@@ -87,6 +87,7 @@ test("disable, enable and reload persist state and keep a single webhook subscri
 
 test("disable removes event subscriptions, cron jobs and cookie-only plugin routes", async () => {
   vi.useFakeTimers();
+  vi.setSystemTime(new Date("2026-01-01T00:00:00.000Z"));
   let ticks = 0;
   let delivered = 0;
   await registerPlugin(
