@@ -48,3 +48,24 @@
 - **W20 导演**：按 OFFICE.md §4 把 API 状态和 WS 事件翻译成动作：上下线、领取、汇报气泡、交接、完成纸屑、暂停休息、会议室、信封。验证：用 curl 走一遍领取→汇报→交接→完成，录 GIF 对照表。
 - **W21 外框与交互**：顶栏、左右值班名单、像素面板样式与字体、点击小人/任务卡的面板、窄屏折叠。验证：截图浅色（office 只有一套配色）、窄屏。
 - **W22 打磨**：reduced-motion、性能（30 个小人 60fps）、空状态（没有智能体时前台的人打瞌睡）、README 补「像素办公室」一节。
+
+## M8 扩展（规则见 `docs/DESIGN.md` §12、`docs/UI.md`、`docs/OFFICE.md`）
+
+派发约束：改 schema 的工作项串行（W24 → W31），各自合并后下一个再开；办公室的三个串行（W39 → W38 → W37）；依赖 W24 的插件（W25、W27、W28、W29、W30）在 W24 合并后再派。同时在跑的不超过 3 个。
+
+- **W24 插件级配置与宿主扩展**：`plugin_state.config`（迁移 0002）、`enabledByDefault`、`ctx.config / dataDir / publicUrl / tasks.act`、`PATCH /plugins/:id`、分发器鉴权、状态机 assign 允许 system、插件页配置表单（含 enum → select）。验证：host.test 覆盖默认关闭与配置热生效；浏览器里给一个插件改配置后 `GET /plugins` 返回掩码值；截图浅色深色。
+- **W25 chat-notifier**：DESIGN §12.2。验证：本地起接收端，四种 format 的请求体各一条；失败写 `chat.failed`。
+- **W26 github-actions 连接器**：DESIGN §12.3。验证：`fetch` 打桩的单元测试覆盖状态映射、since 过滤、trigger 204。
+- **W27 auto-assign**：DESIGN §12.4。验证：两个在线智能体负载不同，新任务指给负载低的；无候选不动；被阻塞不动。
+- **W28 event-archive**：DESIGN §12.5。验证：造 2500 条旧事件，跑一次后文件行数 2500、表里只剩新的、有 `archive.events`。
+- **W29 metrics**：DESIGN §12.6。验证：用 agent key 抓 `/api/plugins/metrics/prometheus`，文本能被 `promtool check metrics` 接受（没有 promtool 就逐行对格式）。
+- **W30 result-archive**：DESIGN §12.7。验证：完成一个任务后文件存在、frontmatter 正确。
+- **W31 任务依赖**：DESIGN §12.8、UI.md 协作台。验证：被阻塞任务 claim 返回 409 和原因；阻塞任务完成后可领取；抽屉里加减依赖；截图。
+- **W32 任务模板**：DESIGN §12.9、UI.md 协作台与定时页。验证：建一个关着的 publish_task 定时任务，发布弹层选模板后表单填好；截图。
+- **W33 按主机分组**：UI.md 协作台。验证：两台主机的智能体各领一个任务，切「按主机」后分组正确、刷新后记住；截图。
+- **W34 智能体画像**：DESIGN §12.11、UI.md 智能体页。验证：集成测试造 claim→complete 两轮，stats 数字与平均耗时正确；截图。
+- **W35 只读访客**：DESIGN §12.12、UI.md 布局。验证：viewer 登录后 GET 200、POST 403、WS 能连；侧栏有「只读」；截图。
+- **W36 搜索正文**：DESIGN §12.13。验证：`?q=` 命中正文与结果；看板输入后列表变化；MCP 带 q。
+- **W37 办公室回放**：OFFICE.md §4、§5。验证：录一段 GIF，先 curl 走一遍领取→完成，再回放 60× 能看到同样的动作。
+- **W38 办公室昼夜**：OFFICE.md §6。验证：把系统时间（或临时参数）设到夜间截图、黄昏截图。
+- **W39 办公室声音**：OFFICE.md §5、§6。验证：开关持久化；点喇叭后领取有声（录屏或 console 里打印 AudioContext 状态）。

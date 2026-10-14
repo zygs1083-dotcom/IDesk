@@ -73,6 +73,7 @@ index.ts                                         启动
 | leaseExpiresAt | datetime \| null | 进行中的租约；心跳续期 |
 | result | markdown \| null | 完成时的产出说明 |
 | dueAt | datetime \| null | |
+| blockedBy | task id[] | 依赖；其中任何一个不是 done/cancelled 时，本任务不能离开 open（见 §12.8） |
 | createdAt / updatedAt / completedAt | datetime | |
 
 ### 4.2 Agent
@@ -203,15 +204,18 @@ done        --reopen-->                  open          仅人；清空 result、
 主要端点：
 
 ```
-GET    /tasks?status=&capability=&assignee=     列表。不带 status 时，done/cancelled 只返回最近 7 天（按 updatedAt）更新过的；要看更早的历史必须带 status
+GET    /tasks?status=&capability=&assignee=&q=  列表。q 在 title/body/result 上做子串匹配（LIKE，§12.13）。不带 status 时，done/cancelled 只返回最近 7 天（按 updatedAt）更新过的；要看更早的历史必须带 status
 POST   /tasks                                   发布
 GET    /tasks/:id
+PATCH  /tasks/:id { blockedBy }                  改依赖；人或发布者（§12.8）
 POST   /tasks/:id/actions/:action               状态机动作，body 按动作定义；:action 不接受 lease_expired
 POST   /tasks/:id/report { message }            汇报进展（内部续租，写 task.reported）
 GET    /tasks/:id/events                        该任务全部事件，正序
 
 GET    /agents            POST /agents (人)     PATCH /agents/:id    DELETE /agents/:id
 GET    /agents/me                               当前 key 对应的 agent
+GET    /agents/:id/stats                        画像数字，从事件聚合（§12.11）
+GET    /auth/me                                 { role: "admin" | "viewer" }（§12.12）
 POST   /agents/me/heartbeat
 
 GET    /events?since=&type=&agentId=            活动流，最多 200 条。不带 since 时 id 倒序取最新；带 since 时 id 升序取 since 之后最早的 200 条，调用方连续拉取可补齐积压
@@ -226,6 +230,7 @@ GET    /automation/jobs?connectorId=            GET /automation/jobs/:id/runs
 GET    /automation/runs?connectorId=            该连接器全部 run（一次 join），每条带 jobName，给自动化看板分列用
 GET    /plugins                                 每项带 configSchema（z.toJSONSchema 的结果），前端据此生成连接器配置表单；只支持顶层 string/number/boolean
 POST   /plugins/:id/enable|disable|reload
+PATCH  /plugins/:id { config }                  插件级配置（§12.1）；每项的 config 出 API 时按连接器同样的规则掩码
 GET    /openapi.json
 WS     /ws                                      cookie 鉴权；每条事件广播 { type, taskId?, agentId?, ts }
 ```
@@ -279,7 +284,11 @@ export interface PluginContext {
   db: Db;
   events: { emit(e: NewEvent): void; on(type: string, fn: Listener): Unsubscribe };
   schedule(cron: string, fn: () => Promise<void>): Unsubscribe;
-  registerRoutes(app: Hono): void;   // 宿主只挂一个固定的 /api/plugins/:pluginId/* 分发器，按 id 转发到插件自己的 Hono 子应用；disable 时从表里删掉，之后 404
+  registerRoutes(app: Hono): void;   // 宿主只挂一个固定的 /api/plugins/:pluginId/* 分发器，按 id 转发到插件自己的 Hono 子应用；disable 时从表里删掉，之后 404。鉴权与 /api/v1 相同：管理员 cookie 或 agent key 都可以
+  config: unknown;                   // plugin_state.config 经 configSchema.parse 后的值；没有记录时 parse({})，所以 schema 的字段都要有默认值或可选
+  dataDir: string;                   // IDESK_DATA_DIR/plugin-data/<id>，setup 前已创建，插件自己的文件放这里
+  publicUrl: string | undefined;     // IDESK_PUBLIC_URL，给通知里拼链接
+  tasks: { act(id: string, action: TaskAction): Task | TransitionError | undefined };  // 以 system 身份走状态机，和 REST 同一条路
 }
 // 没有 logger：事件表就是日志，插件要记录就 emit 一条事件。
 
@@ -288,7 +297,8 @@ export interface Plugin {
   name: string;
   version: string;
   kind: "connector" | "notifier" | "action";
-  configSchema: ZodType;  // 实例配置
+  configSchema: ZodType;  // 连接器：实例配置；其他：插件级配置（存 plugin_state.config）
+  enabledByDefault?: boolean;  // 默认 true；会改变行为或删数据的插件设 false，plugin_state 没有记录时按它
   setup?(ctx: PluginContext): void | Promise<void>;
   teardown?(): void | Promise<void>;
 }
@@ -305,12 +315,12 @@ export interface ConnectorPlugin extends Plugin {
 宿主 `plugins/host.ts`：
 
 - 启动时扫描 `plugins/*/index.ts`（内置）和 `IDESK_PLUGIN_DIR/*/index.js`（外置）。
-- 每个插件的启用状态存 `plugin_state` 表，没有记录的视为启用。`enable` 动态 `import()` 并 `setup`；`disable` 调 `teardown` 并撤销它注册的所有订阅、cron、路由。`reload` = disable + 清 import cache（带 `?t=` query）+ enable。
+- 每个插件的启用状态和插件级配置存 `plugin_state` 表（`enabled`、`config` JSON）；没有记录的按 `enabledByDefault` 决定。`PATCH /plugins/:id { config }` 按 configSchema 校验后写库，插件已启用时 teardown 再 setup 让新配置生效。`enable` 动态 `import()` 并 `setup`；`disable` 调 `teardown` 并撤销它注册的所有订阅、cron、路由。`reload` = disable + 清 import cache（带 `?t=` query）+ enable。
 - 连接器轮询由宿主统一驱动：每分钟扫 `enabled` 的连接器，按各自 `pollIntervalSec` 决定是否轮询，顺序执行，upsert job 和 run，每个 job 只留最近 50 条 run，单个失败只写 `lastError` 不影响其他，有变化时 emit `connector.polled { connectorId, changed }`。
 - 连接器 config 出 API 时按键名掩码：键名匹配 `/token|key|secret|password/i` 的值替换成 `••••••`；PATCH 时收到 `••••••` 就保留原值。
 - 核心代码不出现任何插件 id。
 
-内置插件：`n8n`、`dolphinscheduler`（连接器）、`webhook-notifier`（notifier，实现 §6.3）。
+内置插件：`n8n`、`dolphinscheduler`、`github-actions`（连接器）、`webhook-notifier`、`chat-notifier`、`result-archive`（notifier）、`auto-assign`、`event-archive`、`metrics`（action）。各自的规则见 §12。
 
 ## 8. 实时与前端数据流
 
@@ -330,18 +340,150 @@ IDESK_DATA_DIR=/data            # idesk.db 所在
 IDESK_ADMIN_PASSWORD=...        # 必填
 IDESK_SESSION_SECRET=...        # 必填
 IDESK_PLUGIN_DIR=/data/plugins  # 可选
-IDESK_PUBLIC_URL=http://...     # 给 CLI/MCP 提示用
+IDESK_PUBLIC_URL=http://...     # 给 CLI/MCP 提示用，也给通知插件拼链接
+IDESK_VIEWER_PASSWORD=...       # 可选；只读访客密码（§12.12）
 ```
 
 ## 10. 安全边界
 
-- 内网部署（Tailscale），单管理员。不做多租户、角色、限流。
-- Agent key 只能操作任务、自己的心跳、读自动化看板；不能创建 Agent、改连接器、改定时任务、改插件。
+- 内网部署（Tailscale），一个管理员密码，外加一个可选的只读密码。不做多租户、用户表、权限矩阵、限流。
+- Agent key 只能操作任务、自己的心跳、读自动化看板、访问插件路由；不能创建 Agent、改连接器、改定时任务、改插件。
+- 只读 cookie 只能 GET 与连 WS，其余一律 403。
 - 响应里永远不出现 key 明文、连接器密钥。
 
 ## 11. 不做的事
 
-- 不做用户系统、权限矩阵、组织。
+- 不做用户系统、权限矩阵、组织。只读访客是第二个密码，不是用户。
 - 不做任务评论线程；进展用 `idesk_report` 写事件即可。
 - 不做文件附件；成果和上下文放在传递区消息的 `body`（markdown，可放链接）。
 - 不做自动化系统的写操作面板；只有「触发」和只读镜像。
+
+## 12. M8 扩展
+
+每一小节是一个工作项的完整规则，编号对应 `docs/ROADMAP.md` 的 M8。原则不变：能用事件表的不建表，能用现有 UI 组件的不加组件，默认关闭的功能不改变已有行为。
+
+### 12.1 插件级配置与宿主扩展（W24）
+
+- `plugin_state` 加 `config` 列（JSON，默认 `{}`），迁移 `0002`。
+- `Plugin.enabledByDefault`、`PluginContext.config / dataDir / publicUrl / tasks.act` 如 §7。`tasks.act` 以 `{ kind: "system" }` 调 `core/tasks/transition.ts` 的 `actOnTask`。
+- 状态机：`assign` 新增允许 system（自动分派用）；事件 `task.assign` 的 agentId 为空。其余权限不变。
+- `GET /plugins` 每项多一个 `config`（掩码后）；`PATCH /plugins/:id { config }` 只有人，收到 `••••••` 保留原值，校验失败 400。
+- 分发器 `/api/plugins/:id/*` 的鉴权改用和 `/api/v1` 同一个中间件。
+- 插件页：configSchema 有 properties 的插件，行尾多一个「配置」，展开成和连接器一样生成的表单（复用 `configFields`）；JSON Schema 带 `enum` 的字符串字段渲染成 `<select>`，`configFields` 加 `options?: string[]`。保存即 PATCH。
+
+### 12.2 chat-notifier（W25，notifier，默认关闭）
+
+配置：`format` 枚举 `feishu | slack | telegram | text`（默认 `text`）、`webhookUrl`（url）、`chatId`（string，可选，只 telegram 用）、`events`（string，逗号分隔的事件类型，默认 `task.created,task.complete,task.lease_expired,webhook.failed`）。
+
+订阅 `*`，类型在 `events` 里的才发。一句话文案（插件内一张小表，不跨 app import 前端的）：
+
+| 事件 | 文案 |
+| --- | --- |
+| task.created | `新任务：<title>` |
+| task.claim / accept | `<agent> 领取了 <title>` |
+| task.complete | `<agent> 完成了 <title>` |
+| task.handoff | `<agent> 交接了 <title>` |
+| task.lease_expired | `租约到期：<title>` |
+| webhook.failed | `Webhook 失败：<agent>` |
+| 其他 | `<type>：<title 或 空>` |
+
+`<agent>` 取 agents 表的 name，人则是「管理员」。有 `publicUrl` 且事件带 taskId 时文案后加一行 `<publicUrl>/desk?task=<id>`。
+
+请求体按 format：feishu `{ msg_type: "text", content: { text } }`；slack `{ text }`；telegram `{ chat_id: chatId, text }`（webhookUrl 填 `https://api.telegram.org/bot<token>/sendMessage`）；text `{ text }`。POST 一次，不重试；非 2xx 或网络错误写事件 `chat.failed { type, error }`。
+
+### 12.3 github-actions 连接器（W26）
+
+配置：`baseUrl`（url，默认 `https://api.github.com`）、`token`、`repo`（`owner/name`）、`ref`（默认 `main`，触发用）。请求头 `Authorization: Bearer <token>`、`Accept: application/vnd.github+json`、`X-GitHub-Api-Version: 2022-11-28`。
+
+- `testConnection`：`GET /repos/{repo}` 200。
+- `listJobs`：`GET /repos/{repo}/actions/workflows` → `externalId = String(id)`，`name`，`enabled = state === "active"`，`url = html_url`。
+- `listRuns`：`GET /repos/{repo}/actions/runs?per_page=<limit>` 加 `&created=>=<since ISO>`（since 为 null 时不加）→ `externalId = String(id)`，`jobExternalId = String(workflow_id)`，`startedAt = run_started_at ?? created_at`，`finishedAt = status === "completed" ? updated_at : null`，`trigger = event`，`url = html_url`，`error = null`。
+- 状态映射：`status` 为 `queued | waiting | pending | requested` → waiting；`in_progress` → running；`completed` 看 `conclusion`：`success` → success；`failure | timed_out | startup_failure | action_required` → failed；`cancelled | skipped | neutral | stale` 及其他 → canceled。
+- `trigger`：`POST /repos/{repo}/actions/workflows/{id}/dispatches { ref }`，204 即成功，返回 `{}`（GitHub 不返回 run id）。
+
+### 12.4 auto-assign（W27，action，默认关闭）
+
+配置：`tag`（string，默认空；非空时只处理带这个 tag 的任务）。订阅 `task.created`：
+
+1. 任务 status 为 open，且不被阻塞（§12.8）。
+2. 候选 = 在线（lastSeenAt 2 分钟内）且 capabilities 覆盖任务 capabilities 的智能体。
+3. 负载 = 该智能体为 assignee 的 assigned / in_progress / paused 任务数；取最少，平局取 lastSeenAt 最近。
+4. 没有候选就不做。有则 `ctx.tasks.act(id, { type: "assign", agentId })`；返回 TransitionError 时忽略（任务可能已被领取）。
+
+### 12.5 event-archive（W28，action，默认关闭）
+
+配置：`keepDays`（number，默认 90）。`ctx.schedule("0 3 * * *")`：把 `ts` 早于 `now - keepDays` 的事件按 `ts` 所在月追加到 `<dataDir>/events-YYYY-MM.jsonl`（一行一条，字段同 API 的 event），然后删除；每批 1000 条，循环到没有。本次有删除时 emit `archive.events { count }`。归档后旧任务的时间线只剩未归档部分，这是预期的。
+
+### 12.6 metrics（W29，action，默认开启）
+
+无配置。`registerRoutes`：`GET /prometheus`，`Content-Type: text/plain; version=0.0.4`，每次请求现查：
+
+```
+# TYPE idesk_tasks gauge
+idesk_tasks{status="open"} 3            每个 TaskStatus 一行
+# TYPE idesk_agents gauge
+idesk_agents{status="online"} 2         online / offline 各一行
+# TYPE idesk_events_total counter
+idesk_events_total{type="task.complete"} 42   events 表按 type 分组计数
+# TYPE idesk_relay_messages_total counter
+idesk_relay_messages_total 10
+```
+
+Prometheus 用一个智能体的 key 抓 `/api/plugins/metrics/prometheus`。
+
+### 12.7 result-archive（W30，notifier，默认关闭）
+
+无配置。订阅 `task.complete`：写 `<dataDir>/YYYY-MM/<YYYY-MM-DD>-<taskId>.md`：
+
+```
+---
+title: <title>
+assignee: <agent name 或 human>
+publisher: <agent name 或 human>
+tags: [a, b]
+completedAt: <ISO>
+---
+
+<body>
+
+## 结果
+
+<result>
+```
+
+### 12.8 任务依赖（W31）
+
+- `tasks.blocked_by`（JSON string[]，默认 `[]`），迁移 `0003`。`createTaskSchema` 加 `blockedBy?: string[]`；`PATCH /tasks/:id { blockedBy }` 人或发布者，校验每个 id 存在且不是自己，写事件 `task.dependencies { blockedBy }`。
+- 规则在 `core/tasks/transition.ts` 的 `applyAction` 里：任务 status 为 open 且 action 是 `claim | assign | recruit` 时，若 `blockedBy` 里有任务 status 不是 done/cancelled，返回 `TransitionError("被「<那个任务的 title>」阻塞")`，REST 映射 409。状态机纯函数不改。不检测环；环会让两边都卡住，由人改依赖解开。
+- MCP：`idesk_publish_task` 加 `blockedBy`；默认的可领取列表排除被阻塞的任务。
+- 界面见 UI.md 协作台。
+
+### 12.9 任务模板（W32）
+
+不加表、不加接口。动作为 `publish_task` 的 schedule 就是模板，关掉开关的条目只当模板用。发布弹层见 UI.md。
+
+### 12.10 按主机分组（W33）
+
+纯前端。见 UI.md 协作台。
+
+### 12.11 智能体画像（W34）
+
+`GET /agents/:id/stats` → `{ completed, last7dCompleted, handoffs, reported, avgDurationMs }`，全部从 events 表算：
+
+- completed：agentId 为它的 `task.complete` 数；last7dCompleted 同上限 7 天内。
+- handoffs：agentId 为它的 `task.handoff` 数；reported：`task.reported` 数。
+- avgDurationMs：对它每一条 `task.complete`，找同一 taskId、同一 agentId、ts 更早的最近一条 `task.claim | task.accept | task.join`，两者 ts 之差取平均；一条都配不上时为 null。
+
+### 12.12 只读访客（W35）
+
+- 登录接口：密码等于 `IDESK_VIEWER_PASSWORD` 时 cookie 值为 `viewer`（没配这个变量就不存在这条路径）。
+- `auth` 中间件：cookie 为 viewer 时 actor 仍是 `{ kind: "human" }`（读接口的可见性和管理员一样），另设 `c.set("readonly", true)`；`/api/v1` 下非 GET 请求直接 403「只读账号」。WS 的 cookie 校验同时接受 admin 和 viewer。
+- `GET /auth/me` 返回 `{ role }`。前端见 UI.md 布局。
+
+### 12.13 搜索正文（W36）
+
+`GET /tasks?q=`：`title LIKE %q% OR body LIKE %q% OR result LIKE %q%`，与其他筛选 AND。不用 FTS5：trigram 分词要求至少 3 个字符，中文两字词搜不到；LIKE 在万级任务上够快。MCP `idesk_list_tasks` 加 `q`。看板搜索改走它，见 UI.md。
+
+### 12.14 办公室回放、昼夜、声音（W37–W39）
+
+见 `docs/OFFICE.md` §4、§5、§6。
