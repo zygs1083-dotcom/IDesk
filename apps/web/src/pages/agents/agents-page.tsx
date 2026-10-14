@@ -4,6 +4,7 @@ import { PageHeader } from "../../layout/page-header.tsx";
 import { cn } from "../../lib/cn.ts";
 import { relativeTime } from "../../lib/format.ts";
 import { useAgents } from "../../lib/use-agents.ts";
+import { useShortcut } from "../../lib/use-shortcut.ts";
 import { AgentDetails } from "./agent-details.tsx";
 import { CreateAgent } from "./create-agent.tsx";
 
@@ -11,6 +12,7 @@ export function AgentsPage() {
   const { agents, error, isPending } = useAgents();
   const [expanded, setExpanded] = useState<string | null>(null);
   const [creating, setCreating] = useState(false);
+  useShortcut("n", () => setCreating(true));
   return (
     <div className="space-y-6">
       <PageHeader title="智能体">

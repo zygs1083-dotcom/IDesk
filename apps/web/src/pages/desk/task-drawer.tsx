@@ -18,11 +18,11 @@ import { StatusDot } from "./status-dot.tsx";
 import { useTaskAction } from "./use-task-action.ts";
 
 export function TaskDrawer({ taskId, onClose }: { taskId: string; onClose: () => void }) {
-  const { data: task } = useQuery({
+  const { data: task, error: taskError } = useQuery({
     queryKey: ["task", taskId],
     queryFn: () => request<Task>(`/tasks/${taskId}`),
   });
-  const { data: events = [] } = useQuery({
+  const { data: events = [], error: eventsError } = useQuery({
     queryKey: ["task", taskId, "events"],
     queryFn: () => request<TaskEvent[]>(`/tasks/${taskId}/events`),
   });
@@ -51,6 +51,11 @@ export function TaskDrawer({ taskId, onClose }: { taskId: string; onClose: () =>
   return (
     <>
       <Drawer open onClose={onClose} title={task?.title ?? ""}>
+        {(taskError || eventsError) && (
+          <p role="alert" className="text-secondary text-status-failed">
+            {(taskError ?? eventsError)?.message}
+          </p>
+        )}
         {task && (
           <div className="space-y-6">
             <div className="flex items-center gap-2 text-secondary text-text-2">

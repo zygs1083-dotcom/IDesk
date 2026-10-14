@@ -4,6 +4,17 @@ import { defineConfig } from "vite";
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes("/node_modules/@dnd-kit/")) return "dnd";
+          if (/\/node_modules\/(motion|framer-motion|motion-dom|motion-utils)\//.test(id))
+            return "motion";
+        },
+      },
+    },
+  },
   server: {
     port: 5173,
     proxy: {

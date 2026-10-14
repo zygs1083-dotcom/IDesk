@@ -8,7 +8,7 @@ import {
 } from "@dnd-kit/core";
 import { BOARD_COLUMNS, type TaskStatus } from "@idesk/shared/task-status";
 import { AnimatePresence, useReducedMotion } from "motion/react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "../../components/button.tsx";
 import { Toast } from "../../components/toast.tsx";
 import type { Task, TaskEvent } from "../../lib/types.ts";
@@ -36,6 +36,10 @@ export function Board({
   onOpen: (id: string) => void;
   onPublish: () => void;
 }) {
+  const seen = useRef(new Set<string>());
+  useEffect(() => {
+    for (const task of tasks) seen.current.add(task.id);
+  }, [tasks]);
   const { agents, agentName } = useAgents();
   const [dragged, setDragged] = useState<Task | null>(null);
   const [legal, setLegal] = useState<Partial<Record<TaskStatus, boolean>>>({});
@@ -120,6 +124,7 @@ export function Board({
                   <DraggableCard
                     key={task.id}
                     task={task}
+                    entering={!seen.current.has(task.id)}
                     name={agentName(task.assigneeId ?? task.publisherId)}
                     {...(handoffName(task) === undefined
                       ? {}

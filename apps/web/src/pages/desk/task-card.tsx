@@ -13,6 +13,7 @@ export function TaskCard({
   onOpen,
   overlay = false,
   shake = false,
+  entering = false,
   drag,
 }: {
   task: Task;
@@ -21,6 +22,7 @@ export function TaskCard({
   onOpen: () => void;
   overlay?: boolean;
   shake?: boolean;
+  entering?: boolean;
   drag?: Pick<
     ReturnType<typeof useDraggable>,
     "attributes" | "listeners" | "setNodeRef" | "isDragging"
@@ -39,11 +41,13 @@ export function TaskCard({
       {...drag?.listeners}
       onClick={onOpen}
       layout={!reduced && !overlay}
-      {...(!reduced && !overlay ? { layoutId: task.id } : {})}
-      animate={{ x: shake && !reduced ? [0, -6, 6, -4, 4, 0] : 0 }}
-      transition={
-        shake ? { duration: reduced ? 0 : 0.2 } : { type: "spring", stiffness: 500, damping: 35 }
-      }
+      initial={reduced || !entering ? false : { opacity: 0 }}
+      animate={{ opacity: 1, x: shake && !reduced ? [0, -6, 6, -4, 4, 0] : 0 }}
+      transition={{
+        opacity: { duration: reduced ? 0 : 0.2 },
+        x: { duration: reduced ? 0 : 0.2 },
+        layout: { type: "spring", stiffness: 500, damping: 35 },
+      }}
       className={cn(
         "w-full touch-none rounded-card border border-line bg-surface p-3 text-left transition-colors duration-hover ease-hover hover:bg-surface-2 focus-visible:outline-2 focus-visible:outline-accent",
         drag?.isDragging && "opacity-0",

@@ -9,6 +9,7 @@ import { request } from "../../lib/api.ts";
 import { cn } from "../../lib/cn.ts";
 import { relativeTime } from "../../lib/format.ts";
 import { useAgents } from "../../lib/use-agents.ts";
+import { useShortcut } from "../../lib/use-shortcut.ts";
 import { ComposeRelay } from "./compose-relay.tsx";
 import { recipientLabel } from "./labels.ts";
 import { RelayDetail } from "./relay-detail.tsx";
@@ -28,6 +29,7 @@ export function RelayPage() {
   const [task, setTask] = useState("all");
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [compose, setCompose] = useState<{ reply?: Message } | null>(null);
+  useShortcut("n", () => setCompose({}));
   const filtered = messages.filter(
     (message) =>
       (recipient === "all" || message.to.kind === recipient) &&
@@ -97,7 +99,7 @@ export function RelayPage() {
                 </p>
               </button>
             ))}
-            {!isPending && filtered.length === 0 && (
+            {!isPending && !error && filtered.length === 0 && (
               <p className="p-4 text-secondary text-text-2">没有符合筛选的消息</p>
             )}
           </div>

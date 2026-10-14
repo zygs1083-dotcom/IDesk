@@ -1,11 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { Search } from "lucide-react";
 import { AnimatePresence } from "motion/react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Button } from "../../components/button.tsx";
 import { PageHeader } from "../../layout/page-header.tsx";
 import { request } from "../../lib/api.ts";
 import type { TaskEvent } from "../../lib/types.ts";
+import { useShortcut } from "../../lib/use-shortcut.ts";
 import { useTasks } from "../../lib/use-tasks.ts";
 import { Board } from "./board.tsx";
 import { PublishDialog } from "./publish-dialog.tsx";
@@ -16,9 +17,12 @@ export function Desk() {
     queryKey: ["events", "handoff"],
     queryFn: () => request<TaskEvent[]>("/events?type=task.handoff"),
   });
+  const searchInput = useRef<HTMLInputElement>(null);
   const [search, setSearch] = useState("");
   const [publish, setPublish] = useState(false);
   const [selected, setSelected] = useState<string | null>(null);
+  useShortcut("n", () => setPublish(true));
+  useShortcut("/", () => searchInput.current?.focus());
   return (
     <div className="flex h-full min-h-0 flex-col gap-6">
       <div className="flex items-center gap-4">
@@ -26,6 +30,7 @@ export function Desk() {
         <label className="flex min-w-0 max-w-60 flex-1 items-center gap-2 rounded-control border border-line bg-surface px-3 py-2 text-text-2">
           <Search size={16} strokeWidth={1.5} />
           <input
+            ref={searchInput}
             aria-label="搜索任务"
             placeholder="搜索任务"
             value={search}
