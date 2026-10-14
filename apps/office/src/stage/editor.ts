@@ -38,6 +38,7 @@ export function createEditor(stage: Stage, scene: Scene, onToggle: (active: bool
     ...scene.lounge.spots,
   ];
   for (const point of seats) marker(point, false);
+  marker(scene.bulletin, false);
   drawEdges();
   const move = (event: FederatedPointerEvent) => {
     if (!dragging) return;

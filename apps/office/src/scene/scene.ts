@@ -12,6 +12,7 @@ export const sceneSchema = z.object({
   meeting: z.object({ seats: z.array(spot).length(6) }),
   lounge: z.object({ spots: z.array(spot) }),
   doneTray: point,
+  bulletin: point,
   waypoints: z.array(point.extend({ id: z.string() })),
   edges: z.array(z.tuple([z.string(), z.string()])),
 });

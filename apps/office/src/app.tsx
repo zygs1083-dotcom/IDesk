@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { direct } from "./director.ts";
+import { direct } from "./director/director.ts";
 import { type Scene, sceneSchema } from "./scene/scene.ts";
 import { assignSeats } from "./scene/seats.ts";
 import { createEditor } from "./stage/editor.ts";
