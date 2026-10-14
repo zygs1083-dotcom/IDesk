@@ -132,6 +132,9 @@ a:focus-visible {
   .office-body {
     grid-template-columns: minmax(0, 1fr);
   }
+  .office-body.has-detail {
+    grid-template-columns: minmax(0, 1fr) 252px;
+  }
   .roster {
     display: none;
   }

@@ -1,11 +1,6 @@
 .detail-panel {
-  position: absolute;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  width: 360px;
-  max-width: 100%;
-  z-index: 2;
+  min-width: 0;
+  min-height: 0;
   display: flex;
   flex-direction: column;
 }
@@ -22,6 +17,8 @@
   padding: 0;
 }
 .panel-content {
+  flex: 1;
+  min-height: 0;
   padding: 16px;
   overflow-y: auto;
   line-height: 2;

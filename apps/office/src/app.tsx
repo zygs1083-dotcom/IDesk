@@ -75,7 +75,7 @@ export function App() {
           <RosterItem key={item.id} agent={item} tasks={tasks} onSelect={selectAgent} />
         ))}
       </section>
-      <div className="office-body">
+      <div className={`office-body${agent || task ? " has-detail" : ""}`}>
         {scene && (
           <Roster
             zones={scene.zones.slice(0, 2)}
@@ -86,7 +86,11 @@ export function App() {
           />
         )}
         <div className="stage-host" ref={host} />
-        {scene && (
+        {agent ? (
+          <AgentPanel key={agent.id} agent={agent} tasks={tasks} onClose={closePanel} />
+        ) : task ? (
+          <TaskPanel task={task} agents={agents} onClose={closePanel} />
+        ) : scene ? (
           <Roster
             zones={scene.zones.slice(2)}
             agents={agents}
@@ -94,9 +98,7 @@ export function App() {
             seats={seats}
             onSelect={selectAgent}
           />
-        )}
-        {agent && <AgentPanel key={agent.id} agent={agent} tasks={tasks} onClose={closePanel} />}
-        {task && <TaskPanel task={task} agents={agents} onClose={closePanel} />}
+        ) : null}
       </div>
       {(error || dataError) && (
         <p className="office-error" role="alert">
