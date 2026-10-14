@@ -1,3 +1,4 @@
+import { playSound } from "../engine/sound.ts";
 import type { Cards } from "../stage/card.ts";
 import { confetti, envelope } from "../stage/effects.ts";
 import type { Cast } from "./cast.ts";
@@ -44,6 +45,7 @@ export function createActions(cast: Cast, cards: Cards) {
         if (!character) return;
         await cards.fly(task, { x: character.x + 20, y: character.y - 48 });
         cards.carry(task, character);
+        playSound("claim");
         await home(agentId, "typing");
         cards.place(task, cast.desk(agentId));
       });
@@ -66,8 +68,12 @@ export function createActions(cast: Cast, cards: Cards) {
             if (waypoint)
               await cast.walk(agentId, { ...waypoint, via: waypoint.id, facing: seat.facing });
           }
+          playSound("handoff");
           await cards.fly(task, cast.desk(to));
-        } else await cards.toBoard(task, { x: character.x, y: character.y - 48 });
+        } else {
+          playSound("handoff");
+          await cards.toBoard(task, { x: character.x, y: character.y - 48 });
+        }
         await home(agentId, "idle");
       });
     },
@@ -78,6 +84,7 @@ export function createActions(cast: Cast, cards: Cards) {
         if (!character) return;
         character.setState("idle");
         character.bubble.show("✓", 4000);
+        playSound("complete");
         await Promise.all([confetti(stage, character.position), cards.fly(task, scene.doneTray)]);
         cards.remove(task.id);
         flights.delete(task.id);
@@ -140,11 +147,14 @@ export function createActions(cast: Cast, cards: Cards) {
             : [];
       void queue.enqueue(agentId, async () => {
         const from = characters.get(agentId)?.position ?? scene.frontDesk.human;
-        if (to.kind === "broadcast") await envelope(stage, from, scene.bulletin);
-        else
+        if (to.kind === "broadcast") {
+          await envelope(stage, from, scene.bulletin);
+          playSound("envelope");
+        } else
           await Promise.all(
             recipients.map(async (id) => {
               await envelope(stage, from, cast.desk(id));
+              playSound("envelope");
               void queue.enqueue(id, async () => {
                 const character = characters.get(id);
                 if (!character) return;
