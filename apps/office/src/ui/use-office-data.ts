@@ -14,23 +14,22 @@ export function useOfficeData() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [error, setError] = useState("");
   useEffect(() => {
-    let disposed = false;
     const refreshAgents = () => {
       void request<Agent[]>("/agents")
         .then((data) => {
-          if (!disposed) setAgents(data);
+          setAgents(data);
         })
         .catch((reason: Error) => {
-          if (!disposed) setError(reason.message);
+          setError(reason.message);
         });
     };
     const refreshTasks = () => {
       void request<Task[]>("/tasks")
         .then((data) => {
-          if (!disposed) setTasks(data);
+          setTasks(data);
         })
         .catch((reason: Error) => {
-          if (!disposed) setError(reason.message);
+          setError(reason.message);
         });
     };
     refreshAgents();
@@ -41,7 +40,6 @@ export function useOfficeData() {
     });
     const interval = setInterval(refreshAgents, AGENT_REFRESH_MS);
     return () => {
-      disposed = true;
       unsubscribe();
       clearInterval(interval);
     };

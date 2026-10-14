@@ -16,19 +16,6 @@ export function PixelPanel({
     panel.current?.querySelector<HTMLButtonElement>("button")?.focus();
     const keyboard = (event: KeyboardEvent) => {
       if (event.key === "Escape") onClose();
-      if (event.key !== "Tab") return;
-      const controls = panel.current?.querySelectorAll<HTMLElement>("button, a[href]");
-      if (!controls?.length) return;
-      const first = controls[0];
-      const last = controls[controls.length - 1];
-      if (event.shiftKey && document.activeElement === first) {
-        event.preventDefault();
-        last?.focus();
-      }
-      if (!event.shiftKey && document.activeElement === last) {
-        event.preventDefault();
-        first?.focus();
-      }
     };
     window.addEventListener("keydown", keyboard);
     return () => {
@@ -37,13 +24,7 @@ export function PixelPanel({
     };
   }, [onClose]);
   return (
-    <aside
-      ref={panel}
-      className="pixel-panel detail-panel"
-      role="dialog"
-      aria-modal="true"
-      aria-label={title}
-    >
+    <aside ref={panel} className="pixel-panel detail-panel" role="dialog" aria-label={title}>
       <header className="panel-header">
         <h2>{title}</h2>
         <PixelButton onClick={onClose} aria-label="关闭面板">

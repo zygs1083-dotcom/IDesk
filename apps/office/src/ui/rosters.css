@@ -9,7 +9,8 @@
 }
 .roster-groups {
   overflow-y: auto;
-  max-height: 900px;
+  flex: 1;
+  min-height: 0;
 }
 .roster section {
   padding: 12px 8px;

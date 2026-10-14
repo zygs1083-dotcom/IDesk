@@ -21,7 +21,6 @@ export function AgentPanel({
 }) {
   const [events, setEvents] = useState<TaskEvent[]>([]);
   const [error, setError] = useState("");
-  const [now, setNow] = useState(Date.now());
   useEffect(() => {
     let disposed = false;
     const refresh = () => {
@@ -37,11 +36,9 @@ export function AgentPanel({
     const unsubscribe = onRealtimeEvent((event) => {
       if (event.agentId === agent.id) refresh();
     });
-    const interval = setInterval(() => setNow(Date.now()), 30_000);
     return () => {
       disposed = true;
       unsubscribe();
-      clearInterval(interval);
     };
   }, [agent.id]);
   const current = tasks.filter(
@@ -79,7 +76,7 @@ export function AgentPanel({
       )}
       <h3>最近事件</h3>
       {events.map((event) => {
-        const minutes = Math.max(0, Math.floor((now - Date.parse(event.ts)) / 60_000));
+        const minutes = Math.max(0, Math.floor((Date.now() - Date.parse(event.ts)) / 60_000));
         return (
           <p className="event-row" key={event.id}>
             <span>{event.type}</span>

@@ -45,7 +45,6 @@ export function App() {
         return;
       }
       stage.app.resizeTo = element;
-      stage.app.resize();
       observer = new ResizeObserver(() => stage.app.resize());
       observer.observe(element);
       editor.current = createEditor(stage, scene, setEditing);
