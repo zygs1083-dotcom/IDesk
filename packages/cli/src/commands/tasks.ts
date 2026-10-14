@@ -2,6 +2,7 @@ import { readFile } from "node:fs/promises";
 import { TASK_PRIORITY_LABEL, TASK_STATUS_LABEL } from "@idesk/shared/task-status";
 import type { Command } from "commander";
 import { api } from "../client.js";
+import { formatAgentName } from "../labels.js";
 import { output } from "../output.js";
 
 type Task = {
@@ -30,7 +31,6 @@ export function taskCommands(program: Command): void {
         return;
       }
       const agents = await api<{ id: string; name: string; host: string }[]>("GET", "/agents");
-      const agentNames = new Map(agents.map((agent) => [agent.id, `${agent.name}@${agent.host}`]));
       output(false, tasks, [
         ["id", "状态", "优先级", "能力", "负责人", "标题"],
         ...tasks.map((task) => [
@@ -38,7 +38,7 @@ export function taskCommands(program: Command): void {
           TASK_STATUS_LABEL[task.status],
           TASK_PRIORITY_LABEL[task.priority],
           task.capabilities.join(","),
-          (task.assigneeId === null ? undefined : agentNames.get(task.assigneeId)) ?? "—",
+          formatAgentName(task.assigneeId, agents),
           task.title,
         ]),
       ]);
@@ -110,6 +110,12 @@ export function taskCommands(program: Command): void {
         to: options.to ?? null,
         note: options.message,
       });
-      output(program.opts().json, task, `已交接 ${task.id} → ${options.to ?? "待领取"}`);
+      if (program.opts().json) {
+        output(true, task, "");
+        return;
+      }
+      const agents = await api<{ id: string; name: string; host: string }[]>("GET", "/agents");
+      const recipient = options.to === undefined ? "待领取" : formatAgentName(options.to, agents);
+      output(false, task, `已交接 ${task.id} → ${recipient}`);
     });
 }

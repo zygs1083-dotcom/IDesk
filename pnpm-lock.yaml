@@ -287,20 +287,19 @@ importers:
         version: 5.0.4(@types/node@24.19.2)(vite@8.3.4(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
 
   packages/cli:
-    dependencies:
+    devDependencies:
       '@idesk/shared':
         specifier: workspace:*
         version: link:../shared
       '@modelcontextprotocol/sdk':
         specifier: ^1.32.1
         version: 1.32.1(zod@4.6.7)
-      commander:
-        specifier: ^15.0.0
-        version: 15.0.0
-    devDependencies:
       '@types/node':
         specifier: ^24.0.0
         version: 24.19.2
+      commander:
+        specifier: ^15.0.0
+        version: 15.0.0
       esbuild:
         specifier: 0.28.2
         version: 0.28.2

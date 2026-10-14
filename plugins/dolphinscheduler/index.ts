@@ -3,9 +3,12 @@ import type { RUN_STATUSES } from "../../apps/api/src/db/schema.ts";
 import type { ConnectorPlugin, ExternalRun } from "../../apps/api/src/plugins/types.ts";
 
 const configSchema = z.object({
-  baseUrl: z.url().transform((url) => url.replace(/\/+$/, "")),
-  token: z.string().min(1),
-  projectCode: z.string().regex(/^\d+$/),
+  baseUrl: z
+    .url()
+    .meta({ title: "地址" })
+    .transform((url) => url.replace(/\/+$/, "")),
+  token: z.string().min(1).meta({ title: "Token" }),
+  projectCode: z.string().regex(/^\d+$/).meta({ title: "项目编码" }),
 });
 type Config = z.output<typeof configSchema>;
 type RunStatus = (typeof RUN_STATUSES)[number];
@@ -51,7 +54,12 @@ type Instance = {
 type Page<T> = { totalList: T[]; currentPage: number; totalPage: number };
 
 async function dsGet<T>(config: Config, path: string): Promise<T> {
-  const response = await fetch(`${config.baseUrl}${path}`, { headers: { token: config.token } });
+  let response: Response;
+  try {
+    response = await fetch(`${config.baseUrl}${path}`, { headers: { token: config.token } });
+  } catch (failure) {
+    throw new Error(`无法连接 DolphinScheduler：${(failure as Error).message}`);
+  }
   if (!response.ok)
     throw Object.assign(new Error(`DolphinScheduler 返回 HTTP ${response.status}`), {
       status: response.status,

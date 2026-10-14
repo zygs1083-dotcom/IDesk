@@ -202,7 +202,7 @@ test("plugin REST exposes the input config schema for n8n", async () => {
       id: "n8n",
       configSchema: expect.objectContaining({
         properties: expect.objectContaining({
-          baseUrl: expect.objectContaining({ type: "string" }),
+          baseUrl: expect.objectContaining({ type: "string", title: "地址" }),
           apiKey: expect.objectContaining({ type: "string" }),
         }),
         required: expect.arrayContaining(["baseUrl", "apiKey"]),

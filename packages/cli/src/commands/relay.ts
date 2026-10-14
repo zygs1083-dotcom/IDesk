@@ -2,7 +2,7 @@ import { readFile } from "node:fs/promises";
 import { RELAY_KIND_LABEL } from "@idesk/shared/relay";
 import type { Command } from "commander";
 import { api } from "../client.js";
-import { formatTime } from "../labels.js";
+import { formatAgentName, formatTime } from "../labels.js";
 import { output } from "../output.js";
 
 type Message = {
@@ -73,12 +73,17 @@ export function relayCommands(program: Command): void {
       for (const message of messages) {
         await api<Message>("POST", `/relay/${encodeURIComponent(message.id)}/read`, {});
       }
-      output(program.opts().json, messages, [
+      if (program.opts().json) {
+        output(true, messages, "");
+        return;
+      }
+      const agents = await api<{ id: string; name: string; host: string }[]>("GET", "/agents");
+      output(false, messages, [
         ["id", "种类", "发送者", "标题", "时间"],
         ...messages.map((message) => [
           message.id,
           RELAY_KIND_LABEL[message.kind],
-          message.fromAgentId,
+          formatAgentName(message.fromAgentId, agents),
           message.subject,
           formatTime(message.createdAt),
         ]),
