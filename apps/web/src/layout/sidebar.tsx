@@ -1,4 +1,14 @@
-import { Activity, Bot, Clock, LayoutGrid, Send, Settings, Workflow } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import {
+  Activity,
+  Bot,
+  Building2,
+  Clock,
+  LayoutGrid,
+  Send,
+  Settings,
+  Workflow,
+} from "lucide-react";
 import { NavLink } from "react-router";
 import { cn } from "../lib/cn.ts";
 import { useAgents } from "../lib/use-agents.ts";
@@ -15,6 +25,14 @@ const items = [
 
 export function Sidebar() {
   const { agents } = useAgents();
+  const { data: meta } = useQuery<{ office: boolean }>({
+    queryKey: ["meta"],
+    queryFn: async () => {
+      const response = await fetch("/api/meta");
+      if (!response.ok) throw new Error("部署信息加载失败");
+      return response.json();
+    },
+  });
   const online = agents.filter((agent) => agent.status === "online").length;
   return (
     <aside className="flex shrink-0 items-center border-b border-line bg-surface sidebar:w-sidebar sidebar:flex-col sidebar:items-stretch sidebar:border-r sidebar:border-b-0">
@@ -40,6 +58,17 @@ export function Sidebar() {
             <span className="hidden sidebar:inline">{label}</span>
           </NavLink>
         ))}
+        {meta?.office && (
+          <a
+            href="/office/"
+            aria-label="像素办公室"
+            title="像素办公室"
+            className="flex items-center gap-2 rounded-control p-3 text-body text-text-2 transition-colors duration-hover ease-hover hover:text-text sidebar:px-3 sidebar:py-2"
+          >
+            <Building2 aria-hidden="true" size={16} strokeWidth={1.5} />
+            <span className="hidden sidebar:inline">像素办公室</span>
+          </a>
+        )}
       </nav>
       <div className="mt-auto hidden items-center gap-2 px-5 py-4 text-secondary text-text-2 sidebar:flex">
         <span

@@ -15,6 +15,10 @@ export function Login() {
       request("/auth/login", { method: "POST", body: JSON.stringify({ password }) }),
     onSuccess: () => {
       const from = params.get("from");
+      if (from?.startsWith("/office")) {
+        window.location.assign(from);
+        return;
+      }
       navigate(from?.startsWith("/") && !from.startsWith("//") ? from : "/desk", { replace: true });
     },
   });

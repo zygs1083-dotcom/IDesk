@@ -7,6 +7,7 @@ const schema = z.object({
   IDESK_SESSION_SECRET: z.string().min(16),
   IDESK_PLUGIN_DIR: z.string().optional(),
   IDESK_PUBLIC_URL: z.string().url().optional(),
+  IDESK_OFFICE_DIST: z.string().optional(),
   IDESK_WEB_DIST: z.string().optional(),
 });
 
