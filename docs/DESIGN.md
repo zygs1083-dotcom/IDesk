@@ -16,7 +16,7 @@ IDesk（Intelligent Dispatching Desk）是一个跨网络的 AI 协作调度台�
 
 | 层 | 选择 | 说明 |
 | --- | --- | --- |
-| 运行时 | Node 24, TypeScript, pnpm workspace | ESM only |
+| 运行时 | Node 24, TypeScript, pnpm workspace | ESM only。API 在生产环境也用 tsx 直接跑 `src/index.ts`（插件是 `.ts`，动态 import），不做 tsc 构建；CLI 用 esbuild 打成一个自包含的 `dist/main.js`，可以单独拷到别的设备 |
 | API | Hono 4 + `@hono/zod-openapi` | OpenAPI 自动生成到 `/api/openapi.json` |
 | 数据 | SQLite（better-sqlite3）+ Drizzle ORM | WAL 模式；迁移在 `apps/api/drizzle/` |
 | 校验 | Zod 4 | 只在边界校验一次（请求体、插件配置、环境变量） |
