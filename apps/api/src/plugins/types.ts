@@ -22,10 +22,13 @@ export interface Plugin {
   teardown?(): void | Promise<void>;
 }
 export type ConnectionResult = { success: boolean; error?: string };
-// biome-ignore format: Keep declarations identical to the parallel connector branch.
-export type ExternalJob = Omit<typeof automationJobs.$inferSelect, "id" | "connectorId" | "lastRunStatus" | "lastRunAt">;
-// biome-ignore format: Keep declarations identical to the parallel connector branch.
-export type ExternalRun = Omit<typeof automationRuns.$inferSelect, "id" | "jobId"> & { jobExternalId: string };
+export type ExternalJob = Omit<
+  typeof automationJobs.$inferSelect,
+  "id" | "connectorId" | "lastRunStatus" | "lastRunAt"
+>;
+export type ExternalRun = Omit<typeof automationRuns.$inferSelect, "id" | "jobId"> & {
+  jobExternalId: string;
+};
 export interface ConnectorPlugin extends Plugin {
   kind: "connector";
   testConnection(config: unknown): Promise<ConnectionResult>;

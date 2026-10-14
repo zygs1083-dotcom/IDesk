@@ -2,10 +2,8 @@ import { glob } from "node:fs/promises";
 import { resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 import { config } from "../config.ts";
-import { registerPlugin, stopPlugins } from "./registry.ts";
+import { registerPlugin } from "./registry.ts";
 import type { Plugin } from "./types.ts";
-
-export { stopPlugins };
 
 export async function startPlugins(): Promise<void> {
   const directories = [

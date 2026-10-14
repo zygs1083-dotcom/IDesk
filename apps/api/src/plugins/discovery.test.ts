@@ -25,8 +25,8 @@ test("external JS plugins reload from disk and preserve disabled state across re
     import { writeFile } from "node:fs/promises";
     import { migrate } from ${JSON.stringify(import.meta.resolve("drizzle-orm/better-sqlite3/migrator"))};
     import { db } from ${JSON.stringify(new URL("../db/client.ts", import.meta.url).href)};
-    import { startPlugins, stopPlugins } from ${JSON.stringify(new URL("./host.ts", import.meta.url).href)};
-    import { disablePlugin, enablePlugin, listPlugins, reloadPlugin } from ${JSON.stringify(new URL("./registry.ts", import.meta.url).href)};
+    import { startPlugins } from ${JSON.stringify(new URL("./host.ts", import.meta.url).href)};
+    import { disablePlugin, enablePlugin, listPlugins, reloadPlugin, stopPlugins } from ${JSON.stringify(new URL("./registry.ts", import.meta.url).href)};
     migrate(db, { migrationsFolder: ${JSON.stringify(new URL("../../drizzle", import.meta.url).pathname)} });
     const external = () => listPlugins().find(plugin => plugin.id === "external");
     await startPlugins();

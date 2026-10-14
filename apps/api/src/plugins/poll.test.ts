@@ -151,16 +151,14 @@ test("due scanning skips early, disabled and unavailable plugins and continues a
   await pollDueConnectors(new Date(now.getTime() + 120000));
   expect(calls).toHaveLength(1);
   expect(refreshed().lastError).toBeNull();
-  await registerPlugin(
-    {
-      ...plugin,
-      id: "failure",
-      async listJobs() {
-        throw new Error("failed first");
-      },
+  const failingPlugin: ConnectorPlugin = {
+    ...plugin,
+    id: "failure",
+    async listJobs() {
+      throw new Error("failed first");
     },
-    new URL("file:///failure.js"),
-  );
+  };
+  await registerPlugin(failingPlugin, new URL("file:///failure.js"));
   await registerPlugin({ ...plugin, id: "success" }, new URL("file:///success.js"));
   db.insert(connectors)
     .values([

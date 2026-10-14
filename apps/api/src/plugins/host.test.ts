@@ -10,8 +10,15 @@ import { createTask } from "../core/tasks/store.ts";
 import { db } from "../db/client.ts";
 import { agents, pluginState } from "../db/schema.ts";
 import { app } from "../http/app.ts";
-import { startPlugins, stopPlugins } from "./host.ts";
-import { disablePlugin, enablePlugin, plugins, registerPlugin, reloadPlugin } from "./registry.ts";
+import { startPlugins } from "./host.ts";
+import {
+  disablePlugin,
+  enablePlugin,
+  plugins,
+  registerPlugin,
+  reloadPlugin,
+  stopPlugins,
+} from "./registry.ts";
 
 migrate(db, { migrationsFolder: new URL("../../drizzle", import.meta.url).pathname });
 let cookie: string;

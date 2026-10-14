@@ -50,7 +50,7 @@ async function teardown(loaded: LoadedPlugin): Promise<void> {
   loaded.enabled = false;
 }
 
-export async function registerPlugin(plugin: Plugin | ConnectorPlugin, source: URL): Promise<void> {
+export async function registerPlugin(plugin: Plugin, source: URL): Promise<void> {
   const loaded: LoadedPlugin = { plugin, source, enabled: false, subscriptions: [], crons: [] };
   plugins.set(plugin.id, loaded);
   const state = db.select().from(pluginState).where(eq(pluginState.pluginId, plugin.id)).get();
@@ -64,8 +64,6 @@ export async function enablePlugin(id: string): Promise<void> {
     .values({ pluginId: id, enabled: true })
     .onConflictDoUpdate({ target: pluginState.pluginId, set: { enabled: true } })
     .run();
-  const { default: plugin }: { default: Plugin } = await import(loaded.source.href);
-  loaded.plugin = plugin;
   await setup(loaded);
 }
 
