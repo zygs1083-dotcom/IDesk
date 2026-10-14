@@ -13,6 +13,7 @@ const instance = {
   id: 1,
   processDefinitionCode: "1234567890123456789",
   state: "SUCCESS",
+  commandType: "SCHEDULER",
   startTime: "2026-10-14 01:00:00",
   endTime: "2026-10-14 02:00:00",
 };
@@ -60,7 +61,10 @@ describe("listJobs", () => {
       "fetch",
       vi.fn().mockResolvedValue(new Response('{"code":30002,"msg":"denied","data":null}')),
     );
-    await expect(plugin.listJobs(config)).rejects.toThrow("DolphinScheduler 30002：denied");
+    await expect(plugin.listJobs(config)).rejects.toMatchObject({
+      message: "DolphinScheduler 30002：denied",
+      code: 30002,
+    });
   });
 });
 
@@ -86,6 +90,7 @@ describe("listRuns", () => {
         externalId: "1",
         jobExternalId: "1234567890123456789",
         status,
+        trigger: "SCHEDULER",
         startedAt: new Date("2026-10-14T01:00:00Z"),
         finishedAt: new Date("2026-10-14T02:00:00Z"),
         url: `${baseUrl}/ui/projects/9876543210987654321/workflow/instances/1`,
@@ -128,13 +133,14 @@ describe("listRuns", () => {
       .fn()
       .mockResolvedValue(
         new Response(
-          '{"code":0,"msg":"success","data":{"totalList":[{"id":1,"processDefinitionCode":1234567890123456789,"state":"WAIT_TO_RUN","startTime":null,"endTime":""}],"currentPage":1,"totalPage":1}}',
+          '{"code":0,"msg":"success","data":{"totalList":[{"id":1,"processDefinitionCode":1234567890123456789,"state":"WAIT_TO_RUN","commandType":null,"startTime":null,"endTime":""}],"currentPage":1,"totalPage":1}}',
         ),
       );
     vi.stubGlobal("fetch", fetch);
     const runs = await plugin.listRuns(config, { since: null, limit: 50 });
     expect(runs[0]).toMatchObject({
       jobExternalId: "1234567890123456789",
+      trigger: null,
       startedAt: null,
       finishedAt: null,
     });
@@ -146,9 +152,10 @@ describe("listRuns", () => {
       .mockResolvedValueOnce(new Response(null, { status: 503 }))
       .mockRejectedValueOnce(new Error("offline"));
     vi.stubGlobal("fetch", fetch);
-    await expect(plugin.listRuns(config, { since: null, limit: 50 })).rejects.toThrow(
-      "DolphinScheduler 返回 HTTP 503",
-    );
+    await expect(plugin.listRuns(config, { since: null, limit: 50 })).rejects.toMatchObject({
+      message: "DolphinScheduler 返回 HTTP 503",
+      status: 503,
+    });
     await expect(plugin.listRuns(config, { since: null, limit: 50 })).rejects.toThrow("offline");
   });
 });

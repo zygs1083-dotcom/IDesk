@@ -44,6 +44,7 @@ type Instance = {
   id: number;
   processDefinitionCode: string | number;
   state: DsState;
+  commandType: string | null;
   startTime: string | null;
   endTime: string | null;
 };
@@ -51,26 +52,31 @@ type Page<T> = { totalList: T[]; currentPage: number; totalPage: number };
 
 async function dsGet<T>(config: Config, path: string): Promise<T> {
   const response = await fetch(`${config.baseUrl}${path}`, { headers: { token: config.token } });
-  if (!response.ok) throw new Error(`DolphinScheduler 返回 HTTP ${response.status}`);
-  // Preserve long identifiers before JSON.parse can round them.
+  if (!response.ok)
+    throw Object.assign(new Error(`DolphinScheduler 返回 HTTP ${response.status}`), {
+      status: response.status,
+    });
+  // 在 JSON.parse 丢失精度前保留长整数标识符。
   const body = (await response.text()).replace(
     /("(?:code|processDefinitionCode|projectCode)"\s*:\s*)(\d{16,})(?=\s*[,}])/g,
     '$1"$2"',
   );
   const envelope = JSON.parse(body) as { code: number; msg: string; data: T };
-  if (envelope.code !== 0) throw new Error(`DolphinScheduler ${envelope.code}：${envelope.msg}`);
+  if (envelope.code !== 0)
+    throw Object.assign(new Error(`DolphinScheduler ${envelope.code}：${envelope.msg}`), {
+      code: envelope.code,
+    });
   return envelope.data;
 }
 
 function parseDate(value: string | null): Date | null {
-  // DolphinScheduler's zone-less timestamps are UTC.
+  // DolphinScheduler 不带时区的日期按 UTC 解析。
   return value ? new Date(`${value.replace(" ", "T")}Z`) : null;
 }
 
-const connectionErrors: Record<string, string> = {
-  "HTTP 401": "token 无效",
-  "30002": "没有该项目的权限",
-  "10190": "项目不存在",
+const connectionErrors: Record<number, string> = {
+  30002: "没有该项目的权限",
+  10190: "项目不存在",
 };
 
 export default {
@@ -88,9 +94,14 @@ export default {
       );
       return { success: true };
     } catch (failure) {
-      const message = failure instanceof Error ? failure.message : String(failure);
-      const code = message.match(/^DolphinScheduler (?:返回 )?(HTTP \d+|\d+)/)?.[1];
-      return { success: false, error: (code && connectionErrors[code]) || message };
+      const error = failure as Error & { status?: number; code?: number };
+      return {
+        success: false,
+        error:
+          error.status === 401
+            ? "token 无效"
+            : (error.code !== undefined && connectionErrors[error.code]) || error.message,
+      };
     }
   },
   async listJobs(config) {
@@ -108,7 +119,7 @@ export default {
       externalId: String(definition.code),
       name: definition.name,
       enabled: definition.releaseState === "ONLINE",
-      // UI deep links have not been verified on a real instance.
+      // UI 深链未在真实实例上验证。
       url: `${settings.baseUrl}/ui/projects/${settings.projectCode}/workflow/definitions/${definition.code}`,
     }));
   },
@@ -128,6 +139,7 @@ export default {
           externalId: String(instance.id),
           jobExternalId: String(instance.processDefinitionCode),
           status: statuses[instance.state],
+          trigger: instance.commandType,
           startedAt: parseDate(instance.startTime),
           finishedAt: parseDate(instance.endTime),
           url: `${settings.baseUrl}/ui/projects/${settings.projectCode}/workflow/instances/${instance.id}`,
