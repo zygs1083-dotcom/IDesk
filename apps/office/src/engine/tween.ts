@@ -1,5 +1,7 @@
 import type { Point } from "../scene/scene.ts";
 
+export const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
+
 export const easeInOut = (t: number) => t * t * (3 - 2 * t);
 
 export function tween(
@@ -12,6 +14,7 @@ export function tween(
   ms: number,
   ease = easeInOut,
 ): Promise<void> {
+  if (reducedMotion.matches) ms = 0;
   const start = { x: from.x, y: from.y };
   return new Promise((resolve) => {
     let elapsed = 0;

@@ -1,0 +1,140 @@
+import { Text, type Texture } from "pixi.js";
+import { findPath } from "../scene/path.ts";
+import type { Point, Scene, Seat } from "../scene/scene.ts";
+import { assignSeats } from "../scene/seats.ts";
+import { Character, type CharacterState } from "../stage/character.ts";
+import type { Stage } from "../stage/stage.ts";
+import type { Agent } from "../stage/textures.ts";
+import { ActionQueue } from "./queue.ts";
+
+export class Cast {
+  readonly agents = new Map<string, Agent>();
+  readonly characters = new Map<string, Character>();
+  readonly queue = new ActionQueue();
+  seats = new Map<string, Seat>();
+  readonly present = new Set<string>();
+  private labels: Text[];
+
+  constructor(
+    readonly stage: Stage,
+    readonly scene: Scene,
+    private frames: Record<string, Texture>,
+  ) {
+    this.labels = scene.zones.map((zone) => {
+      const label = new Text({
+        text: "",
+        style: { fontFamily: "monospace", fontSize: 12, fill: 0x302a2a },
+      });
+      label.anchor.set(0.5);
+      label.position.copyFrom(zone.name);
+      stage.world.addChild(label);
+      return label;
+    });
+    const human: Agent = {
+      id: "human",
+      name: "人",
+      kind: "custom",
+      host: "",
+      capabilities: [],
+      webhookUrl: null,
+      lastSeenAt: null,
+      createdAt: "",
+      status: "online",
+    };
+    this.agents.set(human.id, human);
+    this.seats.set(human.id, scene.frontDesk.human);
+    this.add(human);
+    this.place("human", scene.frontDesk.human, "sit");
+  }
+
+  update(agents: Agent[], initial = false) {
+    for (const agent of agents) this.agents.set(agent.id, agent);
+    this.seats = assignSeats(
+      [...this.agents.values()].filter((agent) => agent.id !== "human"),
+      this.scene,
+    );
+    this.seats.set("human", this.scene.frontDesk.human);
+    for (const agent of agents) {
+      if (!this.seats.has(agent.id)) continue;
+      if (!this.characters.has(agent.id)) this.add(agent);
+      if (initial) {
+        const character = this.characters.get(agent.id);
+        const seat = this.seats.get(agent.id);
+        if (character && seat)
+          this.place(agent.id, seat, agent.status === "online" ? "sit" : "away");
+        if (agent.status === "online") this.present.add(agent.id);
+      } else if (agent.status === "online") this.arrive(agent.id);
+      else if (this.present.delete(agent.id)) {
+        void this.queue.enqueue(agent.id, async () => {
+          await this.walk(agent.id, { ...this.scene.door, facing: "down" });
+          this.characters.get(agent.id)?.setState("away");
+        });
+      }
+    }
+    this.scene.zones.forEach((zone, index) => {
+      const hosts = [
+        ...new Set(
+          agents
+            .filter((agent) => {
+              const seat = this.seats.get(agent.id);
+              return seat && zone.seats.includes(seat);
+            })
+            .map((agent) => agent.host),
+        ),
+      ];
+      const label = this.labels[index];
+      if (label) {
+        label.text = hosts.join(" · ");
+        label.scale.set(Math.min(1, 100 / label.width));
+      }
+    });
+  }
+
+  private add(agent: Agent) {
+    const character = new Character(this.stage, agent, this.frames);
+    character.position.copyFrom(this.scene.door);
+    character.setState("away");
+    this.characters.set(agent.id, character);
+    this.stage.characters.addChild(character);
+  }
+
+  arrive(id: string) {
+    const seat = this.seats.get(id);
+    const character = this.characters.get(id);
+    if (!seat || !character || this.present.has(id) || id === "human") return;
+    this.present.add(id);
+    void this.queue.enqueue(id, async () => {
+      character.position.copyFrom(this.scene.door);
+      await this.walk(id, seat);
+      character.setState("sit");
+    });
+  }
+
+  nearest(point: Point) {
+    return [...this.scene.waypoints].sort(
+      (a, b) => Math.hypot(a.x - point.x, a.y - point.y) - Math.hypot(b.x - point.x, b.y - point.y),
+    )[0];
+  }
+
+  async walk(id: string, target: Seat) {
+    const character = this.characters.get(id);
+    if (!character || character.destroyed) return;
+    const from = this.nearest(character.position);
+    if (!from) return;
+    await character.walkTo([...findPath(this.scene, from.id, target.via), target]);
+    character.facing = target.facing;
+  }
+
+  place(id: string, target: Seat, state: CharacterState) {
+    const character = this.characters.get(id);
+    if (!character) return;
+    character.position.copyFrom(target);
+    character.facing = target.facing;
+    character.setState(state);
+  }
+
+  desk(id: string): Point {
+    const seat = this.seats.get(id) ?? this.scene.frontDesk.human;
+    return { x: seat.x + (seat.facing === "left" ? -35 : 35), y: seat.y + 25 };
+  }
+}

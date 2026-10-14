@@ -1,5 +1,5 @@
-import { ColorMatrixFilter, Container, Sprite, Text, type Texture } from "pixi.js";
-import { tween } from "../engine/tween.ts";
+import { ColorMatrixFilter, Container, Graphics, Sprite, Text, type Texture } from "pixi.js";
+import { reducedMotion, tween } from "../engine/tween.ts";
 import type { Direction, Point } from "../scene/scene.ts";
 import { Bubble } from "./bubble.ts";
 import { hueOffset } from "./hue.ts";
@@ -12,10 +12,15 @@ export class Character extends Container {
   state: CharacterState = "idle";
   facing: Direction = "down";
   private sprite: Sprite;
+  private cup = new Graphics()
+    .rect(12, -42, 10, 9)
+    .fill(0xfff0ce)
+    .stroke({ color: 0x302a2a, width: 2 })
+    .rect(22, -40, 4, 5)
+    .stroke({ color: 0x302a2a, width: 2 });
   readonly bubble = new Bubble();
   private fallback: Texture;
   private elapsed = 0;
-  private reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
 
   constructor(
     private stage: Stage,
@@ -44,6 +49,14 @@ export class Character extends Container {
     label.y = -102;
     label.visible = false;
     this.eventMode = "static";
+    this.cursor = "pointer";
+    this.on("pointertap", () =>
+      window.dispatchEvent(
+        new CustomEvent("office:select", {
+          detail: { type: "agent", id: agent.id },
+        }),
+      ),
+    );
     this.on("pointerover", () => {
       label.visible = true;
     });
@@ -51,7 +64,8 @@ export class Character extends Container {
       label.visible = false;
     });
     this.bubble.y = -104;
-    this.addChild(this.sprite, label, this.bubble);
+    this.cup.visible = false;
+    this.addChild(this.sprite, this.cup, label, this.bubble);
     stage.app.ticker.add(this.animate, undefined, -1);
     this.on("destroyed", () => {
       stage.app.ticker.remove(this.animate);
@@ -60,15 +74,16 @@ export class Character extends Container {
   }
 
   setState(state: CharacterState) {
+    if (state === "away" || (this.state === "talk" && state !== "talk")) this.bubble.hide();
     this.state = state;
     this.visible = state !== "away";
-    this.bubble.hide();
+    this.cup.visible = state === "coffee";
     if (state === "talk") this.bubble.show("…", Number.POSITIVE_INFINITY);
   }
 
   private animate = () => {
     this.zIndex = this.y;
-    if (!this.reducedMotion.matches) this.elapsed += this.stage.app.ticker.deltaMS;
+    if (!reducedMotion.matches) this.elapsed += this.stage.app.ticker.deltaMS;
     const walk = `walk/${this.facing}/0`;
     const poses: Record<CharacterState, string> = {
       idle: walk,
@@ -79,8 +94,9 @@ export class Character extends Container {
       coffee: walk,
       away: walk,
     };
-    this.sprite.texture = this.frames[`${this.agent.kind}/${poses[this.state]}`] ?? this.fallback;
     const seated = this.state === "sit" || this.state === "typing" || this.state === "talk";
+    const pose = seated && this.facing === "down" ? "walk/down/0" : poses[this.state];
+    this.sprite.texture = this.frames[`${this.agent.kind}/${pose}`] ?? this.fallback;
     this.sprite.scale.x = seated && this.facing === "left" ? -1 : 1;
   };
 
@@ -91,15 +107,13 @@ export class Character extends Container {
       const dy = target.y - this.y;
       this.facing =
         Math.abs(dx) > Math.abs(dy) ? (dx < 0 ? "left" : "right") : dy < 0 ? "up" : "down";
-      if (this.reducedMotion.matches) this.position.copyFrom(target);
-      else
-        await tween(
-          this.stage.app.ticker,
-          this.position,
-          target,
-          (Math.hypot(dx, dy) / 90) * 1000,
-          (t) => t,
-        );
+      await tween(
+        this.stage.app.ticker,
+        this.position,
+        target,
+        (Math.hypot(dx, dy) / 90) * 1000,
+        (t) => t,
+      );
       if (this.destroyed) return;
     }
     this.setState("idle");
