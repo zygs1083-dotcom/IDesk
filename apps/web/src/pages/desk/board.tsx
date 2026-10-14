@@ -15,7 +15,7 @@ import type { Task, TaskEvent } from "../../lib/types.ts";
 import { useAgents } from "../../lib/use-agents.ts";
 import { ActionDialog } from "./action-dialog.tsx";
 import { Column } from "./column.tsx";
-import { DraggableCard } from "./draggable-card.tsx";
+import { ColumnContent } from "./column-content.tsx";
 import { actionSamples, dropAction } from "./drop-action.ts";
 import { dropAnimation } from "./drop-animation.ts";
 import { TaskCard } from "./task-card.tsx";
@@ -25,6 +25,7 @@ export function Board({
   tasks,
   handoffs,
   search,
+  group,
   loading,
   onOpen,
   onPublish,
@@ -32,6 +33,7 @@ export function Board({
   tasks: Task[];
   handoffs: TaskEvent[];
   search: string;
+  group: "flat" | "host";
   loading: boolean;
   onOpen: (id: string) => void;
   onPublish: () => void;
@@ -112,19 +114,16 @@ export function Board({
                 count={columnTasks.length}
                 legal={legal[status] ?? true}
               >
-                {columnTasks.map((task) => (
-                  <DraggableCard
-                    key={task.id}
-                    task={task}
-                    entering={!seen.current.has(task.id)}
-                    name={agentName(task.assigneeId ?? task.publisherId)}
-                    {...(handoffName(task) === undefined
-                      ? {}
-                      : { handoff: handoffName(task) as string })}
-                    onOpen={() => onOpen(task.id)}
-                    shake={shake === task.id}
-                  />
-                ))}
+                <ColumnContent
+                  tasks={columnTasks}
+                  agents={agents}
+                  group={group}
+                  seen={seen.current}
+                  agentName={agentName}
+                  handoffName={handoffName}
+                  onOpen={onOpen}
+                  shake={shake}
+                />
               </Column>
             );
           })}

@@ -4,6 +4,7 @@ import { AnimatePresence } from "motion/react";
 import { useRef, useState } from "react";
 import { useSearchParams } from "react-router";
 import { Button } from "../../components/button.tsx";
+import { Segmented } from "../../components/segmented.tsx";
 import { PageHeader } from "../../layout/page-header.tsx";
 import { request } from "../../lib/api.ts";
 import type { TaskEvent } from "../../lib/types.ts";
@@ -19,6 +20,9 @@ export function Desk() {
     queryFn: () => request<TaskEvent[]>("/events?type=task.handoff"),
   });
   const searchInput = useRef<HTMLInputElement>(null);
+  const [group, setGroup] = useState<"flat" | "host">(() =>
+    localStorage.getItem("desk.group") === "host" ? "host" : "flat",
+  );
   const [search, setSearch] = useState("");
   const [publish, setPublish] = useState(false);
   const [params, setParams] = useSearchParams();
@@ -37,9 +41,9 @@ export function Desk() {
   useShortcut("/", () => searchInput.current?.focus());
   return (
     <div className="flex h-full min-h-0 flex-col gap-6">
-      <div className="flex items-center gap-4">
+      <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 sidebar:flex sidebar:gap-4">
         <PageHeader title="协作台" />
-        <label className="flex min-w-0 max-w-60 flex-1 items-center gap-2 rounded-control border border-line bg-surface px-3 py-2 text-text-2">
+        <label className="order-3 flex min-w-0 flex-1 sidebar:order-none sidebar:max-w-60 items-center gap-2 rounded-control border border-line bg-surface px-3 py-2 text-text-2">
           <Search size={16} strokeWidth={1.5} />
           <input
             ref={searchInput}
@@ -50,7 +54,25 @@ export function Desk() {
             className="min-w-0 w-full bg-transparent text-secondary text-text outline-none placeholder:text-text-3 focus-visible:outline-1 focus-visible:outline-accent"
           />
         </label>
-        <Button variant="primary" className="ml-auto shrink-0" onClick={() => setPublish(true)}>
+        <div className="order-4 sidebar:order-none">
+          <Segmented<"flat" | "host">
+            label="分组"
+            options={[
+              { value: "flat", label: "平铺" },
+              { value: "host", label: "按主机" },
+            ]}
+            value={group}
+            onChange={(value) => {
+              setGroup(value);
+              localStorage.setItem("desk.group", value);
+            }}
+          />
+        </div>
+        <Button
+          variant="primary"
+          className="order-2 ml-auto shrink-0 sidebar:order-none"
+          onClick={() => setPublish(true)}
+        >
           发布
         </Button>
       </div>
@@ -63,6 +85,7 @@ export function Desk() {
         tasks={tasks}
         handoffs={handoffs}
         search={search}
+        group={group}
         loading={isPending || !!queryError}
         onOpen={setSelected}
         onPublish={() => setPublish(true)}
