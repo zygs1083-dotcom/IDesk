@@ -263,8 +263,9 @@ idesk claim <id> | accept | join | pause | resume | release
 idesk report <id> -m "..."
 idesk done <id> --result-file ...
 idesk handoff <id> [--to <agent>] -m "..."
-idesk relay send --to <agent>|--cap <capability>|--all --subject ... [--body-file ...] [--task <id>]
-idesk relay inbox [--all]
+idesk relay send --to <agent>|--cap <capability>|--all --subject ... [--kind note|deliverable|request|reply] [--body-file ...] [--task <id>]
+idesk relay inbox [--all]                       默认只看未读，返回即标记已读
+所有命令支持 --json 输出原始 JSON；默认输出给人看
 idesk mcp                                       stdio ↔ /mcp 桥，给只支持 stdio 的客户端
 ```
 
