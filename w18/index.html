@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><title>W18 sprite motion check</title>
+<style>body{margin:0;background:#f7eddc;font:16px monospace;color:#33251c}h1,p{margin:12px 24px}canvas{display:block;margin:0 20px;image-rendering:pixelated}</style>
+<h1>W18 — 5 kinds × 4 directions</h1><p>150 ms/frame · PixiJS 8 Assets.load · shared 64×96 frames</p>
+<script src="pixi.min.js"></script>
+<script>
+(async () => {
+  const dark = new URLSearchParams(location.search).has('dark');
+  document.body.style.background = dark ? '#262423' : '#f7eddc';
+  document.body.style.color = dark ? '#f7eddc' : '#33251c';
+  const app = new PIXI.Application();
+  await app.init({width:900,height:1130,background:dark ? '#262423' : '#f7eddc',preference:'webgl',antialias:false});
+  document.body.append(app.canvas);
+  const sheet=await PIXI.Assets.load('sprites.json');
+  const kinds=['claude-code','codex','n8n','script','custom'];
+  const dirs=['down','left','right','up'];
+  const sprites=[];
+  for(let k=0;k<5;k++){
+    const label=new PIXI.Text({text:kinds[k],style:{fontFamily:'monospace',fontSize:18,fill:dark?'#f7eddc':'#33251c'}});
+    label.position.set(12,30+k*216);app.stage.addChild(label);
+    for(let d=0;d<4;d++){
+      const animation=sheet.animations[`${kinds[k]}/walk/${dirs[d]}`];
+      for(const texture of animation)texture.source.scaleMode='nearest';
+      const sprite=new PIXI.Sprite(animation[0]);sprite.scale.set(2);sprite.position.set(200+d*170,32+k*216);app.stage.addChild(sprite);
+      sprites.push({sprite,animation});
+      if(k===0){const text=new PIXI.Text({text:dirs[d],style:{fontFamily:'monospace',fontSize:16,fill:dark?'#f7eddc':'#33251c'}});text.position.set(210+d*170,0);app.stage.addChild(text);}
+    }
+  }
+  let elapsed=0;
+  window.phase=0;
+  app.ticker.add(ticker=>{elapsed+=ticker.deltaMS;window.phase=Math.floor(elapsed/150);for(const {sprite,animation} of sprites)sprite.texture=animation[window.phase%4];});
+  window.ready={textures:Object.keys(sheet.textures).length,animations:Object.keys(sheet.animations).length,sprites:sprites.length,pixi:PIXI.VERSION};
+})();
+</script></html>
