@@ -3,9 +3,9 @@ import { expireLeases } from "../core/tasks/lease.ts";
 import { pollDueConnectors } from "../plugins/poll.ts";
 
 export function startScheduler(): () => void {
-  const job = new Cron("* * * * *", () => {
+  const job = new Cron("* * * * *", { protect: true }, async () => {
     expireLeases(new Date());
-    void pollDueConnectors(new Date());
+    await pollDueConnectors(new Date());
   });
   return () => job.stop();
 }

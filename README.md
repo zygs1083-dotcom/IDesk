@@ -5,7 +5,9 @@ Intelligent Dispatching Desk：跨网络的 AI 协作调度台。多台设备上
 - 架构：`docs/DESIGN.md`
 - 界面：`docs/UI.md`
 - 路线：`docs/ROADMAP.md`
-- 开发约定：`AGENTS.md`
+- 扩展（写插件、接新客户端、改办公室）：`docs/EXTENDING.md`
+- 想法与技巧：`docs/IDEAS.md`
+- 贡献与代码约定：`CONTRIBUTING.md`
 
 ## 本地开发
 
@@ -89,12 +91,27 @@ docker compose -f deploy/compose.yml up -d --build
 
 打开 `http://127.0.0.1:3300`，用管理员密码登录。API 与前端由同一进程提供，启动时自动执行数据库迁移。镜像通过 tsx 运行 API 和内置 TypeScript 插件，以非 root 的 `node` 用户运行。
 
-命名卷 `idesk-data` 挂载到 `/data`，保存 SQLite 数据库；`docker compose -f deploy/compose.yml down` 后仍保留数据。外置插件可放在卷中的 `/data/plugins/<插件名>/index.js`。可在 `.env` 中设置 `IDESK_PUBLIC_URL` 为实际访问地址，供 CLI/MCP 提示使用。
+命名卷 `idesk-data` 挂载到 `/data`，保存 SQLite 数据库；`docker compose -f deploy/compose.yml down` 后仍保留数据。外置插件放在卷中的 `/data/plugins/<插件名>/index.js`，写法见 `docs/EXTENDING.md`。可在 `.env` 中设置 `IDESK_PUBLIC_URL` 为实际访问地址，供 CLI/MCP 提示使用。
 
-服务仅绑定 `127.0.0.1:3300`。通过 Tailscale 访问时，由管理员检查已有的 `tailscale serve` 配置并选择未占用的 HTTPS 端口，例如：
+服务仅绑定 `127.0.0.1:3300`。通过 Tailscale 访问时，先看 `tailscale serve status` 选一个没用的端口。tailnet 开了 HTTPS 证书用：
 
 ```sh
 tailscale serve --bg --https=8443 http://127.0.0.1:3300
 ```
 
-随后通过该设备的 Tailscale HTTPS 地址及端口访问；保留已有的其他端口转发配置。
+没开证书时上面的命令会一直等证书，改用 TCP 转发走明文：
+
+```sh
+tailscale serve --bg --tcp=8443 tcp://127.0.0.1:3300
+```
+
+随后通过该设备的 Tailscale 地址加端口访问。
+
+### 备份
+
+```sh
+docker compose -f deploy/compose.yml exec idesk ./node_modules/.bin/tsx src/db/backup.ts /data/backup.db
+docker cp deploy-idesk-1:/data/backup.db ./idesk-backup.db
+```
+
+用的是 SQLite 在线备份，WAL 里未落盘的事务也包含在内。本地开发用 `pnpm --filter api db:backup [目标路径]`。

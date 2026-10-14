@@ -1,6 +1,6 @@
-# IDesk 开发约定
+# 贡献指南
 
-所有在这个仓库工作的 agent（Codex、Claude、其他）都读这份。设计以 `docs/DESIGN.md` 为准，界面以 `docs/UI.md` 为准，任务拆分见 `docs/ROADMAP.md`。本文件讲怎么写代码。
+不管是人还是 AI 写代码，都按这份来。设计以 `docs/DESIGN.md` 为准，界面以 `docs/UI.md` 为准，任务拆分见 `docs/ROADMAP.md`，写插件看 `docs/EXTENDING.md`。本文件讲怎么写代码。
 
 ## 产品是什么
 

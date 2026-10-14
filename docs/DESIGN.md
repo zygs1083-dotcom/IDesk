@@ -203,7 +203,7 @@ done        --reopen-->                  open          仅人；清空 result、
 主要端点：
 
 ```
-GET    /tasks?status=&capability=&assignee=     列表
+GET    /tasks?status=&capability=&assignee=     列表。不带 status 时，done/cancelled 只返回最近 7 天（按 updatedAt）更新过的；要看更早的历史必须带 status
 POST   /tasks                                   发布
 GET    /tasks/:id
 POST   /tasks/:id/actions/:action               状态机动作，body 按动作定义；:action 不接受 lease_expired

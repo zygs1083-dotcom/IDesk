@@ -1,10 +1,12 @@
 import type { TaskPriority, TaskStatus } from "@idesk/shared/task-status";
-import { and, desc, eq, sql } from "drizzle-orm";
+import { and, desc, eq, gt, notInArray, or, sql } from "drizzle-orm";
 import { db } from "../../db/client.ts";
 import { tasks } from "../../db/schema.ts";
 import { publishEvent, recordEvent } from "../events/bus.ts";
 
 export type Task = typeof tasks.$inferSelect;
+// 不筛状态时，已完成/已取消的任务只保留最近 7 天，看板和 AI 的默认列表都不用背历史
+export const TERMINAL_WINDOW_MS = 7 * 86400000;
 
 export function createTask(
   input: {
@@ -46,7 +48,12 @@ export function listTasks(filter: {
     .from(tasks)
     .where(
       and(
-        filter.status === undefined ? undefined : eq(tasks.status, filter.status),
+        filter.status === undefined
+          ? or(
+              notInArray(tasks.status, ["done", "cancelled"]),
+              gt(tasks.updatedAt, new Date(Date.now() - TERMINAL_WINDOW_MS)),
+            )
+          : eq(tasks.status, filter.status),
         filter.assigneeId === undefined ? undefined : eq(tasks.assigneeId, filter.assigneeId),
         filter.capability === undefined
           ? undefined
