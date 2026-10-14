@@ -85,12 +85,24 @@ index.ts                                         启动
 | capabilities | string[]，与 Task.capabilities 匹配 |
 | apiKeyHash | SHA-256；明文只在创建时返回一次 |
 | webhookUrl | 可选；有则推送任务事件 |
-| lastSeenAt | 任何带 key 的请求都会更新 |
+| lastSeenAt | 任何带 key 的请求都会更新（鉴权时顺带写，没有单独的心跳函数；`POST /agents/me/heartbeat` 只是一个空请求） |
 | status | 派生：lastSeenAt 在 2 分钟内为 `online` |
 
 ### 4.3 Event（只追加）
 
-`{ id, ts, type, taskId?, agentId?, payload }`。类型形如 `task.created` `task.claimed` `task.transitioned` `task.heartbeat` `relay.sent` `agent.registered` `connector.polled` `schedule.fired`。所有 UI 活动流、WS 推送、Webhook、插件订阅都来自这张表。
+`{ id, ts, type, taskId?, agentId?, payload }`。所有 UI 活动流、WS 推送、Webhook、插件订阅都来自这张表。
+
+事件类型：
+
+| 类型 | payload | 何时 |
+| --- | --- | --- |
+| `task.created` | `{ title, status }` | 发布 |
+| `task.<action>` | `{ from, to }`，handoff 另带 `handoffTo` | 每个状态机动作一条，action 名同 §5 |
+| `task.reported` | `{ message }` | AI 汇报进展（内部同时续租） |
+| `relay.sent` | `{ messageId, to }` | 传递区发消息 |
+| `agent.registered` | `{ name, kind }` | 新建智能体 |
+| `connector.polled` | `{ connectorId, changed }` | 连接器轮询有变化 |
+| `schedule.fired` | `{ scheduleId, status }` | 定时任务执行 |
 
 ### 4.4 Schedule（定时任务）
 
