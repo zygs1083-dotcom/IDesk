@@ -7,8 +7,7 @@ export function groupByHost(
   const hosts = new Map(agents.map((agent) => [agent.id, agent.host]));
   const groups = new Map<string | null, Task[]>();
   for (const task of tasks) {
-    const owner = task.assigneeId ?? task.publisherId;
-    const host = owner === "human" ? null : (hosts.get(owner) ?? null);
+    const host = hosts.get(task.assigneeId ?? task.publisherId) ?? null;
     const group = groups.get(host);
     if (group) group.push(task);
     else groups.set(host, [task]);
