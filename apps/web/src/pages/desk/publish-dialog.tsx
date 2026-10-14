@@ -6,8 +6,8 @@ import { Dialog } from "../../components/dialog.tsx";
 import { Field } from "../../components/field.tsx";
 import { Segmented } from "../../components/segmented.tsx";
 import { request } from "../../lib/api.ts";
+import { priorityLabels } from "./priority-label.ts";
 
-const priorityLabels = { low: "低", normal: "普通", high: "高", urgent: "紧急" };
 export function PublishDialog({ onClose }: { onClose: () => void }) {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
