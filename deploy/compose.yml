@@ -3,6 +3,9 @@ services:
     build:
       context: ..
       dockerfile: deploy/Dockerfile
+      args:
+        # 改成 "false" 即不部署像素办公室。
+        WITH_OFFICE: "true"
     ports:
       - "127.0.0.1:3300:3300"
     env_file: ../.env

@@ -1,3 +1,5 @@
+import { existsSync, readFileSync } from "node:fs";
+import { join } from "node:path";
 import { serveStatic } from "@hono/node-server/serve-static";
 import { OpenAPIHono } from "@hono/zod-openapi";
 import { z } from "zod";
@@ -32,6 +34,8 @@ app.onError((err, c) => {
   return c.json({ error: "internal error" }, 500);
 });
 
+app.get("/api/meta", (c) => c.json({ office: config.IDESK_OFFICE_DIST !== undefined }));
+
 app.get("/api/health", (c) => c.json({ ok: true }));
 
 app.use("/api/v1/*", auth);
@@ -52,6 +56,22 @@ app.doc("/api/openapi.json", {
 });
 
 export const injectWebSocket = registerWebSocket(app);
+
+if (config.IDESK_OFFICE_DIST !== undefined) {
+  const dist = config.IDESK_OFFICE_DIST;
+  app.get("/office/scene.json", (c) => {
+    const override = join(config.IDESK_DATA_DIR, "office", "scene.json");
+    const path = existsSync(override) ? override : join(dist, "scene.json");
+    return c.body(readFileSync(path, "utf8"), 200, { "Content-Type": "application/json" });
+  });
+  app.use(
+    "/office/*",
+    serveStatic({ root: dist, rewriteRequestPath: (path) => path.slice("/office".length) }),
+  );
+  app.get("/office/*", serveStatic({ root: dist, path: "index.html" }));
+} else {
+  app.get("/office/*", (c) => c.notFound());
+}
 
 if (config.IDESK_WEB_DIST) {
   app.use("/*", serveStatic({ root: config.IDESK_WEB_DIST }));

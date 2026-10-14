@@ -1,9 +1,12 @@
+ARG WITH_OFFICE=true
 FROM node:24-bookworm-slim AS build
+ARG WITH_OFFICE
 RUN corepack enable
 WORKDIR /app
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY apps/api/package.json apps/api/package.json
 COPY apps/web/package.json apps/web/package.json
+COPY apps/office/package.json apps/office/package.json
 COPY packages/shared/package.json packages/shared/package.json
 COPY packages/cli/package.json packages/cli/package.json
 COPY plugins/n8n/package.json plugins/n8n/package.json
@@ -12,6 +15,7 @@ COPY plugins/webhook-notifier/package.json plugins/webhook-notifier/package.json
 RUN pnpm install --frozen-lockfile
 COPY . .
 RUN pnpm --filter web build
+RUN if [ "$WITH_OFFICE" = "true" ]; then pnpm --filter office build; fi
 
 FROM node:24-bookworm-slim AS runtime
 RUN corepack enable
@@ -34,3 +38,11 @@ VOLUME /data
 EXPOSE 3300
 WORKDIR /app/apps/api
 CMD ["sh", "-c", "./node_modules/.bin/tsx src/db/migrate.ts && exec ./node_modules/.bin/tsx src/index.ts"]
+
+FROM runtime AS runtime-true
+COPY --from=build /app/apps/office/dist /app/apps/office/dist
+ENV IDESK_OFFICE_DIST=/app/apps/office/dist
+
+FROM runtime AS runtime-false
+
+FROM runtime-${WITH_OFFICE} AS final
