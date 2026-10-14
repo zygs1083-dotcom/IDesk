@@ -1,7 +1,8 @@
 import { createHash, randomBytes } from "node:crypto";
+import type { AGENT_KINDS } from "@idesk/shared/agent-schemas";
 import { eq } from "drizzle-orm";
 import { db } from "../../db/client.ts";
-import { type AGENT_KINDS, agents } from "../../db/schema.ts";
+import { agents } from "../../db/schema.ts";
 import { publishEvent, recordEvent } from "../events/bus.ts";
 
 type Agent = typeof agents.$inferSelect;

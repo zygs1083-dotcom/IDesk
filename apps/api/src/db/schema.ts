@@ -1,10 +1,10 @@
+import { AGENT_KINDS } from "@idesk/shared/agent-schemas";
 import { RELAY_KINDS, type RelayRecipient } from "@idesk/shared/relay";
 import type { TaskRecruit } from "@idesk/shared/task-machine";
 import { TASK_PRIORITIES, TASK_STATUSES, type TaskPriority } from "@idesk/shared/task-status";
 import { index, integer, sqliteTable, text, uniqueIndex } from "drizzle-orm/sqlite-core";
 import { ulid } from "ulid";
 
-export const AGENT_KINDS = ["claude-code", "codex", "n8n", "script", "custom"] as const;
 export const RUN_STATUSES = ["waiting", "running", "success", "failed", "canceled"] as const;
 
 export const tasks = sqliteTable(

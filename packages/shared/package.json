@@ -6,7 +6,10 @@
   "exports": {
     "./task-status": "./src/task-status.ts",
     "./task-machine": "./src/task-machine.ts",
-    "./relay": "./src/relay.ts"
+    "./relay": "./src/relay.ts",
+    "./task-schemas": "./src/task-schemas.ts",
+    "./agent-schemas": "./src/agent-schemas.ts",
+    "./relay-schemas": "./src/relay-schemas.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
