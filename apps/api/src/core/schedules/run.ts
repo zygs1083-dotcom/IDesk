@@ -48,7 +48,7 @@ export async function runSchedule(id: string): Promise<Schedule | undefined> {
   if (!row) return undefined;
   let result: RunResult;
   try {
-    // The union keeps the action and its table entry correlated.
+    // 同一 type 下 action 与执行函数一一对应，断言只为让 TS 认可。
     const execute = executions[row.action.type] as (action: ScheduleAction) => Promise<RunResult>;
     result = await execute(row.action);
   } catch (error) {
