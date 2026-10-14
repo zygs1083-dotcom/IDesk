@@ -5,8 +5,8 @@ export class Bubble extends Container {
   private text = new Text({
     text: "",
     style: {
-      fontFamily: "monospace",
-      fontSize: 14,
+      fontFamily: "Fusion Pixel",
+      fontSize: 12,
       fill: 0x302a2a,
       wordWrap: true,
       wordWrapWidth: 180,

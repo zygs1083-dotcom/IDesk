@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { direct } from "./director/director.ts";
 import { type Scene, sceneSchema } from "./scene/scene.ts";
-import { assignSeats } from "./scene/seats.ts";
+import { assignSeats, assignStanding } from "./scene/seats.ts";
 import { createEditor } from "./stage/editor.ts";
 import { createStage } from "./stage/stage.ts";
 import { AgentPanel } from "./ui/agent-panel.tsx";
@@ -39,6 +39,8 @@ export function App() {
       const element = host.current;
       if (!element || disposed) return;
       setScene(scene);
+      await document.fonts.load('12px "Fusion Pixel"');
+      if (disposed) return;
       stage = await createStage(element);
       if (disposed) {
         stage.app.destroy(true, { children: true });
@@ -62,6 +64,7 @@ export function App() {
     };
   }, []);
   const seats = scene ? assignSeats(agents, scene) : new Map();
+  const standing = scene ? assignStanding(agents, seats, scene) : new Map();
   const agent =
     selection?.type === "agent" ? agents.find((item) => item.id === selection.id) : undefined;
   const task =
@@ -92,6 +95,7 @@ export function App() {
           <TaskPanel task={task} agents={agents} onClose={closePanel} />
         ) : scene ? (
           <Roster
+            standing={standing}
             zones={scene.zones.slice(2)}
             agents={agents}
             tasks={tasks}

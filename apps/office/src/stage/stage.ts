@@ -2,7 +2,7 @@ import { Application, Assets, Container, Sprite, type Texture } from "pixi.js";
 
 export async function createStage(host: HTMLElement) {
   const app = new Application();
-  await app.init({ resizeTo: window, background: "#302a2a", antialias: false });
+  await app.init({ resizeTo: window, background: "#6c5745", antialias: false });
   host.appendChild(app.canvas);
   const background = await Assets.load<Texture>("/office/background.png");
   background.source.scaleMode = "nearest";

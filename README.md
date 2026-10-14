@@ -60,6 +60,20 @@ node main.js login --url <origin> --key <key>
 
 查看 `<origin>/api/openapi.json`；请求头使用 `Authorization: Bearer <key>`。
 
+## 像素办公室
+
+把智能体与任务事件画成会走动、递卡片的像素办公室，登录后打开 `/office/`。
+`deploy/Dockerfile` 的构建参数 `WITH_OFFICE` 默认是 `true`；在 compose 的 `build.args` 中设为 `"false"` 可不打包办公室。
+
+换场景：按 `e` 进入编辑模式，拖动座位、站位和路点，点击「导出 JSON」。
+把文件放到 `IDESK_DATA_DIR/office/scene.json`，即可覆盖内置 `scene.json`，无需重新构建。
+
+换素材：按 `apps/office/assets/PROMPTS.md` 生图，再从仓库根目录运行：
+
+```sh
+node apps/office/tools/sprites.mjs
+```
+
 ## 部署
 
 需要 Docker 和 Docker Compose。在仓库根目录创建 `.env`，填入两个必填项：

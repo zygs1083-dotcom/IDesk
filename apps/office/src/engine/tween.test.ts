@@ -48,12 +48,13 @@ test("easing endpoints and overshoot land exactly on the target", async () => {
   expect(point).toEqual({ x: 5, y: 9 });
 });
 
-test("reduced motion reaches the destination in one tick regardless of duration", async () => {
+test("reduced motion reaches the destination without waiting for a tick", async () => {
   motion.matches = true;
   const ticker = manualTicker();
   const point = { x: 0, y: 0 };
   const finished = tween(ticker, point, { x: 100, y: 200 }, 5000);
-  ticker.advance(1);
+  expect(point).toEqual({ x: 100, y: 200 });
+  expect(ticker.updates.size).toBe(0);
   await finished;
   expect(point).toEqual({ x: 100, y: 200 });
   expect(ticker.updates.size).toBe(0);
