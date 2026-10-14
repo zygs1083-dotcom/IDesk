@@ -1,4 +1,4 @@
-import type { Tx } from "../../db/client.ts";
+import { db, type Tx } from "../../db/client.ts";
 import { events } from "../../db/schema.ts";
 
 export type Event = typeof events.$inferSelect;
@@ -36,4 +36,10 @@ export function onEvent(type: string, listener: Listener): () => void {
   return () => {
     subscriptions.delete(listener);
   };
+}
+
+export function emitEvent(event: NewEvent): Event {
+  const recorded = db.transaction((tx) => recordEvent(tx, event));
+  publishEvent(recorded);
+  return recorded;
 }
