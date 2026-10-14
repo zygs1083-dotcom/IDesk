@@ -1,14 +1,36 @@
 FROM node:24-bookworm-slim AS build
 RUN corepack enable
-WORKDIR /src
+WORKDIR /app
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY apps/api/package.json apps/api/package.json
+COPY apps/web/package.json apps/web/package.json
+COPY packages/shared/package.json packages/shared/package.json
+COPY packages/cli/package.json packages/cli/package.json
+COPY plugins/n8n/package.json plugins/n8n/package.json
+COPY plugins/dolphinscheduler/package.json plugins/dolphinscheduler/package.json
+COPY plugins/webhook-notifier/package.json plugins/webhook-notifier/package.json
+RUN pnpm install --frozen-lockfile
 COPY . .
-RUN pnpm install --frozen-lockfile && pnpm build
+RUN pnpm --filter web build
 
-FROM node:24-bookworm-slim
+FROM node:24-bookworm-slim AS runtime
 RUN corepack enable
 WORKDIR /app
-COPY --from=build /src /app
-ENV NODE_ENV=production IDESK_DATA_DIR=/data IDESK_WEB_DIST=/app/apps/web/dist IDESK_PORT=3300
+COPY --from=build /app/package.json /app/pnpm-lock.yaml /app/pnpm-workspace.yaml ./
+COPY --from=build /app/apps/api/package.json apps/api/package.json
+COPY --from=build /app/packages/shared/package.json packages/shared/package.json
+COPY --from=build /app/plugins/n8n/package.json plugins/n8n/package.json
+COPY --from=build /app/plugins/dolphinscheduler/package.json plugins/dolphinscheduler/package.json
+COPY --from=build /app/plugins/webhook-notifier/package.json plugins/webhook-notifier/package.json
+RUN pnpm install --frozen-lockfile --prod
+COPY apps/api apps/api
+COPY packages/shared packages/shared
+COPY plugins plugins
+COPY --from=build /app/apps/web/dist apps/web/dist
+RUN mkdir /data && chown node:node /data
+ENV NODE_ENV=production IDESK_DATA_DIR=/data IDESK_WEB_DIST=/app/apps/web/dist IDESK_PORT=3300 IDESK_PLUGIN_DIR=/data/plugins
+USER node
 VOLUME /data
 EXPOSE 3300
-CMD ["sh", "-c", "pnpm --filter api db:migrate && node apps/api/dist/index.js"]
+WORKDIR /app/apps/api
+CMD ["sh", "-c", "./node_modules/.bin/tsx src/db/migrate.ts && exec ./node_modules/.bin/tsx src/index.ts"]
