@@ -16,7 +16,7 @@ export function createActions(cast: Cast, cards: Cards) {
     const seat = cast.seats.get(id);
     if (!seat) return;
     await cast.walk(id, seat);
-    characters.get(id)?.setState(state);
+    cast.settle(id, state);
   };
   const flights = new Map<string, Promise<void>>();
   const taskAction = (task: Task, id: string, action: () => Promise<void>) => {

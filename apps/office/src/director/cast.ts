@@ -113,7 +113,7 @@ export class Cast {
       if (delay) await new Promise((resolve) => setTimeout(resolve, delay));
       character.position.copyFrom(this.scene.door);
       await this.walk(id, seat);
-      character.setState(this.standing.has(id) ? "idle" : "sit");
+      this.settle(id, "sit");
     });
   }
 
@@ -143,7 +143,12 @@ export class Cast {
     if (!character) return;
     character.position.copyFrom(target);
     character.facing = target.facing;
-    character.setState(state === "sit" && this.standing.has(id) ? "idle" : state);
+    this.settle(id, state);
+  }
+
+  settle(id: string, state: CharacterState) {
+    const standing = this.standing.has(id) && (state === "sit" || state === "typing");
+    this.characters.get(id)?.setState(standing ? "idle" : state);
   }
 
   desk(id: string): Point {
