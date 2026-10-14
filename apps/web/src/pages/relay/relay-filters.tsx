@@ -1,6 +1,5 @@
-import { RELAY_KINDS } from "@idesk/shared/relay";
+import { RELAY_KIND_LABEL, RELAY_KINDS } from "@idesk/shared/relay";
 import { Segmented } from "../../components/segmented.tsx";
-import { RELAY_KIND_LABEL } from "./labels.ts";
 
 export function RelayFilters({
   recipient,

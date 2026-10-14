@@ -1,3 +1,4 @@
+import { RELAY_KIND_LABEL } from "@idesk/shared/relay";
 import type { relayMessageSchema } from "@idesk/shared/relay-schemas";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
@@ -9,7 +10,7 @@ import { cn } from "../../lib/cn.ts";
 import { relativeTime } from "../../lib/format.ts";
 import { useAgents } from "../../lib/use-agents.ts";
 import { ComposeRelay } from "./compose-relay.tsx";
-import { RELAY_KIND_LABEL, recipientLabel } from "./labels.ts";
+import { recipientLabel } from "./labels.ts";
 import { RelayDetail } from "./relay-detail.tsx";
 import { RelayFilters } from "./relay-filters.tsx";
 

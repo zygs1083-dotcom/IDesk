@@ -1,10 +1,11 @@
+import { RELAY_KIND_LABEL } from "@idesk/shared/relay";
 import type { relayMessageSchema } from "@idesk/shared/relay-schemas";
 import type { z } from "zod";
 import { Button } from "../../components/button.tsx";
 import { Markdown } from "../../components/markdown.tsx";
 import { relativeTime } from "../../lib/format.ts";
 import { useAgents } from "../../lib/use-agents.ts";
-import { RELAY_KIND_LABEL, recipientLabel } from "./labels.ts";
+import { recipientLabel } from "./labels.ts";
 
 type Message = z.infer<typeof relayMessageSchema>;
 

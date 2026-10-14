@@ -1,4 +1,4 @@
-import { TASK_PRIORITIES, type TaskPriority } from "@idesk/shared/task-status";
+import { TASK_PRIORITIES, TASK_PRIORITY_LABEL, type TaskPriority } from "@idesk/shared/task-status";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { Button } from "../../components/button.tsx";
@@ -6,7 +6,6 @@ import { Dialog } from "../../components/dialog.tsx";
 import { Field } from "../../components/field.tsx";
 import { Segmented } from "../../components/segmented.tsx";
 import { request } from "../../lib/api.ts";
-import { priorityLabels } from "./priority-label.ts";
 
 export function PublishDialog({ onClose }: { onClose: () => void }) {
   const [title, setTitle] = useState("");
@@ -66,7 +65,7 @@ export function PublishDialog({ onClose }: { onClose: () => void }) {
             label="优先级"
             value={priority}
             onChange={setPriority}
-            options={TASK_PRIORITIES.map((value) => ({ value, label: priorityLabels[value] }))}
+            options={TASK_PRIORITIES.map((value) => ({ value, label: TASK_PRIORITY_LABEL[value] }))}
           />
         </div>
         {mutation.error && (

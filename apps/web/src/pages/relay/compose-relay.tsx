@@ -1,4 +1,4 @@
-import { RELAY_KINDS } from "@idesk/shared/relay";
+import { RELAY_KIND_LABEL, RELAY_KINDS } from "@idesk/shared/relay";
 import type { relayMessageSchema, sendRelaySchema } from "@idesk/shared/relay-schemas";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
@@ -9,7 +9,6 @@ import { Field } from "../../components/field.tsx";
 import { Segmented } from "../../components/segmented.tsx";
 import { request } from "../../lib/api.ts";
 import { useAgents } from "../../lib/use-agents.ts";
-import { RELAY_KIND_LABEL } from "./labels.ts";
 
 type Input = z.infer<typeof sendRelaySchema>;
 
