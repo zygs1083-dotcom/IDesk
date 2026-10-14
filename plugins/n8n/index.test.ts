@@ -187,7 +187,7 @@ describe("n8n connector", () => {
     vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new Error("connection refused")));
     expect(await plugin.testConnection(config)).toEqual({
       success: false,
-      error: "connection refused",
+      error: "无法连接 n8n：connection refused",
     });
   });
   it("propagates HTTP errors from job and run listing", async () => {
@@ -197,4 +197,12 @@ describe("n8n connector", () => {
       "n8n 返回 HTTP 503",
     );
   });
+});
+
+it("reports Chinese network errors from job and run listing", async () => {
+  vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new TypeError("fetch failed")));
+  await expect(plugin.listJobs(config)).rejects.toThrow(/^无法连接 n8n：fetch failed$/);
+  await expect(plugin.listRuns(config, { since: null, limit: 1 })).rejects.toThrow(
+    /^无法连接 n8n：fetch failed$/,
+  );
 });

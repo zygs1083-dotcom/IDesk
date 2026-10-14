@@ -7,8 +7,11 @@ import type {
 } from "../../apps/api/src/plugins/types.ts";
 
 const configSchema = z.object({
-  baseUrl: z.url().transform((url) => url.replace(/\/+$/, "")),
-  apiKey: z.string().min(1),
+  baseUrl: z
+    .url()
+    .meta({ title: "地址" })
+    .transform((url) => url.replace(/\/+$/, "")),
+  apiKey: z.string().min(1).meta({ title: "API Key" }),
 });
 type Config = z.output<typeof configSchema>;
 type RunStatus = (typeof RUN_STATUSES)[number];
@@ -61,9 +64,14 @@ const connectionErrors: Partial<Record<number, string>> = {
 };
 
 async function n8nGet<T>(config: Config, path: string): Promise<T> {
-  const response = await fetch(`${config.baseUrl}/api/v1${path}`, {
-    headers: { "X-N8N-API-KEY": config.apiKey },
-  });
+  let response: Response;
+  try {
+    response = await fetch(`${config.baseUrl}/api/v1${path}`, {
+      headers: { "X-N8N-API-KEY": config.apiKey },
+    });
+  } catch (failure) {
+    throw new Error(`无法连接 n8n：${(failure as Error).message}`);
+  }
   if (!response.ok) {
     throw Object.assign(new Error(`n8n 返回 HTTP ${response.status}`), { status: response.status });
   }

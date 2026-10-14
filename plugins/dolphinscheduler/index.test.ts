@@ -188,6 +188,19 @@ describe("testConnection", () => {
   });
   it("returns network errors as a failed connection", async () => {
     vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new Error("offline")));
-    expect(await plugin.testConnection(config)).toEqual({ success: false, error: "offline" });
+    expect(await plugin.testConnection(config)).toEqual({
+      success: false,
+      error: "无法连接 DolphinScheduler：offline",
+    });
   });
+});
+
+it("reports Chinese network errors from job and run listing", async () => {
+  vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new TypeError("fetch failed")));
+  await expect(plugin.listJobs(config)).rejects.toThrow(
+    /^无法连接 DolphinScheduler：fetch failed$/,
+  );
+  await expect(plugin.listRuns(config, { since: null, limit: 1 })).rejects.toThrow(
+    /^无法连接 DolphinScheduler：fetch failed$/,
+  );
 });
