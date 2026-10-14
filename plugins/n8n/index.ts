@@ -1,0 +1,144 @@
+import { z } from "zod";
+import type { RUN_STATUSES } from "../../apps/api/src/db/schema.ts";
+import type {
+  ConnectorPlugin,
+  ExternalJob,
+  ExternalRun,
+} from "../../apps/api/src/plugins/types.ts";
+
+const configSchema = z.object({
+  baseUrl: z.url().transform((url) => url.replace(/\/+$/, "")),
+  apiKey: z.string().min(1),
+});
+type Config = z.output<typeof configSchema>;
+type RunStatus = (typeof RUN_STATUSES)[number];
+type N8nStatus =
+  | "new"
+  | "waiting"
+  | "running"
+  | "success"
+  | "error"
+  | "crashed"
+  | "canceled"
+  | "unknown";
+type Workflow = {
+  id: string;
+  name: string;
+  active: boolean;
+  isArchived?: boolean;
+  activeVersionId?: string | null;
+  activeVersion?: object | null;
+};
+type Execution = {
+  id: number;
+  workflowId: string;
+  status: N8nStatus;
+  startedAt: string | null;
+  stoppedAt: string | null;
+};
+type Page<T> = { data: T[]; nextCursor?: string };
+
+const statuses: Record<N8nStatus, RunStatus> = {
+  new: "waiting",
+  waiting: "waiting",
+  running: "running",
+  success: "success",
+  error: "failed",
+  crashed: "failed",
+  canceled: "canceled",
+  unknown: "failed",
+};
+
+async function n8nGet<T>(config: Config, path: string): Promise<T> {
+  const response = await fetch(`${config.baseUrl}/api/v1${path}`, {
+    headers: { "X-N8N-API-KEY": config.apiKey },
+  });
+  if (!response.ok) throw new Error(`n8n 返回 HTTP ${response.status}`);
+  return response.json() as Promise<T>;
+}
+
+export default {
+  id: "n8n",
+  name: "n8n",
+  version: "0.1.0",
+  kind: "connector",
+  configSchema,
+  async testConnection(config) {
+    try {
+      await n8nGet<Page<Workflow>>(config as Config, "/workflows?limit=1");
+      return { success: true };
+    } catch (failure) {
+      const message = failure instanceof Error ? failure.message : String(failure);
+      const status = /^n8n 返回 HTTP (\d+)$/.exec(message)?.[1];
+      return {
+        success: false,
+        error:
+          status === "401" || status === "403"
+            ? "API key 无效"
+            : status
+              ? `HTTP ${status}`
+              : message,
+      };
+    }
+  },
+  async listJobs(config) {
+    const settings = config as Config;
+    const jobs: ExternalJob[] = [];
+    let cursor: string | undefined;
+    do {
+      const query = new URLSearchParams({ limit: "250" });
+      if (cursor) query.set("cursor", cursor);
+      const page = await n8nGet<Page<Workflow>>(settings, `/workflows?${query}`);
+      for (const workflow of page.data) {
+        if (workflow.isArchived === true) continue;
+        jobs.push({
+          externalId: workflow.id,
+          name: workflow.name,
+          enabled:
+            workflow.active === true ||
+            workflow.activeVersionId != null ||
+            workflow.activeVersion != null,
+          url: `${settings.baseUrl}/workflow/${workflow.id}`,
+        });
+      }
+      cursor = page.nextCursor;
+    } while (cursor);
+    return jobs;
+  },
+  async listRuns(config, { since, limit }) {
+    const settings = config as Config;
+    const runs: ExternalRun[] = [];
+    let cursor: string | undefined;
+    while (runs.length < limit) {
+      const query = new URLSearchParams({
+        limit: String(Math.min(250, limit - runs.length)),
+        includeData: "false",
+      });
+      if (cursor) query.set("cursor", cursor);
+      const page = await n8nGet<Page<Execution>>(settings, `/executions?${query}`);
+      for (const execution of page.data) {
+        const startedAt = execution.startedAt === null ? null : new Date(execution.startedAt);
+        // n8n 2.32.6 ignores startedAfter, so truncate the descending list locally.
+        if (since !== null && startedAt !== null && startedAt < since) return runs;
+        runs.push({
+          externalId: String(execution.id),
+          jobExternalId: execution.workflowId,
+          status: statuses[execution.status],
+          startedAt,
+          finishedAt: execution.stoppedAt === null ? null : new Date(execution.stoppedAt),
+          url: `${settings.baseUrl}/workflow/${execution.workflowId}/executions/${execution.id}`,
+          error:
+            execution.status === "error" || execution.status === "crashed"
+              ? `n8n 执行失败（${execution.status}）`
+              : execution.status === "unknown"
+                ? "n8n 状态未知"
+                : null,
+        });
+        if (runs.length === limit) return runs;
+      }
+      cursor = page.nextCursor;
+      if (!cursor) break;
+    }
+    return runs;
+  },
+} satisfies ConnectorPlugin;
