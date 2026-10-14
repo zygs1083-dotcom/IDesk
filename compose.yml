@@ -1,0 +1,16 @@
+services:
+  idesk:
+    build: .
+    container_name: idesk
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      IDESK_DATA_DIR: /data
+    volumes:
+      - idesk-data:/data
+    # Bind only to the Tailscale address so IDesk is reachable from the tailnet, never the public internet.
+    # Replace with this host's Tailscale IP (tailscale ip -4) or front it with `tailscale serve`.
+    ports:
+      - "100.86.115.84:7070:7070"
+volumes:
+  idesk-data:
