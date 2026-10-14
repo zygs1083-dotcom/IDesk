@@ -1,6 +1,6 @@
 import { type TaskAction, TransitionError, transition } from "@idesk/shared/task-machine";
 import type { TaskStatus } from "@idesk/shared/task-status";
-import type { Task } from "./types.ts";
+import type { Task } from "../../lib/types.ts";
 
 export const actionSamples = {
   release: { type: "release" },

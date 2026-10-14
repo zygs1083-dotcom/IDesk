@@ -4,8 +4,8 @@ import { Button } from "../../components/button.tsx";
 import { Dialog } from "../../components/dialog.tsx";
 import { Field } from "../../components/field.tsx";
 import { Toast } from "../../components/toast.tsx";
+import type { Agent } from "../../lib/types.ts";
 import type { HumanAction } from "./drop-action.ts";
-import type { Agent } from "./types.ts";
 
 type ParameterAction = Extract<HumanAction, "assign" | "handoff" | "recruit">;
 export function ActionDialog({

@@ -2,9 +2,9 @@ import type { useDraggable } from "@dnd-kit/core";
 import { motion, useReducedMotion } from "motion/react";
 import { cn } from "../../lib/cn.ts";
 import { relativeTime } from "../../lib/format.ts";
+import type { Task } from "../../lib/types.ts";
 import { priorityLabels } from "./priority-label.ts";
 import { StatusDot } from "./status-dot.tsx";
-import type { Task } from "./types.ts";
 
 export function TaskCard({
   task,

@@ -10,11 +10,11 @@ import { Toast } from "../../components/toast.tsx";
 import { request } from "../../lib/api.ts";
 import { eventText } from "../../lib/event-text.ts";
 import { relativeTime } from "../../lib/format.ts";
+import type { Task, TaskEvent } from "../../lib/types.ts";
+import { useAgents } from "../../lib/use-agents.ts";
 import { ActionDialog } from "./action-dialog.tsx";
 import { actionSamples, type HumanAction, previewAction } from "./drop-action.ts";
 import { StatusDot } from "./status-dot.tsx";
-import type { Task, TaskEvent } from "./types.ts";
-import { useAgents } from "./use-agents.ts";
 import { useTaskAction } from "./use-task-action.ts";
 
 export function TaskDrawer({ taskId, onClose }: { taskId: string; onClose: () => void }) {

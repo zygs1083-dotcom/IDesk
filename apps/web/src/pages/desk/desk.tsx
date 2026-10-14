@@ -5,10 +5,10 @@ import { useState } from "react";
 import { Button } from "../../components/button.tsx";
 import { PageHeader } from "../../layout/page-header.tsx";
 import { request } from "../../lib/api.ts";
+import type { Task, TaskEvent } from "../../lib/types.ts";
 import { Board } from "./board.tsx";
 import { PublishDialog } from "./publish-dialog.tsx";
 import { TaskDrawer } from "./task-drawer.tsx";
-import type { Task, TaskEvent } from "./types.ts";
 export function Desk() {
   const {
     data: tasks = [],

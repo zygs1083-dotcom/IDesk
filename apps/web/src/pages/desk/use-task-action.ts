@@ -2,8 +2,8 @@ import { type TaskAction, TransitionError } from "@idesk/shared/task-machine";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { request } from "../../lib/api.ts";
+import type { Task } from "../../lib/types.ts";
 import { previewAction } from "./drop-action.ts";
-import type { Task } from "./types.ts";
 
 export function useTaskAction(onSuccess: () => void) {
   const client = useQueryClient();
