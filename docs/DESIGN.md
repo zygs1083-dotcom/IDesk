@@ -223,7 +223,9 @@ POST   /relay/:id/read                          标记已读
 GET/POST/PATCH/DELETE /schedules                POST /schedules/:id/run
 GET/POST/PATCH/DELETE /connectors               POST /connectors/test   POST /connectors/:id/poll
 GET    /automation/jobs?connectorId=            GET /automation/jobs/:id/runs
-GET    /plugins                                 POST /plugins/:id/enable|disable|reload
+GET    /automation/runs?connectorId=            该连接器全部 run（一次 join），每条带 jobName，给自动化看板分列用
+GET    /plugins                                 每项带 configSchema（z.toJSONSchema 的结果），前端据此生成连接器配置表单；只支持顶层 string/number/boolean
+POST   /plugins/:id/enable|disable|reload
 GET    /openapi.json
 WS     /ws                                      cookie 鉴权；每条事件广播 { type, taskId?, agentId?, ts }
 ```
