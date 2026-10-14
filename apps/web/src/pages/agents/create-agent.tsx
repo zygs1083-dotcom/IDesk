@@ -73,7 +73,7 @@ export function CreateAgent({ onClose }: { onClose: () => void }) {
         >
           <Field label="名称" value={name} onChange={(event) => setName(event.target.value)} />
           <label className="block space-y-2 text-secondary text-text-2">
-            kind
+            类型
             <select
               className="block w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body text-text focus:border-accent"
               value={kind}
