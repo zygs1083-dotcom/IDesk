@@ -1,19 +1,12 @@
 @import "tailwindcss";
 @import "./tokens.css";
 
-@theme {
-  --color-bg: var(--bg);
-  --color-surface: var(--surface);
-  --color-surface-2: var(--surface-2);
-  --color-line: var(--line);
-  --color-line-strong: var(--line-strong);
-  --color-text: var(--text);
-  --color-text-2: var(--text-2);
-  --color-text-3: var(--text-3);
-  --color-accent: var(--accent);
-  --font-sans:
-    -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Helvetica Neue",
-    "Noto Sans SC", sans-serif;
+@utility duration-hover {
+  transition-duration: var(--duration-hover);
+}
+
+@utility duration-expand {
+  transition-duration: var(--duration-expand);
 }
 
 html,
@@ -27,8 +20,9 @@ body {
   background: var(--bg);
   color: var(--text);
   font-family: var(--font-sans);
-  font-size: 14px;
-  line-height: 20px;
+  font-size: var(--text-body);
+  line-height: var(--text-body--line-height);
+  font-weight: var(--text-body--font-weight);
   -webkit-font-smoothing: antialiased;
 }
 

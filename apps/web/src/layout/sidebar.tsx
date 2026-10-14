@@ -1,5 +1,6 @@
 import { Activity, Bot, Clock, LayoutGrid, Send, Settings, Workflow } from "lucide-react";
 import { NavLink } from "react-router";
+import { cn } from "../lib/cn.ts";
 
 const items = [
   { to: "/desk", label: "协作台", icon: LayoutGrid },
@@ -13,27 +14,30 @@ const items = [
 
 export function Sidebar() {
   return (
-    <aside className="flex w-[220px] shrink-0 flex-col border-r border-line bg-surface">
-      <div className="px-5 pt-5 pb-4 text-[15px] font-semibold tracking-[-0.01em]">IDesk</div>
-      <nav className="flex flex-col gap-0.5 px-3">
+    <aside className="flex shrink-0 items-center border-b border-line bg-surface sidebar:w-sidebar sidebar:flex-col sidebar:items-stretch sidebar:border-r sidebar:border-b-0">
+      <div className="hidden px-5 pt-5 pb-4 text-section sidebar:block">IDesk</div>
+      <nav
+        aria-label="主导航"
+        className="flex gap-2 p-3 sidebar:flex-col sidebar:gap-1 sidebar:py-0"
+      >
         {items.map(({ to, label, icon: Icon }) => (
           <NavLink
             key={to}
             to={to}
+            aria-label={label}
+            title={label}
             className={({ isActive }) =>
-              `flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 transition-colors duration-[120ms] ${
-                isActive ? "bg-surface-2 text-text" : "text-text-2 hover:bg-surface-2"
-              }`
+              cn(
+                "flex items-center gap-2 rounded-control p-3 text-body transition-colors duration-hover ease-hover sidebar:px-3 sidebar:py-2",
+                isActive ? "bg-line text-text" : "text-text-2 hover:text-text",
+              )
             }
           >
-            <Icon size={16} strokeWidth={1.5} />
-            <span>{label}</span>
+            <Icon aria-hidden="true" size={16} strokeWidth={1.5} />
+            <span className="hidden sidebar:inline">{label}</span>
           </NavLink>
         ))}
       </nav>
-      <div className="mt-auto flex items-center gap-2 px-5 py-4 text-[13px] text-text-2">
-        <span className="h-2 w-2 rounded-full bg-[var(--status-done)]" />0 在线
-      </div>
     </aside>
   );
 }
