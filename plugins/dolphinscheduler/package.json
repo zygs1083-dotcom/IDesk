@@ -1,0 +1,17 @@
+{
+  "name": "@idesk/plugin-dolphinscheduler",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "zod": "^4.6.7"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "typescript": "^6.0.0",
+    "vitest": "^5.0.4"
+  }
+}
