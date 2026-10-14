@@ -193,3 +193,20 @@ test("plugin REST lists plugins and restricts lifecycle operations to humans", a
   const document = await (await app.request("/api/openapi.json")).text();
   expect(document).toContain("/api/v1/plugins/{id}/{action}");
 });
+
+test("plugin REST exposes the input config schema for n8n", async () => {
+  const response = await app.request("/api/v1/plugins", { headers: { Cookie: cookie } });
+  expect(response.status).toBe(200);
+  expect(await response.json()).toContainEqual(
+    expect.objectContaining({
+      id: "n8n",
+      configSchema: expect.objectContaining({
+        properties: expect.objectContaining({
+          baseUrl: expect.objectContaining({ type: "string" }),
+          apiKey: expect.objectContaining({ type: "string" }),
+        }),
+        required: expect.arrayContaining(["baseUrl", "apiKey"]),
+      }),
+    }),
+  );
+});

@@ -10,5 +10,6 @@ export async function request<T>(path: string, init?: RequestInit): Promise<T> {
     const { error }: { error: string } = await response.json();
     throw Object.assign(new Error(error), { status: response.status });
   }
+  if (response.status === 204) return undefined as T;
   return response.json();
 }
