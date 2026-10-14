@@ -10,7 +10,8 @@
     "./task-schemas": "./src/task-schemas.ts",
     "./agent-schemas": "./src/agent-schemas.ts",
     "./relay-schemas": "./src/relay-schemas.ts",
-    "./plugin-schemas": "./src/plugin-schemas.ts"
+    "./plugin-schemas": "./src/plugin-schemas.ts",
+    "./automation-schemas": "./src/automation-schemas.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",

@@ -7,6 +7,8 @@ import { HttpError } from "./errors.ts";
 import { type AuthEnv, auth } from "./middleware/auth.ts";
 import { agentRoutes } from "./routes/agents.ts";
 import { authRoutes } from "./routes/auth.ts";
+import { automationRoutes } from "./routes/automation.ts";
+import { connectorRoutes } from "./routes/connectors.ts";
 import { eventRoutes } from "./routes/events.ts";
 import { mcpRoutes } from "./routes/mcp.ts";
 import { pluginRoutes } from "./routes/plugins.ts";
@@ -38,6 +40,8 @@ agentRoutes(app);
 eventRoutes(app);
 relayRoutes(app);
 pluginRoutes(app);
+connectorRoutes(app);
+automationRoutes(app);
 mcpRoutes(app);
 
 app.doc("/api/openapi.json", {
