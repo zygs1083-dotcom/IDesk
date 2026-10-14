@@ -8,3 +8,4 @@ dist/
 !.env.example
 screenshots/
 .DS_Store
+.test-data/
