@@ -16,6 +16,7 @@ export function RosterItem({
       type="button"
       className={`roster-item ${agent.status === "offline" ? "offline" : ""}`}
       onClick={() => onSelect(agent.id)}
+      aria-label={`${agent.name} · ${statusText(agent, tasks)}`}
       title={`${agent.name} · ${statusText(agent, tasks)}`}
     >
       <Avatar kind={agent.kind} />
