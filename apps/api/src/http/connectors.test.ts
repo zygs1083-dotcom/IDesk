@@ -2,6 +2,7 @@ import { registeredAgentSchema } from "@idesk/shared/agent-schemas";
 import {
   automationJobSchema,
   automationRunSchema,
+  automationRunWithJobSchema,
   connectorSchema,
   pollResultSchema,
 } from "@idesk/shared/automation-schemas";
@@ -156,6 +157,9 @@ test("agents read masked connectors and automation but cannot mutate connectors"
   const jobsResponse = await request("/automation/jobs", "GET", undefined, agent.apiKey);
   expect(jobsResponse.status).toBe(200);
   const jobs = z.array(automationJobSchema).parse(await jobsResponse.json());
+  expect(
+    (await request(`/automation/runs?connectorId=${id}`, "GET", undefined, agent.apiKey)).status,
+  ).toBe(200);
   const runs = await request(
     `/automation/jobs/${jobs[0]?.id}/runs`,
     "GET",
@@ -194,7 +198,43 @@ test("OpenAPI includes every connector and automation operation", async () => {
     "/connectors/test": ["post"],
     "/connectors/{id}/poll": ["post"],
     "/automation/jobs": ["get"],
+    "/automation/runs": ["get"],
     "/automation/jobs/{id}/runs": ["get"],
   }))
     for (const method of methods) expect(document.paths[`/api/v1${path}`]).toHaveProperty(method);
+});
+
+test("connector runs include every job, sorted newest first and scoped to the connector", async () => {
+  const { id } = await create();
+  const other = await create();
+  const job = db
+    .select()
+    .from(automationJobs)
+    .where(eq(automationJobs.connectorId, id))
+    .all()
+    .find((job) => job.name === "Z");
+  if (!job) throw new Error("Fixture job missing");
+  db.insert(automationRuns)
+    .values({
+      jobId: job.id,
+      externalId: "3",
+      status: "running",
+      startedAt: new Date("2026-10-14T12:00:03Z"),
+    })
+    .run();
+  const response = await request(`/automation/runs?connectorId=${id}`);
+  expect(response.status).toBe(200);
+  const runs = z.array(automationRunWithJobSchema).parse(await response.json());
+  expect(runs.map((run) => [run.externalId, run.jobName])).toEqual([
+    ["3", "Z"],
+    ["2", "A"],
+    ["1", "A"],
+  ]);
+  expect(
+    z
+      .array(automationRunWithJobSchema)
+      .parse(await (await request(`/automation/runs?connectorId=${other.id}`)).json()),
+  ).toHaveLength(2);
+  expect(await (await request("/automation/runs?connectorId=missing")).json()).toEqual([]);
+  expect((await request("/automation/runs")).status).toBe(400);
 });
