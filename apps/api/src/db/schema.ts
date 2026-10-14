@@ -1,7 +1,4 @@
 import { AGENT_KINDS } from "@idesk/shared/agent-schemas";
-
-export { AGENT_KINDS } from "@idesk/shared/agent-schemas";
-
 import { RELAY_KINDS, type RelayRecipient } from "@idesk/shared/relay";
 import type { TaskRecruit } from "@idesk/shared/task-machine";
 import { TASK_PRIORITIES, TASK_STATUSES, type TaskPriority } from "@idesk/shared/task-status";

@@ -27,7 +27,7 @@ export const auth = createMiddleware<AuthEnv>(async (c, next) => {
   await next();
 });
 export const requireHuman = createMiddleware<AuthEnv>(async (c, next) => {
-  if (c.get("actor").kind !== "human") throw new HttpError(403, "只有人可以创建智能体");
+  if (c.get("actor").kind !== "human") throw new HttpError(403, "只有人可以操作");
   await next();
 });
 export const requireAgent = createMiddleware<AuthEnv>(async (c, next) => {

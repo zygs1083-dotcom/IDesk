@@ -58,7 +58,9 @@ test("login, signed cookies and bearer keys enforce authentication and roles", a
   expect(me.status).toBe(200);
   expect(await me.json()).toMatchObject({ id: agent.id, status: "online" });
   expect((await request("/agents/me/heartbeat", apiKey, {})).status).toBe(200);
-  expect((await request("/agents", apiKey, {})).status).toBe(403);
+  const forbidden = await request("/agents", apiKey, {});
+  expect(forbidden.status).toBe(403);
+  expect(await forbidden.json()).toEqual({ error: "只有人可以操作" });
   expect((await request("/agents/me", cookie)).status).toBe(403);
   expect((await request("/agents/me/heartbeat", cookie, {})).status).toBe(403);
   expect((await request("/relay/missing/read", cookie, {})).status).toBe(403);

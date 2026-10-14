@@ -1,4 +1,4 @@
-import { createRoute, type OpenAPIHono } from "@hono/zod-openapi";
+import { createRoute, type OpenAPIHono, type RouteConfig } from "@hono/zod-openapi";
 import { TransitionError } from "@idesk/shared/task-machine";
 import {
   createTaskSchema,
@@ -80,39 +80,26 @@ export function taskRoutes(app: OpenAPIHono<AuthEnv>) {
   const actionRoute = createRoute({
     method: "post",
     path: "/api/v1/tasks/{id}/actions/{action}",
-    parameters: [
-      { name: "id", in: "path", required: true, schema: { type: "string" } },
-      {
-        name: "action",
-        in: "path",
-        required: true,
-        schema: {
-          type: "string",
-          enum: taskActionSchema.options.map((option) => option.shape.type.value),
-        },
-      },
-    ],
+    request: {
+      params: z.object({
+        id: z.string(),
+        action: z.enum(taskActionSchema.options.map((option) => option.shape.type.value)),
+      }),
+    },
     description:
       "assign: {agentId}; recruit: {needed}; complete: {result}; handoff: {to?, note}; other actions: {} or no body.",
     requestBody: {
       content: {
         "application/json": {
-          schema: {
-            type: "object",
-            properties: {
-              agentId: { type: "string" },
-              needed: { type: "integer", minimum: 2 },
-              result: { type: "string" },
-              to: { type: ["string", "null"] },
-              note: { type: "string" },
-            },
-          },
+          schema: z.toJSONSchema(taskActionSchema),
         },
       },
-    },
+    } as NonNullable<RouteConfig["requestBody"]>,
     middleware: validator("json", (body, c) => {
       const parsed = taskActionSchema.safeParse({ ...body, type: c.req.param("action") });
-      if (!parsed.success) return app.defaultHook?.({ ...parsed, target: "json" }, c);
+      if (!parsed.success) {
+        throw new HttpError(400, parsed.error.issues.map((issue) => issue.message).join("；"));
+      }
       return parsed.data;
     }),
     responses: {
@@ -123,15 +110,20 @@ export function taskRoutes(app: OpenAPIHono<AuthEnv>) {
       },
     },
   });
-  app.openapi<typeof actionRoute, { out: { json: z.output<typeof taskActionSchema> } }>(
-    actionRoute,
-    (c) => {
-      const task = actOnTask(c.req.param("id"), c.req.valid("json"), c.get("actor"));
-      if (!task) throw new HttpError(404, "任务不存在");
-      if (task instanceof TransitionError) return c.json({ error: task.message }, 409);
-      return c.json(task, 200);
-    },
-  );
+  app.openapi<
+    typeof actionRoute,
+    {
+      out: {
+        json: z.output<typeof taskActionSchema>;
+        param: z.output<typeof actionRoute.request.params>;
+      };
+    }
+  >(actionRoute, (c) => {
+    const task = actOnTask(c.req.valid("param").id, c.req.valid("json"), c.get("actor"));
+    if (!task) throw new HttpError(404, "任务不存在");
+    if (task instanceof TransitionError) return c.json({ error: task.message }, 409);
+    return c.json(task, 200);
+  });
   app.openapi(
     {
       method: "post",

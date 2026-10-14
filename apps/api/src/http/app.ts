@@ -13,7 +13,7 @@ import { taskRoutes } from "./routes/tasks.ts";
 export const app = new OpenAPIHono<AuthEnv>({
   defaultHook: (result, c) => {
     if (!result.success) {
-      for (const issue of result.error.issues) return c.json({ error: issue.message }, 400);
+      return c.json({ error: result.error.issues.map((issue) => issue.message).join("；") }, 400);
     }
   },
 });
