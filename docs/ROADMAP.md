@@ -40,3 +40,11 @@
 
 - **W16 Docker**：多阶段构建，API 托管前端，compose 挂载 `/data`。验证：`docker compose up` 后 Tailscale 内可访问。
 - **W17 打磨**：空状态、错误态、键盘快捷键（`n` 新建、`/` 搜索、`esc` 关抽屉）、README 安装说明。
+
+## M7 像素办公室（可选动效前端，设计见 `docs/OFFICE.md`）
+
+- **W18 素材**：`apps/office/assets/PROMPTS.md` 写好背景与 5 种角色的提示词，用 Codex 内置生图工具生成（背景 1 张、每种 kind 走路 4×4 + 坐 + 打字），`tools/sprites.mjs` 抠色、切帧、缩放、打包图集。验证：图集 PNG + JSON 入库，脚本可重跑；每种角色 4 方向走路在浏览器里连续播放不抖。
+- **W19 场景与角色**：`apps/office` 应用骨架（Vite + React + PixiJS 8），背景、scene.json（座位、路点、区域）、路点 A*、角色状态机与走路动画、按 y 排序、编辑模式导出 JSON；API 托管 `/office/` 与 `/api/meta.office`；主前端侧栏入口；Dockerfile `WITH_OFFICE`。验证：用假数据让 8 个小人从门走到座位，截图 + 一段 GIF。
+- **W20 导演**：按 OFFICE.md §4 把 API 状态和 WS 事件翻译成动作：上下线、领取、汇报气泡、交接、完成纸屑、暂停休息、会议室、信封。验证：用 curl 走一遍领取→汇报→交接→完成，录 GIF 对照表。
+- **W21 外框与交互**：顶栏、左右值班名单、像素面板样式与字体、点击小人/任务卡的面板、窄屏折叠。验证：截图浅色（office 只有一套配色）、窄屏。
+- **W22 打磨**：reduced-motion、性能（30 个小人 60fps）、空状态（没有智能体时前台的人打瞌睡）、README 补「像素办公室」一节。
