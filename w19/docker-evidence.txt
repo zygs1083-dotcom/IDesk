@@ -1,0 +1,4 @@
+office-dist=present
+/app/apps/office/dist
+office-dist=absent
+office-env=absent

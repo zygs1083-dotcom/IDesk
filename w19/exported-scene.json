@@ -1,0 +1,297 @@
+{
+  "hostZones": {
+    "alpha": 1
+  },
+  "door": {
+    "x": 905,
+    "y": 690,
+    "via": "door"
+  },
+  "frontDesk": {
+    "human": {
+      "x": 440,
+      "y": 820,
+      "via": "south",
+      "facing": "down"
+    }
+  },
+  "taskBoard": {
+    "x": 595,
+    "y": 225,
+    "width": 175,
+    "height": 140
+  },
+  "zones": [
+    {
+      "name": {
+        "x": 210,
+        "y": 405
+      },
+      "seats": [
+        {
+          "x": 265,
+          "y": 525,
+          "via": "nw",
+          "facing": "up"
+        },
+        {
+          "x": 325,
+          "y": 530,
+          "via": "nw",
+          "facing": "up"
+        },
+        {
+          "x": 285,
+          "y": 570,
+          "via": "nw",
+          "facing": "up"
+        },
+        {
+          "x": 355,
+          "y": 585,
+          "via": "nw",
+          "facing": "up"
+        }
+      ]
+    },
+    {
+      "name": {
+        "x": 510,
+        "y": 385
+      },
+      "seats": [
+        {
+          "x": 555,
+          "y": 495,
+          "via": "ne",
+          "facing": "up"
+        },
+        {
+          "x": 625,
+          "y": 510,
+          "via": "ne",
+          "facing": "up"
+        },
+        {
+          "x": 585,
+          "y": 550,
+          "via": "ne",
+          "facing": "up"
+        },
+        {
+          "x": 655,
+          "y": 565,
+          "via": "ne",
+          "facing": "up"
+        }
+      ]
+    },
+    {
+      "name": {
+        "x": 100,
+        "y": 620
+      },
+      "seats": [
+        {
+          "x": 145,
+          "y": 730,
+          "via": "sw",
+          "facing": "up"
+        },
+        {
+          "x": 215,
+          "y": 745,
+          "via": "sw",
+          "facing": "up"
+        },
+        {
+          "x": 175,
+          "y": 785,
+          "via": "sw",
+          "facing": "up"
+        },
+        {
+          "x": 245,
+          "y": 800,
+          "via": "sw",
+          "facing": "up"
+        }
+      ]
+    },
+    {
+      "name": {
+        "x": 570,
+        "y": 730
+      },
+      "seats": [
+        {
+          "x": 615,
+          "y": 840,
+          "via": "se",
+          "facing": "up"
+        },
+        {
+          "x": 685,
+          "y": 855,
+          "via": "se",
+          "facing": "up"
+        },
+        {
+          "x": 645,
+          "y": 895,
+          "via": "se",
+          "facing": "up"
+        },
+        {
+          "x": 715,
+          "y": 910,
+          "via": "se",
+          "facing": "up"
+        }
+      ]
+    }
+  ],
+  "meeting": {
+    "seats": [
+      {
+        "x": 425,
+        "y": 610,
+        "via": "center",
+        "facing": "down"
+      },
+      {
+        "x": 475,
+        "y": 585,
+        "via": "center",
+        "facing": "down"
+      },
+      {
+        "x": 525,
+        "y": 560,
+        "via": "center",
+        "facing": "down"
+      },
+      {
+        "x": 485,
+        "y": 725,
+        "via": "center",
+        "facing": "up"
+      },
+      {
+        "x": 535,
+        "y": 700,
+        "via": "center",
+        "facing": "up"
+      },
+      {
+        "x": 585,
+        "y": 675,
+        "via": "center",
+        "facing": "up"
+      }
+    ]
+  },
+  "lounge": {
+    "spots": [
+      {
+        "x": 800,
+        "y": 600,
+        "via": "east",
+        "facing": "left"
+      }
+    ]
+  },
+  "doneTray": {
+    "x": 465,
+    "y": 805
+  },
+  "waypoints": [
+    {
+      "x": 905,
+      "y": 690,
+      "id": "door"
+    },
+    {
+      "x": 780,
+      "y": 630,
+      "id": "east"
+    },
+    {
+      "x": 527,
+      "y": 659,
+      "id": "center"
+    },
+    {
+      "x": 465,
+      "y": 480,
+      "id": "north"
+    },
+    {
+      "x": 390,
+      "y": 575,
+      "id": "nw"
+    },
+    {
+      "x": 640,
+      "y": 575,
+      "id": "ne"
+    },
+    {
+      "x": 435,
+      "y": 805,
+      "id": "south"
+    },
+    {
+      "x": 280,
+      "y": 800,
+      "id": "sw"
+    },
+    {
+      "x": 730,
+      "y": 900,
+      "id": "se"
+    }
+  ],
+  "edges": [
+    [
+      "door",
+      "east"
+    ],
+    [
+      "east",
+      "center"
+    ],
+    [
+      "center",
+      "north"
+    ],
+    [
+      "north",
+      "nw"
+    ],
+    [
+      "north",
+      "ne"
+    ],
+    [
+      "center",
+      "nw"
+    ],
+    [
+      "center",
+      "ne"
+    ],
+    [
+      "center",
+      "south"
+    ],
+    [
+      "south",
+      "sw"
+    ],
+    [
+      "south",
+      "se"
+    ]
+  ]
+}
