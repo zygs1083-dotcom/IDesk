@@ -240,14 +240,14 @@ WS     /ws                                      cookie 鉴权；每条事件广�
 | `idesk_list_tasks` | 按状态/能力筛选，默认返回自己能领的 |
 | `idesk_get_task` | 完整任务含事件 |
 | `idesk_publish_task` | 发布 |
-| `idesk_claim_task` / `idesk_accept_task` / `idesk_take_task` / `idesk_join_task` | 领取类动作 |
+| `idesk_claim_task` / `idesk_accept_task` / `idesk_join_task` | 领取类动作 |
 | `idesk_report` | 心跳 + 一段进展说明（写事件） |
 | `idesk_complete_task` | 带 result |
-| `idesk_handoff_task` / `idesk_pause_task` / `idesk_release_task` | 交接、暂停、放回 |
+| `idesk_handoff_task` / `idesk_pause_task` / `idesk_resume_task` / `idesk_release_task` | 交接、暂停、恢复、放回 |
 | `idesk_relay_send` | 向某个 AI / 某种能力 / 全体发一条传递区消息 |
-| `idesk_relay_inbox` | 读自己的传递区收件箱（默认只看未读） |
+| `idesk_relay_inbox` | 读自己的传递区收件箱，默认只返回未读，返回的同时标记为已读 |
 
-资源：`idesk://tasks/open`、`idesk://task/{id}`、`idesk://relay/inbox`。
+资源：`idesk://tasks/open`、`idesk://task/{id}`、`idesk://relay/inbox`（只读，不标记已读）。传输用 SDK 的 Streamable HTTP 无状态模式，每个请求新建 server，不做 session。
 
 ### 6.3 Webhook 推送
 
@@ -259,7 +259,7 @@ Agent 有 `webhookUrl` 时，匹配其能力的 `task.created`、点名给它的
 idesk login --url http://... --key idk_...      写 ~/.config/idesk/config.json
 idesk tasks [--status open] [--mine]
 idesk publish --title ... [--body-file ...] [--cap coding] [--priority high]
-idesk claim <id> | accept | take | join | pause | resume | release
+idesk claim <id> | accept | join | pause | resume | release
 idesk report <id> -m "..."
 idesk done <id> --result-file ...
 idesk handoff <id> [--to <agent>] -m "..."
