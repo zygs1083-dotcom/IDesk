@@ -32,3 +32,10 @@ export const BOARD_COLUMNS: readonly TaskStatus[] = [
 
 export const TASK_PRIORITIES = ["low", "normal", "high", "urgent"] as const;
 export type TaskPriority = (typeof TASK_PRIORITIES)[number];
+
+export const TASK_PRIORITY_LABEL: Record<TaskPriority, string> = {
+  low: "低",
+  normal: "普通",
+  high: "高",
+  urgent: "紧急",
+};
