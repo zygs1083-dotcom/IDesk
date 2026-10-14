@@ -50,20 +50,12 @@ export function Board({
   } | null>(null);
   const { mutation, error, setError } = useTaskAction(() => setParameter(null));
   const reduced = useReducedMotion();
-  const [now, setNow] = useState(Date.now);
-  useEffect(() => {
-    const timer = setInterval(() => setNow(Date.now()), 30000);
-    return () => clearInterval(timer);
-  }, []);
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
     useSensor(KeyboardSensor),
   );
-  const visible = tasks.filter(
-    (task) =>
-      task.title.toLocaleLowerCase().includes(search.toLocaleLowerCase()) &&
-      (task.status !== "done" ||
-        (task.completedAt !== null && now - new Date(task.completedAt).getTime() <= 7 * 86400000)),
+  const visible = tasks.filter((task) =>
+    task.title.toLocaleLowerCase().includes(search.toLocaleLowerCase()),
   );
   const boardTasks = visible.filter((task) => BOARD_COLUMNS.includes(task.status));
   function handoffName(task: Task): string | undefined {

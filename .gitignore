@@ -9,3 +9,9 @@ dist/
 screenshots/
 .DS_Store
 .test-data/
+# 本地 agent 说明与协作流程，不入库
+CLAUDE.md
+AGENTS.md
+.claude/
+.codex/
+local/

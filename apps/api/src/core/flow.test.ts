@@ -7,7 +7,7 @@ import { agents, events, tasks } from "../db/schema.ts";
 import { authenticateAgent, listAgents, registerAgent } from "./agents/agents.ts";
 import { type Event, onEvent } from "./events/bus.ts";
 import { listRelay } from "./relay/relay.ts";
-import { createTask, getTask, listTasks } from "./tasks/store.ts";
+import { createTask, getTask, listTasks, TERMINAL_WINDOW_MS } from "./tasks/store.ts";
 import { actOnTask, reportProgress } from "./tasks/transition.ts";
 
 migrate(db, { migrationsFolder: new URL("../../drizzle", import.meta.url).pathname });
@@ -85,6 +85,21 @@ test("claim, report, handoff, accept and complete commit tasks, events and deliv
   } finally {
     stop();
   }
+});
+
+test("finished tasks leave the default listing after the window but stay under their status", () => {
+  const a = register("window").agent;
+  const actor: Actor = { kind: "agent", id: a.id, capabilities: a.capabilities };
+  const task = createTask({ title: "旧任务" }, a.id);
+  actOnTask(task.id, { type: "claim" }, actor);
+  actOnTask(task.id, { type: "complete", result: "完成" }, actor);
+  expect(listTasks({}).some((row) => row.id === task.id)).toBe(true);
+  db.update(tasks)
+    .set({ updatedAt: new Date(Date.now() - TERMINAL_WINDOW_MS - 1000) })
+    .where(eq(tasks.id, task.id))
+    .run();
+  expect(listTasks({}).some((row) => row.id === task.id)).toBe(false);
+  expect(listTasks({ status: "done" }).some((row) => row.id === task.id)).toBe(true);
 });
 
 test("authentication updates presence and public agents exclude key hashes", () => {
