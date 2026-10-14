@@ -4,6 +4,8 @@ import type { Event } from "../../apps/api/src/core/events/bus.ts";
 import { agents, tasks } from "../../apps/api/src/db/schema.ts";
 import type { Plugin, PluginContext } from "../../apps/api/src/plugins/types.ts";
 
+type Task = typeof tasks.$inferSelect;
+
 const configSchema = z.object({
   format: z.enum(["feishu", "slack", "telegram", "text"]).default("text").meta({ title: "格式" }),
   webhookUrl: z.url().optional().meta({ title: "Webhook 地址" }),
@@ -34,7 +36,7 @@ const bodies: Record<Config["format"], (text: string, chatId?: string) => object
 
 function message(ctx: PluginContext, event: Event): string {
   const title = event.taskId
-    ? (ctx.db.select().from(tasks).where(eq(tasks.id, event.taskId)).get()?.title ?? "")
+    ? (ctx.db.select().from(tasks).where(eq(tasks.id, event.taskId)).get() as Task).title
     : "";
   const agentId =
     event.type === "webhook.failed" ? (event.payload.agentId as string) : event.agentId;
@@ -87,7 +89,7 @@ export default {
         .filter(Boolean),
     );
     ctx.events.on("*", (event) => {
-      // Never notify delivery failures: another failed send would recurse indefinitely.
+      // chat.failed 不推送：推送失败会再触发 chat.failed，无限循环。
       if (event.type === "chat.failed" || !selected.has(event.type)) return;
       const body = JSON.stringify(bodies[config.format](message(ctx, event), config.chatId));
       void send(ctx, event, webhookUrl, body);
