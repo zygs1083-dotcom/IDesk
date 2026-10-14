@@ -14,7 +14,11 @@ export function ActionFields({
   setParams,
   capabilities,
   setCapabilities,
+  tags,
+  setTags,
 }: {
+  tags: string;
+  setTags: (text: string) => void;
   capabilities: string;
   setCapabilities: (text: string) => void;
   action: ScheduleAction;
@@ -29,6 +33,7 @@ export function ActionFields({
     case "publish_task":
       return (
         <>
+          <p className="text-secondary text-text-2">关闭开关的条目可在发布弹层当模板用</p>
           <Field
             label="标题"
             required
@@ -51,6 +56,12 @@ export function ActionFields({
             placeholder="空格或逗号分隔"
             value={capabilities}
             onChange={(event) => setCapabilities(event.target.value)}
+          />
+          <Field
+            label="标签"
+            placeholder="空格或逗号分隔"
+            value={tags}
+            onChange={(event) => setTags(event.target.value)}
           />
           <Segmented
             label="优先级"

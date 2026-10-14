@@ -8,11 +8,13 @@ export function Dialog({
   onClose,
   title,
   children,
+  actions,
 }: {
   open: boolean;
   onClose: () => void;
   title: string;
   children: ReactNode;
+  actions?: ReactNode;
 }) {
   const id = useId();
   const reduced = useReducedMotion();
@@ -46,6 +48,7 @@ export function Dialog({
               <h2 id={id} className="text-section">
                 {title}
               </h2>
+              {actions && <div className="ml-auto">{actions}</div>}
               <Button aria-label="关闭" onClick={onClose} className="border-0 p-2">
                 <X size={18} strokeWidth={1.5} />
               </Button>
