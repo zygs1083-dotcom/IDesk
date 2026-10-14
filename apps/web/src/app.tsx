@@ -5,8 +5,8 @@ import { AgentsPage } from "./pages/agents/agents-page.tsx";
 import { AutomationPage } from "./pages/automation/automation-page.tsx";
 import { Desk } from "./pages/desk/desk.tsx";
 import { Login } from "./pages/login.tsx";
-import { Placeholder } from "./pages/placeholder.tsx";
 import { RelayPage } from "./pages/relay/relay-page.tsx";
+import { SchedulesPage } from "./pages/schedules/schedules-page.tsx";
 import { AccessPage } from "./pages/settings/access-page.tsx";
 import { ConnectorsPage } from "./pages/settings/connectors-page.tsx";
 import { PluginsPage } from "./pages/settings/plugins-page.tsx";
@@ -22,7 +22,7 @@ export function App() {
         <Route path="/relay" element={<RelayPage />} />
         <Route path="/automation" element={<AutomationPage />} />
         <Route path="/agents" element={<AgentsPage />} />
-        <Route path="/schedules" element={<Placeholder title="定时" />} />
+        <Route path="/schedules" element={<SchedulesPage />} />
         <Route path="/activity" element={<ActivityPage />} />
         <Route path="/settings" element={<SettingsPage />}>
           <Route index element={<Navigate to="/settings/connectors" replace />} />
