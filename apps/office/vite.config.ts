@@ -4,6 +4,21 @@ import { defineConfig } from "vite";
 export default defineConfig({
   base: "/office/",
   plugins: [react()],
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          // Grouping barrel modules makes Rolldown pull both Pixi chunks back together.
+          if (id.includes("/node_modules/pixi.js/") || id.includes("/node_modules/@pixi/"))
+            return id.includes("/index.mjs") || id.includes("/index.js")
+              ? undefined
+              : id.includes("/rendering/")
+                ? "pixi-rendering"
+                : "pixi";
+        },
+      },
+    },
+  },
   server: {
     port: 5174,
     proxy: {

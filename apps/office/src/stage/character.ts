@@ -1,8 +1,10 @@
-import { Container, Graphics, Sprite, Text, type Texture } from "pixi.js";
+import { ColorMatrixFilter, Container, Sprite, Text, type Texture } from "pixi.js";
 import { tween } from "../engine/tween.ts";
 import type { Direction, Point } from "../scene/scene.ts";
+import { Bubble } from "./bubble.ts";
+import { hueOffset } from "./hue.ts";
 import type { Stage } from "./stage.ts";
-import { type Agent, placeholderFrames } from "./textures.ts";
+import type { Agent } from "./textures.ts";
 
 export type CharacterState = "idle" | "walk" | "sit" | "typing" | "talk" | "coffee" | "away";
 
@@ -10,42 +12,24 @@ export class Character extends Container {
   state: CharacterState = "idle";
   facing: Direction = "down";
   private sprite: Sprite;
-  private arrow = new Graphics().poly([0, -7, -6, 4, 6, 4]).fill(0x302a2a);
-  private badge = new Text({ text: "", style: { fontSize: 18, fill: 0xfff0ce } });
-  private frames: Record<string, Texture>;
+  readonly bubble = new Bubble();
+  private fallback: Texture;
   private elapsed = 0;
   private reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
-  private enter: Record<CharacterState, () => void> = {
-    idle: () => {
-      this.badge.text = "";
-    },
-    walk: () => {
-      this.badge.text = "";
-    },
-    sit: () => {
-      this.badge.text = "";
-    },
-    typing: () => {
-      this.badge.text = "⌨";
-    },
-    talk: () => {
-      this.badge.text = "…";
-    },
-    coffee: () => {
-      this.badge.text = "☕";
-    },
-    away: () => {
-      this.visible = false;
-    },
-  };
 
   constructor(
     private stage: Stage,
     private agent: Agent,
+    private frames: Record<string, Texture>,
   ) {
     super();
-    this.frames = placeholderFrames(stage.app, agent);
-    this.sprite = new Sprite(this.frames[`${agent.kind}/walk/down/0`]!);
+    const fallback = frames[`${agent.kind}/walk/down/0`];
+    if (!fallback) throw new Error(`Missing sprite frames for ${agent.kind}`);
+    this.fallback = fallback;
+    this.sprite = new Sprite(fallback);
+    const tint = new ColorMatrixFilter();
+    tint.hue(hueOffset(agent.id), false);
+    this.sprite.filters = [tint];
     this.sprite.anchor.set(0.5, 1);
     const label = new Text({
       text: agent.name,
@@ -58,20 +42,28 @@ export class Character extends Container {
     });
     label.anchor.set(0.5, 1);
     label.y = -102;
-    this.arrow.y = -56;
-    this.badge.position.set(30, -110);
-    this.addChild(this.sprite, this.arrow, label, this.badge);
+    label.visible = false;
+    this.eventMode = "static";
+    this.on("pointerover", () => {
+      label.visible = true;
+    });
+    this.on("pointerout", () => {
+      label.visible = false;
+    });
+    this.bubble.y = -104;
+    this.addChild(this.sprite, label, this.bubble);
     stage.app.ticker.add(this.animate, undefined, -1);
     this.on("destroyed", () => {
       stage.app.ticker.remove(this.animate);
-      for (const texture of Object.values(this.frames)) texture.destroy(true);
+      tint.destroy();
     });
   }
 
   setState(state: CharacterState) {
     this.state = state;
-    this.visible = true;
-    this.enter[state]();
+    this.visible = state !== "away";
+    this.bubble.hide();
+    if (state === "talk") this.bubble.show("…", Number.POSITIVE_INFINITY);
   }
 
   private animate = () => {
@@ -87,10 +79,9 @@ export class Character extends Container {
       coffee: walk,
       away: walk,
     };
-    this.sprite.texture = this.frames[`${this.agent.kind}/${poses[this.state]}`]!;
-    this.arrow.rotation = { up: 0, right: Math.PI / 2, down: Math.PI, left: -Math.PI / 2 }[
-      this.facing
-    ];
+    this.sprite.texture = this.frames[`${this.agent.kind}/${poses[this.state]}`] ?? this.fallback;
+    const seated = this.state === "sit" || this.state === "typing" || this.state === "talk";
+    this.sprite.scale.x = seated && this.facing === "left" ? -1 : 1;
   };
 
   async walkTo(points: Point[]) {

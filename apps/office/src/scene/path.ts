@@ -12,13 +12,21 @@ export function findPath(scene: Scene, fromWaypointId: string, toWaypointId: str
   const scores = new Map([[start.id, distance(start, goal)]]);
   const previous = new Map<string, string>();
   while (open.size) {
-    const current = [...open].sort((a, b) => scores.get(a)! - scores.get(b)!)[0]!;
+    const current = [...open].sort(
+      (a, b) => (scores.get(a) ?? Infinity) - (scores.get(b) ?? Infinity),
+    )[0];
+    if (!current) return [];
+    const point = points.get(current);
+    const currentCost = costs.get(current);
+    if (!point || currentCost === undefined) return [];
     if (current === goal.id) {
-      const path = [points.get(current)!];
-      let id = current;
-      while (previous.has(id)) {
-        id = previous.get(id)!;
-        path.unshift(points.get(id)!);
+      const path = [point];
+      let id = previous.get(current);
+      while (id !== undefined) {
+        const parent = points.get(id);
+        if (!parent) return [];
+        path.unshift(parent);
+        id = previous.get(id);
       }
       return path.map(({ x, y }) => ({ x, y }));
     }
@@ -26,11 +34,13 @@ export function findPath(scene: Scene, fromWaypointId: string, toWaypointId: str
     for (const [a, b] of scene.edges) {
       const next = a === current ? b : b === current ? a : undefined;
       if (!next) continue;
-      const cost = costs.get(current)! + distance(points.get(current)!, points.get(next)!);
-      if (cost >= (costs.get(next) ?? Number.POSITIVE_INFINITY)) continue;
+      const neighbor = points.get(next);
+      if (!neighbor) continue;
+      const cost = currentCost + distance(point, neighbor);
+      if (cost >= (costs.get(next) ?? Infinity)) continue;
       previous.set(next, current);
       costs.set(next, cost);
-      scores.set(next, cost + distance(points.get(next)!, goal));
+      scores.set(next, cost + distance(neighbor, goal));
       open.add(next);
     }
   }

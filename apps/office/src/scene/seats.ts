@@ -15,10 +15,13 @@ export function assignSeats(
       fixed === undefined ? hosts.indexOf(agent.host) % scene.zones.length : fixed - 1;
     for (let offset = 0; offset < scene.zones.length; offset++) {
       const zone = (preferred + offset) % scene.zones.length;
-      const seat = scene.zones[zone]!.seats[occupied[zone]!];
+      const target = scene.zones[zone];
+      const count = occupied[zone];
+      if (!target || count === undefined) continue;
+      const seat = target.seats[count];
       if (seat) {
         assignments.set(agent.id, seat);
-        occupied[zone]!++;
+        occupied[zone] = count + 1;
         break;
       }
     }
