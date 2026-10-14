@@ -6,6 +6,8 @@ import { hueOffset } from "./hue.ts";
 import type { Stage } from "./stage.ts";
 import type { Agent } from "./textures.ts";
 
+const WALK_SPEED = 140;
+
 export type CharacterState = "idle" | "walk" | "sit" | "typing" | "talk" | "coffee" | "away";
 
 export class Character extends Container {
@@ -39,8 +41,8 @@ export class Character extends Container {
     const label = new Text({
       text: agent.name,
       style: {
-        fontFamily: "monospace",
-        fontSize: 14,
+        fontFamily: "Fusion Pixel",
+        fontSize: 12,
         fill: 0xfff0ce,
         stroke: { color: 0x302a2a, width: 4 },
       },
@@ -111,7 +113,7 @@ export class Character extends Container {
         this.stage.app.ticker,
         this.position,
         target,
-        (Math.hypot(dx, dy) / 90) * 1000,
+        (Math.hypot(dx, dy) / WALK_SPEED) * 1000,
         (t) => t,
       );
       if (this.destroyed) return;

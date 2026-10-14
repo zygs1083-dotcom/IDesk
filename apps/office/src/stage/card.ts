@@ -36,7 +36,7 @@ export class Cards {
   private board = new Set<string>();
   private overflow = new Text({
     text: "",
-    style: { fontFamily: "monospace", fontSize: 16, fill: 0x302a2a },
+    style: { fontFamily: "Fusion Pixel", fontSize: 12, fill: 0x302a2a },
   });
 
   constructor(

@@ -210,6 +210,104 @@
       }
     ]
   },
+  "standing": [
+    {
+      "x": 390,
+      "y": 280,
+      "via": "west-upper-205",
+      "facing": "right"
+    },
+    {
+      "x": 390,
+      "y": 390,
+      "via": "west-cross-420",
+      "facing": "right"
+    },
+    {
+      "x": 390,
+      "y": 500,
+      "via": "reception-side",
+      "facing": "right"
+    },
+    {
+      "x": 390,
+      "y": 610,
+      "via": "west-cross-515",
+      "facing": "right"
+    },
+    {
+      "x": 390,
+      "y": 720,
+      "via": "west-lower-730",
+      "facing": "right"
+    },
+    {
+      "x": 810,
+      "y": 275,
+      "via": "middle-upper-205",
+      "facing": "right"
+    },
+    {
+      "x": 810,
+      "y": 390,
+      "via": "middle-cross-420",
+      "facing": "right"
+    },
+    {
+      "x": 810,
+      "y": 575,
+      "via": "middle-cross-515",
+      "facing": "right"
+    },
+    {
+      "x": 810,
+      "y": 710,
+      "via": "middle-lower-730",
+      "facing": "right"
+    },
+    {
+      "x": 1180,
+      "y": 285,
+      "via": "east-upper-205",
+      "facing": "left"
+    },
+    {
+      "x": 1180,
+      "y": 405,
+      "via": "east-cross-420",
+      "facing": "left"
+    },
+    {
+      "x": 1180,
+      "y": 520,
+      "via": "east-cross-515",
+      "facing": "left"
+    },
+    {
+      "x": 1180,
+      "y": 640,
+      "via": "lounge-aisle",
+      "facing": "left"
+    },
+    {
+      "x": 540,
+      "y": 815,
+      "via": "zone-3-3",
+      "facing": "up"
+    },
+    {
+      "x": 680,
+      "y": 815,
+      "via": "south-center",
+      "facing": "up"
+    },
+    {
+      "x": 960,
+      "y": 815,
+      "via": "zone-4-3",
+      "facing": "up"
+    }
+  ],
   "doneTray": {
     "x": 287,
     "y": 614

@@ -7,12 +7,14 @@ export function Roster({
   agents,
   tasks,
   seats,
+  standing,
   onSelect,
 }: {
   zones: Scene["zones"];
   agents: Agent[];
   tasks: Task[];
   seats: Map<string, Seat>;
+  standing?: Map<string, Seat>;
   onSelect: (id: string) => void;
 }) {
   return (
@@ -34,6 +36,16 @@ export function Roster({
             </section>
           );
         })}
+        {standing && standing.size > 0 && (
+          <section>
+            <h3>站着的</h3>
+            {agents
+              .filter((agent) => standing.has(agent.id))
+              .map((agent) => (
+                <RosterItem key={agent.id} agent={agent} tasks={tasks} onSelect={onSelect} />
+              ))}
+          </section>
+        )}
       </div>
     </aside>
   );

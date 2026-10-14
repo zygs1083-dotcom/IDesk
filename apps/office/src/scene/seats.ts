@@ -28,3 +28,19 @@ export function assignSeats(
   }
   return assignments;
 }
+
+export function assignStanding(
+  agents: { id: string }[],
+  seated: Map<string, Seat>,
+  scene: Scene,
+): Map<string, Seat> {
+  const spots = [...scene.lounge.spots, ...scene.standing];
+  const assignments = new Map<string, Seat>();
+  for (const agent of agents) {
+    if (seated.has(agent.id)) continue;
+    const spot = spots[assignments.size];
+    if (!spot) break;
+    assignments.set(agent.id, spot);
+  }
+  return assignments;
+}

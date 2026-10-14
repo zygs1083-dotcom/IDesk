@@ -113,7 +113,7 @@ a:focus-visible {
   min-height: 0;
   overflow: hidden;
   border: 2px solid var(--office-ink);
-  background: var(--office-ink);
+  background: var(--office-floor);
 }
 .avatar-strip {
   display: none;

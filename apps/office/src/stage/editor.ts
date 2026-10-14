@@ -36,6 +36,7 @@ export function createEditor(stage: Stage, scene: Scene, onToggle: (active: bool
     ...scene.zones.flatMap((zone) => zone.seats),
     ...scene.meeting.seats,
     ...scene.lounge.spots,
+    ...scene.standing,
   ];
   for (const point of seats) marker(point, false);
   marker(scene.bulletin, false);

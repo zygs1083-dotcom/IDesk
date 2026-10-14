@@ -14,13 +14,17 @@ export function tween(
   ms: number,
   ease = easeInOut,
 ): Promise<void> {
-  if (reducedMotion.matches) ms = 0;
+  if (reducedMotion.matches || ms === 0) {
+    from.x = to.x;
+    from.y = to.y;
+    return Promise.resolve();
+  }
   const start = { x: from.x, y: from.y };
   return new Promise((resolve) => {
     let elapsed = 0;
     const update = (tick: { deltaMS: number }) => {
       elapsed += tick.deltaMS;
-      const progress = ms === 0 ? 1 : Math.min(elapsed / ms, 1);
+      const progress = Math.min(elapsed / ms, 1);
       const t = ease(progress);
       from.x = start.x + (to.x - start.x) * t;
       from.y = start.y + (to.y - start.y) * t;

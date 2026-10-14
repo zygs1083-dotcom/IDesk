@@ -1,7 +1,7 @@
 import { Text, type Texture } from "pixi.js";
 import { findPath } from "../scene/path.ts";
 import type { Point, Scene, Seat } from "../scene/scene.ts";
-import { assignSeats } from "../scene/seats.ts";
+import { assignSeats, assignStanding } from "../scene/seats.ts";
 import { Character, type CharacterState } from "../stage/character.ts";
 import type { Stage } from "../stage/stage.ts";
 import type { Agent } from "../stage/textures.ts";
@@ -14,6 +14,7 @@ export class Cast {
   seats = new Map<string, Seat>();
   readonly present = new Set<string>();
   private labels: Text[];
+  private standing = new Map<string, Seat>();
 
   constructor(
     readonly stage: Stage,
@@ -23,7 +24,7 @@ export class Cast {
     this.labels = scene.zones.map((zone) => {
       const label = new Text({
         text: "",
-        style: { fontFamily: "monospace", fontSize: 12, fill: 0x302a2a },
+        style: { fontFamily: "Fusion Pixel", fontSize: 12, fill: 0x302a2a },
       });
       label.anchor.set(0.5);
       label.position.copyFrom(zone.name);
@@ -45,15 +46,17 @@ export class Cast {
     this.seats.set(human.id, scene.frontDesk.human);
     this.add(human);
     this.place("human", scene.frontDesk.human, "sit");
+    this.checkEmpty();
   }
 
   update(agents: Agent[], initial = false) {
     for (const agent of agents) this.agents.set(agent.id, agent);
-    this.seats = assignSeats(
-      [...this.agents.values()].filter((agent) => agent.id !== "human"),
-      this.scene,
-    );
+    const members = [...this.agents.values()].filter((agent) => agent.id !== "human");
+    this.seats = assignSeats(members, this.scene);
+    this.standing = assignStanding(members, this.seats, this.scene);
+    this.seats = new Map([...this.seats, ...this.standing]);
     this.seats.set("human", this.scene.frontDesk.human);
+    let arrivals = 0;
     for (const agent of agents) {
       if (!this.seats.has(agent.id)) continue;
       if (!this.characters.has(agent.id)) this.add(agent);
@@ -63,14 +66,16 @@ export class Cast {
         if (character && seat)
           this.place(agent.id, seat, agent.status === "online" ? "sit" : "away");
         if (agent.status === "online") this.present.add(agent.id);
-      } else if (agent.status === "online") this.arrive(agent.id);
-      else if (this.present.delete(agent.id)) {
+      } else if (agent.status === "online" && !this.present.has(agent.id))
+        this.arrive(agent.id, arrivals++ * 500);
+      else if (agent.status === "offline" && this.present.delete(agent.id)) {
         void this.queue.enqueue(agent.id, async () => {
           await this.walk(agent.id, { ...this.scene.door, facing: "down" });
           this.characters.get(agent.id)?.setState("away");
         });
       }
     }
+    this.checkEmpty();
     this.scene.zones.forEach((zone, index) => {
       const hosts = [
         ...new Set(
@@ -98,16 +103,24 @@ export class Cast {
     this.stage.characters.addChild(character);
   }
 
-  arrive(id: string) {
+  arrive(id: string, delay = 0) {
     const seat = this.seats.get(id);
     const character = this.characters.get(id);
     if (!seat || !character || this.present.has(id) || id === "human") return;
     this.present.add(id);
+    this.checkEmpty();
     void this.queue.enqueue(id, async () => {
+      if (delay) await new Promise((resolve) => setTimeout(resolve, delay));
       character.position.copyFrom(this.scene.door);
       await this.walk(id, seat);
-      character.setState("sit");
+      character.setState(this.standing.has(id) ? "idle" : "sit");
     });
+  }
+
+  private checkEmpty() {
+    const bubble = this.characters.get("human")?.bubble;
+    if (this.present.size === 0) bubble?.show("zzz", Number.POSITIVE_INFINITY);
+    else bubble?.hide();
   }
 
   nearest(point: Point) {
@@ -130,7 +143,7 @@ export class Cast {
     if (!character) return;
     character.position.copyFrom(target);
     character.facing = target.facing;
-    character.setState(state);
+    character.setState(state === "sit" && this.standing.has(id) ? "idle" : state);
   }
 
   desk(id: string): Point {
