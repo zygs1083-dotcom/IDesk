@@ -1,6 +1,7 @@
 import { Cron } from "croner";
 import { eq } from "drizzle-orm";
 import type { Hono } from "hono";
+import { z } from "zod";
 import { emitEvent, onEvent } from "../core/events/bus.ts";
 import { db } from "../db/client.ts";
 import { pluginState } from "../db/schema.ts";
@@ -97,6 +98,7 @@ export function listPlugins() {
     version: plugin.version,
     kind: plugin.kind,
     enabled,
+    configSchema: z.toJSONSchema(plugin.configSchema, { io: "input" }),
   }));
 }
 

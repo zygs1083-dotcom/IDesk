@@ -1,11 +1,11 @@
-import type { ButtonHTMLAttributes } from "react";
+import type { ComponentPropsWithRef } from "react";
 import { cn } from "../lib/cn.ts";
 
 export function Button({
   variant = "secondary",
   className,
   ...props
-}: ButtonHTMLAttributes<HTMLButtonElement> & { variant?: "primary" | "secondary" }) {
+}: ComponentPropsWithRef<"button"> & { variant?: "primary" | "secondary" }) {
   return (
     <button
       type="button"

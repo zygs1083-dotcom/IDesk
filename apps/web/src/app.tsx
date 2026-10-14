@@ -6,6 +6,10 @@ import { Desk } from "./pages/desk/desk.tsx";
 import { Login } from "./pages/login.tsx";
 import { Placeholder } from "./pages/placeholder.tsx";
 import { RelayPage } from "./pages/relay/relay-page.tsx";
+import { AccessPage } from "./pages/settings/access-page.tsx";
+import { ConnectorsPage } from "./pages/settings/connectors-page.tsx";
+import { PluginsPage } from "./pages/settings/plugins-page.tsx";
+import { SettingsPage } from "./pages/settings/settings-page.tsx";
 
 export function App() {
   return (
@@ -19,7 +23,12 @@ export function App() {
         <Route path="/agents" element={<AgentsPage />} />
         <Route path="/schedules" element={<Placeholder title="定时" />} />
         <Route path="/activity" element={<ActivityPage />} />
-        <Route path="/settings" element={<Placeholder title="设置" />} />
+        <Route path="/settings" element={<SettingsPage />}>
+          <Route index element={<Navigate to="/settings/connectors" replace />} />
+          <Route path="connectors" element={<ConnectorsPage />} />
+          <Route path="plugins" element={<PluginsPage />} />
+          <Route path="access" element={<AccessPage />} />
+        </Route>
       </Route>
     </Routes>
   );
