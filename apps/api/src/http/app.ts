@@ -1,9 +1,22 @@
 import { serveStatic } from "@hono/node-server/serve-static";
 import { OpenAPIHono } from "@hono/zod-openapi";
 import { config } from "../config.ts";
+import { registerWebSocket } from "../realtime/ws.ts";
 import { HttpError } from "./errors.ts";
+import { type AuthEnv, auth } from "./middleware/auth.ts";
+import { agentRoutes } from "./routes/agents.ts";
+import { authRoutes } from "./routes/auth.ts";
+import { eventRoutes } from "./routes/events.ts";
+import { relayRoutes } from "./routes/relay.ts";
+import { taskRoutes } from "./routes/tasks.ts";
 
-export const app = new OpenAPIHono();
+export const app = new OpenAPIHono<AuthEnv>({
+  defaultHook: (result, c) => {
+    if (!result.success) {
+      for (const issue of result.error.issues) return c.json({ error: issue.message }, 400);
+    }
+  },
+});
 
 app.onError((err, c) => {
   if (err instanceof HttpError) return c.json({ error: err.message }, err.status);
@@ -13,10 +26,19 @@ app.onError((err, c) => {
 
 app.get("/api/health", (c) => c.json({ ok: true }));
 
+app.use("/api/v1/*", auth);
+authRoutes(app);
+taskRoutes(app);
+agentRoutes(app);
+eventRoutes(app);
+relayRoutes(app);
+
 app.doc("/api/openapi.json", {
   openapi: "3.1.0",
   info: { title: "IDesk API", version: "0.1.0" },
 });
+
+export const injectWebSocket = registerWebSocket(app);
 
 if (config.IDESK_WEB_DIST) {
   app.use("/*", serveStatic({ root: config.IDESK_WEB_DIST }));
