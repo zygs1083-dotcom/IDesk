@@ -11,12 +11,17 @@ export type AuthEnv = {
     agent: PublicAgent;
   };
 };
+export function bearerAgent(authorization: string | undefined): PublicAgent | undefined {
+  if (!authorization?.startsWith("Bearer ")) return undefined;
+  const agent = authenticateAgent(authorization.slice(7));
+  if (!agent) throw new HttpError(401, "key 无效");
+  return agent;
+}
+
 export const auth = createMiddleware<AuthEnv>(async (c, next) => {
   if (c.req.path === "/api/v1/auth/login" && c.req.method === "POST") return next();
-  const authorization = c.req.header("Authorization");
-  if (authorization?.startsWith("Bearer ")) {
-    const agent = authenticateAgent(authorization.slice(7));
-    if (!agent) throw new HttpError(401, "key 无效");
+  const agent = bearerAgent(c.req.header("Authorization"));
+  if (agent) {
     c.set("agent", agent);
     c.set("actor", { kind: "agent", id: agent.id, capabilities: agent.capabilities });
   } else {

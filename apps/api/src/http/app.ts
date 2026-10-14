@@ -1,5 +1,6 @@
 import { serveStatic } from "@hono/node-server/serve-static";
 import { OpenAPIHono } from "@hono/zod-openapi";
+import { z } from "zod";
 import { config } from "../config.ts";
 import { registerWebSocket } from "../realtime/ws.ts";
 import { HttpError } from "./errors.ts";
@@ -7,8 +8,11 @@ import { type AuthEnv, auth } from "./middleware/auth.ts";
 import { agentRoutes } from "./routes/agents.ts";
 import { authRoutes } from "./routes/auth.ts";
 import { eventRoutes } from "./routes/events.ts";
+import { mcpRoutes } from "./routes/mcp.ts";
 import { relayRoutes } from "./routes/relay.ts";
 import { taskRoutes } from "./routes/tasks.ts";
+
+z.config(z.locales.zhCN());
 
 export const app = new OpenAPIHono<AuthEnv>({
   defaultHook: (result, c) => {
@@ -32,6 +36,7 @@ taskRoutes(app);
 agentRoutes(app);
 eventRoutes(app);
 relayRoutes(app);
+mcpRoutes(app);
 
 app.doc("/api/openapi.json", {
   openapi: "3.1.0",

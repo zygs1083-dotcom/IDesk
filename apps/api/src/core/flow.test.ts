@@ -65,7 +65,7 @@ test("claim, report, handoff, accept and complete commit tasks, events and deliv
     });
     expect(stored[2]).toMatchObject({ agentId: a.id, payload: { message: "进展" } });
     expect(stored[3]).toMatchObject({
-      payload: { from: "in_progress", to: "assigned", handoffTo: b.id },
+      payload: { from: "in_progress", to: "assigned", handoffFrom: a.id, handoffTo: b.id },
     });
     const inbox = listRelay(actorB, "inbox", task.id);
     expect(inbox).toHaveLength(1);
