@@ -89,5 +89,6 @@
   --duration-expand: 200ms;
   --ease-expand: cubic-bezier(0.2, 0.8, 0.2, 1);
   --container-sidebar: 220px;
+  --container-column: 260px;
   --breakpoint-sidebar: 900px;
 }

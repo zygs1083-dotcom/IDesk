@@ -8,7 +8,7 @@ export async function request<T>(path: string, init?: RequestInit): Promise<T> {
   });
   if (!response.ok) {
     const { error }: { error: string } = await response.json();
-    throw new Error(error);
+    throw Object.assign(new Error(error), { status: response.status });
   }
   return response.json();
 }
