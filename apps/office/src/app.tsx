@@ -18,7 +18,9 @@ export function App() {
       const response = await fetch("/office/scene.json");
       if (!response.ok) throw new Error("场景加载失败");
       const scene = sceneSchema.parse(await response.json());
-      stage = await createStage(host.current!);
+      const element = host.current;
+      if (!element || disposed) return;
+      stage = await createStage(element);
       if (disposed) {
         stage.app.destroy(true, { children: true });
         return;
@@ -41,7 +43,7 @@ export function App() {
       <div ref={host} />
       {error && <p role="alert">{error}</p>}
       {editing && (
-        <button type="button" onClick={() => void editor.current!.exportJson()}>
+        <button type="button" onClick={() => void editor.current?.exportJson()}>
           导出 JSON
         </button>
       )}

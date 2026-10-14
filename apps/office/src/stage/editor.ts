@@ -10,8 +10,9 @@ export function createEditor(stage: Stage, scene: Scene, onToggle: (active: bool
   const drawEdges = () => {
     lines.clear();
     for (const [a, b] of scene.edges) {
-      const from = scene.waypoints.find((point) => point.id === a)!;
-      const to = scene.waypoints.find((point) => point.id === b)!;
+      const from = scene.waypoints.find((point) => point.id === a);
+      const to = scene.waypoints.find((point) => point.id === b);
+      if (!from || !to) continue;
       lines.moveTo(from.x, from.y).lineTo(to.x, to.y).stroke({ color: 0xffeb96, width: 2 });
     }
   };
