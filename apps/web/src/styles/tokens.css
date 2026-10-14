@@ -19,41 +19,6 @@
 
   --elevation-card: 0 1px 2px rgba(0, 0, 0, 0.06);
   --elevation-pop: 0 8px 30px rgba(0, 0, 0, 0.12);
-
-  --font-family:
-    -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Helvetica Neue",
-    "Noto Sans SC", sans-serif;
-
-  --corner-card: 10px;
-  --corner-panel: 12px;
-  --corner-control: 8px;
-  --corner-tag: 6px;
-  --corner-pop: 14px;
-
-  --size-title: 22px;
-  --leading-title: 28px;
-  --weight-title: 600;
-  --tracking-title: -0.01em;
-  --size-section: 15px;
-  --leading-section: 20px;
-  --weight-section: 600;
-  --tracking-section: -0.01em;
-  --size-body: 14px;
-  --leading-body: 20px;
-  --weight-body: 500;
-  --size-secondary: 13px;
-  --leading-secondary: 18px;
-  --weight-secondary: 400;
-  --size-label: 12px;
-  --leading-label: 16px;
-  --weight-label: 500;
-  --tracking-normal: 0;
-
-  --duration-hover: 120ms;
-  --easing-hover: ease-out;
-  --duration-expand: 200ms;
-  --easing-expand: cubic-bezier(0.2, 0.8, 0.2, 1);
-  --width-sidebar: 220px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -70,4 +35,59 @@
     --elevation-card: 0 1px 2px rgba(0, 0, 0, 0.4);
     --elevation-pop: 0 8px 30px rgba(0, 0, 0, 0.6);
   }
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-text: var(--text);
+  --color-text-2: var(--text-2);
+  --color-text-3: var(--text-3);
+  --color-accent: var(--accent);
+  --color-status-open: var(--status-open);
+  --color-status-recruiting: var(--status-recruiting);
+  --color-status-assigned: var(--status-assigned);
+  --color-status-in-progress: var(--status-in-progress);
+  --color-status-paused: var(--status-paused);
+  --color-status-done: var(--status-done);
+  --color-status-failed: var(--status-failed);
+  --shadow-card: var(--elevation-card);
+  --shadow-pop: var(--elevation-pop);
+}
+
+@theme {
+  --font-sans:
+    -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Helvetica Neue",
+    "Noto Sans SC", sans-serif;
+  --radius-card: 10px;
+  --radius-panel: 12px;
+  --radius-control: 8px;
+  --radius-tag: 6px;
+  --radius-pop: 14px;
+  --text-title: 22px;
+  --text-title--line-height: 28px;
+  --text-title--font-weight: 600;
+  --text-title--letter-spacing: -0.01em;
+  --text-section: 15px;
+  --text-section--line-height: 20px;
+  --text-section--font-weight: 600;
+  --text-section--letter-spacing: -0.01em;
+  --text-body: 14px;
+  --text-body--line-height: 20px;
+  --text-body--font-weight: 500;
+  --text-secondary: 13px;
+  --text-secondary--line-height: 18px;
+  --text-secondary--font-weight: 400;
+  --text-label: 12px;
+  --text-label--line-height: 16px;
+  --text-label--font-weight: 500;
+  --duration-hover: 120ms;
+  --ease-hover: ease-out;
+  --duration-expand: 200ms;
+  --ease-expand: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --container-sidebar: 220px;
+  --breakpoint-sidebar: 900px;
 }

@@ -29,7 +29,7 @@ export function Sidebar() {
             className={({ isActive }) =>
               cn(
                 "flex items-center gap-2 rounded-control p-3 text-body transition-colors duration-hover ease-hover sidebar:px-3 sidebar:py-2",
-                isActive ? "bg-surface-2 text-text" : "text-text-2 hover:text-text",
+                isActive ? "bg-line text-text" : "text-text-2 hover:text-text",
               )
             }
           >
