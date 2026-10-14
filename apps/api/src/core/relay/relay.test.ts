@@ -60,21 +60,20 @@ test("read receipts require inbox visibility and are only appended once", () => 
     { to: { kind: "capability", value: "coding" }, kind: "note", subject: "已读" },
     sender.id,
   );
-  expect(markRelayRead(message.id, coder.id)?.readBy).toEqual([coder.id]);
-  expect(markRelayRead(message.id, coder.id)?.readBy).toEqual([coder.id]);
-  expect(markRelayRead(message.id, other.id)).toBeUndefined();
-  expect(markRelayRead(message.id, sender.id)).toBeUndefined();
-  expect(markRelayRead(message.id, "missing-agent")).toBeUndefined();
-  expect(markRelayRead("missing-message", coder.id)).toBeUndefined();
+  expect(markRelayRead(message.id, coder)?.readBy).toEqual([coder.id]);
+  expect(markRelayRead(message.id, coder)?.readBy).toEqual([coder.id]);
+  expect(markRelayRead(message.id, other)).toBeUndefined();
+  expect(markRelayRead(message.id, sender)).toBeUndefined();
+  expect(markRelayRead("missing-message", coder)).toBeUndefined();
   const direct = sendRelay(
     { to: { kind: "agent", id: coder.id }, kind: "note", subject: "指定" },
     sender.id,
   );
-  expect(markRelayRead(direct.id, other.id)).toBeUndefined();
-  expect(markRelayRead(direct.id, coder.id)?.readBy).toEqual([coder.id]);
+  expect(markRelayRead(direct.id, other)).toBeUndefined();
+  expect(markRelayRead(direct.id, coder)?.readBy).toEqual([coder.id]);
   const broadcast = sendRelay(
     { to: { kind: "broadcast" }, kind: "note", subject: "广播" },
     sender.id,
   );
-  expect(markRelayRead(broadcast.id, other.id)?.readBy).toEqual([other.id]);
+  expect(markRelayRead(broadcast.id, other)?.readBy).toEqual([other.id]);
 });

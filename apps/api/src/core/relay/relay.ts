@@ -2,7 +2,7 @@ import type { RelayKind, RelayRecipient } from "@idesk/shared/relay";
 import type { Actor } from "@idesk/shared/task-machine";
 import { and, desc, eq, ne, or, sql } from "drizzle-orm";
 import { db, type Tx } from "../../db/client.ts";
-import { agents, relayMessages } from "../../db/schema.ts";
+import { relayMessages } from "../../db/schema.ts";
 import { type Event, publishEvent, recordEvent } from "../events/bus.ts";
 
 export type RelayMessage = typeof relayMessages.$inferSelect;
@@ -82,29 +82,22 @@ export function listRelay(
     .all();
 }
 
-export function markRelayRead(id: string, agentId: string): RelayMessage | undefined {
-  return db.transaction(
-    (tx) => {
-      const agent = tx.select().from(agents).where(eq(agents.id, agentId)).get();
-      if (!agent) return undefined;
-      const message = tx
-        .select()
-        .from(relayMessages)
-        .where(
-          and(
-            eq(relayMessages.id, id),
-            inbox({ kind: "agent", id: agentId, capabilities: agent.capabilities }),
-          ),
-        )
-        .get();
-      if (!message || message.readBy.includes(agentId)) return message;
-      return tx
-        .update(relayMessages)
-        .set({ readBy: [...message.readBy, agentId] })
-        .where(eq(relayMessages.id, id))
-        .returning()
-        .get();
-    },
-    { behavior: "immediate" },
-  );
+export function markRelayRead(
+  id: string,
+  viewer: Extract<Viewer, { kind: "agent" }>,
+): RelayMessage | undefined {
+  return db.transaction((tx) => {
+    const message = tx
+      .select()
+      .from(relayMessages)
+      .where(and(eq(relayMessages.id, id), inbox(viewer)))
+      .get();
+    if (!message || message.readBy.includes(viewer.id)) return message;
+    return tx
+      .update(relayMessages)
+      .set({ readBy: [...message.readBy, viewer.id] })
+      .where(eq(relayMessages.id, id))
+      .returning()
+      .get();
+  });
 }

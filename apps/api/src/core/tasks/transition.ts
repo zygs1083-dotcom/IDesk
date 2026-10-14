@@ -19,48 +19,45 @@ function applyAction(
 ): Task | TransitionError | undefined {
   const now = new Date();
   const recorded: Event[] = [];
-  const result = db.transaction(
-    (tx) => {
-      const task = tx.select().from(tasks).where(eq(tasks.id, id)).get();
-      if (!task) return undefined;
-      const next = transition(task, action, actor, now);
-      if (next instanceof TransitionError) return next;
-      const updated = tx
-        .update(tasks)
-        .set({ ...next, updatedAt: now })
-        .where(eq(tasks.id, id))
-        .returning()
-        .get();
-      recorded.push(
-        recordEvent(tx, {
+  const result = db.transaction((tx) => {
+    const task = tx.select().from(tasks).where(eq(tasks.id, id)).get();
+    if (!task) return undefined;
+    const next = transition(task, action, actor, now);
+    if (next instanceof TransitionError) return next;
+    const updated = tx
+      .update(tasks)
+      .set({ ...next, updatedAt: now })
+      .where(eq(tasks.id, id))
+      .returning()
+      .get();
+    recorded.push(
+      recordEvent(tx, {
+        taskId: id,
+        ...(actor.kind === "agent" ? { agentId: actor.id } : {}),
+        type: eventOverride?.type ?? `task.${action.type}`,
+        payload: eventOverride?.payload ?? {
+          from: task.status,
+          to: next.status,
+          ...(action.type === "handoff" ? { handoffTo: action.to } : {}),
+        },
+      }),
+    );
+    if (action.type === "handoff") {
+      const { event } = writeRelay(
+        tx,
+        {
+          to: action.to === null ? { kind: "broadcast" } : { kind: "agent", id: action.to },
+          kind: "deliverable",
           taskId: id,
-          ...(actor.kind === "agent" ? { agentId: actor.id } : {}),
-          type: eventOverride?.type ?? `task.${action.type}`,
-          payload: eventOverride?.payload ?? {
-            from: task.status,
-            to: next.status,
-            ...(action.type === "handoff" ? { handoffTo: action.to } : {}),
-          },
-        }),
+          subject: task.title,
+          body: action.note,
+        },
+        actor.kind === "agent" ? actor.id : "human",
       );
-      if (action.type === "handoff") {
-        const { event } = writeRelay(
-          tx,
-          {
-            to: action.to === null ? { kind: "broadcast" } : { kind: "agent", id: action.to },
-            kind: "deliverable",
-            taskId: id,
-            subject: task.title,
-            body: action.note,
-          },
-          actor.kind === "agent" ? actor.id : "human",
-        );
-        recorded.push(event);
-      }
-      return updated;
-    },
-    { behavior: "immediate" },
-  );
+      recorded.push(event);
+    }
+    return updated;
+  });
   for (const event of recorded) publishEvent(event);
   return result;
 }

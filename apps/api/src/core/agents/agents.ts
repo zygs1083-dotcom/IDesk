@@ -35,7 +35,7 @@ export function registerAgent(input: {
       .values({ ...input, apiKeyHash, createdAt: now })
       .returning()
       .get();
-    const event = recordEvent(tx, { type: "agent.registered", agentId: agent.id, payload: {} });
+    const event = recordEvent(tx, { type: "agent.registered", agentId: agent.id });
     return { agent, event };
   });
   publishEvent(event);

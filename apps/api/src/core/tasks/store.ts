@@ -28,7 +28,6 @@ export function createTask(
       type: "task.created",
       taskId: task.id,
       ...(publisherId === "human" ? {} : { agentId: publisherId }),
-      payload: {},
     });
     return { task, event };
   });
