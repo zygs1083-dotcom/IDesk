@@ -285,7 +285,7 @@ export interface PluginContext {
   events: { emit(e: NewEvent): void; on(type: string, fn: Listener): Unsubscribe };
   schedule(cron: string, fn: () => Promise<void>): Unsubscribe;
   registerRoutes(app: Hono): void;   // 宿主只挂一个固定的 /api/plugins/:pluginId/* 分发器，按 id 转发到插件自己的 Hono 子应用；disable 时从表里删掉，之后 404。鉴权与 /api/v1 相同：管理员 cookie 或 agent key 都可以
-  config: unknown;                   // plugin_state.config 经 configSchema.parse 后的值；没有记录时 parse({})，所以 schema 的字段都要有默认值或可选
+  config: unknown;                   // notifier/action：plugin_state.config 经 configSchema.parse 后的值，没有记录时 parse({})，所以字段都要有默认值或可选；connector：undefined
   dataDir: string;                   // IDESK_DATA_DIR/plugin-data/<id>，setup 前已创建，插件自己的文件放这里
   publicUrl: string | undefined;     // IDESK_PUBLIC_URL，给通知里拼链接
   tasks: { act(id: string, action: TaskAction): Task | TransitionError | undefined };  // 以 system 身份走状态机，和 REST 同一条路
@@ -364,7 +364,9 @@ IDESK_VIEWER_PASSWORD=...       # 可选；只读访客密码（§12.12）
 
 ### 12.1 插件级配置与宿主扩展（W24）
 
-- `plugin_state` 加 `config` 列（JSON，默认 `{}`），迁移 `0002`。
+- `plugin_state` 加 `config` 列（JSON，默认 `{}`），迁移 `0002`。存的是 PATCH 收到的原始输入（掩码位已换回原值），不是 parse 后的值；setup 时才 parse，这样插件改默认值后旧记录也能跟着变。
+- 插件级配置只给 notifier 和 action。连接器的 configSchema 是实例配置：连接器的 `ctx.config` 为 undefined，`GET /plugins` 里它的 `config` 为 `{}`，`PATCH /plugins/:id` 对连接器返回 400「连接器的配置在连接器实例上」，插件页不给连接器显示「配置」。
+- setup 抛错（通常是存的配置过不了新 schema）不能让进程起不来：宿主 catch 这一处，把插件置为未启用，错误信息放进内存的 `error` 字段，`GET /plugins` 每项多一个可选 `error`，插件页在该行下用 text-status-failed 显示；人改好配置或重载后清掉。这是把错误变成状态的 catch，和连接器 `lastError` 同类，其他地方照旧不 catch。
 - `Plugin.enabledByDefault`、`PluginContext.config / dataDir / publicUrl / tasks.act` 如 §7。`tasks.act` 以 `{ kind: "system" }` 调 `core/tasks/transition.ts` 的 `actOnTask`。
 - 状态机：`assign` 新增允许 system（自动分派用）；事件 `task.assign` 的 agentId 为空。其余权限不变。
 - `GET /plugins` 每项多一个 `config`（掩码后）；`PATCH /plugins/:id { config }` 只有人，收到 `••••••` 保留原值，校验失败 400。
