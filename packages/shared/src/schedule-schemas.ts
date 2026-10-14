@@ -2,7 +2,10 @@ import { z } from "zod";
 import { createTaskSchema } from "./task-schemas.ts";
 
 export const scheduleActionSchema = z.discriminatedUnion("type", [
-  z.object({ type: z.literal("publish_task"), template: createTaskSchema.omit({ dueAt: true }) }),
+  z.object({
+    type: z.literal("publish_task"),
+    template: createTaskSchema.omit({ dueAt: true, blockedBy: true }),
+  }),
   z.object({
     type: z.literal("connector_trigger"),
     connectorId: z.string(),
