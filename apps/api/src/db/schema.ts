@@ -1,10 +1,11 @@
+import { RELAY_KINDS, type RelayRecipient } from "@idesk/shared/relay";
+import type { TaskRecruit } from "@idesk/shared/task-machine";
 import { TASK_PRIORITIES, TASK_STATUSES, type TaskPriority } from "@idesk/shared/task-status";
 import { index, integer, sqliteTable, text, uniqueIndex } from "drizzle-orm/sqlite-core";
 import { ulid } from "ulid";
 
 export const AGENT_KINDS = ["claude-code", "codex", "n8n", "script", "custom"] as const;
 export const RUN_STATUSES = ["waiting", "running", "success", "failed", "canceled"] as const;
-export const RELAY_KINDS = ["note", "deliverable", "request", "reply"] as const;
 
 export const tasks = sqliteTable(
   "tasks",
@@ -21,7 +22,7 @@ export const tasks = sqliteTable(
     publisherId: text("publisher_id").notNull(),
     // 不建外键：agent 可删除，任务与事件历史要保留
     assigneeId: text("assignee_id"),
-    recruit: text({ mode: "json" }).$type<{ needed: number; joined: string[] }>(),
+    recruit: text({ mode: "json" }).$type<TaskRecruit>(),
     leaseExpiresAt: integer("lease_expires_at", { mode: "timestamp_ms" }),
     result: text(),
     dueAt: integer("due_at", { mode: "timestamp_ms" }),
@@ -182,13 +183,7 @@ export const relayMessages = sqliteTable(
       .notNull()
       .$defaultFn(() => new Date()),
     fromAgentId: text("from_agent_id").notNull(),
-    to: text({ mode: "json" })
-      .$type<
-        | { kind: "agent"; id: string }
-        | { kind: "capability"; value: string }
-        | { kind: "broadcast" }
-      >()
-      .notNull(),
+    to: text({ mode: "json" }).$type<RelayRecipient>().notNull(),
     kind: text({ enum: RELAY_KINDS }).notNull(),
     taskId: text("task_id"),
     replyTo: text("reply_to"),
