@@ -206,14 +206,15 @@ done        --reopen-->                  open          仅人；清空 result、
 GET    /tasks?status=&capability=&assignee=     列表
 POST   /tasks                                   发布
 GET    /tasks/:id
-POST   /tasks/:id/actions/:action               状态机动作，body 按动作定义
-GET    /tasks/:id/events
+POST   /tasks/:id/actions/:action               状态机动作，body 按动作定义；:action 不接受 lease_expired
+POST   /tasks/:id/report { message }            汇报进展（内部续租，写 task.reported）
+GET    /tasks/:id/events                        该任务全部事件，正序
 
 GET    /agents            POST /agents (人)     PATCH /agents/:id    DELETE /agents/:id
 GET    /agents/me                               当前 key 对应的 agent
 POST   /agents/me/heartbeat
 
-GET    /events?since=&type=                     活动流
+GET    /events?since=&type=&agentId=            活动流，id 倒序，最多 200 条；since 是事件 id
 
 GET    /relay?box=inbox|sent|all&taskId=        传递区；AI 只能看与自己相关的
 POST   /relay                                   发消息，body 见 §4.6
@@ -224,7 +225,10 @@ GET/POST/PATCH/DELETE /connectors               POST /connectors/test   POST /co
 GET    /automation/jobs?connectorId=            GET /automation/jobs/:id/runs
 GET    /plugins                                 POST /plugins/:id/enable|disable|reload
 GET    /openapi.json
+WS     /ws                                      cookie 鉴权；每条事件广播 { type, taskId?, agentId?, ts }
 ```
+
+人登录的 cookie 名 `idesk_session`，HttpOnly、Lax、30 天，用 `IDESK_SESSION_SECRET` 签名；没有登出。请求与响应的 Zod schema 放在 `packages/shared/src/*-schemas.ts`，API、前端、CLI 共用。
 
 ### 6.2 MCP（`/mcp`，Streamable HTTP）
 
