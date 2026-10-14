@@ -97,7 +97,7 @@ index.ts                                         启动
 | 类型 | payload | 何时 |
 | --- | --- | --- |
 | `task.created` | `{ title, status }` | 发布 |
-| `task.<action>` | `{ from, to }`，handoff 另带 `handoffTo` | 每个状态机动作一条，action 名同 §5 |
+| `task.<action>` | `{ from, to }`，handoff 另带 `handoffFrom`（交接前的负责人）和 `handoffTo` | 每个状态机动作一条，action 名同 §5 |
 | `task.reported` | `{ message }` | AI 汇报进展（内部同时续租） |
 | `relay.sent` | `{ messageId, to }` | 传递区发消息 |
 | `agent.registered` | `{ name, kind }` | 新建智能体 |
