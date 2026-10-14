@@ -1,4 +1,3 @@
-/* 设计 token。全部定义见 docs/UI.md §3。 */
 :root {
   --bg: #f5f5f7;
   --surface: #ffffff;
@@ -18,10 +17,43 @@
   --status-done: #34c759;
   --status-failed: #ff3b30;
 
-  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.06);
-  --shadow-pop: 0 8px 30px rgba(0, 0, 0, 0.12);
+  --elevation-card: 0 1px 2px rgba(0, 0, 0, 0.06);
+  --elevation-pop: 0 8px 30px rgba(0, 0, 0, 0.12);
 
-  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --font-family:
+    -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Helvetica Neue",
+    "Noto Sans SC", sans-serif;
+
+  --corner-card: 10px;
+  --corner-panel: 12px;
+  --corner-control: 8px;
+  --corner-tag: 6px;
+  --corner-pop: 14px;
+
+  --size-title: 22px;
+  --leading-title: 28px;
+  --weight-title: 600;
+  --tracking-title: -0.01em;
+  --size-section: 15px;
+  --leading-section: 20px;
+  --weight-section: 600;
+  --tracking-section: -0.01em;
+  --size-body: 14px;
+  --leading-body: 20px;
+  --weight-body: 500;
+  --size-secondary: 13px;
+  --leading-secondary: 18px;
+  --weight-secondary: 400;
+  --size-label: 12px;
+  --leading-label: 16px;
+  --weight-label: 500;
+  --tracking-normal: 0;
+
+  --duration-hover: 120ms;
+  --easing-hover: ease-out;
+  --duration-expand: 200ms;
+  --easing-expand: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --width-sidebar: 220px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -35,7 +67,7 @@
     --text-2: #a1a1a6;
     --text-3: #6e6e73;
     --accent: #0a84ff;
-    --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.4);
-    --shadow-pop: 0 8px 30px rgba(0, 0, 0, 0.6);
+    --elevation-card: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --elevation-pop: 0 8px 30px rgba(0, 0, 0, 0.6);
   }
 }

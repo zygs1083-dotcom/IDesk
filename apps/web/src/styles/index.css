@@ -1,7 +1,7 @@
 @import "tailwindcss";
 @import "./tokens.css";
 
-@theme {
+@theme inline {
   --color-bg: var(--bg);
   --color-surface: var(--surface);
   --color-surface-2: var(--surface-2);
@@ -11,9 +11,59 @@
   --color-text-2: var(--text-2);
   --color-text-3: var(--text-3);
   --color-accent: var(--accent);
-  --font-sans:
-    -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Helvetica Neue",
-    "Noto Sans SC", sans-serif;
+  --font-sans: var(--font-family);
+  --color-status-open: var(--status-open);
+  --color-status-recruiting: var(--status-recruiting);
+  --color-status-assigned: var(--status-assigned);
+  --color-status-in-progress: var(--status-in-progress);
+  --color-status-paused: var(--status-paused);
+  --color-status-done: var(--status-done);
+  --color-status-failed: var(--status-failed);
+  --radius-card: var(--corner-card);
+  --radius-panel: var(--corner-panel);
+  --radius-control: var(--corner-control);
+  --radius-tag: var(--corner-tag);
+  --radius-pop: var(--corner-pop);
+  --shadow-card: var(--elevation-card);
+  --shadow-pop: var(--elevation-pop);
+  --ease-hover: var(--easing-hover);
+  --ease-expand: var(--easing-expand);
+  --text-title: var(--size-title);
+  --text-title--line-height: var(--leading-title);
+  --text-title--font-weight: var(--weight-title);
+  --text-title--letter-spacing: var(--tracking-title);
+  --text-section: var(--size-section);
+  --text-section--line-height: var(--leading-section);
+  --text-section--font-weight: var(--weight-section);
+  --text-section--letter-spacing: var(--tracking-section);
+  --text-body: var(--size-body);
+  --text-body--line-height: var(--leading-body);
+  --text-body--font-weight: var(--weight-body);
+  --text-body--letter-spacing: var(--tracking-normal);
+  --text-secondary: var(--size-secondary);
+  --text-secondary--line-height: var(--leading-secondary);
+  --text-secondary--font-weight: var(--weight-secondary);
+  --text-secondary--letter-spacing: var(--tracking-normal);
+  --text-label: var(--size-label);
+  --text-label--line-height: var(--leading-label);
+  --text-label--font-weight: var(--weight-label);
+  --text-label--letter-spacing: var(--tracking-normal);
+}
+
+@theme {
+  --breakpoint-sidebar: 900px;
+}
+
+@utility w-sidebar {
+  width: var(--width-sidebar);
+}
+
+@utility duration-hover {
+  transition-duration: var(--duration-hover);
+}
+
+@utility duration-expand {
+  transition-duration: var(--duration-expand);
 }
 
 html,
@@ -27,8 +77,10 @@ body {
   background: var(--bg);
   color: var(--text);
   font-family: var(--font-sans);
-  font-size: 14px;
-  line-height: 20px;
+  font-size: var(--size-body);
+  line-height: var(--leading-body);
+  font-weight: var(--weight-body);
+  letter-spacing: var(--tracking-normal);
   -webkit-font-smoothing: antialiased;
 }
 
