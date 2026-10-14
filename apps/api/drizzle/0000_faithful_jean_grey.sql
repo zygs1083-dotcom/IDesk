@@ -64,6 +64,21 @@ CREATE TABLE `plugin_state` (
 	`enabled` integer NOT NULL
 );
 --> statement-breakpoint
+CREATE TABLE `relay_messages` (
+	`id` text PRIMARY KEY NOT NULL,
+	`created_at` integer NOT NULL,
+	`from_agent_id` text NOT NULL,
+	`to` text NOT NULL,
+	`kind` text NOT NULL,
+	`task_id` text,
+	`reply_to` text,
+	`subject` text NOT NULL,
+	`body` text DEFAULT '' NOT NULL,
+	`read_by` text DEFAULT '[]' NOT NULL
+);
+--> statement-breakpoint
+CREATE INDEX `relay_messages_task_id_idx` ON `relay_messages` (`task_id`);--> statement-breakpoint
+CREATE INDEX `relay_messages_created_at_idx` ON `relay_messages` (`created_at`);--> statement-breakpoint
 CREATE TABLE `schedules` (
 	`id` text PRIMARY KEY NOT NULL,
 	`name` text NOT NULL,
@@ -87,7 +102,6 @@ CREATE TABLE `tasks` (
 	`publisher_id` text NOT NULL,
 	`assignee_id` text,
 	`recruit` text,
-	`handoff` text,
 	`lease_expires_at` integer,
 	`result` text,
 	`due_at` integer,

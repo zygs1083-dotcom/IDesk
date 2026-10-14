@@ -4,6 +4,7 @@ import { ulid } from "ulid";
 
 export const AGENT_KINDS = ["claude-code", "codex", "n8n", "script", "custom"] as const;
 export const RUN_STATUSES = ["waiting", "running", "success", "failed", "canceled"] as const;
+export const RELAY_KINDS = ["note", "deliverable", "request", "reply"] as const;
 
 export const tasks = sqliteTable(
   "tasks",
@@ -21,7 +22,6 @@ export const tasks = sqliteTable(
     // 不建外键：agent 可删除，任务与事件历史要保留
     assigneeId: text("assignee_id"),
     recruit: text({ mode: "json" }).$type<{ needed: number; joined: string[] }>(),
-    handoff: text({ mode: "json" }).$type<{ from: string; to: string | null; note: string }>(),
     leaseExpiresAt: integer("lease_expires_at", { mode: "timestamp_ms" }),
     result: text(),
     dueAt: integer("due_at", { mode: "timestamp_ms" }),
@@ -171,3 +171,33 @@ export const pluginState = sqliteTable("plugin_state", {
   pluginId: text("plugin_id").primaryKey(),
   enabled: integer({ mode: "boolean" }).notNull(),
 });
+
+export const relayMessages = sqliteTable(
+  "relay_messages",
+  {
+    id: text()
+      .primaryKey()
+      .$defaultFn(() => ulid()),
+    createdAt: integer("created_at", { mode: "timestamp_ms" })
+      .notNull()
+      .$defaultFn(() => new Date()),
+    fromAgentId: text("from_agent_id").notNull(),
+    to: text({ mode: "json" })
+      .$type<
+        | { kind: "agent"; id: string }
+        | { kind: "capability"; value: string }
+        | { kind: "broadcast" }
+      >()
+      .notNull(),
+    kind: text({ enum: RELAY_KINDS }).notNull(),
+    taskId: text("task_id"),
+    replyTo: text("reply_to"),
+    subject: text().notNull(),
+    body: text().notNull().default(""),
+    readBy: text("read_by", { mode: "json" }).$type<string[]>().notNull().default([]),
+  },
+  (table) => [
+    index("relay_messages_task_id_idx").on(table.taskId),
+    index("relay_messages_created_at_idx").on(table.createdAt),
+  ],
+);

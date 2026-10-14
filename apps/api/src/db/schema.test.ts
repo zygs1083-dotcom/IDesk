@@ -2,7 +2,7 @@ import { eq } from "drizzle-orm";
 import { migrate } from "drizzle-orm/better-sqlite3/migrator";
 import { expect, test } from "vitest";
 import { db } from "./client.ts";
-import { automationJobs, automationRuns, connectors, tasks } from "./schema.ts";
+import { automationJobs, automationRuns, connectors, relayMessages, tasks } from "./schema.ts";
 
 test("migrations provide task defaults and cascade connector deletion to jobs and runs", () => {
   migrate(db, { migrationsFolder: new URL("../../drizzle", import.meta.url).pathname });
@@ -21,6 +21,19 @@ test("migrations provide task defaults and cascade connector deletion to jobs an
     tags: [],
     createdAt: expect.any(Date),
   });
+
+  const message = db
+    .insert(relayMessages)
+    .values({ fromAgentId: "human", to: { kind: "broadcast" }, kind: "note", subject: "Test" })
+    .returning()
+    .get();
+  const storedMessage = db
+    .select()
+    .from(relayMessages)
+    .where(eq(relayMessages.id, message.id))
+    .get();
+
+  expect(storedMessage).toMatchObject({ readBy: [], to: { kind: "broadcast" } });
 
   const connector = db
     .insert(connectors)
