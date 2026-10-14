@@ -11,6 +11,7 @@ import { eventRoutes } from "./routes/events.ts";
 import { mcpRoutes } from "./routes/mcp.ts";
 import { pluginRoutes } from "./routes/plugins.ts";
 import { relayRoutes } from "./routes/relay.ts";
+import { scheduleRoutes } from "./routes/schedules.ts";
 import { taskRoutes } from "./routes/tasks.ts";
 
 z.config(z.locales.zhCN());
@@ -38,6 +39,7 @@ agentRoutes(app);
 eventRoutes(app);
 relayRoutes(app);
 pluginRoutes(app);
+scheduleRoutes(app);
 mcpRoutes(app);
 
 app.doc("/api/openapi.json", {
