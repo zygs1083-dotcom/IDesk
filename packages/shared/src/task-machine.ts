@@ -121,6 +121,8 @@ const transitions: Record<TaskStatus, ActionTable> = {
 
 const byAssignee = (task: TaskState, actor: Actor): string | null =>
   actor.kind === "agent" && actor.id === task.assigneeId ? null : "只有负责人可以操作";
+const byAssigneeOrHuman = (task: TaskState, actor: Actor): string | null =>
+  actor.kind === "human" ? null : byAssignee(task, actor);
 const byHumanOrPublisher = (task: TaskState, actor: Actor): string | null =>
   actor.kind === "human" || (actor.kind === "agent" && actor.id === task.publisherId)
     ? null
@@ -132,23 +134,25 @@ const byCapabilities = (task: TaskState, actor: Actor): string | null => {
 };
 const permitted: {
   [A in TaskAction["type"]]: (
-    ...args: [TaskState, Actor, Extract<TaskAction, { type: A }>]
+    task: TaskState,
+    actor: Actor,
+    action: Extract<TaskAction, { type: A }>,
   ) => string | null;
 } = {
   claim: byCapabilities,
   join: (task, actor) =>
     byCapabilities(task, actor) ||
-    ((task.recruit as TaskRecruit).joined.includes((actor as { id: string }).id)
+    (actor.kind === "agent" && (task.recruit as TaskRecruit).joined.includes(actor.id)
       ? "已经加入了"
       : null),
   accept: byAssignee,
   decline: byAssignee,
   heartbeat: byAssignee,
-  complete: (task, actor) => (actor.kind === "human" ? null : byAssignee(task, actor)),
-  pause: (task, actor) => (actor.kind === "human" ? null : byAssignee(task, actor)),
-  handoff: (task, actor) => (actor.kind === "human" ? null : byAssignee(task, actor)),
-  release: (task, actor) => (actor.kind === "human" ? null : byAssignee(task, actor)),
-  resume: (task, actor) => (actor.kind === "human" ? null : byAssignee(task, actor)),
+  complete: byAssigneeOrHuman,
+  pause: byAssigneeOrHuman,
+  handoff: byAssigneeOrHuman,
+  release: byAssigneeOrHuman,
+  resume: byAssigneeOrHuman,
   assign: byHumanOrPublisher,
   recruit: (task, actor, action) =>
     byHumanOrPublisher(task, actor) || (action.needed < 2 ? "招募至少需要 2 个智能体" : null),
