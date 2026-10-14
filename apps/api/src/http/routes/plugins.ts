@@ -1,7 +1,10 @@
 import type { OpenAPIHono } from "@hono/zod-openapi";
 import { pluginSchema } from "@idesk/shared/plugin-schemas";
+import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { maskConfig, mergeSecrets } from "../../core/connectors/connectors.ts";
+import { db } from "../../db/client.ts";
+import { pluginState } from "../../db/schema.ts";
 import {
   configurePlugin,
   disablePlugin,
@@ -85,10 +88,12 @@ export function pluginRoutes(app: OpenAPIHono<AuthEnv>) {
       if (!loaded) throw new HttpError(404, "插件不存在");
       if (loaded.plugin.kind === "connector")
         throw new HttpError(400, "连接器的配置在连接器实例上");
-      const previous = listPlugins().find((plugin) => plugin.id === id) as z.infer<
-        typeof pluginSchema
-      >;
-      const merged = mergeSecrets(c.req.valid("json").config, previous.config);
+      const previous = db
+        .select({ config: pluginState.config })
+        .from(pluginState)
+        .where(eq(pluginState.pluginId, id))
+        .get();
+      const merged = mergeSecrets(c.req.valid("json").config, previous?.config ?? {});
       const parsed = loaded.plugin.configSchema.safeParse(merged);
       if (!parsed.success)
         throw new HttpError(400, parsed.error.issues.map((issue) => issue.message).join("；"));
