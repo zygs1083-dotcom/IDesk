@@ -1,0 +1,13 @@
+services:
+  idesk:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    ports:
+      - "3300:3300"
+    env_file: ../.env
+    volumes:
+      - idesk-data:/data
+    restart: unless-stopped
+volumes:
+  idesk-data:

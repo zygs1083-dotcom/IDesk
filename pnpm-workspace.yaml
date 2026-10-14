@@ -1,0 +1,13 @@
+packages:
+  - apps/*
+  - packages/*
+  - plugins/*
+allowBuilds:
+  better-sqlite3: true
+  esbuild: true
+  "@biomejs/biome": true
+minimumReleaseAgeExclude:
+  - framer-motion@14.2.0
+  - lucide-react@1.57.0
+  - motion-dom@14.2.0
+  - motion@14.2.0

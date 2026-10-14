@@ -1,0 +1,42 @@
+/* 设计 token。全部定义见 docs/UI.md §3。 */
+:root {
+  --bg: #f5f5f7;
+  --surface: #ffffff;
+  --surface-2: #fafafb;
+  --line: rgba(0, 0, 0, 0.08);
+  --line-strong: rgba(0, 0, 0, 0.14);
+  --text: #1d1d1f;
+  --text-2: #6e6e73;
+  --text-3: #aeaeb2;
+  --accent: #0a84ff;
+
+  --status-open: #8e8e93;
+  --status-recruiting: #af52de;
+  --status-assigned: #5856d6;
+  --status-in-progress: #0a84ff;
+  --status-handoff: #ff9f0a;
+  --status-paused: #ff9500;
+  --status-done: #34c759;
+  --status-failed: #ff3b30;
+
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-pop: 0 8px 30px rgba(0, 0, 0, 0.12);
+
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #000000;
+    --surface: #1c1c1e;
+    --surface-2: #2c2c2e;
+    --line: rgba(255, 255, 255, 0.1);
+    --line-strong: rgba(255, 255, 255, 0.18);
+    --text: #f5f5f7;
+    --text-2: #a1a1a6;
+    --text-3: #6e6e73;
+    --accent: #0a84ff;
+    --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --shadow-pop: 0 8px 30px rgba(0, 0, 0, 0.6);
+  }
+}

@@ -1,0 +1,296 @@
+# IDesk 架构设计
+
+IDesk（Intelligent Dispatching Desk）是一个跨网络的 AI 协作调度台：分布在多台设备上的 AI 主动来这里发布、领取、交接任务；人用同一个界面统一看任务流转，并旁观 n8n、DolphinScheduler 等自动化系统的执行进度。
+
+本文是实现的唯一依据。与本文冲突的实现以本文为准；要改设计先改本文。
+
+## 1. 原则
+
+- **轻量**：单进程、单 SQLite 文件、一个 Docker 镜像。没有 Redis、没有消息队列、没有微服务。
+- **解耦**：核心只认识三样东西：任务（Task）、智能体（Agent）、事件（Event）。连接器、通知、定时动作都是插件，核心不 import 任何插件。
+- **热插拔**：插件在运行时启用、停用、重载，不重启进程。连接器实例可以随时增删。
+- **平台不审批**：AI 之间自行协作。IDesk 记录事实、维持状态机、推送变化，不做裁判。
+- **一处真相**：状态变化只通过 `core/tasks/transition.ts` 发生，每次变化写一条事件，事件驱动 WebSocket、Webhook、插件。
+
+## 2. 技术栈
+
+| 层 | 选择 | 说明 |
+| --- | --- | --- |
+| 运行时 | Node 24, TypeScript, pnpm workspace | ESM only |
+| API | Hono 4 + `@hono/zod-openapi` | OpenAPI 自动生成到 `/api/openapi.json` |
+| 数据 | SQLite（better-sqlite3）+ Drizzle ORM | WAL 模式；迁移在 `apps/api/drizzle/` |
+| 校验 | Zod 4 | 只在边界校验一次（请求体、插件配置、环境变量） |
+| 实时 | WebSocket（`@hono/node-ws`） | 单向：服务端 → 浏览器 |
+| MCP | `@modelcontextprotocol/sdk` | Streamable HTTP 挂在 `/mcp`；CLI 提供 stdio 桥 |
+| 定时 | croner | 进程内；任务的 cron 表达式存库 |
+| 前端 | React 19 + Vite + Tailwind 4 + TanStack Query + react-router 7 | `@dnd-kit` 拖拽，`motion` 动效 |
+| CLI | `idesk`（commander） | 走 REST；`idesk mcp` 做 stdio ↔ HTTP 桥 |
+| 部署 | Dockerfile + compose.yml | API 同源托管前端静态文件 |
+
+## 3. 仓库结构
+
+```
+apps/api            Hono 服务：核心域、REST、MCP、WS、调度器、插件宿主
+apps/web            React 前端
+packages/shared     类型、状态机常量、Zod schema（API 与前端、CLI 共用）
+packages/cli        idesk 命令行
+plugins/*           内置插件（n8n、dolphinscheduler、webhook-notifier）
+docs/               本文、UI.md、ROADMAP.md
+deploy/             Dockerfile、compose.yml
+```
+
+`apps/api/src` 内部：
+
+```
+core/        tasks/ agents/ events/ schedules/   纯领域逻辑，不依赖 Hono
+db/          schema.ts relations.ts client.ts    Drizzle
+http/        routes/ middleware/ openapi.ts      REST
+mcp/         server.ts tools/                    MCP 工具定义，调用 core
+realtime/    ws.ts                               事件 → WebSocket
+scheduler/   runner.ts                           croner 驱动 schedules 与连接器轮询
+plugins/     host.ts registry.ts types.ts        插件宿主
+index.ts                                         启动
+```
+
+每个文件一个职责。一个组件一个文件。不做 barrel（index.ts 转发导出）。
+
+## 4. 领域模型
+
+### 4.1 Task
+
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| id | ulid | |
+| title | string | |
+| body | markdown | 任务说明，给 AI 读 |
+| status | TaskStatus | 见 §5 |
+| priority | `low` `normal` `high` `urgent` | |
+| tags | string[] | 自由标签 |
+| capabilities | string[] | 领取者需具备的能力标签，如 `coding` `browser` `gpu` `macos` |
+| publisherId | agent id 或 `human` | |
+| assigneeId | agent id \| null | 当前负责人 |
+| recruit | `{ needed: number, joined: agentId[] }` \| null | 招募中使用 |
+| handoff | `{ from: agentId, to: agentId \| null, note: markdown }` \| null | 传递区使用 |
+| leaseExpiresAt | datetime \| null | 进行中的租约；心跳续期 |
+| result | markdown \| null | 完成时的产出说明 |
+| dueAt | datetime \| null | |
+| createdAt / updatedAt / completedAt | datetime | |
+
+### 4.2 Agent
+
+| 字段 | 说明 |
+| --- | --- |
+| id, name | |
+| kind | `claude-code` `codex` `n8n` `script` `custom` |
+| host | 设备名/服务器名，自由文本 |
+| capabilities | string[]，与 Task.capabilities 匹配 |
+| apiKeyHash | SHA-256；明文只在创建时返回一次 |
+| webhookUrl | 可选；有则推送任务事件 |
+| lastSeenAt | 任何带 key 的请求都会更新 |
+| status | 派生：lastSeenAt 在 2 分钟内为 `online` |
+
+### 4.3 Event（只追加）
+
+`{ id, ts, type, taskId?, agentId?, payload }`。类型形如 `task.created` `task.claimed` `task.transitioned` `task.heartbeat` `agent.registered` `connector.polled` `schedule.fired`。所有 UI 活动流、WS 推送、Webhook、插件订阅都来自这张表。
+
+### 4.4 Schedule（定时任务）
+
+`{ id, name, cron, timezone, enabled, action, lastRunAt, lastStatus, nextRunAt }`
+
+action 是可辨识联合：
+
+- `{ type: "publish_task", template: Partial<Task> }` 定时把任务放到待领取。
+- `{ type: "connector_trigger", connectorId, jobExternalId, params }` 定时触发外部工作流。
+- `{ type: "http", url, method, headers, body }` 通用 HTTP 调用。
+
+### 4.5 Connector / AutomationJob / AutomationRun
+
+连接器是连接器插件的一个实例：`{ id, pluginId, name, config(json), enabled, pollIntervalSec, lastPolledAt, lastError }`。config 里的密钥明文存库（单机内网），出 API 时掩码。
+
+AutomationJob 镜像外部的工作流定义：`{ id, connectorId, externalId, name, enabled, url, lastRunStatus, lastRunAt }`。
+AutomationRun 镜像执行实例：`{ id, jobId, externalId, status, startedAt, finishedAt, url, error }`，status 统一为 `waiting` `running` `success` `failed` `canceled`。每个 job 只保留最近 50 条 run。
+
+外部 API 的已验证事实（n8n 2.32、DolphinScheduler 3.2.2）见 `/data/browser-home/pro/kaneo-design/scheduled-jobs-design.md` §1，实现连接器时以它为准。
+
+## 5. 任务状态机
+
+状态 id 用英文，界面显示中文。
+
+| id | 中文 | 含义 |
+| --- | --- | --- |
+| `open` | 待领取 | 任何能力匹配的 AI 都可领取 |
+| `recruiting` | 招募中 | 需要多个 AI 加入，凑齐后开始 |
+| `assigned` | 已指定 | 发布者点名给某个 AI，等它接受 |
+| `in_progress` | 进行中 | 有负责人，有租约 |
+| `handoff` | 传递区 | 负责人把任务连同上下文交给另一个（或任意一个）AI |
+| `paused` | 已暂停 | 负责人暂停，保留上下文 |
+| `done` | 已完成 | 终态，可被人重开 |
+| `cancelled` | 已取消 | 终态，不在看板列显示 |
+
+允许的转换（动作 → 结果）：
+
+```
+open        --claim(agent)-->            in_progress   assignee=agent, lease
+open        --assign(agent)-->           assigned
+open        --recruit(needed)-->         recruiting
+open        --cancel-->                  cancelled
+assigned    --accept-->                  in_progress
+assigned    --decline-->                 open          assignee=null
+recruiting  --join(agent)-->             recruiting | in_progress   joined 满员即开始，assignee=第一个加入者
+recruiting  --cancel_recruit-->          open
+in_progress --heartbeat-->               in_progress   续租
+in_progress --complete(result)-->        done
+in_progress --pause-->                   paused
+in_progress --handoff(to?, note)-->      handoff
+in_progress --release-->                 open          assignee=null
+in_progress --lease_expired-->           open          由调度器触发
+paused      --resume-->                  in_progress
+paused      --release-->                 open
+handoff     --take(agent)-->             in_progress   to 为空则任何匹配者可取；不为空只有 to 可取
+handoff     --release-->                 open
+done        --reopen-->                  open          仅人
+*           --cancel-->                  cancelled     仅人或发布者
+```
+
+实现为一张纯函数表 `transition(task, action, actor) => task | TransitionError`，放在 `packages/shared/src/task-machine.ts`，前后端共用；API 层只负责持久化和写事件。不允许的转换返回 409，错误信息说明当前状态和动作。
+
+租约：`claim`/`accept`/`take`/`resume` 设 `leaseExpiresAt = now + 10min`；`heartbeat` 续期；调度器每分钟扫过期租约执行 `lease_expired`。
+
+## 6. 接入方式
+
+四种入口都落到同一个 `core/`，没有第二套逻辑。
+
+### 6.1 REST（`/api/v1`）
+
+鉴权：
+
+- 人：`POST /api/v1/auth/login { password }` 校验 `IDESK_ADMIN_PASSWORD`，签发 HttpOnly cookie。
+- AI：`Authorization: Bearer idk_...`。key 在创建 Agent 时生成一次。
+
+主要端点：
+
+```
+GET    /tasks?status=&capability=&assignee=     列表
+POST   /tasks                                   发布
+GET    /tasks/:id
+POST   /tasks/:id/actions/:action               状态机动作，body 按动作定义
+GET    /tasks/:id/events
+
+GET    /agents            POST /agents (人)     PATCH /agents/:id    DELETE /agents/:id
+GET    /agents/me                               当前 key 对应的 agent
+POST   /agents/me/heartbeat
+
+GET    /events?since=&type=                     活动流
+
+GET/POST/PATCH/DELETE /schedules                POST /schedules/:id/run
+GET/POST/PATCH/DELETE /connectors               POST /connectors/test   POST /connectors/:id/poll
+GET    /automation/jobs?connectorId=            GET /automation/jobs/:id/runs
+GET    /plugins                                 POST /plugins/:id/enable|disable|reload
+GET    /openapi.json
+```
+
+### 6.2 MCP（`/mcp`，Streamable HTTP）
+
+同样用 Bearer key。工具：
+
+| 工具 | 作用 |
+| --- | --- |
+| `idesk_me` | 当前 agent 信息 |
+| `idesk_list_tasks` | 按状态/能力筛选，默认返回自己能领的 |
+| `idesk_get_task` | 完整任务含事件 |
+| `idesk_publish_task` | 发布 |
+| `idesk_claim_task` / `idesk_accept_task` / `idesk_take_task` / `idesk_join_task` | 领取类动作 |
+| `idesk_report` | 心跳 + 一段进展说明（写事件） |
+| `idesk_complete_task` | 带 result |
+| `idesk_handoff_task` / `idesk_pause_task` / `idesk_release_task` | 交接、暂停、放回 |
+
+资源：`idesk://tasks/open`、`idesk://task/{id}`。
+
+### 6.3 Webhook 推送
+
+Agent 有 `webhookUrl` 时，匹配其能力的 `task.created`、`task.handoff`、点名给它的 `task.assigned` 会 POST 过去，header `X-IDesk-Signature: sha256=HMAC(key, body)`。失败重试 3 次（1s、5s、30s），结果写事件。不建投递表。
+
+### 6.4 CLI `idesk`
+
+```
+idesk login --url http://... --key idk_...      写 ~/.config/idesk/config.json
+idesk tasks [--status open] [--mine]
+idesk publish --title ... [--body-file ...] [--cap coding] [--priority high]
+idesk claim <id> | accept | take | join | pause | resume | release
+idesk report <id> -m "..."
+idesk done <id> --result-file ...
+idesk handoff <id> [--to <agent>] -m "..."
+idesk mcp                                       stdio ↔ /mcp 桥，给只支持 stdio 的客户端
+```
+
+## 7. 插件系统
+
+```ts
+// apps/api/src/plugins/types.ts
+export interface PluginContext {
+  db: Db;
+  events: { emit(e: NewEvent): void; on(type: string, fn: Listener): Unsubscribe };
+  schedule(cron: string, fn: () => Promise<void>): Unsubscribe;
+  registerRoutes(app: Hono): void;   // 挂到 /api/plugins/:pluginId/*
+  logger: Logger;
+}
+
+export interface Plugin {
+  id: string;             // "n8n"
+  name: string;
+  version: string;
+  kind: "connector" | "notifier" | "action";
+  configSchema: ZodType;  // 实例配置
+  setup?(ctx: PluginContext): void | Promise<void>;
+  teardown?(): void | Promise<void>;
+}
+
+export interface ConnectorPlugin extends Plugin {
+  kind: "connector";
+  testConnection(config: unknown): Promise<ConnectionResult>;
+  listJobs(config: unknown): Promise<ExternalJob[]>;
+  listRuns(config: unknown, opts: { since: Date | null; limit: number }): Promise<ExternalRun[]>;
+  trigger?(config: unknown, jobExternalId: string, params?: unknown): Promise<{ runExternalId?: string }>;
+}
+```
+
+宿主 `plugins/host.ts`：
+
+- 启动时扫描 `plugins/*/index.ts`（内置）和 `IDESK_PLUGIN_DIR/*/index.js`（外置）。
+- 每个插件的启用状态存 `plugin_state` 表。`enable` 动态 `import()` 并 `setup`；`disable` 调 `teardown` 并撤销它注册的所有订阅、cron、路由。`reload` = disable + 清 import cache（带 `?t=` query）+ enable。
+- 连接器轮询由宿主统一驱动：每分钟扫 `enabled` 的连接器，按各自 `pollIntervalSec` 决定是否轮询，顺序执行，单个失败只写 `lastError` 不影响其他。
+- 核心代码不出现任何插件 id。
+
+内置插件：`n8n`、`dolphinscheduler`（连接器）、`webhook-notifier`（notifier，实现 §6.3）。
+
+## 8. 实时与前端数据流
+
+- 每条事件写库后广播到所有 WS 连接：`{ type, taskId?, agentId?, ts }`，不带完整实体。
+- 前端收到后按 `type` 使相应 TanStack Query 失效并重新拉取；看板列表接口要快（单表查询，不 join 事件）。
+- 拖拽卡片 = 调用对应动作接口；乐观更新，失败回滚并提示状态机给的原因。
+
+## 9. 配置
+
+环境变量，全部在 `apps/api/src/config.ts` 用 Zod 解析一次：
+
+```
+IDESK_PORT=3300
+IDESK_DATA_DIR=/data            # idesk.db 所在
+IDESK_ADMIN_PASSWORD=...        # 必填
+IDESK_SESSION_SECRET=...        # 必填
+IDESK_PLUGIN_DIR=/data/plugins  # 可选
+IDESK_PUBLIC_URL=http://...     # 给 CLI/MCP 提示用
+```
+
+## 10. 安全边界
+
+- 内网部署（Tailscale），单管理员。不做多租户、角色、限流。
+- Agent key 只能操作任务、自己的心跳、读自动化看板；不能创建 Agent、改连接器、改定时任务、改插件。
+- 响应里永远不出现 key 明文、连接器密钥。
+
+## 11. 不做的事
+
+- 不做用户系统、权限矩阵、组织。
+- 不做任务评论线程；进展用 `idesk_report` 写事件即可。
+- 不做文件附件；交接上下文放在 `handoff.note`（markdown，可放链接）。
+- 不做自动化系统的写操作面板；只有「触发」和只读镜像。
