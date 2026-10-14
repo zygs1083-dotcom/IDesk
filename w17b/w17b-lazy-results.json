@@ -1,0 +1,22 @@
+[
+  {
+    "route": "desk",
+    "errors": [],
+    "chunks": [
+      {
+        "url": "http://127.0.0.1:5173/assets/react-markdown-BImRURud.js",
+        "status": 200
+      }
+    ]
+  },
+  {
+    "route": "relay",
+    "errors": [],
+    "chunks": [
+      {
+        "url": "http://127.0.0.1:5173/assets/react-markdown-BImRURud.js",
+        "status": 200
+      }
+    ]
+  }
+]
