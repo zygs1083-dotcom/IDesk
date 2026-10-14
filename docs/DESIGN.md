@@ -455,7 +455,7 @@ completedAt: <ISO>
 
 ### 12.8 任务依赖（W31）
 
-- `tasks.blocked_by`（JSON string[]，默认 `[]`），迁移 `0003`。`createTaskSchema` 加 `blockedBy?: string[]`；`PATCH /tasks/:id { blockedBy }` 人或发布者，校验每个 id 存在且不是自己，写事件 `task.dependencies { blockedBy }`。
+- `tasks.blocked_by`（JSON string[]，默认 `[]`），迁移 `0003`。`createTaskSchema` 加 `blockedBy?: string[]`，定时任务的 `publish_task` 模板把它 omit 掉（模板不指向具体任务）；`PATCH /tasks/:id { blockedBy }` 人或发布者，校验每个 id 存在且不是自己，写事件 `task.dependencies { blockedBy }`。
 - 规则在 `core/tasks/transition.ts` 的 `applyAction` 里：任务 status 为 open 且 action 是 `claim | assign | recruit` 时，若 `blockedBy` 里有任务 status 不是 done/cancelled，返回 `TransitionError("被「<那个任务的 title>」阻塞")`，REST 映射 409。状态机纯函数不改。不检测环；环会让两边都卡住，由人改依赖解开。
 - MCP：`idesk_publish_task` 加 `blockedBy`；默认的可领取列表排除被阻塞的任务。
 - 界面见 UI.md 协作台。
