@@ -9,7 +9,8 @@
     "./relay": "./src/relay.ts",
     "./task-schemas": "./src/task-schemas.ts",
     "./agent-schemas": "./src/agent-schemas.ts",
-    "./relay-schemas": "./src/relay-schemas.ts"
+    "./relay-schemas": "./src/relay-schemas.ts",
+    "./plugin-schemas": "./src/plugin-schemas.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
