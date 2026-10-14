@@ -78,13 +78,23 @@ export function TaskDrawer({ taskId, onClose }: { taskId: string; onClose: () =>
               <ReactMarkdown>{task.body}</ReactMarkdown>
               {task.result !== null && <ReactMarkdown>{task.result}</ReactMarkdown>}
             </div>
-            <dl className="grid grid-cols-2 gap-x-4 gap-y-3 border-y border-line py-4 text-secondary">
-              <dt className="text-text-2">负责人</dt>
-              <dd>{task.assigneeId === null ? "未指定" : agentName(task.assigneeId)}</dd>
-              <dt className="text-text-2">发布者</dt>
-              <dd>{agentName(task.publisherId)}</dd>
-              <dt className="text-text-2">能力</dt>
-              <dd className="text-text-2">{task.capabilities.join(" · ") || "—"}</dd>
+            <dl className="space-y-3 border-y border-line py-4 text-secondary">
+              <div className="flex gap-2">
+                <dt className="w-18 shrink-0 text-text-2">负责人</dt>
+                <dd className="min-w-0 flex-1 break-words">
+                  {task.assigneeId === null ? "未指定" : agentName(task.assigneeId)}
+                </dd>
+              </div>
+              <div className="flex gap-2">
+                <dt className="w-18 shrink-0 text-text-2">发布者</dt>
+                <dd className="min-w-0 flex-1 break-words">{agentName(task.publisherId)}</dd>
+              </div>
+              <div className="flex gap-2">
+                <dt className="w-18 shrink-0 text-text-2">能力</dt>
+                <dd className="min-w-0 flex-1 break-words text-text-2">
+                  {task.capabilities.join(" · ") || "—"}
+                </dd>
+              </div>
             </dl>
             <section>
               <h3 className="mb-4 text-section">时间线</h3>

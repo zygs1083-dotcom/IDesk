@@ -1,3 +1,4 @@
+import type { RelayRecipient } from "@idesk/shared/relay";
 import { ACTION_LABEL, type TaskAction } from "@idesk/shared/task-machine";
 import type { eventSchema } from "@idesk/shared/task-schemas";
 import type { z } from "zod";
@@ -9,11 +10,8 @@ export function eventText(
   if (event.type === "task.reported")
     return `${agentName(event.agentId)} 汇报：${String(event.payload.message)}`;
   if (event.type === "relay.sent") {
-    const to = event.payload.to as
-      | { kind: "agent"; id: string }
-      | { kind: "capability"; value: string }
-      | { kind: "broadcast" };
-    return `${agentName(event.agentId)} 发消息给 ${to.kind === "agent" ? agentName(to.id) : to.kind === "capability" ? `能力 ${to.value}` : "全体"}`;
+    const to = event.payload.to as RelayRecipient;
+    return `${agentName(event.agentId)} 发消息给 ${recipientText(to, agentName)}`;
   }
   if (event.type === "task.created") return `${agentName(event.agentId)} 发布了`;
   if (event.type.startsWith("task.")) {
@@ -23,4 +21,15 @@ export function eventText(
   }
   if (event.type === "agent.registered") return `新建了智能体 ${String(event.payload.name)}`;
   return event.type;
+}
+
+function recipientText(to: RelayRecipient, agentName: (id: string | null) => string): string {
+  switch (to.kind) {
+    case "agent":
+      return agentName(to.id);
+    case "capability":
+      return `能力 ${to.value}`;
+    case "broadcast":
+      return "全体";
+  }
 }
