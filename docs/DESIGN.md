@@ -214,7 +214,7 @@ GET    /agents            POST /agents (人)     PATCH /agents/:id    DELETE /ag
 GET    /agents/me                               当前 key 对应的 agent
 POST   /agents/me/heartbeat
 
-GET    /events?since=&type=&agentId=            活动流，id 倒序，最多 200 条；since 是事件 id
+GET    /events?since=&type=&agentId=            活动流，最多 200 条。不带 since 时 id 倒序取最新；带 since 时 id 升序取 since 之后最早的 200 条，调用方连续拉取可补齐积压
 
 GET    /relay?box=inbox|sent|all&taskId=        传递区；AI 只能看与自己相关的
 POST   /relay                                   发消息，body 见 §4.6
