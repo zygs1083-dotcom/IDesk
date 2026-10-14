@@ -119,7 +119,7 @@ action 是可辨识联合：
 连接器是连接器插件的一个实例：`{ id, pluginId, name, config(json), enabled, pollIntervalSec, lastPolledAt, lastError }`。config 里的密钥明文存库（单机内网），出 API 时掩码。
 
 AutomationJob 镜像外部的工作流定义：`{ id, connectorId, externalId, name, enabled, url, lastRunStatus, lastRunAt }`。
-AutomationRun 镜像执行实例：`{ id, jobId, externalId, status, startedAt, finishedAt, url, error }`，status 统一为 `waiting` `running` `success` `failed` `canceled`。每个 job 只保留最近 50 条 run。
+AutomationRun 镜像执行实例：`{ id, jobId, externalId, status, trigger, startedAt, finishedAt, url, error }`，status 统一为 `waiting` `running` `success` `failed` `canceled`；`trigger` 是外部系统给的触发方式原文（n8n 的 mode，DolphinScheduler 的 commandType），可空。每个 job 只保留最近 50 条 run。轮询的 since 取该连接器下仍在 waiting/running 的 run 里最早的 startedAt，没有则用 lastPolledAt，这样未结束的 run 会被重新拉取并更新。n8n 公共 API 没有立即运行端点，n8n 连接器不实现 trigger()。
 
 外部 API 的已验证事实（n8n 2.32、DolphinScheduler 3.2.2）见 `/data/browser-home/pro/kaneo-design/scheduled-jobs-design.md` §1，实现连接器时以它为准。
 
