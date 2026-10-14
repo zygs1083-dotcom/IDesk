@@ -5,7 +5,8 @@
   "type": "module",
   "exports": {
     "./task-status": "./src/task-status.ts",
-    "./task-machine": "./src/task-machine.ts"
+    "./task-machine": "./src/task-machine.ts",
+    "./relay": "./src/relay.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
