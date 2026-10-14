@@ -8,11 +8,7 @@ export function listJobs(connectorId?: string) {
     .from(automationJobs)
     .where(connectorId === undefined ? undefined : eq(automationJobs.connectorId, connectorId))
     .orderBy(asc(automationJobs.name))
-    .all()
-    .map((row) => ({
-      ...row,
-      lastRunAt: row.lastRunAt?.toISOString() ?? null,
-    }));
+    .all();
 }
 export function listRuns(jobId: string) {
   if (!db.select().from(automationJobs).where(eq(automationJobs.id, jobId)).get()) return undefined;
@@ -22,10 +18,5 @@ export function listRuns(jobId: string) {
     .where(eq(automationRuns.jobId, jobId))
     .orderBy(desc(automationRuns.startedAt), desc(automationRuns.id))
     .limit(50)
-    .all()
-    .map((row) => ({
-      ...row,
-      startedAt: row.startedAt?.toISOString() ?? null,
-      finishedAt: row.finishedAt?.toISOString() ?? null,
-    }));
+    .all();
 }

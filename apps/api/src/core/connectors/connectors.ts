@@ -28,7 +28,6 @@ export function toPublicConnector(row: typeof connectors.$inferSelect) {
     ...row,
     canTrigger: connectorPlugin(row.pluginId)?.trigger !== undefined,
     config: maskConfig(row.config),
-    lastPolledAt: row.lastPolledAt?.toISOString() ?? null,
   };
 }
 export function listConnectors() {
