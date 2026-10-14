@@ -111,7 +111,7 @@ index.ts                                         启动
 action 是可辨识联合：
 
 - `{ type: "publish_task", template: Partial<Task> }` 定时把任务放到待领取。
-- `{ type: "connector_trigger", connectorId, jobExternalId, params }` 定时触发外部工作流。
+- `{ type: "connector_trigger", connectorId, jobExternalId, params }` 定时触发外部工作流：调插件的 `trigger()`，插件没有实现则这次执行记为 failed，错误「该连接器不支持触发」。前端新建时只列出其插件实现了 `trigger` 的连接器（内置的 n8n、DolphinScheduler 都没有，因为公共 API 未验证）。
 - `{ type: "http", url, method, headers, body }` 通用 HTTP 调用。
 
 ### 4.5 Connector / AutomationJob / AutomationRun
