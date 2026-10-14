@@ -3,20 +3,23 @@ import plugin from "./index.ts";
 
 const requestOptions = { headers: { "X-N8N-API-KEY": "test-key" } };
 const config = plugin.configSchema.parse({ baseUrl: "https://n8n.test/", apiKey: "test-key" });
-
 const startTime = "2026-10-14T10:00:00Z";
 function execution(id: number, status = "success", startedAt: string | null = startTime) {
-  return { id, workflowId: "workflow-1", status, startedAt, stoppedAt: "2026-10-14T10:01:00Z" };
+  return {
+    id,
+    workflowId: "workflow-1",
+    mode: "manual",
+    status,
+    startedAt,
+    stoppedAt: "2026-10-14T10:01:00Z",
+  };
 }
-
 afterEach(() => vi.unstubAllGlobals());
-
 describe("n8n connector", () => {
   it("removes trailing slashes from the base URL", () => {
     const parsed = plugin.configSchema.parse({ baseUrl: "https://n8n.test///", apiKey: "key" });
     expect(parsed.baseUrl).toBe("https://n8n.test");
   });
-
   it("paginates workflows and maps archived/active versions", async () => {
     const fetch = vi
       .fn()
@@ -45,7 +48,6 @@ describe("n8n connector", () => {
         }),
       );
     vi.stubGlobal("fetch", fetch);
-
     const jobs = await plugin.listJobs(config);
     expect(jobs.map(({ externalId, enabled }) => [externalId, enabled])).toEqual([
       ["active", true],
@@ -83,7 +85,6 @@ describe("n8n connector", () => {
         }),
       ),
     );
-
     const runs = await plugin.listRuns(config, { since: null, limit: 8 });
     expect(runs.map((run) => [run.status, run.error])).toEqual([
       ["waiting", null],
@@ -99,6 +100,7 @@ describe("n8n connector", () => {
       externalId: "8",
       jobExternalId: "workflow-1",
       status: "waiting",
+      trigger: "manual",
       startedAt: new Date("2026-10-14T10:00:00Z"),
       finishedAt: new Date("2026-10-14T10:01:00Z"),
       url: "https://n8n.test/workflow/workflow-1/executions/8",
@@ -116,7 +118,6 @@ describe("n8n connector", () => {
         Response.json({ data: [execution(3), execution(2)], nextCursor: "third" }),
       );
     vi.stubGlobal("fetch", fetch);
-
     expect(
       (await plugin.listRuns(config, { since: null, limit: 3 })).map((run) => run.externalId),
     ).toEqual(["5", "4", "3"]);
@@ -189,7 +190,6 @@ describe("n8n connector", () => {
       error: "connection refused",
     });
   });
-
   it("propagates HTTP errors from job and run listing", async () => {
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response(null, { status: 503 })));
     await expect(plugin.listJobs(config)).rejects.toThrow("n8n 返回 HTTP 503");

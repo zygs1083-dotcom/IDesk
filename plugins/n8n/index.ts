@@ -32,6 +32,7 @@ type Workflow = {
 type Execution = {
   id: number;
   workflowId: string;
+  mode: string;
   status: N8nStatus;
   startedAt: string | null;
   stoppedAt: string | null;
@@ -49,11 +50,23 @@ const statuses: Record<N8nStatus, RunStatus> = {
   unknown: "failed",
 };
 
+const executionErrors: Partial<Record<N8nStatus, string>> = {
+  error: "n8n 执行失败（error）",
+  crashed: "n8n 执行失败（crashed）",
+  unknown: "n8n 状态未知",
+};
+const connectionErrors: Partial<Record<number, string>> = {
+  401: "API key 无效",
+  403: "API key 无效",
+};
+
 async function n8nGet<T>(config: Config, path: string): Promise<T> {
   const response = await fetch(`${config.baseUrl}/api/v1${path}`, {
     headers: { "X-N8N-API-KEY": config.apiKey },
   });
-  if (!response.ok) throw new Error(`n8n 返回 HTTP ${response.status}`);
+  if (!response.ok) {
+    throw Object.assign(new Error(`n8n 返回 HTTP ${response.status}`), { status: response.status });
+  }
   return response.json() as Promise<T>;
 }
 
@@ -68,16 +81,13 @@ export default {
       await n8nGet<Page<Workflow>>(config as Config, "/workflows?limit=1");
       return { success: true };
     } catch (failure) {
-      const message = failure instanceof Error ? failure.message : String(failure);
-      const status = /^n8n 返回 HTTP (\d+)$/.exec(message)?.[1];
+      const error = failure as Error & { status?: number };
       return {
         success: false,
         error:
-          status === "401" || status === "403"
-            ? "API key 无效"
-            : status
-              ? `HTTP ${status}`
-              : message,
+          error.status === undefined
+            ? error.message
+            : (connectionErrors[error.status] ?? `HTTP ${error.status}`),
       };
     }
   },
@@ -118,21 +128,17 @@ export default {
       const page = await n8nGet<Page<Execution>>(settings, `/executions?${query}`);
       for (const execution of page.data) {
         const startedAt = execution.startedAt === null ? null : new Date(execution.startedAt);
-        // n8n 2.32.6 ignores startedAfter, so truncate the descending list locally.
+        // n8n 2.32.6 的 startedAfter 不生效，因此在客户端截断倒序列表。
         if (since !== null && startedAt !== null && startedAt < since) return runs;
         runs.push({
           externalId: String(execution.id),
           jobExternalId: execution.workflowId,
           status: statuses[execution.status],
+          trigger: execution.mode,
           startedAt,
           finishedAt: execution.stoppedAt === null ? null : new Date(execution.stoppedAt),
           url: `${settings.baseUrl}/workflow/${execution.workflowId}/executions/${execution.id}`,
-          error:
-            execution.status === "error" || execution.status === "crashed"
-              ? `n8n 执行失败（${execution.status}）`
-              : execution.status === "unknown"
-                ? "n8n 状态未知"
-                : null,
+          error: executionErrors[execution.status] ?? null,
         });
         if (runs.length === limit) return runs;
       }
