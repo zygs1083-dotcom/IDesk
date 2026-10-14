@@ -1,5 +1,5 @@
 import { ColorMatrixFilter, Container, Graphics, Sprite, Text, type Texture } from "pixi.js";
-import { tween } from "../engine/tween.ts";
+import { reducedMotion, tween } from "../engine/tween.ts";
 import type { Direction, Point } from "../scene/scene.ts";
 import { Bubble } from "./bubble.ts";
 import { hueOffset } from "./hue.ts";
@@ -21,7 +21,6 @@ export class Character extends Container {
   readonly bubble = new Bubble();
   private fallback: Texture;
   private elapsed = 0;
-  private reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
 
   constructor(
     private stage: Stage,
@@ -84,7 +83,7 @@ export class Character extends Container {
 
   private animate = () => {
     this.zIndex = this.y;
-    if (!this.reducedMotion.matches) this.elapsed += this.stage.app.ticker.deltaMS;
+    if (!reducedMotion.matches) this.elapsed += this.stage.app.ticker.deltaMS;
     const walk = `walk/${this.facing}/0`;
     const poses: Record<CharacterState, string> = {
       idle: walk,
@@ -108,15 +107,13 @@ export class Character extends Container {
       const dy = target.y - this.y;
       this.facing =
         Math.abs(dx) > Math.abs(dy) ? (dx < 0 ? "left" : "right") : dy < 0 ? "up" : "down";
-      if (this.reducedMotion.matches) this.position.copyFrom(target);
-      else
-        await tween(
-          this.stage.app.ticker,
-          this.position,
-          target,
-          (Math.hypot(dx, dy) / 90) * 1000,
-          (t) => t,
-        );
+      await tween(
+        this.stage.app.ticker,
+        this.position,
+        target,
+        (Math.hypot(dx, dy) / 90) * 1000,
+        (t) => t,
+      );
       if (this.destroyed) return;
     }
     this.setState("idle");

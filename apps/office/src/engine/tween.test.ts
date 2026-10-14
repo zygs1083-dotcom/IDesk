@@ -1,5 +1,14 @@
-import { expect, test } from "vitest";
+import { afterEach, expect, test, vi } from "vitest";
 import { easeInOut, tween } from "./tween.ts";
+
+const motion = vi.hoisted(() => {
+  const media = { matches: false };
+  vi.stubGlobal("matchMedia", () => media);
+  return media;
+});
+afterEach(() => {
+  motion.matches = false;
+});
 
 function manualTicker() {
   const updates = new Set<(tick: { deltaMS: number }) => void>();
@@ -37,4 +46,15 @@ test("easing endpoints and overshoot land exactly on the target", async () => {
   ticker.advance(20);
   await finished;
   expect(point).toEqual({ x: 5, y: 9 });
+});
+
+test("reduced motion reaches the destination in one tick regardless of duration", async () => {
+  motion.matches = true;
+  const ticker = manualTicker();
+  const point = { x: 0, y: 0 };
+  const finished = tween(ticker, point, { x: 100, y: 200 }, 5000);
+  ticker.advance(1);
+  await finished;
+  expect(point).toEqual({ x: 100, y: 200 });
+  expect(ticker.updates.size).toBe(0);
 });

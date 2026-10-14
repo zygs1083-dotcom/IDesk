@@ -16,12 +16,11 @@ export function eventPull(
       again = false;
       const events = await request(lastId);
       if (events.length === 200) again = true;
-      for (const event of events.sort((a, b) => a.id.localeCompare(b.id))) {
+      for (const event of events.sort((a, b) => (a.id < b.id ? -1 : 1))) {
         await handle(event);
         lastId = event.id;
       }
     } while (again);
-    running = undefined;
   };
   return () => {
     if (running) {
@@ -29,7 +28,11 @@ export function eventPull(
       return running;
     }
     // Defer one microtask so notifications in the same turn share their first fetch.
-    running = Promise.resolve().then(pull);
+    running = Promise.resolve()
+      .then(pull)
+      .finally(() => {
+        running = undefined;
+      });
     return running;
   };
 }

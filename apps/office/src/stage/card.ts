@@ -118,9 +118,7 @@ export class Cards {
     const card = this.get(task);
     this.ground(card);
     card.visible = true;
-    const ms = matchMedia("(prefers-reduced-motion: reduce)").matches
-      ? 0
-      : Math.min(600, Math.hypot(card.x - point.x, card.y - point.y) * 2);
+    const ms = Math.min(600, Math.hypot(card.x - point.x, card.y - point.y) * 2);
     await tween(this.stage.app.ticker, card.position, point, ms);
   }
 
@@ -134,9 +132,8 @@ export class Cards {
       this.pin(task);
     }
     if (bounce && visible) {
-      const ms = matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 120;
-      await tween(this.stage.app.ticker, card.scale, { x: 1.15, y: 1.15 }, ms);
-      await tween(this.stage.app.ticker, card.scale, { x: 1, y: 1 }, ms);
+      await tween(this.stage.app.ticker, card.scale, { x: 1.15, y: 1.15 }, 120);
+      await tween(this.stage.app.ticker, card.scale, { x: 1, y: 1 }, 120);
     }
   }
 

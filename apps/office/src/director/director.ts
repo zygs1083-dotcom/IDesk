@@ -12,7 +12,7 @@ import { Cast } from "./cast.ts";
 import { eventPull } from "./events.ts";
 import { placeSnapshot } from "./snapshot.ts";
 
-export const PRESENCE_MS = 30_000;
+const PRESENCE_MS = 30_000;
 const LEASE_WARNING_MS = 120_000;
 
 export async function direct(stage: Stage, scene: Scene) {

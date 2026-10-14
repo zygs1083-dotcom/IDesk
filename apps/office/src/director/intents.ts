@@ -14,10 +14,7 @@ export type Intent =
 type Snapshot = { event: OfficeEvent; task: Task | undefined; previous: Task | undefined };
 const owner = ({ event, task, previous }: Snapshot) =>
   event.agentId ?? previous?.assigneeId ?? task?.assigneeId;
-const owned = (
-  kind: "claim" | "complete" | "pause" | "resume" | "return",
-  snapshot: Snapshot,
-): Intent[] => {
+const owned = (kind: OwnedKind, snapshot: Snapshot): Intent[] => {
   const agentId = owner(snapshot);
   return agentId && snapshot.task ? [{ kind, agentId, task: snapshot.task }] : [];
 };
@@ -63,7 +60,6 @@ export const intentions: Record<string, (snapshot: Snapshot) => Intent[]> = {
           { kind: "disband", task },
         ]
       : [],
-  "task.heartbeat": () => [],
   "relay.sent": ({ event }) => [
     { kind: "relay", agentId: event.agentId ?? "human", to: event.payload.to as RelayRecipient },
   ],

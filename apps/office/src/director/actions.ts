@@ -1,5 +1,3 @@
-import { tween } from "../engine/tween.ts";
-import type { Point } from "../scene/scene.ts";
 import type { Cards } from "../stage/card.ts";
 import { confetti, envelope } from "../stage/effects.ts";
 import type { Cast } from "./cast.ts";
@@ -129,22 +127,17 @@ export function createActions(cast: Cast, cards: Cards) {
       void (flights.get(intent.task.id) ?? Promise.resolve()).then(() =>
         cards.remove(intent.task.id),
       );
-      if (intent.task.assigneeId)
-        void queue.enqueue(intent.task.assigneeId, () =>
-          home(intent.task.assigneeId as string, "idle"),
-        );
+      const id = intent.task.assigneeId;
+      if (id) void queue.enqueue(id, () => home(id, "idle"));
     },
     relay: (intent) => {
       const { agentId, to } = intent;
-      const recipients = {
-        agent: () => (to.kind === "agent" ? [to.id] : []),
-        capability: () =>
-          [...cast.present].filter(
-            (id) =>
-              to.kind === "capability" && cast.agents.get(id)?.capabilities.includes(to.value),
-          ),
-        broadcast: () => [],
-      }[to.kind]();
+      const recipients =
+        to.kind === "agent"
+          ? [to.id]
+          : to.kind === "capability"
+            ? [...cast.present].filter((id) => cast.agents.get(id)?.capabilities.includes(to.value))
+            : [];
       void queue.enqueue(agentId, async () => {
         const from = characters.get(agentId)?.position ?? scene.frontDesk.human;
         if (to.kind === "broadcast") await envelope(stage, from, scene.bulletin);
@@ -157,13 +150,7 @@ export function createActions(cast: Cast, cards: Cards) {
                 if (!character) return;
                 const facing = character.facing;
                 character.facing = "down";
-                const clock: Point = { x: 0, y: 0 };
-                await tween(
-                  stage.app.ticker,
-                  clock,
-                  clock,
-                  matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 1000,
-                );
+                await new Promise((resolve) => setTimeout(resolve, 1000));
                 character.facing = facing;
               });
             }),

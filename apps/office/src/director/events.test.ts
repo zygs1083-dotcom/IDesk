@@ -71,3 +71,23 @@ test("a full 200 event batch continues immediately using the greatest processed 
   expect(cursors).toEqual(["000", "200"]);
   expect(processed).toEqual([...batch.map((item) => item.id).sort(), "201"]);
 });
+
+test("a failed request does not swallow the next notification", async () => {
+  const cursors: string[] = [];
+  const processed: string[] = [];
+  const pull = eventPull(
+    "0",
+    async (since) => {
+      cursors.push(since);
+      if (cursors.length === 1) throw new Error("request failed");
+      return [event("1")];
+    },
+    async (item) => {
+      processed.push(item.id);
+    },
+  );
+  await expect(pull()).rejects.toThrow("request failed");
+  await pull();
+  expect(cursors).toEqual(["0", "0"]);
+  expect(processed).toEqual(["1"]);
+});
