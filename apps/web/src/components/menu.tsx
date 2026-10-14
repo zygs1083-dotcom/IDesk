@@ -8,14 +8,16 @@ export function Menu({
   label,
   items,
   disabled = false,
+  trigger,
 }: {
   label: string;
   items: { label: string; onSelect: () => void; danger?: boolean }[];
   disabled?: boolean;
+  trigger?: string;
 }) {
   const [open, setOpen] = useState(false);
   const root = useRef<HTMLDivElement>(null);
-  const trigger = useRef<HTMLButtonElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
   const menu = useRef<HTMLDivElement>(null);
   const id = useId();
   const reduced = useReducedMotion();
@@ -30,18 +32,18 @@ export function Menu({
   }, [open]);
   function close() {
     setOpen(false);
-    trigger.current?.focus();
+    triggerRef.current?.focus();
   }
   return (
     <div ref={root} className="relative">
       <Button
-        ref={trigger}
+        ref={triggerRef}
         aria-label={label}
         aria-haspopup="menu"
         aria-expanded={open}
         aria-controls={open ? id : undefined}
         disabled={disabled}
-        className="border-0 p-2"
+        className={trigger ? "border-0 text-accent" : "border-0 p-2"}
         onClick={() => setOpen(!open)}
         onKeyDown={(event) => {
           if (event.key === "ArrowDown" || event.key === "ArrowUp") {
@@ -50,7 +52,7 @@ export function Menu({
           }
         }}
       >
-        <Ellipsis size={18} strokeWidth={1.5} />
+        {trigger ?? <Ellipsis size={18} strokeWidth={1.5} />}
       </Button>
       {open && (
         <motion.div

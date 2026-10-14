@@ -4,10 +4,10 @@ import { useState } from "react";
 import { Button } from "../../components/button.tsx";
 import { Dialog } from "../../components/dialog.tsx";
 import { Field } from "../../components/field.tsx";
-import { Segmented } from "../../components/segmented.tsx";
 import { Switch } from "../../components/switch.tsx";
 import { request } from "../../lib/api.ts";
 import { ActionFields } from "./action-fields.tsx";
+import { ActionTabs } from "./action-tabs.tsx";
 import { cronText } from "./cron-text.ts";
 import { entriesText, parseEntries } from "./entry-text.ts";
 import type { Connector, Schedule, ScheduleInput } from "./types.ts";
@@ -42,13 +42,10 @@ export function ScheduleDialog({
       ? (schedule.action.template.capabilities ?? []).join(" ")
       : "",
   );
+  const [tags, setTags] = useState(
+    schedule?.action.type === "publish_task" ? (schedule.action.template.tags ?? []).join(" ") : "",
+  );
   const triggerConnectors = connectors.filter((connector) => connector.canTrigger);
-  const firstTrigger = triggerConnectors[0];
-  const options: { value: ScheduleAction["type"]; label: string }[] = [
-    { value: "publish_task", label: "发布任务" },
-    { value: "http", label: "HTTP 请求" },
-  ];
-  if (firstTrigger) options.push({ value: "connector_trigger", label: "触发连接器" });
   const ready =
     !!name.trim() &&
     !!cron.trim() &&
@@ -80,6 +77,7 @@ export function ScheduleDialog({
           template: {
             ...action.template,
             capabilities: capabilities.split(/[\s,，]+/).filter(Boolean),
+            tags: tags.split(/[\s,，]+/).filter(Boolean),
           },
         };
       return request<Schedule>(schedule ? `/schedules/${schedule.id}` : "/schedules", {
@@ -133,30 +131,7 @@ export function ScheduleDialog({
             <Switch label="启用" checked={enabled} onChange={setEnabled} />
           </div>
         </div>
-        <Segmented
-          label="动作"
-          options={options}
-          value={action.type}
-          onChange={(type) => {
-            switch (type) {
-              case "publish_task":
-                setAction({ type, template: { title: "", priority: "normal" } });
-                break;
-              case "http":
-                setAction({ type, method: "GET", url: "", headers: {} });
-                break;
-              case "connector_trigger":
-                if (firstTrigger)
-                  setAction({
-                    type,
-                    connectorId: firstTrigger.id,
-                    jobExternalId: "",
-                    params: {},
-                  });
-                break;
-            }
-          }}
-        />
+        <ActionTabs action={action} onChange={setAction} connectors={triggerConnectors} />
         <ActionFields
           action={action}
           onChange={setAction}
@@ -167,6 +142,8 @@ export function ScheduleDialog({
           setParams={setParams}
           capabilities={capabilities}
           setCapabilities={setCapabilities}
+          tags={tags}
+          setTags={setTags}
         />
         {save.error && (
           <p role="alert" className="text-secondary text-status-failed">
