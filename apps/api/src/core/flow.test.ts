@@ -59,7 +59,10 @@ test("claim, report, handoff, accept and complete commit tasks, events and deliv
       "task.complete",
     ]);
     expect(received.filter((event) => event.taskId === task.id)).toEqual(stored);
-    expect(stored[0]).toMatchObject({ agentId: null, payload: {} });
+    expect(stored[0]).toMatchObject({
+      agentId: null,
+      payload: { title: "实现核心服务", status: "open" },
+    });
     expect(stored[2]).toMatchObject({ agentId: a.id, payload: { message: "进展" } });
     expect(stored[3]).toMatchObject({
       payload: { from: "in_progress", to: "assigned", handoffTo: b.id },

@@ -27,6 +27,7 @@ export function createTask(
     const event = recordEvent(tx, {
       type: "task.created",
       taskId: task.id,
+      payload: { title: task.title, status: task.status },
       ...(publisherId === "human" ? {} : { agentId: publisherId }),
     });
     return { task, event };
