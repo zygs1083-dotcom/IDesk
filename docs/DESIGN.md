@@ -277,9 +277,9 @@ export interface PluginContext {
   db: Db;
   events: { emit(e: NewEvent): void; on(type: string, fn: Listener): Unsubscribe };
   schedule(cron: string, fn: () => Promise<void>): Unsubscribe;
-  registerRoutes(app: Hono): void;   // 挂到 /api/plugins/:pluginId/*
-  logger: Logger;
+  registerRoutes(app: Hono): void;   // 宿主只挂一个固定的 /api/plugins/:pluginId/* 分发器，按 id 转发到插件自己的 Hono 子应用；disable 时从表里删掉，之后 404
 }
+// 没有 logger：事件表就是日志，插件要记录就 emit 一条事件。
 
 export interface Plugin {
   id: string;             // "n8n"
@@ -303,8 +303,9 @@ export interface ConnectorPlugin extends Plugin {
 宿主 `plugins/host.ts`：
 
 - 启动时扫描 `plugins/*/index.ts`（内置）和 `IDESK_PLUGIN_DIR/*/index.js`（外置）。
-- 每个插件的启用状态存 `plugin_state` 表。`enable` 动态 `import()` 并 `setup`；`disable` 调 `teardown` 并撤销它注册的所有订阅、cron、路由。`reload` = disable + 清 import cache（带 `?t=` query）+ enable。
-- 连接器轮询由宿主统一驱动：每分钟扫 `enabled` 的连接器，按各自 `pollIntervalSec` 决定是否轮询，顺序执行，单个失败只写 `lastError` 不影响其他。
+- 每个插件的启用状态存 `plugin_state` 表，没有记录的视为启用。`enable` 动态 `import()` 并 `setup`；`disable` 调 `teardown` 并撤销它注册的所有订阅、cron、路由。`reload` = disable + 清 import cache（带 `?t=` query）+ enable。
+- 连接器轮询由宿主统一驱动：每分钟扫 `enabled` 的连接器，按各自 `pollIntervalSec` 决定是否轮询，顺序执行，upsert job 和 run，每个 job 只留最近 50 条 run，单个失败只写 `lastError` 不影响其他，有变化时 emit `connector.polled { connectorId, changed }`。
+- 连接器 config 出 API 时按键名掩码：键名匹配 `/token|key|secret|password/i` 的值替换成 `••••••`；PATCH 时收到 `••••••` 就保留原值。
 - 核心代码不出现任何插件 id。
 
 内置插件：`n8n`、`dolphinscheduler`（连接器）、`webhook-notifier`（notifier，实现 §6.3）。
