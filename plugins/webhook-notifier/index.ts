@@ -9,6 +9,17 @@ import type { RelayRecipient } from "../../packages/shared/src/relay.ts";
 type Task = typeof tasks.$inferSelect;
 type Agent = typeof agents.$inferSelect;
 
+function receives(agent: Agent, to: RelayRecipient): boolean {
+  switch (to.kind) {
+    case "agent":
+      return agent.id === to.id;
+    case "capability":
+      return agent.capabilities.includes(to.value);
+    case "broadcast":
+      return true;
+  }
+}
+
 function assigned(ctx: PluginContext, event: Event): Agent[] {
   const task = ctx.db
     .select()
@@ -40,18 +51,12 @@ const recipients: Record<string, (ctx: PluginContext, event: Event) => Agent[]> 
   "task.handoff": (ctx, event) => (event.payload.handoffTo == null ? [] : assigned(ctx, event)),
   "relay.sent": (ctx, event) => {
     const to = event.payload.to as RelayRecipient;
-    const matches: Record<RelayRecipient["kind"], (agent: Agent) => boolean> = {
-      agent: (agent) => agent.id === (to as Extract<RelayRecipient, { kind: "agent" }>).id,
-      capability: (agent) =>
-        agent.capabilities.includes((to as Extract<RelayRecipient, { kind: "capability" }>).value),
-      broadcast: () => true,
-    };
     return ctx.db
       .select()
       .from(agents)
       .where(isNotNull(agents.webhookUrl))
       .all()
-      .filter((agent) => agent.id !== event.agentId && matches[to.kind](agent));
+      .filter((agent) => agent.id !== event.agentId && receives(agent, to));
   },
 };
 
