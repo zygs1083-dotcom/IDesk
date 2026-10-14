@@ -15,7 +15,7 @@ program
   .requiredOption("--url <url>")
   .requiredOption("--key <key>")
   .action(async (options: Config) => {
-    const path = await saveConfig({ url: options.url, key: options.key });
+    const path = await saveConfig({ url: options.url.replace(/\/+$/, ""), key: options.key });
     process.stdout.write(`已保存到 ${path}\n`);
   });
 taskCommands(program);

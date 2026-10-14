@@ -1,11 +1,12 @@
 import { readFile } from "node:fs/promises";
 import type { Command } from "commander";
 import { api } from "../client.js";
+import { formatTime, kindLabels } from "../labels.js";
 import { output } from "../output.js";
 
 type Message = {
   id: string;
-  kind: string;
+  kind: keyof typeof kindLabels;
   fromAgentId: string;
   subject: string;
   createdAt: string;
@@ -75,10 +76,10 @@ export function relayCommands(program: Command): void {
         ["id", "种类", "发送者", "标题", "时间"],
         ...messages.map((message) => [
           message.id,
-          message.kind,
+          kindLabels[message.kind],
           message.fromAgentId,
           message.subject,
-          message.createdAt,
+          formatTime(message.createdAt),
         ]),
       ]);
     });

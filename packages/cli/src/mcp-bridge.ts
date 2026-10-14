@@ -4,7 +4,7 @@ import { readConfig } from "./config.js";
 
 export async function mcpBridge(): Promise<void> {
   const { url, key } = await readConfig();
-  const http = new StreamableHTTPClientTransport(new URL(`${url.replace(/\/$/, "")}/mcp`), {
+  const http = new StreamableHTTPClientTransport(new URL(`${url}/mcp`), {
     requestInit: { headers: { Authorization: `Bearer ${key}` } },
   });
   const stdio = new StdioServerTransport();

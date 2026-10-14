@@ -1,26 +1,17 @@
 import { readFile } from "node:fs/promises";
 import type { Command } from "commander";
 import { api } from "../client.js";
+import { priorityLabels, statusLabels } from "../labels.js";
 import { output } from "../output.js";
 
 type Task = {
   id: string;
   title: string;
   status: keyof typeof statusLabels;
-  priority: string;
+  priority: keyof typeof priorityLabels;
   capabilities: string[];
   assigneeId: string | null;
 };
-const statusLabels = {
-  open: "待领取",
-  recruiting: "招募中",
-  assigned: "已指定",
-  in_progress: "进行中",
-  paused: "已暂停",
-  done: "已完成",
-  cancelled: "已取消",
-};
-
 export function taskCommands(program: Command): void {
   program
     .command("tasks")
@@ -39,7 +30,7 @@ export function taskCommands(program: Command): void {
         ...tasks.map((task) => [
           task.id,
           statusLabels[task.status],
-          task.priority,
+          priorityLabels[task.priority],
           task.capabilities.join(","),
           task.assigneeId ?? "—",
           task.title,
