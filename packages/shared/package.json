@@ -4,7 +4,8 @@
   "private": true,
   "type": "module",
   "exports": {
-    "./task-status": "./src/task-status.ts"
+    "./task-status": "./src/task-status.ts",
+    "./task-machine": "./src/task-machine.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
