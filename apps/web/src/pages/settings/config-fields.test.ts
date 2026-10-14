@@ -20,15 +20,26 @@ test("top-level fields preserve required flags and select input types", () => {
       required: ["baseUrl", "apiKey", "enabled"],
     }),
   ).toEqual([
-    { name: "name", type: "text", required: false },
-    { name: "baseUrl", type: "url", required: true },
-    { name: "apiKey", type: "password", required: true },
-    { name: "accessToken", type: "password", required: false },
-    { name: "secret", type: "password", required: false },
-    { name: "password", type: "password", required: false },
-    { name: "interval", type: "number", required: false },
-    { name: "count", type: "number", required: false },
-    { name: "enabled", type: "boolean", required: true },
+    { name: "name", label: "name", type: "text", required: false },
+    { name: "baseUrl", label: "baseUrl", type: "url", required: true },
+    { name: "apiKey", label: "apiKey", type: "password", required: true },
+    { name: "accessToken", label: "accessToken", type: "password", required: false },
+    { name: "secret", label: "secret", type: "password", required: false },
+    { name: "password", label: "password", type: "password", required: false },
+    { name: "interval", label: "interval", type: "number", required: false },
+    { name: "count", label: "count", type: "number", required: false },
+    { name: "enabled", label: "enabled", type: "boolean", required: true },
   ]);
   expect(configFields({})).toEqual([]);
+});
+
+test("schema titles label fields with a key fallback", () => {
+  expect(
+    configFields({
+      properties: { baseUrl: { type: "string", title: "地址" }, apiKey: { type: "string" } },
+    }),
+  ).toEqual([
+    { name: "baseUrl", label: "地址", type: "text", required: false },
+    { name: "apiKey", label: "apiKey", type: "password", required: false },
+  ]);
 });

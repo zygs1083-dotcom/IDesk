@@ -4,6 +4,7 @@ import { Button } from "../../components/button.tsx";
 import { Dialog } from "../../components/dialog.tsx";
 import { Toast } from "../../components/toast.tsx";
 import { request } from "../../lib/api.ts";
+import { useShortcut } from "../../lib/use-shortcut.ts";
 import { ConnectorDialog } from "./connector-dialog.tsx";
 import { ConnectorRow } from "./connector-row.tsx";
 import type { ConnectionResult, Connector, Plugin } from "./types.ts";
@@ -50,6 +51,9 @@ export function ConnectorsPage() {
     },
     onError: (error) => setMessage(error.message),
   });
+  useShortcut("n", () => {
+    if (plugins.data) setCreating(true);
+  });
   const error = connectors.error ?? plugins.error;
   return (
     <section className="space-y-4" aria-label="连接器">
@@ -65,7 +69,7 @@ export function ConnectorsPage() {
         </p>
       )}
       {connectors.isPending && <p className="text-secondary text-text-2">加载中…</p>}
-      {connectors.data?.length === 0 && (
+      {!error && connectors.data?.length === 0 && (
         <div className="py-16 text-center text-secondary text-text-2">
           <p>还没有连接器</p>
           <Button className="mt-3" disabled={!plugins.data} onClick={() => setCreating(true)}>

@@ -112,9 +112,9 @@ export function ConnectorDialog({
         {fields.map((field) =>
           field.type === "boolean" ? (
             <div key={field.name} className="flex items-center justify-between">
-              <span className="text-secondary text-text-2">{field.name}</span>
+              <span className="text-secondary text-text-2">{field.label}</span>
               <Switch
-                label={field.name}
+                label={field.label}
                 checked={values[field.name] === true}
                 onChange={(value) => changeValue(field.name, value)}
               />
@@ -122,7 +122,7 @@ export function ConnectorDialog({
           ) : (
             <Field
               key={field.name}
-              label={field.name}
+              label={field.label}
               type={field.type}
               required={field.required}
               step={field.type === "number" ? "any" : undefined}

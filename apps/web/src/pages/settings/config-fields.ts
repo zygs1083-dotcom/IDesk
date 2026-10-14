@@ -2,13 +2,14 @@ import type { Plugin } from "./types.ts";
 
 export type ConfigField = {
   name: string;
+  label: string;
   type: "text" | "url" | "password" | "number" | "boolean";
   required: boolean;
 };
 
 export function configFields(schema: Plugin["configSchema"]): ConfigField[] {
   const properties = schema.properties as
-    | Record<string, { type?: string; format?: string }>
+    | Record<string, { type?: string; format?: string; title?: string }>
     | undefined;
   const required = schema.required as string[] | undefined;
   if (!properties) return [];
@@ -25,6 +26,8 @@ export function configFields(schema: Plugin["configSchema"]): ConfigField[] {
     } else if (property.type === "boolean") {
       type = "boolean";
     } else return [];
-    return [{ name, type, required: required?.includes(name) ?? false }];
+    return [
+      { name, label: property.title ?? name, type, required: required?.includes(name) ?? false },
+    ];
   });
 }

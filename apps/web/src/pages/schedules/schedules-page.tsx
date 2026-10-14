@@ -5,6 +5,7 @@ import { Dialog } from "../../components/dialog.tsx";
 import { Toast } from "../../components/toast.tsx";
 import { PageHeader } from "../../layout/page-header.tsx";
 import { request } from "../../lib/api.ts";
+import { useShortcut } from "../../lib/use-shortcut.ts";
 import { ScheduleDialog } from "./schedule-dialog.tsx";
 import { ScheduleRow } from "./schedule-row.tsx";
 import type { Connector, Schedule } from "./types.ts";
@@ -56,6 +57,9 @@ export function SchedulesPage() {
     },
     onError: (error) => setMessage(error.message),
   });
+  useShortcut("n", () => {
+    if (connectors.data) setCreating(true);
+  });
   const error = schedules.error ?? connectors.error;
   return (
     <div className="space-y-6">
@@ -70,7 +74,7 @@ export function SchedulesPage() {
         </p>
       )}
       {schedules.isPending && <p className="text-secondary text-text-2">加载中…</p>}
-      {schedules.data?.length === 0 && (
+      {!error && schedules.data?.length === 0 && (
         <div className="py-16 text-center text-secondary text-text-2">
           <p>还没有定时任务</p>
           <Button className="mt-3" disabled={!connectors.data} onClick={() => setCreating(true)}>

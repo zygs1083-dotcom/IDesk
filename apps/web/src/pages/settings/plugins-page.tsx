@@ -50,6 +50,9 @@ export function PluginsPage() {
         </p>
       )}
       {plugins.isPending && <p className="text-secondary text-text-2">加载中…</p>}
+      {plugins.data?.length === 0 && (
+        <p className="py-16 text-center text-secondary text-text-2">还没有插件</p>
+      )}
       <div className="rounded-panel border border-line bg-surface">
         {plugins.data?.map((plugin) => (
           <div

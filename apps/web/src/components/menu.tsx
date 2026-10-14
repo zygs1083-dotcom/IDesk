@@ -1,6 +1,7 @@
 import { Ellipsis } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
 import { useEffect, useId, useRef, useState } from "react";
+import { cn } from "../lib/cn.ts";
 import { Button } from "./button.tsx";
 
 export function Menu({
@@ -62,7 +63,7 @@ export function Menu({
               close();
             }
             if (event.key === "Tab") setOpen(false);
-            if (open && ["ArrowDown", "ArrowUp", "Home", "End"].includes(event.key)) {
+            if (["ArrowDown", "ArrowUp", "Home", "End"].includes(event.key)) {
               event.preventDefault();
               const buttons = Array.from(menu.current?.querySelectorAll("button") ?? []);
               const current = buttons.indexOf(document.activeElement as HTMLButtonElement);
@@ -88,7 +89,10 @@ export function Menu({
               type="button"
               role="menuitem"
               tabIndex={-1}
-              className={`block w-full rounded-control px-3 py-2 text-left text-secondary hover:bg-line focus:bg-line focus:outline-none ${item.danger ? "text-status-failed" : "text-text"}`}
+              className={cn(
+                "block w-full rounded-control px-3 py-2 text-left text-secondary hover:bg-line focus:bg-line focus:outline-none",
+                item.danger ? "text-status-failed" : "text-text",
+              )}
               onClick={() => {
                 close();
                 item.onSelect();
