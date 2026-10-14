@@ -6,7 +6,7 @@ import type { ConfigField } from "./config-fields.ts";
 type Values = Record<string, string | boolean>;
 
 export function useConfigInputs(fields: ConfigField[], initial: Record<string, unknown> = {}) {
-  const [values, setValues] = useState<Values>(() =>
+  const [inputs, setValues] = useState<Values>(() =>
     Object.fromEntries(
       Object.entries(initial).flatMap<[string, string | boolean]>(([key, value]) =>
         typeof value === "boolean"
@@ -17,6 +17,12 @@ export function useConfigInputs(fields: ConfigField[], initial: Record<string, u
       ),
     ),
   );
+  const values: Values = {
+    ...Object.fromEntries(
+      fields.flatMap((field) => (field.default === undefined ? [] : [[field.name, field.default]])),
+    ),
+    ...inputs,
+  };
   const config = Object.fromEntries(
     fields.flatMap((field) => {
       const value = values[field.name];
@@ -53,11 +59,11 @@ export function ConfigInputs({
         <select
           id={`${id}-${field.name}`}
           required={field.required}
-          className="w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none placeholder:text-text-3 focus:border-accent"
+          className="w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none focus:border-accent"
           value={typeof values[field.name] === "string" ? (values[field.name] as string) : ""}
           onChange={(event) => onChange(field.name, event.target.value)}
         >
-          <option value="">请选择</option>
+          {field.default === undefined && <option value="">请选择</option>}
           {field.options.map((option) => (
             <option key={option} value={option}>
               {option}

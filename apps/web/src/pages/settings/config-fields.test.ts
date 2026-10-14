@@ -57,3 +57,30 @@ test("string enums expose select options while retaining their input type", () =
     },
   ]);
 });
+
+test("schema defaults preserve strings and booleans and stringify numbers", () => {
+  expect(
+    configFields({
+      properties: {
+        name: { type: "string", default: "demo" },
+        keepDays: { type: "number", default: 90 },
+        dryRun: { type: "boolean", default: true },
+        disabled: { type: "boolean", default: false },
+        format: { type: "string", enum: ["text", "json", "csv"], default: "json" },
+      },
+    }),
+  ).toEqual([
+    { name: "name", label: "name", type: "text", required: false, default: "demo" },
+    { name: "keepDays", label: "keepDays", type: "number", required: false, default: "90" },
+    { name: "dryRun", label: "dryRun", type: "boolean", required: false, default: true },
+    { name: "disabled", label: "disabled", type: "boolean", required: false, default: false },
+    {
+      name: "format",
+      label: "format",
+      type: "text",
+      required: false,
+      options: ["text", "json", "csv"],
+      default: "json",
+    },
+  ]);
+});
