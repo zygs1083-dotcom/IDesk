@@ -7,6 +7,7 @@ const directions = ["down", "left", "right", "up"];
 const root = fileURLToPath(new URL("../", import.meta.url));
 const frameWidth = 64;
 const frameHeight = 96;
+const fringeThreshold = 40;
 const atlas = new PNG({ width: frameWidth * 19, height: frameHeight * kinds.length });
 const frames = {};
 const animations = {};
@@ -34,6 +35,20 @@ for (const [kindIndex, kind] of kinds.entries()) {
   for (let p = 0; p < source.data.length; p += 4) {
     const distance = Math.hypot(source.data[p] - 255, source.data[p + 1], source.data[p + 2] - 255);
     if (distance <= 60) source.data[p + 3] = 0;
+  }
+  // 生成图的抗锯齿会留下品红过渡边；邻域使用抠色快照，只去边一遍。
+  const alpha = source.data.filter((_, index) => index % 4 === 3);
+  const w = source.width;
+  for (let pixel = 0; pixel < alpha.length; pixel++) {
+    const p = pixel * 4;
+    const [r, g, b] = source.data.subarray(p, p + 3);
+    if (!alpha[pixel] || r - g <= fringeThreshold || b - g <= fringeThreshold) continue;
+    const edge = [-w - 1, -w, -w + 1, -1, 1, w - 1, w, w + 1].some((offset) => {
+      const neighbor = pixel + offset;
+      if (neighbor < 0 || neighbor >= alpha.length) return false;
+      return Math.abs((neighbor % w) - (pixel % w)) <= 1 && alpha[neighbor] === 0;
+    });
+    if (edge) source.data[p + 3] = 0;
   }
   const columns = Array.from({ length: 5 }, (_, i) => Math.round((i * source.width) / 4));
   const rows = Array.from({ length: 6 }, (_, i) => Math.round((i * source.height) / 5));
