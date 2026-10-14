@@ -1,0 +1,65 @@
+.roster {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.roster > h2 {
+  padding: 16px;
+  border-bottom: 2px solid var(--office-ink);
+}
+.roster-groups {
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+}
+.roster section {
+  padding: 12px 8px;
+}
+.roster h3 {
+  padding: 0 8px 8px;
+  overflow-wrap: anywhere;
+  color: var(--office-floor);
+}
+.roster section + section {
+  border-top: 1px solid var(--office-shadow);
+}
+.roster-item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 108px;
+  border: 0;
+  background: transparent;
+  padding: 6px;
+  text-align: left;
+  color: inherit;
+  cursor: pointer;
+}
+.avatar {
+  width: 128px;
+  height: 96px;
+  flex-shrink: 0;
+  object-fit: contain;
+}
+.roster-item .avatar {
+  margin-left: -12px;
+  margin-right: 0;
+}
+.roster-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+.roster-copy strong {
+  font-weight: 400;
+}
+.roster-copy > span {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.offline {
+  opacity: 0.45;
+  filter: grayscale(1);
+}
