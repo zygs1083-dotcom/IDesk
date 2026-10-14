@@ -6,7 +6,7 @@ CREATE TABLE `agents` (
 	`capabilities` text DEFAULT '[]' NOT NULL,
 	`api_key_hash` text NOT NULL,
 	`webhook_url` text,
-	`last_seen_at` integer NOT NULL,
+	`last_seen_at` integer,
 	`created_at` integer NOT NULL
 );
 --> statement-breakpoint

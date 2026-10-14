@@ -17,8 +17,8 @@ export const tasks = sqliteTable(
     priority: text({ enum: TASK_PRIORITIES }).notNull().default("normal"),
     tags: text({ mode: "json" }).$type<string[]>().notNull().default([]),
     capabilities: text({ mode: "json" }).$type<string[]>().notNull().default([]),
-    // Agent deletion must preserve task ownership and event history.
     publisherId: text("publisher_id").notNull(),
+    // 不建外键：agent 可删除，任务与事件历史要保留
     assigneeId: text("assignee_id"),
     recruit: text({ mode: "json" }).$type<{ needed: number; joined: string[] }>(),
     handoff: text({ mode: "json" }).$type<{ from: string; to: string | null; note: string }>(),
@@ -48,7 +48,7 @@ export const agents = sqliteTable(
     capabilities: text({ mode: "json" }).$type<string[]>().notNull().default([]),
     apiKeyHash: text("api_key_hash").notNull(),
     webhookUrl: text("webhook_url"),
-    lastSeenAt: integer("last_seen_at", { mode: "timestamp_ms" }).notNull(),
+    lastSeenAt: integer("last_seen_at", { mode: "timestamp_ms" }),
     createdAt: integer("created_at", { mode: "timestamp_ms" })
       .notNull()
       .$defaultFn(() => new Date()),
