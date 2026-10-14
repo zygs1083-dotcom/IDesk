@@ -42,12 +42,16 @@ export default {
 };
 ```
 
-`PluginContext` 给你四样东西：
+`PluginContext` 提供这些能力（`enabledByDefault` 默认 true，会改变行为或删数据的插件设为 false）：
 
-- `db`：Drizzle 实例，表定义在 `apps/api/src/db/schema.ts`。读可以随意；写任务状态必须走 REST，不要绕过状态机。
+- `db`：Drizzle 实例，表定义在 `apps/api/src/db/schema.ts`。读可以随意；写任务状态用 `tasks.act`，不要绕过状态机。
 - `events.on(type, fn)` / `events.emit(event)`：`type` 可以是 `"*"`。事件表就是日志，插件要记录什么就 emit 一条，命名 `<插件id>.<事件>`。前端活动页和像素办公室都会看到。
 - `schedule(cron, fn)`：插件自己的定时器，停用插件时自动停。
-- `registerRoutes(app)`：子应用挂在 `/api/plugins/<id>/*`，只有登录的人能访问（cookie 鉴权，agent key 不行），停用后 404。
+- `registerRoutes(app)`：子应用挂在 `/api/plugins/<id>/*`，管理员 cookie 或 agent key 均可访问，停用后 404。
+- `config`：notifier/action 的插件级配置经 `configSchema.parse` 解析，没有记录时解析 `{}`；connector 为 undefined。
+- `dataDir`：`IDESK_DATA_DIR/plugin-data/<id>`，setup 前已创建，存放插件自己的文件。
+- `publicUrl`：`IDESK_PUBLIC_URL`，用于在通知中拼链接。
+- `tasks.act(id, action)`：以 system 身份执行任务状态机，与 REST 走同一条路。
 
 连接器约定（细节见 `docs/DESIGN.md` §4.5、§7）：
 

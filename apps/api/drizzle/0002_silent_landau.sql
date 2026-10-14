@@ -1,0 +1,1 @@
+ALTER TABLE `plugin_state` ADD `config` text DEFAULT '{}' NOT NULL;

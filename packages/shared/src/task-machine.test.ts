@@ -142,14 +142,16 @@ it("only humans reopen and completion fields are cleared", () => {
     completedAt: null,
   });
 });
-it("only the system expires leases and cannot perform other actions", () => {
+it("only the system expires leases and may also assign tasks", () => {
   for (const actor of [human, agent])
     expect(transition(task("in_progress"), { type: "lease_expired" }, actor, now)).toBeInstanceOf(
       TransitionError,
     );
   const expired = ok(transition(task("in_progress"), { type: "lease_expired" }, system, now));
   expect(expired).toMatchObject({ status: "open", assigneeId: null, leaseExpiresAt: null });
-  for (const action of actions.filter((action) => action.type !== "lease_expired")) {
+  for (const action of actions.filter(
+    (action) => action.type !== "lease_expired" && action.type !== "assign",
+  )) {
     for (const status of TASK_STATUSES)
       expect(transition(task(status), action, system, now)).toBeInstanceOf(TransitionError);
   }

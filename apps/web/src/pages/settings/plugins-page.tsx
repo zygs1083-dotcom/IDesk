@@ -4,6 +4,8 @@ import { Button } from "../../components/button.tsx";
 import { Switch } from "../../components/switch.tsx";
 import { Toast } from "../../components/toast.tsx";
 import { request } from "../../lib/api.ts";
+import { configFields } from "./config-fields.ts";
+import { PluginConfig } from "./plugin-config.tsx";
 import type { Plugin } from "./types.ts";
 
 const kinds = { connector: "连接器", notifier: "通知", action: "动作" };
@@ -11,6 +13,7 @@ const kinds = { connector: "连接器", notifier: "通知", action: "动作" };
 export function PluginsPage() {
   const client = useQueryClient();
   const plugins = useQuery({ queryKey: ["plugins"], queryFn: () => request<Plugin[]>("/plugins") });
+  const [expanded, setExpanded] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const toggle = useMutation({
     mutationFn: ({ id, enabled }: { id: string; enabled: boolean }) =>
@@ -55,26 +58,42 @@ export function PluginsPage() {
       )}
       <div className="rounded-panel border border-line bg-surface">
         {plugins.data?.map((plugin) => (
-          <div
-            key={plugin.id}
-            className="flex flex-wrap items-center gap-4 border-b border-line px-4 py-3 last:border-b-0"
-          >
-            <span className="min-w-0 flex-1 break-words text-body">{plugin.name}</span>
-            <span className="text-secondary tabular-nums text-text-2">{plugin.version}</span>
-            <span className="w-12 text-secondary text-text-2">{kinds[plugin.kind]}</span>
-            <Switch
-              label={`启用 ${plugin.name}`}
-              checked={plugin.enabled}
-              disabled={toggle.isPending || reload.isPending}
-              onChange={(enabled) => toggle.mutate({ id: plugin.id, enabled })}
-            />
-            <Button
-              className="border-0 text-accent"
-              disabled={reload.isPending || toggle.isPending}
-              onClick={() => reload.mutate(plugin)}
-            >
-              重载
-            </Button>
+          <div key={plugin.id} className="border-b border-line last:border-b-0">
+            <div className="flex flex-wrap items-center gap-4 px-4 py-3">
+              <span className="min-w-0 flex-1 break-words text-body">{plugin.name}</span>
+              <span className="text-secondary tabular-nums text-text-2">{plugin.version}</span>
+              <span className="w-12 text-secondary text-text-2">{kinds[plugin.kind]}</span>
+              <Switch
+                label={`启用 ${plugin.name}`}
+                checked={plugin.enabled}
+                disabled={toggle.isPending || reload.isPending}
+                onChange={(enabled) => toggle.mutate({ id: plugin.id, enabled })}
+              />
+              {plugin.kind !== "connector" && configFields(plugin.configSchema).length > 0 && (
+                <Button
+                  className="border-0 text-accent"
+                  aria-expanded={expanded === plugin.id}
+                  onClick={() => setExpanded(expanded === plugin.id ? null : plugin.id)}
+                >
+                  配置
+                </Button>
+              )}
+              <Button
+                className="border-0 text-accent"
+                disabled={reload.isPending || toggle.isPending}
+                onClick={() => reload.mutate(plugin)}
+              >
+                重载
+              </Button>
+            </div>
+            {plugin.error && (
+              <p role="alert" className="px-4 pb-3 text-secondary text-status-failed">
+                {plugin.error}
+              </p>
+            )}
+            {expanded === plugin.id && (
+              <PluginConfig plugin={plugin} onClose={() => setExpanded(null)} />
+            )}
           </div>
         ))}
       </div>

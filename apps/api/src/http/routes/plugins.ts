@@ -1,9 +1,9 @@
 import type { OpenAPIHono } from "@hono/zod-openapi";
 import { pluginSchema } from "@idesk/shared/plugin-schemas";
-import { getSignedCookie } from "hono/cookie";
 import { z } from "zod";
-import { config } from "../../config.ts";
+import { maskConfig, mergeSecrets } from "../../core/connectors/connectors.ts";
 import {
+  configurePlugin,
   disablePlugin,
   enablePlugin,
   listPlugins,
@@ -11,7 +11,11 @@ import {
   reloadPlugin,
 } from "../../plugins/registry.ts";
 import { HttpError } from "../errors.ts";
-import { type AuthEnv, requireHuman } from "../middleware/auth.ts";
+import { type AuthEnv, auth, requireHuman } from "../middleware/auth.ts";
+
+function publicPlugins() {
+  return listPlugins().map((plugin) => ({ ...plugin, config: maskConfig(plugin.config) }));
+}
 
 const actions = { enable: enablePlugin, disable: disablePlugin, reload: reloadPlugin };
 
@@ -27,7 +31,7 @@ export function pluginRoutes(app: OpenAPIHono<AuthEnv>) {
         },
       },
     },
-    (c) => c.json(listPlugins(), 200),
+    (c) => c.json(publicPlugins(), 200),
   );
   app.openapi(
     {
@@ -49,14 +53,54 @@ export function pluginRoutes(app: OpenAPIHono<AuthEnv>) {
       if (!plugins.has(id)) throw new HttpError(404, "插件不存在");
       await actions[action](id);
       return c.json(
-        listPlugins().find((plugin) => plugin.id === id) as z.infer<typeof pluginSchema>,
+        publicPlugins().find((plugin) => plugin.id === id) as z.infer<typeof pluginSchema>,
         200,
       );
     },
   );
+  app.openapi(
+    {
+      method: "patch",
+      path: "/api/v1/plugins/{id}",
+      middleware: requireHuman,
+      request: {
+        params: z.object({ id: z.string() }),
+        body: {
+          content: {
+            "application/json": { schema: z.object({ config: z.record(z.string(), z.unknown()) }) },
+          },
+          required: true,
+        },
+      },
+      responses: {
+        200: {
+          description: "Plugin config",
+          content: { "application/json": { schema: pluginSchema } },
+        },
+      },
+    },
+    async (c) => {
+      const { id } = c.req.valid("param");
+      const loaded = plugins.get(id);
+      if (!loaded) throw new HttpError(404, "插件不存在");
+      if (loaded.plugin.kind === "connector")
+        throw new HttpError(400, "连接器的配置在连接器实例上");
+      const previous = listPlugins().find((plugin) => plugin.id === id) as z.infer<
+        typeof pluginSchema
+      >;
+      const merged = mergeSecrets(c.req.valid("json").config, previous.config);
+      const parsed = loaded.plugin.configSchema.safeParse(merged);
+      if (!parsed.success)
+        throw new HttpError(400, parsed.error.issues.map((issue) => issue.message).join("；"));
+      await configurePlugin(id, merged);
+      return c.json(
+        publicPlugins().find((plugin) => plugin.id === id) as z.infer<typeof pluginSchema>,
+        200,
+      );
+    },
+  );
+  app.use("/api/plugins/*", auth);
   app.all("/api/plugins/:pluginId/*", async (c) => {
-    const session = await getSignedCookie(c, config.IDESK_SESSION_SECRET, "idesk_session");
-    if (session !== "admin") throw new HttpError(401, "未登录");
     const id = c.req.param("pluginId");
     const routes = plugins.get(id)?.routes;
     if (!routes) throw new HttpError(404, "插件不存在或已停用");
