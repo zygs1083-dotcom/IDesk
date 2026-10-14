@@ -146,6 +146,7 @@ export const automationRuns = sqliteTable(
 
 export const pluginState = sqliteTable("plugin_state", {
   pluginId: text("plugin_id").primaryKey(),
+  config: text({ mode: "json" }).$type<Record<string, unknown>>().notNull().default({}),
   enabled: integer({ mode: "boolean" }).notNull(),
 });
 

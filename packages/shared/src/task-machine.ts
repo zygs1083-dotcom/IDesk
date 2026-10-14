@@ -153,7 +153,7 @@ const permitted: {
   handoff: byAssigneeOrHuman,
   release: byAssigneeOrHuman,
   resume: byAssigneeOrHuman,
-  assign: byHumanOrPublisher,
+  assign: (task, actor) => (actor.kind === "system" ? null : byHumanOrPublisher(task, actor)),
   recruit: (task, actor, action) =>
     byHumanOrPublisher(task, actor) || (action.needed < 2 ? "招募至少需要 2 个智能体" : null),
   cancel_recruit: byHumanOrPublisher,

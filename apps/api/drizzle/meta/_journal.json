@@ -15,6 +15,13 @@
       "when": 1791983914152,
       "tag": "0001_known_arachne",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1792016568410,
+      "tag": "0002_silent_landau",
+      "breakpoints": true
     }
   ]
 }

@@ -43,3 +43,17 @@ test("schema titles label fields with a key fallback", () => {
     { name: "apiKey", label: "apiKey", type: "password", required: false },
   ]);
 });
+
+test("string enums expose select options while retaining their input type", () => {
+  expect(
+    configFields({ properties: { format: { type: "string", enum: ["text", "json", "csv"] } } }),
+  ).toEqual([
+    {
+      name: "format",
+      label: "format",
+      type: "text",
+      required: false,
+      options: ["text", "json", "csv"],
+    },
+  ]);
+});

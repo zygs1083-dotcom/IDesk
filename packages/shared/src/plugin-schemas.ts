@@ -6,5 +6,7 @@ export const pluginSchema = z.object({
   version: z.string(),
   kind: z.enum(["connector", "notifier", "action"]),
   enabled: z.boolean(),
+  config: z.record(z.string(), z.unknown()),
+  error: z.string().optional(),
   configSchema: z.record(z.string(), z.unknown()),
 });

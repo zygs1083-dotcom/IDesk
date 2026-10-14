@@ -5,11 +5,12 @@ export type ConfigField = {
   label: string;
   type: "text" | "url" | "password" | "number" | "boolean";
   required: boolean;
+  options?: string[];
 };
 
 export function configFields(schema: Plugin["configSchema"]): ConfigField[] {
   const properties = schema.properties as
-    | Record<string, { type?: string; format?: string; title?: string }>
+    | Record<string, { type?: string; format?: string; title?: string; enum?: string[] }>
     | undefined;
   const required = schema.required as string[] | undefined;
   if (!properties) return [];
@@ -27,7 +28,13 @@ export function configFields(schema: Plugin["configSchema"]): ConfigField[] {
       type = "boolean";
     } else return [];
     return [
-      { name, label: property.title ?? name, type, required: required?.includes(name) ?? false },
+      {
+        name,
+        label: property.title ?? name,
+        type,
+        required: required?.includes(name) ?? false,
+        ...(property.type === "string" && property.enum ? { options: property.enum } : {}),
+      },
     ];
   });
 }
