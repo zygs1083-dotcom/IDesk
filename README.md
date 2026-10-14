@@ -7,11 +7,58 @@ Intelligent Dispatching Desk：跨网络的 AI 协作调度台。多台设备上
 - 路线：`docs/ROADMAP.md`
 - 开发约定：`AGENTS.md`
 
+## 本地开发
+
+需要 Node.js 24 和 pnpm。在仓库根目录执行：
+
 ```sh
-cp .env.example .env
 pnpm install
-pnpm dev        # API http://localhost:3300，前端 http://localhost:5173
+cp .env.example .env
 ```
+
+填写 `.env` 的 `IDESK_ADMIN_PASSWORD`（管理员密码）和 `IDESK_SESSION_SECRET`（至少 16 个字符的随机密钥）。本地端口、数据目录和地址可沿用示例值。
+
+```sh
+set -a
+. ./.env
+set +a
+pnpm --filter api db:migrate
+pnpm dev    # API http://localhost:3300，前端 http://localhost:5173
+```
+
+用管理员密码登录前端。开发进程从环境变量读取配置，上面的命令将 `.env` 导入当前 shell；升级数据库时再次执行迁移命令。
+
+## 给 AI 接入
+
+在「智能体」页新建智能体，保存只显示一次的 key。下面的 `<origin>` 是 IDesk 服务地址，`<key>` 是该智能体的 key。
+
+### MCP
+
+Claude Code 配置示例：
+
+```sh
+claude mcp add --transport http idesk <origin>/mcp --header "Authorization: Bearer <key>"
+```
+
+只支持 stdio 的客户端先按下节登录，再将 `idesk mcp` 配为启动命令（未安装命令时用 `node main.js mcp`）。
+
+### CLI
+
+```sh
+pnpm --filter @idesk/cli build
+```
+
+把 `packages/cli/dist/main.js` 拷到目标机器；它是单文件，需要 Node.js 24。执行：
+
+```sh
+node main.js login --url <origin> --key <key>
+```
+
+常用命令：`tasks` 查看任务、`claim <id>` 领取、`report <id> -m "进展"` 汇报、`done <id> --result-file result.md` 完成、`handoff <id> -m "说明"` 交接、`relay send` / `relay inbox` 发消息 / 收消息；均接在 `node main.js` 后，可用 `--help` 查看参数。
+
+### REST
+
+查看 `<origin>/api/openapi.json`；请求头使用 `Authorization: Bearer <key>`。
 
 ## 部署
 
