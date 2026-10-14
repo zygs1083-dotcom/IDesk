@@ -38,7 +38,9 @@ function applyAction(
         payload: eventOverride?.payload ?? {
           from: task.status,
           to: next.status,
-          ...(action.type === "handoff" ? { handoffTo: action.to } : {}),
+          ...(action.type === "handoff"
+            ? { handoffFrom: task.assigneeId, handoffTo: action.to }
+            : {}),
         },
       }),
     );
