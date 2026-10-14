@@ -1,12 +1,13 @@
 import { readFile } from "node:fs/promises";
+import { RELAY_KIND_LABEL } from "@idesk/shared/relay";
 import type { Command } from "commander";
 import { api } from "../client.js";
-import { formatTime, kindLabels } from "../labels.js";
+import { formatTime } from "../labels.js";
 import { output } from "../output.js";
 
 type Message = {
   id: string;
-  kind: keyof typeof kindLabels;
+  kind: keyof typeof RELAY_KIND_LABEL;
   fromAgentId: string;
   subject: string;
   createdAt: string;
@@ -76,7 +77,7 @@ export function relayCommands(program: Command): void {
         ["id", "种类", "发送者", "标题", "时间"],
         ...messages.map((message) => [
           message.id,
-          kindLabels[message.kind],
+          RELAY_KIND_LABEL[message.kind],
           message.fromAgentId,
           message.subject,
           formatTime(message.createdAt),

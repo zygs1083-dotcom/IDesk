@@ -1,14 +1,14 @@
 import { readFile } from "node:fs/promises";
+import { TASK_PRIORITY_LABEL, TASK_STATUS_LABEL } from "@idesk/shared/task-status";
 import type { Command } from "commander";
 import { api } from "../client.js";
-import { priorityLabels, statusLabels } from "../labels.js";
 import { output } from "../output.js";
 
 type Task = {
   id: string;
   title: string;
-  status: keyof typeof statusLabels;
-  priority: keyof typeof priorityLabels;
+  status: keyof typeof TASK_STATUS_LABEL;
+  priority: keyof typeof TASK_PRIORITY_LABEL;
   capabilities: string[];
   assigneeId: string | null;
 };
@@ -25,14 +25,20 @@ export function taskCommands(program: Command): void {
         query.set("assignee", me.id);
       }
       const tasks = await api<Task[]>("GET", `/tasks?${query}`);
-      output(program.opts().json, tasks, [
+      if (program.opts().json) {
+        output(true, tasks, "");
+        return;
+      }
+      const agents = await api<{ id: string; name: string; host: string }[]>("GET", "/agents");
+      const agentNames = new Map(agents.map((agent) => [agent.id, `${agent.name}@${agent.host}`]));
+      output(false, tasks, [
         ["id", "状态", "优先级", "能力", "负责人", "标题"],
         ...tasks.map((task) => [
           task.id,
-          statusLabels[task.status],
-          priorityLabels[task.priority],
+          TASK_STATUS_LABEL[task.status],
+          TASK_PRIORITY_LABEL[task.priority],
           task.capabilities.join(","),
-          task.assigneeId ?? "—",
+          (task.assigneeId === null ? undefined : agentNames.get(task.assigneeId)) ?? "—",
           task.title,
         ]),
       ]);
