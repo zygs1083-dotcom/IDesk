@@ -1,7 +1,8 @@
 import { AGENT_KINDS } from "@idesk/shared/agent-schemas";
 import { RELAY_KINDS, type RelayRecipient } from "@idesk/shared/relay";
+import type { ScheduleAction } from "@idesk/shared/schedule-schemas";
 import type { TaskRecruit } from "@idesk/shared/task-machine";
-import { TASK_PRIORITIES, TASK_STATUSES, type TaskPriority } from "@idesk/shared/task-status";
+import { TASK_PRIORITIES, TASK_STATUSES } from "@idesk/shared/task-status";
 import { index, integer, sqliteTable, text, uniqueIndex } from "drizzle-orm/sqlite-core";
 import { ulid } from "ulid";
 
@@ -80,33 +81,7 @@ export const schedules = sqliteTable("schedules", {
   cron: text().notNull(),
   timezone: text().notNull().default("Asia/Shanghai"),
   enabled: integer({ mode: "boolean" }).notNull().default(true),
-  action: text({ mode: "json" })
-    .$type<
-      | {
-          type: "publish_task";
-          template: {
-            title: string;
-            body?: string;
-            priority?: TaskPriority;
-            tags?: string[];
-            capabilities?: string[];
-          };
-        }
-      | {
-          type: "connector_trigger";
-          connectorId: string;
-          jobExternalId: string;
-          params?: Record<string, string>;
-        }
-      | {
-          type: "http";
-          url: string;
-          method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
-          headers: Record<string, string>;
-          body?: string;
-        }
-    >()
-    .notNull(),
+  action: text({ mode: "json" }).$type<ScheduleAction>().notNull(),
   lastRunAt: integer("last_run_at", { mode: "timestamp_ms" }),
   lastStatus: text("last_status", { enum: ["success", "failed"] }),
   nextRunAt: integer("next_run_at", { mode: "timestamp_ms" }),
