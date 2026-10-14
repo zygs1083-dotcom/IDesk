@@ -1,0 +1,14 @@
+.git
+**/node_modules
+**/dist
+**/*.test.*
+**/test
+**/vitest.config.*
+.env
+.env.*
+**/*.db
+**/*.db-wal
+**/*.db-shm
+**/.test-data
+screenshots
+pr-assets
