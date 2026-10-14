@@ -1,0 +1,879 @@
+{
+  "segment": {
+    "whiteSpace": "nowrap",
+    "height": 26,
+    "lineHeight": "18px"
+  },
+  "reduced": {
+    "opacity": "1",
+    "transform": "none"
+  },
+  "backendError": "{\"error\":\"任务不存在\"}",
+  "insertion": [
+    {
+      "i": 1,
+      "frame": 0,
+      "cards": [
+        {
+          "title": "插入验证任务 1browser人刚刚",
+          "x": 256,
+          "y": 136,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "0.99233",
+          "transform": "none"
+        }
+      ]
+    },
+    {
+      "i": 1,
+      "frame": 1,
+      "cards": [
+        {
+          "title": "插入验证任务 1browser人刚刚",
+          "x": 256,
+          "y": 136,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "1",
+          "transform": "none"
+        }
+      ]
+    },
+    {
+      "i": 1,
+      "frame": 2,
+      "cards": [
+        {
+          "title": "插入验证任务 1browser人刚刚",
+          "x": 256,
+          "y": 136,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "1",
+          "transform": "none"
+        }
+      ]
+    },
+    {
+      "i": 1,
+      "frame": 3,
+      "cards": [
+        {
+          "title": "插入验证任务 1browser人刚刚",
+          "x": 256,
+          "y": 136,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "1",
+          "transform": "none"
+        }
+      ]
+    },
+    {
+      "i": 1,
+      "frame": 4,
+      "cards": [
+        {
+          "title": "插入验证任务 1browser人刚刚",
+          "x": 256,
+          "y": 136,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "1",
+          "transform": "none"
+        }
+      ]
+    },
+    {
+      "i": 1,
+      "frame": 5,
+      "cards": [
+        {
+          "title": "插入验证任务 1browser人刚刚",
+          "x": 256,
+          "y": 136,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "1",
+          "transform": "none"
+        }
+      ]
+    },
+    {
+      "i": 1,
+      "frame": 6,
+      "cards": [
+        {
+          "title": "插入验证任务 1browser人刚刚",
+          "x": 256,
+          "y": 136,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "1",
+          "transform": "none"
+        }
+      ]
+    },
+    {
+      "i": 1,
+      "frame": 7,
+      "cards": [
+        {
+          "title": "插入验证任务 1browser人刚刚",
+          "x": 256,
+          "y": 136,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "1",
+          "transform": "none"
+        }
+      ]
+    },
+    {
+      "i": 1,
+      "frame": 8,
+      "cards": [
+        {
+          "title": "插入验证任务 1browser人刚刚",
+          "x": 256,
+          "y": 136,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "1",
+          "transform": "none"
+        }
+      ]
+    },
+    {
+      "i": 1,
+      "frame": 9,
+      "cards": [
+        {
+          "title": "插入验证任务 1browser人刚刚",
+          "x": 256,
+          "y": 136,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "1",
+          "transform": "none"
+        }
+      ]
+    },
+    {
+      "i": 1,
+      "frame": 10,
+      "cards": [
+        {
+          "title": "插入验证任务 1browser人刚刚",
+          "x": 256,
+          "y": 136,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "1",
+          "transform": "none"
+        }
+      ]
+    },
+    {
+      "i": 1,
+      "frame": 11,
+      "cards": [
+        {
+          "title": "插入验证任务 1browser人刚刚",
+          "x": 256,
+          "y": 136,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "1",
+          "transform": "none"
+        }
+      ]
+    },
+    {
+      "i": 2,
+      "frame": 0,
+      "cards": [
+        {
+          "title": "插入验证任务 2browser人刚刚",
+          "x": 256,
+          "y": 136,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "0.983775",
+          "transform": "none"
+        },
+        {
+          "title": "插入验证任务 1browser人刚刚",
+          "x": 256,
+          "y": 242.44830322265625,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "1",
+          "transform": "matrix(1, 0, 0, 1, 0, 0.448292)"
+        }
+      ]
+    },
+    {
+      "i": 2,
+      "frame": 1,
+      "cards": [
+        {
+          "title": "插入验证任务 2browser人刚刚",
+          "x": 256,
+          "y": 136,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "1",
+          "transform": "none"
+        },
+        {
+          "title": "插入验证任务 1browser人刚刚",
+          "x": 256,
+          "y": 243.97543334960938,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "1",
+          "transform": "matrix(1, 0, 0, 1, 0, 1.97543)"
+        }
+      ]
+    },
+    {
+      "i": 2,
+      "frame": 2,
+      "cards": [
+        {
+          "title": "插入验证任务 2browser人刚刚",
+          "x": 256,
+          "y": 136,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "1",
+          "transform": "none"
+        },
+        {
+          "title": "插入验证任务 1browser人刚刚",
+          "x": 256,
+          "y": 244.028076171875,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "1",
+          "transform": "matrix(1, 0, 0, 1, 0, 2.02807)"
+        }
+      ]
+    },
+    {
+      "i": 2,
+      "frame": 3,
+      "cards": [
+        {
+          "title": "插入验证任务 2browser人刚刚",
+          "x": 256,
+          "y": 136,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "1",
+          "transform": "none"
+        },
+        {
+          "title": "插入验证任务 1browser人刚刚",
+          "x": 256,
+          "y": 243.8465118408203,
+          "width": 241.328125,
+          "height": 97.99998474121094,
+          "opacity": "1",
+          "transform": "matrix(1, 0, 0, 1, 0, 1.84651)"
+        }
+      ]
+    },
+    {
+      "i": 2,
+      "frame": 4,
+      "cards": [
+        {
+          "title": "插入验证任务 2browser人刚刚",
+          "x": 256,
+          "y": 136,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "1",
+          "transform": "none"
+        },
+        {
+          "title": "插入验证任务 1browser人刚刚",
+          "x": 256,
+          "y": 243.23565673828125,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "1",
+          "transform": "matrix(1, 0, 0, 1, 0, 1.23565)"
+        }
+      ]
+    },
+    {
+      "i": 2,
+      "frame": 5,
+      "cards": [
+        {
+          "title": "插入验证任务 2browser人刚刚",
+          "x": 256,
+          "y": 136,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "1",
+          "transform": "none"
+        },
+        {
+          "title": "插入验证任务 1browser人刚刚",
+          "x": 256,
+          "y": 242.64695739746094,
+          "width": 241.328125,
+          "height": 98.00001525878906,
+          "opacity": "1",
+          "transform": "matrix(1, 0, 0, 1, 0, 0.646961)"
+        }
+      ]
+    },
+    {
+      "i": 2,
+      "frame": 6,
+      "cards": [
+        {
+          "title": "插入验证任务 2browser人刚刚",
+          "x": 256,
+          "y": 136,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "1",
+          "transform": "none"
+        },
+        {
+          "title": "插入验证任务 1browser人刚刚",
+          "x": 256,
+          "y": 242.43817138671875,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "1",
+          "transform": "matrix(1, 0, 0, 1, 0, 0.438178)"
+        }
+      ]
+    },
+    {
+      "i": 2,
+      "frame": 7,
+      "cards": [
+        {
+          "title": "插入验证任务 2browser人刚刚",
+          "x": 256,
+          "y": 136,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "1",
+          "transform": "none"
+        },
+        {
+          "title": "插入验证任务 1browser人刚刚",
+          "x": 256,
+          "y": 242.26779174804688,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "1",
+          "transform": "matrix(1, 0, 0, 1, 0, 0.267793)"
+        }
+      ]
+    },
+    {
+      "i": 2,
+      "frame": 8,
+      "cards": [
+        {
+          "title": "插入验证任务 2browser人刚刚",
+          "x": 256,
+          "y": 136,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "1",
+          "transform": "none"
+        },
+        {
+          "title": "插入验证任务 1browser人刚刚",
+          "x": 256,
+          "y": 242.06167602539062,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "1",
+          "transform": "matrix(1, 0, 0, 1, 0, 0.0616661)"
+        }
+      ]
+    },
+    {
+      "i": 2,
+      "frame": 9,
+      "cards": [
+        {
+          "title": "插入验证任务 2browser人刚刚",
+          "x": 256,
+          "y": 136,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "1",
+          "transform": "none"
+        },
+        {
+          "title": "插入验证任务 1browser人刚刚",
+          "x": 256,
+          "y": 242.01145935058594,
+          "width": 241.328125,
+          "height": 98.00001525878906,
+          "opacity": "1",
+          "transform": "matrix(1, 0, 0, 1, 0, 0.0114612)"
+        }
+      ]
+    },
+    {
+      "i": 2,
+      "frame": 10,
+      "cards": [
+        {
+          "title": "插入验证任务 2browser人刚刚",
+          "x": 256,
+          "y": 136,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "1",
+          "transform": "none"
+        },
+        {
+          "title": "插入验证任务 1browser人刚刚",
+          "x": 256,
+          "y": 241.96585083007812,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "1",
+          "transform": "matrix(1, 0, 0, 1, 0, -0.03415)"
+        }
+      ]
+    },
+    {
+      "i": 2,
+      "frame": 11,
+      "cards": [
+        {
+          "title": "插入验证任务 2browser人刚刚",
+          "x": 256,
+          "y": 136,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "1",
+          "transform": "none"
+        },
+        {
+          "title": "插入验证任务 1browser人刚刚",
+          "x": 256,
+          "y": 242,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "1",
+          "transform": "none"
+        }
+      ]
+    },
+    {
+      "i": 3,
+      "frame": 0,
+      "cards": [
+        {
+          "title": "插入验证任务 3browser人刚刚",
+          "x": 256,
+          "y": 136,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "0.903821",
+          "transform": "none"
+        },
+        {
+          "title": "插入验证任务 2browser人刚刚",
+          "x": 256,
+          "y": 237.40452575683594,
+          "width": 241.328125,
+          "height": 98.00001525878906,
+          "opacity": "1",
+          "transform": "matrix(1, 0, 0, 1, 0, -4.59548)"
+        },
+        {
+          "title": "插入验证任务 1browser人刚刚",
+          "x": 256,
+          "y": 343.404541015625,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "1",
+          "transform": "matrix(1, 0, 0, 1, 0, -4.59548)"
+        }
+      ]
+    },
+    {
+      "i": 3,
+      "frame": 1,
+      "cards": [
+        {
+          "title": "插入验证任务 3browser人刚刚",
+          "x": 256,
+          "y": 136,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "0.986805",
+          "transform": "none"
+        },
+        {
+          "title": "插入验证任务 2browser人刚刚",
+          "x": 256,
+          "y": 242.53665161132812,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "1",
+          "transform": "matrix(1, 0, 0, 1, 0, 0.536649)"
+        },
+        {
+          "title": "插入验证任务 1browser人刚刚",
+          "x": 256,
+          "y": 348.5366516113281,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "1",
+          "transform": "matrix(1, 0, 0, 1, 0, 0.536649)"
+        }
+      ]
+    },
+    {
+      "i": 3,
+      "frame": 2,
+      "cards": [
+        {
+          "title": "插入验证任务 3browser人刚刚",
+          "x": 256,
+          "y": 136,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "0.999962",
+          "transform": "none"
+        },
+        {
+          "title": "插入验证任务 2browser人刚刚",
+          "x": 256,
+          "y": 243.58926391601562,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "1",
+          "transform": "matrix(1, 0, 0, 1, 0, 1.58927)"
+        },
+        {
+          "title": "插入验证任务 1browser人刚刚",
+          "x": 256,
+          "y": 349.5892639160156,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "1",
+          "transform": "matrix(1, 0, 0, 1, 0, 1.58927)"
+        }
+      ]
+    },
+    {
+      "i": 3,
+      "frame": 3,
+      "cards": [
+        {
+          "title": "插入验证任务 3browser人刚刚",
+          "x": 256,
+          "y": 136,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "1",
+          "transform": "none"
+        },
+        {
+          "title": "插入验证任务 2browser人刚刚",
+          "x": 256,
+          "y": 243.99884033203125,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "1",
+          "transform": "matrix(1, 0, 0, 1, 0, 1.99884)"
+        },
+        {
+          "title": "插入验证任务 1browser人刚刚",
+          "x": 256,
+          "y": 349.99884033203125,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "1",
+          "transform": "matrix(1, 0, 0, 1, 0, 1.99884)"
+        }
+      ]
+    },
+    {
+      "i": 3,
+      "frame": 4,
+      "cards": [
+        {
+          "title": "插入验证任务 3browser人刚刚",
+          "x": 256,
+          "y": 136,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "1",
+          "transform": "none"
+        },
+        {
+          "title": "插入验证任务 2browser人刚刚",
+          "x": 256,
+          "y": 243.8154296875,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "1",
+          "transform": "matrix(1, 0, 0, 1, 0, 1.81543)"
+        },
+        {
+          "title": "插入验证任务 1browser人刚刚",
+          "x": 256,
+          "y": 349.8154296875,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "1",
+          "transform": "matrix(1, 0, 0, 1, 0, 1.81543)"
+        }
+      ]
+    },
+    {
+      "i": 3,
+      "frame": 5,
+      "cards": [
+        {
+          "title": "插入验证任务 3browser人刚刚",
+          "x": 256,
+          "y": 136,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "1",
+          "transform": "none"
+        },
+        {
+          "title": "插入验证任务 2browser人刚刚",
+          "x": 256,
+          "y": 243.17779541015625,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "1",
+          "transform": "matrix(1, 0, 0, 1, 0, 1.17779)"
+        },
+        {
+          "title": "插入验证任务 1browser人刚刚",
+          "x": 256,
+          "y": 349.17779541015625,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "1",
+          "transform": "matrix(1, 0, 0, 1, 0, 1.17779)"
+        }
+      ]
+    },
+    {
+      "i": 3,
+      "frame": 6,
+      "cards": [
+        {
+          "title": "插入验证任务 3browser人刚刚",
+          "x": 256,
+          "y": 136,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "1",
+          "transform": "none"
+        },
+        {
+          "title": "插入验证任务 2browser人刚刚",
+          "x": 256,
+          "y": 242.8853759765625,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "1",
+          "transform": "matrix(1, 0, 0, 1, 0, 0.885387)"
+        },
+        {
+          "title": "插入验证任务 1browser人刚刚",
+          "x": 256,
+          "y": 348.8853759765625,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "1",
+          "transform": "matrix(1, 0, 0, 1, 0, 0.885387)"
+        }
+      ]
+    },
+    {
+      "i": 3,
+      "frame": 7,
+      "cards": [
+        {
+          "title": "插入验证任务 3browser人刚刚",
+          "x": 256,
+          "y": 136,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "1",
+          "transform": "none"
+        },
+        {
+          "title": "插入验证任务 2browser人刚刚",
+          "x": 256,
+          "y": 242.63250732421875,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "1",
+          "transform": "matrix(1, 0, 0, 1, 0, 0.632505)"
+        },
+        {
+          "title": "插入验证任务 1browser人刚刚",
+          "x": 256,
+          "y": 348.63250732421875,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "1",
+          "transform": "matrix(1, 0, 0, 1, 0, 0.632505)"
+        }
+      ]
+    },
+    {
+      "i": 3,
+      "frame": 8,
+      "cards": [
+        {
+          "title": "插入验证任务 3browser人刚刚",
+          "x": 256,
+          "y": 136,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "1",
+          "transform": "none"
+        },
+        {
+          "title": "插入验证任务 2browser人刚刚",
+          "x": 256,
+          "y": 242.2510223388672,
+          "width": 241.328125,
+          "height": 98.00001525878906,
+          "opacity": "1",
+          "transform": "matrix(1, 0, 0, 1, 0, 0.251019)"
+        },
+        {
+          "title": "插入验证任务 1browser人刚刚",
+          "x": 256,
+          "y": 348.25103759765625,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "1",
+          "transform": "matrix(1, 0, 0, 1, 0, 0.251019)"
+        }
+      ]
+    },
+    {
+      "i": 3,
+      "frame": 9,
+      "cards": [
+        {
+          "title": "插入验证任务 3browser人刚刚",
+          "x": 256,
+          "y": 136,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "1",
+          "transform": "none"
+        },
+        {
+          "title": "插入验证任务 2browser人刚刚",
+          "x": 256,
+          "y": 242.13331604003906,
+          "width": 241.328125,
+          "height": 97.99998474121094,
+          "opacity": "1",
+          "transform": "matrix(1, 0, 0, 1, 0, 0.133316)"
+        },
+        {
+          "title": "插入验证任务 1browser人刚刚",
+          "x": 256,
+          "y": 348.13330078125,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "1",
+          "transform": "matrix(1, 0, 0, 1, 0, 0.133316)"
+        }
+      ]
+    },
+    {
+      "i": 3,
+      "frame": 10,
+      "cards": [
+        {
+          "title": "插入验证任务 3browser人刚刚",
+          "x": 256,
+          "y": 136,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "1",
+          "transform": "none"
+        },
+        {
+          "title": "插入验证任务 2browser人刚刚",
+          "x": 256,
+          "y": 242,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "1",
+          "transform": "none"
+        },
+        {
+          "title": "插入验证任务 1browser人刚刚",
+          "x": 256,
+          "y": 348,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "1",
+          "transform": "none"
+        }
+      ]
+    },
+    {
+      "i": 3,
+      "frame": 11,
+      "cards": [
+        {
+          "title": "插入验证任务 3browser人刚刚",
+          "x": 256,
+          "y": 136,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "1",
+          "transform": "none"
+        },
+        {
+          "title": "插入验证任务 2browser人刚刚",
+          "x": 256,
+          "y": 241.9745330810547,
+          "width": 241.328125,
+          "height": 98.00001525878906,
+          "opacity": "1",
+          "transform": "matrix(1, 0, 0, 1, 0, -0.0254669)"
+        },
+        {
+          "title": "插入验证任务 1browser人刚刚",
+          "x": 256,
+          "y": 347.97454833984375,
+          "width": 241.328125,
+          "height": 98,
+          "opacity": "1",
+          "transform": "matrix(1, 0, 0, 1, 0, -0.0254669)"
+        }
+      ]
+    }
+  ],
+  "pageErrors": []
+}
