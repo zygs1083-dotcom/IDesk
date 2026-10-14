@@ -13,6 +13,7 @@ COPY plugins/auto-assign/package.json plugins/auto-assign/package.json
 COPY plugins/chat-notifier/package.json plugins/chat-notifier/package.json
 COPY plugins/event-archive/package.json plugins/event-archive/package.json
 COPY plugins/result-archive/package.json plugins/result-archive/package.json
+COPY plugins/metrics/package.json plugins/metrics/package.json
 COPY plugins/n8n/package.json plugins/n8n/package.json
 COPY plugins/dolphinscheduler/package.json plugins/dolphinscheduler/package.json
 COPY plugins/github-actions/package.json plugins/github-actions/package.json
@@ -32,6 +33,7 @@ COPY --from=build /app/plugins/auto-assign/package.json plugins/auto-assign/pack
 COPY --from=build /app/plugins/chat-notifier/package.json plugins/chat-notifier/package.json
 COPY --from=build /app/plugins/event-archive/package.json plugins/event-archive/package.json
 COPY --from=build /app/plugins/result-archive/package.json plugins/result-archive/package.json
+COPY --from=build /app/plugins/metrics/package.json plugins/metrics/package.json
 COPY --from=build /app/plugins/n8n/package.json plugins/n8n/package.json
 COPY --from=build /app/plugins/dolphinscheduler/package.json plugins/dolphinscheduler/package.json
 COPY --from=build /app/plugins/github-actions/package.json plugins/github-actions/package.json
