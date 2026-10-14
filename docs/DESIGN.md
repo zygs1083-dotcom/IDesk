@@ -296,6 +296,8 @@ export interface ConnectorPlugin extends Plugin {
 
 - 每条事件写库后广播到所有 WS 连接：`{ type, taskId?, agentId?, ts }`，不带完整实体。
 - 前端收到后按 `type` 使相应 TanStack Query 失效并重新拉取；看板列表接口要快（单表查询，不 join 事件）。
+- Query key 约定：`task.*` → `["tasks"]` 和 `["task", id]`；`relay.*` → `["relay"]`；`agent.*` → `["agents"]`；`connector.*` → `["automation"]`；`schedule.*` → `["schedules"]`；所有事件都失效 `["events"]`。
+- WS 断开后每 3 秒重连一次，不退避、不限次数；内网单用户，简单就好。
 - 拖拽卡片 = 调用对应动作接口；乐观更新，失败回滚并提示状态机给的原因。
 
 ## 9. 配置
