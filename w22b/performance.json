@@ -1,0 +1,72 @@
+{
+  "samples": [
+    {
+      "second": 1,
+      "fps": 30.030030030029867,
+      "walking": 5
+    },
+    {
+      "second": 2,
+      "fps": 20,
+      "walking": 12
+    },
+    {
+      "second": 3,
+      "fps": 15.015015015015138,
+      "walking": 19
+    },
+    {
+      "second": 4,
+      "fps": 30.030030030029867,
+      "walking": 25
+    },
+    {
+      "second": 5,
+      "fps": 20,
+      "walking": 29
+    },
+    {
+      "second": 6,
+      "fps": 14.992503748125774,
+      "walking": 27
+    },
+    {
+      "second": 7,
+      "fps": 20,
+      "walking": 26
+    },
+    {
+      "second": 8,
+      "fps": 20,
+      "walking": 28
+    },
+    {
+      "second": 9,
+      "fps": 20,
+      "walking": 26
+    },
+    {
+      "second": 10,
+      "fps": 20,
+      "walking": 26
+    }
+  ],
+  "average": 21.006757882320066,
+  "errors": [],
+  "setup": {
+    "onlineAgents": 30,
+    "openTasks": 40,
+    "hosts": 4
+  },
+  "trace": {
+    "frames": 223,
+    "scriptAverageMs": 2.2132331838565023,
+    "steadyAverageMs": 2.216162162162162,
+    "steadyP95Ms": 3.957,
+    "steadyMaxMs": 11.416,
+    "initialWarmupMs": 1.563,
+    "gpuTaskAverageMs": 10.711244897959183,
+    "method": "sum Pixi _tick FunctionCall durations per RAF cycle; callbacks within 10ms grouped; first cycle reported separately as warmup",
+    "renderer": "ANGLE Vulkan SwiftShader (Subzero)"
+  }
+}
