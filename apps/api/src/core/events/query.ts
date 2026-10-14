@@ -28,7 +28,7 @@ export function listEvents(filter: {
         filter.agentId === undefined ? undefined : eq(events.agentId, filter.agentId),
       ),
     )
-    .orderBy(desc(events.id))
+    .orderBy(filter.since === undefined ? desc(events.id) : asc(events.id))
     .limit(ACTIVITY_LIMIT)
     .all();
 }

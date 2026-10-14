@@ -17,7 +17,7 @@ test("simultaneous notifications share one fetch and events are handled oldest f
     "0",
     async () => {
       calls++;
-      return [event("2"), event("1")];
+      return [event("1"), event("2")];
     },
     async (item) => {
       processed.push(item.id);
@@ -46,7 +46,7 @@ test("a notification during a fetch schedules one more incremental fetch", async
   await Promise.resolve();
   const second = pull();
   const third = pull();
-  finish([event("2"), event("1")]);
+  finish([event("1"), event("2")]);
   await Promise.all([first, second, third]);
   expect(cursors).toEqual(["0", "2"]);
 });
@@ -69,7 +69,7 @@ test("a full 200 event batch continues immediately using the greatest processed 
   );
   await pull();
   expect(cursors).toEqual(["000", "200"]);
-  expect(processed).toEqual([...batch.map((item) => item.id).sort(), "201"]);
+  expect(processed).toEqual([...batch.map((item) => item.id), "201"]);
 });
 
 test("a failed request does not swallow the next notification", async () => {

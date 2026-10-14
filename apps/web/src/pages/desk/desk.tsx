@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Search } from "lucide-react";
 import { AnimatePresence } from "motion/react";
 import { useRef, useState } from "react";
+import { useSearchParams } from "react-router";
 import { Button } from "../../components/button.tsx";
 import { PageHeader } from "../../layout/page-header.tsx";
 import { request } from "../../lib/api.ts";
@@ -20,7 +21,18 @@ export function Desk() {
   const searchInput = useRef<HTMLInputElement>(null);
   const [search, setSearch] = useState("");
   const [publish, setPublish] = useState(false);
-  const [selected, setSelected] = useState<string | null>(null);
+  const [params, setParams] = useSearchParams();
+  const selected = params.get("task");
+  const setSelected = (taskId: string | null) => {
+    setParams(
+      (params) => {
+        if (taskId === null) params.delete("task");
+        else params.set("task", taskId);
+        return params;
+      },
+      { replace: true },
+    );
+  };
   useShortcut("n", () => setPublish(true));
   useShortcut("/", () => searchInput.current?.focus());
   return (

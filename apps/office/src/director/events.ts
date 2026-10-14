@@ -16,7 +16,7 @@ export function eventPull(
       again = false;
       const events = await request(lastId);
       if (events.length === 200) again = true;
-      for (const event of events.sort((a, b) => (a.id < b.id ? -1 : 1))) {
+      for (const event of events) {
         await handle(event);
         lastId = event.id;
       }
