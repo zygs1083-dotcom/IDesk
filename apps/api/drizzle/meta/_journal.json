@@ -8,6 +8,13 @@
       "when": 1791977604268,
       "tag": "0000_faithful_jean_grey",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1791983914152,
+      "tag": "0001_known_arachne",
+      "breakpoints": true
     }
   ]
 }

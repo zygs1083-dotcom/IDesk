@@ -1,3 +1,4 @@
+import type { Hono } from "hono";
 import type { ZodType } from "zod";
 import type { Event, NewEvent } from "../core/events/bus.ts";
 import type { Db } from "../db/client.ts";
@@ -7,6 +8,8 @@ export type Unsubscribe = () => void;
 export type Listener = (event: Event) => void;
 export interface PluginContext {
   db: Db;
+  schedule(cron: string, fn: () => Promise<void>): Unsubscribe;
+  registerRoutes(app: Hono): void;
   events: { emit(event: NewEvent): void; on(type: string, fn: Listener): Unsubscribe };
 }
 export interface Plugin {
@@ -19,8 +22,13 @@ export interface Plugin {
   teardown?(): void | Promise<void>;
 }
 export type ConnectionResult = { success: boolean; error?: string };
-export type ExternalJob = Omit<typeof automationJobs.$inferSelect, "id" | "connectorId">;
-export type ExternalRun = Omit<typeof automationRuns.$inferSelect, "id" | "jobId">;
+export type ExternalJob = Omit<
+  typeof automationJobs.$inferSelect,
+  "id" | "connectorId" | "lastRunStatus" | "lastRunAt"
+>;
+export type ExternalRun = Omit<typeof automationRuns.$inferSelect, "id" | "jobId"> & {
+  jobExternalId: string;
+};
 export interface ConnectorPlugin extends Plugin {
   kind: "connector";
   testConnection(config: unknown): Promise<ConnectionResult>;

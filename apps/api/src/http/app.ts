@@ -9,6 +9,7 @@ import { agentRoutes } from "./routes/agents.ts";
 import { authRoutes } from "./routes/auth.ts";
 import { eventRoutes } from "./routes/events.ts";
 import { mcpRoutes } from "./routes/mcp.ts";
+import { pluginRoutes } from "./routes/plugins.ts";
 import { relayRoutes } from "./routes/relay.ts";
 import { taskRoutes } from "./routes/tasks.ts";
 
@@ -36,6 +37,7 @@ taskRoutes(app);
 agentRoutes(app);
 eventRoutes(app);
 relayRoutes(app);
+pluginRoutes(app);
 mcpRoutes(app);
 
 app.doc("/api/openapi.json", {

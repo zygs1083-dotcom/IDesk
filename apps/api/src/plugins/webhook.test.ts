@@ -11,7 +11,8 @@ import { createTask } from "../core/tasks/store.ts";
 import { actOnTask } from "../core/tasks/transition.ts";
 import { db } from "../db/client.ts";
 import { agents, events } from "../db/schema.ts";
-import { startPlugins, stopPlugins } from "./host.ts";
+import { startPlugins } from "./host.ts";
+import { stopPlugins } from "./registry.ts";
 
 migrate(db, { migrationsFolder: new URL("../../drizzle", import.meta.url).pathname });
 const requests: { method: string | undefined; headers: IncomingHttpHeaders; body: string }[] = [];
