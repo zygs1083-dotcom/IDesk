@@ -1,8 +1,9 @@
-import { Activity, Bot, Clock, LayoutGrid, Settings, Workflow } from "lucide-react";
+import { Activity, Bot, Clock, LayoutGrid, Send, Settings, Workflow } from "lucide-react";
 import { NavLink } from "react-router";
 
 const items = [
   { to: "/desk", label: "协作台", icon: LayoutGrid },
+  { to: "/relay", label: "传递区", icon: Send },
   { to: "/automation", label: "自动化", icon: Workflow },
   { to: "/agents", label: "智能体", icon: Bot },
   { to: "/schedules", label: "定时", icon: Clock },

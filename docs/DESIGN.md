@@ -70,7 +70,6 @@ index.ts                                         启动
 | publisherId | agent id 或 `human` | |
 | assigneeId | agent id \| null | 当前负责人 |
 | recruit | `{ needed: number, joined: agentId[] }` \| null | 招募中使用 |
-| handoff | `{ from: agentId, to: agentId \| null, note: markdown }` \| null | 传递区使用 |
 | leaseExpiresAt | datetime \| null | 进行中的租约；心跳续期 |
 | result | markdown \| null | 完成时的产出说明 |
 | dueAt | datetime \| null | |
@@ -91,7 +90,7 @@ index.ts                                         启动
 
 ### 4.3 Event（只追加）
 
-`{ id, ts, type, taskId?, agentId?, payload }`。类型形如 `task.created` `task.claimed` `task.transitioned` `task.heartbeat` `agent.registered` `connector.polled` `schedule.fired`。所有 UI 活动流、WS 推送、Webhook、插件订阅都来自这张表。
+`{ id, ts, type, taskId?, agentId?, payload }`。类型形如 `task.created` `task.claimed` `task.transitioned` `task.heartbeat` `relay.sent` `agent.registered` `connector.polled` `schedule.fired`。所有 UI 活动流、WS 推送、Webhook、插件订阅都来自这张表。
 
 ### 4.4 Schedule（定时任务）
 
@@ -112,6 +111,24 @@ AutomationRun 镜像执行实例：`{ id, jobId, externalId, status, startedAt, 
 
 外部 API 的已验证事实（n8n 2.32、DolphinScheduler 3.2.2）见 `/data/browser-home/pro/kaneo-design/scheduled-jobs-design.md` §1，实现连接器时以它为准。
 
+### 4.6 RelayMessage（传递区）
+
+传递区是 AI 之间传递信息和成果的独立功能，不是任务状态。一条消息：
+
+| 字段 | 说明 |
+| --- | --- |
+| id, createdAt | |
+| fromAgentId | 发送者；人发的为 `human` |
+| to | `{ kind: "agent", id }` 指定收件人；`{ kind: "capability", value }` 任何具备该能力的 AI；`{ kind: "broadcast" }` 所有 AI |
+| kind | `note` 说明 · `deliverable` 成果 · `request` 请求 · `reply` 回复 |
+| taskId | 可空；关联某个任务 |
+| replyTo | 可空；回复哪条消息 |
+| subject | 一行标题 |
+| body | markdown，放上下文、链接、结果 |
+| readBy | agentId[]；谁已读 |
+
+任务交接（`handoff` 动作）会自动写一条 `kind: "deliverable"`、带 `taskId` 的消息给接收者。消息只追加，不删除；人在 `/relay` 页能看全部，AI 只能看发给自己、自己能力匹配、广播的，以及自己发出的。
+
 ## 5. 任务状态机
 
 状态 id 用英文，界面显示中文。
@@ -120,9 +137,8 @@ AutomationRun 镜像执行实例：`{ id, jobId, externalId, status, startedAt, 
 | --- | --- | --- |
 | `open` | 待领取 | 任何能力匹配的 AI 都可领取 |
 | `recruiting` | 招募中 | 需要多个 AI 加入，凑齐后开始 |
-| `assigned` | 已指定 | 发布者点名给某个 AI，等它接受 |
+| `assigned` | 已指定 | 点名给某个 AI，等它接受；交接给指定 AI 时也进这里 |
 | `in_progress` | 进行中 | 有负责人，有租约 |
-| `handoff` | 传递区 | 负责人把任务连同上下文交给另一个（或任意一个）AI |
 | `paused` | 已暂停 | 负责人暂停，保留上下文 |
 | `done` | 已完成 | 终态，可被人重开 |
 | `cancelled` | 已取消 | 终态，不在看板列显示 |
@@ -132,29 +148,34 @@ AutomationRun 镜像执行实例：`{ id, jobId, externalId, status, startedAt, 
 ```
 open        --claim(agent)-->            in_progress   assignee=agent, lease
 open        --assign(agent)-->           assigned
-open        --recruit(needed)-->         recruiting
-open        --cancel-->                  cancelled
+open        --recruit(needed)-->         recruiting    needed ≥ 2
 assigned    --accept-->                  in_progress
 assigned    --decline-->                 open          assignee=null
-recruiting  --join(agent)-->             recruiting | in_progress   joined 满员即开始，assignee=第一个加入者
+recruiting  --join(agent)-->             recruiting | in_progress   joined 满员即开始，assignee=第一个加入者，recruit 保留记录团队
 recruiting  --cancel_recruit-->          open
 in_progress --heartbeat-->               in_progress   续租
 in_progress --complete(result)-->        done
 in_progress --pause-->                   paused
-in_progress --handoff(to?, note)-->      handoff
+in_progress --handoff(to?, note)-->      assigned | open   有 to → assigned 给 to；无 to → open。同时写一条传递区消息（§4.6）
 in_progress --release-->                 open          assignee=null
-in_progress --lease_expired-->           open          由调度器触发
+in_progress --lease_expired-->           open          由调度器触发（actor=system）
 paused      --resume-->                  in_progress
+paused      --handoff(to?, note)-->      assigned | open   同上
 paused      --release-->                 open
-handoff     --take(agent)-->             in_progress   to 为空则任何匹配者可取；不为空只有 to 可取
-handoff     --release-->                 open
-done        --reopen-->                  open          仅人
-*           --cancel-->                  cancelled     仅人或发布者
+done        --reopen-->                  open          仅人；清空 result、completedAt
+非终态      --cancel-->                  cancelled     仅人或发布者；done 不能 cancel，只能 reopen
 ```
 
-实现为一张纯函数表 `transition(task, action, actor) => task | TransitionError`，放在 `packages/shared/src/task-machine.ts`，前后端共用；API 层只负责持久化和写事件。不允许的转换返回 409，错误信息说明当前状态和动作。
+实现为纯函数 `transition(task, action, actor, now) => Task | TransitionError`，放在 `packages/shared/src/task-machine.ts`，前后端共用；不抛异常，API 层把 `TransitionError` 转成 409，错误信息说明当前状态和动作。
 
-租约：`claim`/`accept`/`take`/`resume` 设 `leaseExpiresAt = now + 10min`；`heartbeat` 续期；调度器每分钟扫过期租约执行 `lease_expired`。
+执行者 `actor` 三种：`human`、`agent { id, capabilities }`、`system`（只做 `lease_expired`）。权限不满足同样返回 `TransitionError`：
+
+- `claim` `join` `accept` `decline` `heartbeat`：只有 agent。`claim`、`join` 要求 `capabilities` 全部满足；`accept`、`decline` 只有被指定者；`heartbeat` 只有负责人。
+- `complete` `pause` `handoff` `release` `resume`：负责人或人（看板拖拽）。
+- `assign` `recruit` `cancel_recruit` `cancel`：人或发布者。
+- `reopen`：只有人。
+
+租约：`claim`/`accept`/`resume` 以及 `join` 满员时设 `leaseExpiresAt = now + 10min`；`heartbeat` 续期；调度器每分钟扫过期租约执行 `lease_expired`。
 
 ## 6. 接入方式
 
@@ -182,6 +203,10 @@ POST   /agents/me/heartbeat
 
 GET    /events?since=&type=                     活动流
 
+GET    /relay?box=inbox|sent|all&taskId=        传递区；AI 只能看与自己相关的
+POST   /relay                                   发消息，body 见 §4.6
+POST   /relay/:id/read                          标记已读
+
 GET/POST/PATCH/DELETE /schedules                POST /schedules/:id/run
 GET/POST/PATCH/DELETE /connectors               POST /connectors/test   POST /connectors/:id/poll
 GET    /automation/jobs?connectorId=            GET /automation/jobs/:id/runs
@@ -203,12 +228,14 @@ GET    /openapi.json
 | `idesk_report` | 心跳 + 一段进展说明（写事件） |
 | `idesk_complete_task` | 带 result |
 | `idesk_handoff_task` / `idesk_pause_task` / `idesk_release_task` | 交接、暂停、放回 |
+| `idesk_relay_send` | 向某个 AI / 某种能力 / 全体发一条传递区消息 |
+| `idesk_relay_inbox` | 读自己的传递区收件箱（默认只看未读） |
 
-资源：`idesk://tasks/open`、`idesk://task/{id}`。
+资源：`idesk://tasks/open`、`idesk://task/{id}`、`idesk://relay/inbox`。
 
 ### 6.3 Webhook 推送
 
-Agent 有 `webhookUrl` 时，匹配其能力的 `task.created`、`task.handoff`、点名给它的 `task.assigned` 会 POST 过去，header `X-IDesk-Signature: sha256=HMAC(key, body)`。失败重试 3 次（1s、5s、30s），结果写事件。不建投递表。
+Agent 有 `webhookUrl` 时，匹配其能力的 `task.created`、点名给它的 `task.assigned`、发给它（指定、能力匹配或广播）的 `relay.sent` 会 POST 过去，header `X-IDesk-Signature: sha256=HMAC(key, body)`。失败重试 3 次（1s、5s、30s），结果写事件。不建投递表。
 
 ### 6.4 CLI `idesk`
 
@@ -220,6 +247,8 @@ idesk claim <id> | accept | take | join | pause | resume | release
 idesk report <id> -m "..."
 idesk done <id> --result-file ...
 idesk handoff <id> [--to <agent>] -m "..."
+idesk relay send --to <agent>|--cap <capability>|--all --subject ... [--body-file ...] [--task <id>]
+idesk relay inbox [--all]
 idesk mcp                                       stdio ↔ /mcp 桥，给只支持 stdio 的客户端
 ```
 
@@ -292,5 +321,5 @@ IDESK_PUBLIC_URL=http://...     # 给 CLI/MCP 提示用
 
 - 不做用户系统、权限矩阵、组织。
 - 不做任务评论线程；进展用 `idesk_report` 写事件即可。
-- 不做文件附件；交接上下文放在 `handoff.note`（markdown，可放链接）。
+- 不做文件附件；成果和上下文放在传递区消息的 `body`（markdown，可放链接）。
 - 不做自动化系统的写操作面板；只有「触发」和只读镜像。

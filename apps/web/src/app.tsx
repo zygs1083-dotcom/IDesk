@@ -8,6 +8,7 @@ export function App() {
       <Route element={<Shell />}>
         <Route index element={<Navigate to="/desk" replace />} />
         <Route path="/desk" element={<Placeholder title="协作台" />} />
+        <Route path="/relay" element={<Placeholder title="传递区" />} />
         <Route path="/automation" element={<Placeholder title="自动化" />} />
         <Route path="/agents" element={<Placeholder title="智能体" />} />
         <Route path="/schedules" element={<Placeholder title="定时" />} />

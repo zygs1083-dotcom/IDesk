@@ -3,7 +3,6 @@ export const TASK_STATUSES = [
   "recruiting",
   "assigned",
   "in_progress",
-  "handoff",
   "paused",
   "done",
   "cancelled",
@@ -16,7 +15,6 @@ export const TASK_STATUS_LABEL: Record<TaskStatus, string> = {
   recruiting: "招募中",
   assigned: "已指定",
   in_progress: "进行中",
-  handoff: "传递区",
   paused: "已暂停",
   done: "已完成",
   cancelled: "已取消",
@@ -28,7 +26,6 @@ export const BOARD_COLUMNS: readonly TaskStatus[] = [
   "recruiting",
   "assigned",
   "in_progress",
-  "handoff",
   "paused",
   "done",
 ];

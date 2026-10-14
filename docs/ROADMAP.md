@@ -8,20 +8,20 @@
 
 ## M1 核心域
 
-- **W1 数据层**：Drizzle schema（task, agent, event, schedule, connector, automation_job, automation_run, plugin_state）、首个迁移、`db/client.ts`（WAL、外键）。验证：`pnpm --filter api db:migrate` 后表存在；一条集成测试插入并读出 task。
+- **W1 数据层**：Drizzle schema（task, agent, event, relay_message, schedule, connector, automation_job, automation_run, plugin_state）、首个迁移、`db/client.ts`（WAL、外键）。验证：`pnpm --filter api db:migrate` 后表存在；一条集成测试插入并读出 task。
 - **W2 状态机**：`packages/shared/src/task-machine.ts` 纯函数 + 表驱动，覆盖 DESIGN §5 全部转换。验证：单元测试枚举每个 (status, action) 组合，合法的得到预期状态，非法的得到 TransitionError。
-- **W3 核心服务**：`core/tasks`（create/list/get/act）、`core/agents`（register/key 校验/heartbeat）、`core/events`（append + 进程内订阅）。验证：集成测试走 claim → report → complete 全链路，事件数量正确。
+- **W3 核心服务**：`core/tasks`（create/list/get/act）、`core/agents`（register/key 校验/heartbeat）、`core/events`（append + 进程内订阅）、`core/relay`（send/list/read，可见性规则见 DESIGN §4.6，handoff 自动写消息）。验证：集成测试走 claim → report → handoff → accept → complete 全链路，事件和传递区消息数量正确。
 - **W4 REST + 鉴权**：Hono 路由、Zod OpenAPI、cookie 登录、Bearer key 中间件、错误映射（TransitionError→409）。验证：集成测试覆盖登录、无 key 401、非法转换 409、`/openapi.json` 可取。
 
 ## M2 协作台前端
 
 - **W5 前端基座**：tokens.css、布局壳、侧栏、路由、Query client、WS hook、相对时间与 cn 工具。验证：浏览器截图符合 UI.md §4，深色模式正常。
 - **W6 看板**：列、卡片、拖拽、详情抽屉、动作按钮、乐观更新。验证：截图 + 真浏览器走一遍发布→拖到进行中→完成。
-- **W7 智能体页 + 活动页**：表格、新建流程（key 只显示一次）、时间线。验证：截图。
+- **W7 智能体页 + 传递区页 + 活动页**：智能体表格与新建流程（key 只显示一次）、传递区两栏与发消息弹层、活动时间线。验证：截图。
 
 ## M3 AI 接入
 
-- **W8 MCP**：`/mcp` Streamable HTTP，DESIGN §6.2 的工具和资源。验证：用 `@modelcontextprotocol/sdk` 客户端连上，列出工具，claim 一个任务。
+- **W8 MCP**：`/mcp` Streamable HTTP，DESIGN §6.2 的工具和资源（含 relay）。验证：用 `@modelcontextprotocol/sdk` 客户端连上，列出工具，claim 一个任务，发一条传递区消息。
 - **W9 CLI**：`packages/cli`，DESIGN §6.4 的命令，`idesk mcp` stdio 桥。验证：对着本地 API 跑 `idesk tasks` 与 `idesk claim`；Claude Code 通过 `idesk mcp` 挂载后能看到工具。
 - **W10 Webhook + 租约**：webhook-notifier 插件、签名、重试；调度器每分钟处理过期租约。验证：本地起一个接收端收到签名正确的 POST；把租约改成过去时间，一分钟内任务回到 open。
 
