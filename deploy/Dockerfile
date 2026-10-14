@@ -11,6 +11,7 @@ COPY packages/shared/package.json packages/shared/package.json
 COPY packages/cli/package.json packages/cli/package.json
 COPY plugins/n8n/package.json plugins/n8n/package.json
 COPY plugins/dolphinscheduler/package.json plugins/dolphinscheduler/package.json
+COPY plugins/github-actions/package.json plugins/github-actions/package.json
 COPY plugins/webhook-notifier/package.json plugins/webhook-notifier/package.json
 RUN pnpm install --frozen-lockfile
 COPY . .
@@ -25,6 +26,7 @@ COPY --from=build /app/apps/api/package.json apps/api/package.json
 COPY --from=build /app/packages/shared/package.json packages/shared/package.json
 COPY --from=build /app/plugins/n8n/package.json plugins/n8n/package.json
 COPY --from=build /app/plugins/dolphinscheduler/package.json plugins/dolphinscheduler/package.json
+COPY --from=build /app/plugins/github-actions/package.json plugins/github-actions/package.json
 COPY --from=build /app/plugins/webhook-notifier/package.json plugins/webhook-notifier/package.json
 RUN pnpm install --frozen-lockfile --prod
 COPY apps/api apps/api
