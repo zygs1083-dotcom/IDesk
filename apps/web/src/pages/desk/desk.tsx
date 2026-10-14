@@ -5,16 +5,13 @@ import { useState } from "react";
 import { Button } from "../../components/button.tsx";
 import { PageHeader } from "../../layout/page-header.tsx";
 import { request } from "../../lib/api.ts";
-import type { Task, TaskEvent } from "../../lib/types.ts";
+import type { TaskEvent } from "../../lib/types.ts";
+import { useTasks } from "../../lib/use-tasks.ts";
 import { Board } from "./board.tsx";
 import { PublishDialog } from "./publish-dialog.tsx";
 import { TaskDrawer } from "./task-drawer.tsx";
 export function Desk() {
-  const {
-    data: tasks = [],
-    error: queryError,
-    isPending,
-  } = useQuery({ queryKey: ["tasks"], queryFn: () => request<Task[]>("/tasks") });
+  const { tasks, error: queryError, isPending } = useTasks();
   const { data: handoffs = [] } = useQuery({
     queryKey: ["events", "handoff"],
     queryFn: () => request<TaskEvent[]>("/events?type=task.handoff"),

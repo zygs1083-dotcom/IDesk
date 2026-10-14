@@ -5,8 +5,9 @@ import { Segmented } from "../../components/segmented.tsx";
 import { PageHeader } from "../../layout/page-header.tsx";
 import { request } from "../../lib/api.ts";
 import { eventText } from "../../lib/event-text.ts";
-import type { Task, TaskEvent } from "../../lib/types.ts";
+import type { TaskEvent } from "../../lib/types.ts";
 import { useAgents } from "../../lib/use-agents.ts";
+import { useTasks } from "../../lib/use-tasks.ts";
 import { groupEvents } from "./group-events.ts";
 
 export function ActivityPage() {
@@ -22,10 +23,7 @@ export function ActivityPage() {
       request<TaskEvent[]>(`/events${agentId ? `?agentId=${encodeURIComponent(agentId)}` : ""}`),
   });
   const { agents, agentName } = useAgents();
-  const { data: tasks = [] } = useQuery({
-    queryKey: ["tasks"],
-    queryFn: () => request<Task[]>("/tasks"),
-  });
+  const { tasks } = useTasks();
   const taskTitles = new Map(tasks.map((task) => [task.id, task.title]));
   const groups = groupEvents(
     events.filter((event) => type === "all" || event.type.startsWith(`${type}.`)),

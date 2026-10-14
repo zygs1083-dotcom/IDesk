@@ -35,7 +35,7 @@ export function AgentsPage() {
           <table className="w-full text-left text-secondary">
             <thead className="border-b border-line text-label text-text-2">
               <tr>
-                {["名称", "kind", "主机", "能力", "最近活跃", "Webhook"].map((label) => (
+                {["名称", "类型", "主机", "能力", "最近活跃", "Webhook"].map((label) => (
                   <th key={label} scope="col" className="whitespace-nowrap px-4 py-3 font-medium">
                     {label}
                   </th>

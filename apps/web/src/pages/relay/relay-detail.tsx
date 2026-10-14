@@ -1,9 +1,7 @@
 import type { relayMessageSchema } from "@idesk/shared/relay-schemas";
-import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import type { z } from "zod";
-import { request } from "../../lib/api.ts";
-import type { Task } from "../../lib/types.ts";
+import { useTasks } from "../../lib/use-tasks.ts";
 import { TaskDrawer } from "../desk/task-drawer.tsx";
 import { RelayMessage } from "./relay-message.tsx";
 import { relayThread } from "./thread.ts";
@@ -20,10 +18,7 @@ export function RelayDetail({
   onReply: (message: Message) => void;
 }) {
   const [taskId, setTaskId] = useState<string | null>(null);
-  const { data: tasks = [] } = useQuery({
-    queryKey: ["tasks"],
-    queryFn: () => request<Task[]>("/tasks"),
-  });
+  const { tasks } = useTasks();
   const titles = new Map(tasks.map((task) => [task.id, task.title]));
   const thread = relayThread(messages, selected.id);
   if (!thread) return null;

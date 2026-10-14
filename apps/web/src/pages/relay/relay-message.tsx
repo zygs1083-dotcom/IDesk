@@ -1,7 +1,7 @@
 import type { relayMessageSchema } from "@idesk/shared/relay-schemas";
-import ReactMarkdown from "react-markdown";
 import type { z } from "zod";
 import { Button } from "../../components/button.tsx";
+import { Markdown } from "../../components/markdown.tsx";
 import { relativeTime } from "../../lib/format.ts";
 import { useAgents } from "../../lib/use-agents.ts";
 import { RELAY_KIND_LABEL, recipientLabel } from "./labels.ts";
@@ -34,9 +34,13 @@ export function RelayMessage({
           </p>
         </div>
         {message.fromAgentId !== "human" && (
-          <Button className="shrink-0" onClick={() => onReply(message)}>
+          <button
+            type="button"
+            className="shrink-0 text-secondary text-accent"
+            onClick={() => onReply(message)}
+          >
             回复
-          </Button>
+          </button>
         )}
       </div>
       {taskId && (
@@ -50,9 +54,7 @@ export function RelayMessage({
           </Button>
         </div>
       )}
-      <div className="space-y-3 break-words text-body [&_a]:text-accent [&_a]:underline [&_blockquote]:border-l [&_blockquote]:border-line-strong [&_blockquote]:pl-3 [&_blockquote]:text-text-2 [&_code]:rounded-tag [&_code]:bg-surface-2 [&_code]:px-1 [&_h1]:text-section [&_h2]:text-section [&_h3]:text-section [&_li]:ml-4 [&_ol]:list-decimal [&_p]:my-3 [&_pre]:overflow-auto [&_pre]:rounded-control [&_pre]:bg-surface-2 [&_pre]:p-3 [&_ul]:list-disc">
-        <ReactMarkdown>{message.body}</ReactMarkdown>
-      </div>
+      <Markdown>{message.body}</Markdown>
       <p className="text-label text-text-2">
         {message.readBy.length > 0
           ? `已读：${message.readBy.map(agentName).join(" · ")}`
