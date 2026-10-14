@@ -69,7 +69,7 @@ Director 订阅 WebSocket，把事件翻译成角色意图；刷新页面时按�
 - 补间用自己的 20 行 `tween(ticker, from, to, ms, ease)`；走路速度固定 90px/s。
 - 数据：复用 `@idesk/shared` 的 schema 和主前端一样的 `request()`、WS 重连逻辑（复制一份，不跨 app import）。
 - `prefers-reduced-motion`：角色瞬移到目标、无气泡动画。
-- 素材生成：由 Codex 的内置生图工具按 `apps/office/assets/PROMPTS.md` 里的提示词生成，背景一张，角色每种 kind 一张 4×5 精灵图，统一品红 #FF00FF 底；脚本 `apps/office/tools/sprites.mjs` 做抠色（容差 60）、按图片实际尺寸等分切帧、公共包围盒对齐、最近邻缩放到 64×96、打包成一张 TexturePacker hash 格式的图集 + JSON。提示词和生成结果都进仓库，重新生成可复现。
+- 素材生成：由 Codex 的内置生图工具按 `apps/office/assets/PROMPTS.md` 里的提示词生成，背景一张，角色每种 kind 一张 4×5 精灵图，统一品红 #FF00FF 底；脚本 `apps/office/tools/sprites.mjs` 做抠色（容差 60）、按连通区域的质心归入等分格来切帧（生图的像素不会严格对齐格线，头发可能越过一两格；连通区域整体归格就不会被切碎）、公共包围盒对齐、最近邻缩放到 64×96、打包成一张 TexturePacker hash 格式的图集 + JSON。提示词和生成结果都进仓库，重新生成可复现。
 
 ## 7. 不做的事
 
