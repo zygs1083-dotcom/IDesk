@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from "react-router";
 import { Shell } from "./layout/shell.tsx";
 import { ActivityPage } from "./pages/activity/activity-page.tsx";
 import { AgentsPage } from "./pages/agents/agents-page.tsx";
+import { AutomationPage } from "./pages/automation/automation-page.tsx";
 import { Desk } from "./pages/desk/desk.tsx";
 import { Login } from "./pages/login.tsx";
 import { Placeholder } from "./pages/placeholder.tsx";
@@ -15,7 +16,7 @@ export function App() {
         <Route index element={<Navigate to="/desk" replace />} />
         <Route path="/desk" element={<Desk />} />
         <Route path="/relay" element={<RelayPage />} />
-        <Route path="/automation" element={<Placeholder title="自动化" />} />
+        <Route path="/automation" element={<AutomationPage />} />
         <Route path="/agents" element={<AgentsPage />} />
         <Route path="/schedules" element={<Placeholder title="定时" />} />
         <Route path="/activity" element={<ActivityPage />} />

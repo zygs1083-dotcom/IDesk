@@ -1,4 +1,4 @@
-import { asc, desc, eq } from "drizzle-orm";
+import { asc, desc, eq, getTableColumns } from "drizzle-orm";
 import { db } from "../../db/client.ts";
 import { automationJobs, automationRuns } from "../../db/schema.ts";
 
@@ -18,5 +18,15 @@ export function listRuns(jobId: string) {
     .where(eq(automationRuns.jobId, jobId))
     .orderBy(desc(automationRuns.startedAt), desc(automationRuns.id))
     .limit(50)
+    .all();
+}
+
+export function listRunsForConnector(connectorId: string) {
+  return db
+    .select({ ...getTableColumns(automationRuns), jobName: automationJobs.name })
+    .from(automationRuns)
+    .innerJoin(automationJobs, eq(automationRuns.jobId, automationJobs.id))
+    .where(eq(automationJobs.connectorId, connectorId))
+    .orderBy(desc(automationRuns.startedAt), desc(automationRuns.id))
     .all();
 }

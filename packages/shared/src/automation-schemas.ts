@@ -59,3 +59,5 @@ export const automationRunSchema = z
     error: z.string().nullable(),
   })
   .meta({ id: "AutomationRun" });
+
+export const automationRunWithJobSchema = automationRunSchema.extend({ jobName: z.string() });
