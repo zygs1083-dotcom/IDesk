@@ -4,6 +4,7 @@ import { groupByHost } from "./group-by-host.ts";
 
 export function ColumnContent({
   tasks,
+  blockers,
   agents,
   group,
   seen,
@@ -13,6 +14,7 @@ export function ColumnContent({
   shake,
 }: {
   tasks: Task[];
+  blockers: Map<string, number>;
   agents: Agent[];
   group: "flat" | "host";
   seen: Set<string>;
@@ -27,6 +29,7 @@ export function ColumnContent({
       <DraggableCard
         key={task.id}
         task={task}
+        blockers={blockers.get(task.id) as number}
         entering={!seen.has(task.id)}
         name={agentName(task.assigneeId ?? task.publisherId)}
         {...(handoff === undefined ? {} : { handoff })}

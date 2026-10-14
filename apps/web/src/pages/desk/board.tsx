@@ -16,6 +16,7 @@ import { useAgents } from "../../lib/use-agents.ts";
 import { ActionDialog } from "./action-dialog.tsx";
 import { Column } from "./column.tsx";
 import { ColumnContent } from "./column-content.tsx";
+import { countBlockers } from "./count-blockers.ts";
 import { actionSamples, dropAction } from "./drop-action.ts";
 import { dropAnimation } from "./drop-animation.ts";
 import { TaskCard } from "./task-card.tsx";
@@ -50,12 +51,21 @@ export function Board({
     task: Task;
     action: "assign" | "handoff" | "recruit";
   } | null>(null);
-  const { mutation, error, setError } = useTaskAction(() => setParameter(null));
+  const { mutation, error, setError } = useTaskAction(
+    () => setParameter(null),
+    (error, task) => {
+      if ("status" in error && error.status === 409) {
+        setParameter(null);
+        setShake(task.id);
+      }
+    },
+  );
   const reduced = useReducedMotion();
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
     useSensor(KeyboardSensor),
   );
+  const blockers = new Map(tasks.map((task) => [task.id, countBlockers(task.blockedBy, tasks)]));
   const visible = tasks.filter((task) =>
     task.title.toLocaleLowerCase().includes(search.toLocaleLowerCase()),
   );
@@ -116,6 +126,7 @@ export function Board({
               >
                 <ColumnContent
                   tasks={columnTasks}
+                  blockers={blockers}
                   agents={agents}
                   group={group}
                   seen={seen.current}
@@ -145,6 +156,7 @@ export function Board({
           {dragged && (
             <TaskCard
               task={dragged}
+              blockers={blockers.get(dragged.id) as number}
               name={agentName(dragged.assigneeId ?? dragged.publisherId)}
               onOpen={() => {}}
               overlay

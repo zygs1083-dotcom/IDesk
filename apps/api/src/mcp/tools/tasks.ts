@@ -1,14 +1,27 @@
 import { createTaskSchema, idSchema, taskQuerySchema } from "@idesk/shared/task-schemas";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { inArray } from "drizzle-orm";
 import { z } from "zod";
 import type { PublicAgent } from "../../core/agents/agents.ts";
 import { listEvents } from "../../core/events/query.ts";
 import { createTask, getTask, listTasks } from "../../core/tasks/store.ts";
+import { db } from "../../db/client.ts";
+import { tasks } from "../../db/schema.ts";
 import { toolResult } from "../result.ts";
 
 export function claimableTasks(agent: PublicAgent) {
-  return listTasks({ status: "open" }).filter((task) =>
-    task.capabilities.every((capability) => agent.capabilities.includes(capability)),
+  const unfinished = new Set(
+    db
+      .select({ id: tasks.id })
+      .from(tasks)
+      .where(inArray(tasks.status, ["open", "assigned", "recruiting", "in_progress", "paused"]))
+      .all()
+      .map((task) => task.id),
+  );
+  return listTasks({ status: "open" }).filter(
+    (task) =>
+      task.capabilities.every((capability) => agent.capabilities.includes(capability)) &&
+      !task.blockedBy.some((id) => unfinished.has(id)),
   );
 }
 
@@ -52,7 +65,10 @@ export function registerTaskTools(server: McpServer, agent: PublicAgent) {
   );
   server.registerTool(
     "idesk_publish_task",
-    { description: "发布一个新任务供智能体领取。", inputSchema: createTaskSchema.shape },
+    {
+      description: "发布一个新任务供智能体领取；blockedBy 指定必须先完成或取消的依赖任务。",
+      inputSchema: createTaskSchema.shape,
+    },
     ({ dueAt, ...input }) =>
       toolResult(
         createTask(

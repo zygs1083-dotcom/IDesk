@@ -3,6 +3,7 @@ import { and, desc, eq, gt, notInArray, or, sql } from "drizzle-orm";
 import { db } from "../../db/client.ts";
 import { tasks } from "../../db/schema.ts";
 import { publishEvent, recordEvent } from "../events/bus.ts";
+import { validateDependencies } from "./dependencies.ts";
 
 export type Task = typeof tasks.$inferSelect;
 // 不筛状态时，已完成/已取消的任务只保留最近 7 天，看板和 AI 的默认列表都不用背历史
@@ -16,14 +17,16 @@ export function createTask(
     tags?: string[];
     capabilities?: string[];
     dueAt?: Date;
+    blockedBy?: string[];
   },
   publisherId: string,
 ): Task {
   const now = new Date();
   const { task, event } = db.transaction((tx) => {
+    const blockedBy = validateDependencies(tx, input.blockedBy ?? []);
     const task = tx
       .insert(tasks)
-      .values({ ...input, publisherId, createdAt: now, updatedAt: now })
+      .values({ ...input, blockedBy, publisherId, createdAt: now, updatedAt: now })
       .returning()
       .get();
     const event = recordEvent(tx, {

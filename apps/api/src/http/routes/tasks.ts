@@ -7,12 +7,14 @@ import {
   idSchema,
   reportSchema,
   taskActionSchema,
+  taskDependenciesSchema,
   taskQuerySchema,
   taskSchema,
 } from "@idesk/shared/task-schemas";
 import { validator } from "hono/validator";
 import { z } from "zod";
 import { listEvents } from "../../core/events/query.ts";
+import { updateDependencies } from "../../core/tasks/dependencies.ts";
 import { createTask, getTask, listTasks } from "../../core/tasks/store.ts";
 import { actOnTask, reportProgress } from "../../core/tasks/transition.ts";
 import { HttpError } from "../errors.ts";
@@ -76,6 +78,27 @@ export function taskRoutes(app: OpenAPIHono<AuthEnv>) {
       if (!task) throw new HttpError(404, "任务不存在");
       return c.json(task, 200);
     },
+  );
+  app.openapi(
+    {
+      method: "patch",
+      path: "/api/v1/tasks/{id}",
+      request: {
+        params: idSchema,
+        body: {
+          required: true,
+          content: { "application/json": { schema: taskDependenciesSchema } },
+        },
+      },
+      responses: {
+        200: { description: "Updated", content: { "application/json": { schema: taskSchema } } },
+      },
+    },
+    (c) =>
+      c.json(
+        updateDependencies(c.req.valid("param").id, c.req.valid("json").blockedBy, c.get("actor")),
+        200,
+      ),
   );
   const actionRoute = createRoute({
     method: "post",

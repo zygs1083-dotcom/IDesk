@@ -11,6 +11,7 @@ const task: Task = {
   status: "open",
   priority: "normal",
   tags: [],
+  blockedBy: [],
   capabilities: [],
   publisherId: "human",
   assigneeId: "agent",

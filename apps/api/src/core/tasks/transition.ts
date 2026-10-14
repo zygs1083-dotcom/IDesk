@@ -4,7 +4,7 @@ import {
   TransitionError,
   transition,
 } from "@idesk/shared/task-machine";
-import { eq } from "drizzle-orm";
+import { eq, inArray } from "drizzle-orm";
 import { db } from "../../db/client.ts";
 import { tasks } from "../../db/schema.ts";
 import { type Event, publishEvent, recordEvent } from "../events/bus.ts";
@@ -22,6 +22,18 @@ function applyAction(
   const result = db.transaction((tx) => {
     const task = tx.select().from(tasks).where(eq(tasks.id, id)).get();
     if (!task) return undefined;
+    if (
+      task.status === "open" &&
+      ["claim", "assign", "recruit"].includes(action.type) &&
+      task.blockedBy.length
+    ) {
+      const dependencies = tx.select().from(tasks).where(inArray(tasks.id, task.blockedBy)).all();
+      const blocked = task.blockedBy
+        .map((id) => dependencies.find((item) => item.id === id))
+        .find((item) => item && item.status !== "done" && item.status !== "cancelled");
+      if (blocked)
+        return new TransitionError(task.status, action.type, `被「${blocked.title}」阻塞`);
+    }
     const next = transition(task, action, actor, now);
     if (next instanceof TransitionError) return next;
     const updated = tx

@@ -7,6 +7,7 @@ export const createTaskSchema = z.object({
   body: z.string().exactOptional(),
   priority: z.enum(TASK_PRIORITIES).exactOptional(),
   tags: z.array(z.string()).exactOptional(),
+  blockedBy: z.array(z.string()).exactOptional(),
   capabilities: z.array(z.string()).exactOptional(),
   dueAt: z.iso.datetime().exactOptional(),
 });
@@ -31,6 +32,7 @@ export const taskActionSchema = z.discriminatedUnion("type", [
   z.object({ type: z.literal("resume") }),
   z.object({ type: z.literal("reopen") }),
 ]) satisfies z.ZodType<TaskAction>;
+export const taskDependenciesSchema = z.object({ blockedBy: z.array(z.string()) });
 export const reportSchema = z.object({ message: z.string() });
 export const taskQuerySchema = z.object({
   status: z.enum(TASK_STATUSES).exactOptional(),
@@ -51,6 +53,7 @@ export const taskSchema = z
     status: z.enum(TASK_STATUSES),
     priority: z.enum(TASK_PRIORITIES),
     tags: z.array(z.string()),
+    blockedBy: z.array(z.string()),
     capabilities: z.array(z.string()),
     publisherId: z.string(),
     assigneeId: z.string().nullable(),

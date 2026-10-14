@@ -20,6 +20,7 @@ const task: Task = {
   status: "in_progress",
   priority: "normal",
   tags: [],
+  blockedBy: [],
   capabilities: [],
   publisherId: "human",
   assigneeId: "a",

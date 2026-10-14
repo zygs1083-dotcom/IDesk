@@ -1,0 +1,1 @@
+ALTER TABLE `tasks` ADD `blocked_by` text DEFAULT '[]' NOT NULL;

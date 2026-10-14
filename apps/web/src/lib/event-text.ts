@@ -13,6 +13,7 @@ export function eventText(
     const to = event.payload.to as RelayRecipient;
     return `${agentName(event.agentId)} 发消息给 ${recipientText(to, agentName)}`;
   }
+  if (event.type === "task.dependencies") return `${agentName(event.agentId)} 修改了依赖`;
   if (event.type === "task.created") return `${agentName(event.agentId)} 发布了`;
   if (event.type.startsWith("task.")) {
     const action = event.type.slice(5);
