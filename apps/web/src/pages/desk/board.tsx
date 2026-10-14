@@ -11,14 +11,14 @@ import { AnimatePresence, useReducedMotion } from "motion/react";
 import { useEffect, useState } from "react";
 import { Button } from "../../components/button.tsx";
 import { Toast } from "../../components/toast.tsx";
+import type { Task, TaskEvent } from "../../lib/types.ts";
+import { useAgents } from "../../lib/use-agents.ts";
 import { ActionDialog } from "./action-dialog.tsx";
 import { Column } from "./column.tsx";
 import { DraggableCard } from "./draggable-card.tsx";
 import { actionSamples, dropAction } from "./drop-action.ts";
 import { dropAnimation } from "./drop-animation.ts";
 import { TaskCard } from "./task-card.tsx";
-import type { Task, TaskEvent } from "./types.ts";
-import { useAgents } from "./use-agents.ts";
 import { useTaskAction } from "./use-task-action.ts";
 
 export function Board({

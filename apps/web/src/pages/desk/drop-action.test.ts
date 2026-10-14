@@ -1,7 +1,7 @@
 import { BOARD_COLUMNS, TASK_STATUSES, type TaskStatus } from "@idesk/shared/task-status";
 import { describe, expect, it } from "vitest";
+import type { Task } from "../../lib/types.ts";
 import { dropAction } from "./drop-action.ts";
-import type { Task } from "./types.ts";
 
 const now = new Date("2026-10-14T12:00:00Z");
 const task: Task = {

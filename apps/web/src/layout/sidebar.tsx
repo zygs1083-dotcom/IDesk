@@ -1,6 +1,7 @@
 import { Activity, Bot, Clock, LayoutGrid, Send, Settings, Workflow } from "lucide-react";
 import { NavLink } from "react-router";
 import { cn } from "../lib/cn.ts";
+import { useAgents } from "../lib/use-agents.ts";
 
 const items = [
   { to: "/desk", label: "协作台", icon: LayoutGrid },
@@ -13,6 +14,8 @@ const items = [
 ];
 
 export function Sidebar() {
+  const { agents } = useAgents();
+  const online = agents.filter((agent) => agent.status === "online").length;
   return (
     <aside className="flex shrink-0 items-center border-b border-line bg-surface sidebar:w-sidebar sidebar:flex-col sidebar:items-stretch sidebar:border-r sidebar:border-b-0">
       <div className="hidden px-5 pt-5 pb-4 text-section sidebar:block">IDesk</div>
@@ -38,6 +41,12 @@ export function Sidebar() {
           </NavLink>
         ))}
       </nav>
+      <div className="mt-auto hidden items-center gap-2 px-5 py-4 text-secondary text-text-2 sidebar:flex">
+        <span
+          className={cn("size-2 rounded-full", online > 0 ? "bg-status-done" : "bg-status-open")}
+        />
+        <span>{online} 在线</span>
+      </div>
     </aside>
   );
 }

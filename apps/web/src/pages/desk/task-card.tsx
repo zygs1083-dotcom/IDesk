@@ -1,10 +1,10 @@
 import type { useDraggable } from "@dnd-kit/core";
+import { TASK_PRIORITY_LABEL } from "@idesk/shared/task-status";
 import { motion, useReducedMotion } from "motion/react";
 import { cn } from "../../lib/cn.ts";
 import { relativeTime } from "../../lib/format.ts";
-import { priorityLabels } from "./priority-label.ts";
+import type { Task } from "../../lib/types.ts";
 import { StatusDot } from "./status-dot.tsx";
-import type { Task } from "./types.ts";
 
 export function TaskCard({
   task,
@@ -55,7 +55,7 @@ export function TaskCard({
         <span className="truncate">{task.capabilities.join(" · ")}</span>
         {(task.priority === "high" || task.priority === "urgent") && (
           <span className={cn("shrink-0", task.priority === "urgent" && "text-status-failed")}>
-            ↑{priorityLabels[task.priority]}
+            ↑{TASK_PRIORITY_LABEL[task.priority]}
           </span>
         )}
       </span>

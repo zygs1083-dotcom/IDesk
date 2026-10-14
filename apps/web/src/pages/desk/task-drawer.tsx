@@ -3,18 +3,18 @@ import { TASK_STATUS_LABEL } from "@idesk/shared/task-status";
 import { useQuery } from "@tanstack/react-query";
 import { AnimatePresence } from "motion/react";
 import { useState } from "react";
-import ReactMarkdown from "react-markdown";
 import { Button } from "../../components/button.tsx";
 import { Drawer } from "../../components/drawer.tsx";
+import { Markdown } from "../../components/markdown.tsx";
 import { Toast } from "../../components/toast.tsx";
 import { request } from "../../lib/api.ts";
 import { eventText } from "../../lib/event-text.ts";
 import { relativeTime } from "../../lib/format.ts";
+import type { Task, TaskEvent } from "../../lib/types.ts";
+import { useAgents } from "../../lib/use-agents.ts";
 import { ActionDialog } from "./action-dialog.tsx";
 import { actionSamples, type HumanAction, previewAction } from "./drop-action.ts";
 import { StatusDot } from "./status-dot.tsx";
-import type { Task, TaskEvent } from "./types.ts";
-import { useAgents } from "./use-agents.ts";
 import { useTaskAction } from "./use-task-action.ts";
 
 export function TaskDrawer({ taskId, onClose }: { taskId: string; onClose: () => void }) {
@@ -74,9 +74,9 @@ export function TaskDrawer({ taskId, onClose }: { taskId: string; onClose: () =>
                 </Button>
               ))}
             </div>
-            <div className="space-y-3 break-words text-body [&_a]:text-accent [&_a]:underline [&_blockquote]:border-l [&_blockquote]:border-line-strong [&_blockquote]:pl-3 [&_blockquote]:text-text-2 [&_code]:rounded-tag [&_code]:bg-surface-2 [&_code]:px-1 [&_h1]:text-section [&_h2]:text-section [&_h3]:text-section [&_li]:ml-4 [&_ol]:list-decimal [&_p]:my-3 [&_pre]:overflow-auto [&_pre]:rounded-control [&_pre]:bg-surface-2 [&_pre]:p-3 [&_ul]:list-disc">
-              <ReactMarkdown>{task.body}</ReactMarkdown>
-              {task.result !== null && <ReactMarkdown>{task.result}</ReactMarkdown>}
+            <div className="space-y-3">
+              <Markdown>{task.body}</Markdown>
+              {task.result !== null && <Markdown>{task.result}</Markdown>}
             </div>
             <dl className="space-y-3 border-y border-line py-4 text-secondary">
               <div className="flex gap-2">
