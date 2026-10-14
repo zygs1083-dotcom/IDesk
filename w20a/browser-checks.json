@@ -1,0 +1,32 @@
+{
+  "checks": [
+    {
+      "facing": "down",
+      "valid": true,
+      "anchor": 1,
+      "scale": 1
+    },
+    {
+      "facing": "left",
+      "valid": true,
+      "anchor": 1,
+      "scale": 1
+    },
+    {
+      "facing": "right",
+      "valid": true,
+      "anchor": 1,
+      "scale": 1
+    },
+    {
+      "facing": "up",
+      "valid": true,
+      "anchor": 1,
+      "scale": 1
+    },
+    {
+      "typing": true
+    }
+  ],
+  "errors": []
+}
