@@ -69,40 +69,34 @@ export class TransitionError extends Error {
 type Context = { task: TaskState; agentId: string; lease: Date; now: Date };
 type Handler<A extends TaskAction = TaskAction> = (ctx: Context, action: A) => Partial<TaskState>;
 type ActionTable = { [A in TaskAction["type"]]?: Handler<Extract<TaskAction, { type: A }>> };
+const cancel = (): Partial<TaskState> => ({ status: "cancelled", leaseExpiresAt: null });
+const handoff: Handler<Extract<TaskAction, { type: "handoff" }>> = (_, action) => ({
+  status: action.to === null ? "open" : "assigned",
+  assigneeId: action.to,
+  leaseExpiresAt: null,
+});
+const running = ({ lease }: Context) => ({ status: "in_progress" as const, leaseExpiresAt: lease });
 const transitions: Record<TaskStatus, ActionTable> = {
   open: {
-    claim: ({ agentId, lease }) => ({
-      status: "in_progress",
-      assigneeId: agentId,
-      leaseExpiresAt: lease,
-    }),
+    cancel,
+    claim: (context) => ({ ...running(context), assigneeId: context.agentId }),
     assign: (_, action) => ({ status: "assigned", assigneeId: action.agentId }),
-    recruit: (_, action) => ({
-      status: "recruiting",
-      recruit: { needed: action.needed, joined: [] },
-    }),
+    recruit: (_, { needed }) => ({ status: "recruiting", recruit: { needed, joined: [] } }),
   },
-  assigned: {
-    accept: ({ lease }) => ({ status: "in_progress", leaseExpiresAt: lease }),
-    decline: () => ({ status: "open", assigneeId: null }),
-  },
+  assigned: { cancel, accept: running, decline: () => ({ status: "open", assigneeId: null }) },
   recruiting: {
-    join: ({ task, agentId, lease }) => {
-      const recruit = task.recruit as TaskRecruit;
-      const joined = [...recruit.joined, agentId];
-      const changes: Partial<TaskState> = { recruit: { ...recruit, joined } };
-      if (joined.length === recruit.needed) {
-        Object.assign(changes, {
-          status: "in_progress",
-          assigneeId: joined[0],
-          leaseExpiresAt: lease,
-        });
-      }
-      return changes;
+    cancel,
+    join: (context) => {
+      const { task, agentId } = context;
+      const previous = task.recruit as TaskRecruit;
+      const recruit = { ...previous, joined: [...previous.joined, agentId] };
+      if (recruit.joined.length !== recruit.needed) return { recruit };
+      return { ...running(context), recruit, assigneeId: recruit.joined[0] as string };
     },
     cancel_recruit: () => ({ status: "open", recruit: null }),
   },
   in_progress: {
+    cancel,
     heartbeat: ({ lease }) => ({ leaseExpiresAt: lease }),
     complete: ({ now }, action) => ({
       status: "done",
@@ -111,25 +105,57 @@ const transitions: Record<TaskStatus, ActionTable> = {
       leaseExpiresAt: null,
     }),
     pause: () => ({ status: "paused", leaseExpiresAt: null }),
-    handoff: (_, action) => ({
-      status: action.to === null ? "open" : "assigned",
-      assigneeId: action.to,
-      leaseExpiresAt: null,
-    }),
+    handoff,
     release: () => ({ status: "open", assigneeId: null, leaseExpiresAt: null }),
     lease_expired: () => ({ status: "open", assigneeId: null, leaseExpiresAt: null }),
   },
   paused: {
-    handoff: (_, action) => ({
-      status: action.to === null ? "open" : "assigned",
-      assigneeId: action.to,
-      leaseExpiresAt: null,
-    }),
-    resume: ({ lease }) => ({ status: "in_progress", leaseExpiresAt: lease }),
+    cancel,
+    handoff,
+    resume: running,
     release: () => ({ status: "open", assigneeId: null }),
   },
   done: { reopen: () => ({ status: "open", assigneeId: null, result: null, completedAt: null }) },
   cancelled: {},
+};
+
+const byAssignee = (task: TaskState, actor: Actor): string | null =>
+  actor.kind === "agent" && actor.id === task.assigneeId ? null : "只有负责人可以操作";
+const byHumanOrPublisher = (task: TaskState, actor: Actor): string | null =>
+  actor.kind === "human" || (actor.kind === "agent" && actor.id === task.publisherId)
+    ? null
+    : "只有人或发布者可以操作";
+const byCapabilities = (task: TaskState, actor: Actor): string | null => {
+  if (actor.kind !== "agent") return "只有智能体可以领取或加入";
+  const missing = task.capabilities.filter((cap) => !actor.capabilities.includes(cap));
+  return missing.length ? `能力不匹配：缺少 ${missing.join("、")}` : null;
+};
+const permitted: {
+  [A in TaskAction["type"]]: (
+    ...args: [TaskState, Actor, Extract<TaskAction, { type: A }>]
+  ) => string | null;
+} = {
+  claim: byCapabilities,
+  join: (task, actor) =>
+    byCapabilities(task, actor) ||
+    ((task.recruit as TaskRecruit).joined.includes((actor as { id: string }).id)
+      ? "已经加入了"
+      : null),
+  accept: byAssignee,
+  decline: byAssignee,
+  heartbeat: byAssignee,
+  complete: (task, actor) => (actor.kind === "human" ? null : byAssignee(task, actor)),
+  pause: (task, actor) => (actor.kind === "human" ? null : byAssignee(task, actor)),
+  handoff: (task, actor) => (actor.kind === "human" ? null : byAssignee(task, actor)),
+  release: (task, actor) => (actor.kind === "human" ? null : byAssignee(task, actor)),
+  resume: (task, actor) => (actor.kind === "human" ? null : byAssignee(task, actor)),
+  assign: byHumanOrPublisher,
+  recruit: (task, actor, action) =>
+    byHumanOrPublisher(task, actor) || (action.needed < 2 ? "招募至少需要 2 个智能体" : null),
+  cancel_recruit: byHumanOrPublisher,
+  cancel: byHumanOrPublisher,
+  reopen: (_, actor) => (actor.kind === "human" ? null : "只有人可以重开"),
+  lease_expired: (_, actor) => (actor.kind === "system" ? null : "只有系统可以处理租约到期"),
 };
 
 export function transition<T extends TaskState>(
@@ -138,42 +164,15 @@ export function transition<T extends TaskState>(
   actor: Actor,
   now: Date,
 ): T | TransitionError {
-  const type = action.type;
+  const apply = transitions[task.status][action.type];
+  if (!apply) {
+    const message = `${TASK_STATUS_LABEL[task.status]}的任务不能${ACTION_LABEL[action.type]}`;
+    return new TransitionError(task.status, action.type, message);
+  }
+  // 同一个动作键下的处理函数与 action 类型一致。
+  const reason = permitted[action.type](task, actor, action as never);
+  if (reason) return new TransitionError(task.status, action.type, reason);
   const agentId = actor.kind === "agent" ? actor.id : "";
-  const human = actor.kind === "human";
-  const fail = (message: string) => new TransitionError(task.status, type, message);
-  const apply = transitions[task.status][type] as Handler | undefined;
-  if (!apply && !(type === "cancel" && task.status !== "cancelled" && task.status !== "done")) {
-    return fail(`${TASK_STATUS_LABEL[task.status]}的任务不能${ACTION_LABEL[type]}`);
-  }
-  if (actor.kind === "system" && type !== "lease_expired") return fail("系统只能处理租约到期");
-  if (type === "lease_expired" && actor.kind !== "system") return fail("只有系统可以处理租约到期");
-  const agentOnly = ["claim", "accept", "decline", "join", "heartbeat"].includes(type);
-  if (agentOnly && actor.kind !== "agent") {
-    return fail(`只有智能体可以${ACTION_LABEL[type]}`);
-  }
-  const publisherOnly = ["assign", "recruit", "cancel_recruit", "cancel"].includes(type);
-  if (publisherOnly && !human && agentId !== task.publisherId) {
-    return fail(`只有人或发布者可以${ACTION_LABEL[type]}`);
-  }
-  if (type === "reopen" && !human) return fail("只有人可以重开");
-  if (["heartbeat", "complete", "pause", "handoff", "release", "resume"].includes(type)) {
-    if (!human && agentId !== task.assigneeId) return fail(`只有负责人可以${ACTION_LABEL[type]}`);
-  }
-  if (actor.kind === "agent") {
-    if (["claim", "join"].includes(type)) {
-      const missing = task.capabilities.filter((cap) => !actor.capabilities.includes(cap));
-      if (missing.length) return fail(`能力不匹配：缺少 ${missing.join("、")}`);
-    }
-    if (["accept", "decline"].includes(type) && actor.id !== task.assigneeId)
-      return fail(`只有被指定的智能体可以${ACTION_LABEL[type]}`);
-    if (type === "join" && (task.recruit as TaskRecruit).joined.includes(actor.id))
-      return fail("已经加入了");
-  }
-  if (action.type === "recruit" && action.needed < 2) return fail("招募至少需要 2 个智能体");
-  if (type === "cancel") return { ...task, status: "cancelled", leaseExpiresAt: null };
-  // 表的动作键保证处理函数与 action 的类型一致。
   const lease = new Date(now.getTime() + LEASE_MS);
-  const context = { task, agentId, lease, now };
-  return { ...task, ...(apply as Handler)(context, action) };
+  return { ...task, ...apply({ task, agentId, lease, now }, action as never) };
 }

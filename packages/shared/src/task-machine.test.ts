@@ -1,11 +1,11 @@
 import { expect, it } from "vitest";
 import {
   type Actor,
-  TransitionError as Denied,
   LEASE_MS,
-  transition as step,
   type TaskAction,
   type TaskState,
+  TransitionError,
+  transition,
 } from "./task-machine.ts";
 import { TASK_STATUS_LABEL, TASK_STATUSES, type TaskStatus } from "./task-status.ts";
 
@@ -14,6 +14,7 @@ const lease = new Date(now.getTime() + LEASE_MS);
 const agent: Actor = { kind: "agent", id: "owner", capabilities: ["coding", "gpu"] };
 const human: Actor = { kind: "human" };
 const system: Actor = { kind: "system" };
+const other: Actor = { ...agent, id: "other" };
 function task(status: TaskStatus = "open"): TaskState {
   return {
     status,
@@ -61,8 +62,8 @@ const allowed: Record<TaskStatus, Partial<Record<TaskAction["type"], TaskStatus>
   done: { reopen: "open" },
   cancelled: {},
 };
-function ok(result: TaskState | Denied): TaskState {
-  expect(result).not.toBeInstanceOf(Denied);
+function ok(result: TaskState | TransitionError): TaskState {
+  expect(result).not.toBeInstanceOf(TransitionError);
   return result as TaskState;
 }
 it.each(TASK_STATUSES.flatMap((status) => actions.map((action) => ({ status, action }))))(
@@ -70,18 +71,18 @@ it.each(TASK_STATUSES.flatMap((status) => actions.map((action) => ({ status, act
   ({ status, action }) => {
     const actor =
       action.type === "lease_expired" ? system : action.type === "reopen" ? human : agent;
-    const result = step(task(status), action, actor, now);
+    const result = transition(task(status), action, actor, now);
     const expected = allowed[status][action.type];
     if (expected) expect(ok(result).status).toBe(expected);
     else {
-      expect(result).toBeInstanceOf(Denied);
-      expect((result as Denied).message).toContain(TASK_STATUS_LABEL[status]);
+      expect(result).toBeInstanceOf(TransitionError);
+      expect((result as TransitionError).message).toContain(TASK_STATUS_LABEL[status]);
     }
   },
 );
 it("claim sets the owner and a ten-minute lease, preserving other fields", () => {
   const original = task();
-  expect(ok(step(original, { type: "claim" }, agent, now))).toEqual({
+  expect(ok(transition(original, { type: "claim" }, agent, now))).toEqual({
     ...original,
     status: "in_progress",
     assigneeId: "owner",
@@ -89,9 +90,9 @@ it("claim sets the owner and a ten-minute lease, preserving other fields", () =>
   });
 });
 it("recruiting starts when the third member joins and retains the team", () => {
-  const second = ok(step(task("recruiting"), { type: "join" }, agent, now));
+  const second = ok(transition(task("recruiting"), { type: "join" }, agent, now));
   expect(second.status).toBe("recruiting");
-  const third = ok(step(second, { type: "join" }, { ...agent, id: "third" }, now));
+  const third = ok(transition(second, { type: "join" }, { ...agent, id: "third" }, now));
   expect(third).toEqual({
     ...second,
     status: "in_progress",
@@ -99,12 +100,12 @@ it("recruiting starts when the third member joins and retains the team", () => {
     assigneeId: "first",
     leaseExpiresAt: lease,
   });
-  expect(step(second, { type: "join" }, agent, now)).toBeInstanceOf(Denied);
+  expect(transition(second, { type: "join" }, agent, now)).toBeInstanceOf(TransitionError);
 });
 it.each(["in_progress", "paused"] as const)("%s hands off to an assignee or open", (status) => {
   for (const to of ["next", null]) {
     const original = task(status);
-    expect(ok(step(original, { type: "handoff", to, note: "context" }, agent, now))).toEqual({
+    expect(ok(transition(original, { type: "handoff", to, note: "context" }, agent, now))).toEqual({
       ...original,
       status: to === null ? "open" : "assigned",
       assigneeId: to,
@@ -114,21 +115,16 @@ it.each(["in_progress", "paused"] as const)("%s hands off to an assignee or open
 });
 it.each(["claim", "join"] as const)("%s requires every capability", (type) => {
   const status = { claim: "open", join: "recruiting" } as const;
-  expect(
-    step(
-      { ...task(status[type]), capabilities: ["coding", "gpu"] },
-      { type },
-      { kind: "agent", id: "owner", capabilities: ["coding"] },
-      now,
-    ),
-  ).toBeInstanceOf(Denied);
+  const original = { ...task(status[type]), capabilities: ["coding", "gpu"] };
+  const limited: Actor = { ...agent, capabilities: ["coding"] };
+  expect(transition(original, { type }, limited, now)).toBeInstanceOf(TransitionError);
 });
 it("only the owner or a human can complete", () => {
   const original = task("in_progress");
-  expect(
-    step(original, { type: "complete", result: "new" }, { ...agent, id: "other" }, now),
-  ).toBeInstanceOf(Denied);
-  expect(ok(step(original, { type: "complete", result: "new" }, human, now))).toEqual({
+  expect(transition(original, { type: "complete", result: "new" }, other, now)).toBeInstanceOf(
+    TransitionError,
+  );
+  expect(ok(transition(original, { type: "complete", result: "new" }, human, now))).toEqual({
     ...original,
     status: "done",
     result: "new",
@@ -137,8 +133,8 @@ it("only the owner or a human can complete", () => {
   });
 });
 it("only humans reopen and completion fields are cleared", () => {
-  expect(step(task("done"), { type: "reopen" }, agent, now)).toBeInstanceOf(Denied);
-  expect(ok(step(task("done"), { type: "reopen" }, human, now))).toEqual({
+  expect(transition(task("done"), { type: "reopen" }, agent, now)).toBeInstanceOf(TransitionError);
+  expect(ok(transition(task("done"), { type: "reopen" }, human, now))).toEqual({
     ...task("done"),
     status: "open",
     assigneeId: null,
@@ -148,18 +144,20 @@ it("only humans reopen and completion fields are cleared", () => {
 });
 it("only the system expires leases and cannot perform other actions", () => {
   for (const actor of [human, agent])
-    expect(step(task("in_progress"), { type: "lease_expired" }, actor, now)).toBeInstanceOf(Denied);
-  const expired = ok(step(task("in_progress"), { type: "lease_expired" }, system, now));
+    expect(transition(task("in_progress"), { type: "lease_expired" }, actor, now)).toBeInstanceOf(
+      TransitionError,
+    );
+  const expired = ok(transition(task("in_progress"), { type: "lease_expired" }, system, now));
   expect(expired).toMatchObject({ status: "open", assigneeId: null, leaseExpiresAt: null });
   for (const action of actions.filter((action) => action.type !== "lease_expired")) {
     for (const status of TASK_STATUSES)
-      expect(step(task(status), action, system, now)).toBeInstanceOf(Denied);
+      expect(transition(task(status), action, system, now)).toBeInstanceOf(TransitionError);
   }
 });
 it("does not mutate inputs and preserves additional fields", () => {
   const original = { ...task("recruiting"), id: "task-id", updatedAt: now };
   const before = structuredClone(original);
-  const result = step(original, { type: "join" }, agent, now);
+  const result = transition(original, { type: "join" }, agent, now);
   expect(result).not.toBe(original);
   expect(original).toEqual(before);
   expect(result).toMatchObject({ id: "task-id", updatedAt: now });
@@ -169,7 +167,7 @@ it("agent actions reject humans", () => {
     ["claim", "accept", "decline", "join", "heartbeat"].includes(a.type),
   )) {
     for (const status of TASK_STATUSES.filter((s) => allowed[s][action.type])) {
-      expect(step(task(status), action, human, now)).toBeInstanceOf(Denied);
+      expect(transition(task(status), action, human, now)).toBeInstanceOf(TransitionError);
     }
   }
 });
@@ -178,20 +176,23 @@ it.each(["assign", "recruit", "cancel_recruit", "cancel"] as const)(
   (type) => {
     const action = actions.find((action) => action.type === type) as TaskAction;
     const original = task(type === "cancel_recruit" ? "recruiting" : "open");
-    expect(step(original, action, { ...agent, id: "other" }, now)).toBeInstanceOf(Denied);
-    expect(step(original, action, human, now)).not.toBeInstanceOf(Denied);
+    expect(transition(original, action, other, now)).toBeInstanceOf(TransitionError);
+    expect(transition(original, action, human, now)).not.toBeInstanceOf(TransitionError);
   },
 );
 it.each(["accept", "decline"] as const)("%s requires the assignee", (type) => {
-  expect(step(task("assigned"), { type }, { ...agent, id: "other" }, now)).toBeInstanceOf(Denied);
+  const original = task("assigned");
+  expect(transition(original, { type }, other, now)).toBeInstanceOf(TransitionError);
 });
 it("recruit requires at least two members", () => {
-  expect(step(task(), { type: "recruit", needed: 1 }, human, now)).toBeInstanceOf(Denied);
-  expect(ok(step(task(), { type: "recruit", needed: 2 }, human, now)).recruit).toEqual({
+  expect(transition(task(), { type: "recruit", needed: 1 }, human, now)).toBeInstanceOf(
+    TransitionError,
+  );
+  expect(ok(transition(task(), { type: "recruit", needed: 2 }, human, now)).recruit).toEqual({
     needed: 2,
     joined: [],
   });
 });
 it.each(["done", "cancelled"] as const)("%s cannot be cancelled", (status) => {
-  expect(step(task(status), { type: "cancel" }, human, now)).toBeInstanceOf(Denied);
+  expect(transition(task(status), { type: "cancel" }, human, now)).toBeInstanceOf(TransitionError);
 });
