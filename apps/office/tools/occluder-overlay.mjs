@@ -48,6 +48,22 @@ export function overlay(output, grid = false) {
     savePng(resolve(output, `${zone.id}@3x.png`), enlargeCrop(png, { x, y, w, h }));
   }
   rectangle(png, layout.board, [255, 128, 0, 255]);
+  for (const [positions, color] of [
+    [Object.values(layout.points ?? {}), [255, 255, 255, 255]],
+    [layout.spots ?? [], [0, 100, 255, 255]],
+    [layout.standing ?? [], [255, 180, 0, 255]],
+  ])
+    for (const point of positions) {
+      line(png, [point.x - 5, point.y], [point.x + 5, point.y], color);
+      line(png, [point.x, point.y - 5], [point.x, point.y + 5], color);
+    }
+  for (const [id, box] of [
+    ["reception", { x: 0, y: 540, w: 375, h: 240 }],
+    ["meeting", { x: 1230, y: 100, w: 385, h: 245 }],
+    ["lounge", { x: 1250, y: 360, w: 422, h: 320 }],
+    ["misc", { x: 40, y: 315, w: 140, h: 175 }],
+  ])
+    savePng(resolve(output, `${id}@3x.png`), enlargeCrop(png, box));
   savePng(
     resolve(output, "overview@3x.png"),
     enlargeCrop(png, { x: 0, y: 0, w: png.width, h: png.height }),

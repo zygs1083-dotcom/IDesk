@@ -55,10 +55,34 @@ const relationships = [
     ahead: ["zone-4-chair-front-right"],
     behind: ["zone-4-desk-front-right"],
   },
+  { seat: "reception-seat", ahead: ["reception-counter"], behind: [] },
+  ...["left", "middle", "right"].flatMap((side) => [
+    { seat: `meeting-back-${side}`, ahead: ["meeting-table"], behind: [] },
+    {
+      seat: `meeting-front-${side}`,
+      ahead: [`meeting-chair-front-${side}`],
+      behind: ["meeting-table"],
+    },
+  ]),
+  ...["left", "right"].map((side) => ({
+    seat: `lounge-back-${side}`,
+    ahead: ["lounge-coffee-table"],
+    behind: ["lounge-sofa-front"],
+  })),
+  {
+    seat: "lounge-side",
+    ahead: ["lounge-sofa-side-arm", "lounge-sofa-side-apron", "lounge-coffee-table"],
+    behind: [],
+  },
 ];
-describe("work areas 1 through 4 silhouette ordering", () => {
+describe("office silhouette ordering", () => {
+  it("covers every seat exactly once", () => {
+    expect(relationships.map(({ seat }) => seat).sort()).toEqual(
+      layout.seats.map(({ id }) => id).sort(),
+    );
+  });
   for (const { seat: seatId, ahead, behind } of relationships) {
-    it(`${seatId} is between its desk and chair`, () => {
+    it(`${seatId} has the measured silhouette ordering`, () => {
       const seat = layout.seats.find((seat) => seat.id === seatId);
       expect(seat).toBeDefined();
       const y = (seat as (typeof layout.seats)[number]).y;

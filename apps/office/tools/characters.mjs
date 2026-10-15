@@ -14,9 +14,15 @@ const frames = {};
 const animations = {};
 const anchors = {
   default: { x: 0.5, y: 1 },
-  "sit/back": { x: 0.5, y: 1.2083333333333333 },
-  "typing/back/0": { x: 0.5, y: 1.2083333333333333 },
-  "typing/back/1": { x: 0.5, y: 1.2083333333333333 },
+  "sit/back": { x: 0.5, y: (96 + 32) / 96 },
+  "typing/back/0": { x: 0.5, y: (96 + 32) / 96 },
+  "typing/back/1": { x: 0.5, y: (96 + 32) / 96 },
+  "sit/down": { x: 0.5, y: (96 - 7) / 96 },
+  "typing/down/0": { x: 0.5, y: (96 - 7) / 96 },
+  "typing/down/1": { x: 0.5, y: (96 - 7) / 96 },
+  "sit/right": { x: 0.5, y: 1 },
+  "typing/right/0": { x: 0.5, y: 1 },
+  "typing/right/1": { x: 0.5, y: 1 },
 };
 
 for (const [kindIndex, kind] of kinds.entries()) {
