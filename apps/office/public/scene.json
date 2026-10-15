@@ -899,249 +899,66 @@
     }
   ],
   "edges": [
-    [
-      "door",
-      "entrance"
-    ],
-    [
-      "south-east",
-      "south-center"
-    ],
-    [
-      "south-center",
-      "south-west"
-    ],
-    [
-      "south-west",
-      "west-lower"
-    ],
-    [
-      "west-lower",
-      "west-cross"
-    ],
-    [
-      "west-cross",
-      "west-upper"
-    ],
-    [
-      "south-center",
-      "middle-lower"
-    ],
-    [
-      "middle-lower",
-      "middle-cross"
-    ],
-    [
-      "middle-cross",
-      "middle-upper"
-    ],
-    [
-      "south-east",
-      "east-lower"
-    ],
-    [
-      "east-lower",
-      "east-cross"
-    ],
-    [
-      "east-cross",
-      "east-upper"
-    ],
-    [
-      "west-cross",
-      "middle-cross"
-    ],
-    [
-      "middle-cross",
-      "east-cross"
-    ],
-    [
-      "west-upper",
-      "board-approach"
-    ],
-    [
-      "board-approach",
-      "board"
-    ],
-    [
-      "west-cross",
-      "reception-side"
-    ],
-    [
-      "reception-side",
-      "reception"
-    ],
-    [
-      "west-upper",
-      "west-upper-205"
-    ],
-    [
-      "west-upper-205",
-      "zone-1-1"
-    ],
-    [
-      "middle-upper",
-      "middle-upper-205"
-    ],
-    [
-      "middle-upper-205",
-      "zone-1-2"
-    ],
-    [
-      "west-cross",
-      "west-cross-420"
-    ],
-    [
-      "west-cross-420",
-      "zone-1-3"
-    ],
-    [
-      "middle-cross",
-      "middle-cross-420"
-    ],
-    [
-      "middle-cross-420",
-      "zone-1-4"
-    ],
-    [
-      "middle-upper-205",
-      "zone-2-1"
-    ],
-    [
-      "east-upper",
-      "east-upper-205"
-    ],
-    [
-      "east-upper-205",
-      "zone-2-2"
-    ],
-    [
-      "middle-cross-420",
-      "zone-2-3"
-    ],
-    [
-      "east-cross",
-      "east-cross-420"
-    ],
-    [
-      "east-cross-420",
-      "zone-2-4"
-    ],
-    [
-      "west-cross",
-      "west-cross-515"
-    ],
-    [
-      "west-cross-515",
-      "zone-3-1"
-    ],
-    [
-      "middle-cross",
-      "middle-cross-515"
-    ],
-    [
-      "middle-cross-515",
-      "zone-3-2"
-    ],
-    [
-      "west-lower",
-      "west-lower-730"
-    ],
-    [
-      "west-lower-730",
-      "zone-3-3"
-    ],
-    [
-      "middle-lower",
-      "middle-lower-730"
-    ],
-    [
-      "middle-lower-730",
-      "zone-3-4"
-    ],
-    [
-      "middle-cross-515",
-      "zone-4-1"
-    ],
-    [
-      "east-cross",
-      "east-cross-515"
-    ],
-    [
-      "east-cross-515",
-      "zone-4-2"
-    ],
-    [
-      "middle-lower-730",
-      "zone-4-3"
-    ],
-    [
-      "east-lower",
-      "east-lower-730"
-    ],
-    [
-      "east-lower-730",
-      "zone-4-4"
-    ],
-    [
-      "east-cross",
-      "meeting-bottom"
-    ],
-    [
-      "meeting-top",
-      "meeting-top-0"
-    ],
-    [
-      "meeting-bottom",
-      "meeting-bottom-0"
-    ],
-    [
-      "meeting-top",
-      "meeting-top-1"
-    ],
-    [
-      "meeting-bottom",
-      "meeting-bottom-1"
-    ],
-    [
-      "meeting-top",
-      "meeting-top-2"
-    ],
-    [
-      "meeting-bottom",
-      "meeting-bottom-2"
-    ],
-    [
-      "east-cross",
-      "coffee"
-    ],
-    [
-      "entrance",
-      "entrance-aisle"
-    ],
-    [
-      "entrance-aisle",
-      "south-east"
-    ],
-    [
-      "east-upper",
-      "meeting-entry"
-    ],
-    [
-      "meeting-entry",
-      "meeting-top"
-    ],
-    [
-      "lounge-aisle",
-      "sofa"
-    ],
-    [
-      "lounge-aisle",
-      "sofa-side"
-    ],
-    [
-      "coffee",
-      "lounge-aisle"
-    ]
+    ["door", "entrance"],
+    ["south-east", "south-center"],
+    ["south-center", "south-west"],
+    ["south-west", "west-lower"],
+    ["west-lower", "west-cross"],
+    ["west-cross", "west-upper"],
+    ["south-center", "middle-lower"],
+    ["middle-lower", "middle-cross"],
+    ["middle-cross", "middle-upper"],
+    ["south-east", "east-lower"],
+    ["east-lower", "east-cross"],
+    ["east-cross", "east-upper"],
+    ["west-cross", "middle-cross"],
+    ["middle-cross", "east-cross"],
+    ["west-upper", "board-approach"],
+    ["board-approach", "board"],
+    ["west-cross", "reception-side"],
+    ["reception-side", "reception"],
+    ["west-upper", "west-upper-205"],
+    ["west-upper-205", "zone-1-1"],
+    ["middle-upper", "middle-upper-205"],
+    ["middle-upper-205", "zone-1-2"],
+    ["west-cross", "west-cross-420"],
+    ["west-cross-420", "zone-1-3"],
+    ["middle-cross", "middle-cross-420"],
+    ["middle-cross-420", "zone-1-4"],
+    ["middle-upper-205", "zone-2-1"],
+    ["east-upper", "east-upper-205"],
+    ["east-upper-205", "zone-2-2"],
+    ["middle-cross-420", "zone-2-3"],
+    ["east-cross", "east-cross-420"],
+    ["east-cross-420", "zone-2-4"],
+    ["west-cross", "west-cross-515"],
+    ["west-cross-515", "zone-3-1"],
+    ["middle-cross", "middle-cross-515"],
+    ["middle-cross-515", "zone-3-2"],
+    ["west-lower", "west-lower-730"],
+    ["west-lower-730", "zone-3-3"],
+    ["middle-lower", "middle-lower-730"],
+    ["middle-lower-730", "zone-3-4"],
+    ["middle-cross-515", "zone-4-1"],
+    ["east-cross", "east-cross-515"],
+    ["east-cross-515", "zone-4-2"],
+    ["middle-lower-730", "zone-4-3"],
+    ["east-lower", "east-lower-730"],
+    ["east-lower-730", "zone-4-4"],
+    ["east-cross", "meeting-bottom"],
+    ["meeting-top", "meeting-top-0"],
+    ["meeting-bottom", "meeting-bottom-0"],
+    ["meeting-top", "meeting-top-1"],
+    ["meeting-bottom", "meeting-bottom-1"],
+    ["meeting-top", "meeting-top-2"],
+    ["meeting-bottom", "meeting-bottom-2"],
+    ["east-cross", "coffee"],
+    ["entrance", "entrance-aisle"],
+    ["entrance-aisle", "south-east"],
+    ["east-upper", "meeting-entry"],
+    ["meeting-entry", "meeting-top"],
+    ["lounge-aisle", "sofa"],
+    ["lounge-aisle", "sofa-side"],
+    ["coffee", "lounge-aisle"]
   ]
 }
