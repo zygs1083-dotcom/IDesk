@@ -19,7 +19,12 @@ export function ConnectorRow({
   onDelete: () => void;
   onEdit: () => void;
 }) {
-  const status = !connector.enabled ? "已停用" : connector.lastError || "正常";
+  const { progress } = connector;
+  const status = !connector.enabled
+    ? "已停用"
+    : progress
+      ? `同步中${progress.total ? ` ${progress.done}/${progress.total}` : ""}`
+      : connector.lastError || "正常";
   return (
     <div className="flex items-center gap-4 border-b border-line px-4 py-3 last:border-b-0">
       <Plug aria-hidden="true" size={18} strokeWidth={1.5} className="shrink-0 text-text-2" />
@@ -30,6 +35,19 @@ export function ConnectorRow({
             {connector.config.baseUrl}
           </p>
         )}
+        {progress && (
+          <div
+            className="mt-2 h-0.5 w-full overflow-hidden rounded-full bg-line"
+            aria-hidden="true"
+          >
+            <div
+              className="h-full rounded-full bg-accent transition-[width] duration-hover ease-hover"
+              style={{
+                width: progress.total ? `${(progress.done / progress.total) * 100}%` : "8%",
+              }}
+            />
+          </div>
+        )}
       </div>
       <div className="flex w-40 min-w-0 items-center gap-2 text-secondary" title={status}>
         <span
@@ -37,15 +55,19 @@ export function ConnectorRow({
             "size-2 shrink-0 rounded-full",
             !connector.enabled
               ? "bg-status-open"
-              : connector.lastError
-                ? "bg-status-failed"
-                : "bg-status-done",
+              : progress
+                ? "bg-accent"
+                : connector.lastError
+                  ? "bg-status-failed"
+                  : "bg-status-done",
           )}
         />
         <span
           className={cn(
             "truncate",
-            connector.enabled && connector.lastError ? "text-status-failed" : "text-text-2",
+            connector.enabled && connector.lastError && !progress
+              ? "text-status-failed"
+              : "text-text-2",
           )}
         >
           {status}

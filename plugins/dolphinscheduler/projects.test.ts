@@ -103,6 +103,7 @@ it("tests all-project access with a single project-list item", async () => {
   expect(await plugin.testConnection(config)).toEqual({ success: true });
   expect(fetch).toHaveBeenCalledWith(`${baseUrl}/projects?pageNo=1&pageSize=1`, {
     headers: { token: "secret" },
+    signal: expect.any(AbortSignal),
   });
 });
 

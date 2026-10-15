@@ -13,6 +13,7 @@ export function ConnectorsPage() {
   const client = useQueryClient();
   const connectors = useQuery({
     queryKey: ["automation", "connectors"],
+    refetchInterval: (query) => (query.state.data?.some((c) => c.progress) ? 2000 : false),
     queryFn: () => request<Connector[]>("/connectors"),
   });
   const plugins = useQuery({ queryKey: ["plugins"], queryFn: () => request<Plugin[]>("/plugins") });

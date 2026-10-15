@@ -29,6 +29,8 @@ export interface Plugin {
   teardown?(): void | Promise<void>;
 }
 export type ConnectionResult = { success: boolean; error?: string };
+// 轮询进度，插件在逐项目之类的长循环里汇报，连接器页据此画进度条
+export type Progress = (done: number, total: number) => void;
 export type ExternalJob = Omit<
   typeof automationJobs.$inferSelect,
   "id" | "connectorId" | "lastRunStatus" | "lastRunAt"
@@ -39,8 +41,11 @@ export type ExternalRun = Omit<typeof automationRuns.$inferSelect, "id" | "jobId
 export interface ConnectorPlugin extends Plugin {
   kind: "connector";
   testConnection(config: unknown): Promise<ConnectionResult>;
-  listJobs(config: unknown): Promise<ExternalJob[]>;
-  listRuns(config: unknown, opts: { since: Date | null; limit: number }): Promise<ExternalRun[]>;
+  listJobs(config: unknown, opts?: { progress?: Progress }): Promise<ExternalJob[]>;
+  listRuns(
+    config: unknown,
+    opts: { since: Date | null; limit: number; progress?: Progress },
+  ): Promise<ExternalRun[]>;
   trigger?(
     config: unknown,
     jobExternalId: string,

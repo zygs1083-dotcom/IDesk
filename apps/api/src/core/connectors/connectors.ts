@@ -3,6 +3,7 @@ import { asc, eq } from "drizzle-orm";
 import type { z } from "zod";
 import { db } from "../../db/client.ts";
 import { connectors } from "../../db/schema.ts";
+import { polling } from "../../plugins/poll.ts";
 import { connectorPlugin } from "../../plugins/registry.ts";
 
 export const MASK = "••••••";
@@ -28,6 +29,7 @@ export function toPublicConnector(row: typeof connectors.$inferSelect) {
     ...row,
     canTrigger: connectorPlugin(row.pluginId)?.trigger !== undefined,
     config: maskConfig(row.config),
+    progress: polling.get(row.id) ?? null,
   };
 }
 export function listConnectors() {
