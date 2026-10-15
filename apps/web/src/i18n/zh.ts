@@ -20,6 +20,7 @@ export const zh = {
   "automation.cancelled": "已取消",
   "automation.done": "已完成",
   "automation.lastPolled": "上次轮询 {time}",
+  "automation.nextRun": "下次 {time}",
   "automation.notPolled": "尚未轮询",
   "automation.openRun": "打开 {name}",
   "automation.pollTooSoon": "刚刚轮询过，稍后再试",

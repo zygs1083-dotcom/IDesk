@@ -3,13 +3,12 @@ import type { z } from "zod";
 
 type Run = z.infer<typeof automationRunWithJobSchema>;
 
+export function matches(query: string, values: (string | null)[]): boolean {
+  const normalized = query.trim().toLowerCase();
+  return !normalized || values.some((value) => value?.toLowerCase().includes(normalized));
+}
+
 export function filterRuns(runs: Run[], q: string): Run[] {
-  const query = q.trim().toLowerCase();
-  if (query === "") return runs;
-  return runs.filter(
-    (run) =>
-      run.jobName.toLowerCase().includes(query) ||
-      run.jobGroup?.toLowerCase().includes(query) ||
-      run.trigger?.toLowerCase().includes(query),
-  );
+  if (!q.trim()) return runs;
+  return runs.filter((run) => matches(q, [run.jobName, run.jobGroup, run.trigger]));
 }

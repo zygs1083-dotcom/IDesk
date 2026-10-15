@@ -279,6 +279,9 @@ importers:
       '@tanstack/react-query':
         specifier: ^5.104.2
         version: 5.104.2(react@19.3.0)
+      croner:
+        specifier: ^10.0.1
+        version: 10.0.1
       lucide-react:
         specifier: ^1.57.0
         version: 1.57.0(@types/react@19.3.0)(react@19.3.0)
@@ -404,6 +407,9 @@ importers:
       '@types/node':
         specifier: ^24.0.0
         version: 24.19.2
+      croner:
+        specifier: ^10.0.1
+        version: 10.0.1
       typescript:
         specifier: ^6.0.0
         version: 6.0.3

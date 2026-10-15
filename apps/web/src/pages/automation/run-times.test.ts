@@ -1,5 +1,5 @@
 import { expect, test } from "vitest";
-import { runTimes } from "./run-times.ts";
+import { nextRunTime, runTimes } from "./run-times.ts";
 
 const now = new Date(2026, 9, 15, 12).getTime();
 const start = new Date(2026, 9, 15, 9, 5, 3).toISOString();
@@ -59,4 +59,12 @@ test("pads single-digit month, day, hours, minutes and seconds", () => {
     text: "01-02 03:04:05 → 01-02 06:07:08",
     title: "2026-01-02 03:04:05 → 2026-01-02 06:07:08",
   });
+});
+
+test("next run uses local minutes and dates outside today, including year boundaries", () => {
+  expect(nextRunTime(new Date(2026, 9, 15, 9, 5, 3), now)).toBe("09:05");
+  expect(nextRunTime(new Date(2026, 9, 16, 0, 4), now)).toBe("10-16 00:04");
+  expect(nextRunTime(new Date(2027, 0, 1, 3, 4), new Date(2026, 11, 31).getTime())).toBe(
+    "01-01 03:04",
+  );
 });

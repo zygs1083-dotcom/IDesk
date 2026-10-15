@@ -22,6 +22,7 @@ export const en: Record<Key, string> = {
   "automation.cancelled": "Cancelled",
   "automation.done": "Done",
   "automation.lastPolled": "Last polled {time}",
+  "automation.nextRun": "Next {time}",
   "automation.notPolled": "Not polled yet",
   "automation.openRun": "Open {name}",
   "automation.pollTooSoon": "Polled just now. Try again shortly",

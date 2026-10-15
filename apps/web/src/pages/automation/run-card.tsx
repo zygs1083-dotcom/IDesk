@@ -1,8 +1,7 @@
 import type { automationRunWithJobSchema } from "@idesk/shared/automation-schemas";
-import { ExternalLink } from "lucide-react";
 import type { z } from "zod";
 import { useLang } from "../../i18n/lang.tsx";
-import { cn } from "../../lib/cn.ts";
+import { CardHeading } from "./card-heading.tsx";
 import { duration } from "./duration.ts";
 import { runTimes } from "./run-times.ts";
 
@@ -34,29 +33,13 @@ export function RunCard({ run, now }: { run: Run; now: number }) {
   ].filter((value) => value !== null);
   return (
     <article className="rounded-card border border-line bg-surface p-3 transition-colors duration-hover ease-hover hover:bg-surface-2">
-      <div className="mb-2 flex items-start gap-2">
-        <span
-          title={statusLabels[run.status]}
-          className={cn("mt-1.5 size-2 shrink-0 rounded-full", statusColors[run.status])}
-        />
-        <h3 className="min-w-0 flex-1 line-clamp-2 text-body">{run.jobName}</h3>
-        {run.url !== null && (
-          <a
-            href={run.url}
-            target="_blank"
-            rel="noreferrer"
-            aria-label={t("automation.openRun", { name: run.jobName })}
-            className="shrink-0 rounded-control text-text-2 hover:text-text focus-visible:outline-2 focus-visible:outline-accent"
-          >
-            <ExternalLink size={16} strokeWidth={1.5} />
-          </a>
-        )}
-      </div>
-      {run.jobGroup !== null && (
-        <p title={run.jobGroup} className="mb-2 truncate text-label text-text-2">
-          {run.jobGroup}
-        </p>
-      )}
+      <CardHeading
+        name={run.jobName}
+        group={run.jobGroup}
+        url={run.url}
+        status={statusLabels[run.status]}
+        color={statusColors[run.status]}
+      />
       <p title={times.title || undefined} className="text-label text-text-2 tabular-nums">
         {metadata.join(" · ")}
       </p>
