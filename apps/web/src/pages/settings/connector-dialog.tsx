@@ -71,8 +71,7 @@ export function ConnectorDialog({
       >
         {connector ? (
           <p className="text-secondary text-text-2">
-            {t("settings.pluginLabel")}
-            {plugin?.name ?? connector.pluginId}
+            {t("settings.pluginLabel", { name: plugin?.name ?? connector.pluginId })}
           </p>
         ) : plugins.length > 0 ? (
           <Segmented

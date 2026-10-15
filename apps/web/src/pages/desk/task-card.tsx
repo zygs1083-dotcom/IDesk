@@ -63,8 +63,8 @@ export function TaskCard({
         {blockers > 0 && (
           <span className="mr-2 inline-flex items-center gap-1 text-text-3 tabular-nums">
             <Lock size={16} strokeWidth={1.5} aria-hidden="true" />
-            {blockers}
-            <span className="sr-only"> {t("desk.blockers")}</span>
+            <span aria-hidden="true">{blockers}</span>
+            <span className="sr-only">{t("desk.blockers", { count: blockers })}</span>
           </span>
         )}
         {task.title}
