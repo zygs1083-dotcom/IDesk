@@ -24,6 +24,7 @@ import { useTaskAction } from "./use-task-action.ts";
 
 export function Board({
   tasks,
+  visible,
   handoffs,
   search,
   group,
@@ -32,6 +33,7 @@ export function Board({
   onPublish,
 }: {
   tasks: Task[];
+  visible: Task[];
   handoffs: TaskEvent[];
   search: string;
   group: "flat" | "host";
@@ -66,9 +68,6 @@ export function Board({
     useSensor(KeyboardSensor),
   );
   const blockers = new Map(tasks.map((task) => [task.id, countBlockers(task.blockedBy, tasks)]));
-  const visible = tasks.filter((task) =>
-    task.title.toLocaleLowerCase().includes(search.toLocaleLowerCase()),
-  );
   const boardTasks = visible.filter((task) => BOARD_COLUMNS.includes(task.status));
   function handoffName(task: Task): string | undefined {
     const event = handoffs.find((event) => event.taskId === task.id);
@@ -146,7 +145,7 @@ export function Board({
               </div>
             </div>
           )}
-          {search && boardTasks.length === 0 && (
+          {search && boardTasks.length === 0 && !loading && (
             <p className="absolute inset-x-0 top-20 text-center text-secondary text-text-2">
               没有匹配的任务
             </p>

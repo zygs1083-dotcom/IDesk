@@ -41,16 +41,27 @@ export function createTask(
   return task;
 }
 
+export function escapeLike(query: string): string {
+  return query.replace(/[\\%_]/g, "\\$&");
+}
+
 export function listTasks(filter: {
+  q?: string;
   status?: TaskStatus;
   capability?: string;
   assigneeId?: string;
 }): Task[] {
+  const pattern = filter.q === undefined ? undefined : `%${escapeLike(filter.q)}%`;
   return db
     .select()
     .from(tasks)
     .where(
       and(
+        pattern === undefined
+          ? undefined
+          : sql`(${tasks.title} LIKE ${pattern} ESCAPE '\\'
+              OR ${tasks.body} LIKE ${pattern} ESCAPE '\\'
+              OR ${tasks.result} LIKE ${pattern} ESCAPE '\\')`,
         filter.status === undefined
           ? or(
               notInArray(tasks.status, ["done", "cancelled"]),

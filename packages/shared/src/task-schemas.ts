@@ -35,6 +35,7 @@ export const taskActionSchema = z.discriminatedUnion("type", [
 export const taskDependenciesSchema = z.object({ blockedBy: z.array(z.string()) });
 export const reportSchema = z.object({ message: z.string() });
 export const taskQuerySchema = z.object({
+  q: z.string().min(1).exactOptional(),
   status: z.enum(TASK_STATUSES).exactOptional(),
   capability: z.string().exactOptional(),
   assignee: z.string().exactOptional(),

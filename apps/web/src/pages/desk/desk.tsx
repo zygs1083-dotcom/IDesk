@@ -1,13 +1,13 @@
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { Search } from "lucide-react";
 import { AnimatePresence } from "motion/react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router";
 import { Button } from "../../components/button.tsx";
 import { Segmented } from "../../components/segmented.tsx";
 import { PageHeader } from "../../layout/page-header.tsx";
 import { request } from "../../lib/api.ts";
-import type { TaskEvent } from "../../lib/types.ts";
+import type { Task, TaskEvent } from "../../lib/types.ts";
 import { useShortcut } from "../../lib/use-shortcut.ts";
 import { useTasks } from "../../lib/use-tasks.ts";
 import { Board } from "./board.tsx";
@@ -24,6 +24,18 @@ export function Desk() {
     localStorage.getItem("desk.group") === "host" ? "host" : "flat",
   );
   const [search, setSearch] = useState("");
+  const [q, setQ] = useState("");
+  useEffect(() => {
+    const timer = setTimeout(() => setQ(search), 200);
+    return () => clearTimeout(timer);
+  }, [search]);
+  const searchQuery = useQuery({
+    queryKey: ["tasks", q],
+    queryFn: () => request<Task[]>(`/tasks?q=${encodeURIComponent(q)}`),
+    enabled: q !== "",
+    placeholderData: keepPreviousData,
+  });
+  const error = queryError ?? (q ? searchQuery.error : null);
   const [publish, setPublish] = useState(false);
   const [params, setParams] = useSearchParams();
   const selected = params.get("task");
@@ -76,17 +88,18 @@ export function Desk() {
           发布
         </Button>
       </div>
-      {queryError && (
+      {error && (
         <p role="alert" className="text-secondary text-status-failed">
-          {queryError.message}
+          {error.message}
         </p>
       )}
       <Board
         tasks={tasks}
         handoffs={handoffs}
-        search={search}
+        search={q}
+        visible={q ? (searchQuery.data ?? []) : tasks}
         group={group}
-        loading={isPending || !!queryError}
+        loading={isPending || (q !== "" && searchQuery.isPending) || !!error}
         onOpen={setSelected}
         onPublish={() => setPublish(true)}
       />
