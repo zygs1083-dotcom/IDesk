@@ -1,4 +1,5 @@
 import { Application, Assets, Container, Sprite, type Texture } from "pixi.js";
+import { officeUrl } from "../office-url.ts";
 
 export async function createStage(host: HTMLElement) {
   const app = new Application();
@@ -10,7 +11,7 @@ export async function createStage(host: HTMLElement) {
     preference: "webgl",
   });
   host.appendChild(app.canvas);
-  const background = await Assets.load<Texture>("/office/background.webp");
+  const background = await Assets.load<Texture>(officeUrl("background.webp"));
   background.source.scaleMode = "nearest";
   const world = new Container();
   world.addChild(new Sprite(background));

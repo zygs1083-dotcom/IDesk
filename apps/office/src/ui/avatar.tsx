@@ -1,10 +1,11 @@
 import { useEffect, useRef } from "react";
 import atlas from "../../public/sprites.json";
 import { useLang } from "../i18n/lang.tsx";
+import { officeUrl } from "../office-url.ts";
 import type { Agent } from "./use-office-data.ts";
 
 const spriteImage = new Image();
-spriteImage.src = "/office/sprites.png";
+spriteImage.src = officeUrl("sprites.png");
 
 export function Avatar({ kind, fullFrame = false }: { kind: Agent["kind"]; fullFrame?: boolean }) {
   const { t } = useLang();
