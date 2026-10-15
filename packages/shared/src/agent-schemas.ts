@@ -9,6 +9,7 @@ export const registerAgentSchema = z.object({
   webhookUrl: z.url().exactOptional(),
 });
 export const loginSchema = z.object({ password: z.string() });
+export const authMeSchema = z.object({ role: z.enum(["admin", "viewer"]) });
 export const publicAgentSchema = z
   .object({
     id: z.string(),

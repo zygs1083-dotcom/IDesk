@@ -85,6 +85,8 @@ IDESK_ADMIN_PASSWORD=换成管理员密码
 IDESK_SESSION_SECRET=换成至少16个字符的随机密钥
 ```
 
+可选设置 `IDESK_VIEWER_PASSWORD`，用该密码登录的访客只能读取页面和接收实时更新。
+
 ```sh
 docker compose -f deploy/compose.yml up -d --build
 ```

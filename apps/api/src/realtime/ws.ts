@@ -24,7 +24,7 @@ export function registerWebSocket(app: OpenAPIHono<AuthEnv>) {
       const session = await getSignedCookie(c, config.IDESK_SESSION_SECRET, "idesk_session");
       return {
         onOpen: (_, ws) => {
-          if (session !== "admin") ws.close(1008);
+          if (session !== "admin" && session !== "viewer") ws.close(1008);
           else connections.add(ws);
         },
         onClose: (_, ws) => {

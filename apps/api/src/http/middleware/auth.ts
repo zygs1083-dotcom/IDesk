@@ -9,6 +9,7 @@ export type AuthEnv = {
   Variables: {
     actor: Exclude<Actor, { kind: "system" }>;
     agent: PublicAgent;
+    readonly?: true;
   };
 };
 export function bearerAgent(authorization: string | undefined): PublicAgent | undefined {
@@ -26,8 +27,12 @@ export const auth = createMiddleware<AuthEnv>(async (c, next) => {
     c.set("actor", { kind: "agent", id: agent.id, capabilities: agent.capabilities });
   } else {
     const session = await getSignedCookie(c, config.IDESK_SESSION_SECRET, "idesk_session");
-    if (session !== "admin") throw new HttpError(401, "未登录");
+    if (session !== "admin" && session !== "viewer") throw new HttpError(401, "未登录");
     c.set("actor", { kind: "human" });
+    if (session === "viewer") {
+      c.set("readonly", true);
+      if (c.req.method !== "GET") throw new HttpError(403, "只读账号");
+    }
   }
   await next();
 });
