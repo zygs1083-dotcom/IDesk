@@ -1,0 +1,4 @@
+cb3b0990dbf5bfc8aa008e18c34e72a673d48cc07d5fcecfc71694f47eb7538d  apps/office/public/characters.png
+caa4bfe2a41123afaf5adbcfb65278c5bcaa7318912aa9a3a74aad5792c2237d  apps/office/public/characters.json
+b4145e4662208283e33586249c40ac7abb5c06bc230fc281150f1d7625263426  apps/office/public/occluders.png
+feffe81b1e85fecab59e2636e1e3a187c21145e09dbf3a85a687ae1efde448ec  apps/office/public/occluders.json

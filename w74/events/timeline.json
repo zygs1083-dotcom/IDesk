@@ -1,0 +1,194 @@
+[
+  {
+    "name": "online-start",
+    "seconds": 2.846
+  },
+  {
+    "name": "online",
+    "seconds": 20.381
+  },
+  {
+    "name": "created-start",
+    "seconds": 23.301
+  },
+  {
+    "name": "created",
+    "seconds": 30.987
+  },
+  {
+    "name": "claim-start",
+    "seconds": 33.223
+  },
+  {
+    "name": "claim",
+    "seconds": 70.63
+  },
+  {
+    "name": "reported-start",
+    "seconds": 73.242
+  },
+  {
+    "name": "reported",
+    "seconds": 80.833
+  },
+  {
+    "name": "handoff-start",
+    "seconds": 83.875
+  },
+  {
+    "name": "handoff",
+    "seconds": 98.617
+  },
+  {
+    "name": "accept-start",
+    "seconds": 101.081
+  },
+  {
+    "name": "accept",
+    "seconds": 148.42
+  },
+  {
+    "name": "pause-start",
+    "seconds": 150.729
+  },
+  {
+    "name": "pause",
+    "seconds": 172.632
+  },
+  {
+    "name": "resume-start",
+    "seconds": 175.128
+  },
+  {
+    "name": "resume",
+    "seconds": 198.963
+  },
+  {
+    "name": "complete-start",
+    "seconds": 203.832
+  },
+  {
+    "name": "complete",
+    "seconds": 211.988
+  },
+  {
+    "name": "assigned-created-start",
+    "seconds": 215.876
+  },
+  {
+    "name": "assigned-created",
+    "seconds": 224.853
+  },
+  {
+    "name": "assigned-start",
+    "seconds": 227.64
+  },
+  {
+    "name": "assigned",
+    "seconds": 235.494
+  },
+  {
+    "name": "assigned-accept-start",
+    "seconds": 237.885
+  },
+  {
+    "name": "assigned-accept",
+    "seconds": 275.382
+  },
+  {
+    "name": "assigned-complete-start",
+    "seconds": 277.961
+  },
+  {
+    "name": "assigned-complete",
+    "seconds": 285.017
+  },
+  {
+    "name": "release-created-start",
+    "seconds": 287.336
+  },
+  {
+    "name": "release-created",
+    "seconds": 294.855
+  },
+  {
+    "name": "release-claim-start",
+    "seconds": 297.427
+  },
+  {
+    "name": "release-claim",
+    "seconds": 315.521
+  },
+  {
+    "name": "release-start",
+    "seconds": 319.423
+  },
+  {
+    "name": "release",
+    "seconds": 327.063
+  },
+  {
+    "name": "recruit-start",
+    "seconds": 329.232
+  },
+  {
+    "name": "recruit",
+    "seconds": 336.113
+  },
+  {
+    "name": "join-1-start",
+    "seconds": 338.311
+  },
+  {
+    "name": "join-1",
+    "seconds": 366.133
+  },
+  {
+    "name": "join-2-start",
+    "seconds": 368.434
+  },
+  {
+    "name": "join-2",
+    "seconds": 395.748
+  },
+  {
+    "name": "join-3-start",
+    "seconds": 397.365
+  },
+  {
+    "name": "join-3",
+    "seconds": 424.081
+  },
+  {
+    "name": "join-4-start",
+    "seconds": 425.734
+  },
+  {
+    "name": "join-4",
+    "seconds": 452.329
+  },
+  {
+    "name": "join-5-start",
+    "seconds": 455.035
+  },
+  {
+    "name": "join-5",
+    "seconds": 483.587
+  },
+  {
+    "name": "join-6-start",
+    "seconds": 485.34
+  },
+  {
+    "name": "join-6",
+    "seconds": 532.179
+  },
+  {
+    "name": "meeting-cancel-start",
+    "seconds": 535.427
+  },
+  {
+    "name": "meeting-cancel",
+    "seconds": 553.987
+  }
+]

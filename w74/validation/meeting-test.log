@@ -1,0 +1,9 @@
+
+ RUN  v5.0.4 /data/browser-home/orca/workspaces/IDesk/wi-74-office-v3-switch/apps/office
+
+
+ Test Files  4 passed (4)
+      Tests  92 passed (92)
+   Start at  01:48:34
+   Duration  1.33s (tests 51%, import 37%, transform 11%, worker 2%)
+

@@ -1,0 +1,88 @@
+$ pnpm -r --workspace-concurrency=1 test
+Scope: 14 of 15 workspace projects
+$ vitest run --passWithNoTests
+
+ RUN  v5.0.4 /data/browser-home/orca/workspaces/IDesk/wi-74-office-v3-switch/packages/shared
+
+
+ Test Files  5 passed (5)
+      Tests  175 passed (175)
+   Start at  01:49:13
+   Duration  461ms (import 48%, tests 32%, transform 12%, worker 9%)
+
+$ vitest run
+
+ RUN  v5.0.4 /data/browser-home/orca/workspaces/IDesk/wi-74-office-v3-switch/plugins/dolphinscheduler
+
+
+ Test Files  5 passed (5)
+      Tests  48 passed (48)
+   Start at  01:49:14
+   Duration  624ms (import 56%, tests 33%, transform 8%, worker 3%)
+
+$ vitest run
+
+ RUN  v5.0.4 /data/browser-home/orca/workspaces/IDesk/wi-74-office-v3-switch/plugins/github-actions
+
+
+ Test Files  1 passed (1)
+      Tests  30 passed (30)
+   Start at  01:49:16
+   Duration  575ms (import 50%, tests 38%, transform 10%, worker 2%)
+
+$ vitest run
+
+ RUN  v5.0.4 /data/browser-home/orca/workspaces/IDesk/wi-74-office-v3-switch/plugins/n8n
+
+
+ Test Files  1 passed (1)
+      Tests  13 passed (13)
+   Start at  01:49:17
+   Duration  596ms (import 54%, tests 42%, transform 2%, worker 2%)
+
+$ vitest run --passWithNoTests
+
+ RUN  v5.0.4 /data/browser-home/orca/workspaces/IDesk/wi-74-office-v3-switch/apps/api
+
+
+ Test Files  38 passed (38)
+      Tests  133 passed (133)
+   Start at  01:49:19
+   Duration  71.66s (import 73%, tests 26%, worker 1%)
+
+     Import  132 modules were evaluated 617 times · 46.38s total, 73% of tracked time
+             ~36.46s faster with isolate: false — shared modules are evaluated once per worker instead of once per file
+             learn more: https://vitest.dev/guide/improving-performance#test-isolation
+
+$ vitest run
+
+ RUN  v5.0.4 /data/browser-home/orca/workspaces/IDesk/wi-74-office-v3-switch/apps/office
+
+
+ Test Files  32 passed (32)
+      Tests  491 passed (491)
+   Start at  01:50:31
+   Duration  3.68s (import 59%, tests 32%, transform 6%, worker 3%)
+
+    Isolate  32 workers spawned · ~284ms startup each (spawn + environment, per file)
+             at least ~1.01s faster with isolate: false — reuses workers across files instead of one per file
+
+$ vitest run --passWithNoTests
+
+ RUN  v5.0.4 /data/browser-home/orca/workspaces/IDesk/wi-74-office-v3-switch/apps/web
+
+
+ Test Files  15 passed (15)
+      Tests  179 passed (179)
+   Start at  01:50:35
+   Duration  845ms (transform 44%, import 25%, tests 22%, worker 9%)
+
+$ vitest run --passWithNoTests
+
+ RUN  v5.0.4 /data/browser-home/orca/workspaces/IDesk/wi-74-office-v3-switch/packages/cli
+
+No test files found, exiting with code 0
+
+include: **/*.{test,spec}.?(c|m)[jt]s?(x)
+exclude:  **/node_modules/**, **/.git/**
+

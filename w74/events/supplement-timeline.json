@@ -1,0 +1,82 @@
+[
+  {
+    "name": "debug-dragged",
+    "seconds": 9.558
+  },
+  {
+    "name": "live-day",
+    "seconds": 12.668
+  },
+  {
+    "name": "profile",
+    "seconds": 15.089
+  },
+  {
+    "name": "replay",
+    "seconds": 17.332
+  },
+  {
+    "name": "day-claim-start",
+    "seconds": 34.734
+  },
+  {
+    "name": "day-claim",
+    "seconds": 61.39
+  },
+  {
+    "name": "lease-expiry-start",
+    "seconds": 62.795
+  },
+  {
+    "name": "lease-expired",
+    "seconds": 64.312
+  },
+  {
+    "name": "handoff-to-board-start",
+    "seconds": 90.859
+  },
+  {
+    "name": "handoff-to-board",
+    "seconds": 117.392
+  },
+  {
+    "name": "envelope-fixed-start",
+    "seconds": 118.995
+  },
+  {
+    "name": "envelope-fixed",
+    "seconds": 121.874
+  },
+  {
+    "name": "broadcast-fixed-start",
+    "seconds": 123.169
+  },
+  {
+    "name": "broadcast-fixed",
+    "seconds": 125.587
+  },
+  {
+    "name": "complete-fixed-start",
+    "seconds": 151.901
+  },
+  {
+    "name": "complete-fixed",
+    "seconds": 154.499
+  },
+  {
+    "name": "idle-day-start",
+    "seconds": 155.676
+  },
+  {
+    "name": "idle-day-end",
+    "seconds": 216.923
+  },
+  {
+    "name": "offline-day-start",
+    "seconds": 218.286
+  },
+  {
+    "name": "offline-day",
+    "seconds": 264.57
+  }
+]
