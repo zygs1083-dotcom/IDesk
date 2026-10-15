@@ -22,7 +22,7 @@ export function createDaylight(stage: Stage, characters: Map<string, Character>)
   const context = canvas.getContext("2d");
   if (!context) throw new Error("无法创建暖光画布");
   const gradient = context.createRadialGradient(40, 40, 0, 40, 40, 40);
-  gradient.addColorStop(0, "rgba(255, 210, 122, 0.85)");
+  gradient.addColorStop(0, "rgba(255, 210, 122, 0.5)");
   gradient.addColorStop(1, "rgba(255, 210, 122, 0)");
   context.fillStyle = gradient;
   context.fillRect(0, 0, 80, 80);
@@ -59,7 +59,7 @@ export function createDaylight(stage: Stage, characters: Map<string, Character>)
         !editing &&
         current === "night" &&
         (character.state === "sit" || character.state === "typing");
-      glow.position.set(character.x, character.y - 40);
+      glow.position.set(character.x, character.y - 10);
     }
   };
   updateShade();
