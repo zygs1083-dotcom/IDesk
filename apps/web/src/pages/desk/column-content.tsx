@@ -1,3 +1,4 @@
+import { useLang } from "../../i18n/lang.tsx";
 import type { Agent, Task } from "../../lib/types.ts";
 import { DraggableCard } from "./draggable-card.tsx";
 import { groupByHost } from "./group-by-host.ts";
@@ -23,6 +24,7 @@ export function ColumnContent({
   onOpen: (id: string) => void;
   shake: string | null;
 }) {
+  const { t } = useLang();
   function card(task: Task) {
     const handoff = handoffName(task);
     return (
@@ -44,7 +46,7 @@ export function ColumnContent({
       key={host === null ? "unassigned" : `host:${host}`}
       className="flex flex-col gap-2 [&+&]:mt-2"
     >
-      <h3 className="text-secondary text-text-2">{host === null ? "未指派" : host}</h3>
+      <h3 className="text-secondary text-text-2">{host === null ? t("desk.unassigned") : host}</h3>
       {tasks.map(card)}
     </div>
   ));

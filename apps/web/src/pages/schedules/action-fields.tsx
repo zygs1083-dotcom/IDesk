@@ -1,7 +1,9 @@
+import { labels } from "@idesk/shared/labels";
 import type { ScheduleAction } from "@idesk/shared/schedule-schemas";
-import { TASK_PRIORITIES, TASK_PRIORITY_LABEL } from "@idesk/shared/task-status";
+import { TASK_PRIORITIES } from "@idesk/shared/task-status";
 import { Field } from "../../components/field.tsx";
 import { Segmented } from "../../components/segmented.tsx";
+import { useLang } from "../../i18n/lang.tsx";
 import type { Connector } from "./types.ts";
 
 export function ActionFields({
@@ -29,13 +31,16 @@ export function ActionFields({
   params: string;
   setParams: (text: string) => void;
 }) {
+  const { lang, t } = useLang();
   switch (action.type) {
     case "publish_task":
       return (
         <>
-          <p className="text-secondary text-text-2">关闭开关的条目可在发布弹层当模板用</p>
+          <p className="text-secondary text-text-2">
+            {t("schedules.disabledEntriesAreAvailableAsTemplatesWhen")}
+          </p>
           <Field
-            label="标题"
+            label={t("schedules.title")}
             required
             value={action.template.title}
             onChange={(event) =>
@@ -43,7 +48,7 @@ export function ActionFields({
             }
           />
           <Field
-            label="正文"
+            label={t("schedules.body")}
             multiline
             rows={3}
             value={action.template.body ?? ""}
@@ -52,21 +57,24 @@ export function ActionFields({
             }
           />
           <Field
-            label="能力"
-            placeholder="空格或逗号分隔"
+            label={t("schedules.capabilities")}
+            placeholder={t("schedules.separateWithSpacesOrCommas")}
             value={capabilities}
             onChange={(event) => setCapabilities(event.target.value)}
           />
           <Field
-            label="标签"
-            placeholder="空格或逗号分隔"
+            label={t("schedules.tags")}
+            placeholder={t("schedules.separateWithSpacesOrCommas")}
             value={tags}
             onChange={(event) => setTags(event.target.value)}
           />
           <Segmented
-            label="优先级"
+            label={t("schedules.priority")}
             value={action.template.priority ?? "normal"}
-            options={TASK_PRIORITIES.map((value) => ({ value, label: TASK_PRIORITY_LABEL[value] }))}
+            options={TASK_PRIORITIES.map((value) => ({
+              value,
+              label: labels(lang).priority[value],
+            }))}
             onChange={(priority) =>
               onChange({ ...action, template: { ...action.template, priority } })
             }
@@ -77,7 +85,7 @@ export function ActionFields({
       return (
         <>
           <Segmented
-            label="方法"
+            label={t("schedules.method")}
             value={action.method}
             options={["GET", "POST", "PUT", "PATCH", "DELETE"].map((value) => ({
               value: value as typeof action.method,
@@ -93,7 +101,7 @@ export function ActionFields({
             onChange={(event) => onChange({ ...action, url: event.target.value })}
           />
           <Field
-            label="请求头"
+            label={t("schedules.headers")}
             multiline
             rows={3}
             placeholder="Key: Value"
@@ -102,7 +110,7 @@ export function ActionFields({
           />
           {action.method !== "GET" && (
             <Field
-              label="请求体"
+              label={t("schedules.requestBody")}
               multiline
               rows={3}
               value={action.body ?? ""}
@@ -115,7 +123,7 @@ export function ActionFields({
       return (
         <>
           <label className="block space-y-2 text-secondary text-text-2">
-            <span>连接器</span>
+            <span>{t("schedules.connectors")}</span>
             <select
               className="w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body text-text focus:outline-accent"
               value={action.connectorId}
@@ -123,7 +131,7 @@ export function ActionFields({
             >
               {!connectors.some((connector) => connector.id === action.connectorId) && (
                 <option value={action.connectorId} disabled>
-                  当前连接器不支持触发
+                  {t("schedules.thisConnectorDoesNotSupportTriggers")}
                 </option>
               )}
               {connectors.map((connector) => (
@@ -134,13 +142,13 @@ export function ActionFields({
             </select>
           </label>
           <Field
-            label="工作流 id"
+            label={t("schedules.workflowID")}
             required
             value={action.jobExternalId}
             onChange={(event) => onChange({ ...action, jobExternalId: event.target.value })}
           />
           <Field
-            label="参数"
+            label={t("schedules.parameters")}
             multiline
             rows={3}
             placeholder="key=value"

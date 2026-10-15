@@ -1,4 +1,5 @@
-import { RELAY_KIND_LABEL, RELAY_KINDS } from "@idesk/shared/relay";
+import { labels } from "@idesk/shared/labels";
+import { RELAY_KINDS } from "@idesk/shared/relay";
 import type { relayMessageSchema, sendRelaySchema } from "@idesk/shared/relay-schemas";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
@@ -7,6 +8,7 @@ import { Button } from "../../components/button.tsx";
 import { Dialog } from "../../components/dialog.tsx";
 import { Field } from "../../components/field.tsx";
 import { Segmented } from "../../components/segmented.tsx";
+import { useLang } from "../../i18n/lang.tsx";
 import { request } from "../../lib/api.ts";
 import { useAgents } from "../../lib/use-agents.ts";
 
@@ -19,13 +21,14 @@ export function ComposeRelay({
   reply: z.infer<typeof relayMessageSchema> | undefined;
   onClose: () => void;
 }) {
+  const { lang, t } = useLang();
   const client = useQueryClient();
   const { agents, agentName } = useAgents();
   const [recipient, setRecipient] = useState<Input["to"]["kind"]>(reply ? "agent" : "broadcast");
   const [agentId, setAgentId] = useState(reply?.fromAgentId ?? "");
   const [capability, setCapability] = useState("");
   const [kind, setKind] = useState<Input["kind"]>(reply ? "reply" : "note");
-  const [subject, setSubject] = useState(reply ? `回复：${reply.subject}` : "");
+  const [subject, setSubject] = useState(reply ? t("relay.re", { p1: reply.subject }) : "");
   const [body, setBody] = useState("");
   const [taskId, setTaskId] = useState(reply?.taskId ?? "");
   const send = useMutation({
@@ -43,7 +46,11 @@ export function ComposeRelay({
     subject.trim() &&
     (recipient === "broadcast" || (recipient === "agent" ? agentId : capability.trim()));
   return (
-    <Dialog open onClose={onClose} title={reply ? "回复消息" : "发消息"}>
+    <Dialog
+      open
+      onClose={onClose}
+      title={reply ? t("relay.replyToMessage") : t("relay.sendMessage")}
+    >
       <form
         className="space-y-4"
         onSubmit={(event) => {
@@ -65,27 +72,27 @@ export function ComposeRelay({
         }}
       >
         <div className="space-y-2">
-          <p className="text-secondary text-text-2">收件对象</p>
+          <p className="text-secondary text-text-2">{t("relay.recipient")}</p>
           <Segmented
-            label="收件对象"
+            label={t("relay.recipient")}
             value={recipient}
             onChange={setRecipient}
             options={[
-              { value: "agent", label: "指定 AI" },
-              { value: "capability", label: "能力" },
-              { value: "broadcast", label: "全体" },
+              { value: "agent", label: t("relay.specificAI") },
+              { value: "capability", label: t("relay.capabilities") },
+              { value: "broadcast", label: t("relay.everyone") },
             ]}
           />
         </div>
         {recipient === "agent" && (
           <label className="block space-y-2 text-secondary text-text-2">
-            智能体
+            {t("relay.agents")}
             <select
               className="block w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body text-text focus:border-accent"
               value={agentId}
               onChange={(event) => setAgentId(event.target.value)}
             >
-              <option value="">选择智能体</option>
+              <option value="">{t("relay.selectAgent")}</option>
               {agents.map((agent) => (
                 <option key={agent.id} value={agent.id}>
                   {agentName(agent.id)}
@@ -96,31 +103,35 @@ export function ComposeRelay({
         )}
         {recipient === "capability" && (
           <Field
-            label="能力"
+            label={t("relay.capabilities")}
             value={capability}
             onChange={(event) => setCapability(event.target.value)}
           />
         )}
         <div className="space-y-2">
-          <p className="text-secondary text-text-2">种类</p>
+          <p className="text-secondary text-text-2">{t("relay.kind")}</p>
           <Segmented
-            label="种类"
+            label={t("relay.kind")}
             value={kind}
             onChange={setKind}
-            options={RELAY_KINDS.map((value) => ({ value, label: RELAY_KIND_LABEL[value] }))}
+            options={RELAY_KINDS.map((value) => ({ value, label: labels(lang).relayKind[value] }))}
           />
         </div>
-        <Field label="标题" value={subject} onChange={(event) => setSubject(event.target.value)} />
+        <Field
+          label={t("relay.title")}
+          value={subject}
+          onChange={(event) => setSubject(event.target.value)}
+        />
         <Field
           multiline
-          label="正文"
+          label={t("relay.body")}
           rows={6}
           placeholder="Markdown"
           value={body}
           onChange={(event) => setBody(event.target.value)}
         />
         <Field
-          label="关联任务 id（可选）"
+          label={t("relay.taskIDOptional")}
           className="tabular-nums"
           value={taskId}
           onChange={(event) => setTaskId(event.target.value)}
@@ -131,9 +142,9 @@ export function ComposeRelay({
           </p>
         )}
         <div className="flex justify-end gap-2">
-          <Button onClick={onClose}>取消</Button>
+          <Button onClick={onClose}>{t("relay.cancel")}</Button>
           <Button type="submit" variant="primary" disabled={!valid || send.isPending}>
-            发送
+            {t("relay.send")}
           </Button>
         </div>
       </form>

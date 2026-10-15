@@ -1,5 +1,6 @@
 import { Plug } from "lucide-react";
 import { Menu } from "../../components/menu.tsx";
+import { useLang } from "../../i18n/lang.tsx";
 import { cn } from "../../lib/cn.ts";
 import { relativeTime } from "../../lib/format.ts";
 import type { Connector } from "./types.ts";
@@ -19,12 +20,13 @@ export function ConnectorRow({
   onDelete: () => void;
   onEdit: () => void;
 }) {
+  const { lang, t } = useLang();
   const { progress } = connector;
   const status = !connector.enabled
-    ? "已停用"
+    ? t("settings.disabled")
     : progress
-      ? `同步中${progress.total ? ` ${progress.done}/${progress.total}` : ""}`
-      : connector.lastError || "正常";
+      ? t("settings.syncing", { p1: progress.total ? ` ${progress.done}/${progress.total}` : "" })
+      : connector.lastError || t("settings.healthy");
   return (
     <div className="flex items-center gap-4 border-b border-line px-4 py-3 last:border-b-0">
       <Plug aria-hidden="true" size={18} strokeWidth={1.5} className="shrink-0 text-text-2" />
@@ -75,18 +77,21 @@ export function ConnectorRow({
       </div>
       <span
         className="hidden w-24 text-right text-secondary tabular-nums text-text-2 sm:block"
-        title="上次轮询"
+        title={t("settings.lastPolled")}
       >
-        {connector.lastPolledAt ? relativeTime(new Date(connector.lastPolledAt)) : "—"}
+        {connector.lastPolledAt ? relativeTime(new Date(connector.lastPolledAt), lang) : "—"}
       </span>
       <Menu
-        label={`连接器 ${connector.name} 操作`}
+        label={t("settings.actionsForConnector", { p1: connector.name })}
         disabled={busy}
         items={[
-          { label: "测试", onSelect: onTest },
-          { label: "编辑", onSelect: onEdit },
-          { label: connector.enabled ? "停用" : "启用", onSelect: onToggle },
-          { label: "删除", onSelect: onDelete, danger: true },
+          { label: t("settings.test"), onSelect: onTest },
+          { label: t("settings.edit"), onSelect: onEdit },
+          {
+            label: connector.enabled ? t("settings.disable") : t("settings.enable"),
+            onSelect: onToggle,
+          },
+          { label: t("settings.delete"), onSelect: onDelete, danger: true },
         ]}
       />
     </div>

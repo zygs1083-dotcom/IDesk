@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Button } from "../../components/button.tsx";
+import { useLang } from "../../i18n/lang.tsx";
 
 export function AccessRow({
   title,
@@ -10,6 +11,7 @@ export function AccessRow({
   value: string;
   description?: string;
 }) {
+  const { t } = useLang();
   const [copied, setCopied] = useState(false);
   const [error, setError] = useState("");
   const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
@@ -22,7 +24,7 @@ export function AccessRow({
       clearTimeout(timer.current);
       timer.current = setTimeout(() => setCopied(false), 2000);
     } catch {
-      setError("复制失败，请选中文本复制");
+      setError(t("settings.copyFailed"));
     }
   }
   return (
@@ -37,8 +39,8 @@ export function AccessRow({
           </p>
         )}
       </div>
-      <Button aria-label={`复制${title}`} onClick={copy}>
-        {copied ? "已复制" : "复制"}
+      <Button aria-label={t("settings.copy", { p1: title })} onClick={copy}>
+        {copied ? t("settings.copied") : t("settings.copy2")}
       </Button>
     </div>
   );

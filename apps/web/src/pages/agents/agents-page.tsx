@@ -1,6 +1,7 @@
 import { Fragment, useState } from "react";
 import { Button } from "../../components/button.tsx";
 import { Menu } from "../../components/menu.tsx";
+import { useLang } from "../../i18n/lang.tsx";
 import { PageHeader } from "../../layout/page-header.tsx";
 import { cn } from "../../lib/cn.ts";
 import { relativeTime } from "../../lib/format.ts";
@@ -12,6 +13,7 @@ import { CreateAgent } from "./create-agent.tsx";
 import { DeleteAgent } from "./delete-agent.tsx";
 
 export function AgentsPage() {
+  const { lang, t } = useLang();
   const { agents, error, isPending } = useAgents();
   const [expanded, setExpanded] = useState<string | null>(null);
   const [editing, setEditing] = useState<Agent | null>(null);
@@ -20,9 +22,9 @@ export function AgentsPage() {
   useShortcut("n", () => setCreating(true));
   return (
     <div className="space-y-6">
-      <PageHeader title="智能体">
+      <PageHeader title={t("agents.agents")}>
         <Button variant="primary" onClick={() => setCreating(true)}>
-          新建
+          {t("agents.create")}
         </Button>
       </PageHeader>
       {error && (
@@ -32,9 +34,9 @@ export function AgentsPage() {
       )}
       {!isPending && !error && agents.length === 0 ? (
         <div className="py-16 text-center text-secondary text-text-2">
-          <p>还没有智能体</p>
+          <p>{t("agents.noAgentsYet")}</p>
           <Button className="mt-3" onClick={() => setCreating(true)}>
-            新建一个
+            {t("agents.createOne")}
           </Button>
         </div>
       ) : (
@@ -43,7 +45,15 @@ export function AgentsPage() {
             <table className="w-full text-left text-secondary">
               <thead className="border-b border-line text-label text-text-2">
                 <tr>
-                  {["名称", "类型", "主机", "能力", "最近活跃", "Webhook", ""].map((label) => (
+                  {[
+                    t("agents.name"),
+                    t("agents.type"),
+                    t("agents.host"),
+                    t("agents.capabilities"),
+                    t("agents.lastActive"),
+                    "Webhook",
+                    "",
+                  ].map((label) => (
                     <th key={label} scope="col" className="whitespace-nowrap px-4 py-3 font-medium">
                       {label}
                     </th>
@@ -63,7 +73,9 @@ export function AgentsPage() {
                           className="justify-start gap-2 whitespace-nowrap border-0 text-body group-hover:bg-surface-2"
                         >
                           <span
-                            title={agent.status === "online" ? "在线" : "离线"}
+                            title={
+                              agent.status === "online" ? t("agents.online") : t("agents.offline")
+                            }
                             className={cn(
                               "size-2 shrink-0 rounded-full",
                               agent.status === "online" ? "bg-status-done" : "bg-status-open",
@@ -78,7 +90,7 @@ export function AgentsPage() {
                         {agent.capabilities.join(" · ") || "—"}
                       </td>
                       <td className="whitespace-nowrap px-4 py-2 tabular-nums text-text-2">
-                        {agent.lastSeenAt ? relativeTime(new Date(agent.lastSeenAt)) : "—"}
+                        {agent.lastSeenAt ? relativeTime(new Date(agent.lastSeenAt), lang) : "—"}
                       </td>
                       <td className="px-4 py-2 text-text-2">
                         <span
@@ -94,10 +106,14 @@ export function AgentsPage() {
                         onKeyDown={(event) => event.stopPropagation()}
                       >
                         <Menu
-                          label={`${agent.name} 操作`}
+                          label={t("agents.actionsFor", { p1: agent.name })}
                           items={[
-                            { label: "编辑", onSelect: () => setEditing(agent) },
-                            { label: "删除", danger: true, onSelect: () => setDeleting(agent) },
+                            { label: t("agents.edit"), onSelect: () => setEditing(agent) },
+                            {
+                              label: t("agents.delete"),
+                              danger: true,
+                              onSelect: () => setDeleting(agent),
+                            },
                           ]}
                         />
                       </td>

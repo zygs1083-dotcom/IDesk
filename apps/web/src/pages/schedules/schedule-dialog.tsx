@@ -5,6 +5,7 @@ import { Button } from "../../components/button.tsx";
 import { Dialog } from "../../components/dialog.tsx";
 import { Field } from "../../components/field.tsx";
 import { Switch } from "../../components/switch.tsx";
+import { useLang } from "../../i18n/lang.tsx";
 import { request } from "../../lib/api.ts";
 import { ActionFields } from "./action-fields.tsx";
 import { ActionTabs } from "./action-tabs.tsx";
@@ -21,6 +22,7 @@ export function ScheduleDialog({
   connectors: Connector[];
   onClose: () => void;
 }) {
+  const { lang, t } = useLang();
   const client = useQueryClient();
   const [name, setName] = useState(schedule?.name ?? "");
   const [cron, setCron] = useState(schedule?.cron ?? "");
@@ -91,7 +93,11 @@ export function ScheduleDialog({
     },
   });
   return (
-    <Dialog open title={schedule ? "编辑定时" : "新建定时"} onClose={onClose}>
+    <Dialog
+      open
+      title={schedule ? t("schedules.editSchedule") : t("schedules.createSchedule")}
+      onClose={onClose}
+    >
       <form
         noValidate
         className="space-y-4"
@@ -101,7 +107,7 @@ export function ScheduleDialog({
         }}
       >
         <Field
-          label="名称"
+          label={t("schedules.name")}
           required
           value={name}
           onChange={(event) => setName(event.target.value)}
@@ -115,20 +121,20 @@ export function ScheduleDialog({
             onChange={(event) => setCron(event.target.value)}
           />
           <p aria-live="polite" className="text-secondary text-text-2">
-            {cron ? cronText(cron) : "填写 cron 表达式"}
+            {cron ? cronText(cron, lang) : t("schedules.enterACronExpression")}
           </p>
         </div>
         <div className="flex items-end gap-4">
           <div className="min-w-0 flex-1">
             <Field
-              label="时区"
+              label={t("schedules.timeZone")}
               value={timezone}
               onChange={(event) => setTimezone(event.target.value)}
             />
           </div>
           <div className="flex items-center gap-2 pb-2">
-            <span className="text-secondary text-text-2">启用</span>
-            <Switch label="启用" checked={enabled} onChange={setEnabled} />
+            <span className="text-secondary text-text-2">{t("schedules.enable")}</span>
+            <Switch label={t("schedules.enable")} checked={enabled} onChange={setEnabled} />
           </div>
         </div>
         <ActionTabs action={action} onChange={setAction} connectors={triggerConnectors} />
@@ -151,9 +157,13 @@ export function ScheduleDialog({
           </p>
         )}
         <div className="flex justify-end gap-2">
-          <Button onClick={onClose}>取消</Button>
+          <Button onClick={onClose}>{t("schedules.cancel")}</Button>
           <Button type="submit" variant="primary" disabled={!ready || save.isPending}>
-            {save.isPending ? "保存中…" : schedule ? "保存" : "新建"}
+            {save.isPending
+              ? t("schedules.saving")
+              : schedule
+                ? t("schedules.save")
+                : t("schedules.create")}
           </Button>
         </div>
       </form>

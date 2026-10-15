@@ -1,9 +1,10 @@
-import { RELAY_KIND_LABEL } from "@idesk/shared/relay";
+import { labels } from "@idesk/shared/labels";
 import type { relayMessageSchema } from "@idesk/shared/relay-schemas";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import type { z } from "zod";
 import { Button } from "../../components/button.tsx";
+import { useLang } from "../../i18n/lang.tsx";
 import { PageHeader } from "../../layout/page-header.tsx";
 import { request } from "../../lib/api.ts";
 import { cn } from "../../lib/cn.ts";
@@ -18,6 +19,7 @@ import { RelayFilters } from "./relay-filters.tsx";
 type Message = z.infer<typeof relayMessageSchema>;
 
 export function RelayPage() {
+  const { lang, t } = useLang();
   const {
     data: messages = [],
     error,
@@ -39,9 +41,9 @@ export function RelayPage() {
   const selected = filtered.find((message) => message.id === selectedId) ?? filtered[0];
   return (
     <div className="flex h-full flex-col gap-6">
-      <PageHeader title="传递区">
+      <PageHeader title={t("relay.relay")}>
         <Button variant="primary" onClick={() => setCompose({})}>
-          发消息
+          {t("relay.sendMessage")}
         </Button>
       </PageHeader>
       <RelayFilters
@@ -59,9 +61,9 @@ export function RelayPage() {
       )}
       {!isPending && !error && messages.length === 0 ? (
         <div className="py-16 text-center text-secondary text-text-2">
-          <p>还没有消息</p>
+          <p>{t("relay.noMessagesYet")}</p>
           <Button className="mt-3" onClick={() => setCompose({})}>
-            发一条
+            {t("relay.sendOne")}
           </Button>
         </div>
       ) : (
@@ -80,10 +82,10 @@ export function RelayPage() {
               >
                 <div className="flex items-center justify-between gap-2">
                   <span className="rounded-tag bg-line px-2 py-0.5 text-label text-text-2">
-                    {RELAY_KIND_LABEL[message.kind]}
+                    {labels(lang).relayKind[message.kind]}
                   </span>
                   <time className="text-label tabular-nums text-text-2">
-                    {relativeTime(new Date(message.createdAt))}
+                    {relativeTime(new Date(message.createdAt), lang)}
                   </time>
                 </div>
                 <p
@@ -95,12 +97,12 @@ export function RelayPage() {
                   {message.subject}
                 </p>
                 <p className="truncate text-secondary text-text-2">
-                  {agentName(message.fromAgentId)} → {recipientLabel(message.to, agentName)}
+                  {agentName(message.fromAgentId)} → {recipientLabel(message.to, agentName, lang)}
                 </p>
               </button>
             ))}
             {!isPending && !error && filtered.length === 0 && (
-              <p className="p-4 text-secondary text-text-2">没有符合筛选的消息</p>
+              <p className="p-4 text-secondary text-text-2">{t("relay.noMatchingMessages")}</p>
             )}
           </div>
           <div className="min-w-0 flex-1 overflow-y-auto">

@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Button } from "../../components/button.tsx";
 import { Dialog } from "../../components/dialog.tsx";
 import { Toast } from "../../components/toast.tsx";
+import { useLang } from "../../i18n/lang.tsx";
 import { PageHeader } from "../../layout/page-header.tsx";
 import { request } from "../../lib/api.ts";
 import { useShortcut } from "../../lib/use-shortcut.ts";
@@ -11,6 +12,7 @@ import { ScheduleRow } from "./schedule-row.tsx";
 import type { Connector, Schedule } from "./types.ts";
 
 export function SchedulesPage() {
+  const { t } = useLang();
   const client = useQueryClient();
   const schedules = useQuery({
     queryKey: ["schedules"],
@@ -44,7 +46,9 @@ export function SchedulesPage() {
   const run = useMutation({
     mutationFn: (id: string) => request<Schedule>(`/schedules/${id}/run`, { method: "POST" }),
     onSuccess: (result) => {
-      setMessage(result.lastStatus === "success" ? "已运行：成功" : "已运行：失败");
+      setMessage(
+        result.lastStatus === "success" ? t("schedules.runSucceeded") : t("schedules.runFailed"),
+      );
       void client.invalidateQueries({ queryKey: ["schedules"] });
     },
     onError: (error) => setMessage(error.message),
@@ -63,9 +67,9 @@ export function SchedulesPage() {
   const error = schedules.error ?? connectors.error;
   return (
     <div className="space-y-6">
-      <PageHeader title="定时">
+      <PageHeader title={t("schedules.schedules")}>
         <Button variant="primary" disabled={!connectors.data} onClick={() => setCreating(true)}>
-          新建
+          {t("schedules.create")}
         </Button>
       </PageHeader>
       {error && (
@@ -73,12 +77,14 @@ export function SchedulesPage() {
           {error.message}
         </p>
       )}
-      {schedules.isPending && <p className="text-secondary text-text-2">加载中…</p>}
+      {schedules.isPending && (
+        <p className="text-secondary text-text-2">{t("schedules.loading")}</p>
+      )}
       {!error && schedules.data?.length === 0 && (
         <div className="py-16 text-center text-secondary text-text-2">
-          <p>还没有定时任务</p>
+          <p>{t("schedules.noSchedulesYet")}</p>
           <Button className="mt-3" disabled={!connectors.data} onClick={() => setCreating(true)}>
-            新建一个
+            {t("schedules.createOne")}
           </Button>
         </div>
       )}
@@ -87,7 +93,15 @@ export function SchedulesPage() {
           <table className="w-full text-left text-secondary">
             <thead className="border-b border-line text-label text-text-2">
               <tr>
-                {["名称", "频率", "动作", "上次运行", "下次运行", "启用", ""].map((label) => (
+                {[
+                  t("schedules.name"),
+                  t("schedules.frequency"),
+                  t("schedules.action"),
+                  t("schedules.lastRun"),
+                  t("schedules.nextRun"),
+                  t("schedules.enable"),
+                  "",
+                ].map((label) => (
                   <th key={label} scope="col" className="whitespace-nowrap px-4 py-3 font-medium">
                     {label}
                   </th>
@@ -123,11 +137,11 @@ export function SchedulesPage() {
       )}
       <Dialog
         open={!!deleting}
-        title={`删除定时任务 ${deleting?.name ?? ""}？`}
+        title={t("schedules.deleteSchedule", { p1: deleting?.name ?? "" })}
         onClose={() => setDeleting(null)}
       >
         <div className="flex justify-end gap-2">
-          <Button onClick={() => setDeleting(null)}>取消</Button>
+          <Button onClick={() => setDeleting(null)}>{t("schedules.cancel")}</Button>
           <Button
             className="text-status-failed"
             disabled={remove.isPending}
@@ -135,7 +149,7 @@ export function SchedulesPage() {
               if (deleting) remove.mutate(deleting.id);
             }}
           >
-            删除
+            {t("schedules.delete")}
           </Button>
         </div>
       </Dialog>

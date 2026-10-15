@@ -1,6 +1,7 @@
 import { X } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { type ReactNode, useCallback, useId } from "react";
+import { useLang } from "../i18n/lang.tsx";
 import { Button } from "./button.tsx";
 
 export function Drawer({
@@ -14,6 +15,7 @@ export function Drawer({
   title: string;
   children: ReactNode;
 }) {
+  const { t } = useLang();
   const id = useId();
   const reduced = useReducedMotion();
   const modalRef = useCallback((node: HTMLDialogElement | null) => {
@@ -52,7 +54,11 @@ export function Drawer({
               <h2 id={id} className="text-title">
                 {title}
               </h2>
-              <Button aria-label="关闭" onClick={onClose} className="shrink-0 border-0 p-2">
+              <Button
+                aria-label={t("common.close")}
+                onClick={onClose}
+                className="shrink-0 border-0 p-2"
+              >
                 <X size={18} strokeWidth={1.5} />
               </Button>
             </header>

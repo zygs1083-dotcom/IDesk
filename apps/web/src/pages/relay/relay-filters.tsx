@@ -1,5 +1,7 @@
-import { RELAY_KIND_LABEL, RELAY_KINDS } from "@idesk/shared/relay";
+import { labels } from "@idesk/shared/labels";
+import { RELAY_KINDS } from "@idesk/shared/relay";
 import { Segmented } from "../../components/segmented.tsx";
+import { useLang } from "../../i18n/lang.tsx";
 
 export function RelayFilters({
   recipient,
@@ -16,36 +18,37 @@ export function RelayFilters({
   task: string;
   onTask: (value: string) => void;
 }) {
+  const { lang, t } = useLang();
   return (
     <div className="flex flex-wrap items-center gap-4 whitespace-nowrap">
       <Segmented
-        label="收件对象"
+        label={t("relay.recipient")}
         value={recipient}
         onChange={onRecipient}
         options={[
-          { value: "all", label: "全部" },
-          { value: "agent", label: "指定" },
-          { value: "capability", label: "能力" },
-          { value: "broadcast", label: "全体" },
+          { value: "all", label: t("relay.all") },
+          { value: "agent", label: t("relay.specific") },
+          { value: "capability", label: t("relay.capabilities") },
+          { value: "broadcast", label: t("relay.everyone") },
         ]}
       />
       <Segmented
-        label="种类"
+        label={t("relay.kind")}
         value={kind}
         onChange={onKind}
         options={[
-          { value: "all", label: "全部种类" },
-          ...RELAY_KINDS.map((value) => ({ value, label: RELAY_KIND_LABEL[value] })),
+          { value: "all", label: t("relay.allKinds") },
+          ...RELAY_KINDS.map((value) => ({ value, label: labels(lang).relayKind[value] })),
         ]}
       />
       <Segmented
-        label="关联任务"
+        label={t("relay.relatedTask")}
         value={task}
         onChange={onTask}
         options={[
-          { value: "all", label: "全部任务" },
-          { value: "with", label: "有关联" },
-          { value: "without", label: "无关联" },
+          { value: "all", label: t("relay.allTasks") },
+          { value: "with", label: t("relay.withTask") },
+          { value: "without", label: t("relay.withoutTask") },
         ]}
       />
     </div>

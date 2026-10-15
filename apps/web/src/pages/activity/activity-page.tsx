@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Bot, ListTodo, Send } from "lucide-react";
 import { useState } from "react";
 import { Segmented } from "../../components/segmented.tsx";
+import { useLang } from "../../i18n/lang.tsx";
 import { PageHeader } from "../../layout/page-header.tsx";
 import { request } from "../../lib/api.ts";
 import { eventText } from "../../lib/event-text.ts";
@@ -11,6 +12,7 @@ import { useTasks } from "../../lib/use-tasks.ts";
 import { groupEvents } from "./group-events.ts";
 
 export function ActivityPage() {
+  const { lang, t } = useLang();
   const [type, setType] = useState("all");
   const [agentId, setAgentId] = useState("");
   const {
@@ -27,30 +29,31 @@ export function ActivityPage() {
   const taskTitles = new Map(tasks.map((task) => [task.id, task.title]));
   const groups = groupEvents(
     events.filter((event) => type === "all" || event.type.startsWith(`${type}.`)),
+    lang,
   );
   return (
     <div className="space-y-6">
-      <PageHeader title="活动" />
+      <PageHeader title={t("activity.activity")} />
       <div className="flex flex-wrap items-center gap-3 whitespace-nowrap text-secondary">
         <Segmented
-          label="类型"
+          label={t("activity.type")}
           value={type}
           onChange={setType}
           options={[
-            { value: "all", label: "全部" },
-            { value: "task", label: "任务" },
-            { value: "relay", label: "传递区" },
-            { value: "agent", label: "智能体" },
+            { value: "all", label: t("activity.all") },
+            { value: "task", label: t("activity.tasks") },
+            { value: "relay", label: t("activity.relay") },
+            { value: "agent", label: t("activity.agents") },
           ]}
         />
         <label className="flex items-center gap-2 text-text-2">
-          智能体
+          {t("activity.agents")}
           <select
             className="rounded-control border border-line bg-surface px-3 py-2 text-text"
             value={agentId}
             onChange={(event) => setAgentId(event.target.value)}
           >
-            <option value="">全部</option>
+            <option value="">{t("activity.all")}</option>
             {agents.map((agent) => (
               <option key={agent.id} value={agent.id}>
                 {agentName(agent.id)}
@@ -65,7 +68,9 @@ export function ActivityPage() {
         </p>
       )}
       {!isPending && !error && groups.length === 0 && (
-        <p className="py-16 text-center text-secondary text-text-2">还没有活动</p>
+        <p className="py-16 text-center text-secondary text-text-2">
+          {t("activity.noActivityYet")}
+        </p>
       )}
       <div className="space-y-6">
         {groups.map((group) => (
@@ -84,7 +89,7 @@ export function ActivityPage() {
                       dateTime={event.ts}
                       className="w-12 shrink-0 text-secondary tabular-nums text-text-2"
                     >
-                      {new Date(event.ts).toLocaleTimeString("zh-CN", {
+                      {new Date(event.ts).toLocaleTimeString(lang === "zh" ? "zh-CN" : "en", {
                         hour: "2-digit",
                         minute: "2-digit",
                         hour12: false,
@@ -97,7 +102,7 @@ export function ActivityPage() {
                       className="shrink-0 text-text-2"
                     />
                     <p className="truncate text-body">
-                      {eventText(event, agentName)}
+                      {eventText(event, agentName, lang)}
                       {event.taskId &&
                         ` ${taskTitles.get(event.taskId) ?? event.taskId.slice(0, 8)}`}
                     </p>

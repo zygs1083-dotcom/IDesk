@@ -1,5 +1,5 @@
-import { ACTION_LABEL, TransitionError } from "@idesk/shared/task-machine";
-import { TASK_STATUS_LABEL } from "@idesk/shared/task-status";
+import { labels } from "@idesk/shared/labels";
+import { TransitionError } from "@idesk/shared/task-machine";
 import { useQuery } from "@tanstack/react-query";
 import { AnimatePresence } from "motion/react";
 import { useState } from "react";
@@ -7,6 +7,7 @@ import { Button } from "../../components/button.tsx";
 import { Drawer } from "../../components/drawer.tsx";
 import { Markdown } from "../../components/markdown.tsx";
 import { Toast } from "../../components/toast.tsx";
+import { useLang } from "../../i18n/lang.tsx";
 import { request } from "../../lib/api.ts";
 import { eventText } from "../../lib/event-text.ts";
 import { relativeTime } from "../../lib/format.ts";
@@ -19,6 +20,7 @@ import { TaskDependencies } from "./task-dependencies.tsx";
 import { useTaskAction } from "./use-task-action.ts";
 
 export function TaskDrawer({ taskId, onClose }: { taskId: string; onClose: () => void }) {
+  const { lang, t } = useLang();
   const { data: task, error: taskError } = useQuery({
     queryKey: ["task", taskId],
     queryFn: () => request<Task>(`/tasks/${taskId}`),
@@ -61,7 +63,7 @@ export function TaskDrawer({ taskId, onClose }: { taskId: string; onClose: () =>
           <div className="space-y-6">
             <div className="flex items-center gap-2 text-secondary text-text-2">
               <StatusDot status={task.status} />
-              {TASK_STATUS_LABEL[task.status]}
+              {labels(lang).status[task.status]}
             </div>
             <div className="flex flex-wrap gap-2">
               {actions.map((action, index) => (
@@ -76,7 +78,7 @@ export function TaskDrawer({ taskId, onClose }: { taskId: string; onClose: () =>
                     else mutation.mutate({ task, action: actionSamples[action] });
                   }}
                 >
-                  {ACTION_LABEL[action]}
+                  {labels(lang).action[action]}
                 </Button>
               ))}
             </div>
@@ -86,17 +88,17 @@ export function TaskDrawer({ taskId, onClose }: { taskId: string; onClose: () =>
             </div>
             <dl className="space-y-3 border-y border-line py-4 text-secondary">
               <div className="flex gap-2">
-                <dt className="w-18 shrink-0 text-text-2">负责人</dt>
+                <dt className="w-18 shrink-0 text-text-2">{t("desk.assignee")}</dt>
                 <dd className="min-w-0 flex-1 break-words">
-                  {task.assigneeId === null ? "未指定" : agentName(task.assigneeId)}
+                  {task.assigneeId === null ? t("desk.unassigned2") : agentName(task.assigneeId)}
                 </dd>
               </div>
               <div className="flex gap-2">
-                <dt className="w-18 shrink-0 text-text-2">发布者</dt>
+                <dt className="w-18 shrink-0 text-text-2">{t("desk.publisher")}</dt>
                 <dd className="min-w-0 flex-1 break-words">{agentName(task.publisherId)}</dd>
               </div>
               <div className="flex gap-2">
-                <dt className="w-18 shrink-0 text-text-2">能力</dt>
+                <dt className="w-18 shrink-0 text-text-2">{t("desk.capabilities")}</dt>
                 <dd className="min-w-0 flex-1 break-words text-text-2">
                   {task.capabilities.join(" · ") || "—"}
                 </dd>
@@ -104,15 +106,15 @@ export function TaskDrawer({ taskId, onClose }: { taskId: string; onClose: () =>
             </dl>
             <TaskDependencies task={task} onError={setError} />
             <section>
-              <h3 className="mb-4 text-section">时间线</h3>
+              <h3 className="mb-4 text-section">{t("desk.timeline")}</h3>
               <ol className="space-y-4">
                 {events.map((event) => (
                   <li key={event.id} className="space-y-1 border-l border-line pl-3">
                     <time className="text-label text-text-2 tabular-nums">
-                      {relativeTime(new Date(event.ts))}
+                      {relativeTime(new Date(event.ts), lang)}
                     </time>
                     <p className="whitespace-pre-wrap break-words text-secondary">
-                      {eventText(event, agentName)}
+                      {eventText(event, agentName, lang)}
                     </p>
                   </li>
                 ))}

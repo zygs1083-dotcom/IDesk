@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Button } from "../../components/button.tsx";
 import { Dialog } from "../../components/dialog.tsx";
 import { Toast } from "../../components/toast.tsx";
+import { useLang } from "../../i18n/lang.tsx";
 import { request } from "../../lib/api.ts";
 import { useShortcut } from "../../lib/use-shortcut.ts";
 import { ConnectorDialog } from "./connector-dialog.tsx";
@@ -10,6 +11,7 @@ import { ConnectorRow } from "./connector-row.tsx";
 import type { ConnectionResult, Connector, Plugin } from "./types.ts";
 
 export function ConnectorsPage() {
+  const { t } = useLang();
   const client = useQueryClient();
   const connectors = useQuery({
     queryKey: ["automation", "connectors"],
@@ -31,7 +33,8 @@ export function ConnectorsPage() {
           config: connector.config,
         }),
       }),
-    onSuccess: (result) => setMessage(result.success ? "连接正常" : (result.error ?? null)),
+    onSuccess: (result) =>
+      setMessage(result.success ? t("settings.connectionSuccessful") : (result.error ?? null)),
     onError: (error) => setMessage(error.message),
   });
   const toggle = useMutation({
@@ -57,11 +60,11 @@ export function ConnectorsPage() {
   });
   const error = connectors.error ?? plugins.error;
   return (
-    <section className="space-y-4" aria-label="连接器">
+    <section className="space-y-4" aria-label={t("settings.connectors")}>
       <header className="flex items-center justify-between gap-2">
-        <h2 className="text-section">连接器</h2>
+        <h2 className="text-section">{t("settings.connectors")}</h2>
         <Button variant="primary" disabled={!plugins.data} onClick={() => setCreating(true)}>
-          添加连接器
+          {t("settings.addConnector")}
         </Button>
       </header>
       {error && (
@@ -69,12 +72,14 @@ export function ConnectorsPage() {
           {error.message}
         </p>
       )}
-      {connectors.isPending && <p className="text-secondary text-text-2">加载中…</p>}
+      {connectors.isPending && (
+        <p className="text-secondary text-text-2">{t("settings.loading")}</p>
+      )}
       {!error && connectors.data?.length === 0 && (
         <div className="py-16 text-center text-secondary text-text-2">
-          <p>还没有连接器</p>
+          <p>{t("settings.noConnectorsYet")}</p>
           <Button className="mt-3" disabled={!plugins.data} onClick={() => setCreating(true)}>
-            添加连接器
+            {t("settings.addConnector")}
           </Button>
         </div>
       )}
@@ -108,12 +113,12 @@ export function ConnectorsPage() {
       )}
       <Dialog
         open={!!deleting}
-        title={`删除连接器 ${deleting?.name ?? ""}？`}
+        title={t("settings.deleteConnector", { p1: deleting?.name ?? "" })}
         onClose={() => setDeleting(null)}
       >
-        <p className="text-secondary text-text-2">它的工作流与运行记录会一起删除</p>
+        <p className="text-secondary text-text-2">{t("settings.itsWorkflowsAndRunsWillAlsoBe")}</p>
         <div className="mt-4 flex justify-end gap-2">
-          <Button onClick={() => setDeleting(null)}>取消</Button>
+          <Button onClick={() => setDeleting(null)}>{t("settings.cancel")}</Button>
           <Button
             disabled={remove.isPending}
             className="text-status-failed"
@@ -121,7 +126,7 @@ export function ConnectorsPage() {
               if (deleting) remove.mutate(deleting);
             }}
           >
-            删除
+            {t("settings.delete")}
           </Button>
         </div>
       </Dialog>

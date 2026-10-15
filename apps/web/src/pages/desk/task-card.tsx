@@ -1,7 +1,8 @@
 import type { useDraggable } from "@dnd-kit/core";
-import { TASK_PRIORITY_LABEL } from "@idesk/shared/task-status";
+import { labels } from "@idesk/shared/labels";
 import { Lock } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
+import { useLang } from "../../i18n/lang.tsx";
 import { cn } from "../../lib/cn.ts";
 import { relativeTime } from "../../lib/format.ts";
 import type { Task } from "../../lib/types.ts";
@@ -31,6 +32,7 @@ export function TaskCard({
     "attributes" | "listeners" | "setNodeRef" | "isDragging"
   >;
 }) {
+  const { lang, t } = useLang();
   const reduced = useReducedMotion();
   const expiring =
     task.status === "in_progress" &&
@@ -62,7 +64,7 @@ export function TaskCard({
           <span className="mr-2 inline-flex items-center gap-1 text-text-3 tabular-nums">
             <Lock size={16} strokeWidth={1.5} aria-hidden="true" />
             {blockers}
-            <span className="sr-only"> 个未完成依赖</span>
+            <span className="sr-only"> {t("desk.unfinishedDependencies")}</span>
           </span>
         )}
         {task.title}
@@ -71,17 +73,19 @@ export function TaskCard({
         <span className="truncate">{task.capabilities.join(" · ")}</span>
         {(task.priority === "high" || task.priority === "urgent") && (
           <span className={cn("shrink-0", task.priority === "urgent" && "text-status-failed")}>
-            ↑{TASK_PRIORITY_LABEL[task.priority]}
+            ↑{labels(lang).priority[task.priority]}
           </span>
         )}
       </span>
       {task.status === "recruiting" && task.recruit && (
         <span className="mb-2 block text-label text-text-2 tabular-nums">
-          {task.recruit.joined.length} / {task.recruit.needed} 已加入
+          {task.recruit.joined.length} / {task.recruit.needed} {t("desk.joined")}
         </span>
       )}
       {task.status === "assigned" && handoff && (
-        <span className="mb-2 block truncate text-label text-text-2">← {handoff} 交接</span>
+        <span className="mb-2 block truncate text-label text-text-2">
+          ← {handoff} {t("desk.handoff")}
+        </span>
       )}
       <span className="flex items-center gap-2 text-label">
         <StatusDot status={task.status} />
@@ -89,7 +93,7 @@ export function TaskCard({
         <span
           className={cn("shrink-0 tabular-nums", expiring ? "text-status-paused" : "text-text-2")}
         >
-          {relativeTime(new Date(task.updatedAt))}
+          {relativeTime(new Date(task.updatedAt), lang)}
         </span>
       </span>
     </motion.button>

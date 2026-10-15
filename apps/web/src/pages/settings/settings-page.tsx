@@ -1,17 +1,22 @@
 import { NavLink, Outlet } from "react-router";
+import { useLang } from "../../i18n/lang.tsx";
 import { PageHeader } from "../../layout/page-header.tsx";
 import { cn } from "../../lib/cn.ts";
 
 export function SettingsPage() {
+  const { t } = useLang();
   return (
     <div className="space-y-6">
-      <PageHeader title="设置" />
+      <PageHeader title={t("settings.settings")} />
       <div className="flex flex-col gap-6 sidebar:flex-row">
-        <nav aria-label="设置导航" className="flex shrink-0 gap-1 sidebar:w-40 sidebar:flex-col">
+        <nav
+          aria-label={t("settings.settingsNavigation")}
+          className="flex shrink-0 gap-1 sidebar:w-40 sidebar:flex-col"
+        >
           {[
-            ["connectors", "连接器"],
-            ["plugins", "插件"],
-            ["access", "接入信息"],
+            ["connectors", t("settings.connectors")],
+            ["plugins", t("settings.plugins")],
+            ["access", t("settings.access")],
           ].map(([path, label]) => (
             <NavLink
               key={path}

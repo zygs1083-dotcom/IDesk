@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router";
 import { Button } from "../../components/button.tsx";
 import { Segmented } from "../../components/segmented.tsx";
+import { useLang } from "../../i18n/lang.tsx";
 import { PageHeader } from "../../layout/page-header.tsx";
 import { request } from "../../lib/api.ts";
 import type { Task, TaskEvent } from "../../lib/types.ts";
@@ -14,6 +15,7 @@ import { Board } from "./board.tsx";
 import { PublishDialog } from "./publish-dialog.tsx";
 import { TaskDrawer } from "./task-drawer.tsx";
 export function Desk() {
+  const { t } = useLang();
   const { tasks, error: queryError, isPending } = useTasks();
   const { data: handoffs = [] } = useQuery({
     queryKey: ["events", "handoff"],
@@ -54,13 +56,13 @@ export function Desk() {
   return (
     <div className="flex h-full min-h-0 flex-col gap-6">
       <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 sidebar:flex sidebar:gap-4">
-        <PageHeader title="协作台" />
+        <PageHeader title={t("desk.desk")} />
         <label className="order-3 flex min-w-0 flex-1 sidebar:order-none sidebar:max-w-60 items-center gap-2 rounded-control border border-line bg-surface px-3 py-2 text-text-2">
           <Search size={16} strokeWidth={1.5} />
           <input
             ref={searchInput}
-            aria-label="搜索任务"
-            placeholder="搜索任务"
+            aria-label={t("desk.searchTasks")}
+            placeholder={t("desk.searchTasks")}
             value={search}
             onChange={(event) => setSearch(event.target.value)}
             className="min-w-0 w-full bg-transparent text-secondary text-text outline-none placeholder:text-text-3 focus-visible:outline-1 focus-visible:outline-accent"
@@ -68,10 +70,10 @@ export function Desk() {
         </label>
         <div className="order-4 sidebar:order-none">
           <Segmented<"flat" | "host">
-            label="分组"
+            label={t("desk.grouping")}
             options={[
-              { value: "flat", label: "平铺" },
-              { value: "host", label: "按主机" },
+              { value: "flat", label: t("desk.flat") },
+              { value: "host", label: t("desk.byHost") },
             ]}
             value={group}
             onChange={(value) => {
@@ -85,7 +87,7 @@ export function Desk() {
           className="order-2 ml-auto shrink-0 sidebar:order-none"
           onClick={() => setPublish(true)}
         >
-          发布
+          {t("desk.publish")}
         </Button>
       </div>
       {error && (

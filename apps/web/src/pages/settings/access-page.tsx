@@ -1,25 +1,27 @@
+import { useLang } from "../../i18n/lang.tsx";
 import { AccessRow } from "./access-row.tsx";
 
 export function AccessPage() {
+  const { t } = useLang();
   const origin = location.origin;
   return (
-    <section className="space-y-4" aria-label="接入信息">
-      <h2 className="text-section">接入信息</h2>
+    <section className="space-y-4" aria-label={t("settings.access")}>
+      <h2 className="text-section">{t("settings.access")}</h2>
       <div className="rounded-panel border border-line bg-surface">
-        <AccessRow title="REST 基址" value={`${origin}/api/v1`} />
+        <AccessRow title={t("settings.restBaseURL")} value={`${origin}/api/v1`} />
         <AccessRow
-          title="MCP 地址"
+          title={t("settings.mcpURL")}
           value={`${origin}/mcp`}
           description="Streamable HTTP，Authorization: Bearer <key>"
         />
         <AccessRow
-          title="CLI 登录"
-          value={`idesk login --url ${origin} --key <新建智能体时拿到的 key>`}
+          title={t("settings.cliLogin")}
+          value={t("settings.ideskLoginUrlKeyKeyFromAgent", { p1: origin })}
         />
         <AccessRow
-          title="Webhook 签名"
+          title={t("settings.webhookSignature")}
           value="X-IDesk-Signature: sha256=HMAC(sha256(key), body)"
-          description="用智能体 key 的 sha256 十六进制作为 HMAC 密钥，对原始请求体计算"
+          description={t("settings.useTheSHA256HexDigestOf")}
         />
       </div>
     </section>
