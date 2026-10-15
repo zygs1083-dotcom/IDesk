@@ -34,7 +34,7 @@ try {
       { id: "reception", seats: [layout.reception.seat] },
       { id: "meeting", seats: layout.meeting.seats },
       { id: "lounge", seats: layout.lounge },
-      { id: "entrance", points: [layout.points.door] },
+      { id: "entrance", points: [layout.points.door], padding: 220 },
       {
         id: "board",
         points: [
@@ -50,9 +50,10 @@ try {
           .filter((item) => item.id.startsWith(`${group.id}-`))
           .flatMap((item) => item.polygon.map(([x, y]) => ({ x, y }))),
       ];
-      const x = Math.max(0, Math.min(...points.map((point) => point.x)) - 80);
-      const y = Math.max(0, Math.min(...points.map((point) => point.y)) - 110);
-      const right = Math.min(layout.size.w, Math.max(...points.map((point) => point.x)) + 80);
+      const padding = group.padding ?? 80;
+      const x = Math.max(0, Math.min(...points.map((point) => point.x)) - padding);
+      const y = Math.max(0, Math.min(...points.map((point) => point.y)) - Math.max(110, padding));
+      const right = Math.min(layout.size.w, Math.max(...points.map((point) => point.x)) + padding);
       const bottom = Math.min(layout.size.h, Math.max(...points.map((point) => point.y)) + 50);
       const png = crop(panorama, { x, y, w: right - x, h: bottom - y });
       writeFileSync(
