@@ -12,6 +12,7 @@ import {
   saveJson,
   savePng,
 } from "./furniture-image.mjs";
+import { saveIndexedPng } from "./indexed-png.mjs";
 import { removeMagenta } from "./sprite-cells.mjs";
 
 export const palette = () => {
@@ -161,7 +162,7 @@ export function buildFurniture() {
     }
   }
   verify(atlas, colors);
-  savePng("public/furniture.png", atlas);
+  saveIndexedPng("public/furniture.png", atlas, colors);
   savePng("assets/probe/furniture-before-clean@3x.png", resize(before, 1536, 1536));
   savePng("assets/probe/furniture-after-clean@3x.png", resize(atlas, 1536, 1536));
   saveJson("public/furniture.json", { frames, meta: { image: "furniture.png", scale: "1" } });

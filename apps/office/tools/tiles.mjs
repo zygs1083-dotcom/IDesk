@@ -2,7 +2,8 @@ import assert from "node:assert/strict";
 import { fileURLToPath } from "node:url";
 import { PNG } from "pngjs";
 import { palette, verify } from "./furniture.mjs";
-import { paste, saveJson, savePng } from "./furniture-image.mjs";
+import { paste, saveJson } from "./furniture-image.mjs";
+import { saveIndexedPng } from "./indexed-png.mjs";
 
 export function drawTile(name, colors) {
   const png = new PNG({ width: 32, height: 32 });
@@ -72,7 +73,7 @@ export function buildTiles() {
     frames[name] = { x: i * 32, y: 0, w: 32, h: 32 };
   }
   verify(atlas, colors);
-  savePng("public/tiles.png", atlas);
+  saveIndexedPng("public/tiles.png", atlas, colors);
   saveJson("public/tiles.json", { tile: 32, codes, frames });
   console.log("瓦片 7 帧；地面双轴接边通过；调色板外颜色数 0；半透明像素 0");
 }

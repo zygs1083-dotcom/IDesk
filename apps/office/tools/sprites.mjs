@@ -6,6 +6,7 @@ import { cleanupTotals, measureCharacterCleanup } from "./character-edges.mjs";
 import { repairCharacterInterior } from "./character-interior.mjs";
 import { palette, quantize, verify } from "./furniture.mjs";
 import { bounds, saveJson } from "./furniture-image.mjs";
+import { saveIndexedPng } from "./indexed-png.mjs";
 import { spriteCells } from "./sprite-cells.mjs";
 import { characterPreviews } from "./sprite-previews.mjs";
 
@@ -136,7 +137,7 @@ console.log(
   `角色 ${Object.keys(frames).length} 帧；调色板外颜色数 0；半透明像素 0；RGB误差均值 ${error.mean.toFixed(3)}；P95 ${error.p95.toFixed(3)}`,
 );
 mkdirSync(`${root}public`, { recursive: true });
-writeFileSync(`${root}public/sprites.png`, PNG.sync.write(atlas));
+saveIndexedPng("public/sprites.png", atlas, colors);
 writeFileSync(
   `${root}public/sprites.json`,
   `${JSON.stringify(
