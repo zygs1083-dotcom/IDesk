@@ -101,4 +101,6 @@
 - **W57 空闲行为第二版**：OFFICE.md §3。spots、概率、变速、到站回弹、打瞌睡、「!」小跑、面对面聊天、同时最多两人走动。验证：60 秒 GIF 里至少出现一次去 spot、一次聊天、一次小动作；reduced-motion 只气泡。
 - 派发：W55 与 W56 并行（W56 只改 zone-sign.ts），W57 等 W55 合并后派（两者都改 scene.json、director）。
 
+- **W63 前台礼仪专属角色图**：OFFICE.md §3「前台礼仪」。生成 `receptionist` 的 4×5 走路图 + 正面坐姿三帧（sit/upright、typing/upright/0、typing/upright/1），重建图集；Cast 里礼仪用 receptionist、档案头像也用它；pose 在 upright 座位用 upright 帧（只有礼仪有，智能体不受影响）。验收：前台放大图里礼仪正对观众坐在柜台后、双手在台面上、没有侧身；走路四方向截图；比例表；档案头像截图。
+
 派发约束：W45 改 schema，先派；W43a 改 shared 标签，和 W42 不同时改 `event-text.ts`（W42 先），W43a 在 W42、W44、W45 合并后派；W43b 在 W43a 之后；W43c 可与 W43a 并行。
