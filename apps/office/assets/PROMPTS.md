@@ -1,6 +1,7 @@
 # 像素办公室素材生成记录
 第三版取代前两版：改为匹配斜放显示器的四分之三坐姿，保留站姿头身比例，仅收腿；前两版正背朝向及过矮坐姿记录保留为历史。
 坐姿补充图三版的完整提示词与比例记录见 [PROMPTS-seated.md](PROMPTS-seated.md)。
+第二版正面四向坐姿与全图集42色量化见 [PROMPTS-front-seating.md](PROMPTS-front-seating.md)。
 礼仪专属原图与正坐补充图的提示词、候选及比例记录见 [PROMPTS-receptionist.md](PROMPTS-receptionist.md)。
 使用 Codex 内置 image_gen 工具，2026-10-14 生成。画风参考 `docs/office-samples/background-sample.png` 与 `sprite-sample.png`。
 经协调者确认，为保证走路、坐姿、打字的原像素比例和身份一致，每种角色改为同一次生成的 **4 列 × 5 行** 图；前四行依次下、左、右、上，每行站、左脚、站、右脚，第五行坐姿、打字 1、打字 2、空格。新增坐姿由五张独立的 `<kind>-seated.png` 4 列 × 2 行补充图提供，原五行逐像素保留。只保留选中的六张原图及五张补充图。原图保留完整生成内容；固定原图运行 `pnpm --filter office sprites` 可确定性重建图集。生图本身具有随机性，同提示词不能保证逐像素重现。

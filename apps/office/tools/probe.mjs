@@ -1,6 +1,8 @@
 import assert from "node:assert/strict";
 import { fileURLToPath } from "node:url";
 import { PNG } from "pngjs";
+import { removeCharacterFringe } from "./character-edges.mjs";
+import { repairCharacterInterior } from "./character-interior.mjs";
 import { palette, quantize, verify } from "./furniture.mjs";
 import {
   bounds,
@@ -12,7 +14,7 @@ import {
   saveJson,
   savePng,
 } from "./furniture-image.mjs";
-import { renderPreviews } from "./probe-previews.mjs";
+import { composeObjects, renderPreviews } from "./probe-previews.mjs";
 import { spriteCells } from "./sprite-cells.mjs";
 
 export const poses = [
@@ -50,7 +52,7 @@ export function people() {
     "codex",
   )[0].png;
   const scale = bounds(standing).h / original.height;
-  const cells = spriteCells(readPng("assets/raw/probe/codex-seated-front.png"), 2, poses, "probe");
+  const cells = spriteCells(readPng("assets/raw/codex-seated-front.png"), 2, poses, "probe");
   const result = { standing };
   for (const cell of cells) {
     const png = resize(
@@ -77,8 +79,8 @@ export function people() {
   return result;
 }
 
-export function objects(items, frames, characters) {
-  return placements.flatMap((placement) => {
+export function objects(items, frames, characters, seats = placements) {
+  return seats.flatMap((placement) => {
     const item = items[placement.item];
     const parts = item.parts.map((part) => ({
       id: placement.id,
@@ -97,7 +99,7 @@ export function objects(items, frames, characters) {
         layer: "object",
         sortY: placement.y * 32 + item.seat.y,
         bias: 0,
-        png: characters[placement.pose],
+        png: characters[placement.kind ? `${placement.kind}/${placement.pose}` : placement.pose],
         x: placement.x * 32 + item.seat.x - 32,
         y: placement.y * 32 + item.seat.y - 96,
       });
@@ -105,8 +107,8 @@ export function objects(items, frames, characters) {
   });
 }
 
-export function assertSorting(list) {
-  for (const placement of placements.filter((p) => p.pose)) {
+export function assertSorting(list, seats = placements) {
+  for (const placement of seats.filter((p) => p.pose)) {
     const parts = list.filter((part) => part.id === placement.id);
     const y = (name) => parts.find((part) => part.frame.endsWith(name)).sortY;
     assert.ok(y("behind") < y("person") && y("person") < y("front"));
@@ -128,7 +130,11 @@ export function buildProbe() {
   const comparison = new PNG({ width: 256, height: 96 });
   paste(comparison, characters.standing, 0, 0);
   paste(comparison, characters["sit/down"], 128, 0);
-  for (const png of Object.values(characters)) quantize(png, colors);
+  for (const png of Object.values(characters)) {
+    removeCharacterFringe(png);
+    repairCharacterInterior(png, palette());
+    quantize(png, colors, undefined, true);
+  }
   paste(comparison, characters.standing, 64, 0);
   paste(comparison, characters["sit/down"], 192, 0);
   savePng("assets/probe/characters-before-after@3x.png", resize(comparison, 768, 288));
@@ -145,11 +151,7 @@ export function buildProbe() {
   }
   const list = objects(readJson("public/catalog.json").items, frames, characters);
   assertSorting(list);
-  const wall = list.filter((part) => part.layer === "wall");
-  const sorted = list
-    .filter((part) => part.layer !== "wall")
-    .sort((a, b) => a.sortY - b.sortY || a.bias - b.bias);
-  for (const part of [...wall, ...sorted]) paste(canvas, part.png, part.x, part.y);
+  composeObjects(canvas, list);
   verify(canvas, colors);
   savePng("assets/probe/probe.png", canvas);
   savePng("assets/probe/probe@3x.png", resize(canvas, 1344, 960));

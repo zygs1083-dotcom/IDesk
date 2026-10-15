@@ -1,0 +1,38 @@
+[
+  {
+    "kind": "claude-code",
+    "baseline": 251,
+    "before": 251,
+    "after": 68
+  },
+  {
+    "kind": "codex",
+    "baseline": 102,
+    "before": 102,
+    "after": 57
+  },
+  {
+    "kind": "n8n",
+    "baseline": 231,
+    "before": 231,
+    "after": 40
+  },
+  {
+    "kind": "script",
+    "baseline": 50,
+    "before": 50,
+    "after": 18
+  },
+  {
+    "kind": "custom",
+    "baseline": 54,
+    "before": 54,
+    "after": 21
+  },
+  {
+    "kind": "receptionist",
+    "baseline": 96,
+    "before": 96,
+    "after": 52
+  }
+]

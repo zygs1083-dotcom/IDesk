@@ -6,9 +6,9 @@ import { assertSorting, objects, people, placements, poses } from "./probe.mjs";
 import { assertSeam, drawTile } from "./tiles.mjs";
 
 const colors = palette();
-test("palette has exactly 36 distinct opaque colors", () => {
-  expect(colors).toHaveLength(36);
-  expect(new Set(colors.map(String)).size).toBe(36);
+test("palette has 42 distinct opaque colors", () => {
+  expect(colors).toHaveLength(42);
+  expect(new Set(colors.map(String)).size).toBe(colors.length);
   const png = readPng("assets/palette.png");
   expect([...png.data].filter((_, i) => i % 4 === 3).every((alpha) => alpha === 255)).toBe(true);
 });

@@ -18,7 +18,8 @@ export function renderPreviews(characters, frames, colors = palette()) {
     paste(ruler, frames[`chair-down-${suffix}`], 240, 96 - frames[`chair-down-${suffix}`].height);
   verify(ruler, colors);
   savePng("assets/probe/ruler@3x.png", resize(ruler, 960, 384));
-  savePng("assets/probe/palette@12x.png", resize(readPng("assets/palette.png"), 432, 12));
+  const paletteImage = readPng("assets/palette.png");
+  savePng("assets/probe/palette@12x.png", resize(paletteImage, paletteImage.width * 12, 12));
   const side = new PNG({ width: 256, height: 128 });
   for (let p = 0; p < side.data.length; p += 4) side.data.set([...colors[6], 255], p);
   for (const [i, facing] of ["left", "right"].entries()) {
@@ -45,4 +46,12 @@ export function renderPreviews(characters, frames, colors = palette()) {
   }
   verify(side, colors);
   savePng("assets/probe/side-chairs@3x.png", resize(side, 768, 384));
+}
+
+export function composeObjects(canvas, list) {
+  const wall = list.filter((part) => part.layer === "wall");
+  const sorted = list
+    .filter((part) => part.layer !== "wall")
+    .sort((a, b) => a.sortY - b.sortY || a.bias - b.bias);
+  for (const part of [...wall, ...sorted]) paste(canvas, part.png, part.x, part.y);
 }

@@ -1,34 +1,26 @@
+import assert from "node:assert/strict";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { PNG } from "pngjs";
+import { cleanupTotals, measureCharacterCleanup } from "./character-edges.mjs";
+import { repairCharacterInterior } from "./character-interior.mjs";
+import { palette, quantize, verify } from "./furniture.mjs";
+import { bounds, saveJson } from "./furniture-image.mjs";
 import { spriteCells } from "./sprite-cells.mjs";
+import { characterPreviews } from "./sprite-previews.mjs";
 
 const kinds = ["claude-code", "codex", "n8n", "script", "custom", "receptionist"];
 const directions = ["down", "left", "right", "up"];
 const root = fileURLToPath(new URL("../", import.meta.url));
 const frameWidth = 64;
 const frameHeight = 96;
-const atlas = new PNG({ width: frameWidth * 25, height: frameHeight * kinds.length });
+const atlas = new PNG({ width: frameWidth * 31, height: frameHeight * kinds.length });
 const frames = {};
+const cleanup = [];
 const animations = {};
 
-function bounds(png) {
-  let left = png.width;
-  let top = png.height;
-  let right = -1;
-  let bottom = -1;
-  for (let y = 0; y < png.height; y++) {
-    for (let x = 0; x < png.width; x++) {
-      if (png.data[(y * png.width + x) * 4 + 3] === 0) continue;
-      left = Math.min(left, x);
-      top = Math.min(top, y);
-      right = Math.max(right, x);
-      bottom = Math.max(bottom, y);
-    }
-  }
-  if (right < left) throw new Error("精灵帧为空");
-  return { x: left, y: top, width: right - left + 1, height: bottom - top + 1 };
-}
+const colors = palette();
+const before = new PNG({ width: atlas.width, height: atlas.height });
 
 for (const [kindIndex, kind] of kinds.entries()) {
   const walking = directions.flatMap((direction) =>
@@ -50,6 +42,12 @@ for (const [kindIndex, kind] of kinds.entries()) {
       supplementDirections.flatMap(seated),
       kind,
     ),
+    ...spriteCells(
+      PNG.sync.read(readFileSync(`${root}assets/raw/${kind}-seated-front.png`)),
+      2,
+      ["down", "up"].flatMap(seated),
+      kind,
+    ),
   ];
 
   // 全部姿态共用同一框和缩放比例，底边固定，避免走路时脚底上下抖动。
@@ -60,6 +58,8 @@ for (const [kindIndex, kind] of kinds.entries()) {
   const scaledWidth = Math.round(commonWidth * scale);
   const scaledHeight = Math.round(commonHeight * scale);
 
+  const measurements = [];
+  let interiorRepairs = 0;
   for (const [index, { png, box, name }] of cells.entries()) {
     const common = new PNG({ width: commonWidth, height: commonHeight });
     png.bitblt(
@@ -86,10 +86,21 @@ for (const [kindIndex, kind] of kinds.entries()) {
       }
     }
     // 缩小可能漏掉窄脚尖，再固定实际不透明底边，不改变共用缩放比例。
+    measurements.push(measureCharacterCleanup(scaled));
+    interiorRepairs += repairCharacterInterior(scaled, colors);
     const scaledBox = bounds(scaled);
-    const occupiedHeight = scaledBox.y + scaledBox.height;
+    const occupiedHeight = scaledBox.y + scaledBox.h;
     scaled.bitblt(
       atlas,
+      0,
+      0,
+      scaledWidth,
+      occupiedHeight,
+      atlasX + offsetX,
+      atlasY + frameHeight - occupiedHeight,
+    );
+    scaled.bitblt(
+      before,
       0,
       0,
       scaledWidth,
@@ -105,16 +116,33 @@ for (const [kindIndex, kind] of kinds.entries()) {
       sourceSize: { w: frameWidth, h: frameHeight },
     };
   }
+  const cleaned = cleanupTotals(measurements, kind);
+  cleanup.push({ ...cleaned, interiorRepairs });
+  saveJson("assets/probe/front-seating-cleanup.json", cleanup);
   for (const direction of directions) {
     const name = `${kind}/walk/${direction}`;
     animations[name] = [0, 1, 2, 3].map((frame) => `${name}/${frame}`);
   }
-  for (const direction of ["right", ...supplementDirections]) {
+  for (const direction of ["right", ...supplementDirections, "down", "up"]) {
     const name = `${kind}/typing/${direction}`;
     animations[name] = [0, 1].map((frame) => `${name}/${frame}`);
   }
 }
 
+quantize(atlas, colors, undefined, true);
+verify(atlas, colors);
+const error = characterPreviews(before, atlas, frames, kinds, colors);
+assert.ok(
+  cleanup.every((row) => row.loss <= 0.02),
+  "品红残边清理损失超过2%",
+);
+assert.ok(
+  cleanup.every((row) => row.remaining === 0),
+  "剩余品红残边",
+);
+console.log(
+  `角色 ${Object.keys(frames).length} 帧；调色板外颜色数 0；半透明像素 0；RGB误差均值 ${error.mean.toFixed(3)}；P95 ${error.p95.toFixed(3)}`,
+);
 mkdirSync(`${root}public`, { recursive: true });
 writeFileSync(`${root}public/sprites.png`, PNG.sync.write(atlas));
 writeFileSync(
