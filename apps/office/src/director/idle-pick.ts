@@ -25,7 +25,6 @@ export type Snapshot = ReadonlyMap<string, Pick<Task, "status" | "assigneeId">>;
 export function idleEligible(cast: IdleCast, snapshot: Snapshot, id: string, ignoreSleep = false) {
   const character = cast.characters.get(id);
   return (
-    id !== "human" &&
     (ignoreSleep || !cast.sleeping.has(id)) &&
     cast.present.has(id) &&
     (character?.state === "idle" || character?.state === "sit") &&

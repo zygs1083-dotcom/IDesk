@@ -20,13 +20,12 @@ vi.hoisted(() => vi.stubGlobal("matchMedia", () => ({ matches: false })));
 const snapshot = new Map([["task", { status: "in_progress" as const, assigneeId: "busy" }]]);
 const cast = {
   sleeping: new Set<string>(),
-  present: new Set(["self", "near", "far", "busy", "human"]),
+  present: new Set(["self", "near", "far", "busy"]),
   characters: new Map([
     ["self", { x: 0, y: 0, state: "idle" as CharacterState }],
     ["near", { x: 3, y: 4, state: "sit" as CharacterState }],
     ["far", { x: 30, y: 40, state: "idle" as CharacterState }],
     ["busy", { x: 1, y: 0, state: "sit" as CharacterState }],
-    ["human", { x: 0, y: 1, state: "sit" as CharacterState }],
     ["absent", { x: 0, y: 2, state: "idle" as CharacterState }],
   ]),
 };
@@ -47,7 +46,7 @@ test.each(["typing", "talk", "walk", "coffee", "away"] as const)(
   },
 );
 
-test.each(["busy", "human", "absent"])("excludes %s", (id) => {
+test.each(["busy", "absent"])("excludes %s", (id) => {
   expect(idleEligible(cast, snapshot, id)).toBe(false);
 });
 

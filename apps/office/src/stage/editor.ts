@@ -53,6 +53,7 @@ export function createEditor(stage: Stage, scene: Scene, onToggle: (active: bool
     marker(point, false);
   }
   marker(scene.bulletin, false);
+  marker(scene.frontDesk.counter, false);
   drawEdges();
   const move = (event: FederatedPointerEvent) => {
     if (!dragging) return;

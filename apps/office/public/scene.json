@@ -19,6 +19,10 @@
         }
       ],
       "upright": true
+    },
+    "counter": {
+      "x": 203,
+      "y": 645
     }
   },
   "taskBoard": {

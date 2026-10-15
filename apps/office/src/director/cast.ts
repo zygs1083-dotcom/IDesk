@@ -25,13 +25,13 @@ export class Cast {
     readonly stage: Stage,
     readonly scene: Scene,
     private frames: Record<string, Texture>,
-    humanName: string,
+    receptionistName: string,
   ) {
     createSeatCovers(stage, scene);
     this.labels = scene.zones.map((zone) => new ZoneSign(stage, zone.name));
     const human: Agent = {
       id: "human",
-      name: humanName,
+      name: receptionistName,
       kind: "custom",
       host: "",
       capabilities: [],
@@ -44,7 +44,7 @@ export class Cast {
     this.seats.set(human.id, scene.frontDesk.human);
     this.add(human);
     this.place("human", scene.frontDesk.human, "sit");
-    this.checkEmpty();
+    this.present.add(human.id);
   }
 
   update(agents: Agent[], initial = false) {
@@ -73,7 +73,6 @@ export class Cast {
         });
       }
     }
-    this.checkEmpty();
     this.scene.zones.forEach((zone, index) => {
       const hosts = [
         ...new Set(
@@ -105,19 +104,12 @@ export class Cast {
     const character = this.characters.get(id);
     if (!seat || !character || this.present.has(id) || id === "human") return;
     this.present.add(id);
-    this.checkEmpty();
     void this.enqueue(id, async () => {
       if (delay) await new Promise((resolve) => setTimeout(resolve, delay));
       character.position.copyFrom(this.scene.door);
       await this.walk(id, seat);
       this.settle(id, "sit");
     });
-  }
-
-  private checkEmpty() {
-    const bubble = this.characters.get("human")?.bubble;
-    if (this.present.size === 0) bubble?.show("zzz", Number.POSITIVE_INFINITY);
-    else bubble?.hide();
   }
 
   nearest(point: Point) {

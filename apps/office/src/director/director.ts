@@ -97,7 +97,7 @@ export async function initialize(stage: Stage, scene: Scene, t: Translate) {
   ]);
   if (stage.world.destroyed) return;
   atlas.textureSource.scaleMode = "nearest";
-  const cast = new Cast(stage, scene, atlas.textures, t("common.human"));
+  const cast = new Cast(stage, scene, atlas.textures, t("reception.name"));
   const daylight = createDaylight(stage, cast.characters);
   cast.update(agents, true);
   const cards = new Cards(stage, scene);
