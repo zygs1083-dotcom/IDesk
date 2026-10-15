@@ -1,4 +1,5 @@
 import type { OpenAPIHono } from "@hono/zod-openapi";
+import type { Lang } from "@idesk/shared/labels";
 import { pluginSchema } from "@idesk/shared/plugin-schemas";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
@@ -15,9 +16,15 @@ import {
 } from "../../plugins/registry.ts";
 import { HttpError } from "../errors.ts";
 import { type AuthEnv, auth, requireHuman } from "../middleware/auth.ts";
+import { pluginTitles } from "../plugin-titles.ts";
+import { requestLang } from "../request-lang.ts";
 
-function publicPlugins() {
-  return listPlugins().map((plugin) => ({ ...plugin, config: maskConfig(plugin.config) }));
+function publicPlugins(lang: Lang): z.infer<typeof pluginSchema>[] {
+  return listPlugins().map((plugin) => ({
+    ...plugin,
+    config: maskConfig(plugin.config),
+    configSchema: pluginTitles(plugin.configSchema, lang),
+  }));
 }
 
 const actions = { enable: enablePlugin, disable: disablePlugin, reload: reloadPlugin };
@@ -34,7 +41,7 @@ export function pluginRoutes(app: OpenAPIHono<AuthEnv>) {
         },
       },
     },
-    (c) => c.json(publicPlugins(), 200),
+    (c) => c.json(publicPlugins(requestLang(c.req.header("Accept-Language"))), 200),
   );
   app.openapi(
     {
@@ -53,10 +60,12 @@ export function pluginRoutes(app: OpenAPIHono<AuthEnv>) {
     },
     async (c) => {
       const { id, action } = c.req.valid("param");
-      if (!plugins.has(id)) throw new HttpError(404, "插件不存在");
+      if (!plugins.has(id)) throw new HttpError(404, "plugin.notFound");
       await actions[action](id);
       return c.json(
-        publicPlugins().find((plugin) => plugin.id === id) as z.infer<typeof pluginSchema>,
+        publicPlugins(requestLang(c.req.header("Accept-Language"))).find(
+          (plugin) => plugin.id === id,
+        ) as z.infer<typeof pluginSchema>,
         200,
       );
     },
@@ -85,9 +94,9 @@ export function pluginRoutes(app: OpenAPIHono<AuthEnv>) {
     async (c) => {
       const { id } = c.req.valid("param");
       const loaded = plugins.get(id);
-      if (!loaded) throw new HttpError(404, "插件不存在");
+      if (!loaded) throw new HttpError(404, "plugin.notFound");
       if (loaded.plugin.kind === "connector")
-        throw new HttpError(400, "连接器的配置在连接器实例上");
+        throw new HttpError(400, "connector.configOnInstance");
       const previous = db
         .select({ config: pluginState.config })
         .from(pluginState)
@@ -96,10 +105,14 @@ export function pluginRoutes(app: OpenAPIHono<AuthEnv>) {
       const merged = mergeSecrets(c.req.valid("json").config, previous?.config ?? {});
       const parsed = loaded.plugin.configSchema.safeParse(merged);
       if (!parsed.success)
-        throw new HttpError(400, parsed.error.issues.map((issue) => issue.message).join("；"));
+        throw new HttpError(400, "validation", {
+          text: parsed.error.issues.map((issue) => issue.message).join("；"),
+        });
       await configurePlugin(id, merged);
       return c.json(
-        publicPlugins().find((plugin) => plugin.id === id) as z.infer<typeof pluginSchema>,
+        publicPlugins(requestLang(c.req.header("Accept-Language"))).find(
+          (plugin) => plugin.id === id,
+        ) as z.infer<typeof pluginSchema>,
         200,
       );
     },
@@ -108,7 +121,7 @@ export function pluginRoutes(app: OpenAPIHono<AuthEnv>) {
   app.all("/api/plugins/:pluginId/*", async (c) => {
     const id = c.req.param("pluginId");
     const routes = plugins.get(id)?.routes;
-    if (!routes) throw new HttpError(404, "插件不存在或已停用");
+    if (!routes) throw new HttpError(404, "plugin.unavailable");
     const url = new URL(c.req.url);
     url.pathname = url.pathname.slice(`/api/plugins/${id}`.length);
     return routes.fetch(new Request(url, c.req.raw));

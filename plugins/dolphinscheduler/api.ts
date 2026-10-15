@@ -3,14 +3,13 @@ import { z } from "zod";
 export const configSchema = z.object({
   baseUrl: z
     .url()
-    .meta({ title: "地址" })
+    .meta({ title: "地址", titleEn: "Address" })
     .transform((url) => url.replace(/\/+$/, "")),
-  token: z.string().min(1).meta({ title: "Token" }),
-  projectCode: z
-    .string()
-    .regex(/^\d*$/)
-    .default("")
-    .meta({ title: "项目编码（留空 = Token 可见的全部项目）" }),
+  token: z.string().min(1).meta({ title: "Token", titleEn: "Token" }),
+  projectCode: z.string().regex(/^\d*$/).default("").meta({
+    title: "项目编码（留空 = Token 可见的全部项目）",
+    titleEn: "Project code (empty = all projects visible to the token)",
+  }),
 });
 export type Config = z.output<typeof configSchema>;
 export type Page<T> = { totalList: T[]; currentPage: number; totalPage: number };

@@ -7,13 +7,16 @@ import type { Plugin, PluginContext } from "../../apps/api/src/plugins/types.ts"
 type Task = typeof tasks.$inferSelect;
 
 const configSchema = z.object({
-  format: z.enum(["feishu", "slack", "telegram", "text"]).default("text").meta({ title: "格式" }),
-  webhookUrl: z.url().optional().meta({ title: "Webhook 地址" }),
-  chatId: z.string().optional().meta({ title: "Chat ID" }),
+  format: z
+    .enum(["feishu", "slack", "telegram", "text"])
+    .default("text")
+    .meta({ title: "格式", titleEn: "Format" }),
+  webhookUrl: z.url().optional().meta({ title: "Webhook 地址", titleEn: "Webhook address" }),
+  chatId: z.string().optional().meta({ title: "Chat ID", titleEn: "Chat ID" }),
   events: z
     .string()
     .default("task.created,task.complete,task.lease_expired,webhook.failed")
-    .meta({ title: "事件" }),
+    .meta({ title: "事件", titleEn: "Events" }),
 });
 type Config = z.infer<typeof configSchema>;
 
