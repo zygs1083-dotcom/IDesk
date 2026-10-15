@@ -1,29 +1,14 @@
 import { readFileSync } from "node:fs";
 import { type OfficeLayout, parseOfficeLayout } from "@idesk/shared/office-layout";
-import type { Layout } from "@idesk/shared/office-schemas";
 import { describe, expect, it } from "vitest";
 import { findPath } from "./path.ts";
 
 const office = parseOfficeLayout(
-  JSON.parse(readFileSync(new URL("../../assets/layout.json", import.meta.url), "utf8")),
+  JSON.parse(readFileSync(new URL("../../public/layout.json", import.meta.url), "utf8")),
 );
 const points = office.points as NonNullable<OfficeLayout["points"]>;
 const spots = office.spots as NonNullable<OfficeLayout["spots"]>;
 const standing = office.standing as NonNullable<OfficeLayout["standing"]>;
-// The v2 pathfinder consumes cell indices; its 32px output scale does not affect grid topology.
-const layout: Layout = {
-  size: { w: (office.grid.rows[0] as string).length, h: office.grid.rows.length },
-  ground: office.grid.rows.map((row) => row.replaceAll("#", "U")),
-  objects: [],
-  zones: [],
-  reception: { chair: "", counter: "" },
-  meeting: { table: "", chairs: [] },
-  lounge: [],
-  standing: [],
-  points: {},
-  spots: [],
-  hostZones: {},
-};
 const cell = (p: { x: number; y: number }) => ({
   x: Math.floor(p.x / office.grid.cell),
   y: Math.floor(p.y / office.grid.cell),
@@ -44,13 +29,13 @@ describe("v3 measured walk grid", () => {
     it(`connects the door to ${destination.id} without crossing furniture or walls`, () => {
       const start = cell(points.door as { x: number; y: number });
       const end = cell(destination);
-      const path = findPath(layout, { tile: 32, items: {} }, start, end);
+      const path = findPath(office, start, end);
       expect(path.length).toBeGreaterThan(0);
-      expect(path[0]).toEqual({ x: start.x * 32 + 16, y: start.y * 32 + 16 });
-      expect(path.at(-1)).toEqual({ x: end.x * 32 + 16, y: end.y * 32 + 16 });
+      expect(path[0]).toEqual({ x: start.x * 16 + 8, y: start.y * 16 + 8 });
+      expect(path.at(-1)).toEqual({ x: end.x * 16 + 8, y: end.y * 16 + 8 });
       for (const point of path)
         expect(
-          (office.grid.rows[Math.floor(point.y / 32)] as string)[Math.floor(point.x / 32)],
+          (office.grid.rows[Math.floor(point.y / 16)] as string)[Math.floor(point.x / 16)],
         ).toBe(".");
     });
   }

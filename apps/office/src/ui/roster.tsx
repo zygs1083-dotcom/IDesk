@@ -1,6 +1,6 @@
-import type { Layout } from "@idesk/shared/office-schemas";
+import type { OfficeLayout as Layout } from "@idesk/shared/office-layout";
 import { useLang } from "../i18n/lang.tsx";
-import type { Seat } from "../world/seats.ts";
+import type { Seat } from "../world/places.ts";
 import { RosterItem } from "./roster-item.tsx";
 import type { Agent, Task } from "./use-office-data.ts";
 
@@ -15,8 +15,8 @@ export function Roster({
   zones: Layout["zones"];
   agents: Agent[];
   tasks: Task[];
-  seats: Map<string, Seat>;
-  standing?: Map<string, Seat>;
+  seats: Map<string, Pick<Seat, "id" | "x" | "y" | "facing" | "zone">>;
+  standing?: Map<string, Pick<Seat, "id" | "x" | "y" | "facing" | "zone">>;
   onSelect: (id: string) => void;
 }) {
   const { t } = useLang();

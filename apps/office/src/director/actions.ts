@@ -81,7 +81,7 @@ export function createActions(cast: Cast, cards: Cards) {
         if (to) {
           const seat = cast.seats.get(to);
           if (seat) {
-            const point = departure(seat, stage.layout, stage.catalog);
+            const point = departure(seat, stage.layout);
             if (point) await cast.walk(agentId, cellCenter({ ...point, facing: seat.facing }));
           }
           playSound("handoff");

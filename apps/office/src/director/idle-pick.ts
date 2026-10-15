@@ -1,6 +1,6 @@
 import type { CharacterState } from "../stage/character.ts";
 import type { Point } from "../world/path.ts";
-import type { Spot } from "../world/seats.ts";
+import type { Spot } from "../world/places.ts";
 import type { Task } from "./events.ts";
 
 const IDLE_MIN_MS = 10_000;

@@ -27,7 +27,8 @@ export const officeLayoutSchema = z.object({
   ),
   zones: z.array(z.object({ id, seats: z.array(id), plaque: rectangle })),
   board: rectangle,
-  points: z.record(id, position).optional(),
+  points: z.object({ door: position, doneTray: position, bulletin: position, board: position }),
+  drops: z.object({ doneTray: point, bulletin: point }),
   spots: z
     .array(
       position.extend({
@@ -43,12 +44,11 @@ export const officeLayoutSchema = z.object({
         ]),
       }),
     )
-    .length(8)
-    .optional(),
-  standing: z.array(position).optional(),
-  reception: z.object({ seat: id, counter: point }).optional(),
-  meeting: z.object({ seats: z.array(id), workSpot: point }).optional(),
-  lounge: z.array(id).optional(),
+    .length(8),
+  standing: z.array(position),
+  reception: z.object({ seat: id, counter: point }),
+  meeting: z.object({ seats: z.array(id), workSpot: point }),
+  lounge: z.array(id),
   hostZones: z.record(id, id),
 });
 export type OfficeLayout = z.infer<typeof officeLayoutSchema>;
@@ -71,12 +71,9 @@ export function parseOfficeLayout(value: unknown): OfficeLayout {
         layout.grid.rows.some((row) => row.length !== columns)
       )
         issue("Grid dimensions do not match size");
-      const allIds = [
-        ...layout.occluders,
-        ...layout.seats,
-        ...layout.zones,
-        ...(layout.spots ?? []),
-      ].map((item) => item.id);
+      const allIds = [...layout.occluders, ...layout.seats, ...layout.zones, ...layout.spots].map(
+        (item) => item.id,
+      );
       if (new Set(allIds).size !== allIds.length) issue("Duplicate id");
       const seats = new Map(layout.seats.map((seat) => [seat.id, seat]));
       const zones = new Map(layout.zones.map((zone) => [zone.id, zone]));
@@ -87,9 +84,9 @@ export function parseOfficeLayout(value: unknown): OfficeLayout {
           issue(`Invalid baseline: ${occluder.id}`);
       }
       const references = [
-        ...(layout.reception ? [layout.reception.seat] : []),
-        ...(layout.meeting?.seats ?? []),
-        ...(layout.lounge ?? []),
+        layout.reception.seat,
+        ...layout.meeting.seats,
+        ...layout.lounge,
         ...layout.zones.flatMap((zone) => zone.seats),
       ];
       for (const reference of references)
@@ -110,13 +107,14 @@ export function parseOfficeLayout(value: unknown): OfficeLayout {
       checkRect(layout.board, "board");
       for (const zone of Object.values(layout.hostZones))
         if (!zones.has(zone)) issue(`Unknown host zone: ${zone}`);
-      if (layout.reception) checkPoint(layout.reception.counter, "counter");
-      if (layout.meeting) checkPoint(layout.meeting.workSpot, "meeting workSpot");
+      checkPoint(layout.reception.counter, "counter");
+      checkPoint(layout.meeting.workSpot, "meeting workSpot");
+      for (const [label, drop] of Object.entries(layout.drops)) checkPoint(drop, `${label} drop`);
       for (const p of [
         ...layout.seats,
-        ...Object.values(layout.points ?? {}),
-        ...(layout.spots ?? []),
-        ...(layout.standing ?? []),
+        ...Object.values(layout.points),
+        ...layout.spots,
+        ...layout.standing,
       ]) {
         checkPoint(p, "position");
         if (layout.grid.rows[Math.floor(p.y / 16)]?.[Math.floor(p.x / 16)] !== ".")

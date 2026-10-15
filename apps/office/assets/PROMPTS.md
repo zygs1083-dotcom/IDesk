@@ -1,10 +1,9 @@
 # 像素办公室素材生成记录
 第三版背景与角色图沿用第一版；四分之三坐姿的生成记录见 [PROMPTS-seated.md](PROMPTS-seated.md)，礼仪正面坐姿见 [PROMPTS-receptionist.md#receptionist-seatedpng](PROMPTS-receptionist.md#receptionist-seatedpng)。
-运行 `pnpm --filter office characters` 重建未量化的 `public/characters.png/json`；第二版素材保留到 W74 切换。
-第二版正面四向坐姿与全图集42色量化见 [PROMPTS-front-seating.md](PROMPTS-front-seating.md)。
+运行 `pnpm --filter office characters` 重建未量化的 `public/characters.png/json`。
 礼仪专属走路原图的提示词、候选及比例记录见 [PROMPTS-receptionist.md](PROMPTS-receptionist.md)。
 使用 Codex 内置 image_gen 工具，2026-10-14 生成。画风参考 `docs/office-samples/background-sample.png` 与 `sprite-sample.png`。
-经协调者确认，为保证走路、坐姿、打字的原像素比例和身份一致，每种角色改为同一次生成的 **4 列 × 5 行** 图；前四行依次下、左、右、上，每行站、左脚、站、右脚，第五行坐姿、打字 1、打字 2、空格。新增坐姿由五张独立的 `<kind>-seated.png` 4 列 × 2 行补充图提供，原五行逐像素保留。只保留选中的六张原图及五张补充图。原图保留完整生成内容；固定原图运行 `pnpm --filter office sprites` 可确定性重建图集。生图本身具有随机性，同提示词不能保证逐像素重现。
+经协调者确认，为保证走路、坐姿、打字的原像素比例和身份一致，每种角色改为同一次生成的 **4 列 × 5 行** 图；前四行依次下、左、右、上，每行站、左脚、站、右脚，第五行坐姿、打字 1、打字 2、空格。新增坐姿由五张独立的 `<kind>-seated.png` 4 列 × 2 行补充图提供，原五行逐像素保留。只保留选中的六张原图及五张补充图。原图保留完整生成内容；固定原图运行 `pnpm --filter office characters` 可确定性重建图集。生图本身具有随机性，同提示词不能保证逐像素重现。
 切帧方式经协调者确认调整为：抠色后在整图上做 8 邻接连通区域标记，按区域质心归入 `Math.round(i*W/4)`、`Math.round(j*H/5)` 边界确定的格子，完整保留越界头发。19 个角色格必须有像素，留空格不能超过 10 个不透明像素；全部帧仍共用框、底边对齐、最近邻等比缩放。
 ## background.png
 用途：场景背景，不缩放、不拉伸；public 中为原图副本。
@@ -99,7 +98,3 @@ Seated sprites are naturally shorter due to bent knees, NEVER enlarged: exactly 
 | n8n.png | 4×5 角色精灵（19 帧） | 1 / 1 | 1122×1402 |
 | script.png | 4×5 角色精灵（19 帧） | 2 / 2 | 1122×1402 |
 | custom.png | 4×5 角色精灵（19 帧） | 1 / 1 | 1122×1402 |
-
-第二版家具：探针见 [PROMPTS-furniture.md](PROMPTS-furniture.md)，W66 扩展见 [PROMPTS-furniture-v2.md](PROMPTS-furniture-v2.md)。
-
-W66 终审返工（矩形会议桌、矮柜、茶几、门垫）：[PROMPTS-meeting-coffee.md](PROMPTS-meeting-coffee.md)。

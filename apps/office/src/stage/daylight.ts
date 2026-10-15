@@ -1,7 +1,4 @@
-import { TILE } from "@idesk/shared/office-schemas";
 import { Container, Graphics, Sprite, Texture } from "pixi.js";
-import { deskFor } from "../world/places.ts";
-import { seats } from "../world/seats.ts";
 import type { Stage } from "../world/stage.ts";
 import type { Character } from "./character.ts";
 
@@ -13,9 +10,9 @@ export function phase(date: Date): "day" | "dusk" | "night" {
 }
 
 export function createDaylight(stage: Stage, characters: Map<string, Character>, hour?: number) {
-  const available = seats(stage.layout, stage.catalog);
-  const width = stage.layout.size.w * TILE;
-  const height = stage.layout.size.h * TILE;
+  const available = stage.layout.seats;
+  const width = stage.layout.size.w;
+  const height = stage.layout.size.h;
   const shade = new Graphics();
   const tint = new Graphics().rect(0, 0, width, height).fill({ color: 0x1a2340, alpha: 0.25 });
   const lights = new Container();
@@ -50,7 +47,7 @@ export function createDaylight(stage: Stage, characters: Map<string, Character>,
     for (const character of characters.values()) {
       if (character.state !== "sit" && character.state !== "typing") continue;
       const seat = available.find((seat) => seat.x === character.x && seat.y === character.y);
-      const desk = seat ? deskFor(seat, stage.layout, stage.catalog) : undefined;
+      const desk = seat?.workSpot;
       if (!desk) continue;
       const key = `${desk.x},${desk.y}`;
       let glow = glows.get(key);

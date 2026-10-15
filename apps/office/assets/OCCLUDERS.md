@@ -1,6 +1,6 @@
 # 第三版遮挡件：工作区 1 样板
 
-坐标单位是原背景像素，原图 1672×941，不从第一版 scene.json 复制座位点。`assets/layout.json` 是第三版源文件；第二版 `public/layout.json`、`office-schemas.ts` 与运行时保持原样。以下读图以最近邻放大、原图像素边界为准，背景的柔边和投影不作为轮廓外沿。
+坐标单位是原背景像素，原图 1672×941，不从第一版 scene.json 复制座位点。`public/layout.json` 是第三版布局的唯一源文件。以下读图以最近邻放大、原图像素边界为准，背景的柔边和投影不作为轮廓外沿。
 
 ## 重新生成与审图
 
@@ -54,7 +54,7 @@ zone-1 木牌框外沿约 x572–696、y151–194；米白内区取 (579,159,110
 
 ## 分阶段数据契约
 
-`meeting`、`lounge`、`reception`、`spots`、`standing`、`points` 在本阶段可省略；有 `spots` 时仍要求完整八种唯一 id。W73c 补齐后由 W74 改为必填。座位、命名点、spots、站位必须落在背景内且格子可走；workSpot、counter、文字矩形也检查背景边界。zone 成员与 seat.zone 双向一致，hostZones 只引用存在的区域。
+`meeting`、`lounge`、`reception`、`spots`、`standing`、`points`、`drops` 均为必填；`spots` 要求完整八种唯一 id。座位、命名点、spots、站位必须落在背景内且格子可走；workSpot、counter、文字矩形也检查背景边界。zone 成员与 seat.zone 双向一致，hostZones 只引用存在的区域。
 
 ## 合成图的角色锚点
 
@@ -96,3 +96,15 @@ node apps/office/tools/occluder-seated.mjs /tmp/w73c-review/walking --walking
 ```
 
 walking 图使用西侧绿植后方的可走点 (104,408)：人脚底 y408 < 绿植 baseline460，叶子盖住躯干、部分脸和腿，头顶从叶丛上方露出；不增加排序偏移。姿势锚点的比较与最终数值只维护在 PROMPTS-seated.md。
+
+## 卡片与信封落点（W74）
+
+`points` 是人站的位置，`drops` 是物件落点，不要求位于可走格。原背景最近邻放大后，文件筐上口约 x269–311、y591–619，取中心 (290,605) 为 `drops.doneTray`。白板右侧便签区约 x402–422、y49–102，取中心 (412,76) 为 `drops.bulletin`。卡片、广播信封直接读这两个字段，不用人站点推导。
+
+会议卡放在 6 人坐满时仍可见的桌面空白处：桌面左上空白 x1291–1325、y164–186，取中心 (1308,175) 为 `meeting.workSpot`。该点避开中央绿植和南排中座头部；卡仍按会议桌 baseline、bias 1 排序。
+
+真实舞台复核后，会议卡继续上移到 y175，避开南排左座头发的左侧轮廓。对六座、五种智能体的 sit 与两帧 typing 按图集 anchor 检查，含 1px 描边的整张卡与人物不透明像素均无交集；由 `meeting-card.test.mjs` 固定这一可见性约束。
+
+### workSpot 可见性
+
+workSpot 是坐满时可见的桌面点；卡片矩形和暖光中心都不能落在任何坐着的人的像素上。按真实角色图集的帧锚点与 mirror 合成全部座位，用 `zIndexOf` 排序扣除遮挡件盖住的像素，再逐点核对卡片外框（含描边 35×23 像素）和暖光中心。会议室从南排三人的头顶上方量取桌面空隙；休息区取茶几前缘的裸露桌面，避开花盆与书。其余工位同样检查五种智能体的 sit 与 typing 两帧，前台检查礼仪 down 的三帧。

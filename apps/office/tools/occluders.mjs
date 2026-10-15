@@ -13,7 +13,7 @@ import {
 } from "./occluder-image.mjs";
 
 export function buildOccluders() {
-  const layout = parseOfficeLayout(readJson(`${root}assets/layout.json`));
+  const layout = parseOfficeLayout(readJson(`${root}public/layout.json`));
   const background = readPng(`${root}assets/raw/background.png`);
   assert.equal(background.width, layout.size.w);
   assert.equal(background.height, layout.size.h);
@@ -60,4 +60,4 @@ export function buildOccluders() {
   return pieces.length;
 }
 if (process.argv[1] === fileURLToPath(import.meta.url))
-  console.log(`Occluders: ${buildOccluders()} frames`);
+  process.stdout.write(`Occluders: ${buildOccluders()} frames\n`);

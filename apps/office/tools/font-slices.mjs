@@ -98,7 +98,7 @@ async function generate() {
     "--write",
     fileURLToPath(new URL("src/fonts.css", root)),
   ]);
-  console.log(
+  process.stdout.write(
     `${slices.length} slices, ${slices.reduce((sum, slice) => sum + slice.points.length, 0)} codepoints, ${bytes} bytes`,
   );
 }

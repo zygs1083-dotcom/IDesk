@@ -2,7 +2,7 @@ import { resolve } from "node:path";
 import { parseOfficeLayout } from "@idesk/shared/office-layout";
 import { contains, polygonBounds, readJson, root, saveJson } from "./occluder-image.mjs";
 
-const layout = parseOfficeLayout(readJson(`${root}assets/layout.json`));
+const layout = parseOfficeLayout(readJson(`${root}public/layout.json`));
 const cell = 16;
 const rows = Array.from({ length: Math.ceil(layout.size.h / cell) }, (_, y) =>
   Array.from({ length: Math.ceil(layout.size.w / cell) }, (_, x) => {
@@ -31,4 +31,4 @@ for (const p of [
   rows[Math.floor(p.y / cell)][Math.floor(p.x / cell)] = ".";
 if (!process.argv[2]) throw new Error("Usage: node tools/occluder-grid.mjs OUTPUT.json");
 saveJson(resolve(process.argv[2]), { cell, rows: rows.map((row) => row.join("")) });
-console.log(`Grid draft: ${resolve(process.argv[2])}`);
+process.stdout.write(`Grid draft: ${resolve(process.argv[2])}\n`);

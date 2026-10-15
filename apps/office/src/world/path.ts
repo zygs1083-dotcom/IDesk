@@ -1,21 +1,10 @@
-import { type Catalog, type Furniture, type Layout, TILE } from "@idesk/shared/office-schemas";
+import type { OfficeLayout } from "@idesk/shared/office-layout";
 
 export type Point = { x: number; y: number };
-export type TileCodes = Record<string, string>;
+const CELL = 16;
 const key = (point: Point) => `${point.x},${point.y}`;
-export function walkableGrid(layout: Layout, catalog: Catalog, codes: TileCodes = {}) {
-  const grid = layout.ground.map((row) =>
-    [...row].map((code) => code !== "U" && code !== "L" && !codes[code]?.startsWith("wall/")),
-  );
-  for (const object of layout.objects) {
-    const item = catalog.items[object.item] as Furniture;
-    if (!item.blocks) continue;
-    for (let y = object.y; y < object.y + item.footprint.h; y++) {
-      for (let x = object.x; x < object.x + item.footprint.w; x++)
-        (grid[y] as boolean[])[x] = false;
-    }
-  }
-  return grid;
+export function walkableGrid(layout: OfficeLayout) {
+  return layout.grid.rows.map((row) => [...row].map((cell) => cell === "."));
 }
 
 export function smoothCorners(path: Point[], walkable: (point: Point) => boolean): Point[] {
@@ -38,15 +27,10 @@ export function smoothCorners(path: Point[], walkable: (point: Point) => boolean
   return result;
 }
 
-export function findPath(
-  layout: Layout,
-  catalog: Catalog,
-  start: Point,
-  end: Point,
-  codes: TileCodes = {},
-): Point[] {
-  const grid = walkableGrid(layout, catalog, codes);
-  const inside = (p: Point) => p.x >= 0 && p.y >= 0 && p.x < layout.size.w && p.y < layout.size.h;
+export function findPath(layout: OfficeLayout, start: Point, end: Point): Point[] {
+  const grid = walkableGrid(layout);
+  const inside = (p: Point) =>
+    p.x >= 0 && p.y >= 0 && p.x < (grid[0] as boolean[]).length && p.y < grid.length;
   if (!inside(start) || !inside(end)) return [];
   const walkable = (p: Point) =>
     inside(p) &&
@@ -87,9 +71,9 @@ export function findPath(
 }
 
 export function cellCenter<T extends Point>(point: T): T {
-  return { ...point, x: (point.x + 0.5) * TILE, y: (point.y + 0.5) * TILE };
+  return { ...point, x: (point.x + 0.5) * CELL, y: (point.y + 0.5) * CELL };
 }
 
 export function cellOf(point: Point): Point {
-  return { x: Math.floor(point.x / TILE), y: Math.floor(point.y / TILE) };
+  return { x: Math.floor(point.x / CELL), y: Math.floor(point.y / CELL) };
 }

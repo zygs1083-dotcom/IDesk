@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 import { zIndexOf } from "./sort.ts";
 
 const layout = parseOfficeLayout(
-  JSON.parse(readFileSync(new URL("../../assets/layout.json", import.meta.url), "utf8")),
+  JSON.parse(readFileSync(new URL("../../public/layout.json", import.meta.url), "utf8")),
 );
 const relationships = [
   { seat: "zone-1-back-left", ahead: ["zone-1-desk-back-left"], behind: [] },

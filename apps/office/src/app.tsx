@@ -1,4 +1,4 @@
-import type { Catalog, Layout } from "@idesk/shared/office-schemas";
+import type { OfficeLayout } from "@idesk/shared/office-layout";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { direct } from "./director/director.ts";
 import { type ReplayControls, replay } from "./director/replay.ts";
@@ -14,7 +14,7 @@ import { TaskPanel } from "./ui/task-panel.tsx";
 import { TopBar } from "./ui/top-bar.tsx";
 import { useOfficeData } from "./ui/use-office-data.ts";
 import { loadWorldAssets } from "./world/assets.ts";
-import { loadCatalog } from "./world/catalog.ts";
+import { installDebug } from "./world/debug.ts";
 import { loadLayout } from "./world/layout.ts";
 import { assignSeats, assignStanding } from "./world/places.ts";
 import { createStage } from "./world/stage.ts";
@@ -44,6 +44,8 @@ export function App() {
   controls.current.playing = playing;
   controls.current.speed = speed;
   const { agents, tasks, admin, error: dataError } = useOfficeData(mode.mode === "live");
+  const adminRef = useRef(admin);
+  adminRef.current = admin;
   const enterReplay = () => {
     const end = Date.now();
     controls.current.end = end;
@@ -52,7 +54,7 @@ export function App() {
     setPlaying(true);
     setMode({ mode: "replay", at: controls.current.start });
   };
-  const [world, setWorld] = useState<{ layout: Layout; catalog: Catalog }>();
+  const [world, setWorld] = useState<{ layout: OfficeLayout }>();
   const layout = world?.layout;
   const [selection, setSelection] = useState<{ type: "agent" | "task"; id: string }>();
   const closePanel = useCallback(() => setSelection(undefined), []);
@@ -68,20 +70,20 @@ export function App() {
     let observer: ResizeObserver;
     let stage: Awaited<ReturnType<typeof createStage>>;
     const start = async () => {
-      const catalog = await loadCatalog();
-      const layout = await loadLayout(catalog);
+      const layout = await loadLayout();
       const assets = await loadWorldAssets();
       const element = host.current;
       if (!element || disposed) return;
-      setWorld({ layout, catalog });
+      setWorld({ layout });
       await loadGlyphs(initialGlyphs);
       if (disposed) return;
-      stage = await createStage(element, layout, catalog, assets);
+      stage = await createStage(element, layout, assets);
       if (disposed) {
         stage.world.destroy({ children: true });
         stage.app.destroy(true, { children: true });
         return;
       }
+      installDebug(stage, stageText.current, () => adminRef.current);
       observer = new ResizeObserver(() => stage.app.resize());
       observer.observe(element);
       setTimeScale(1);
@@ -99,7 +101,7 @@ export function App() {
       stage?.app.destroy(true, { children: true });
     };
   }, [mode]);
-  const seats = world ? assignSeats(agents, world.layout, world.catalog) : new Map();
+  const seats = world ? assignSeats(agents, world.layout) : new Map();
   const standing = layout ? assignStanding(agents, seats, layout) : new Map();
   const agent =
     selection?.type === "agent" ? agents.find((item) => item.id === selection.id) : undefined;

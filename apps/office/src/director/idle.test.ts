@@ -1,6 +1,6 @@
 import { expect, test, vi } from "vitest";
 import type { CharacterState } from "../stage/character.ts";
-import type { Spot } from "../world/seats.ts";
+import type { Spot } from "../world/places.ts";
 import {
   idleDelay,
   idleDozing,
@@ -99,8 +99,8 @@ test("chat picks the nearest eligible neighbor and excludes self", () => {
 
 test("spot chaining uses a quarter probability and a different destination", () => {
   const spots: Spot[] = [
-    { id: "coffee", x: 10, y: 20, facing: "up" },
-    { id: "sofa", x: 30, y: 40, facing: "up" },
+    { id: "coffee", x: 10, y: 20, facing: "back" },
+    { id: "sofa", x: 30, y: 40, facing: "back" },
   ];
   const values = [0, 0.2499, 0];
   expect(pickSpots(spots, () => values.shift() ?? 0)).toEqual(spots);

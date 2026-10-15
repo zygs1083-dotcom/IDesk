@@ -1,7 +1,5 @@
-import { TILE } from "@idesk/shared/office-schemas";
 import { CanvasTextMetrics, Container, Text } from "pixi.js";
 import { setGlyphText } from "../stage/glyphs.ts";
-import { zIndexOf } from "./sort.ts";
 import type { Stage } from "./stage.ts";
 
 const LETTERING = "#3B2A1A";
@@ -40,21 +38,12 @@ export class Plaque extends Container {
 
   constructor(
     private stage: Stage,
-    id: string,
+    area: { x: number; y: number; w: number; h: number },
   ) {
-    super();
-    const object = stage.layout.objects.find((object) => object.id === id);
-    if (!object) throw new Error(`Missing plaque: ${id}`);
-    const item = stage.catalog.items[object.item];
-    const part = item?.parts[0];
-    if (!item?.textArea || !part) throw new Error(`Missing plaque textArea: ${id}`);
-    this.area = item.textArea;
-    this.position.set(
-      object.x * TILE + part.dx + this.area.x + this.area.w / 2,
-      object.y * TILE + part.dy + this.area.y + this.area.h / 2,
-    );
-    this.zIndex = zIndexOf(object.y * TILE + part.sortY, 1);
-    (item.layer === "wall" ? stage.wall : stage.objects).addChild(this);
+    super({ eventMode: "none" });
+    this.area = area;
+    this.position.set(area.x + area.w / 2, area.y + area.h / 2);
+    stage.board.addChild(this);
     this.title.anchor.set(0.5);
     this.addChild(this.title);
     const resize = () => this.update();

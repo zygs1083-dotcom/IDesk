@@ -3,12 +3,12 @@ import { fixture } from "./office-layout.fixture.ts";
 import { parseOfficeLayout } from "./office-layout.ts";
 
 describe("v3 office layout", () => {
-  it("accepts a staged work area without optional destinations", () => {
+  it("accepts the complete layout", () => {
     expect(parseOfficeLayout(fixture())).toEqual(fixture());
   });
   it("accepts all destinations and seat references", () => {
     const value = fixture();
-    value.points = { door: { x: 160, y: 160, facing: "down" } };
+    value.points.door = { x: 160, y: 160, facing: "down" };
     value.standing = [{ x: 160, y: 160, facing: "left" }];
     value.reception = { seat: "seat", counter: { x: 10, y: 10 } };
     value.meeting = { seats: ["seat"], workSpot: { x: 10, y: 10 } };
@@ -26,6 +26,19 @@ describe("v3 office layout", () => {
       ] as const
     ).map((id) => ({ id, x: 160, y: 160, facing: "right" }));
     expect(parseOfficeLayout(value)).toEqual(value);
+  });
+  it.each(["points", "drops", "spots", "standing", "reception", "meeting", "lounge"])(
+    "requires %s",
+    (field) => {
+      const value = { ...fixture() } as Record<string, object | string | undefined>;
+      delete value[field];
+      expect(() => parseOfficeLayout(value)).toThrow();
+    },
+  );
+  it("rejects drops outside the background", () => {
+    const value = fixture();
+    value.drops.bulletin.x = 1672;
+    expect(() => parseOfficeLayout(value)).toThrow();
   });
   it.each([
     ["short grid", (v: ReturnType<typeof fixture>) => v.grid.rows.pop()],
@@ -150,7 +163,7 @@ describe("v3 office layout", () => {
     [
       "blocked point",
       (v: ReturnType<typeof fixture>) => {
-        v.points = { door: { x: 0, y: 0, facing: "down" } };
+        v.points.door = { x: 0, y: 0, facing: "down" };
         v.grid.rows[0] = "#".repeat(105);
       },
     ],

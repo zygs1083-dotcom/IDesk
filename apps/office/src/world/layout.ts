@@ -1,6 +1,6 @@
-import { type Catalog, type Layout, parseLayout } from "@idesk/shared/office-schemas";
+import { type OfficeLayout, parseOfficeLayout } from "@idesk/shared/office-layout";
 
-export async function loadLayout(catalog: Catalog): Promise<Layout> {
+export async function loadLayout(): Promise<OfficeLayout> {
   const response = await fetch("/office/layout.json", { cache: "no-store" });
-  return parseLayout(await response.json(), catalog);
+  return parseOfficeLayout(await response.json());
 }

@@ -1,8 +1,7 @@
 import type { Translate } from "../i18n/translate.ts";
 import type { Key } from "../i18n/zh.ts";
-import { cellCenter } from "../world/path.ts";
+import type { SpotId } from "../world/places.ts";
 import { chatSeats } from "../world/places.ts";
-import type { SpotId } from "../world/seats.ts";
 import type { Cast } from "./cast.ts";
 import { idleEligible, idleSpeed, idleStay, pickSpots, type Snapshot } from "./idle-pick.ts";
 
@@ -69,7 +68,7 @@ export function idleMoves(
     },
     async spot(id: string) {
       for (const spot of pickSpots(cast.stage.layout.spots, random)) {
-        await cast.walk(id, cellCenter(spot), idleSpeed(random));
+        await cast.walk(id, spot, idleSpeed(random));
         if (!alive()) return;
         const duration = idleStay(random);
         cast.characters.get(id)?.bubble.show(t(spotKeys[spot.id]), duration);
@@ -95,7 +94,7 @@ export function idleMoves(
       const a = cast.seats.get(id);
       const b = cast.seats.get(other);
       if (eligible && idleEligible(cast, snapshot, id) && a && b && alive()) {
-        const targets = chatSeats(a, cast.stage.layout, cast.stage.catalog);
+        const targets = chatSeats(a, cast.stage.layout);
         if (targets) {
           await Promise.all([
             cast.walk(id, targets[0], idleSpeed(random)),

@@ -1,4 +1,5 @@
 export const zh = {
+  "debug.export": "导出 JSON",
   "common.capabilities": "能力",
   "common.closePanel": "关闭面板",
   "common.deletedAgent": "已删除的智能体",

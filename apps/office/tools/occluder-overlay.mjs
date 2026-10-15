@@ -15,7 +15,7 @@ import {
 } from "./occluder-image.mjs";
 
 export function overlay(output, grid = false) {
-  const layout = parseOfficeLayout(readJson(`${root}assets/layout.json`));
+  const layout = parseOfficeLayout(readJson(`${root}public/layout.json`));
   const png = readPng(`${root}assets/raw/background.png`);
   if (grid)
     for (let y = 0; y < png.height; y++)
@@ -72,5 +72,5 @@ export function overlay(output, grid = false) {
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   if (!process.argv[2]) throw new Error("Usage: node tools/occluder-overlay.mjs OUTPUT [--grid]");
   overlay(process.argv[2], process.argv.includes("--grid"));
-  console.log(`Overlay: ${resolve(process.argv[2])}`);
+  process.stdout.write(`Overlay: ${resolve(process.argv[2])}\n`);
 }
