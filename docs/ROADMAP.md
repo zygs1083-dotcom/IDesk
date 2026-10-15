@@ -121,3 +121,15 @@
 - 并行：W68 合并后，W69a（layout/catalog schema 搬到 packages/shared）先合；W69b（PUT 接口）、W69c（编辑器 UI）、W70 同时跑。全量测试一律 `flock /tmp/idesk-test.lock pnpm test`，独立 Chromium 一律 `flock /tmp/idesk-browser.lock`。
 
 派发约束：W64 与 W65 并行（W64 只动 `assets/`、`tools/`、`public/` 的新文件，W65 只动 `src/world/`、API 路由）；W66、W67 都改图集，各自用独立图集文件（`furniture.*` 与 `sprites.*`），可以并行；W68 等 W66、W67 都合并；W69 最后。每个 PR 都附 `check-office` 截图。
+
+## M11 像素办公室第三版：第一版的画 + 正规遮挡（设计见 `docs/OFFICE.md`）
+
+用户看了第二版后选择回到第一版插画的质感，只换遮挡技术。M10 剩余的 W69b/W69c（家具编辑器）、W70（家具与瓦片索引色）取消；W71（字体分片）照常。顺序：W72 ‖ W73 → W73b ‖ W73c → W74。
+
+- **W72 素材取回**：从提交 5a08051 取回 `assets/raw/background.png`、六种角色原图与坐姿原图、`PROMPTS*.md`、第一版的 `tools/sprites.mjs` / `sprite-cells.mjs` 切帧逻辑（不量化颜色），生成 `public/background.webp` 与角色图集：走路、四分之三坐姿 front/back、侧坐、礼仪正面坐姿（upright 改名 down）。第二版素材暂不删（W74 删）。验收：图集帧表、与 5a08051 图集逐帧比对（除改名外像素相同）。
+- **W73 遮挡件工具与布局 schema**：`@idesk/shared/office-schemas` 改为第三版 layout（occluders、16px 可走栅格、座位 facing front/back/down/left/right + mirror、工作区名牌文字区、命名点、standing/meeting/lounge、hostZones、title）；`tools/occluders.mjs` 按多边形抠图打包 `occluders.png/json`；`tools/occluder-overlay.mjs` 出轮廓叠加图；按工作区 1 描完它的桌子（连显示器）和前排椅背、量好 4 个座位脚底和 workSpot、名牌文字区，作为后两项的样板。验收：叠加图 3 倍、座位排序单元测试、工具可复现。
+- **W73b 工作区 2–4**：照 W73 样板描 12 张桌子和前排椅背、量 12 个座位与名牌文字区。只写布局里这三个区的条目。
+- **W73c 前台、会议室、休息区与杂项**：柜台、礼仪座位；会议桌与 6 把会议椅（两端侧坐）；沙发与座位、茶几；绿植、书架、打印机、隔断等会挡住行走的人的物体；命名点（门、白板文字区、文件筐、公告栏、8 个空闲去处）、站位；可走栅格（工具出初稿后手修）。
+- **W74 切换并删除第二版**：渲染背景 + 遮挡件 + 人（zIndexOf 唯一），座位与命名点来自第三版布局，四分之三坐姿 + mirror、礼仪正面坐姿、侧坐；名牌、白板卡片、昼夜暖光、检查页、demo-events 接到新布局；`e` 调试模式（轮廓、脚底点、栅格、拖座位导出 JSON）。删除第二版的瓦片、家具图集、目录、调色板、探针、正面工位坐姿和对应工具。验收：坐满全景（白天/黄昏/夜间）、每区放大图逐个看脚手臀肩头、轮廓叠加图、§6 事件 GIF、空闲 60 秒 GIF、「用户第一眼」全景结论。
+
+派发约束：W72 与 W73 并行（W72 只动 assets/raw、tools/sprites*、public/sprites.*、public/background.webp；W73 动 shared schema、tools/occluders*、public/layout.json、public/occluders.*）。W73b、W73c 在 W73 合并后并行，各自只写布局里自己区域的条目（放在 layout.json 的不同数组位置，合并时按 id 排序避免冲突）。全量测试一律 `flock /tmp/idesk-test.lock pnpm test`，独立 Chromium 一律 `flock /tmp/idesk-browser.lock`。
