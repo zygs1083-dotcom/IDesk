@@ -59,7 +59,7 @@ export async function demoEvents(
     await step("created", async () => {
       task = await request("tasks", { title: "Office demo: shipping the world", priority: "high" });
     });
-    await step("claim", () => act(task, "claim"), 15_000);
+    await step("claim", () => act(task, "claim"), 35_000);
     await step("reported", () =>
       request(
         `tasks/${task.id}/report`,
@@ -72,9 +72,9 @@ export async function demoEvents(
       () => act(task, "handoff", 0, { to: agents[1].agent.id, note: "Please verify the world" }),
       12_000,
     );
-    await step("accept", () => act(task, "accept", 1), 15_000);
-    await step("pause", () => act(task, "pause", 1), 12_000);
-    await step("resume", () => act(task, "resume", 1), 12_000);
+    await step("accept", () => act(task, "accept", 1), 45_000);
+    await step("pause", () => act(task, "pause", 1), 20_000);
+    await step("resume", () => act(task, "resume", 1), 20_000);
     await step("complete", () => act(task, "complete", 1, { result: "Verified" }));
     let released;
     await step("release-created", async () => {
@@ -93,7 +93,7 @@ export async function demoEvents(
       await step(
         `join-${index + 1}`,
         () => act(meeting, "join", index),
-        index === agents.length - 1 ? 45_000 : 15_000,
+        index === agents.length - 1 ? 45_000 : 25_000,
       );
     await step("meeting-cancel", () => request(`tasks/${meeting.id}/actions/cancel`, {}), 15_000);
     await step("envelope", () =>
