@@ -10,7 +10,7 @@ import { publishEvent, recordEvent } from "../events/bus.ts";
 type Agent = typeof agents.$inferSelect;
 export type AgentKind = (typeof AGENT_KINDS)[number];
 export type PublicAgent = Omit<Agent, "apiKeyHash"> & { status: "online" | "offline" };
-export const agentActor = (agent: PublicAgent): Actor => ({
+export const agentActor = (agent: PublicAgent): Extract<Actor, { kind: "agent" }> => ({
   kind: "agent",
   id: agent.id,
   capabilities: agent.capabilities,
