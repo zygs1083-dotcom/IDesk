@@ -489,3 +489,12 @@ completedAt: <ISO>
 ### 12.14 办公室回放、昼夜、声音（W37–W39）
 
 见 `docs/OFFICE.md` §4、§5、§6。
+
+### 12.15 智能体编辑与删除（W40）
+
+§6.1 早就列了 `PATCH /agents/:id` 和 `DELETE /agents/:id`，但一直没实现。
+
+- `PATCH /agents/:id { name?, host?, capabilities?, webhookUrl? }`：只有人；写事件 `agent.updated { name, kind }`。
+- `DELETE /agents/:id`：只有人；删行，不动任务和事件（它们保留 agent id，前端显示找不到名字时显示「已删除的智能体」）；写事件 `agent.deleted { name, kind }`（agentId 留空，id 放 payload）。该智能体正在负责的 in_progress / assigned / paused 任务不自动处理，由人在看板上重新指派或放回。
+- 插件里按 id 查智能体名字的地方（chat-notifier、result-archive、webhook-notifier）查不到时用 id 代替，不能 `as` 断言非空。
+- 界面见 UI.md 智能体页。
