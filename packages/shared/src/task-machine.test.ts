@@ -1,16 +1,16 @@
 import { expect, it } from "vitest";
+import { labels } from "./labels.ts";
 import {
   type Actor,
-  LEASE_MS,
   type TaskAction,
   type TaskState,
   TransitionError,
   transition,
 } from "./task-machine.ts";
-import { TASK_STATUS_LABEL, TASK_STATUSES, type TaskStatus } from "./task-status.ts";
+import { TASK_STATUSES, type TaskStatus } from "./task-status.ts";
 
 const now = new Date("2026-10-14T00:00:00Z");
-const lease = new Date(now.getTime() + LEASE_MS);
+const lease = new Date(now.getTime() + 10 * 60_000);
 const agent: Actor = { kind: "agent", id: "owner", capabilities: ["coding", "gpu"] };
 const human: Actor = { kind: "human" };
 const system: Actor = { kind: "system" };
@@ -76,7 +76,7 @@ it.each(TASK_STATUSES.flatMap((status) => actions.map((action) => ({ status, act
     if (expected) expect(ok(result).status).toBe(expected);
     else {
       expect(result).toBeInstanceOf(TransitionError);
-      expect((result as TransitionError).message).toContain(TASK_STATUS_LABEL[status]);
+      expect((result as TransitionError).message).toContain(labels("zh").status[status]);
     }
   },
 );
