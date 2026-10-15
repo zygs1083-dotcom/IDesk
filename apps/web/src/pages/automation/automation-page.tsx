@@ -4,7 +4,8 @@ import type {
   pollResultSchema,
 } from "@idesk/shared/automation-schemas";
 import { skipToken, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { Search } from "lucide-react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import type { z } from "zod";
 import { Button } from "../../components/button.tsx";
@@ -13,6 +14,7 @@ import { Toast } from "../../components/toast.tsx";
 import { PageHeader } from "../../layout/page-header.tsx";
 import { request } from "../../lib/api.ts";
 import { relativeTime } from "../../lib/format.ts";
+import { filterRuns } from "./filter-runs.ts";
 import { RunCard } from "./run-card.tsx";
 import { RunColumn } from "./run-column.tsx";
 
@@ -32,6 +34,12 @@ const runColumns: Record<Run["status"], (typeof columns)[number]["id"]> = {
 export function AutomationPage() {
   const client = useQueryClient();
   const [selected, setSelected] = useState<string | null>(null);
+  const [search, setSearch] = useState("");
+  const [q, setQ] = useState("");
+  useEffect(() => {
+    const timer = setTimeout(() => setQ(search), 200);
+    return () => clearTimeout(timer);
+  }, [search]);
   const [message, setMessage] = useState<string | null>(null);
   const connectorsQuery = useQuery({
     queryKey: ["automation", "connectors"],
@@ -56,6 +64,7 @@ export function AutomationPage() {
     onError: (error) => setMessage(error.message),
   });
   const error = connectorsQuery.error ?? runs.error;
+  const filteredRuns = filterRuns(runs.data ?? [], q);
   const now = Date.now();
   return (
     <div className="flex h-full min-h-0 flex-col gap-6">
@@ -91,13 +100,25 @@ export function AutomationPage() {
       )}
       {connector && (
         <>
-          <div className="flex overflow-x-auto">
-            <Segmented
-              label="连接器"
-              options={connectors.map((item) => ({ value: item.id, label: item.name }))}
-              value={connector.id}
-              onChange={setSelected}
-            />
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div className="flex min-w-0 overflow-x-auto">
+              <Segmented
+                label="连接器"
+                options={connectors.map((item) => ({ value: item.id, label: item.name }))}
+                value={connector.id}
+                onChange={setSelected}
+              />
+            </div>
+            <label className="flex min-w-0 flex-1 sidebar:max-w-60 items-center gap-2 rounded-control border border-line bg-surface px-3 py-2 text-text-2">
+              <Search size={16} strokeWidth={1.5} />
+              <input
+                aria-label="搜索工作流"
+                placeholder="搜索工作流"
+                value={search}
+                onChange={(event) => setSearch(event.target.value)}
+                className="min-w-0 w-full bg-transparent text-secondary text-text outline-none placeholder:text-text-3 focus-visible:outline-1 focus-visible:outline-accent"
+              />
+            </label>
           </div>
           {connector.lastError !== null && (
             <div role="alert">
@@ -110,7 +131,7 @@ export function AutomationPage() {
             className="flex min-h-0 flex-1 gap-3 overflow-x-auto pb-3"
           >
             {columns.map((column) => {
-              const items = (runs.data ?? []).filter((run) => runColumns[run.status] === column.id);
+              const items = filteredRuns.filter((run) => runColumns[run.status] === column.id);
               return (
                 <RunColumn
                   key={column.id}
