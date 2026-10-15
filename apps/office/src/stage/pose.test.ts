@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
-import type { Direction } from "../world/seats.ts";
+import type { Direction } from "../world/places.ts";
 import type { CharacterState } from "./character.ts";
 import { characterPose } from "./pose.ts";
 
 describe("character poses", () => {
-  for (const facing of ["left", "right", "down", "up"] satisfies Direction[]) {
+  for (const facing of ["left", "right", "down", "front", "back"] satisfies Direction[]) {
     const direction = facing === "left" ? "right" : facing;
     for (const state of ["sit", "talk", "typing"] satisfies CharacterState[]) {
       it(`${state} faces ${facing}`, () => {
@@ -14,14 +14,17 @@ describe("character poses", () => {
         });
       });
     }
-    for (const state of ["idle", "walk", "coffee", "away"] satisfies CharacterState[]) {
-      it(`${state} retains ${facing} walking frames`, () => {
-        expect(characterPose(state, facing, 300)).toEqual({
-          frame: `walk/${facing}/${state === "walk" ? 2 : 0}`,
-          mirror: false,
-        });
+    it(`seat mirror applies to ${facing}`, () => {
+      expect(characterPose("typing", facing, 0, true).mirror).toBe(true);
+    });
+  }
+  for (const facing of ["up", "down", "left", "right"] as const) {
+    it(`walks ${facing} without seat mirroring`, () => {
+      expect(characterPose("walk", facing, 300, true)).toEqual({
+        frame: `walk/${facing}/2`,
+        mirror: false,
       });
-    }
+    });
   }
   it("cycles typing frames", () => {
     expect([0, 300, 600].map((ms) => characterPose("typing", "down", ms).frame)).toEqual([

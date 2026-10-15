@@ -1,4 +1,3 @@
-import { TILE } from "@idesk/shared/office-schemas";
 import { Container, Graphics, Text } from "pixi.js";
 import type { Task } from "../director/events.ts";
 import { tween } from "../engine/tween.ts";
@@ -46,16 +45,7 @@ export class Cards {
   private area;
 
   constructor(private stage: Stage) {
-    const object = stage.layout.objects.find((object) => object.item === "whiteboard");
-    if (!object) throw new Error("Missing whiteboard");
-    const item = stage.catalog.items[object.item];
-    const part = item?.parts[0];
-    if (!part || !item?.textArea) throw new Error("Missing board textArea");
-    this.area = {
-      ...item.textArea,
-      x: object.x * TILE + part.dx + item.textArea.x,
-      y: object.y * TILE + part.dy + item.textArea.y,
-    };
+    this.area = stage.layout.board;
     stage.board.addChild(this.overflow);
   }
 

@@ -26,5 +26,28 @@ export function fixture(): Sample {
     zones: [{ id: "zone", seats: ["seat"], plaque: { x: 10, y: 10, w: 40, h: 10 } }],
     board: { x: 10, y: 10, w: 100, h: 100 },
     hostZones: { host: "zone" },
+    points: Object.fromEntries(
+      ["door", "doneTray", "bulletin", "board"].map((id) => [
+        id,
+        { x: 160, y: 160, facing: "down" as const },
+      ]),
+    ) as OfficeLayout["points"],
+    drops: { doneTray: { x: 10, y: 10 }, bulletin: { x: 20, y: 20 } },
+    standing: [],
+    reception: { seat: "seat", counter: { x: 10, y: 10 } },
+    meeting: { seats: ["seat"], workSpot: { x: 10, y: 10 } },
+    lounge: ["seat"],
+    spots: (
+      [
+        "printer",
+        "bookshelf",
+        "whiteboard",
+        "window",
+        "plant",
+        "sofa",
+        "coffee",
+        "meetingDoor",
+      ] as const
+    ).map((id) => ({ id, x: 160, y: 160, facing: "right" })),
   };
 }

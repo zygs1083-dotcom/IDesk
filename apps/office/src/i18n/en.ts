@@ -1,6 +1,7 @@
 import type { Key } from "./zh.ts";
 
 export const en: Record<Key, string> = {
+  "debug.export": "Export JSON",
   "common.capabilities": "Capabilities",
   "common.closePanel": "Close panel",
   "common.deletedAgent": "Deleted agent",

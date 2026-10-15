@@ -2,7 +2,7 @@ import { resolve } from "node:path";
 import { parseOfficeLayout } from "@idesk/shared/office-layout";
 import { contains, polygonBounds, readJson, root, saveJson } from "./occluder-image.mjs";
 
-const layout = parseOfficeLayout(readJson(`${root}assets/layout.json`));
+const layout = parseOfficeLayout(readJson(`${root}public/layout.json`));
 const cell = 16;
 const rows = Array.from({ length: Math.ceil(layout.size.h / cell) }, (_, y) =>
   Array.from({ length: Math.ceil(layout.size.w / cell) }, (_, x) => {

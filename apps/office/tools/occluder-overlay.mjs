@@ -15,7 +15,7 @@ import {
 } from "./occluder-image.mjs";
 
 export function overlay(output, grid = false) {
-  const layout = parseOfficeLayout(readJson(`${root}assets/layout.json`));
+  const layout = parseOfficeLayout(readJson(`${root}public/layout.json`));
   const png = readPng(`${root}assets/raw/background.png`);
   if (grid)
     for (let y = 0; y < png.height; y++)

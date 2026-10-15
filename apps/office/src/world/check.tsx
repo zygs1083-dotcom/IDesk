@@ -1,17 +1,16 @@
 import { useEffect, useRef } from "react";
 import type { Task } from "../director/events.ts";
+import { translator } from "../i18n/translate.ts";
 import { Cards } from "../stage/card.ts";
 import { Character } from "../stage/character.ts";
 import { createDaylight } from "../stage/daylight.ts";
 import { initialGlyphs, loadGlyphs } from "../stage/glyphs.ts";
 import type { OfficeAgent, SpriteKind } from "../stage/textures.ts";
 import { loadWorldAssets } from "./assets.ts";
-import { loadCatalog } from "./catalog.ts";
+import { installDebug } from "./debug.ts";
 import { loadLayout } from "./layout.ts";
-import { cellCenter } from "./path.ts";
-import { deskFor } from "./places.ts";
+import { workSpot } from "./places.ts";
 import { Plaque } from "./plaque.ts";
-import { seats } from "./seats.ts";
 import { createStage } from "./stage.ts";
 import "./check.css";
 
@@ -42,12 +41,11 @@ export function WorldCheck() {
     let stage: Awaited<ReturnType<typeof createStage>>;
     let observer: ResizeObserver;
     const start = async () => {
-      const catalog = await loadCatalog();
-      const layout = await loadLayout(catalog);
+      const layout = await loadLayout();
       const assets = await loadWorldAssets();
       await loadGlyphs(initialGlyphs);
       if (!host.current || disposed) return;
-      stage = await createStage(host.current, layout, catalog, assets);
+      stage = await createStage(host.current, layout, assets);
       if (disposed) {
         stage.world.destroy({ children: true });
         stage.app.destroy(true, { children: true });
@@ -59,16 +57,16 @@ export function WorldCheck() {
       const characters = new Map<string, Character>();
       const kinds: SpriteKind[] = ["claude-code", "codex", "n8n", "script", "custom"];
       const targets = [
-        ...seats(layout, catalog),
+        ...layout.seats,
         ...layout.standing.map((point, index) => ({
-          ...cellCenter(point),
+          ...point,
           id: `standing-${index}`,
           zone: undefined,
         })),
       ];
       for (const [index, seat] of targets.entries()) {
         const kind =
-          seat.id === layout.reception.chair
+          seat.id === layout.reception.seat
             ? "receptionist"
             : (kinds[index % kinds.length] as SpriteKind);
         const agent: OfficeAgent = {
@@ -85,6 +83,7 @@ export function WorldCheck() {
         const character = new Character(stage, agent, assets.sprites);
         character.position.copyFrom(seat);
         character.facing = seat.facing;
+        character.mirror = "mirror" in seat && seat.mirror === true;
         character.setState(
           seat.id.startsWith("standing-")
             ? "idle"
@@ -94,7 +93,7 @@ export function WorldCheck() {
         );
         stage.objects.addChild(character);
         characters.set(seat.id, character);
-        const desk = deskFor(seat, layout, catalog);
+        const desk = "workSpot" in seat ? workSpot(seat.workSpot, seat.y, layout) : undefined;
         if (desk) cards.place(task(seat.id), desk);
       }
       for (let index = 0; index < 20; index++) cards.pin(task(`board-${index}`));
@@ -107,6 +106,7 @@ export function WorldCheck() {
       });
       const hour = new URLSearchParams(location.search).get("hour");
       createDaylight(stage, characters, hour === null ? 12 : Number(hour));
+      installDebug(stage, translator("en"), () => true);
       stage.app.renderer.render(stage.app.stage);
       stage.app.canvas.dataset.ready = "true";
     };

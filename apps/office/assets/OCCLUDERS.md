@@ -1,6 +1,6 @@
 # 第三版遮挡件：工作区 1 样板
 
-坐标单位是原背景像素，原图 1672×941，不从第一版 scene.json 复制座位点。`assets/layout.json` 是第三版源文件；第二版 `public/layout.json`、`office-schemas.ts` 与运行时保持原样。以下读图以最近邻放大、原图像素边界为准，背景的柔边和投影不作为轮廓外沿。
+坐标单位是原背景像素，原图 1672×941，不从第一版 scene.json 复制座位点。`public/layout.json` 是第三版布局的唯一源文件。以下读图以最近邻放大、原图像素边界为准，背景的柔边和投影不作为轮廓外沿。
 
 ## 重新生成与审图
 
@@ -96,3 +96,7 @@ node apps/office/tools/occluder-seated.mjs /tmp/w73c-review/walking --walking
 ```
 
 walking 图使用西侧绿植后方的可走点 (104,408)：人脚底 y408 < 绿植 baseline460，叶子盖住躯干、部分脸和腿，头顶从叶丛上方露出；不增加排序偏移。姿势锚点的比较与最终数值只维护在 PROMPTS-seated.md。
+
+## 卡片与信封落点（W74）
+
+`points` 是人站的位置，`drops` 是物件落点，不要求位于可走格。原背景最近邻放大后，文件筐上口约 x269–311、y591–619，取中心 (290,605) 为 `drops.doneTray`。白板右侧便签区约 x402–422、y49–102，取中心 (412,76) 为 `drops.bulletin`。卡片、广播信封直接读这两个字段，不用人站点推导。

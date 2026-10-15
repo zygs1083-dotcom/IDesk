@@ -1,7 +1,7 @@
 import { Container, Graphics, Sprite, Text, type Texture } from "pixi.js";
 import { reducedMotion, tween } from "../engine/tween.ts";
 import type { Point } from "../world/path.ts";
-import { type Direction, seats } from "../world/seats.ts";
+import type { Direction } from "../world/places.ts";
 import { zIndexOf } from "../world/sort.ts";
 import type { Stage } from "../world/stage.ts";
 import { Bubble } from "./bubble.ts";
@@ -16,6 +16,7 @@ export type CharacterState = "idle" | "walk" | "sit" | "typing" | "talk" | "coff
 export class Character extends Container {
   state: CharacterState = "idle";
   facing: Direction = "down";
+  mirror = false;
   private sprite: Sprite;
   private cup = new Graphics()
     .rect(12, -42, 10, 9)
@@ -38,7 +39,7 @@ export class Character extends Container {
     const fallback = frames[`${agent.kind}/walk/down/0`];
     if (!fallback) throw new Error(`Missing sprite frames for ${agent.kind}`);
     this.sprite = new Sprite(fallback);
-    this.sprite.anchor.set(0.5, 1);
+    this.sprite.anchor.copyFrom(fallback.defaultAnchor as Point);
     const label = new Text({
       text: "",
       style: {
@@ -88,20 +89,19 @@ export class Character extends Container {
   }
 
   private animate = () => {
-    this.zIndex = zIndexOf(this.y, 0);
+    this.zIndex = zIndexOf(this.y, 1);
     this.bubble.position.set(this.x, this.y - 104);
     if (!reducedMotion.matches) this.elapsed += this.stage.app.ticker.deltaMS;
     const state =
       this.state === "coffee" &&
-      seats(this.stage.layout, this.stage.catalog).some(
-        (seat) => seat.x === this.x && seat.y === this.y,
-      )
+      this.stage.layout.seats.some((seat) => seat.x === this.x && seat.y === this.y)
         ? "sit"
         : this.state;
-    const pose = characterPose(state, this.facing, this.elapsed);
+    const pose = characterPose(state, this.facing, this.elapsed, this.mirror);
     const frame = this.frames[`${this.agent.kind}/${pose.frame}`];
     if (!frame) throw new Error(`Missing frame: ${this.agent.kind}/${pose.frame}`);
     this.sprite.texture = frame;
+    this.sprite.anchor.copyFrom(frame.defaultAnchor as Point);
     this.sprite.scale.set((pose.mirror ? -1 : 1) * this.bounce.x, this.bounce.y);
   };
 

@@ -13,7 +13,7 @@ import {
 } from "./occluder-image.mjs";
 
 export function buildOccluders() {
-  const layout = parseOfficeLayout(readJson(`${root}assets/layout.json`));
+  const layout = parseOfficeLayout(readJson(`${root}public/layout.json`));
   const background = readPng(`${root}assets/raw/background.png`);
   assert.equal(background.width, layout.size.w);
   assert.equal(background.height, layout.size.h);

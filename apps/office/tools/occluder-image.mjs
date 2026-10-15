@@ -1,3 +1,7 @@
+import { contains } from "@idesk/shared/office-geometry";
+
+export { contains } from "@idesk/shared/office-geometry";
+
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -13,23 +17,6 @@ export function savePng(path, png) {
 export function saveJson(path, value) {
   mkdirSync(dirname(path), { recursive: true });
   writeFileSync(path, `${JSON.stringify(value, null, 2)}\n`);
-}
-export function contains(polygon, x, y) {
-  let inside = false;
-  for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
-    const [ax, ay] = polygon[i];
-    const [bx, by] = polygon[j];
-    if (
-      (x - ax) * (by - ay) === (y - ay) * (bx - ax) &&
-      x >= Math.min(ax, bx) &&
-      x <= Math.max(ax, bx) &&
-      y >= Math.min(ay, by) &&
-      y <= Math.max(ay, by)
-    )
-      return true;
-    if (ay > y !== by > y && x < ((bx - ax) * (y - ay)) / (by - ay) + ax) inside = !inside;
-  }
-  return inside;
 }
 export function polygonBounds(polygon) {
   const xs = polygon.map(([x]) => x);

@@ -43,7 +43,7 @@ describe("v1 character atlas", () => {
   }
 
   it("draws seated bottoms at the measured lift above their world seat coordinates", () => {
-    const layout = JSON.parse(readFileSync(new URL("../assets/layout.json", import.meta.url)));
+    const layout = JSON.parse(readFileSync(new URL("../public/layout.json", import.meta.url)));
     for (const seat of layout.seats) {
       const kind = seat.id === layout.reception.seat ? "receptionist" : "codex";
       const facing = seat.facing === "left" ? "right" : seat.facing;

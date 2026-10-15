@@ -5,5 +5,5 @@ export function worldScale(
   worldHeight: number,
 ): number {
   const ratio = Math.min(windowWidth / worldWidth, windowHeight / worldHeight);
-  return ratio >= 1 ? Math.floor(ratio) : ratio;
+  return ratio;
 }

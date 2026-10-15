@@ -88,17 +88,11 @@ test("a bubble hidden before its glyphs load stays hidden", async () => {
 test("plaque refits its full host name after the font is available", async () => {
   const fonts = deferFonts();
   const stage = {
-    layout: { objects: [{ id: "sign", item: "plaque", x: 0, y: 0 }] },
-    catalog: {
-      items: {
-        plaque: { parts: [{ dx: 0, dy: 0, sortY: 0 }], textArea: { x: 0, y: 0, w: 110, h: 28 } },
-      },
-    },
     world: { scale: { x: 1 } },
-    objects: { addChild: vi.fn() },
+    board: { addChild: vi.fn() },
     app: { renderer: { on: vi.fn() } },
   } as unknown as Stage;
-  const plaque = new Plaque(stage, "sign");
+  const plaque = new Plaque(stage, { x: 0, y: 0, w: 110, h: 28 });
   plaque.setText("龘主机");
   const text = plaque.children[0] as Text;
   expect(text.text).toBe("");

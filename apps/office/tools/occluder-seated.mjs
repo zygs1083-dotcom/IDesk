@@ -21,7 +21,7 @@ if (!output)
   throw new Error(
     "Usage: node tools/occluder-seated.mjs OUTPUT [SPRITES.png SPRITES.json] [--typing|--typing-alt|--walking]",
   );
-const layout = parseOfficeLayout(readJson(`${root}assets/layout.json`));
+const layout = parseOfficeLayout(readJson(`${root}public/layout.json`));
 const background = readPng(`${root}assets/raw/background.png`);
 const sprites = readPng(spritesPng ?? `${root}public/characters.png`);
 const atlas = readJson(spritesJson ?? `${root}public/characters.json`);

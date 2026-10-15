@@ -1,10 +1,16 @@
 import type { Texture } from "pixi.js";
 import { Character, type CharacterState } from "../stage/character.ts";
 import type { Agent, OfficeAgent } from "../stage/textures.ts";
-import { cellCenter, cellOf, findPath } from "../world/path.ts";
-import { assignSeats, assignStanding, deskFor } from "../world/places.ts";
+import { cellOf, findPath } from "../world/path.ts";
+import {
+  assignSeats,
+  assignStanding,
+  type Seat,
+  type Standing,
+  type Target,
+  workSpot,
+} from "../world/places.ts";
 import { Plaque } from "../world/plaque.ts";
-import { type Seat, seats, type Target } from "../world/seats.ts";
 import type { Stage } from "../world/stage.ts";
 import { ActionQueue } from "./queue.ts";
 
@@ -14,10 +20,10 @@ export class Cast {
   readonly queue = new ActionQueue();
   readonly sleeping = new Set<string>();
   readonly lastActive = new Map<string, number>();
-  seats = new Map<string, Seat>();
+  seats = new Map<string, Seat | Standing>();
   readonly present = new Set<string>();
   private labels: Plaque[];
-  private standing = new Map<string, Seat>();
+  private standing = new Map<string, Standing>();
 
   constructor(
     readonly stage: Stage,
@@ -25,9 +31,7 @@ export class Cast {
     receptionistName: string,
   ) {
     this.labels = stage.layout.zones.map((zone) => new Plaque(stage, zone.plaque));
-    const reception = seats(stage.layout, stage.catalog).find(
-      (seat) => seat.id === stage.layout.reception.chair,
-    );
+    const reception = stage.layout.seats.find((seat) => seat.id === stage.layout.reception.seat);
     if (!reception) throw new Error("Missing reception seat");
     const human: OfficeAgent = {
       id: "human",
@@ -50,7 +54,7 @@ export class Cast {
   update(agents: Agent[], initial = false) {
     for (const agent of agents) this.agents.set(agent.id, agent);
     const members = [...this.agents.values()].filter((agent) => agent.id !== "human");
-    this.seats = assignSeats(members, this.stage.layout, this.stage.catalog);
+    this.seats = assignSeats(members, this.stage.layout);
     this.standing = assignStanding(members, this.seats, this.stage.layout);
     this.seats = new Map([...this.seats, ...this.standing]);
     this.seats.set("human", this.reception);
@@ -69,7 +73,7 @@ export class Cast {
       else if (agent.status === "offline" && this.present.delete(agent.id)) {
         void this.enqueue(agent.id, async () => {
           await this.walk(agent.id, {
-            ...cellCenter(this.stage.layout.points.door as Target),
+            ...this.stage.layout.points.door,
             facing: "down",
           });
           this.characters.get(agent.id)?.setState("away");
@@ -96,7 +100,7 @@ export class Cast {
 
   private add(agent: OfficeAgent) {
     const character = new Character(this.stage, agent, this.frames);
-    character.position.copyFrom(cellCenter(this.stage.layout.points.door as Target));
+    character.position.copyFrom(this.stage.layout.points.door);
     character.setState("away");
     this.characters.set(agent.id, character);
     this.stage.objects.addChild(character);
@@ -109,7 +113,7 @@ export class Cast {
     this.present.add(id);
     void this.enqueue(id, async () => {
       if (delay) await new Promise((resolve) => setTimeout(resolve, delay));
-      character.position.copyFrom(cellCenter(this.stage.layout.points.door as Target));
+      character.position.copyFrom(this.stage.layout.points.door);
       await this.walk(id, seat);
       this.settle(id, "sit");
     });
@@ -119,10 +123,11 @@ export class Cast {
     const character = this.characters.get(id);
     if (!character || character.destroyed) return;
     const start = cellOf(character.position);
-    const path = findPath(this.stage.layout, this.stage.catalog, start, cellOf(target));
+    const path = findPath(this.stage.layout, start, cellOf(target));
     if (!path.length) return;
     await character.walkTo([...path, target], speed);
     character.facing = target.facing;
+    character.mirror = target.mirror === true;
   }
 
   place(id: string, target: Target, state: CharacterState) {
@@ -130,6 +135,7 @@ export class Cast {
     if (!character) return;
     character.position.copyFrom(target);
     character.facing = target.facing;
+    character.mirror = target.mirror === true;
     this.active(id);
     this.settle(id, state);
   }
@@ -153,13 +159,15 @@ export class Cast {
   }
 
   get reception() {
-    return seats(this.stage.layout, this.stage.catalog).find(
-      (seat) => seat.id === this.stage.layout.reception.chair,
+    return this.stage.layout.seats.find(
+      (seat) => seat.id === this.stage.layout.reception.seat,
     ) as Seat;
   }
 
   desk(id: string) {
     const seat = this.seats.get(id);
-    return seat ? deskFor(seat, this.stage.layout, this.stage.catalog) : undefined;
+    return seat && "workSpot" in seat
+      ? workSpot(seat.workSpot, seat.y, this.stage.layout)
+      : undefined;
   }
 }
