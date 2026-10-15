@@ -74,3 +74,11 @@
 ## M9 零散改进
 
 - **W41 DolphinScheduler 多项目**：DESIGN §12.16、§7 宿主删除消失的作业。验证：`fetch` 打桩的单元测试覆盖项目分页、作业名前缀、每个项目各自的 since、留空与填写两种 testConnection；宿主测试覆盖「listJobs 不再返回的作业连同 run 被删并计入 changed」；n8n、github-actions 的测试不变仍通过。
+- **W42 活动页文案**：DESIGN §12.17。验证：`eventText` 测试覆盖表中每行；浏览器里造 connector.polled、schedule.fired、webhook.failed 各一条，活动页没有原始类型名；截图。
+- **W43a 主前端双语**：DESIGN §12.18 的前端部分（字典、t、切换按钮、时间与标签本地化、shared 的 `labels(lang)`）。验证：切到 en 后八个页面无中文（截图协作台、设置、活动的英文版）；切回 zh 一致；刷新保持。
+- **W43b 办公室双语**：DESIGN §12.18，复制 W43a 的机制到 office。验证：英文截图。
+- **W43c API 错误双语**：DESIGN §12.18 的 API 部分。验证：同一个 409，`Accept-Language: en` 返回英文，默认中文；MCP 工具报错仍是中文；shared 的 messages 表两种语言键一致（测试）。
+- **W44 自动化搜索**：UI.md 自动化页。验证：输入项目名、工作流名、触发方式各能筛出；截图。
+- **W45 作业的项目名**：DESIGN §12.19、UI.md 自动化页。验证：迁移 0004；DS 单项目与全部项目模式 group 都是项目名、name 只有工作流名；GitHub 为 owner/repo；卡片第二行显示项目名；截图。
+
+派发约束：W45 改 schema，先派；W43a 改 shared 标签，和 W42 不同时改 `event-text.ts`（W42 先），W43a 在 W42、W44、W45 合并后派；W43b 在 W43a 之后；W43c 可与 W43a 并行。

@@ -509,3 +509,33 @@ completedAt: <ISO>
 - `listRuns`：逐个项目用同一个 `since` 分页拉取，合并后按 `startedAt` 倒序取 `limit` 条。`since` 为 null（首次轮询）时 `startDate` 取 7 天前，不带日期时海豚要对整张实例表分页，大库上会卡很久。宿主把本次 `listJobs` 的结果作为 `opts.jobs` 传给 `listRuns`，DolphinScheduler 只查其中出现过的项目，空项目不查实例；实测 860 个项目里多数是空的。
 - `testConnection`：留空时 `GET /projects?pageNo=1&pageSize=1`，填了照旧。
 - 项目被删或 Token 失去权限：该项目的作业不再出现在 `listJobs` 里，按 §7 的宿主规则连同 run 一起删除。
+
+### 12.17 活动页文案（W42）
+
+活动页不允许出现原始事件类型名。每种内置事件一句中文，事件 payload 里要带够拼句子的字段，前端不再反查：
+
+| 事件 | payload 补充 | 文案 |
+| --- | --- | --- |
+| connector.polled | 加 `name`（连接器名） | `同步了 <name>，<changed> 项变化` |
+| schedule.fired | 加 `name`（定时任务名） | 成功：`定时任务「<name>」执行了`；失败：`定时任务「<name>」执行失败：<error>` |
+| webhook.failed | 已有 agentId、error | `推送给 <agent> 失败：<error>` |
+| chat.failed | 已有 type、error | `聊天通知失败：<error>` |
+| archive.events | 已有 count | `归档了 <count> 条事件` |
+| agent.updated / agent.deleted | 已有 name | `修改了智能体 <name>` / `删除了智能体 <name>` |
+| task.lease_expired | 已有 | `<任务> 租约到期，放回待领取` |
+
+未知类型（外置插件自定义的）显示 `<前缀>插件：<后缀>`，前缀取事件类型第一段。`eventText` 的单元测试覆盖上表每一行。
+
+### 12.18 中英双语（W43）
+
+- 语言只有 zh、en 两种。前端存 `localStorage` 的 `idesk.lang`；没有时按 `navigator.language` 以 `zh` 开头选 zh，否则 en。切换入口：主前端侧栏底部「EN / 中」文字按钮，办公室顶栏同样式像素按钮；切换即时生效，不刷新。
+- 不引 i18n 库。`apps/web/src/i18n/zh.ts`、`en.ts` 两张同键字典（`Record<Key, string>`，en 用 zh 的键类型约束，缺键编译不过），`t(key, params?)` 用 `{name}` 占位替换，`useLang()` 一个 context。办公室复制同一套机制到 `apps/office/src/i18n/`，不跨 app import。
+- `packages/shared` 里的中文标签（`TASK_STATUS_LABEL`、`TASK_PRIORITY_LABEL`、`RELAY_KIND_LABEL`、`ACTION_LABEL`）改成 `labels(lang)` 返回对应语言的一组；API 的 MCP 工具描述固定用 zh。
+- 相对时间、cron 人话、耗时、日期分组全部按语言输出；英文用 `Intl.RelativeTimeFormat` / `Intl.DateTimeFormat("en")`。
+- API 错误信息：`HttpError` 和 `TransitionError` 改为带 `key` 与 `params`，中英文文案表放 `packages/shared/src/messages.ts`，API 按请求的 `Accept-Language`（以 `en` 开头用 en，其他 zh）渲染 `message`；前端 `request()` 按当前语言发 `Accept-Language`。Zod 校验信息保持中文（zod 的 locale 是全局的，不按请求切）。
+
+### 12.19 作业的项目/分组（W45）
+
+- `automation_jobs` 加 `group` 列（text，可空），迁移 `0004`。`ExternalJob` 随之多出 `group`。
+- DolphinScheduler：`name` 只写工作流名，`group` 写项目名；单项目模式下用 `GET /projects/{code}` 取一次项目名。GitHub Actions：`group` 为 `owner/repo`。n8n：null。
+- `GET /automation/runs` 每条多带 `jobGroup`。界面见 UI.md 自动化页。
