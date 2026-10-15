@@ -2,7 +2,7 @@
 
 使用 Codex 内置 image_gen 工具，2026-10-14 生成。画风参考 `docs/office-samples/background-sample.png` 与 `sprite-sample.png`。
 
-经协调者确认，为保证走路、坐姿、打字的原像素比例和身份一致，每种角色改为同一次生成的 **4 列 × 5 行** 图；前四行依次下、左、右、上，每行站、左脚、站、右脚，第五行坐姿、打字 1、打字 2、空格。只保留选中的六张原图。原图保留完整生成内容；固定原图运行 `pnpm --filter office sprites` 可确定性重建图集。生图本身具有随机性，同提示词不能保证逐像素重现。
+经协调者确认，为保证走路、坐姿、打字的原像素比例和身份一致，每种角色改为同一次生成的 **4 列 × 5 行** 图；前四行依次下、左、右、上，每行站、左脚、站、右脚，第五行坐姿、打字 1、打字 2、空格。新增坐姿由五张独立的 `<kind>-seated.png` 4 列 × 2 行补充图提供，原五行逐像素保留。只保留选中的六张原图及五张补充图。原图保留完整生成内容；固定原图运行 `pnpm --filter office sprites` 可确定性重建图集。生图本身具有随机性，同提示词不能保证逐像素重现。
 
 切帧方式经协调者确认调整为：抠色后在整图上做 8 邻接连通区域标记，按区域质心归入 `Math.round(i*W/4)`、`Math.round(j*H/5)` 边界确定的格子，完整保留越界头发。19 个角色格必须有像素，留空格不能超过 10 个不透明像素；全部帧仍共用框、底边对齐、最近邻等比缩放。
 
@@ -137,3 +137,57 @@ Seated sprites are naturally shorter due to bent knees, NEVER enlarged: exactly 
 | script.png | 4×5 角色精灵（19 帧） | 2 / 2 | 1122×1402 |
 | custom.png | 4×5 角色精灵（19 帧） | 1 / 1 | 1122×1402 |
 
+
+## claude-code-seated.png
+
+用途：新增正面／背面坐姿与打字六帧；原五行不改。生成次数：2；选中第 2 次。实测尺寸：1774×887；最近邻缩放到 1122×561，缩放前后人工检查像素清晰、正背方向正确。
+
+完整提示词原文（按生成顺序；每次均引用原角色图，定向修改另引用前次结果）：
+
+```text
+Use case: identity-preserve. Edit the referenced production pixel-game character atlas to produce ONLY TWO NEW ROWS, exactly FOUR columns by TWO rows (8 equal cells), requested 1122x561. Reference is identity and exact pixel-scale guide, do NOT redraw or include its original five rows. Uniform pure #FF00FF magenta background. Same claude-code worker, teal hoodie hood down, charcoal trousers, brown shoes, same short dark brown hair and peach face, same thick square dark outlines and 3-tone pixel shading. Exact SAME head width approximately 108 pixels and seated total height approximately 200 pixels as reference fifth row, NEVER enlarge. Each 280.5x280.5 cell has sprite centered horizontally and soles at local y=235. ROW 1: cell 1 DOWN facing viewer seated on invisible chair hands on lap; cell 2 same front seated hands forward at invisible keyboard height down; cell 3 same front seated hands slightly raised typing; cell 4 UP back-view seated, showing back of head and hoodie back. ROW 2: cell 1 UP back-view seated typing hands low; cell 2 same back seated typing hands slightly raised; cells 3 and 4 COMPLETELY EMPTY MAGENTA. Bent knees make seated sprite shorter than standing. Match reference fifth row torso size and head size exactly. Front faces audience, back shows no face. No chair, desk, keyboard, shadows, labels, text or grid lines. Keep six figures fully inside individual cells with generous magenta margins. Output only new 4x2 sheet.
+```
+
+```text
+Use case: identity-preserve. Correct ONLY the seated posture of the six figures in image 2. Image 1 original fifth row is the exact identity and scale reference. Image 2 figures currently look standing: make all six visibly SITTING with thighs horizontal, bent knees raised forward, short vertical shins, soles beneath knees. Front figures must have visibly broad horizontal lap and knees protruding sideways in front of hips, torso shortened by sitting, NOT straight standing legs. Back figures must also sit with bent legs, wide seated hips and shortened lower body. Same hair and face and teal hoodie from reference, no change in head size; normalized to requested 1122x561 sheet the head should be 108 px wide and total seated body 200 px tall. Match original fifth row pixel-art exactly. Keep 4 columns x2 rows: top front sit / front typing hands low / front typing hands up / back sit; bottom back typing low / back typing up / EMPTY / EMPTY. Pure #FF00FF background. No chairs, desks, keyboards, shadows, text, lines. Only new two-row sheet, requested 1122x561.
+```
+
+## codex-seated.png
+
+用途：新增正面／背面坐姿与打字六帧；原五行不改。生成次数：1；选中第 1 次。实测尺寸：1774×887；最近邻缩放到 1122×561，缩放前后人工检查像素清晰、正背方向正确。
+
+完整提示词原文（按生成顺序；每次均引用原角色图，定向修改另引用前次结果）：
+
+```text
+Use case: identity-preserve. Using this original sprite atlas as exact identity and pixel-scale reference, output ONLY new TWO ROWS, FOUR columns by TWO rows, requested 1122x561, pure #FF00FF magenta background. Codex worker same black rectangular glasses, short brown hair, ivory button-up shirt, navy trousers, brown shoes. Same face and shading, crisp square pixels, thick dark outlines, NOT enlarged. At 1122x561 each sprite seated height 216px and head width 120px, matching original fifth-row sit. All six figures visibly SITTING: horizontal thighs and raised broad knees in front of hips, bent knees, short vertical shins, wide seated lap, shorter than standing. ROW 1: DOWN front-facing sitting hands on lap; DOWN sitting typing hands forward low; DOWN sitting typing hands a few pixels higher; UP back-view sitting showing back of head and shirt, no face. ROW 2: UP sitting typing low; UP sitting typing hands slightly raised; EMPTY MAGENTA; EMPTY MAGENTA. Same original pixel thickness and body proportions as fifth row. Regular equally spaced 280.5px cells, centered with ample margins and soles at local y=245. No visible chair, desk, keyboard, shadows, letters or grid lines. Do not include original five rows.
+```
+
+## n8n-seated.png
+
+用途：新增正面／背面坐姿与打字六帧；原五行不改。生成次数：1；选中第 1 次。实测尺寸：1774×887；最近邻缩放到 1122×561，缩放前后人工检查像素清晰、正背方向正确。
+
+完整提示词原文（按生成顺序；每次均引用原角色图，定向修改另引用前次结果）：
+
+```text
+Use case: identity-preserve. Produce ONLY TWO NEW ROWS for referenced pixel atlas, requested 1122x561, exactly FOUR columns x TWO rows regular equal cells. Pure #FF00FF magenta background. Exact same n8n worker identity: orange vest cream short sleeves charcoal trousers brown shoes short dark brown hair peach face, thick dark square pixel outlines, simple 3-tone shading, same original pixel thickness. Original fifth-row sit is size reference: seated total height 200px, head width 104px at target dimensions. Never enlarge. Six figures all visibly SITTING: horizontal thighs, bent knees forward, broad lap and short downward shins; shorter than standing, same torso and head size. ROW 1: DOWN front-view seated hands on lap; DOWN seated typing hands forward low; DOWN seated typing hands slightly up; UP back-view seated showing back of head and vest, no face. ROW 2: UP seated typing hands low; UP seated typing hands slightly raised; EMPTY MAGENTA; EMPTY MAGENTA. Center sprites within 280.5px cells, feet at local y=240, generous clear margins. No chairs desks keyboards shadows text or grid lines. Only new two rows, exclude original five rows, preserve reference appearance.
+```
+
+## script-seated.png
+
+用途：新增正面／背面坐姿与打字六帧；原五行不改。生成次数：1；选中第 1 次。实测尺寸：1774×887；最近邻缩放到 1122×561，缩放前后人工检查像素清晰、正背方向正确。
+
+完整提示词原文（按生成顺序；每次均引用原角色图，定向修改另引用前次结果）：
+
+```text
+Use case: identity-preserve. Produce ONLY TWO NEW ROWS for referenced pixel atlas, requested 1122x561, exactly FOUR columns x TWO rows regular equal cells. Pure #FF00FF magenta background. Exact same script worker identity: blue baseball cap, mustard short-sleeve shirt navy trousers brown shoes brown hair peach face, thick dark square pixel outlines, simple 3-tone shading, same original pixel thickness. Original fifth-row sit is size reference: seated total height 197px, head width 114px at target dimensions. Never enlarge. Six figures all visibly SITTING: horizontal thighs and bent knees forward, broad lap, short downward shins; shorter than standing, same torso and head size. ROW 1: DOWN front-view seated hands on lap; DOWN seated typing hands forward low; DOWN seated typing hands slightly up; UP back-view seated showing cap back and shirt back, no face. ROW 2: UP seated typing hands low; UP seated typing hands slightly raised; EMPTY MAGENTA; EMPTY MAGENTA. Center sprites within 280.5px cells, feet at local y=240, generous clear margins. No chairs desks keyboards shadows text or grid lines. Only new two rows, exclude original five rows, preserve reference appearance.
+```
+
+## custom-seated.png
+
+用途：新增正面／背面坐姿与打字六帧；原五行不改。生成次数：1；选中第 1 次。实测尺寸：1774×887；最近邻缩放到 1122×561，缩放前后人工检查像素清晰、正背方向正确。
+
+完整提示词原文（按生成顺序；每次均引用原角色图，定向修改另引用前次结果）：
+
+```text
+Use case: identity-preserve. Produce ONLY TWO NEW ROWS for referenced pixel atlas, requested 1122x561, exactly FOUR columns x TWO rows regular equal cells. Pure #FF00FF magenta background. Exact same custom worker identity: burgundy sweater with white collar khaki trousers brown shoes short dark brown hair peach face, thick dark square pixel outlines, simple 3-tone shading, same original pixel thickness. Original fifth-row sit is size reference: seated total height 200px, head width 106px at target dimensions. Never enlarge. Six figures all visibly SITTING: horizontal thighs and bent knees forward, broad lap, short downward shins; shorter than standing, same torso and head size. ROW 1: DOWN front-view seated hands on lap; DOWN seated typing hands forward low; DOWN seated typing hands slightly up; UP back-view seated showing back of head and sweater, no face. ROW 2: UP seated typing hands low; UP seated typing hands slightly raised; EMPTY MAGENTA; EMPTY MAGENTA. Center sprites within 280.5px cells, feet at local y=240, generous clear margins. No chairs desks keyboards shadows text or grid lines. Only new two rows, exclude original five rows, preserve reference appearance.
+```

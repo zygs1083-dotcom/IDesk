@@ -26,28 +26,28 @@
       },
       "seats": [
         {
-          "x": 536,
-          "y": 263,
+          "x": 543,
+          "y": 253,
           "via": "zone-1-1",
-          "facing": "right"
+          "facing": "down"
         },
         {
-          "x": 720,
-          "y": 263,
+          "x": 724,
+          "y": 253,
           "via": "zone-1-2",
-          "facing": "left"
+          "facing": "down"
         },
         {
-          "x": 550,
-          "y": 396,
+          "x": 561,
+          "y": 378,
           "via": "zone-1-3",
-          "facing": "right"
+          "facing": "up"
         },
         {
-          "x": 706,
-          "y": 396,
+          "x": 695,
+          "y": 378,
           "via": "zone-1-4",
-          "facing": "left"
+          "facing": "up"
         }
       ]
     },
@@ -58,28 +58,28 @@
       },
       "seats": [
         {
-          "x": 901,
-          "y": 263,
+          "x": 909,
+          "y": 253,
           "via": "zone-2-1",
-          "facing": "right"
+          "facing": "down"
         },
         {
-          "x": 1085,
-          "y": 263,
+          "x": 1089,
+          "y": 253,
           "via": "zone-2-2",
-          "facing": "left"
+          "facing": "down"
         },
         {
-          "x": 915,
-          "y": 396,
+          "x": 925,
+          "y": 378,
           "via": "zone-2-3",
-          "facing": "right"
+          "facing": "up"
         },
         {
-          "x": 1071,
-          "y": 396,
+          "x": 1059,
+          "y": 378,
           "via": "zone-2-4",
-          "facing": "left"
+          "facing": "up"
         }
       ]
     },
@@ -90,28 +90,28 @@
       },
       "seats": [
         {
-          "x": 531,
-          "y": 573,
+          "x": 528,
+          "y": 563,
           "via": "zone-3-1",
-          "facing": "right"
+          "facing": "down"
         },
         {
-          "x": 715,
-          "y": 573,
+          "x": 716,
+          "y": 563,
           "via": "zone-3-2",
-          "facing": "left"
+          "facing": "down"
         },
         {
-          "x": 545,
-          "y": 706,
+          "x": 548,
+          "y": 691,
           "via": "zone-3-3",
-          "facing": "right"
+          "facing": "up"
         },
         {
-          "x": 701,
-          "y": 706,
+          "x": 684,
+          "y": 691,
           "via": "zone-3-4",
-          "facing": "left"
+          "facing": "up"
         }
       ]
     },
@@ -122,28 +122,28 @@
       },
       "seats": [
         {
-          "x": 901,
-          "y": 573,
+          "x": 899,
+          "y": 563,
           "via": "zone-4-1",
-          "facing": "right"
+          "facing": "down"
         },
         {
-          "x": 1085,
-          "y": 573,
+          "x": 1087,
+          "y": 563,
           "via": "zone-4-2",
-          "facing": "left"
+          "facing": "down"
         },
         {
-          "x": 915,
-          "y": 706,
+          "x": 918,
+          "y": 691,
           "via": "zone-4-3",
-          "facing": "right"
+          "facing": "up"
         },
         {
-          "x": 1071,
-          "y": 706,
+          "x": 1054,
+          "y": 691,
           "via": "zone-4-4",
-          "facing": "left"
+          "facing": "up"
         }
       ]
     }

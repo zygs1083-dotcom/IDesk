@@ -3,6 +3,7 @@ import { reducedMotion, tween } from "../engine/tween.ts";
 import type { Direction, Point } from "../scene/scene.ts";
 import { Bubble } from "./bubble.ts";
 import { hueOffset } from "./hue.ts";
+import { characterPose } from "./pose.ts";
 import type { Stage } from "./stage.ts";
 import type { Agent } from "./textures.ts";
 
@@ -86,20 +87,9 @@ export class Character extends Container {
   private animate = () => {
     this.zIndex = this.y;
     if (!reducedMotion.matches) this.elapsed += this.stage.app.ticker.deltaMS;
-    const walk = `walk/${this.facing}/0`;
-    const poses: Record<CharacterState, string> = {
-      idle: walk,
-      walk: `walk/${this.facing}/${Math.floor(this.elapsed / 150) % 4}`,
-      sit: "sit/0",
-      typing: `typing/${Math.floor(this.elapsed / 300) % 2}`,
-      talk: "sit/0",
-      coffee: walk,
-      away: walk,
-    };
-    const seated = this.state === "sit" || this.state === "typing" || this.state === "talk";
-    const pose = seated && this.facing === "down" ? "walk/down/0" : poses[this.state];
-    this.sprite.texture = this.frames[`${this.agent.kind}/${pose}`] ?? this.fallback;
-    this.sprite.scale.x = seated && this.facing === "left" ? -1 : 1;
+    const pose = characterPose(this.state, this.facing, this.elapsed);
+    this.sprite.texture = this.frames[`${this.agent.kind}/${pose.frame}`] ?? this.fallback;
+    this.sprite.scale.x = pose.mirror ? -1 : 1;
   };
 
   async walkTo(points: Point[]) {

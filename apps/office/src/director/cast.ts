@@ -1,10 +1,12 @@
-import { Text, type Texture } from "pixi.js";
+import type { Texture } from "pixi.js";
 import { findPath } from "../scene/path.ts";
 import type { Point, Scene, Seat } from "../scene/scene.ts";
 import { assignSeats, assignStanding } from "../scene/seats.ts";
 import { Character, type CharacterState } from "../stage/character.ts";
 import type { Stage } from "../stage/stage.ts";
 import type { Agent } from "../stage/textures.ts";
+import { ZoneSign } from "../stage/zone-sign.ts";
+import { deskPoint } from "./desk-point.ts";
 import { ActionQueue } from "./queue.ts";
 
 export class Cast {
@@ -13,7 +15,7 @@ export class Cast {
   readonly queue = new ActionQueue();
   seats = new Map<string, Seat>();
   readonly present = new Set<string>();
-  private labels: Text[];
+  private labels: ZoneSign[];
   private standing = new Map<string, Seat>();
 
   constructor(
@@ -22,16 +24,7 @@ export class Cast {
     private frames: Record<string, Texture>,
     humanName: string,
   ) {
-    this.labels = scene.zones.map((zone) => {
-      const label = new Text({
-        text: "",
-        style: { fontFamily: "Fusion Pixel", fontSize: 12, fill: 0x302a2a },
-      });
-      label.anchor.set(0.5);
-      label.position.copyFrom(zone.name);
-      stage.world.addChild(label);
-      return label;
-    });
+    this.labels = scene.zones.map((zone) => new ZoneSign(stage, zone.name));
     const human: Agent = {
       id: "human",
       name: humanName,
@@ -90,8 +83,7 @@ export class Cast {
       ];
       const label = this.labels[index];
       if (label) {
-        label.text = hosts.join(" · ");
-        label.scale.set(Math.min(1, 100 / label.width));
+        label.setText(hosts.join(" · "));
       }
     });
   }
@@ -154,6 +146,6 @@ export class Cast {
 
   desk(id: string): Point {
     const seat = this.seats.get(id) ?? this.scene.frontDesk.human;
-    return { x: seat.x + (seat.facing === "left" ? -35 : 35), y: seat.y + 25 };
+    return deskPoint(seat);
   }
 }
