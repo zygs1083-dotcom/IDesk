@@ -10,7 +10,7 @@ const cover = z.object({
 const spot = point.extend({
   via: z.string(),
   facing: z.enum(["down", "left", "right", "up"]),
-  cover: cover.optional(),
+  covers: z.array(cover).optional(),
   mirror: z.literal(true).optional(),
 });
 const idleSpot = point.extend({
