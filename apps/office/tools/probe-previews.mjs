@@ -46,3 +46,11 @@ export function renderPreviews(characters, frames, colors = palette()) {
   verify(side, colors);
   savePng("assets/probe/side-chairs@3x.png", resize(side, 768, 384));
 }
+
+export function composeObjects(canvas, list) {
+  const wall = list.filter((part) => part.layer === "wall");
+  const sorted = list
+    .filter((part) => part.layer !== "wall")
+    .sort((a, b) => a.sortY - b.sortY || a.bias - b.bias);
+  for (const part of [...wall, ...sorted]) paste(canvas, part.png, part.x, part.y);
+}
