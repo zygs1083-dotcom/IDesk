@@ -43,7 +43,7 @@ for (const [kindIndex, kind] of kinds.entries()) {
   const supplement = PNG.sync.read(readFileSync(`${root}assets/raw/${kind}-seated.png`));
   const cells = [
     ...spriteCells(original, 5, [...walking, ...seated("right")], kind),
-    ...spriteCells(supplement, 2, [...seated("down"), ...seated("up")], kind),
+    ...spriteCells(supplement, 2, [...seated("front"), ...seated("back")], kind),
   ];
 
   // 全部姿态共用同一框和缩放比例，底边固定，避免走路时脚底上下抖动。
@@ -103,7 +103,7 @@ for (const [kindIndex, kind] of kinds.entries()) {
     const name = `${kind}/walk/${direction}`;
     animations[name] = [0, 1, 2, 3].map((frame) => `${name}/${frame}`);
   }
-  for (const direction of ["right", "down", "up"]) {
+  for (const direction of ["right", "front", "back"]) {
     const name = `${kind}/typing/${direction}`;
     animations[name] = [0, 1].map((frame) => `${name}/${frame}`);
   }

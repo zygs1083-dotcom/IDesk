@@ -380,7 +380,7 @@
         "h": 96
       }
     },
-    "claude-code/sit/down": {
+    "claude-code/sit/front": {
       "frame": {
         "x": 1216,
         "y": 0,
@@ -400,7 +400,7 @@
         "h": 96
       }
     },
-    "claude-code/typing/down/0": {
+    "claude-code/typing/front/0": {
       "frame": {
         "x": 1280,
         "y": 0,
@@ -420,7 +420,7 @@
         "h": 96
       }
     },
-    "claude-code/typing/down/1": {
+    "claude-code/typing/front/1": {
       "frame": {
         "x": 1344,
         "y": 0,
@@ -440,7 +440,7 @@
         "h": 96
       }
     },
-    "claude-code/sit/up": {
+    "claude-code/sit/back": {
       "frame": {
         "x": 1408,
         "y": 0,
@@ -460,7 +460,7 @@
         "h": 96
       }
     },
-    "claude-code/typing/up/0": {
+    "claude-code/typing/back/0": {
       "frame": {
         "x": 1472,
         "y": 0,
@@ -480,7 +480,7 @@
         "h": 96
       }
     },
-    "claude-code/typing/up/1": {
+    "claude-code/typing/back/1": {
       "frame": {
         "x": 1536,
         "y": 0,
@@ -880,7 +880,7 @@
         "h": 96
       }
     },
-    "codex/sit/down": {
+    "codex/sit/front": {
       "frame": {
         "x": 1216,
         "y": 96,
@@ -900,7 +900,7 @@
         "h": 96
       }
     },
-    "codex/typing/down/0": {
+    "codex/typing/front/0": {
       "frame": {
         "x": 1280,
         "y": 96,
@@ -920,7 +920,7 @@
         "h": 96
       }
     },
-    "codex/typing/down/1": {
+    "codex/typing/front/1": {
       "frame": {
         "x": 1344,
         "y": 96,
@@ -940,7 +940,7 @@
         "h": 96
       }
     },
-    "codex/sit/up": {
+    "codex/sit/back": {
       "frame": {
         "x": 1408,
         "y": 96,
@@ -960,7 +960,7 @@
         "h": 96
       }
     },
-    "codex/typing/up/0": {
+    "codex/typing/back/0": {
       "frame": {
         "x": 1472,
         "y": 96,
@@ -980,7 +980,7 @@
         "h": 96
       }
     },
-    "codex/typing/up/1": {
+    "codex/typing/back/1": {
       "frame": {
         "x": 1536,
         "y": 96,
@@ -1380,7 +1380,7 @@
         "h": 96
       }
     },
-    "n8n/sit/down": {
+    "n8n/sit/front": {
       "frame": {
         "x": 1216,
         "y": 192,
@@ -1400,7 +1400,7 @@
         "h": 96
       }
     },
-    "n8n/typing/down/0": {
+    "n8n/typing/front/0": {
       "frame": {
         "x": 1280,
         "y": 192,
@@ -1420,7 +1420,7 @@
         "h": 96
       }
     },
-    "n8n/typing/down/1": {
+    "n8n/typing/front/1": {
       "frame": {
         "x": 1344,
         "y": 192,
@@ -1440,7 +1440,7 @@
         "h": 96
       }
     },
-    "n8n/sit/up": {
+    "n8n/sit/back": {
       "frame": {
         "x": 1408,
         "y": 192,
@@ -1460,7 +1460,7 @@
         "h": 96
       }
     },
-    "n8n/typing/up/0": {
+    "n8n/typing/back/0": {
       "frame": {
         "x": 1472,
         "y": 192,
@@ -1480,7 +1480,7 @@
         "h": 96
       }
     },
-    "n8n/typing/up/1": {
+    "n8n/typing/back/1": {
       "frame": {
         "x": 1536,
         "y": 192,
@@ -1880,7 +1880,7 @@
         "h": 96
       }
     },
-    "script/sit/down": {
+    "script/sit/front": {
       "frame": {
         "x": 1216,
         "y": 288,
@@ -1900,7 +1900,7 @@
         "h": 96
       }
     },
-    "script/typing/down/0": {
+    "script/typing/front/0": {
       "frame": {
         "x": 1280,
         "y": 288,
@@ -1920,7 +1920,7 @@
         "h": 96
       }
     },
-    "script/typing/down/1": {
+    "script/typing/front/1": {
       "frame": {
         "x": 1344,
         "y": 288,
@@ -1940,7 +1940,7 @@
         "h": 96
       }
     },
-    "script/sit/up": {
+    "script/sit/back": {
       "frame": {
         "x": 1408,
         "y": 288,
@@ -1960,7 +1960,7 @@
         "h": 96
       }
     },
-    "script/typing/up/0": {
+    "script/typing/back/0": {
       "frame": {
         "x": 1472,
         "y": 288,
@@ -1980,7 +1980,7 @@
         "h": 96
       }
     },
-    "script/typing/up/1": {
+    "script/typing/back/1": {
       "frame": {
         "x": 1536,
         "y": 288,
@@ -2380,7 +2380,7 @@
         "h": 96
       }
     },
-    "custom/sit/down": {
+    "custom/sit/front": {
       "frame": {
         "x": 1216,
         "y": 384,
@@ -2400,7 +2400,7 @@
         "h": 96
       }
     },
-    "custom/typing/down/0": {
+    "custom/typing/front/0": {
       "frame": {
         "x": 1280,
         "y": 384,
@@ -2420,7 +2420,7 @@
         "h": 96
       }
     },
-    "custom/typing/down/1": {
+    "custom/typing/front/1": {
       "frame": {
         "x": 1344,
         "y": 384,
@@ -2440,7 +2440,7 @@
         "h": 96
       }
     },
-    "custom/sit/up": {
+    "custom/sit/back": {
       "frame": {
         "x": 1408,
         "y": 384,
@@ -2460,7 +2460,7 @@
         "h": 96
       }
     },
-    "custom/typing/up/0": {
+    "custom/typing/back/0": {
       "frame": {
         "x": 1472,
         "y": 384,
@@ -2480,7 +2480,7 @@
         "h": 96
       }
     },
-    "custom/typing/up/1": {
+    "custom/typing/back/1": {
       "frame": {
         "x": 1536,
         "y": 384,
@@ -2527,8 +2527,8 @@
       "claude-code/walk/up/3"
     ],
     "claude-code/typing/right": ["claude-code/typing/right/0", "claude-code/typing/right/1"],
-    "claude-code/typing/down": ["claude-code/typing/down/0", "claude-code/typing/down/1"],
-    "claude-code/typing/up": ["claude-code/typing/up/0", "claude-code/typing/up/1"],
+    "claude-code/typing/front": ["claude-code/typing/front/0", "claude-code/typing/front/1"],
+    "claude-code/typing/back": ["claude-code/typing/back/0", "claude-code/typing/back/1"],
     "codex/walk/down": [
       "codex/walk/down/0",
       "codex/walk/down/1",
@@ -2549,8 +2549,8 @@
     ],
     "codex/walk/up": ["codex/walk/up/0", "codex/walk/up/1", "codex/walk/up/2", "codex/walk/up/3"],
     "codex/typing/right": ["codex/typing/right/0", "codex/typing/right/1"],
-    "codex/typing/down": ["codex/typing/down/0", "codex/typing/down/1"],
-    "codex/typing/up": ["codex/typing/up/0", "codex/typing/up/1"],
+    "codex/typing/front": ["codex/typing/front/0", "codex/typing/front/1"],
+    "codex/typing/back": ["codex/typing/back/0", "codex/typing/back/1"],
     "n8n/walk/down": ["n8n/walk/down/0", "n8n/walk/down/1", "n8n/walk/down/2", "n8n/walk/down/3"],
     "n8n/walk/left": ["n8n/walk/left/0", "n8n/walk/left/1", "n8n/walk/left/2", "n8n/walk/left/3"],
     "n8n/walk/right": [
@@ -2561,8 +2561,8 @@
     ],
     "n8n/walk/up": ["n8n/walk/up/0", "n8n/walk/up/1", "n8n/walk/up/2", "n8n/walk/up/3"],
     "n8n/typing/right": ["n8n/typing/right/0", "n8n/typing/right/1"],
-    "n8n/typing/down": ["n8n/typing/down/0", "n8n/typing/down/1"],
-    "n8n/typing/up": ["n8n/typing/up/0", "n8n/typing/up/1"],
+    "n8n/typing/front": ["n8n/typing/front/0", "n8n/typing/front/1"],
+    "n8n/typing/back": ["n8n/typing/back/0", "n8n/typing/back/1"],
     "script/walk/down": [
       "script/walk/down/0",
       "script/walk/down/1",
@@ -2588,8 +2588,8 @@
       "script/walk/up/3"
     ],
     "script/typing/right": ["script/typing/right/0", "script/typing/right/1"],
-    "script/typing/down": ["script/typing/down/0", "script/typing/down/1"],
-    "script/typing/up": ["script/typing/up/0", "script/typing/up/1"],
+    "script/typing/front": ["script/typing/front/0", "script/typing/front/1"],
+    "script/typing/back": ["script/typing/back/0", "script/typing/back/1"],
     "custom/walk/down": [
       "custom/walk/down/0",
       "custom/walk/down/1",
@@ -2615,8 +2615,8 @@
       "custom/walk/up/3"
     ],
     "custom/typing/right": ["custom/typing/right/0", "custom/typing/right/1"],
-    "custom/typing/down": ["custom/typing/down/0", "custom/typing/down/1"],
-    "custom/typing/up": ["custom/typing/up/0", "custom/typing/up/1"]
+    "custom/typing/front": ["custom/typing/front/0", "custom/typing/front/1"],
+    "custom/typing/back": ["custom/typing/back/0", "custom/typing/back/1"]
   },
   "meta": {
     "image": "sprites.png",
