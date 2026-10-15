@@ -1,4 +1,4 @@
-import { and, count, eq, inArray, isNotNull } from "drizzle-orm";
+import { count, eq, inArray } from "drizzle-orm";
 import { z } from "zod";
 import { listAgents } from "../../apps/api/src/core/agents/agents.ts";
 import { firstBlocker } from "../../apps/api/src/core/tasks/dependencies.ts";
@@ -26,18 +26,13 @@ export default {
           .select()
           .from(tasks)
           .where(eq(tasks.id, event.taskId as string))
-          .get();
-        if (task?.status !== "open" || firstBlocker(ctx.db, task)) return;
+          .get() as typeof tasks.$inferSelect;
+        if (task.status !== "open" || firstBlocker(ctx.db, task)) return;
         if (tag && !task.tags.includes(tag)) return;
         const loads = ctx.db
           .select({ agentId: tasks.assigneeId, load: count() })
           .from(tasks)
-          .where(
-            and(
-              isNotNull(tasks.assigneeId),
-              inArray(tasks.status, ["assigned", "in_progress", "paused"]),
-            ),
-          )
+          .where(inArray(tasks.status, ["assigned", "in_progress", "paused"]))
           .groupBy(tasks.assigneeId)
           .all();
         const agentId = selectAgent(
