@@ -16,7 +16,7 @@ import { removeMagenta } from "./sprite-cells.mjs";
 
 export const palette = () => {
   const png = readPng("assets/palette.png");
-  assert.ok(png.width >= 36 && png.width <= 40);
+  assert.ok(png.width >= 36 && png.width <= 42);
   assert.equal(png.height, 1);
   const colors = Array.from({ length: png.width }, (_, i) => [
     ...png.data.subarray(i * 4, i * 4 + 3),

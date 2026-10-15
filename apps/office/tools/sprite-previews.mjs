@@ -13,6 +13,8 @@ export function characterPreviews(before, after, frames, kinds, colors) {
     kind,
     participating: 0,
     eligible: 0,
+    grey: 0,
+    greyColored: 0,
     jumped: 0,
     crossHue: 0,
     changed: 0,
@@ -24,7 +26,12 @@ export function characterPreviews(before, after, frames, kinds, colors) {
     const rgb = [...before.data.subarray(p, p + 3)];
     const stats = hueReport[Math.floor(p / 4 / before.width / 96)];
     stats.participating++;
-    if (chromatic(rgb)) {
+    if (Math.max(...rgb) >= 51 && Math.max(...rgb) - Math.min(...rgb) <= 24) {
+      stats.grey++;
+      const output = [...after.data.subarray(p, p + 3)];
+      if (Math.max(...output) - Math.min(...output) > 24) stats.greyColored++;
+    }
+    if (chromatic(rgb) && Math.max(...rgb) - Math.min(...rgb) > 24) {
       stats.eligible++;
       const fallback = hueChoices(rgb, colors) === colors;
       if (fallback) {
@@ -75,6 +82,10 @@ export function characterPreviews(before, after, frames, kinds, colors) {
   assert.ok(
     hueReport.every((entry) => entry.jumped === 0 && entry.fallback / entry.participating <= 0.001),
     "角色色相保持或回退比例",
+  );
+  assert.ok(
+    hueReport.every((entry) => entry.greyColored === 0),
+    "灰色像素量化后仍为无彩色",
   );
   const error = errors([...histogram.values()], colors, true);
   saveJson("assets/probe/front-seating-error.json", error);

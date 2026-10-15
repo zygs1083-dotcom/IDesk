@@ -17,7 +17,7 @@ function mark(png, x, y) {
   }
 }
 
-export function fallbackPreviews(before, after, frames, kinds, locations) {
+export function fallbackPreviews(before, after, frames, kinds, locations, label = "fallback") {
   const names = new Map(
     Object.entries(frames).map(([name, { frame }]) => [`${frame.x},${frame.y}`, name]),
   );
@@ -80,8 +80,8 @@ export function fallbackPreviews(before, after, frames, kinds, locations) {
     }
     const enlarged = resize(canvas, canvas.width * 8, canvas.height * 8);
     for (const p of marks) mark(enlarged, p.x, p.y);
-    savePng(`assets/probe/front-seating-fallback-${kind}@8x.png`, enlarged);
+    savePng(`assets/probe/front-seating-${label}-${kind}@8x.png`, enlarged);
     index[kind] = entries.map(({ frame, box, points }) => ({ frame, box, points }));
   }
-  saveJson("assets/probe/front-seating-fallback-index.json", index);
+  saveJson(`assets/probe/front-seating-${label}-index.json`, index);
 }

@@ -31,13 +31,20 @@ test("weighted RGB error and percentile account for every opaque pixel", () => {
   ).toEqual({ pixels: 100, mean: 0, p95: 0 });
 });
 
-test("palette preserves all 36 existing entries and guarantees chromatic identity centers", () => {
+test("palette preserves all 40 existing entries and guarantees chromatic identity centers", () => {
   const colors = palette();
   const report = readJson("assets/probe/quantization-error.json");
-  expect(colors).toHaveLength(40);
+  expect(colors).toHaveLength(42);
   expect(
     createHash("sha256").update(readPng("assets/palette.png").data.subarray(0, 144)).digest("hex"),
   ).toBe("4d9588badd4dc5703d4dd1790b57ca99bf0c7ee7803fee33ac6be9144b7bedc6");
+  expect(
+    createHash("sha256").update(readPng("assets/palette.png").data.subarray(0, 160)).digest("hex"),
+  ).toBe("619040585ea8b26a5faa04ba1214ec954ae15c2a501ce615646650c5614f0700");
+  expect(colors.slice(40)).toEqual([
+    [61, 61, 61],
+    [81, 81, 81],
+  ]);
   expect(colors.slice(36)).toEqual(report.added.map((entry) => entry.rgb));
   for (const signature of report.signatures) {
     expect(signature.saturation).toBeGreaterThanOrEqual(0.15);

@@ -2,7 +2,9 @@
   {
     "kind": "claude-code",
     "participating": 97619,
-    "eligible": 64303,
+    "eligible": 63621,
+    "grey": 6684,
+    "greyColored": 0,
     "jumped": 0,
     "crossHue": 2,
     "changed": 2,
@@ -23,51 +25,18 @@
   {
     "kind": "codex",
     "participating": 98233,
-    "eligible": 66162,
+    "eligible": 64217,
+    "grey": 5705,
+    "greyColored": 0,
     "jumped": 0,
-    "crossHue": 60,
-    "changed": 23,
-    "fallback": 60,
+    "crossHue": 24,
+    "changed": 7,
+    "fallback": 24,
     "examples": [
-      {
-        "rgb": [39, 35, 52],
-        "hue": 254.11764705882354,
-        "pixels": 3
-      },
       {
         "rgb": [35, 31, 56],
         "hue": 249.60000000000002,
         "pixels": 2
-      },
-      {
-        "rgb": [38, 34, 54],
-        "hue": 252,
-        "pixels": 2
-      },
-      {
-        "rgb": [43, 38, 60],
-        "hue": 253.63636363636363,
-        "pixels": 1
-      },
-      {
-        "rgb": [45, 42, 58],
-        "hue": 251.25,
-        "pixels": 1
-      },
-      {
-        "rgb": [47, 43, 67],
-        "hue": 250,
-        "pixels": 1
-      },
-      {
-        "rgb": [38, 34, 53],
-        "hue": 252.63157894736844,
-        "pixels": 1
-      },
-      {
-        "rgb": [37, 32, 55],
-        "hue": 253.0434782608695,
-        "pixels": 1
       },
       {
         "rgb": [49, 43, 76],
@@ -78,13 +47,50 @@
         "rgb": [45, 38, 71],
         "hue": 252.72727272727275,
         "pixels": 1
+      },
+      {
+        "rgb": [43, 37, 68],
+        "hue": 251.61290322580646,
+        "pixels": 1
+      },
+      {
+        "rgb": [39, 32, 61],
+        "hue": 254.48275862068965,
+        "pixels": 1
+      },
+      {
+        "rgb": [41, 36, 65],
+        "hue": 250.34482758620697,
+        "pixels": 1
+      },
+      {
+        "rgb": [38, 33, 58],
+        "hue": 252,
+        "pixels": 1
+      },
+      {
+        "rgb": [44, 39, 69],
+        "hue": 250,
+        "pixels": 1
+      },
+      {
+        "rgb": [37, 32, 63],
+        "hue": 249.67741935483866,
+        "pixels": 1
+      },
+      {
+        "rgb": [34, 29, 56],
+        "hue": 251.1111111111111,
+        "pixels": 1
       }
     ]
   },
   {
     "kind": "n8n",
     "participating": 96919,
-    "eligible": 65608,
+    "eligible": 64145,
+    "grey": 9718,
+    "greyColored": 0,
     "jumped": 0,
     "crossHue": 0,
     "changed": 0,
@@ -94,11 +100,13 @@
   {
     "kind": "script",
     "participating": 102437,
-    "eligible": 77246,
+    "eligible": 77115,
+    "grey": 521,
+    "greyColored": 0,
     "jumped": 0,
-    "crossHue": 23,
-    "changed": 18,
-    "fallback": 23,
+    "crossHue": 13,
+    "changed": 13,
+    "fallback": 13,
     "examples": [
       {
         "rgb": [35, 23, 68],
@@ -141,13 +149,13 @@
         "pixels": 1
       },
       {
-        "rgb": [41, 37, 60],
-        "hue": 250.43478260869563,
+        "rgb": [29, 21, 69],
+        "hue": 250,
         "pixels": 1
       },
       {
-        "rgb": [37, 32, 54],
-        "hue": 253.63636363636363,
+        "rgb": [36, 24, 73],
+        "hue": 254.69387755102048,
         "pixels": 1
       }
     ]
@@ -155,7 +163,9 @@
   {
     "kind": "custom",
     "participating": 93337,
-    "eligible": 68062,
+    "eligible": 67951,
+    "grey": 1441,
+    "greyColored": 0,
     "jumped": 0,
     "crossHue": 0,
     "changed": 0,
@@ -165,60 +175,22 @@
   {
     "kind": "receptionist",
     "participating": 94427,
-    "eligible": 71549,
+    "eligible": 70265,
+    "grey": 2913,
+    "greyColored": 0,
     "jumped": 0,
-    "crossHue": 15,
-    "changed": 3,
-    "fallback": 15,
+    "crossHue": 2,
+    "changed": 2,
+    "fallback": 2,
     "examples": [
-      {
-        "rgb": [53, 48, 68],
-        "hue": 255,
-        "pixels": 1
-      },
-      {
-        "rgb": [54, 50, 71],
-        "hue": 251.42857142857144,
-        "pixels": 1
-      },
-      {
-        "rgb": [53, 49, 66],
-        "hue": 254.11764705882354,
-        "pixels": 1
-      },
       {
         "rgb": [35, 24, 58],
         "hue": 259.4117647058823,
         "pixels": 1
       },
       {
-        "rgb": [49, 44, 66],
-        "hue": 253.63636363636363,
-        "pixels": 1
-      },
-      {
         "rgb": [57, 51, 78],
         "hue": 253.33333333333337,
-        "pixels": 1
-      },
-      {
-        "rgb": [57, 54, 64],
-        "hue": 258,
-        "pixels": 1
-      },
-      {
-        "rgb": [45, 43, 53],
-        "hue": 252,
-        "pixels": 1
-      },
-      {
-        "rgb": [42, 36, 59],
-        "hue": 255.6521739130435,
-        "pixels": 1
-      },
-      {
-        "rgb": [31, 27, 51],
-        "hue": 250,
         "pixels": 1
       }
     ]

@@ -39,6 +39,8 @@ test("every kind preserves candidate hue and limits fallbacks and less than 2% f
   for (const row of report) {
     expect(row.eligible).toBeGreaterThan(0);
     expect(row.jumped).toBe(0);
+    expect(row.grey).toBeGreaterThan(0);
+    expect(row.greyColored).toBe(0);
     expect(row.fallback / row.participating).toBeLessThanOrEqual(0.001);
   }
 });
@@ -87,4 +89,20 @@ test("interior magenta repair targets contamination and preserves intentional si
   ).toBe(1);
   expect([...png.data.subarray(48, 52)]).toEqual([12, 5, 7, 255]);
   expect([...png.data.subarray(24, 28)]).toEqual([255, 255, 255, 255]);
+});
+
+test("warm dark grey uses chroma rather than inflated HSV saturation", () => {
+  const colors = [
+    [255, 255, 255],
+    [61, 61, 61],
+    [81, 81, 81],
+    [57, 75, 69],
+  ];
+  const source = [81, 69, 60];
+  expect(chromatic(source)).toBe(true);
+  const png = new PNG({ width: 1, height: 1 });
+  png.data.set([...source, 255]);
+  quantize(png, colors, undefined, true);
+  expect([...png.data.subarray(0, 3)]).toEqual([61, 61, 61]);
+  expect(hueChoices([40, 20, 20], colors)).toBe(colors);
 });

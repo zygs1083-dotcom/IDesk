@@ -62,7 +62,7 @@ export function errors(points, colors, preserveHue = false) {
 export function buildPalette() {
   const original = readPng("assets/palette.png");
   const base = Array.from({ length: 36 }, (_, i) => [...original.data.subarray(i * 4, i * 4 + 3)]);
-  const { points, candidates } = characterColors();
+  const { points, candidates, greys } = characterColors();
   const { signatures, excluded } = identityColors(candidates);
   const { colors, added } = preserveSignatures(signatures, base);
   refineSignatures(colors, added, signatures, points);
@@ -90,6 +90,18 @@ export function buildPalette() {
     colors.push(entry.rgb);
     added.push({ rgb: entry.rgb, source: [`k-means cluster ${entry.index}`] });
   }
+  const neutrals = clusters(greys, 2)
+    .map((rgb) => rgb.map(Math.round))
+    .sort((a, b) => a[0] - b[0]);
+  for (const [i, rgb] of neutrals.entries()) {
+    colors.push(rgb);
+    added.push({
+      rgb,
+      source: [
+        `neutral clothing ${i === 0 ? "dark" : "medium"}; lower-body y 0.5–0.9, S<0.15, V 0.2–0.8; weighted k-means2`,
+      ],
+    });
+  }
   const png = new PNG({ width: colors.length, height: 1 });
   colors.forEach((color, i) => {
     png.data.set([...color, 255], i * 4);
@@ -97,7 +109,7 @@ export function buildPalette() {
   savePng("assets/palette.png", png);
   const report = {
     method:
-      "fixed garment RGB regions; area-weighted centers; remove S<0.15 and shared clusters; joint <=20 RGB coverage; preserve first36; character quantization S>=0.15 V>=0.2 hue<=20deg",
+      "fixed garment RGB regions; area-weighted centers; remove S<0.15 and shared clusters; joint <=20 RGB coverage; preserve first40; append neutral clothing k-means2; character quantization V>=0.2 chroma<=24 neutral candidates, remaining S>=0.15 hue<=20deg",
     preserved: base.length,
     added: added.map(({ source, ...entry }) => ({ ...entry, source: source.join(", ") })),
     signatures: signatures.map(({ region, ...signature }) => ({

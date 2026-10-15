@@ -39,6 +39,7 @@ const wardrobe = {
 export function characterColors() {
   const points = new Map();
   const candidates = [];
+  const greys = new Map();
   for (const [kind, clothing] of Object.entries(wardrobe)) {
     const garments = [
       ...clothing,
@@ -58,6 +59,20 @@ export function characterColors() {
         for (let p = 0; p < png.data.length; p += 4) {
           if (png.data[p + 3] < 128) continue;
           const rgb = [...png.data.subarray(p, p + 3)];
+          const y = Math.floor(p / 4 / png.width) / png.height;
+          const top = Math.max(...rgb);
+          if (
+            y >= 0.5 &&
+            y < 0.9 &&
+            top >= 51 &&
+            top < 204 &&
+            (top - Math.min(...rgb)) / top < 0.15
+          ) {
+            const value = Math.round(rgb.reduce((sum, channel) => sum + channel, 0) / 3);
+            const grey = greys.get(value) ?? { rgb: [value, value, value], weight: 0 };
+            grey.weight++;
+            greys.set(value, grey);
+          }
           const key = String(rgb);
           const point = points.get(key) ?? { rgb, weight: 0 };
           point.weight++;
@@ -85,5 +100,6 @@ export function characterColors() {
   return {
     points: [...points.values()].sort((a, b) => String(a.rgb).localeCompare(String(b.rgb))),
     candidates,
+    greys: [...greys.values()].sort((a, b) => a.rgb[0] - b.rgb[0]),
   };
 }

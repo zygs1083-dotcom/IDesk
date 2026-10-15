@@ -20,6 +20,13 @@ export function chromatic(rgb) {
 }
 
 export function hueChoices(rgb, colors) {
+  if (Math.max(...rgb) < 51) return colors;
+  if (Math.max(...rgb) - Math.min(...rgb) <= 24) {
+    return colors.filter(
+      (color, i) =>
+        i === 35 || (Math.max(...color) - Math.min(...color)) / Math.max(...color) < 0.05,
+    );
+  }
   if (!chromatic(rgb)) return colors;
   const choices = colors.filter((color) => hueDistance(rgb, color) <= 20);
   return choices.length ? choices : colors;
