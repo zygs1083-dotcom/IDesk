@@ -41,7 +41,7 @@ function message(ctx: PluginContext, event: Event): string {
   const agentId =
     event.type === "webhook.failed" ? (event.payload.agentId as string) : event.agentId;
   const agent = agentId
-    ? (ctx.db.select().from(agents).where(eq(agents.id, agentId)).get()?.name ?? "")
+    ? (ctx.db.select().from(agents).where(eq(agents.id, agentId)).get()?.name ?? agentId)
     : "管理员";
   const text = messages[event.type]?.(title, agent) ?? `${event.type}：${title}`;
   return ctx.publicUrl && event.taskId

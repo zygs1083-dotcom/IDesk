@@ -1,18 +1,54 @@
 import type { OpenAPIHono } from "@hono/zod-openapi";
 import {
   agentStatsSchema,
+  patchAgentSchema,
   publicAgentSchema,
   registerAgentSchema,
   registeredAgentSchema,
 } from "@idesk/shared/agent-schemas";
 import { idSchema } from "@idesk/shared/task-schemas";
 import { z } from "zod";
-import { listAgents, registerAgent } from "../../core/agents/agents.ts";
+import { deleteAgent, listAgents, registerAgent, updateAgent } from "../../core/agents/agents.ts";
 import { getAgentStats } from "../../core/agents/stats.ts";
 import { HttpError } from "../errors.ts";
 import { type AuthEnv, requireAgent, requireHuman } from "../middleware/auth.ts";
 
 export function agentRoutes(app: OpenAPIHono<AuthEnv>) {
+  app.openapi(
+    {
+      method: "patch",
+      path: "/api/v1/agents/{id}",
+      middleware: requireHuman,
+      request: {
+        params: idSchema,
+        body: { required: true, content: { "application/json": { schema: patchAgentSchema } } },
+      },
+      responses: {
+        200: {
+          description: "Updated agent",
+          content: { "application/json": { schema: publicAgentSchema } },
+        },
+      },
+    },
+    (c) => {
+      const agent = updateAgent(c.req.valid("param").id, c.req.valid("json"));
+      if (!agent) throw new HttpError(404, "智能体不存在");
+      return c.json(agent, 200);
+    },
+  );
+  app.openapi(
+    {
+      method: "delete",
+      path: "/api/v1/agents/{id}",
+      middleware: requireHuman,
+      request: { params: idSchema },
+      responses: { 204: { description: "Deleted agent" } },
+    },
+    (c) => {
+      if (!deleteAgent(c.req.valid("param").id)) throw new HttpError(404, "智能体不存在");
+      return c.body(null, 204);
+    },
+  );
   app.openapi(
     {
       method: "get",

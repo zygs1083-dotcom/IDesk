@@ -4,7 +4,7 @@ import { join } from "node:path";
 import { migrate } from "drizzle-orm/better-sqlite3/migrator";
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
 import { config } from "../config.ts";
-import { registerAgent } from "../core/agents/agents.ts";
+import { deleteAgent, registerAgent } from "../core/agents/agents.ts";
 import { createTask, getTask, type Task } from "../core/tasks/store.ts";
 import { actOnTask } from "../core/tasks/transition.ts";
 import { db } from "../db/client.ts";
@@ -146,4 +146,20 @@ test("human-published tasks preserve empty sections and overwrite only the same 
   actOnTask(task.id, { type: "complete", result: "next month" }, { kind: "human" });
   expect(readFileSync(firstPath, "utf8")).toBe(replacement);
   expect(readFileSync(archivePath(task.id, "2026-02-01"), "utf8")).toContain("next month\n");
+});
+
+test("deleted assignee and publisher are archived by id on completion", async () => {
+  await enablePlugin("result-archive");
+  const task = createTask({ title: "Deleted worker" }, agent.agent.id);
+  actOnTask(task.id, { type: "claim" }, { kind: "agent", id: agent.agent.id, capabilities: [] });
+  deleteAgent(agent.agent.id);
+  expect(actOnTask(task.id, { type: "complete", result: "done" }, { kind: "human" })).toMatchObject(
+    { status: "done" },
+  );
+  const completed = getTask(task.id) as Task;
+  const content = readFileSync(
+    archivePath(task.id, (completed.completedAt as Date).toISOString()),
+    "utf8",
+  );
+  expect(content).toContain(`assignee: "${agent.agent.id}"\npublisher: "${agent.agent.id}"`);
 });

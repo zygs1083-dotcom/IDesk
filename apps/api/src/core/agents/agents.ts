@@ -1,6 +1,7 @@
 import { createHash, randomBytes } from "node:crypto";
-import type { AGENT_KINDS } from "@idesk/shared/agent-schemas";
+import type { AGENT_KINDS, patchAgentSchema } from "@idesk/shared/agent-schemas";
 import { eq } from "drizzle-orm";
+import type { z } from "zod";
 import { db } from "../../db/client.ts";
 import { agents } from "../../db/schema.ts";
 import { publishEvent, recordEvent } from "../events/bus.ts";
@@ -66,4 +67,40 @@ export function listAgents(): PublicAgent[] {
     .from(agents)
     .all()
     .map((agent) => toPublic(agent, now));
+}
+
+export function updateAgent(
+  id: string,
+  input: z.infer<typeof patchAgentSchema>,
+): PublicAgent | undefined {
+  const result = db.transaction((tx) => {
+    const agent = Object.keys(input).length
+      ? tx.update(agents).set(input).where(eq(agents.id, id)).returning().get()
+      : tx.select().from(agents).where(eq(agents.id, id)).get();
+    if (!agent) return undefined;
+    const event = recordEvent(tx, {
+      type: "agent.updated",
+      agentId: id,
+      payload: { name: agent.name, kind: agent.kind },
+    });
+    return { agent, event };
+  });
+  if (!result) return undefined;
+  publishEvent(result.event);
+  return toPublic(result.agent, new Date());
+}
+
+export function deleteAgent(id: string): PublicAgent | undefined {
+  const result = db.transaction((tx) => {
+    const agent = tx.delete(agents).where(eq(agents.id, id)).returning().get();
+    if (!agent) return undefined;
+    const event = recordEvent(tx, {
+      type: "agent.deleted",
+      payload: { id, name: agent.name, kind: agent.kind },
+    });
+    return { agent, event };
+  });
+  if (!result) return undefined;
+  publishEvent(result.event);
+  return toPublic(result.agent, new Date());
 }
