@@ -1,7 +1,7 @@
 import type { Direction, Point, Seat } from "../scene/scene.ts";
 
 const DESK_OFFSETS: Record<Direction, Point> = {
-  down: { x: 0, y: 25 },
+  down: { x: 0, y: -7 },
   up: { x: 40, y: -55 },
   left: { x: -35, y: 25 },
   right: { x: 35, y: 25 },

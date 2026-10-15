@@ -3,7 +3,7 @@ import type { Direction } from "../scene/scene.ts";
 import { deskPoint } from "./desk-point.ts";
 
 it.each([
-  ["down", 100, 225],
+  ["down", 100, 193],
   ["up", 140, 145],
   ["left", 65, 225],
   ["right", 135, 225],
