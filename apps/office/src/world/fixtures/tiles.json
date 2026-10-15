@@ -1,0 +1,12 @@
+{
+  "tile": 32,
+  "codes": {
+    "w": "floor/wood",
+    "c": "floor/carpet",
+    "t": "floor/tile",
+    "U": "wall/upper",
+    "L": "wall/wainscot",
+    "N": "wall/window"
+  },
+  "frames": {}
+}
