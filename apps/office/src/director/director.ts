@@ -5,6 +5,7 @@ import { request } from "../lib/api.ts";
 import { onRealtimeEvent } from "../lib/realtime.ts";
 import type { Scene } from "../scene/scene.ts";
 import { Cards } from "../stage/card.ts";
+import { createDaylight } from "../stage/daylight.ts";
 import type { Stage } from "../stage/stage.ts";
 import { sprites } from "../stage/textures.ts";
 import { createActions } from "./actions.ts";
@@ -25,6 +26,7 @@ export async function direct(stage: Stage, scene: Scene) {
   if (stage.app.stage.destroyed) return;
   atlas.textureSource.scaleMode = "nearest";
   const cast = new Cast(stage, scene, atlas.textures);
+  const daylight = createDaylight(stage, cast.characters);
   cast.update(agents, true);
   const cards = new Cards(stage, scene);
   const snapshot = new Map(tasks.map((task) => [task.id, task]));
@@ -89,4 +91,5 @@ export async function direct(stage: Stage, scene: Scene) {
     unsubscribe();
   });
   await pull();
+  return daylight;
 }

@@ -49,8 +49,12 @@ export function App() {
       stage.app.resizeTo = element;
       observer = new ResizeObserver(() => stage.app.resize());
       observer.observe(element);
-      editor.current = createEditor(stage, scene, setEditing);
-      await direct(stage, scene);
+      const daylight = await direct(stage, scene);
+      if (disposed) return;
+      editor.current = createEditor(stage, scene, (active) => {
+        setEditing(active);
+        daylight?.setEditing(active);
+      });
     };
     void start().catch((reason: Error) => {
       if (!disposed) setError(reason.message);
