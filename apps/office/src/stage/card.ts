@@ -6,6 +6,7 @@ import type { Point } from "../world/path.ts";
 import { zIndexOf } from "../world/sort.ts";
 import type { Stage } from "../world/stage.ts";
 import { boardLayout } from "./board-layout.ts";
+import { setGlyphText } from "./glyphs.ts";
 
 export class TaskCard extends Container {
   constructor(task: Task) {
@@ -113,7 +114,7 @@ export class Cards {
       card.visible = index < arrangement.visible;
       card.position.set(x + point.x, y + point.y);
     });
-    this.overflow.text = arrangement.overflow ? `+${arrangement.overflow}` : "";
+    void setGlyphText(this.overflow, arrangement.overflow ? `+${arrangement.overflow}` : "");
     this.overflow.position.set(
       x + arrangement.overflowPoint.x - 8,
       y + arrangement.overflowPoint.y - 5,

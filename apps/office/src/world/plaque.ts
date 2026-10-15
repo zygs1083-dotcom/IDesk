@@ -1,5 +1,6 @@
 import { TILE } from "@idesk/shared/office-schemas";
 import { CanvasTextMetrics, Container, Text } from "pixi.js";
+import { setGlyphText } from "../stage/glyphs.ts";
 import { zIndexOf } from "./sort.ts";
 import type { Stage } from "./stage.ts";
 
@@ -66,9 +67,11 @@ export class Plaque extends Container {
   }
 
   setText(text: string) {
-    this.fullText = text;
-    this.visible = text.length > 0;
-    this.update();
+    void setGlyphText(this.title, text, () => {
+      this.fullText = text;
+      this.visible = text.length > 0;
+      this.update();
+    });
   }
 
   private update() {

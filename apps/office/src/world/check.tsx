@@ -3,6 +3,7 @@ import type { Task } from "../director/events.ts";
 import { Cards } from "../stage/card.ts";
 import { Character } from "../stage/character.ts";
 import { createDaylight } from "../stage/daylight.ts";
+import { initialGlyphs, loadGlyphs } from "../stage/glyphs.ts";
 import type { OfficeAgent, SpriteKind } from "../stage/textures.ts";
 import { loadWorldAssets } from "./assets.ts";
 import { loadCatalog } from "./catalog.ts";
@@ -44,7 +45,7 @@ export function WorldCheck() {
       const catalog = await loadCatalog();
       const layout = await loadLayout(catalog);
       const assets = await loadWorldAssets();
-      await document.fonts.load('12px "Fusion Pixel"');
+      await loadGlyphs(initialGlyphs);
       if (!host.current || disposed) return;
       stage = await createStage(host.current, layout, catalog, assets);
       if (disposed) {

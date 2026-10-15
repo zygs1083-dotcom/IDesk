@@ -5,6 +5,7 @@ import { type Direction, seats } from "../world/seats.ts";
 import { zIndexOf } from "../world/sort.ts";
 import type { Stage } from "../world/stage.ts";
 import { Bubble } from "./bubble.ts";
+import { setGlyphText } from "./glyphs.ts";
 import { characterPose } from "./pose.ts";
 import type { OfficeAgent } from "./textures.ts";
 
@@ -39,7 +40,7 @@ export class Character extends Container {
     this.sprite = new Sprite(fallback);
     this.sprite.anchor.set(0.5, 1);
     const label = new Text({
-      text: agent.name,
+      text: "",
       style: {
         fontFamily: "Fusion Pixel",
         fontSize: 12,
@@ -47,6 +48,7 @@ export class Character extends Container {
         stroke: { color: 0x302a2a, width: 4 },
       },
     });
+    void setGlyphText(label, agent.name);
     label.anchor.set(0.5, 1);
     label.y = -102;
     label.visible = false;
