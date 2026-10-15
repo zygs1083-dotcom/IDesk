@@ -1,11 +1,10 @@
-import { ColorMatrixFilter, Container, Graphics, Sprite, Text, type Texture } from "pixi.js";
+import { Container, Graphics, Sprite, Text, type Texture } from "pixi.js";
 import { reducedMotion, tween } from "../engine/tween.ts";
 import type { Point } from "../world/path.ts";
 import { type Direction, seats } from "../world/seats.ts";
 import { zIndexOf } from "../world/sort.ts";
 import type { Stage } from "../world/stage.ts";
 import { Bubble } from "./bubble.ts";
-import { hueOffset } from "./hue.ts";
 import { characterPose } from "./pose.ts";
 import type { OfficeAgent } from "./textures.ts";
 
@@ -38,9 +37,6 @@ export class Character extends Container {
     const fallback = frames[`${agent.kind}/walk/down/0`];
     if (!fallback) throw new Error(`Missing sprite frames for ${agent.kind}`);
     this.sprite = new Sprite(fallback);
-    const tint = new ColorMatrixFilter();
-    if (agent.kind !== "receptionist") tint.hue(hueOffset(agent.id), false);
-    this.sprite.filters = [tint];
     this.sprite.anchor.set(0.5, 1);
     const label = new Text({
       text: agent.name,
@@ -76,7 +72,6 @@ export class Character extends Container {
     this.on("destroyed", () => {
       stage.app.ticker.remove(this.animate);
       this.stopNod();
-      tint.destroy();
       this.bubble.destroy({ children: true });
     });
   }
