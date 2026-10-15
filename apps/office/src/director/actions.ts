@@ -171,10 +171,11 @@ export function createActions(cast: Cast, cards: Cards) {
   return Object.fromEntries(
     Object.entries(intentions).map(([type, plan]) => [
       type,
-      (event: ActionEvent) => {
+      async (event: ActionEvent) => {
         for (const intent of plan({ event, task: event.task, previous: event.previous }))
           perform[intent.kind](intent as never);
+        await Promise.all([...flights.values(), queue.drain()]);
       },
     ]),
-  ) as Record<string, (event: ActionEvent) => void>;
+  ) as Record<string, (event: ActionEvent) => Promise<void>>;
 }

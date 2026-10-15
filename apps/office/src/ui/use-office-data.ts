@@ -9,7 +9,7 @@ export type Agent = z.infer<typeof publicAgentSchema>;
 export type Task = z.infer<typeof taskSchema>;
 const AGENT_REFRESH_MS = 30_000;
 
-export function useOfficeData() {
+export function useOfficeData(live: boolean) {
   const [agents, setAgents] = useState<Agent[]>([]);
   const [tasks, setTasks] = useState<Task[]>([]);
   const [error, setError] = useState("");
@@ -34,6 +34,7 @@ export function useOfficeData() {
     };
     refreshAgents();
     refreshTasks();
+    if (!live) return;
     const unsubscribe = onRealtimeEvent((event) => {
       if (event.type.startsWith("agent.")) refreshAgents();
       if (event.type.startsWith("task.")) refreshTasks();
@@ -43,6 +44,6 @@ export function useOfficeData() {
       unsubscribe();
       clearInterval(interval);
     };
-  }, []);
+  }, [live]);
   return { agents, tasks, error };
 }
