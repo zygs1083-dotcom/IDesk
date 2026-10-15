@@ -34,7 +34,7 @@ export async function pollConnector(
   try {
     const config = plugin.configSchema.parse(connector.config);
     jobs = await plugin.listJobs(config, { progress });
-    runs = await plugin.listRuns(config, { since, limit: 50, progress });
+    runs = await plugin.listRuns(config, { since, limit: 50, progress, jobs });
   } catch (error) {
     db.update(connectors)
       .set({ lastError: error instanceof Error ? error.message : String(error), lastPolledAt: now })

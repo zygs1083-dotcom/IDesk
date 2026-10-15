@@ -44,7 +44,7 @@ export interface ConnectorPlugin extends Plugin {
   listJobs(config: unknown, opts?: { progress?: Progress }): Promise<ExternalJob[]>;
   listRuns(
     config: unknown,
-    opts: { since: Date | null; limit: number; progress?: Progress },
+    opts: { since: Date | null; limit: number; progress?: Progress; jobs?: ExternalJob[] },
   ): Promise<ExternalRun[]>;
   trigger?(
     config: unknown,
