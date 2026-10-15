@@ -1,7 +1,7 @@
+import { TILE } from "@idesk/shared/office-schemas";
 import { Container, Graphics, Text } from "pixi.js";
 import type { Task } from "../director/events.ts";
 import { tween } from "../engine/tween.ts";
-import { TILE } from "../world/catalog.ts";
 import type { Point } from "../world/path.ts";
 import { zIndexOf } from "../world/sort.ts";
 import type { Stage } from "../world/stage.ts";

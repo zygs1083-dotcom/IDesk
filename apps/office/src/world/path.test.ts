@@ -1,8 +1,7 @@
+import { catalogSchema, type Layout } from "@idesk/shared/office-schemas";
 import { expect, test } from "vitest";
 import rawCatalog from "../../public/catalog.json";
-import { catalogSchema } from "./catalog.ts";
 import tiles from "./fixtures/tiles.json";
-import type { Layout } from "./layout.ts";
 import { findPath, smoothCorners, walkableGrid } from "./path.ts";
 
 const catalog = catalogSchema.parse(rawCatalog);

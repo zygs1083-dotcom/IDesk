@@ -1,7 +1,6 @@
+import { type Catalog, type Layout, TILE } from "@idesk/shared/office-schemas";
 import { type Application, Container, RenderTexture, Sprite } from "pixi.js";
 import type { WorldAssets } from "./assets.ts";
-import { type Catalog, TILE } from "./catalog.ts";
-import type { Layout } from "./layout.ts";
 import { zIndexOf } from "./sort.ts";
 
 export function renderWorld(

@@ -1,8 +1,7 @@
+import { catalogSchema, type Furniture, parseLayout, TILE } from "@idesk/shared/office-schemas";
 import { expect, test } from "vitest";
 import rawCatalog from "../../public/catalog.json";
 import rawLayout from "../../public/layout.json";
-import { catalogSchema, type Furniture, TILE } from "./catalog.ts";
-import { parseLayout } from "./layout.ts";
 import { deskFor } from "./places.ts";
 import { seats } from "./seats.ts";
 import { zIndexOf } from "./sort.ts";

@@ -1,3 +1,4 @@
+import type { Catalog, Layout } from "@idesk/shared/office-schemas";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { direct } from "./director/director.ts";
 import { type ReplayControls, replay } from "./director/replay.ts";
@@ -12,8 +13,8 @@ import { TaskPanel } from "./ui/task-panel.tsx";
 import { TopBar } from "./ui/top-bar.tsx";
 import { useOfficeData } from "./ui/use-office-data.ts";
 import { loadWorldAssets } from "./world/assets.ts";
-import { type Catalog, loadCatalog } from "./world/catalog.ts";
-import { type Layout, loadLayout } from "./world/layout.ts";
+import { loadCatalog } from "./world/catalog.ts";
+import { loadLayout } from "./world/layout.ts";
 import { assignSeats, assignStanding } from "./world/places.ts";
 import { createStage } from "./world/stage.ts";
 

@@ -1,5 +1,4 @@
-import { type Catalog, TILE } from "./catalog.ts";
-import type { Layout } from "./layout.ts";
+import { type Catalog, type Layout, TILE } from "@idesk/shared/office-schemas";
 import { cellCenter, cellOf, type Point, walkableGrid } from "./path.ts";
 import { type Direction, type Seat, seats, type Target } from "./seats.ts";
 

@@ -1,9 +1,8 @@
+import { catalogSchema, parseLayout } from "@idesk/shared/office-schemas";
 import { expect, test, vi } from "vitest";
 import rawCatalog from "../../public/catalog.json";
 import data from "../../public/layout.json";
 import { translator } from "../i18n/translate.ts";
-import { catalogSchema } from "../world/catalog.ts";
-import { parseLayout } from "../world/layout.ts";
 import { chatSeats } from "../world/places.ts";
 import { seats } from "../world/seats.ts";
 import { Cast } from "./cast.ts";
