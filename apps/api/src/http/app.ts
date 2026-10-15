@@ -2,6 +2,8 @@ import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { serveStatic } from "@hono/node-server/serve-static";
 import { OpenAPIHono } from "@hono/zod-openapi";
+import { compress } from "hono/compress";
+import { createMiddleware } from "hono/factory";
 import { z } from "zod";
 import { config } from "../config.ts";
 import { registerWebSocket } from "../realtime/ws.ts";
@@ -33,6 +35,19 @@ app.onError((err, c) => {
   console.error(err);
   return c.json({ error: "internal error" }, 500);
 });
+
+// 内网带宽常常只有 10 Mbps：JS 压缩后缩到三分之一，带 hash 的构建产物一年不再下载。
+// /mcp 是流式响应，/ws 是升级请求，都不压缩。
+app.use("/api/v1/*", compress());
+const cached = (value: string) =>
+  createMiddleware(async (c, next) => {
+    await next();
+    c.header("Cache-Control", value);
+  });
+for (const path of ["/assets/*", "/office/assets/*"])
+  app.use(path, cached("public, max-age=31536000, immutable"), compress());
+app.use("/office/:file{.+\\.(png|webp|woff2)}", cached("public, max-age=86400"));
+app.use("/office/sprites.json", cached("public, max-age=86400"), compress());
 
 app.get("/api/meta", (c) => c.json({ office: config.IDESK_OFFICE_DIST !== undefined }));
 

@@ -76,6 +76,12 @@ node main.js login --url <origin> --key <key>
 node apps/office/tools/sprites.mjs
 ```
 
+背景图存成 WebP（质量 88，2 MB 的 PNG 缩到 190 KB，肉眼看不出差别）：
+
+```sh
+python3 -c "from PIL import Image; Image.open('bg.png').save('apps/office/public/background.webp', 'WEBP', quality=88, method=6)"
+```
+
 ## 部署
 
 需要 Docker 和 Docker Compose。在仓库根目录创建 `.env`，填入两个必填项：
