@@ -552,3 +552,14 @@ completedAt: <ISO>
 - DolphinScheduler：对有工作流的项目各拉一次 `GET /projects/{code}/schedules?pageNo=<n>&pageSize=100`（翻页），只取 `releaseState` 为 ONLINE 的，按 `processDefinitionCode` 挂到作业上；`timezone` 取 `timezoneId`，没有则 `Asia/Shanghai`。海豚的 crontab 是 Quartz 七段：去掉第七段（年），`?` 换成 `*`，星期段的数字整体减 1（Quartz 1=周日…7=周六，标准 cron 0=周日…6=周六；数字、范围、列表都要转，`2-6` → `1-5`，`1,7` → `0,6`，英文缩写不变）；含 `L`、`W`、`#` 或星期段带步长的不支持，`schedule` 置 null。存进去的就是标准 cron，前端和其他连接器不知道 Quartz。一个作业多条在线定时时取第一条。GitHub Actions、n8n：null。
 - 前端不存下一次时间，用 `croner` 在浏览器里按 `cron` + `timezone` 算 `nextRun()`，永远是新鲜的；解析失败的作业不出现在列里。
 - 「待执行」列内容 = 仍在 waiting 状态的实例（照旧，排前面）+ 有 `schedule` 的作业（按下一次时间升序）。作业卡：工作流名、项目名、第三行「下次 HH:mm」（不是当天带 `MM-DD`），title 是 cron 原文和时区；没有外链时不显示外链图标。计数是两类相加。搜索按工作流名、项目名过滤两类。页面每 30 秒重算一次「下次」。
+
+### 12.22 Webhook 接收端要求与在线判定（W49）
+
+- 在线仍只看「2 分钟内有带 key 的请求」。只被动收推送的接收端必须每 60 秒调一次 `POST /agents/me/heartbeat`，否则显示离线；这条写进接入信息页和 `docs/EXTENDING.md`。
+- 接入信息页加「Webhook 接收端」一块：推送的事件（有能力匹配的新任务 task.created、被指派 task.assign、被交接 task.handoff、收到消息 relay.sent）、请求体就是事件记录（字段同 `GET /events`）、签名 `X-IDesk-Signature: sha256=HMAC_SHA256(key = sha256_hex(apiKey), body)`、2xx 视为成功，否则 1s/5s/30s 重试三次后写 `webhook.failed`、接收端按事件 `id` 去重、每 60 秒心跳。每项带复制按钮的只有地址和命令，说明文字不带。
+- webhook-notifier 每次推送 30 秒超时（`AbortSignal.timeout`），超时和网络错误同样进入重试。
+
+### 12.23 发布时直接指定或招募（W50）
+
+- `POST /tasks` 和 MCP `idesk_publish_task` 的 body 加可选 `dispatch`：`{ type: "assign", agentId }` 或 `{ type: "recruit", needed }`（needed ≥ 2）。服务端先 `createTask`，再以同一个 actor 调 `actOnTask`；动作被状态机拒绝时返回 409，任务已创建并停在 open（发布者可以之后再指派）。定时任务的 `publish_task` 模板不加 dispatch。
+- 发布弹层在优先级下面加一个分段「待领取 · 指定 · 招募」（默认待领取）：选「指定」出现智能体下拉（`name@host`，在线的排前面并带绿点）；选「招募」出现人数输入（默认 2，最小 2）。模板不填这一项。

@@ -87,4 +87,7 @@
 
 - **W48 待执行列显示下一次计划执行**：DESIGN §12.21、UI.md 自动化页。验证：迁移 0005；DS 插件测试覆盖 Quartz 转换（七段、`?`、含 L 的置 null）、在线/离线筛选、按项目分页；前端用 croner 算下一次并排序，30 秒重算；截图浅色深色。改自动化页，等 W47 合并后派。
 
+- **W49 Webhook 接收端要求**：DESIGN §12.22、UI.md 接入信息页、`docs/EXTENDING.md` 同步。验证：webhook 测试覆盖超时进入重试；接入信息页截图浅色深色中英文。
+- **W50 发布时直接指定或招募**：DESIGN §12.23、UI.md 协作台。验证：API 测试 dispatch assign/recruit 成功与 409；MCP 带 dispatch；发布弹层三种分派各发一次，截图。
+
 派发约束：W45 改 schema，先派；W43a 改 shared 标签，和 W42 不同时改 `event-text.ts`（W42 先），W43a 在 W42、W44、W45 合并后派；W43b 在 W43a 之后；W43c 可与 W43a 并行。
