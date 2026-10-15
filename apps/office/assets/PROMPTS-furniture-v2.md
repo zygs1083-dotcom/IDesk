@@ -158,3 +158,5 @@ Use case: stylized-concept. One isolated production JRPG office furniture sprite
 | printer.png | 1586×992 |
 | sofa.png | 1643×957 |
 | whiteboard.png | 1774×887 |
+
+W66 终审返工（矩形会议桌、矮柜、茶几、门垫）：[PROMPTS-furniture-rework.md](PROMPTS-furniture-rework.md)。

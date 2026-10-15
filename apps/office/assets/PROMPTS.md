@@ -100,3 +100,5 @@ Seated sprites are naturally shorter due to bent knees, NEVER enlarged: exactly 
 | custom.png | 4×5 角色精灵（19 帧） | 1 / 1 | 1122×1402 |
 
 第二版家具：探针见 [PROMPTS-furniture.md](PROMPTS-furniture.md)，W66 扩展见 [PROMPTS-furniture-v2.md](PROMPTS-furniture-v2.md)。
+
+W66 终审返工（矩形会议桌、矮柜、茶几、门垫）：[PROMPTS-furniture-rework.md](PROMPTS-furniture-rework.md)。

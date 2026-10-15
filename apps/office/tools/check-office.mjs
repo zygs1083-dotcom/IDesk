@@ -14,14 +14,15 @@ url.searchParams.set("world", "1");
 url.searchParams.set("fill", "1");
 const output = resolve(process.argv[3] ?? "office-check");
 mkdirSync(output, { recursive: true });
-const save = (name, png) => writeFileSync(`${output}/${name}.png`, PNG.sync.write(png));
+const suffix = process.argv[4] ? `-${process.argv[4]}` : "";
+const save = (name, png) => writeFileSync(`${output}/${name}${suffix}.png`, PNG.sync.write(png));
 const browser = await chromium.launch({ headless: true });
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
 const errors = [];
 page.on("pageerror", (error) => errors.push(error.message));
 await page.goto(url.href);
 await page.locator('canvas[data-ready="true"]').waitFor();
-await page.screenshot({ path: `${output}/panorama-1440x900.png` });
+await page.screenshot({ path: `${output}/panorama-1440x900${suffix}.png` });
 const layout = await page.evaluate(async () => (await fetch("/office/layout.json")).json());
 const catalog = await page.evaluate(async () => (await fetch("/office/catalog.json")).json());
 const width = layout.size.w * 32;
@@ -34,7 +35,9 @@ await page.waitForFunction(() => {
 await page.evaluate(
   () => new Promise((done) => requestAnimationFrame(() => requestAnimationFrame(done))),
 );
-const panorama = PNG.sync.read(await page.screenshot({ path: `${output}/panorama-1x.png` }));
+const panorama = PNG.sync.read(
+  await page.screenshot({ path: `${output}/panorama-1x${suffix}.png` }),
+);
 const groups = layout.zones.map((zone) => ({
   id: zone.id,
   ids: [...zone.desks, ...zone.chairs, zone.plaque],
@@ -45,7 +48,12 @@ groups.push(
     id: "meeting",
     ids: layout.objects.filter((o) => o.id.startsWith("meeting-")).map((o) => o.id),
   },
-  { id: "lounge", ids: ["lounge-sofa", "coffee-machine", "lounge-plant"] },
+  {
+    id: "lounge",
+    ids: ["lounge-sofa", "lounge-table", "coffee-machine", "lounge-plant", "aisle-plant-1"],
+  },
+  { id: "entrance", ids: ["entrance", "entrance-mat"] },
+  { id: "printer", ids: ["printer"] },
 );
 for (const group of groups) {
   const objects = layout.objects.filter((object) => group.ids.includes(object.id));
