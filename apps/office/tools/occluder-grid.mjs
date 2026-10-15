@@ -15,7 +15,7 @@ const rows = Array.from({ length: Math.ceil(layout.size.h / cell) }, (_, y) =>
         py <= item.baseline &&
         px >= box.x &&
         px < box.x + box.w &&
-        contains(item.polygon, px, py)
+        contains(item.polygon, px, py - Math.max(0, item.baseline - box.y - box.h))
       );
     })
       ? "#"
