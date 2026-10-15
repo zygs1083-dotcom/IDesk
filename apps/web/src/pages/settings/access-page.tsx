@@ -1,5 +1,6 @@
 import { useLang } from "../../i18n/lang.tsx";
 import { AccessRow } from "./access-row.tsx";
+import { WebhookReceiver } from "./webhook-receiver.tsx";
 
 export function AccessPage() {
   const { t } = useLang();
@@ -12,15 +13,11 @@ export function AccessPage() {
         <AccessRow
           title={t("settings.mcpUrl")}
           value={`${origin}/mcp`}
-          description="Streamable HTTP，Authorization: Bearer <key>"
+          description={t("settings.mcpDescription")}
         />
         <AccessRow title={t("settings.cliLogin")} value={t("settings.cliCommand", { origin })} />
-        <AccessRow
-          title={t("settings.webhookSignature")}
-          value="X-IDesk-Signature: sha256=HMAC(sha256(key), body)"
-          description={t("settings.signatureHint")}
-        />
       </div>
+      <WebhookReceiver />
     </section>
   );
 }
