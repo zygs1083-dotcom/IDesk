@@ -23,7 +23,6 @@ function page(totalList: object[], currentPage = 1, totalPage = 1): Response {
   );
 }
 afterEach(() => vi.unstubAllGlobals());
-
 describe("listJobs", () => {
   it("preserves long codes, pages definitions and authenticates with token", async () => {
     const fetch = vi
@@ -37,13 +36,13 @@ describe("listJobs", () => {
     vi.stubGlobal("fetch", fetch);
     expect(await plugin.listJobs(config)).toEqual([
       {
-        externalId: "1234567890123456789",
+        externalId: "9876543210987654321/1234567890123456789",
         name: "daily",
         enabled: true,
         url: `${baseUrl}/ui/projects/9876543210987654321/workflow/definitions/1234567890123456789`,
       },
       {
-        externalId: "2",
+        externalId: "9876543210987654321/2",
         name: "daily",
         enabled: false,
         url: `${baseUrl}/ui/projects/9876543210987654321/workflow/definitions/2`,
@@ -67,7 +66,6 @@ describe("listJobs", () => {
     });
   });
 });
-
 describe("listRuns", () => {
   it.each([
     ["SUCCESS", "success"],
@@ -88,7 +86,7 @@ describe("listRuns", () => {
     expect(await plugin.listRuns(config, { since: null, limit: 50 })).toEqual([
       {
         externalId: "1",
-        jobExternalId: "1234567890123456789",
+        jobExternalId: "9876543210987654321/1234567890123456789",
         status,
         trigger: "SCHEDULER",
         startedAt: new Date("2026-10-14T01:00:00Z"),
@@ -139,7 +137,7 @@ describe("listRuns", () => {
     vi.stubGlobal("fetch", fetch);
     const runs = await plugin.listRuns(config, { since: null, limit: 50 });
     expect(runs[0]).toMatchObject({
-      jobExternalId: "1234567890123456789",
+      jobExternalId: "9876543210987654321/1234567890123456789",
       trigger: null,
       startedAt: null,
       finishedAt: null,
@@ -159,7 +157,6 @@ describe("listRuns", () => {
     await expect(plugin.listRuns(config, { since: null, limit: 50 })).rejects.toThrow("offline");
   });
 });
-
 describe("testConnection", () => {
   it("checks the configured project's definitions", async () => {
     const fetch = vi.fn().mockResolvedValue(page([]));
@@ -194,13 +191,9 @@ describe("testConnection", () => {
     });
   });
 });
-
 it("reports Chinese network errors from job and run listing", async () => {
   vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new TypeError("fetch failed")));
-  await expect(plugin.listJobs(config)).rejects.toThrow(
-    /^无法连接 DolphinScheduler：fetch failed$/,
-  );
-  await expect(plugin.listRuns(config, { since: null, limit: 1 })).rejects.toThrow(
-    /^无法连接 DolphinScheduler：fetch failed$/,
-  );
+  const error = /^无法连接 DolphinScheduler：fetch failed$/;
+  await expect(plugin.listJobs(config)).rejects.toThrow(error);
+  await expect(plugin.listRuns(config, { since: null, limit: 1 })).rejects.toThrow(error);
 });

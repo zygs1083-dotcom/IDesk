@@ -1,16 +1,11 @@
-import { z } from "zod";
 import type { RUN_STATUSES } from "../../apps/api/src/db/schema.ts";
-import type { ConnectorPlugin, ExternalRun } from "../../apps/api/src/plugins/types.ts";
+import type {
+  ConnectorPlugin,
+  ExternalJob,
+  ExternalRun,
+} from "../../apps/api/src/plugins/types.ts";
+import { type Config, configSchema, dsGet, listProjects, type Page, parseDate } from "./api.ts";
 
-const configSchema = z.object({
-  baseUrl: z
-    .url()
-    .meta({ title: "地址" })
-    .transform((url) => url.replace(/\/+$/, "")),
-  token: z.string().min(1).meta({ title: "Token" }),
-  projectCode: z.string().regex(/^\d+$/).meta({ title: "项目编码" }),
-});
-type Config = z.output<typeof configSchema>;
 type RunStatus = (typeof RUN_STATUSES)[number];
 type DsState =
   | "SUBMITTED_SUCCESS"
@@ -51,36 +46,6 @@ type Instance = {
   startTime: string | null;
   endTime: string | null;
 };
-type Page<T> = { totalList: T[]; currentPage: number; totalPage: number };
-
-async function dsGet<T>(config: Config, path: string): Promise<T> {
-  let response: Response;
-  try {
-    response = await fetch(`${config.baseUrl}${path}`, { headers: { token: config.token } });
-  } catch (failure) {
-    throw new Error(`无法连接 DolphinScheduler：${(failure as Error).message}`);
-  }
-  if (!response.ok)
-    throw Object.assign(new Error(`DolphinScheduler 返回 HTTP ${response.status}`), {
-      status: response.status,
-    });
-  // 在 JSON.parse 丢失精度前保留长整数标识符。
-  const body = (await response.text()).replace(
-    /("(?:code|processDefinitionCode|projectCode)"\s*:\s*)(\d{16,})(?=\s*[,}])/g,
-    '$1"$2"',
-  );
-  const envelope = JSON.parse(body) as { code: number; msg: string; data: T };
-  if (envelope.code !== 0)
-    throw Object.assign(new Error(`DolphinScheduler ${envelope.code}：${envelope.msg}`), {
-      code: envelope.code,
-    });
-  return envelope.data;
-}
-
-function parseDate(value: string | null): Date | null {
-  // DolphinScheduler 不带时区的日期按 UTC 解析。
-  return value ? new Date(`${value.replace(" ", "T")}Z`) : null;
-}
 
 const connectionErrors: Record<number, string> = {
   30002: "没有该项目的权限",
@@ -98,7 +63,9 @@ export default {
     try {
       await dsGet<Page<Definition>>(
         settings,
-        `/projects/${settings.projectCode}/process-definition?pageNo=1&pageSize=1`,
+        settings.projectCode
+          ? `/projects/${settings.projectCode}/process-definition?pageNo=1&pageSize=1`
+          : "/projects?pageNo=1&pageSize=1",
       );
       return { success: true };
     } catch (failure) {
@@ -114,47 +81,55 @@ export default {
   },
   async listJobs(config) {
     const settings = config as Config;
-    const definitions: Definition[] = [];
-    for (let pageNo = 1; ; pageNo++) {
-      const page = await dsGet<Page<Definition>>(
-        settings,
-        `/projects/${settings.projectCode}/process-definition?pageNo=${pageNo}&pageSize=100`,
-      );
-      definitions.push(...page.totalList);
-      if (page.currentPage >= page.totalPage) break;
+    const jobs: ExternalJob[] = [];
+    for (const project of await listProjects(settings)) {
+      for (let pageNo = 1; ; pageNo++) {
+        const page = await dsGet<Page<Definition>>(
+          settings,
+          `/projects/${project.code}/process-definition?pageNo=${pageNo}&pageSize=100`,
+        );
+        jobs.push(
+          ...page.totalList.map((definition) => ({
+            externalId: `${project.code}/${definition.code}`,
+            name: settings.projectCode ? definition.name : `${project.name} / ${definition.name}`,
+            enabled: definition.releaseState === "ONLINE",
+            // UI 深链未在真实实例上验证。
+            url: `${settings.baseUrl}/ui/projects/${project.code}/workflow/definitions/${definition.code}`,
+          })),
+        );
+        if (page.currentPage >= page.totalPage) break;
+      }
     }
-    return definitions.map((definition) => ({
-      externalId: String(definition.code),
-      name: definition.name,
-      enabled: definition.releaseState === "ONLINE",
-      // UI 深链未在真实实例上验证。
-      url: `${settings.baseUrl}/ui/projects/${settings.projectCode}/workflow/definitions/${definition.code}`,
-    }));
+    return jobs;
   },
   async listRuns(config, { since, limit }) {
     const settings = config as Config;
     const runs: ExternalRun[] = [];
-    for (let pageNo = 1; runs.length < limit; pageNo++) {
-      const query = new URLSearchParams({ pageNo: String(pageNo), pageSize: "100" });
-      if (since !== null)
-        query.set("startDate", since.toISOString().slice(0, 19).replace("T", " "));
-      const page = await dsGet<Page<Instance>>(
-        settings,
-        `/projects/${settings.projectCode}/process-instances?${query}`,
-      );
-      runs.push(
-        ...page.totalList.map((instance) => ({
-          externalId: String(instance.id),
-          jobExternalId: String(instance.processDefinitionCode),
-          status: statuses[instance.state],
-          trigger: instance.commandType,
-          startedAt: parseDate(instance.startTime),
-          finishedAt: parseDate(instance.endTime),
-          url: `${settings.baseUrl}/ui/projects/${settings.projectCode}/workflow/instances/${instance.id}`,
-          error: instance.state === "FAILURE" ? "DolphinScheduler 执行失败" : null,
-        })),
-      );
-      if (page.currentPage >= page.totalPage) break;
+    for (const project of await listProjects(settings)) {
+      let projectRunCount = 0;
+      for (let pageNo = 1; projectRunCount < limit; pageNo++) {
+        const query = new URLSearchParams({ pageNo: String(pageNo), pageSize: "100" });
+        if (since !== null)
+          query.set("startDate", since.toISOString().slice(0, 19).replace("T", " "));
+        const page = await dsGet<Page<Instance>>(
+          settings,
+          `/projects/${project.code}/process-instances?${query}`,
+        );
+        runs.push(
+          ...page.totalList.map((instance) => ({
+            externalId: String(instance.id),
+            jobExternalId: `${project.code}/${instance.processDefinitionCode}`,
+            status: statuses[instance.state],
+            trigger: instance.commandType,
+            startedAt: parseDate(instance.startTime),
+            finishedAt: parseDate(instance.endTime),
+            url: `${settings.baseUrl}/ui/projects/${project.code}/workflow/instances/${instance.id}`,
+            error: instance.state === "FAILURE" ? "DolphinScheduler 执行失败" : null,
+          })),
+        );
+        projectRunCount += page.totalList.length;
+        if (page.currentPage >= page.totalPage) break;
+      }
     }
     return runs
       .sort((a, b) => (b.startedAt?.getTime() ?? 0) - (a.startedAt?.getTime() ?? 0))

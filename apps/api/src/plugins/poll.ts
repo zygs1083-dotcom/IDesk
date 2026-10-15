@@ -1,4 +1,4 @@
-import { and, asc, desc, eq, inArray } from "drizzle-orm";
+import { and, asc, desc, eq, inArray, notInArray } from "drizzle-orm";
 import { emitEvent } from "../core/events/bus.ts";
 import { db } from "../db/client.ts";
 import { automationJobs, automationRuns, connectors } from "../db/schema.ts";
@@ -60,6 +60,18 @@ export async function pollConnector(
         })
         .run();
     }
+    count += tx
+      .delete(automationJobs)
+      .where(
+        and(
+          eq(automationJobs.connectorId, connector.id),
+          notInArray(
+            automationJobs.externalId,
+            jobs.map((job) => job.externalId),
+          ),
+        ),
+      )
+      .run().changes;
     const storedJobs = tx
       .select()
       .from(automationJobs)
