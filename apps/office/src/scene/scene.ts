@@ -12,6 +12,7 @@ const spot = point.extend({
   facing: z.enum(["down", "left", "right", "up"]),
   covers: z.array(cover).optional(),
   mirror: z.literal(true).optional(),
+  upright: z.literal(true).optional(),
 });
 const idleSpot = point.extend({
   id: z.enum([

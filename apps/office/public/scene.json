@@ -7,7 +7,7 @@
   "frontDesk": {
     "human": {
       "x": 165,
-      "y": 654,
+      "y": 664,
       "via": "reception",
       "facing": "down",
       "covers": [
@@ -17,7 +17,8 @@
           "width": 140,
           "height": 50
         }
-      ]
+      ],
+      "upright": true
     }
   },
   "taskBoard": {
@@ -35,7 +36,7 @@
       "seats": [
         {
           "x": 543,
-          "y": 290,
+          "y": 275,
           "via": "zone-1-1",
           "facing": "down",
           "covers": [
@@ -55,7 +56,7 @@
         },
         {
           "x": 724,
-          "y": 290,
+          "y": 275,
           "via": "zone-1-2",
           "facing": "down",
           "mirror": true,
@@ -113,7 +114,7 @@
       "seats": [
         {
           "x": 909,
-          "y": 290,
+          "y": 275,
           "via": "zone-2-1",
           "facing": "down",
           "covers": [
@@ -133,7 +134,7 @@
         },
         {
           "x": 1089,
-          "y": 290,
+          "y": 275,
           "via": "zone-2-2",
           "facing": "down",
           "mirror": true,
@@ -191,7 +192,7 @@
       "seats": [
         {
           "x": 528,
-          "y": 600,
+          "y": 275,
           "via": "zone-3-1",
           "facing": "down",
           "covers": [
@@ -211,7 +212,7 @@
         },
         {
           "x": 716,
-          "y": 600,
+          "y": 275,
           "via": "zone-3-2",
           "facing": "down",
           "mirror": true,
@@ -269,7 +270,7 @@
       "seats": [
         {
           "x": 899,
-          "y": 600,
+          "y": 275,
           "via": "zone-4-1",
           "facing": "down",
           "covers": [
@@ -289,7 +290,7 @@
         },
         {
           "x": 1087,
-          "y": 600,
+          "y": 275,
           "via": "zone-4-2",
           "facing": "down",
           "mirror": true,
