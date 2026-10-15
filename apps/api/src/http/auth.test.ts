@@ -56,7 +56,7 @@ test("viewer reads as a human and all non-GET methods reject writes before routi
     ["/tasks", "PUT"],
     ["/tasks", "HEAD"],
     ["/tasks", "OPTIONS"],
-  ]) {
+  ] as const) {
     const response = await app.request(`/api/v1${path}`, {
       method,
       headers: { Cookie: viewer },
