@@ -1,6 +1,6 @@
 # W67 正面四向坐姿与角色量化
 
-使用 Codex 内置 image_gen，2026-10-15。全部新图为 4×2，品红底，单元格与原 4×5 图一致；行序：sit/down、typing/down/0、typing/down/1、sit/up；第二行 typing/up/0、typing/up/1、空、空。走路、侧坐、四分之三与礼仪 upright 原图及帧名保留到 W68。
+使用 Codex 内置 image_gen，2026-10-15。全部新图为 4×2，品红底，单元格与原 4×5 图一致；行序：sit/down、typing/down/0、typing/down/1、sit/up；第二行 typing/up/0、typing/up/1、空、空。走路和侧坐沿用 4×5 原图，其余坐姿统一使用正面四向。
 
 按负责人本轮更新，角色只做全调色板 RGB 最近色量化与 alpha 二值化，不调用 cleanIsolated，保留眼睛高光、眼镜反光、纽扣等有意的单像素细节。运行时 id 色相偏移不变。36 色沿用 W64，不重新生成调色板。
 

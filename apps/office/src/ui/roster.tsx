@@ -1,4 +1,6 @@
-import type { Scene, Seat } from "../scene/scene.ts";
+import { useLang } from "../i18n/lang.tsx";
+import type { Layout } from "../world/layout.ts";
+import type { Seat } from "../world/seats.ts";
 import { RosterItem } from "./roster-item.tsx";
 import type { Agent, Task } from "./use-office-data.ts";
 
@@ -10,7 +12,7 @@ export function Roster({
   standing,
   onSelect,
 }: {
-  zones: Scene["zones"];
+  zones: Layout["zones"];
   agents: Agent[];
   tasks: Task[];
   seats: Map<string, Seat>;
@@ -25,11 +27,11 @@ export function Roster({
         {zones.map((zone) => {
           const members = agents.filter((agent) => {
             const seat = seats.get(agent.id);
-            return seat !== undefined && zone.seats.includes(seat);
+            return seat !== undefined && seat.zone === zone.id;
           });
           const hosts = [...new Set(members.map((agent) => agent.host))];
           return (
-            <section key={`${zone.name.x},${zone.name.y}`}>
+            <section key={zone.id}>
               <h3>{hosts.join(" · ") || t("roster.emptyHost")}</h3>
               {members.map((agent) => (
                 <RosterItem key={agent.id} agent={agent} tasks={tasks} onSelect={onSelect} />
@@ -51,5 +53,3 @@ export function Roster({
     </aside>
   );
 }
-
-import { useLang } from "../i18n/lang.tsx";

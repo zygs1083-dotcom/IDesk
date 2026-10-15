@@ -68,10 +68,7 @@ export function findPath(
         path.unshift(parent);
         parent = previous.get(key(parent));
       }
-      return smoothCorners(path, walkable).map((p) => ({
-        x: (p.x + 0.5) * TILE,
-        y: (p.y + 0.5) * TILE,
-      }));
+      return smoothCorners(path, walkable).map((point) => cellCenter({ x: point.x, y: point.y }));
     }
     for (const [dx, dy] of [
       [1, 0],
@@ -88,4 +85,12 @@ export function findPath(
     }
   }
   return [];
+}
+
+export function cellCenter<T extends Point>(point: T): T {
+  return { ...point, x: (point.x + 0.5) * TILE, y: (point.y + 0.5) * TILE };
+}
+
+export function cellOf(point: Point): Point {
+  return { x: Math.floor(point.x / TILE), y: Math.floor(point.y / TILE) };
 }

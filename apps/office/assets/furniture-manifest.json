@@ -881,7 +881,11 @@
           "sortY": 32,
           "bias": 0
         }
-      ]
+      ],
+      "workSpot": {
+        "x": 48,
+        "y": -15
+      }
     },
     "bookshelf": {
       "footprint": {

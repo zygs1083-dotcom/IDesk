@@ -1,8 +1,7 @@
 import { expect, test, vi } from "vitest";
-import type { Spot } from "../scene/scene.ts";
 import type { CharacterState } from "../stage/character.ts";
+import type { Spot } from "../world/seats.ts";
 import {
-  chatSeats,
   idleDelay,
   idleDozing,
   idleEligible,
@@ -100,19 +99,12 @@ test("chat picks the nearest eligible neighbor and excludes self", () => {
 
 test("spot chaining uses a quarter probability and a different destination", () => {
   const spots: Spot[] = [
-    { id: "coffee", x: 10, y: 20, via: "coffee", facing: "up" },
-    { id: "sofa", x: 30, y: 40, via: "sofa", facing: "up" },
+    { id: "coffee", x: 10, y: 20, facing: "up" },
+    { id: "sofa", x: 30, y: 40, facing: "up" },
   ];
   const values = [0, 0.2499, 0];
   expect(pickSpots(spots, () => values.shift() ?? 0)).toEqual(spots);
   expect(pickSpots(spots, () => 0.25)).toEqual([spots[0]]);
-});
-
-test("chat positions straddle the aisle point and face each other", () => {
-  expect(chatSeats({ id: "aisle", x: 480, y: 263 })).toEqual([
-    { x: 456, y: 263, via: "aisle", facing: "right" },
-    { x: 504, y: 263, via: "aisle", facing: "left" },
-  ]);
 });
 
 test("dozing begins at three minutes and activity resets the threshold", () => {

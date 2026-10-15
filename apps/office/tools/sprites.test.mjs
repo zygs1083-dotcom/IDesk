@@ -14,10 +14,9 @@ test("the complete character atlas contains only opaque palette pixels or clear 
 });
 
 for (const kind of ["claude-code", "codex", "n8n", "script", "custom", "receptionist"]) {
-  test(`${kind} retains legacy frames and adds six front-facing poses with seated proportions`, () => {
+  test(`${kind} provides four-direction seated poses with seated proportions`, () => {
     const standing = crop(atlas, frames[`${kind}/walk/down/0`].frame);
-    const legacy = kind === "receptionist" ? ["upright"] : ["front", "back"];
-    for (const direction of ["right", ...legacy, "down", "up"]) {
+    for (const direction of ["right", "down", "up"]) {
       expect(frames[`${kind}/sit/${direction}`]).toBeDefined();
       expect(animations[`${kind}/typing/${direction}`]).toEqual(
         [0, 1].map((i) => `${kind}/typing/${direction}/${i}`),

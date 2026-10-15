@@ -1,5 +1,6 @@
-import type { Point, Seat, Spot } from "../scene/scene.ts";
 import type { CharacterState } from "../stage/character.ts";
+import type { Point } from "../world/path.ts";
+import type { Spot } from "../world/seats.ts";
 import type { Task } from "./events.ts";
 
 const IDLE_MIN_MS = 10_000;
@@ -74,13 +75,6 @@ export function pickSpots(spots: Spot[], random: () => number) {
   const second =
     random() < SECOND_SPOT_CHANCE ? others[Math.floor(random() * others.length)] : undefined;
   return second ? [first, second] : [first];
-}
-
-export function chatSeats(center: Point & { id: string }): [Seat, Seat] {
-  return [
-    { x: center.x - 24, y: center.y, via: center.id, facing: "right" },
-    { x: center.x + 24, y: center.y, via: center.id, facing: "left" },
-  ];
 }
 
 export function idleDozing(

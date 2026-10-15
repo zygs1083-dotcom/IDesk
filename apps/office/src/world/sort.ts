@@ -1,5 +1,3 @@
-export type SortKey = { sortY: number; bias: number };
-
-export function sortDrawables<T extends SortKey>(drawables: readonly T[]): T[] {
-  return [...drawables].sort((a, b) => a.sortY - b.sortY || a.bias - b.bias);
+export function zIndexOf(sortY: number, bias: 0 | 1): number {
+  return sortY * 2 + bias;
 }

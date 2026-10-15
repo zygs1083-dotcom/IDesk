@@ -124,7 +124,6 @@ export const zh = {
   "replay.pause": "暂停",
   "replay.play": "播放",
   "replay.time": "回放时间",
-  "editor.export": "导出 JSON",
 };
 
 export type Key = keyof typeof zh;

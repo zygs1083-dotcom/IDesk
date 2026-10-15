@@ -1,7 +1,11 @@
 import { expect, test, vi } from "vitest";
-import data from "../../public/scene.json";
+import rawCatalog from "../../public/catalog.json";
+import data from "../../public/layout.json";
 import { translator } from "../i18n/translate.ts";
-import { sceneSchema } from "../scene/scene.ts";
+import { catalogSchema } from "../world/catalog.ts";
+import { parseLayout } from "../world/layout.ts";
+import { chatSeats } from "../world/places.ts";
+import { seats } from "../world/seats.ts";
 import { Cast } from "./cast.ts";
 import { idleMoves } from "./idle-moves.ts";
 import { ActionQueue } from "./queue.ts";
@@ -9,17 +13,18 @@ import { ActionQueue } from "./queue.ts";
 vi.hoisted(() => vi.stubGlobal("matchMedia", () => ({ matches: false })));
 
 test.each([0, 1])("chat with a partner in zone %s uses the initiator's aisle", async (zone) => {
-  const scene = sceneSchema.parse(data);
-  const initiator = scene.zones[0]?.seats[0];
-  const partner = scene.zones[zone]?.seats[1];
+  const catalog = catalogSchema.parse(rawCatalog);
+  const layout = parseLayout(data, catalog);
+  const available = seats(layout, catalog);
+  const initiator = available.find((seat) => seat.id === layout.zones[0]?.chairs[0]);
+  const partner = available.find((seat) => seat.id === layout.zones[zone]?.chairs[1]);
   if (!initiator || !partner) throw new Error("missing seats");
   const walk = vi.fn(async () => {});
   const bubble = { show: vi.fn() };
   const cast: Cast = Object.create(Cast.prototype);
   Object.assign(cast, {
-    scene,
     queue: new ActionQueue(),
-    stage: { world: { destroyed: false } },
+    stage: { world: { destroyed: false }, layout, catalog },
     seats: new Map([
       ["a", initiator],
       ["b", partner],
@@ -40,8 +45,10 @@ test.each([0, 1])("chat with a partner in zone %s uses the initiator's aisle", a
     async () => {},
     () => 0,
   ).chat("a", "b");
+  const targets = chatSeats(initiator, layout, catalog);
+  expect(targets).toBeDefined();
   expect(walk.mock.calls.slice(0, 2)).toEqual([
-    ["a", { x: 456, y: 263, via: "zone-1-1", facing: "right" }, 120],
-    ["b", { x: 504, y: 263, via: "zone-1-1", facing: "left" }, 120],
+    ["a", targets?.[0], 120],
+    ["b", targets?.[1], 120],
   ]);
 });

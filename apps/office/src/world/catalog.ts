@@ -18,7 +18,7 @@ export const catalogSchema = z.object({
             dx: z.number(),
             dy: z.number(),
             sortY: z.number(),
-            bias: z.number(),
+            bias: z.union([z.literal(0), z.literal(1)]),
           }),
         )
         .min(1),

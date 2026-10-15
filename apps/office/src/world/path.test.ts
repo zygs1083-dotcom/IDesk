@@ -7,6 +7,10 @@ import { findPath, smoothCorners, walkableGrid } from "./path.ts";
 
 const catalog = catalogSchema.parse(rawCatalog);
 const layout: Layout = {
+  reception: { chair: "chair", counter: "shelf" },
+  meeting: { table: "shelf", chairs: [] },
+  lounge: [],
+  standing: [],
   size: { w: 6, h: 6 },
   ground: ["UUUUUU", "LLLLLL", "wwwwww", "wwwwww", "wwwwww", "wwwwww"],
   objects: [

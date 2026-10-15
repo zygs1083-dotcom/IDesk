@@ -67,20 +67,16 @@ node main.js login --url <origin> --key <key>
 把智能体与任务事件画成会走动、递卡片的像素办公室，登录后打开 `/office/`。
 `deploy/Dockerfile` 的构建参数 `WITH_OFFICE` 默认是 `true`；在 compose 的 `build.args` 中设为 `"false"` 可不打包办公室。
 
-换场景：按 `e` 进入编辑模式，拖动座位、站位和路点，点击「导出 JSON」。
-把文件放到 `IDESK_DATA_DIR/office/scene.json`，即可覆盖内置 `scene.json`，无需重新构建。
+办公室使用正面格子地图；修改 `apps/office/public/layout.json`，或把布局放到 `IDESK_DATA_DIR/office/layout.json` 覆盖构建版本。座位来自椅子，工作区和去处由布局指定。
 
-换素材：按 `apps/office/assets/PROMPTS.md` 生图，再从仓库根目录运行：
-
-```sh
-node apps/office/tools/sprites.mjs
-```
-
-背景图存成 WebP（质量 88，2 MB 的 PNG 缩到 190 KB，肉眼看不出差别）：
+素材生产记录见 `apps/office/assets/PROMPTS.md`。从仓库根目录重建角色与家具：
 
 ```sh
-python3 -c "from PIL import Image; Image.open('bg.png').save('apps/office/public/background.webp', 'WEBP', quality=88, method=6)"
+pnpm --filter office sprites
+pnpm --filter office furniture
 ```
+
+`/office/?check=1` 是不连接 API 的坐满检查页；加 `&hour=7` / `&hour=22` 检查黄昏与夜间。运行 `pnpm --filter office exec node tools/check-office.mjs http://localhost:3300/office/ /tmp/office-check` 输出全景和各区放大图。
 
 ## 部署
 

@@ -4,6 +4,11 @@ import { type Catalog, facingSchema } from "./catalog.ts";
 const coordinate = z.number().int().nonnegative();
 const point = z.object({ x: coordinate, y: coordinate, facing: facingSchema });
 export const layoutSchema = z.object({
+  title: z.string().optional(),
+  reception: z.object({ chair: z.string(), counter: z.string() }),
+  meeting: z.object({ table: z.string(), chairs: z.array(z.string()).length(6) }),
+  lounge: z.array(z.string()),
+  standing: z.array(point),
   size: z.object({ w: z.number().int().positive(), h: z.number().int().positive() }),
   ground: z.array(z.string()),
   objects: z.array(z.object({ id: z.string(), item: z.string(), x: coordinate, y: coordinate })),
@@ -30,7 +35,7 @@ export const layoutSchema = z.object({
       ]),
     }),
   ),
-  hostZones: z.record(z.string(), z.number().int().nonnegative()),
+  hostZones: z.record(z.string(), z.string()),
 });
 export type Layout = z.infer<typeof layoutSchema>;
 
@@ -54,6 +59,17 @@ export function parseLayout(value: unknown, catalog: Catalog): Layout {
         )
           issue(`Object outside map: ${object.id}`);
       }
+      for (const id of [
+        layout.reception.chair,
+        layout.reception.counter,
+        layout.meeting.table,
+        ...layout.meeting.chairs,
+        ...layout.lounge,
+      ])
+        if (!ids.has(id)) issue(`Unknown place object: ${id}`);
+      const zones = new Set(layout.zones.map((zone) => zone.id));
+      for (const zone of Object.values(layout.hostZones))
+        if (!zones.has(zone)) issue(`Unknown host zone: ${zone}`);
       for (const zone of layout.zones) {
         for (const id of [...zone.desks, ...zone.chairs, zone.plaque])
           if (!ids.has(id)) issue(`Unknown zone object: ${id}`);

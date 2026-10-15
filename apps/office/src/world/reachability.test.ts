@@ -18,6 +18,7 @@ const seatTiles = seats(layout, catalog).map((seat) => ({
 const targets = [
   ...seatTiles,
   ...layout.spots,
+  ...layout.standing.map((point, index) => ({ ...point, id: `standing-${index}` })),
   ...Object.entries(layout.points).map(([id, point]) => ({ id, ...point })),
 ];
 for (const target of targets) {
