@@ -93,7 +93,7 @@ export async function demoEvents(
       await step(
         `join-${index + 1}`,
         () => act(meeting, "join", index),
-        index === agents.length - 1 ? 20_000 : 15_000,
+        index === agents.length - 1 ? 45_000 : 15_000,
       );
     await step("meeting-cancel", () => request(`tasks/${meeting.id}/actions/cancel`, {}), 15_000);
     await step("envelope", () =>
