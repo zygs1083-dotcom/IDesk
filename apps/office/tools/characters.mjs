@@ -12,6 +12,12 @@ const frameHeight = 96;
 const atlas = new PNG({ width: frameWidth * 25, height: frameHeight * kinds.length });
 const frames = {};
 const animations = {};
+const anchors = {
+  default: { x: 0.5, y: 1 },
+  "sit/back": { x: 0.5, y: 1.2083333333333333 },
+  "typing/back/0": { x: 0.5, y: 1.2083333333333333 },
+  "typing/back/1": { x: 0.5, y: 1.2083333333333333 },
+};
 
 for (const [kindIndex, kind] of kinds.entries()) {
   const walking = directions.flatMap((direction) =>
@@ -71,6 +77,7 @@ for (const [kindIndex, kind] of kinds.entries()) {
     );
     frames[name] = {
       frame: { x: atlasX, y: atlasY, w: frameWidth, h: frameHeight },
+      anchor: anchors[name.slice(kind.length + 1)] ?? anchors.default,
       rotated: false,
       trimmed: false,
       spriteSourceSize: { x: 0, y: 0, w: frameWidth, h: frameHeight },

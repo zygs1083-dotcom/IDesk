@@ -42,6 +42,27 @@ describe("v1 character atlas", () => {
     });
   }
 
+  it("anchors back-facing seated frames at cushion height and all others at ground level", () => {
+    const backFrames = kinds
+      .filter((kind) => kind !== "receptionist")
+      .flatMap((kind) => [`${kind}/sit/back`, `${kind}/typing/back/0`, `${kind}/typing/back/1`]);
+    for (const [name, frame] of Object.entries(atlas.frames)) {
+      expect(frame.anchor, name).toEqual({
+        x: 0.5,
+        y: backFrames.includes(name) ? 116 / 96 : 1,
+      });
+    }
+  });
+
+  it("draws back-facing seated bottoms 20px above the unchanged seat position", () => {
+    const seatY = 400;
+    for (const [name, frame] of Object.entries(atlas.frames)) {
+      if (!name.includes("/back")) continue;
+      const bottomY = seatY + (1 - frame.anchor.y) * frame.sourceSize.h;
+      expect(bottomY, name).toBeCloseTo(seatY - 20);
+    }
+  });
+
   it("has no extra kinds or dangling animation frames", () => {
     expect(
       [...new Set(Object.keys(atlas.frames).map((name) => name.split("/")[0]))].sort(),

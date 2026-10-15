@@ -158,3 +158,20 @@ Correct this six-figure script seated supplement. Uniformly shrink every whole f
 Use case: identity-preserve. Reference image is original custom pixel worker atlas, use first standing row and third right-facing row as exact head/torso scale and identity reference, fifth row as bent-leg reference. Create replacement seated supplement ONLY, exactly FOUR columns x TWO rows, uniform pure #FF00FF background, requested1122x561. Six figures, last two cells empty. Crisp square pixel art same short brown hair burgundy sweater white collar khaki pants brown shoes. THREE-QUARTER oblique view, NOT straight front or straight back. Row1: sit/front body turned 45degrees toward viewer's LOWER RIGHT showing face chest one shoulder and horizontal bent thighs; typing/front same direction arms forward at keyboard height; typing/front alternate hands slightly higher; sit/back turned45degrees away toward UPPER RIGHT showing back hair sweater back and one shoulder. Row2: typing/back same upper-right orientation arms forward; typing/back alternate; EMPTY; EMPTY. No furniture keyboard shadows text lines. At1122x561 each figure opaque height176px (standing200px, ratio0.88), head width97px (standing97px). Preserve FULL standing head and torso size; shorten ONLY legs into visibly bent seated thighs and short shins. Do not shrink whole head or torso, no squat tiny bodies. Figure feet local y250, top66. Same scale all six, ample magenta margins. Exact two-to-one sheet aspect. Only new seated supplement, do not reproduce original five rows.
 Uniformly make ALL six custom seated figures smaller by15percent inside same cells. Keep full figures IDENTICAL proportions and poses, just more magenta space. Current opaque height350px at1774wide should be300px, head184px should be157px. Target1122wide figure190px head100px. Preserve burgundy sweater white collar khaki pants brown shoes brown hair pixel art same three-quarter front lower right/back upper right. 4columns2rows final2empty magenta. No props shadows text lines.
 ```
+
+## 第三版帧锚点（W72）
+
+back 帧底边 = 臀，比落地点高一个坐垫高度（办公椅 20px），由 W73 合成图确定。front 帧底边是落在地板上的脚；座位坐标始终取椅子落地点中心，排序也用它，抬升归于帧姿势。以 96px 帧高归一化，anchor.y = (帧高 + 抬升)/帧高，抬升 20px 表示精灵底边在落地点上方 20px，因此 back 的 anchor.y 为 `(96 + 20) / 96 = 1.2083333333333333`。Pixi 将帧上的 anchor 点放在 position 上，精灵顶边是 `座位 y - anchor.y × 96`，底边是 `座位 y - 20`；图片像素不变。
+
+| 适用角色 | 帧 | anchor.x | anchor.y |
+| --- | --- | ---: | ---: |
+| claude-code、codex、n8n、script、custom | `sit/back`、`typing/back/0`、`typing/back/1` | 0.5 | 1.2083333333333333 |
+| 全部角色 | 其余帧 | 0.5 | 1 |
+
+`tools/characters.mjs` 的同一张锚点表生成每帧的 `anchor`。侧坐 `sit/right`、`typing/right/*` 和礼仪 `sit/down`、`typing/down/*` 暂用默认值，等 W73c 合成图量完后更新此表。
+
+W73 对比图（均为 3 倍最近邻）：
+
+- [底边对齐落地点的标注图](https://raw.githubusercontent.com/zygs1083-dotcom/IDesk/pr-assets/w72/zone-1-ground-annotated%403x.png)：back 帧底边代表臀，按落地点画会低一个坐垫高度。
+- [back 抬高 20px 的标注图](https://raw.githubusercontent.com/zygs1083-dotcom/IDesk/pr-assets/w72/zone-1-lift20-annotated%403x.png)：与上图比较，办公椅坐垫高度取 20px。
+- [front/back 坐姿合成图](https://raw.githubusercontent.com/zygs1083-dotcom/IDesk/pr-assets/w72/zone-1-seated%403x.png)：对照脸朝前帧的落地脚与背对观众帧的臀，front 保持默认锚点。
