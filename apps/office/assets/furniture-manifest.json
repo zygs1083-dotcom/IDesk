@@ -1,0 +1,402 @@
+{
+  "frames": [
+    {
+      "name": "desk-monitor",
+      "source": "assets/raw/furniture/office-sheet-corrected.png",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "w": 362,
+        "h": 362
+      },
+      "w": 64,
+      "h": 64
+    },
+    {
+      "name": "desk-laptop",
+      "source": "assets/raw/furniture/office-sheet-corrected.png",
+      "box": {
+        "x": 362,
+        "y": 0,
+        "w": 362,
+        "h": 362
+      },
+      "w": 64,
+      "h": 52
+    },
+    {
+      "name": "counter",
+      "source": "assets/raw/furniture/office-sheet-corrected.png",
+      "box": {
+        "x": 724,
+        "y": 0,
+        "w": 362,
+        "h": 362
+      },
+      "w": 96,
+      "h": 52
+    },
+    {
+      "name": "bookshelf",
+      "source": "assets/raw/furniture/office-sheet-corrected.png",
+      "box": {
+        "x": 1086,
+        "y": 0,
+        "w": 362,
+        "h": 362
+      },
+      "w": 64,
+      "h": 88
+    },
+    {
+      "name": "chair-down",
+      "source": "assets/raw/furniture/office-sheet-corrected.png",
+      "box": {
+        "x": 0,
+        "y": 362,
+        "w": 362,
+        "h": 362
+      },
+      "w": 32,
+      "h": 40,
+      "parts": [
+        {
+          "name": "chair-down-behind",
+          "rects": [[0, 0, 32, 12], [5, 12, 22, 28], [0, 25, 5, 15], [27, 25, 5, 15]]
+        },
+        {
+          "name": "chair-down-front",
+          "rects": [[0, 0, 32, 12], [5, 12, 22, 28], [0, 25, 5, 15], [27, 25, 5, 15]],
+          "exclude": true
+        }
+      ]
+    },
+    {
+      "name": "chair-up",
+      "source": "assets/raw/furniture/office-sheet-corrected.png",
+      "box": {
+        "x": 362,
+        "y": 362,
+        "w": 362,
+        "h": 362
+      },
+      "w": 32,
+      "h": 40,
+      "parts": [
+        {
+          "name": "chair-up-behind",
+          "rects": [[0, 21, 32, 19]]
+        },
+        {
+          "name": "chair-up-front",
+          "rects": [[0, 21, 32, 19]],
+          "exclude": true
+        }
+      ]
+    },
+    {
+      "name": "chair-left",
+      "source": "assets/raw/furniture/office-sheet-corrected.png",
+      "box": {
+        "x": 724,
+        "y": 362,
+        "w": 362,
+        "h": 362
+      },
+      "w": 32,
+      "h": 40,
+      "parts": [
+        {
+          "name": "chair-left-behind",
+          "rects": [[0, 0, 21, 14], [0, 18, 20, 22], [21, 25, 11, 15]]
+        },
+        {
+          "name": "chair-left-front",
+          "rects": [[0, 0, 21, 14], [0, 18, 20, 22], [21, 25, 11, 15]],
+          "exclude": true
+        }
+      ]
+    },
+    {
+      "name": "chair-right",
+      "source": "assets/raw/furniture/office-sheet-corrected.png",
+      "box": {
+        "x": 1086,
+        "y": 362,
+        "w": 362,
+        "h": 362
+      },
+      "w": 32,
+      "h": 40,
+      "parts": [
+        {
+          "name": "chair-right-behind",
+          "rects": [[11, 0, 21, 14], [12, 18, 20, 22], [0, 25, 11, 15]]
+        },
+        {
+          "name": "chair-right-front",
+          "rects": [[11, 0, 21, 14], [12, 18, 20, 22], [0, 25, 11, 15]],
+          "exclude": true
+        }
+      ]
+    },
+    {
+      "name": "plant",
+      "source": "assets/raw/furniture/office-sheet-corrected.png",
+      "box": {
+        "x": 0,
+        "y": 724,
+        "w": 362,
+        "h": 362
+      },
+      "w": 32,
+      "h": 56
+    },
+    {
+      "name": "plaque",
+      "source": "assets/raw/furniture/office-sheet-corrected.png",
+      "box": {
+        "x": 362,
+        "y": 724,
+        "w": 362,
+        "h": 362
+      },
+      "w": 64,
+      "h": 24
+    }
+  ],
+  "items": {
+    "desk-monitor": {
+      "footprint": {
+        "w": 2,
+        "h": 1
+      },
+      "blocks": true,
+      "layer": "object",
+      "parts": [
+        {
+          "frame": "desk-monitor",
+          "dx": 0,
+          "dy": -32,
+          "sortY": 32,
+          "bias": 0
+        }
+      ],
+      "workSpot": {
+        "x": 50,
+        "y": -4
+      }
+    },
+    "desk-laptop": {
+      "footprint": {
+        "w": 2,
+        "h": 1
+      },
+      "blocks": true,
+      "layer": "object",
+      "parts": [
+        {
+          "frame": "desk-laptop",
+          "dx": 0,
+          "dy": -20,
+          "sortY": 32,
+          "bias": 0
+        }
+      ],
+      "workSpot": {
+        "x": 12,
+        "y": -10
+      }
+    },
+    "counter": {
+      "footprint": {
+        "w": 3,
+        "h": 1
+      },
+      "blocks": true,
+      "layer": "object",
+      "parts": [
+        {
+          "frame": "counter",
+          "dx": 0,
+          "dy": -20,
+          "sortY": 32,
+          "bias": 0
+        }
+      ]
+    },
+    "bookshelf": {
+      "footprint": {
+        "w": 2,
+        "h": 1
+      },
+      "blocks": true,
+      "layer": "object",
+      "parts": [
+        {
+          "frame": "bookshelf",
+          "dx": 0,
+          "dy": -56,
+          "sortY": 32,
+          "bias": 0
+        }
+      ]
+    },
+    "chair-down": {
+      "footprint": {
+        "w": 2,
+        "h": 1
+      },
+      "blocks": false,
+      "layer": "object",
+      "parts": [
+        {
+          "frame": "chair-down-behind",
+          "dx": 16,
+          "dy": -8,
+          "sortY": 24,
+          "bias": 0
+        },
+        {
+          "frame": "chair-down-front",
+          "dx": 16,
+          "dy": -8,
+          "sortY": 32,
+          "bias": 0
+        }
+      ],
+      "seat": {
+        "x": 32,
+        "y": 30,
+        "facing": "down"
+      }
+    },
+    "chair-up": {
+      "footprint": {
+        "w": 2,
+        "h": 1
+      },
+      "blocks": false,
+      "layer": "object",
+      "parts": [
+        {
+          "frame": "chair-up-behind",
+          "dx": 16,
+          "dy": -8,
+          "sortY": 24,
+          "bias": 0
+        },
+        {
+          "frame": "chair-up-front",
+          "dx": 16,
+          "dy": -8,
+          "sortY": 32,
+          "bias": 0
+        }
+      ],
+      "seat": {
+        "x": 32,
+        "y": 30,
+        "facing": "up"
+      }
+    },
+    "chair-left": {
+      "footprint": {
+        "w": 1,
+        "h": 1
+      },
+      "blocks": false,
+      "layer": "object",
+      "parts": [
+        {
+          "frame": "chair-left-behind",
+          "dx": 0,
+          "dy": -8,
+          "sortY": 24,
+          "bias": 0
+        },
+        {
+          "frame": "chair-left-front",
+          "dx": 0,
+          "dy": -8,
+          "sortY": 32,
+          "bias": 0
+        }
+      ],
+      "seat": {
+        "x": 16,
+        "y": 30,
+        "facing": "left"
+      }
+    },
+    "chair-right": {
+      "footprint": {
+        "w": 1,
+        "h": 1
+      },
+      "blocks": false,
+      "layer": "object",
+      "parts": [
+        {
+          "frame": "chair-right-behind",
+          "dx": 0,
+          "dy": -8,
+          "sortY": 24,
+          "bias": 0
+        },
+        {
+          "frame": "chair-right-front",
+          "dx": 0,
+          "dy": -8,
+          "sortY": 32,
+          "bias": 0
+        }
+      ],
+      "seat": {
+        "x": 16,
+        "y": 30,
+        "facing": "right"
+      }
+    },
+    "plant": {
+      "footprint": {
+        "w": 1,
+        "h": 1
+      },
+      "blocks": true,
+      "layer": "object",
+      "parts": [
+        {
+          "frame": "plant",
+          "dx": 0,
+          "dy": -24,
+          "sortY": 32,
+          "bias": 0
+        }
+      ]
+    },
+    "plaque": {
+      "footprint": {
+        "w": 2,
+        "h": 1
+      },
+      "blocks": false,
+      "layer": "wall",
+      "parts": [
+        {
+          "frame": "plaque",
+          "dx": 0,
+          "dy": 0,
+          "sortY": 32,
+          "bias": 0
+        }
+      ],
+      "textArea": {
+        "x": 7,
+        "y": 6,
+        "w": 50,
+        "h": 12
+      }
+    }
+  }
+}
