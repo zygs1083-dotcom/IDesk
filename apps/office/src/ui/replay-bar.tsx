@@ -1,9 +1,7 @@
 import { useEffect, useRef, useState } from "react";
+import { useLang } from "../i18n/lang.tsx";
 import { PixelButton } from "./pixel-button.tsx";
 import "./replay-bar.css";
-
-const time = (at: number) =>
-  new Date(at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: false });
 
 export function ReplayBar({
   start,
@@ -26,6 +24,13 @@ export function ReplayBar({
   onSpeed: (speed: number) => void;
   onLive: () => void;
 }) {
+  const { lang, t } = useLang();
+  const time = (at: number) =>
+    new Intl.DateTimeFormat(lang, {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    }).format(at);
   const ticks = Array.from({ length: 7 }, (_, i) => start + i * 600000);
   const [draft, setDraft] = useState<number>();
   const slider = useRef<HTMLInputElement>(null);
@@ -39,13 +44,13 @@ export function ReplayBar({
     return () => element?.removeEventListener("change", commit);
   }, [onSeek]);
   return (
-    <section className="pixel-panel replay-bar" aria-label="回放控制">
+    <section className="pixel-panel replay-bar" aria-label={t("replay.controls")}>
       <div className="replay-timeline">
         <label htmlFor="replay-time">{time(draft ?? at)}</label>
         <input
           ref={slider}
           id="replay-time"
-          aria-label="回放时间"
+          aria-label={t("replay.time")}
           type="range"
           min={start}
           max={end}
@@ -65,7 +70,7 @@ export function ReplayBar({
           ))}
         </div>
       </div>
-      <PixelButton onClick={onPlay}>{playing ? "暂停" : "播放"}</PixelButton>
+      <PixelButton onClick={onPlay}>{t(playing ? "replay.pause" : "replay.play")}</PixelButton>
       <div className="replay-speeds">
         {[1, 10, 60].map((value) => (
           <PixelButton key={value} aria-pressed={speed === value} onClick={() => onSpeed(value)}>
@@ -73,7 +78,7 @@ export function ReplayBar({
           </PixelButton>
         ))}
       </div>
-      <PixelButton onClick={onLive}>回到现场</PixelButton>
+      <PixelButton onClick={onLive}>{t("replay.live")}</PixelButton>
     </section>
   );
 }

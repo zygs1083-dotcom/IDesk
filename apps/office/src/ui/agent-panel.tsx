@@ -3,6 +3,8 @@ import type { eventSchema } from "@idesk/shared/task-schemas";
 
 import { useEffect, useState } from "react";
 import type { z } from "zod";
+import { useLang } from "../i18n/lang.tsx";
+import { relativeTime } from "../i18n/relative-time.ts";
 import { request } from "../lib/api.ts";
 import { onRealtimeEvent } from "../lib/realtime.ts";
 import { Avatar } from "./avatar.tsx";
@@ -20,6 +22,7 @@ export function AgentPanel({
   tasks: Task[];
   onClose: () => void;
 }) {
+  const { lang, t } = useLang();
   const [events, setEvents] = useState<TaskEvent[]>([]);
   const [error, setError] = useState("");
   useEffect(() => {
@@ -48,50 +51,44 @@ export function AgentPanel({
       ["in_progress", "paused", "assigned"].includes(task.status),
   );
   return (
-    <PixelPanel title="智能体档案" onClose={onClose}>
+    <PixelPanel title={t("panel.agent")} onClose={onClose}>
       <div className="agent-identity">
         <Avatar kind={agent.kind} />
         <div>
           <h3>{agent.name}</h3>
-          <p>{statusText(agent, tasks)}</p>
+          <p>{statusText(agent, tasks, t)}</p>
         </div>
       </div>
       <dl>
-        <dt>类型</dt>
+        <dt>{t("panel.type")}</dt>
         <dd>{agent.kind}</dd>
-        <dt>主机</dt>
+        <dt>{t("panel.host")}</dt>
         <dd>{agent.host}</dd>
-        <dt>能力</dt>
-        <dd>{agent.capabilities.join(" · ") || "暂无"}</dd>
+        <dt>{t("common.capabilities")}</dt>
+        <dd>{agent.capabilities.join(" · ") || t("common.none")}</dd>
       </dl>
-      <h3>当前任务</h3>
+      <h3>{t("panel.currentTasks")}</h3>
       {current.length ? (
         current.map((task) => (
           <p key={task.id}>
             {task.title}
-            <span className="task-status">{labels("zh").status[task.status]}</span>
+            <span className="task-status">{labels(lang).status[task.status]}</span>
           </p>
         ))
       ) : (
-        <p>暂无当前任务</p>
+        <p>{t("panel.emptyTasks")}</p>
       )}
-      <h3>最近事件</h3>
+      <h3>{t("panel.recentEvents")}</h3>
       {events.map((event) => {
         const minutes = Math.max(0, Math.floor((Date.now() - Date.parse(event.ts)) / 60_000));
         return (
           <p className="event-row" key={event.id}>
             <span>{event.type}</span>
-            <time dateTime={event.ts}>
-              {minutes < 1
-                ? "刚刚"
-                : minutes < 60
-                  ? `${minutes} 分钟前`
-                  : `${Math.floor(minutes / 60)} 小时前`}
-            </time>
+            <time dateTime={event.ts}>{relativeTime(minutes, lang, t)}</time>
           </p>
         );
       })}
-      {!events.length && <p>暂无事件</p>}
+      {!events.length && <p>{t("panel.emptyEvents")}</p>}
       {error && <p role="alert">{error}</p>}
     </PixelPanel>
   );

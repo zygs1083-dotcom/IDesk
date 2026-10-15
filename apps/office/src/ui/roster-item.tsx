@@ -11,19 +11,24 @@ export function RosterItem({
   tasks: Task[];
   onSelect: (id: string) => void;
 }) {
+  const { t } = useLang();
+  const status = statusText(agent, tasks, t);
+  const description = t("roster.member", { agent: agent.name, status });
   return (
     <button
       type="button"
       className={`roster-item ${agent.status === "offline" ? "offline" : ""}`}
       onClick={() => onSelect(agent.id)}
-      aria-label={`${agent.name} · ${statusText(agent, tasks)}`}
-      title={`${agent.name} · ${statusText(agent, tasks)}`}
+      aria-label={description}
+      title={description}
     >
       <Avatar kind={agent.kind} />
       <span className="roster-copy">
         <strong>{agent.name}</strong>
-        <span>{statusText(agent, tasks)}</span>
+        <span>{status}</span>
       </span>
     </button>
   );
 }
+
+import { useLang } from "../i18n/lang.tsx";

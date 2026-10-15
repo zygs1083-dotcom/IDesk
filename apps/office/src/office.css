@@ -101,6 +101,12 @@ a:focus-visible {
   gap: 8px;
   flex-shrink: 0;
 }
+.language-inactive {
+  opacity: 0.5;
+}
+.language-switch {
+  gap: 4px;
+}
 .top-bar h1 {
   font-size: 24px;
   line-height: 1.25;
@@ -135,6 +141,12 @@ a:focus-visible {
   right: 160px;
 }
 @media (max-width: 1099px) {
+  .top-bar {
+    flex-wrap: wrap;
+  }
+  .top-bar-actions {
+    flex-wrap: wrap;
+  }
   .office-body {
     grid-template-columns: minmax(0, 1fr);
   }

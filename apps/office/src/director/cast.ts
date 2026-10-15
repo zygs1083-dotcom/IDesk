@@ -20,6 +20,7 @@ export class Cast {
     readonly stage: Stage,
     readonly scene: Scene,
     private frames: Record<string, Texture>,
+    humanName: string,
   ) {
     this.labels = scene.zones.map((zone) => {
       const label = new Text({
@@ -33,7 +34,7 @@ export class Cast {
     });
     const human: Agent = {
       id: "human",
-      name: "人",
+      name: humanName,
       kind: "custom",
       host: "",
       capabilities: [],

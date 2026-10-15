@@ -1,4 +1,5 @@
 import { type ReactNode, useEffect, useRef } from "react";
+import { useLang } from "../i18n/lang.tsx";
 import { PixelButton } from "./pixel-button.tsx";
 
 export function PixelPanel({
@@ -10,6 +11,7 @@ export function PixelPanel({
   onClose: () => void;
   children: ReactNode;
 }) {
+  const { t } = useLang();
   const panel = useRef<HTMLElement>(null);
   useEffect(() => {
     const previous = document.activeElement;
@@ -27,7 +29,7 @@ export function PixelPanel({
     <aside ref={panel} className="pixel-panel detail-panel" role="dialog" aria-label={title}>
       <header className="panel-header">
         <h2>{title}</h2>
-        <PixelButton onClick={onClose} aria-label="关闭面板">
+        <PixelButton onClick={onClose} aria-label={t("common.closePanel")}>
           ×
         </PixelButton>
       </header>

@@ -1,5 +1,6 @@
 import { useSyncExternalStore } from "react";
 import { soundState, toggleSound } from "../engine/sound.ts";
+import { useLang } from "../i18n/lang.tsx";
 import { PixelButton } from "./pixel-button.tsx";
 import type { Agent, Task } from "./use-office-data.ts";
 
@@ -16,18 +17,30 @@ export function TopBar({
   agents: Agent[];
   tasks: Task[];
 }) {
+  const { lang, setLang, t } = useLang();
   const sound = useSyncExternalStore(soundState.subscribe, soundState.getSnapshot);
   return (
     <header className="pixel-panel top-bar">
       <div>
         <h1>{title}</h1>
         <p>
-          {agents.filter((agent) => agent.status === "online").length} 人在线 ·{" "}
-          {tasks.filter((task) => task.status === "in_progress").length} 个任务进行中
+          {t("top.summary", {
+            agents: agents.filter((agent) => agent.status === "online").length,
+            tasks: tasks.filter((task) => task.status === "in_progress").length,
+          })}
         </p>
       </div>
       <div className="top-bar-actions">
-        <PixelButton aria-label="声音" aria-pressed={sound} onClick={toggleSound}>
+        <PixelButton
+          className="language-switch"
+          aria-label={t("top.switchLanguage")}
+          onClick={() => setLang(({ zh: "en", en: "zh" } as const)[lang])}
+        >
+          <span className={lang !== "en" ? "language-inactive" : ""}>EN</span>
+          <span aria-hidden="true"> / </span>
+          <span className={lang !== "zh" ? "language-inactive" : ""}>中</span>
+        </PixelButton>
+        <PixelButton aria-label={t("top.sound")} aria-pressed={sound} onClick={toggleSound}>
           <svg
             width="16"
             height="16"
@@ -58,9 +71,9 @@ export function TopBar({
           </svg>
         </PixelButton>
         <PixelButton aria-pressed={replaying} onClick={onReplay}>
-          回放
+          {t("top.replay")}
         </PixelButton>
-        <PixelButton href="/desk">回到看板</PixelButton>
+        <PixelButton href="/desk">{t("top.board")}</PixelButton>
       </div>
     </header>
   );
