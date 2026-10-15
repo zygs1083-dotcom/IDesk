@@ -3,6 +3,7 @@ import { defineConfig } from "vite";
 
 export default defineConfig({
   base: "/office/",
+  define: { __OFFICE_BUILD__: JSON.stringify(Date.now().toString(36)) },
   plugins: [react()],
   build: {
     rollupOptions: {
