@@ -14,6 +14,7 @@ export class Bubble extends Container {
     },
   });
   private timer: ReturnType<typeof setTimeout> | undefined;
+  private shown = 0;
 
   constructor() {
     super({ visible: false });
@@ -25,8 +26,13 @@ export class Bubble extends Container {
 
   show(text: string, ms: number) {
     clearTimeout(this.timer);
-    void setGlyphText(this.text, text, () => this.draw());
-    this.visible = true;
+    // 新字形要等字体分片下载完才能画；在此之前不显示，免得闪出上一条气泡。
+    const shown = ++this.shown;
+    void setGlyphText(this.text, text, () => {
+      if (shown !== this.shown) return;
+      this.draw();
+      this.visible = true;
+    });
     if (Number.isFinite(ms)) this.timer = setTimeout(() => this.hide(), ms);
   }
 
@@ -67,6 +73,7 @@ export class Bubble extends Container {
 
   hide() {
     clearTimeout(this.timer);
+    this.shown++;
     this.visible = false;
   }
 }
