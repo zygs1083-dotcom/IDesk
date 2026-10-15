@@ -320,6 +320,16 @@
       }
     ]
   },
+  "spots": [
+    { "id": "printer", "x": 925, "y": 155, "via": "east-upper", "facing": "up" },
+    { "id": "bookshelf", "x": 1070, "y": 155, "via": "east-upper", "facing": "up" },
+    { "id": "whiteboard", "x": 325, "y": 245, "via": "board", "facing": "up" },
+    { "id": "window", "x": 125, "y": 300, "via": "west-upper", "facing": "left" },
+    { "id": "plant", "x": 115, "y": 475, "via": "west-cross", "facing": "up" },
+    { "id": "sofa", "x": 1510, "y": 565, "via": "sofa", "facing": "up" },
+    { "id": "coffee", "x": 1325, "y": 550, "via": "coffee", "facing": "up" },
+    { "id": "meetingDoor", "x": 1200, "y": 195, "via": "meeting-entry", "facing": "right" }
+  ],
   "standing": [
     {
       "x": 390,

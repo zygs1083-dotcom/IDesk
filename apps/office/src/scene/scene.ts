@@ -13,6 +13,20 @@ const spot = point.extend({
   cover: cover.optional(),
   mirror: z.literal(true).optional(),
 });
+const idleSpot = point.extend({
+  id: z.enum([
+    "printer",
+    "bookshelf",
+    "whiteboard",
+    "window",
+    "plant",
+    "sofa",
+    "coffee",
+    "meetingDoor",
+  ]),
+  via: z.string(),
+  facing: spot.shape.facing,
+});
 export const sceneSchema = z.object({
   hostZones: z.record(z.string(), z.number().int().min(1).max(4)).optional(),
   title: z.string().optional(),
@@ -23,6 +37,7 @@ export const sceneSchema = z.object({
   meeting: z.object({ seats: z.array(spot).length(6) }),
   lounge: z.object({ spots: z.array(spot) }),
   standing: z.array(spot),
+  spots: z.array(idleSpot),
   doneTray: point,
   bulletin: point,
   waypoints: z.array(point.extend({ id: z.string() })),
@@ -33,3 +48,6 @@ export type Scene = z.infer<typeof sceneSchema>;
 export type Point = z.infer<typeof point>;
 export type Seat = z.infer<typeof spot>;
 export type Direction = Seat["facing"];
+
+export type Spot = z.infer<typeof idleSpot>;
+export type SpotId = Spot["id"];
