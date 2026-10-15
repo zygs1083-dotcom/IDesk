@@ -10,7 +10,6 @@ import { Segmented } from "../../components/segmented.tsx";
 import { useLang } from "../../i18n/lang.tsx";
 import { request } from "../../lib/api.ts";
 import type { Schedule } from "../schedules/types.ts";
-
 import { DispatchFields } from "./dispatch-fields.tsx";
 
 export function PublishDialog({ onClose }: { onClose: () => void }) {

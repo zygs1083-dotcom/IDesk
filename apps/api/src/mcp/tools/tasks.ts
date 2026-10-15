@@ -1,7 +1,7 @@
 import { idSchema, publishTaskSchema, taskQuerySchema } from "@idesk/shared/task-schemas";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import type { PublicAgent } from "../../core/agents/agents.ts";
+import { agentActor, type PublicAgent } from "../../core/agents/agents.ts";
 import { listEvents } from "../../core/events/query.ts";
 import { firstBlocker } from "../../core/tasks/dependencies.ts";
 import { publishTask } from "../../core/tasks/publish.ts";
@@ -69,7 +69,7 @@ export function registerTaskTools(server: McpServer, agent: PublicAgent) {
       toolResult(
         publishTask(
           { ...input, ...(dueAt === undefined ? {} : { dueAt: new Date(dueAt) }) },
-          { kind: "agent", id: agent.id, capabilities: agent.capabilities },
+          agentActor(agent),
           dispatch,
         ),
       ),

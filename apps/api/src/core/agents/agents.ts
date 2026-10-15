@@ -1,5 +1,6 @@
 import { createHash, randomBytes } from "node:crypto";
 import type { AGENT_KINDS, patchAgentSchema } from "@idesk/shared/agent-schemas";
+import type { Actor } from "@idesk/shared/task-machine";
 import { eq } from "drizzle-orm";
 import type { z } from "zod";
 import { db } from "../../db/client.ts";
@@ -9,6 +10,11 @@ import { publishEvent, recordEvent } from "../events/bus.ts";
 type Agent = typeof agents.$inferSelect;
 export type AgentKind = (typeof AGENT_KINDS)[number];
 export type PublicAgent = Omit<Agent, "apiKeyHash"> & { status: "online" | "offline" };
+export const agentActor = (agent: PublicAgent): Actor => ({
+  kind: "agent",
+  id: agent.id,
+  capabilities: agent.capabilities,
+});
 
 function toPublic(row: Agent, now: Date): PublicAgent {
   const { apiKeyHash, ...agent } = row;

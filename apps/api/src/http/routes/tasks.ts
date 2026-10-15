@@ -17,7 +17,6 @@ import { actOnTask, reportProgress } from "../../core/tasks/transition.ts";
 import { HttpError } from "../errors.ts";
 import type { AuthEnv } from "../middleware/auth.ts";
 import { requestLang } from "../request-lang.ts";
-
 import { taskQueryRoutes } from "./task-queries.ts";
 
 export function taskRoutes(app: OpenAPIHono<AuthEnv>) {
