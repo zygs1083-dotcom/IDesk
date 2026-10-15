@@ -11,17 +11,19 @@ import { sprites } from "../stage/textures.ts";
 import { createActions } from "./actions.ts";
 import { Cast } from "./cast.ts";
 import { eventPull } from "./events.ts";
+import { startIdle } from "./idle.ts";
 import { placeSnapshot } from "./snapshot.ts";
 
 const PRESENCE_MS = 30_000;
 const LEASE_WARNING_MS = 120_000;
 
-export async function direct(stage: Stage, scene: Scene, humanName: string) {
+export async function direct(stage: Stage, scene: Scene, humanName: string, lines: string[]) {
   const initialEvents = z.array(eventSchema).parse(await request("/events"));
   const initialized = await initialize(stage, scene, humanName);
   if (!initialized) return;
   const { cast, snapshot, actions, daylight, tasks, cards } = initialized;
   placeSnapshot(cast, cards, tasks);
+  const syncIdle = startIdle(cast, snapshot, lines);
   const warned = new Set<string>();
   const checkLeases = () => {
     const nearExpiry = new Set(
@@ -57,6 +59,7 @@ export async function direct(stage: Stage, scene: Scene, humanName: string) {
         if (!cast.agents.has(event.agentId))
           cast.update(z.array(publicAgentSchema).parse(await request("/agents")));
         cast.arrive(event.agentId);
+        syncIdle();
       }
       const previous = event.taskId ? snapshot.get(event.taskId) : undefined;
       let task = previous;
@@ -73,6 +76,7 @@ export async function direct(stage: Stage, scene: Scene, humanName: string) {
     const agents = z.array(publicAgentSchema).parse(await request("/agents"));
     if (stage.world.destroyed) return;
     cast.update(agents);
+    syncIdle();
     checkLeases();
   }, PRESENCE_MS);
   checkLeases();
