@@ -29,7 +29,7 @@
 
 **是什么。** 背景里会挡住人的物体——工位桌（连显示器）、前排椅子的椅背、前台柜台、会议桌和会议椅、沙发的扶手和前沿、绿植、书架、玻璃隔断等——按它的真实外轮廓（含描边）从背景里抠出来的一块图。遮挡件画在背景上完全相同的位置，像素和背景重合，所以没人站在它后面时看不出它存在；有人在它后面时，它就按轮廓盖住人。
 
-**数据。** `layout.json` 的 `occluders`：每件 `{ id, polygon, baseline }`。`polygon` 是背景像素坐标的顶点列表，沿物体描边的外沿走，误差不超过 1 像素；`baseline` 是物体落地前沿的 y（桌腿、柜台底、椅轮落在地板上的那条线）。`tools/occluders.mjs` 按多边形从 `background.png` 抠出带透明的图块，打包成 `occluders.png/json`，可复现。
+**数据。** `layout.json` 的 `occluders`：每件 `{ id, polygon, baseline }`。`polygon` 是背景像素坐标的顶点列表，沿物体描边的外沿走，误差不超过 1 像素；`baseline` 是物体落地前沿的 y（桌腿、柜台底、椅轮落在地板上的那条线）。baseline 可以低于多边形的下沿：前排椅子只抠到椅背和扶手，但它的落地前沿是更低的椅轮。座位脚底取落地点的中心、遮挡件 baseline 取落地的前沿，所以坐在前排椅子上的人天然排在自己的椅背后面，不需要任何偏移。`tools/occluders.mjs` 按多边形从 `background.png` 抠出带透明的图块，打包成 `occluders.png/json`，可复现。
 
 **拆法。** 一个物体若一部分在坐着的人前面、一部分在后面，只抠在人前面的那部分：前排椅子（人背对观众）只抠椅背和扶手，坐垫留在背景里；后排椅子（人脸朝观众）整把都在人后面，不抠。
 
@@ -45,7 +45,7 @@
 
 **布局文件** `apps/office/public/layout.json`（schema 在 `@idesk/shared/office-schemas`），数据目录 `IDESK_DATA_DIR/office/layout.json` 覆盖，不缓存。内容：背景尺寸、`occluders`、可走栅格、座位、工作区、命名点、`standing`、`meeting`、`lounge`、`hostZones`、`title`。
 
-**座位**：`{ id, x, y, facing, mirror?, zone?, workSpot }`。`(x, y)` 是坐下时人的脚底，量法统一为「这把椅子落地点的中心」（椅轮或椅脚落在地板上的位置），不凭感觉调。`facing` 取 `front`（后排，脸朝观众偏右下）、`back`（前排，背对观众偏右上）、`down`（前台礼仪，正对观众）、`left` / `right`（会议室两端、沙发侧坐）。每组工位右侧的座位 `mirror: true`，让人看向自己的显示器。`workSpot` 是桌面上放任务卡和台灯光的点。
+**座位**：`{ id, x, y, facing, mirror?, zone?, workSpot }`。`(x, y)` 是坐下时人的脚底，量法统一为「这把椅子落地点的中心」（椅轮或椅脚落在地板上的位置），不凭感觉调。落地点被桌子挡住的椅子（后排），用同款椅子换算：在一把完全可见的同款椅子上量一次「坐垫中心 → 落地点中心」的偏移，被挡的椅子一律取「可见的坐垫中心 + 同一偏移」，偏移写在 `assets/OCCLUDERS.md`，不逐把调。`facing` 取 `front`（后排，脸朝观众偏右下）、`back`（前排，背对观众偏右上）、`down`（前台礼仪，正对观众）、`left` / `right`（会议室两端、沙发侧坐）。每组工位右侧的座位 `mirror: true`，让人看向自己的显示器。`workSpot` 是桌面上放任务卡和台灯光的点。
 
 **工作区**：每区若干座位和一个名牌文字区（背景木牌里的矩形，从画上量出）。分配规则不变：同一 `agent.host` 坐同一区，超出时循环，`hostZones` 可固定。工位不够时站到 `standing` 站位。
 
