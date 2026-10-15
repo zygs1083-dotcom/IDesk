@@ -10,14 +10,14 @@ const configSchema = z.object({
   baseUrl: z
     .url()
     .default("https://api.github.com")
-    .meta({ title: "地址" })
+    .meta({ title: "地址", titleEn: "Base URL" })
     .transform((url) => url.replace(/\/+$/, "")),
-  token: z.string().min(1).meta({ title: "Token" }),
+  token: z.string().min(1).meta({ title: "Token", titleEn: "Token" }),
   repo: z
     .string()
     .regex(/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/)
-    .meta({ title: "仓库" }),
-  ref: z.string().min(1).default("main").meta({ title: "分支" }),
+    .meta({ title: "仓库", titleEn: "Repository" }),
+  ref: z.string().min(1).default("main").meta({ title: "分支", titleEn: "Branch" }),
 });
 type Config = z.output<typeof configSchema>;
 type RunStatus = (typeof RUN_STATUSES)[number];

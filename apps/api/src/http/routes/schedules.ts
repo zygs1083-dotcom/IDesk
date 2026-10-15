@@ -57,7 +57,7 @@ export function scheduleRoutes(app: OpenAPIHono<AuthEnv>) {
     },
     (c) => {
       const row = getSchedule(c.req.valid("param").id);
-      if (!row) throw new HttpError(404, "定时任务不存在");
+      if (!row) throw new HttpError(404, "schedule.notFound");
       return c.json(row, 200);
     },
   );
@@ -105,12 +105,14 @@ export function scheduleRoutes(app: OpenAPIHono<AuthEnv>) {
       requireHuman,
       validator("json", (body, c) => {
         const row = getSchedule(c.req.param("id") as string);
-        if (!row) throw new HttpError(404, "定时任务不存在");
+        if (!row) throw new HttpError(404, "schedule.notFound");
         const parsed = updateScheduleSchema
           .refine((input) => validCron({ ...row, ...input }), "cron 表达式无效")
           .safeParse(body);
         if (!parsed.success)
-          throw new HttpError(400, parsed.error.issues.map((issue) => issue.message).join("；"));
+          throw new HttpError(400, "validation", {
+            text: parsed.error.issues.map((issue) => issue.message).join("；"),
+          });
         return parsed.data;
       }),
     ],
@@ -128,7 +130,7 @@ export function scheduleRoutes(app: OpenAPIHono<AuthEnv>) {
     }
   >(patchRoute, (c) => {
     const row = updateSchedule(c.req.valid("param").id, c.req.valid("json"));
-    if (!row) throw new HttpError(404, "定时任务不存在");
+    if (!row) throw new HttpError(404, "schedule.notFound");
     syncSchedule(row);
     return c.json(row, 200);
   });
@@ -142,7 +144,7 @@ export function scheduleRoutes(app: OpenAPIHono<AuthEnv>) {
     },
     (c) => {
       const id = c.req.valid("param").id;
-      if (!deleteSchedule(id)) throw new HttpError(404, "定时任务不存在");
+      if (!deleteSchedule(id)) throw new HttpError(404, "schedule.notFound");
       unscheduleSchedule(id);
       return c.body(null, 204);
     },
@@ -162,7 +164,7 @@ export function scheduleRoutes(app: OpenAPIHono<AuthEnv>) {
     },
     async (c) => {
       const row = await runSchedule(c.req.valid("param").id);
-      if (!row) throw new HttpError(404, "定时任务不存在");
+      if (!row) throw new HttpError(404, "schedule.notFound");
       return c.json(row, 200);
     },
   );

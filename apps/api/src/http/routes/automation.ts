@@ -54,7 +54,7 @@ export function automationRoutes(app: OpenAPIHono<AuthEnv>) {
     },
     (c) => {
       const runs = listRuns(c.req.valid("param").id);
-      if (!runs) throw new HttpError(404, "任务流不存在");
+      if (!runs) throw new HttpError(404, "automation.notFound");
       return c.json(runs, 200);
     },
   );

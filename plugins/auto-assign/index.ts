@@ -7,7 +7,10 @@ import type { Plugin } from "../../apps/api/src/plugins/types.ts";
 import { selectAgent } from "./select-agent.ts";
 
 const configSchema = z.object({
-  tag: z.string().default("").meta({ title: "只处理带此标签的任务" }),
+  tag: z
+    .string()
+    .default("")
+    .meta({ title: "只处理带此标签的任务", titleEn: "Only process tasks with this tag" }),
 });
 
 export default {

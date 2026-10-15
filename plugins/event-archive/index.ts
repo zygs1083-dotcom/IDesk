@@ -6,7 +6,12 @@ import { events } from "../../apps/api/src/db/schema.ts";
 import type { Plugin, PluginContext } from "../../apps/api/src/plugins/types.ts";
 
 const configSchema = z.object({
-  keepDays: z.number().int().min(1).default(90).meta({ title: "保留天数" }),
+  keepDays: z
+    .number()
+    .int()
+    .min(1)
+    .default(90)
+    .meta({ title: "保留天数", titleEn: "Retention days" }),
 });
 type Config = z.infer<typeof configSchema>;
 

@@ -1,4 +1,11 @@
-import { labels } from "./labels.ts";
+import type { Lang } from "./labels.ts";
+import {
+  type MessageArguments,
+  type MessageDetail,
+  type MessageKey,
+  type MessageParams,
+  message,
+} from "./messages.ts";
 import type { TaskStatus } from "./task-status.ts";
 
 export interface TaskRecruit {
@@ -38,14 +45,22 @@ export type TaskAction =
   | { type: "reopen" };
 
 export const LEASE_MS = 10 * 60 * 1000;
-export class TransitionError extends Error {
+export class TransitionError<K extends MessageKey = MessageKey> extends Error {
+  readonly params: MessageParams<K>;
   constructor(
     readonly status: TaskStatus,
     readonly action: TaskAction["type"],
-    message: string,
+    readonly key: K,
+    ...args: MessageArguments<K>
   ) {
-    super(message);
+    const params = args[0] as MessageParams<K>;
+    super(message("zh", key, params));
+    this.params = params;
     this.name = "TransitionError";
+  }
+
+  translate(lang: Lang): string {
+    return message(lang, this.key, this.params);
   }
 }
 
@@ -102,31 +117,33 @@ const transitions: Record<TaskStatus, ActionTable> = {
   cancelled: {},
 };
 
-const byAssignee = (task: TaskState, actor: Actor): string | null =>
-  actor.kind === "agent" && actor.id === task.assigneeId ? null : "只有负责人可以操作";
-const byAssigneeOrHuman = (task: TaskState, actor: Actor): string | null =>
+const byAssignee = (task: TaskState, actor: Actor): MessageDetail | null =>
+  actor.kind === "agent" && actor.id === task.assigneeId
+    ? null
+    : { key: "transition.assigneeOnly", params: undefined };
+const byAssigneeOrHuman = (task: TaskState, actor: Actor): MessageDetail | null =>
   actor.kind === "human" ? null : byAssignee(task, actor);
-const byHumanOrPublisher = (task: TaskState, actor: Actor): string | null =>
+const byHumanOrPublisher = (task: TaskState, actor: Actor): MessageDetail | null =>
   actor.kind === "human" || (actor.kind === "agent" && actor.id === task.publisherId)
     ? null
-    : "只有人或发布者可以操作";
-const byCapabilities = (task: TaskState, actor: Actor): string | null => {
-  if (actor.kind !== "agent") return "只有智能体可以领取或加入";
+    : { key: "auth.humanOrPublisherOnly", params: undefined };
+const byCapabilities = (task: TaskState, actor: Actor): MessageDetail | null => {
+  if (actor.kind !== "agent") return { key: "transition.agentOnly", params: undefined };
   const missing = task.capabilities.filter((cap) => !actor.capabilities.includes(cap));
-  return missing.length ? `能力不匹配：缺少 ${missing.join("、")}` : null;
+  return missing.length ? { key: "transition.missingCapabilities", params: { missing } } : null;
 };
 const permitted: {
   [A in TaskAction["type"]]: (
     task: TaskState,
     actor: Actor,
     action: Extract<TaskAction, { type: A }>,
-  ) => string | null;
+  ) => MessageDetail | null;
 } = {
   claim: byCapabilities,
   join: (task, actor) =>
     byCapabilities(task, actor) ||
     (actor.kind === "agent" && (task.recruit as TaskRecruit).joined.includes(actor.id)
-      ? "已经加入了"
+      ? { key: "transition.alreadyJoined", params: undefined }
       : null),
   accept: byAssignee,
   decline: byAssignee,
@@ -138,11 +155,14 @@ const permitted: {
   resume: byAssigneeOrHuman,
   assign: (task, actor) => (actor.kind === "system" ? null : byHumanOrPublisher(task, actor)),
   recruit: (task, actor, action) =>
-    byHumanOrPublisher(task, actor) || (action.needed < 2 ? "招募至少需要 2 个智能体" : null),
+    byHumanOrPublisher(task, actor) ||
+    (action.needed < 2 ? { key: "transition.recruitMinimum", params: undefined } : null),
   cancel_recruit: byHumanOrPublisher,
   cancel: byHumanOrPublisher,
-  reopen: (_, actor) => (actor.kind === "human" ? null : "只有人可以重开"),
-  lease_expired: (_, actor) => (actor.kind === "system" ? null : "只有系统可以处理租约到期"),
+  reopen: (_, actor) =>
+    actor.kind === "human" ? null : { key: "transition.humanReopenOnly", params: undefined },
+  lease_expired: (_, actor) =>
+    actor.kind === "system" ? null : { key: "transition.systemLeaseOnly", params: undefined },
 };
 
 export function transition<T extends TaskState>(
@@ -153,12 +173,14 @@ export function transition<T extends TaskState>(
 ): T | TransitionError {
   const apply = transitions[task.status][action.type];
   if (!apply) {
-    const message = `${labels("zh").status[task.status]}的任务不能${labels("zh").action[action.type]}`;
-    return new TransitionError(task.status, action.type, message);
+    return new TransitionError(task.status, action.type, "transition.notAllowed", {
+      status: task.status,
+      action: action.type,
+    });
   }
   // 同一个动作键下的处理函数与 action 类型一致。
   const reason = permitted[action.type](task, actor, action as never);
-  if (reason) return new TransitionError(task.status, action.type, reason);
+  if (reason) return new TransitionError(task.status, action.type, reason.key, reason.params);
   const agentId = actor.kind === "agent" ? actor.id : "";
   const lease = new Date(now.getTime() + LEASE_MS);
   return { ...task, ...apply({ task, agentId, lease, now }, action as never) };
