@@ -7,15 +7,17 @@
   "frontDesk": {
     "human": {
       "x": 165,
-      "y": 630,
+      "y": 654,
       "via": "reception",
       "facing": "down",
-      "cover": {
-        "x": 130,
-        "y": 622,
-        "width": 72,
-        "height": 22
-      }
+      "covers": [
+        {
+          "x": 100,
+          "y": 640,
+          "width": 140,
+          "height": 50
+        }
+      ]
     }
   },
   "taskBoard": {
@@ -33,53 +35,73 @@
       "seats": [
         {
           "x": 543,
-          "y": 285,
+          "y": 290,
           "via": "zone-1-1",
           "facing": "down",
-          "cover": {
-            "x": 509,
-            "y": 275,
-            "width": 68,
-            "height": 22
-          }
+          "covers": [
+            {
+              "x": 496,
+              "y": 262,
+              "width": 126,
+              "height": 98
+            },
+            {
+              "x": 555,
+              "y": 240,
+              "width": 48,
+              "height": 24
+            }
+          ]
         },
         {
           "x": 724,
-          "y": 285,
+          "y": 290,
           "via": "zone-1-2",
           "facing": "down",
-          "cover": {
-            "x": 690,
-            "y": 275,
-            "width": 68,
-            "height": 22
-          },
-          "mirror": true
+          "mirror": true,
+          "covers": [
+            {
+              "x": 632,
+              "y": 262,
+              "width": 128,
+              "height": 98
+            },
+            {
+              "x": 652,
+              "y": 240,
+              "width": 48,
+              "height": 24
+            }
+          ]
         },
         {
           "x": 561,
           "y": 378,
           "via": "zone-1-3",
           "facing": "up",
-          "cover": {
-            "x": 536,
-            "y": 359,
-            "width": 50,
-            "height": 20
-          }
+          "covers": [
+            {
+              "x": 536,
+              "y": 359,
+              "width": 50,
+              "height": 20
+            }
+          ]
         },
         {
           "x": 695,
           "y": 378,
           "via": "zone-1-4",
           "facing": "up",
-          "cover": {
-            "x": 670,
-            "y": 359,
-            "width": 50,
-            "height": 20
-          },
-          "mirror": true
+          "mirror": true,
+          "covers": [
+            {
+              "x": 670,
+              "y": 359,
+              "width": 50,
+              "height": 20
+            }
+          ]
         }
       ]
     },
@@ -91,53 +113,73 @@
       "seats": [
         {
           "x": 909,
-          "y": 285,
+          "y": 290,
           "via": "zone-2-1",
           "facing": "down",
-          "cover": {
-            "x": 875,
-            "y": 275,
-            "width": 68,
-            "height": 22
-          }
+          "covers": [
+            {
+              "x": 862,
+              "y": 262,
+              "width": 126,
+              "height": 98
+            },
+            {
+              "x": 921,
+              "y": 240,
+              "width": 48,
+              "height": 24
+            }
+          ]
         },
         {
           "x": 1089,
-          "y": 285,
+          "y": 290,
           "via": "zone-2-2",
           "facing": "down",
-          "cover": {
-            "x": 1055,
-            "y": 275,
-            "width": 68,
-            "height": 22
-          },
-          "mirror": true
+          "mirror": true,
+          "covers": [
+            {
+              "x": 997,
+              "y": 262,
+              "width": 128,
+              "height": 98
+            },
+            {
+              "x": 1017,
+              "y": 240,
+              "width": 48,
+              "height": 24
+            }
+          ]
         },
         {
           "x": 925,
           "y": 378,
           "via": "zone-2-3",
           "facing": "up",
-          "cover": {
-            "x": 900,
-            "y": 359,
-            "width": 50,
-            "height": 20
-          }
+          "covers": [
+            {
+              "x": 900,
+              "y": 359,
+              "width": 50,
+              "height": 20
+            }
+          ]
         },
         {
           "x": 1059,
           "y": 378,
           "via": "zone-2-4",
           "facing": "up",
-          "cover": {
-            "x": 1034,
-            "y": 359,
-            "width": 50,
-            "height": 20
-          },
-          "mirror": true
+          "mirror": true,
+          "covers": [
+            {
+              "x": 1034,
+              "y": 359,
+              "width": 50,
+              "height": 20
+            }
+          ]
         }
       ]
     },
@@ -149,53 +191,73 @@
       "seats": [
         {
           "x": 528,
-          "y": 595,
+          "y": 600,
           "via": "zone-3-1",
           "facing": "down",
-          "cover": {
-            "x": 494,
-            "y": 585,
-            "width": 68,
-            "height": 22
-          }
+          "covers": [
+            {
+              "x": 481,
+              "y": 572,
+              "width": 126,
+              "height": 98
+            },
+            {
+              "x": 540,
+              "y": 550,
+              "width": 48,
+              "height": 24
+            }
+          ]
         },
         {
           "x": 716,
-          "y": 595,
+          "y": 600,
           "via": "zone-3-2",
           "facing": "down",
-          "cover": {
-            "x": 682,
-            "y": 585,
-            "width": 68,
-            "height": 22
-          },
-          "mirror": true
+          "mirror": true,
+          "covers": [
+            {
+              "x": 624,
+              "y": 572,
+              "width": 128,
+              "height": 98
+            },
+            {
+              "x": 644,
+              "y": 550,
+              "width": 48,
+              "height": 24
+            }
+          ]
         },
         {
           "x": 548,
           "y": 691,
           "via": "zone-3-3",
           "facing": "up",
-          "cover": {
-            "x": 523,
-            "y": 672,
-            "width": 50,
-            "height": 20
-          }
+          "covers": [
+            {
+              "x": 523,
+              "y": 672,
+              "width": 50,
+              "height": 20
+            }
+          ]
         },
         {
           "x": 684,
           "y": 691,
           "via": "zone-3-4",
           "facing": "up",
-          "cover": {
-            "x": 659,
-            "y": 672,
-            "width": 50,
-            "height": 20
-          },
-          "mirror": true
+          "mirror": true,
+          "covers": [
+            {
+              "x": 659,
+              "y": 672,
+              "width": 50,
+              "height": 20
+            }
+          ]
         }
       ]
     },
@@ -207,53 +269,73 @@
       "seats": [
         {
           "x": 899,
-          "y": 595,
+          "y": 600,
           "via": "zone-4-1",
           "facing": "down",
-          "cover": {
-            "x": 865,
-            "y": 585,
-            "width": 68,
-            "height": 22
-          }
+          "covers": [
+            {
+              "x": 852,
+              "y": 572,
+              "width": 126,
+              "height": 98
+            },
+            {
+              "x": 911,
+              "y": 550,
+              "width": 48,
+              "height": 24
+            }
+          ]
         },
         {
           "x": 1087,
-          "y": 595,
+          "y": 600,
           "via": "zone-4-2",
           "facing": "down",
-          "cover": {
-            "x": 1053,
-            "y": 585,
-            "width": 68,
-            "height": 22
-          },
-          "mirror": true
+          "mirror": true,
+          "covers": [
+            {
+              "x": 995,
+              "y": 572,
+              "width": 128,
+              "height": 98
+            },
+            {
+              "x": 1015,
+              "y": 550,
+              "width": 48,
+              "height": 24
+            }
+          ]
         },
         {
           "x": 918,
           "y": 691,
           "via": "zone-4-3",
           "facing": "up",
-          "cover": {
-            "x": 893,
-            "y": 672,
-            "width": 50,
-            "height": 20
-          }
+          "covers": [
+            {
+              "x": 893,
+              "y": 672,
+              "width": 50,
+              "height": 20
+            }
+          ]
         },
         {
           "x": 1054,
           "y": 691,
           "via": "zone-4-4",
           "facing": "up",
-          "cover": {
-            "x": 1029,
-            "y": 672,
-            "width": 50,
-            "height": 20
-          },
-          "mirror": true
+          "mirror": true,
+          "covers": [
+            {
+              "x": 1029,
+              "y": 672,
+              "width": 50,
+              "height": 20
+            }
+          ]
         }
       ]
     }
@@ -264,37 +346,43 @@
         "x": 1345,
         "y": 155,
         "via": "meeting-top-0",
-        "facing": "right"
+        "facing": "right",
+        "covers": []
       },
       {
         "x": 1345,
         "y": 302,
         "via": "meeting-bottom-0",
-        "facing": "left"
+        "facing": "left",
+        "covers": []
       },
       {
         "x": 1415,
         "y": 155,
         "via": "meeting-top-1",
-        "facing": "right"
+        "facing": "right",
+        "covers": []
       },
       {
         "x": 1415,
         "y": 302,
         "via": "meeting-bottom-1",
-        "facing": "left"
+        "facing": "left",
+        "covers": []
       },
       {
         "x": 1485,
         "y": 155,
         "via": "meeting-top-2",
-        "facing": "right"
+        "facing": "right",
+        "covers": []
       },
       {
         "x": 1485,
         "y": 302,
         "via": "meeting-bottom-2",
-        "facing": "left"
+        "facing": "left",
+        "covers": []
       }
     ]
   },
@@ -304,128 +392,195 @@
         "x": 1240,
         "y": 550,
         "via": "coffee",
-        "facing": "up"
+        "facing": "up",
+        "covers": []
       },
       {
         "x": 1410,
         "y": 650,
         "via": "sofa",
-        "facing": "up"
+        "facing": "up",
+        "covers": []
       },
       {
         "x": 1630,
         "y": 650,
         "via": "sofa-side",
-        "facing": "up"
+        "facing": "up",
+        "covers": []
       }
     ]
   },
   "spots": [
-    { "id": "printer", "x": 925, "y": 155, "via": "east-upper", "facing": "up" },
-    { "id": "bookshelf", "x": 1070, "y": 155, "via": "east-upper", "facing": "up" },
-    { "id": "whiteboard", "x": 325, "y": 245, "via": "board", "facing": "up" },
-    { "id": "window", "x": 125, "y": 300, "via": "west-upper", "facing": "left" },
-    { "id": "plant", "x": 115, "y": 475, "via": "west-cross", "facing": "up" },
-    { "id": "sofa", "x": 1560, "y": 555, "via": "sofa-side", "facing": "up" },
-    { "id": "coffee", "x": 1325, "y": 550, "via": "coffee", "facing": "up" },
-    { "id": "meetingDoor", "x": 1200, "y": 195, "via": "meeting-entry", "facing": "right" }
+    {
+      "id": "printer",
+      "x": 925,
+      "y": 155,
+      "via": "east-upper",
+      "facing": "up"
+    },
+    {
+      "id": "bookshelf",
+      "x": 1070,
+      "y": 155,
+      "via": "east-upper",
+      "facing": "up"
+    },
+    {
+      "id": "whiteboard",
+      "x": 325,
+      "y": 245,
+      "via": "board",
+      "facing": "up"
+    },
+    {
+      "id": "window",
+      "x": 125,
+      "y": 300,
+      "via": "west-upper",
+      "facing": "left"
+    },
+    {
+      "id": "plant",
+      "x": 115,
+      "y": 475,
+      "via": "west-cross",
+      "facing": "up"
+    },
+    {
+      "id": "sofa",
+      "x": 1560,
+      "y": 555,
+      "via": "sofa-side",
+      "facing": "up"
+    },
+    {
+      "id": "coffee",
+      "x": 1325,
+      "y": 550,
+      "via": "coffee",
+      "facing": "up"
+    },
+    {
+      "id": "meetingDoor",
+      "x": 1200,
+      "y": 195,
+      "via": "meeting-entry",
+      "facing": "right"
+    }
   ],
   "standing": [
     {
       "x": 390,
       "y": 280,
       "via": "west-upper-205",
-      "facing": "right"
+      "facing": "right",
+      "covers": []
     },
     {
       "x": 390,
       "y": 390,
       "via": "west-cross-420",
-      "facing": "right"
+      "facing": "right",
+      "covers": []
     },
     {
       "x": 390,
       "y": 500,
       "via": "reception-side",
-      "facing": "right"
+      "facing": "right",
+      "covers": []
     },
     {
       "x": 390,
       "y": 610,
       "via": "west-cross-515",
-      "facing": "right"
+      "facing": "right",
+      "covers": []
     },
     {
       "x": 390,
       "y": 720,
       "via": "west-lower-730",
-      "facing": "right"
+      "facing": "right",
+      "covers": []
     },
     {
       "x": 810,
       "y": 275,
       "via": "middle-upper-205",
-      "facing": "right"
+      "facing": "right",
+      "covers": []
     },
     {
       "x": 810,
       "y": 390,
       "via": "middle-cross-420",
-      "facing": "right"
+      "facing": "right",
+      "covers": []
     },
     {
       "x": 810,
       "y": 575,
       "via": "middle-cross-515",
-      "facing": "right"
+      "facing": "right",
+      "covers": []
     },
     {
       "x": 810,
       "y": 710,
       "via": "middle-lower-730",
-      "facing": "right"
+      "facing": "right",
+      "covers": []
     },
     {
       "x": 1180,
       "y": 285,
       "via": "east-upper-205",
-      "facing": "left"
+      "facing": "left",
+      "covers": []
     },
     {
       "x": 1180,
       "y": 405,
       "via": "east-cross-420",
-      "facing": "left"
+      "facing": "left",
+      "covers": []
     },
     {
       "x": 1180,
       "y": 520,
       "via": "east-cross-515",
-      "facing": "left"
+      "facing": "left",
+      "covers": []
     },
     {
       "x": 1180,
       "y": 640,
       "via": "lounge-aisle",
-      "facing": "left"
+      "facing": "left",
+      "covers": []
     },
     {
       "x": 540,
       "y": 815,
       "via": "zone-3-3",
-      "facing": "up"
+      "facing": "up",
+      "covers": []
     },
     {
       "x": 680,
       "y": 815,
       "via": "south-center",
-      "facing": "up"
+      "facing": "up",
+      "covers": []
     },
     {
       "x": 960,
       "y": 815,
       "via": "zone-4-3",
-      "facing": "up"
+      "facing": "up",
+      "covers": []
     }
   ],
   "doneTray": {
@@ -739,66 +894,249 @@
     }
   ],
   "edges": [
-    ["door", "entrance"],
-    ["south-east", "south-center"],
-    ["south-center", "south-west"],
-    ["south-west", "west-lower"],
-    ["west-lower", "west-cross"],
-    ["west-cross", "west-upper"],
-    ["south-center", "middle-lower"],
-    ["middle-lower", "middle-cross"],
-    ["middle-cross", "middle-upper"],
-    ["south-east", "east-lower"],
-    ["east-lower", "east-cross"],
-    ["east-cross", "east-upper"],
-    ["west-cross", "middle-cross"],
-    ["middle-cross", "east-cross"],
-    ["west-upper", "board-approach"],
-    ["board-approach", "board"],
-    ["west-cross", "reception-side"],
-    ["reception-side", "reception"],
-    ["west-upper", "west-upper-205"],
-    ["west-upper-205", "zone-1-1"],
-    ["middle-upper", "middle-upper-205"],
-    ["middle-upper-205", "zone-1-2"],
-    ["west-cross", "west-cross-420"],
-    ["west-cross-420", "zone-1-3"],
-    ["middle-cross", "middle-cross-420"],
-    ["middle-cross-420", "zone-1-4"],
-    ["middle-upper-205", "zone-2-1"],
-    ["east-upper", "east-upper-205"],
-    ["east-upper-205", "zone-2-2"],
-    ["middle-cross-420", "zone-2-3"],
-    ["east-cross", "east-cross-420"],
-    ["east-cross-420", "zone-2-4"],
-    ["west-cross", "west-cross-515"],
-    ["west-cross-515", "zone-3-1"],
-    ["middle-cross", "middle-cross-515"],
-    ["middle-cross-515", "zone-3-2"],
-    ["west-lower", "west-lower-730"],
-    ["west-lower-730", "zone-3-3"],
-    ["middle-lower", "middle-lower-730"],
-    ["middle-lower-730", "zone-3-4"],
-    ["middle-cross-515", "zone-4-1"],
-    ["east-cross", "east-cross-515"],
-    ["east-cross-515", "zone-4-2"],
-    ["middle-lower-730", "zone-4-3"],
-    ["east-lower", "east-lower-730"],
-    ["east-lower-730", "zone-4-4"],
-    ["east-cross", "meeting-bottom"],
-    ["meeting-top", "meeting-top-0"],
-    ["meeting-bottom", "meeting-bottom-0"],
-    ["meeting-top", "meeting-top-1"],
-    ["meeting-bottom", "meeting-bottom-1"],
-    ["meeting-top", "meeting-top-2"],
-    ["meeting-bottom", "meeting-bottom-2"],
-    ["east-cross", "coffee"],
-    ["entrance", "entrance-aisle"],
-    ["entrance-aisle", "south-east"],
-    ["east-upper", "meeting-entry"],
-    ["meeting-entry", "meeting-top"],
-    ["lounge-aisle", "sofa"],
-    ["lounge-aisle", "sofa-side"],
-    ["coffee", "lounge-aisle"]
+    [
+      "door",
+      "entrance"
+    ],
+    [
+      "south-east",
+      "south-center"
+    ],
+    [
+      "south-center",
+      "south-west"
+    ],
+    [
+      "south-west",
+      "west-lower"
+    ],
+    [
+      "west-lower",
+      "west-cross"
+    ],
+    [
+      "west-cross",
+      "west-upper"
+    ],
+    [
+      "south-center",
+      "middle-lower"
+    ],
+    [
+      "middle-lower",
+      "middle-cross"
+    ],
+    [
+      "middle-cross",
+      "middle-upper"
+    ],
+    [
+      "south-east",
+      "east-lower"
+    ],
+    [
+      "east-lower",
+      "east-cross"
+    ],
+    [
+      "east-cross",
+      "east-upper"
+    ],
+    [
+      "west-cross",
+      "middle-cross"
+    ],
+    [
+      "middle-cross",
+      "east-cross"
+    ],
+    [
+      "west-upper",
+      "board-approach"
+    ],
+    [
+      "board-approach",
+      "board"
+    ],
+    [
+      "west-cross",
+      "reception-side"
+    ],
+    [
+      "reception-side",
+      "reception"
+    ],
+    [
+      "west-upper",
+      "west-upper-205"
+    ],
+    [
+      "west-upper-205",
+      "zone-1-1"
+    ],
+    [
+      "middle-upper",
+      "middle-upper-205"
+    ],
+    [
+      "middle-upper-205",
+      "zone-1-2"
+    ],
+    [
+      "west-cross",
+      "west-cross-420"
+    ],
+    [
+      "west-cross-420",
+      "zone-1-3"
+    ],
+    [
+      "middle-cross",
+      "middle-cross-420"
+    ],
+    [
+      "middle-cross-420",
+      "zone-1-4"
+    ],
+    [
+      "middle-upper-205",
+      "zone-2-1"
+    ],
+    [
+      "east-upper",
+      "east-upper-205"
+    ],
+    [
+      "east-upper-205",
+      "zone-2-2"
+    ],
+    [
+      "middle-cross-420",
+      "zone-2-3"
+    ],
+    [
+      "east-cross",
+      "east-cross-420"
+    ],
+    [
+      "east-cross-420",
+      "zone-2-4"
+    ],
+    [
+      "west-cross",
+      "west-cross-515"
+    ],
+    [
+      "west-cross-515",
+      "zone-3-1"
+    ],
+    [
+      "middle-cross",
+      "middle-cross-515"
+    ],
+    [
+      "middle-cross-515",
+      "zone-3-2"
+    ],
+    [
+      "west-lower",
+      "west-lower-730"
+    ],
+    [
+      "west-lower-730",
+      "zone-3-3"
+    ],
+    [
+      "middle-lower",
+      "middle-lower-730"
+    ],
+    [
+      "middle-lower-730",
+      "zone-3-4"
+    ],
+    [
+      "middle-cross-515",
+      "zone-4-1"
+    ],
+    [
+      "east-cross",
+      "east-cross-515"
+    ],
+    [
+      "east-cross-515",
+      "zone-4-2"
+    ],
+    [
+      "middle-lower-730",
+      "zone-4-3"
+    ],
+    [
+      "east-lower",
+      "east-lower-730"
+    ],
+    [
+      "east-lower-730",
+      "zone-4-4"
+    ],
+    [
+      "east-cross",
+      "meeting-bottom"
+    ],
+    [
+      "meeting-top",
+      "meeting-top-0"
+    ],
+    [
+      "meeting-bottom",
+      "meeting-bottom-0"
+    ],
+    [
+      "meeting-top",
+      "meeting-top-1"
+    ],
+    [
+      "meeting-bottom",
+      "meeting-bottom-1"
+    ],
+    [
+      "meeting-top",
+      "meeting-top-2"
+    ],
+    [
+      "meeting-bottom",
+      "meeting-bottom-2"
+    ],
+    [
+      "east-cross",
+      "coffee"
+    ],
+    [
+      "entrance",
+      "entrance-aisle"
+    ],
+    [
+      "entrance-aisle",
+      "south-east"
+    ],
+    [
+      "east-upper",
+      "meeting-entry"
+    ],
+    [
+      "meeting-entry",
+      "meeting-top"
+    ],
+    [
+      "lounge-aisle",
+      "sofa"
+    ],
+    [
+      "lounge-aisle",
+      "sofa-side"
+    ],
+    [
+      "coffee",
+      "lounge-aisle"
+    ]
   ]
 }

@@ -49,7 +49,7 @@ export function createEditor(stage: Stage, scene: Scene, onToggle: (active: bool
     ...scene.standing,
   ];
   for (const point of seats) {
-    if (point.cover) marker(point.cover, false, point.cover);
+    for (const cover of point.covers ?? []) marker(cover, false, cover);
     marker(point, false);
   }
   marker(scene.bulletin, false);
