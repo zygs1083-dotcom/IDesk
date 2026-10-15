@@ -1,0 +1,50 @@
+[
+  {
+    "kind": "claude-code",
+    "baseline": 251,
+    "before": 251,
+    "after": 68,
+    "limit": 83.66666666666667,
+    "passed": true
+  },
+  {
+    "kind": "codex",
+    "baseline": 102,
+    "before": 102,
+    "after": 57,
+    "limit": 34,
+    "passed": false
+  },
+  {
+    "kind": "n8n",
+    "baseline": 231,
+    "before": 231,
+    "after": 40,
+    "limit": 77,
+    "passed": true
+  },
+  {
+    "kind": "script",
+    "baseline": 50,
+    "before": 50,
+    "after": 18,
+    "limit": 16.666666666666668,
+    "passed": false
+  },
+  {
+    "kind": "custom",
+    "baseline": 54,
+    "before": 54,
+    "after": 21,
+    "limit": 18,
+    "passed": false
+  },
+  {
+    "kind": "receptionist",
+    "baseline": 96,
+    "before": 96,
+    "after": 52,
+    "limit": 32,
+    "passed": false
+  }
+]
