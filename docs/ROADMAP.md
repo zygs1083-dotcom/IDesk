@@ -90,4 +90,9 @@
 - **W49 Webhook 接收端要求**：DESIGN §12.22、UI.md 接入信息页、`docs/EXTENDING.md` 同步。验证：webhook 测试覆盖超时进入重试；接入信息页截图浅色深色中英文。
 - **W50 发布时直接指定或招募**：DESIGN §12.23、UI.md 协作台。验证：API 测试 dispatch assign/recruit 成功与 409；MCP 带 dispatch；发布弹层三种分派各发一次，截图。
 
+- **W51 办公室坐姿与名牌**：OFFICE.md §2、§3。精灵图扩成 4×6（Codex 图片编辑追加第六行，保持原角色），`sprites.mjs` 切 6 行并为 left 镜像，坐下/打字按座位朝向取侧面帧；工作区名牌改成可读的像素面板。验证：五种角色坐在左右两侧都面朝桌子的截图；名牌在 1440 和 1000 宽都可读。
+- **W52 空闲行为与气泡**：OFFICE.md §3。验证：录一段 60 秒 GIF，至少出现伸懒腰、张望、喝咖啡、聊天中的三种；reduced-motion 下只有气泡；有进行中任务的角色不触发；字典 `idle.*` 中英各一份。
+- **W53 同事档案弹窗**：OFFICE.md §4、§5。验证：点小人弹出居中弹窗，画像数字来自 stats 接口；指派已有任务、发布并指派、发消息三个动作各走一遍并在看板/传递区看到结果；只读访客无动作区；Esc 关闭；截图中英文。
+- 派发：W51 和 W53 并行（W51 改 stage/tools/assets，W53 改 ui），W52 等 W51 合并后派（都碰 character.ts / director）。
+
 派发约束：W45 改 schema，先派；W43a 改 shared 标签，和 W42 不同时改 `event-text.ts`（W42 先），W43a 在 W42、W44、W45 合并后派；W43b 在 W43a 之后；W43c 可与 W43a 并行。
