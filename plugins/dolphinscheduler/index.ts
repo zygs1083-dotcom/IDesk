@@ -6,6 +6,7 @@ import type {
   Progress,
 } from "../../apps/api/src/plugins/types.ts";
 import { type Config, configSchema, dsGet, listProjects, type Page, parseDate } from "./api.ts";
+import { listSchedules } from "./schedules.ts";
 
 type RunStatus = (typeof RUN_STATUSES)[number];
 type DsState =
@@ -86,22 +87,32 @@ export default {
     const projects = await listProjects(settings);
     for (const [index, project] of projects.entries()) {
       progress?.(index, projects.length);
+      const projectJobs: ExternalJob[] = [];
       for (let pageNo = 1; ; pageNo++) {
         const page = await dsGet<Page<Definition>>(
           settings,
           `/projects/${project.code}/process-definition?pageNo=${pageNo}&pageSize=100`,
         );
-        jobs.push(
+        projectJobs.push(
           ...page.totalList.map((definition) => ({
             externalId: `${project.code}/${definition.code}`,
             name: definition.name,
             group: project.name,
+            schedule: null,
             enabled: definition.releaseState === "ONLINE",
             // UI 深链未在真实实例上验证。
             url: `${settings.baseUrl}/ui/projects/${project.code}/workflow/definitions/${definition.code}`,
           })),
         );
         if (page.currentPage >= page.totalPage) break;
+      }
+      if (projectJobs.length > 0) {
+        const schedules = await listSchedules(settings, project.code);
+        for (const job of projectJobs) {
+          job.schedule =
+            schedules.get(job.externalId.slice(job.externalId.indexOf("/") + 1)) ?? null;
+        }
+        jobs.push(...projectJobs);
       }
     }
     return jobs;

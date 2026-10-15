@@ -1,4 +1,5 @@
 import type {
+  automationJobSchema,
   automationRunWithJobSchema,
   connectorSchema,
   pollResultSchema,
@@ -15,7 +16,9 @@ import { useLang } from "../../i18n/lang.tsx";
 import { PageHeader } from "../../layout/page-header.tsx";
 import { request } from "../../lib/api.ts";
 import { relativeTime } from "../../lib/format.ts";
-import { filterRuns } from "./filter-runs.ts";
+import { filterRuns, matches } from "./filter-runs.ts";
+import { JobCard } from "./job-card.tsx";
+import { nextRuns } from "./next-runs.ts";
 import { RunCard } from "./run-card.tsx";
 import { RunColumn } from "./run-column.tsx";
 
@@ -40,6 +43,11 @@ export function AutomationPage() {
   const [selected, setSelected] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [q, setQ] = useState("");
+  const [now, setNow] = useState(Date.now);
+  useEffect(() => {
+    const timer = setInterval(() => setNow(Date.now()), 30_000);
+    return () => clearInterval(timer);
+  }, []);
   useEffect(() => {
     const timer = setTimeout(() => setQ(search), 200);
     return () => clearTimeout(timer);
@@ -58,6 +66,16 @@ export function AutomationPage() {
         ? skipToken
         : () => request<Run[]>(`/automation/runs?connectorId=${encodeURIComponent(connector.id)}`),
   });
+  const jobs = useQuery({
+    queryKey: ["automation", "jobs", connector?.id],
+    queryFn:
+      connector === undefined
+        ? skipToken
+        : () =>
+            request<z.infer<typeof automationJobSchema>[]>(
+              `/automation/jobs?connectorId=${encodeURIComponent(connector.id)}`,
+            ),
+  });
   const poll = useMutation({
     mutationFn: (id: string) =>
       request<z.infer<typeof pollResultSchema>>(`/connectors/${id}/poll`, { method: "POST" }),
@@ -67,9 +85,12 @@ export function AutomationPage() {
     },
     onError: (error) => setMessage(error.message),
   });
-  const error = connectorsQuery.error ?? runs.error;
+  const error = connectorsQuery.error ?? runs.error ?? jobs.error;
   const filteredRuns = filterRuns(runs.data ?? [], q);
-  const now = Date.now();
+  const upcoming = nextRuns(
+    (jobs.data ?? []).filter((job) => matches(q, [job.name, job.group])),
+    now,
+  );
   return (
     <div className="flex h-full min-h-0 flex-col gap-6">
       <PageHeader title={t("nav.automation")}>
@@ -142,12 +163,14 @@ export function AutomationPage() {
                 <RunColumn
                   key={column.id}
                   label={column.label}
-                  count={items.length}
+                  count={items.length + (column.id === "waiting" ? upcoming.length : 0)}
                   color={column.color}
                 >
                   {items.map((run) => (
                     <RunCard key={run.id} run={run} now={now} />
                   ))}
+                  {column.id === "waiting" &&
+                    upcoming.map((item) => <JobCard key={item.job.id} {...item} now={now} />)}
                 </RunColumn>
               );
             })}

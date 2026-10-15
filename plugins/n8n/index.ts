@@ -113,6 +113,7 @@ export default {
         jobs.push({
           externalId: workflow.id,
           name: workflow.name,
+          schedule: null,
           group: null,
           enabled:
             workflow.active === true ||

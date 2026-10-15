@@ -32,6 +32,7 @@ test("polling fills existing job groups, exposes nullable groups and updates the
       return ["grouped", "ungrouped"].map((name) => ({
         externalId: name,
         name,
+        schedule: null,
         group: name === "grouped" ? group : null,
         enabled: true,
         url: null,

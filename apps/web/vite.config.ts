@@ -9,6 +9,7 @@ export default defineConfig({
       output: {
         manualChunks(id) {
           if (id.includes("/node_modules/@dnd-kit/")) return "dnd";
+          if (id.includes("/node_modules/croner/")) return "croner";
           if (/\/node_modules\/(motion|framer-motion|motion-dom|motion-utils)\//.test(id))
             return "motion";
         },

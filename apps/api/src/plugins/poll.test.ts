@@ -25,7 +25,16 @@ const plugin: ConnectorPlugin = {
   async listJobs(config) {
     expect(config).toEqual({ token: "test" });
     if (failure) throw new Error("network failed");
-    return [{ externalId: "workflow", name: "Workflow", group: null, enabled: true, url: null }];
+    return [
+      {
+        externalId: "workflow",
+        name: "Workflow",
+        group: null,
+        schedule: null,
+        enabled: true,
+        url: null,
+      },
+    ];
   },
   async listRuns(_config, options) {
     calls.push(options);

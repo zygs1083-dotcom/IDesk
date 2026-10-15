@@ -42,6 +42,7 @@ export const automationJobSchema = z
     externalId: z.string(),
     name: z.string(),
     group: z.string().nullable(),
+    schedule: z.object({ cron: z.string(), timezone: z.string() }).nullable(),
     enabled: z.boolean(),
     url: z.string().nullable(),
     lastRunStatus: runStatusSchema.nullable(),

@@ -1,7 +1,7 @@
 import type { automationRunWithJobSchema } from "@idesk/shared/automation-schemas";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, test } from "vitest";
 import type { z } from "zod";
-import { filterRuns } from "./filter-runs.ts";
+import { filterRuns, matches } from "./filter-runs.ts";
 
 const run: z.infer<typeof automationRunWithJobSchema> = {
   id: "run",
@@ -40,4 +40,12 @@ describe("filterRuns", () => {
     expect(filterRuns([other], "Schedule")).toEqual([]);
     expect(filterRuns(runs, "missing")).toEqual([]);
   });
+});
+
+test("matches run and job fields, including nulls and blank queries", () => {
+  expect(matches(" warehouse ", [run.jobName, run.jobGroup, run.trigger])).toBe(true);
+  expect(matches("daily", ["Daily Import", "Warehouse"])).toBe(true);
+  expect(matches("schedule", ["Daily Import", "Warehouse"])).toBe(false);
+  expect(matches("missing", [null, null])).toBe(false);
+  expect(matches(" ", [null])).toBe(true);
 });

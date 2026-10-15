@@ -113,6 +113,7 @@ export const automationJobs = sqliteTable(
     externalId: text("external_id").notNull(),
     name: text().notNull(),
     group: text(),
+    schedule: text({ mode: "json" }).$type<{ cron: string; timezone: string }>(),
     enabled: integer({ mode: "boolean" }).notNull().default(true),
     url: text(),
     lastRunStatus: text("last_run_status", { enum: RUN_STATUSES }),
