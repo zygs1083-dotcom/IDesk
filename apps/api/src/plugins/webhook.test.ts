@@ -17,11 +17,12 @@ import { stopPlugins } from "./registry.ts";
 migrate(db, { migrationsFolder: new URL("../../drizzle", import.meta.url).pathname });
 const requests: { method: string | undefined; headers: IncomingHttpHeaders; body: string }[] = [];
 let status = 200;
+let hanging = false;
 const server = createServer(async (request, response) => {
   let body = "";
   for await (const chunk of request) body += chunk;
   requests.push({ method: request.method, headers: request.headers, body });
-  response.writeHead(status).end();
+  if (!hanging) response.writeHead(status).end();
 });
 let url: string;
 let a: ReturnType<typeof registerAgent>;
@@ -37,6 +38,7 @@ beforeEach(async () => {
   db.update(agents).set({ webhookUrl: null }).run();
   requests.length = 0;
   status = 200;
+  hanging = false;
   await new Promise<void>((resolve) => server.listen(0, "127.0.0.1", resolve));
   const address = server.address();
   if (address === null || typeof address === "string") throw new Error("TCP address required");
@@ -53,6 +55,7 @@ beforeEach(async () => {
 });
 afterEach(async () => {
   vi.useRealTimers();
+  vi.restoreAllMocks();
   await stopPlugins();
   db.update(agents).set({ webhookUrl: null }).where(eq(agents.id, a.agent.id)).run();
   server.closeAllConnections();
@@ -125,5 +128,48 @@ test("HTTP failures retry after 1s, 5s and 30s then record one failed event", as
     agentId: a.agent.id,
     eventId: original.id,
     error: "HTTP 500",
+  });
+});
+
+test("hanging deliveries time out after 30s and exhaust all three retries", async () => {
+  hanging = true;
+  vi.useFakeTimers({ toFake: ["setTimeout"] });
+  // Node's native AbortSignal.timeout uses internal timers, outside Vitest's fake clock.
+  const timeout = vi.spyOn(AbortSignal, "timeout").mockImplementation((delay) => {
+    const controller = new AbortController();
+    setTimeout(
+      () => controller.abort(new DOMException("Request timed out", "TimeoutError")),
+      delay,
+    );
+    return controller.signal;
+  });
+  const task = createTask({ title: "timeout", capabilities: ["coding"] }, "human");
+  await received(1);
+  const original = db.select().from(events).where(eq(events.taskId, task.id)).get() as Event;
+  const failures = () =>
+    db
+      .select()
+      .from(events)
+      .where(eq(events.type, "webhook.failed"))
+      .all()
+      .filter((event) => event.payload.eventId === original.id);
+  for (const [index, retryDelay] of [1000, 5000, 30000].entries()) {
+    await vi.advanceTimersByTimeAsync(29_999);
+    expect(requests).toHaveLength(index + 1);
+    expect(failures()).toHaveLength(0);
+    await vi.advanceTimersByTimeAsync(1);
+    await wait(30);
+    await vi.advanceTimersByTimeAsync(retryDelay - 1);
+    expect(requests).toHaveLength(index + 1);
+    await vi.advanceTimersByTimeAsync(1);
+    await received(index + 2);
+  }
+  await vi.advanceTimersByTimeAsync(30_000);
+  await vi.waitFor(() => expect(failures()).toHaveLength(1));
+  expect(timeout.mock.calls).toEqual([[30_000], [30_000], [30_000], [30_000]]);
+  expect((failures()[0] as Event).payload).toEqual({
+    agentId: a.agent.id,
+    eventId: original.id,
+    error: "Request timed out",
   });
 });
