@@ -15,7 +15,8 @@
     "./plugin-schemas": "./src/plugin-schemas.ts",
     "./automation-schemas": "./src/automation-schemas.ts",
     "./schedule-schemas": "./src/schedule-schemas.ts",
-    "./office-schemas": "./src/office-schemas.ts"
+    "./office-schemas": "./src/office-schemas.ts",
+    "./office-layout": "./src/office-layout.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
