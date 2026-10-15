@@ -11,10 +11,18 @@ export const createTaskSchema = z.object({
   capabilities: z.array(z.string()).exactOptional(),
   dueAt: z.iso.datetime().exactOptional(),
 });
+const assignActionSchema = z.object({ type: z.literal("assign"), agentId: z.string() });
+const recruitActionSchema = z.object({
+  type: z.literal("recruit"),
+  needed: z.number().int().min(2),
+});
+export const publishTaskSchema = createTaskSchema.extend({
+  dispatch: z.discriminatedUnion("type", [assignActionSchema, recruitActionSchema]).exactOptional(),
+});
 export const taskActionSchema = z.discriminatedUnion("type", [
   z.object({ type: z.literal("claim") }),
-  z.object({ type: z.literal("assign"), agentId: z.string() }),
-  z.object({ type: z.literal("recruit"), needed: z.number().int().min(2) }),
+  assignActionSchema,
+  recruitActionSchema,
   z.object({ type: z.literal("cancel") }),
   z.object({ type: z.literal("accept") }),
   z.object({ type: z.literal("decline") }),
