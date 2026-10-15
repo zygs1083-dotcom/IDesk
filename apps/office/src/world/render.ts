@@ -3,7 +3,6 @@ import type { WorldAssets } from "./assets.ts";
 import { type Catalog, type Furniture, TILE } from "./catalog.ts";
 import type { Layout } from "./layout.ts";
 import { PLACEHOLDER_DARK, PLACEHOLDER_FILL, PLACEHOLDER_GROUND } from "./placeholder.ts";
-import { seats } from "./seats.ts";
 import { sortDrawables } from "./sort.ts";
 
 function block(w: number, h: number, color: number) {
@@ -18,6 +17,7 @@ export function renderWorld(
   layout: Layout,
   catalog: Catalog,
   assets: WorldAssets,
+  people: { kind: string; frame: string; mirror: boolean; x: number; y: number }[] = [],
 ) {
   const world = new Container();
   const ground = new Container();
@@ -66,15 +66,14 @@ export function renderWorld(
       else drawables.push({ sprite, sortY: object.y * TILE + part.sortY, bias: part.bias });
     }
   }
-  seats(layout, catalog).forEach((seat, i) => {
-    const kind = seat.zone ? ["codex", "claude-code", "n8n", "script"][i % 4] : "receptionist";
-    const sprite = new Sprite(assets.sprites[`${kind}/walk/${seat.facing}/0`]);
+  for (const person of people) {
+    const sprite = new Sprite(assets.sprites[`${person.kind}/${person.frame}`]);
     sprite.texture.source.scaleMode = "nearest";
     sprite.anchor.set(0.5, 1);
-    sprite.position.set(seat.x, seat.y);
-    sprite.label = seat.id;
-    drawables.push({ sprite, sortY: seat.y, bias: 0 });
-  });
+    sprite.scale.x = person.mirror ? -1 : 1;
+    sprite.position.set(person.x, person.y);
+    drawables.push({ sprite, sortY: person.y, bias: 0 });
+  }
   for (const drawable of sortDrawables(drawables)) objects.addChild(drawable.sprite);
   return world;
 }
