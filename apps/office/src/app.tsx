@@ -85,14 +85,8 @@ export function App() {
       observer.observe(element);
       setTimeScale(1);
       const daylight = await (mode.mode === "live"
-        ? direct(stage, scene, stageText.current("common.human"), [
-            stageText.current("idle.anyTasks"),
-            stageText.current("idle.cheer"),
-            stageText.current("idle.coffee"),
-            stageText.current("idle.slacking"),
-            stageText.current("idle.waiting"),
-          ])
-        : replay(stage, scene, mode.at, controls.current, stageText.current("common.human")));
+        ? direct(stage, scene, stageText.current)
+        : replay(stage, scene, mode.at, controls.current, stageText.current));
       if (disposed) return;
       editor.current = createEditor(stage, scene, (active) => {
         setEditing(active);

@@ -1,12 +1,25 @@
 import { expect, test, vi } from "vitest";
-import type { Seat } from "../scene/scene.ts";
+import type { Spot } from "../scene/scene.ts";
 import type { CharacterState } from "../stage/character.ts";
-import { idleCoffee, idleDelay, idleEligible, idleNeighbor, pickIdle } from "./idle.ts";
+import {
+  chatSeats,
+  idleDelay,
+  idleDozing,
+  idleEligible,
+  idleNeighbor,
+  idleSleepCapacity,
+  idleSleepDuration,
+  idleSpeed,
+  idleStay,
+  pickIdle,
+  pickSpots,
+} from "./idle-pick.ts";
 
 vi.hoisted(() => vi.stubGlobal("matchMedia", () => ({ matches: false })));
 
 const snapshot = new Map([["task", { status: "in_progress" as const, assigneeId: "busy" }]]);
 const cast = {
+  sleeping: new Set<string>(),
   present: new Set(["self", "near", "far", "busy", "human"]),
   characters: new Map([
     ["self", { x: 0, y: 0, state: "idle" as CharacterState }],
@@ -49,30 +62,34 @@ test.each(["paused", "done", "assigned"] as const)(
 
 test.each([
   [0, "stretch"],
-  [0.199, "stretch"],
-  [0.2, "look"],
-  [0.399, "look"],
-  [0.4, "coffee"],
-  [0.599, "coffee"],
-  [0.6, "chat"],
-  [0.799, "chat"],
-  [0.8, "board"],
-  [0.999, "board"],
-])("random %s selects %s", (value, action) => {
-  expect(pickIdle(() => Number(value), false)).toBe(action);
+  [0.499, "stretch"],
+  [0.5, "spot"],
+  [0.799, "spot"],
+  [0.8, "chat"],
+  [0.999, "chat"],
+])("probability %s picks %s", (value, action) => {
+  const values = [Number(value), 0];
+  expect(pickIdle(() => values.shift() ?? 0, false)).toBe(action);
 });
 
-test.each([0, 0.2, 0.4, 0.6, 0.8, 0.999])(
-  "reduced motion always selects bubbles for %s",
-  (value) => {
-    expect(pickIdle(() => value, true)).toBe("stretch");
-  },
-);
+test.each([0, 0.49, 0.5, 0.99])("reduced motion only uses stretch and nod (%s)", (value) => {
+  expect(["stretch", "nod"]).toContain(pickIdle(() => value, true));
+});
 
-test("delay is uniform from twenty to sixty seconds", () => {
-  expect(idleDelay(() => 0)).toBe(20_000);
-  expect(idleDelay(() => 0.5)).toBe(40_000);
-  expect(idleDelay(() => 0.999999)).toBeCloseTo(59_999.96);
+test.each([0, 0.5, 0.8, 0.999])("two walkers force small actions (%s)", (value) => {
+  expect(["stretch", "look", "nod"]).toContain(pickIdle(() => value, false, 2));
+});
+
+test("uniform timing and speed boundaries", () => {
+  for (const [choose, low, high] of [
+    [idleDelay, 10_000, 40_000],
+    [idleStay, 2000, 6000],
+    [idleSpeed, 120, 170],
+  ] as const) {
+    expect(choose(() => 0)).toBe(low);
+    expect(choose(() => 0.5)).toBe((low + high) / 2);
+    expect(choose(() => 1)).toBe(high);
+  }
 });
 
 test("chat picks the nearest eligible neighbor and excludes self", () => {
@@ -82,22 +99,56 @@ test("chat picks the nearest eligible neighbor and excludes self", () => {
   ).toBeUndefined();
 });
 
-test("coffee uses a free spot and skips a fully occupied lounge", () => {
-  const spots: Seat[] = [
-    { x: 10, y: 20, via: "coffee", facing: "up" },
-    { x: 30, y: 40, via: "sofa", facing: "up" },
+test("spot chaining uses a quarter probability and a different destination", () => {
+  const spots: Spot[] = [
+    { id: "coffee", x: 10, y: 20, via: "coffee", facing: "up" },
+    { id: "sofa", x: 30, y: 40, via: "sofa", facing: "up" },
   ];
-  expect(idleCoffee(spots, [{ ...spots[0], x: 10, y: 20, state: "coffee" }])).toEqual(spots[1]);
-  expect(
-    idleCoffee(
-      spots,
-      spots.map((spot) => ({ ...spot, state: "coffee" })),
-    ),
-  ).toBeUndefined();
-  expect(
-    idleCoffee(
-      spots,
-      spots.map((spot) => ({ ...spot, state: "walk" })),
-    ),
-  ).toEqual(spots[0]);
+  const values = [0, 0.2499, 0];
+  expect(pickSpots(spots, () => values.shift() ?? 0)).toEqual(spots);
+  expect(pickSpots(spots, () => 0.25)).toEqual([spots[0]]);
+});
+
+test("chat positions straddle the aisle point and face each other", () => {
+  expect(chatSeats({ id: "aisle", x: 480, y: 263 })).toEqual([
+    { x: 456, y: 263, via: "aisle", facing: "right" },
+    { x: 504, y: 263, via: "aisle", facing: "left" },
+  ]);
+});
+
+test("dozing begins at three minutes and activity resets the threshold", () => {
+  expect(idleDozing(cast, snapshot, "self", 0, 179_999)).toBe(false);
+  expect(idleDozing(cast, snapshot, "self", 0, 180_000)).toBe(true);
+  expect(idleDozing(cast, snapshot, "busy", 0, 180_000)).toBe(false);
+  expect(idleDozing(cast, snapshot, "self", 180_000, 180_001)).toBe(false);
+});
+
+test("sleep lasts sixty to one hundred eighty seconds", () => {
+  expect(idleSleepDuration(() => 0)).toBe(60_000);
+  expect(idleSleepDuration(() => 0.5)).toBe(120_000);
+  expect(idleSleepDuration(() => 1)).toBe(180_000);
+});
+
+test.each([
+  [0, 0],
+  [1, 0],
+  [2, 0],
+  [3, 1],
+  [5, 1],
+  [6, 2],
+  [8, 2],
+])("%s eligible people allow %s sleepers", (count, capacity) => {
+  expect(idleSleepCapacity(count)).toBe(capacity);
+});
+
+test("sleepers neither initiate idle actions nor become chat partners", () => {
+  const sleepingCast = { ...cast, sleeping: new Set(["self", "near"]) };
+  expect(idleEligible(sleepingCast, snapshot, "self")).toBe(false);
+  expect(idleNeighbor(sleepingCast, snapshot, "self")).toBe("far");
+});
+
+test("ignoreSleep counts sleepers without relaxing other eligibility rules", () => {
+  const sleepingCast = { ...cast, sleeping: new Set(["self", "busy"]) };
+  expect(idleEligible(sleepingCast, snapshot, "self", true)).toBe(true);
+  expect(idleEligible(sleepingCast, snapshot, "busy", true)).toBe(false);
 });

@@ -14,6 +14,8 @@ export class Cast {
   readonly agents = new Map<string, Agent>();
   readonly characters = new Map<string, Character>();
   readonly queue = new ActionQueue();
+  readonly sleeping = new Set<string>();
+  readonly lastActive = new Map<string, number>();
   seats = new Map<string, Seat>();
   readonly present = new Set<string>();
   private labels: ZoneSign[];
@@ -65,7 +67,7 @@ export class Cast {
       } else if (agent.status === "online" && !this.present.has(agent.id))
         this.arrive(agent.id, arrivals++ * 500);
       else if (agent.status === "offline" && this.present.delete(agent.id)) {
-        void this.queue.enqueue(agent.id, async () => {
+        void this.enqueue(agent.id, async () => {
           await this.walk(agent.id, { ...this.scene.door, facing: "down" });
           this.characters.get(agent.id)?.setState("away");
         });
@@ -104,7 +106,7 @@ export class Cast {
     if (!seat || !character || this.present.has(id) || id === "human") return;
     this.present.add(id);
     this.checkEmpty();
-    void this.queue.enqueue(id, async () => {
+    void this.enqueue(id, async () => {
       if (delay) await new Promise((resolve) => setTimeout(resolve, delay));
       character.position.copyFrom(this.scene.door);
       await this.walk(id, seat);
@@ -124,12 +126,12 @@ export class Cast {
     )[0];
   }
 
-  async walk(id: string, target: Seat) {
+  async walk(id: string, target: Seat, speed?: number) {
     const character = this.characters.get(id);
     if (!character || character.destroyed) return;
     const from = this.nearest(character.position);
     if (!from) return;
-    await character.walkTo([...findPath(this.scene, from.id, target.via), target]);
+    await character.walkTo([...findPath(this.scene, from.id, target.via), target], speed);
     character.facing = target.facing;
     character.mirrored = target.mirror === true;
   }
@@ -140,12 +142,26 @@ export class Cast {
     character.position.copyFrom(target);
     character.facing = target.facing;
     character.mirrored = target.mirror === true;
+    this.active(id);
     this.settle(id, state);
   }
 
   settle(id: string, state: CharacterState) {
     const standing = this.standing.has(id) && (state === "sit" || state === "typing");
     this.characters.get(id)?.setState(standing ? "idle" : state);
+  }
+
+  active(id: string) {
+    this.stage.world.emit("office:active", id);
+    this.lastActive.set(id, Date.now());
+  }
+
+  enqueue(id: string, action: () => Promise<void> | void) {
+    this.active(id);
+    return this.queue.enqueue(id, () => {
+      this.active(id);
+      return action();
+    });
   }
 
   desk(id: string): Point {

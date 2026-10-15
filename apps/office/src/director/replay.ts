@@ -1,6 +1,7 @@
 import { eventSchema, taskSchema } from "@idesk/shared/task-schemas";
 import { z } from "zod";
 import { setTimeScale } from "../engine/tween.ts";
+import type { Translate } from "../i18n/translate.ts";
 import { request } from "../lib/api.ts";
 import type { Scene } from "../scene/scene.ts";
 import type { Stage } from "../stage/stage.ts";
@@ -21,9 +22,9 @@ export async function replay(
   scene: Scene,
   at: number,
   controls: ReplayControls,
-  humanName: string,
+  t: Translate,
 ) {
-  const initialized = await initialize(stage, scene, humanName);
+  const initialized = await initialize(stage, scene, t);
   if (!initialized) return;
   const { cast, cards, snapshot, actions, daylight, tasks } = initialized;
   for (const id of cast.present) cast.settle(id, "idle");
