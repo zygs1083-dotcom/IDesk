@@ -19,8 +19,44 @@ const relationships = [
     ahead: ["zone-1-chair-front-right"],
     behind: ["zone-1-desk-front-right"],
   },
+  { seat: "zone-2-back-left", ahead: ["zone-2-desk-back-left"], behind: [] },
+  { seat: "zone-2-back-right", ahead: ["zone-2-desk-back-right"], behind: [] },
+  {
+    seat: "zone-2-front-left",
+    ahead: ["zone-2-chair-front-left"],
+    behind: ["zone-2-desk-front-left"],
+  },
+  {
+    seat: "zone-2-front-right",
+    ahead: ["zone-2-chair-front-right"],
+    behind: ["zone-2-desk-front-right"],
+  },
+  { seat: "zone-3-back-left", ahead: ["zone-3-desk-back-left"], behind: [] },
+  { seat: "zone-3-back-right", ahead: ["zone-3-desk-back-right"], behind: [] },
+  {
+    seat: "zone-3-front-left",
+    ahead: ["zone-3-chair-front-left"],
+    behind: ["zone-3-desk-front-left"],
+  },
+  {
+    seat: "zone-3-front-right",
+    ahead: ["zone-3-chair-front-right"],
+    behind: ["zone-3-desk-front-right"],
+  },
+  { seat: "zone-4-back-left", ahead: ["zone-4-desk-back-left"], behind: [] },
+  { seat: "zone-4-back-right", ahead: ["zone-4-desk-back-right"], behind: [] },
+  {
+    seat: "zone-4-front-left",
+    ahead: ["zone-4-chair-front-left"],
+    behind: ["zone-4-desk-front-left"],
+  },
+  {
+    seat: "zone-4-front-right",
+    ahead: ["zone-4-chair-front-right"],
+    behind: ["zone-4-desk-front-right"],
+  },
 ];
-describe("work area 1 silhouette ordering", () => {
+describe("work areas 1 through 4 silhouette ordering", () => {
   for (const { seat: seatId, ahead, behind } of relationships) {
     it(`${seatId} is between its desk and chair`, () => {
       const seat = layout.seats.find((seat) => seat.id === seatId);
