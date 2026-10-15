@@ -8,6 +8,7 @@
     "build": "vite build",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
+    "characters": "node tools/characters.mjs",
     "sprites": "node tools/sprites.mjs",
     "tiles": "node tools/tiles.mjs",
     "furniture": "node tools/furniture.mjs",
