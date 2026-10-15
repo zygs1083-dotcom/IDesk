@@ -81,6 +81,7 @@ export const zh = {
   "desk.board": "任务看板",
   "desk.byHost": "按主机",
   "desk.dependencies": "依赖",
+  "desk.dispatch": "分派",
   "desk.empty": "还没有任务",
   "desk.flat": "平铺",
   "desk.grouping": "分组",

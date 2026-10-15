@@ -10,6 +10,7 @@ import { Segmented } from "../../components/segmented.tsx";
 import { useLang } from "../../i18n/lang.tsx";
 import { request } from "../../lib/api.ts";
 import type { Schedule } from "../schedules/types.ts";
+import { DispatchFields } from "./dispatch-fields.tsx";
 
 export function PublishDialog({ onClose }: { onClose: () => void }) {
   const { lang, t } = useLang();
@@ -28,6 +29,16 @@ export function PublishDialog({ onClose }: { onClose: () => void }) {
         : [],
     ) ?? [];
   const [priority, setPriority] = useState<TaskPriority>("normal");
+  const [mode, setMode] = useState<"open" | "assign" | "recruit">("open");
+  const [agentId, setAgentId] = useState("");
+  const [needed, setNeeded] = useState(2);
+  const dispatch =
+    mode === "assign"
+      ? { type: mode, agentId }
+      : mode === "recruit"
+        ? { type: mode, needed }
+        : undefined;
+  const enabled = mode === "assign" ? !!agentId : mode === "recruit" ? needed >= 2 : true;
   const client = useQueryClient();
   const mutation = useMutation({
     mutationFn: () =>
@@ -38,9 +49,14 @@ export function PublishDialog({ onClose }: { onClose: () => void }) {
           body,
           capabilities: capabilities.split(/[,，\s]+/).filter(Boolean),
           priority,
+          ...(dispatch === undefined ? {} : { dispatch }),
           tags: tags.split(/[,，\s]+/).filter(Boolean),
         }),
       }),
+    onError: (error) => {
+      if ("status" in error && error.status === 409)
+        void client.invalidateQueries({ queryKey: ["tasks"] });
+    },
     onSuccess: () => {
       void client.invalidateQueries({ queryKey: ["tasks"] });
       onClose();
@@ -116,13 +132,25 @@ export function PublishDialog({ onClose }: { onClose: () => void }) {
             }))}
           />
         </div>
+        <DispatchFields
+          mode={mode}
+          onModeChange={setMode}
+          agentId={agentId}
+          onAgentChange={setAgentId}
+          needed={needed}
+          onNeededChange={setNeeded}
+        />
         {mutation.error && (
           <p role="alert" className="text-secondary text-status-failed">
             {mutation.error.message}
           </p>
         )}
         <div className="flex justify-end">
-          <Button type="submit" variant="primary" disabled={!title.trim() || mutation.isPending}>
+          <Button
+            type="submit"
+            variant="primary"
+            disabled={!title.trim() || !enabled || mutation.isPending}
+          >
             {t("common.publish")}
           </Button>
         </div>

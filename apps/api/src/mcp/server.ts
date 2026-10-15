@@ -1,6 +1,6 @@
 import { McpServer, ResourceTemplate } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { ErrorCode, McpError } from "@modelcontextprotocol/sdk/types.js";
-import type { PublicAgent } from "../core/agents/agents.ts";
+import { agentActor, type PublicAgent } from "../core/agents/agents.ts";
 import { listRelay } from "../core/relay/relay.ts";
 import { registerActionTools } from "./tools/actions.ts";
 import { registerRelayTools } from "./tools/relay.ts";
@@ -26,8 +26,7 @@ export function createMcpServer(agent: PublicAgent): McpServer {
     },
   );
   server.registerResource("relay_inbox", "idesk://relay/inbox", metadata, (uri) => {
-    const actor = { kind: "agent" as const, id: agent.id, capabilities: agent.capabilities };
-    const messages = listRelay(actor, "inbox").filter(
+    const messages = listRelay(agentActor(agent), "inbox").filter(
       (message) => !message.readBy.includes(agent.id),
     );
     return { contents: [{ uri: uri.href, ...metadata, text: JSON.stringify(messages) }] };

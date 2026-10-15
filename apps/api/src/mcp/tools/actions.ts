@@ -1,7 +1,7 @@
 import type { TaskAction } from "@idesk/shared/task-machine";
 import { idSchema, reportSchema, taskActionSchema } from "@idesk/shared/task-schemas";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import type { PublicAgent } from "../../core/agents/agents.ts";
+import { agentActor, type PublicAgent } from "../../core/agents/agents.ts";
 import { actOnTask, reportProgress } from "../../core/tasks/transition.ts";
 import { toolResult } from "../result.ts";
 
@@ -17,7 +17,7 @@ const actions = [
 ] as const;
 
 export function registerActionTools(server: McpServer, agent: PublicAgent) {
-  const actor = { kind: "agent" as const, id: agent.id, capabilities: agent.capabilities };
+  const actor = agentActor(agent);
   for (const [type, description] of actions) {
     const schema = taskActionSchema.options.find(
       (option) => option.shape.type.value === type,
