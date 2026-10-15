@@ -13,13 +13,13 @@ Raw atlas saving: 342414 bytes (70.9%). `atlases-before/` preserves main's origi
 
 ## First screen static payload
 
-Built with `pnpm --filter office build`; resource set observed in headless Chromium on `/office/?check=1`, 1440×900, fresh page. Includes the HTML entry, all four initially requested JS chunks, CSS, tiles/furniture/sprites/catalog/layout JSON, all three PNG atlases and the font. Dynamic API/WS payloads and HTTP headers are excluded. Gzip figures are the sum of each resource compressed separately using Node zlib level 9, not an assertion that the server compresses every format. Build-stamp changes alone account for the 1-byte HTML and JS gzip differences.
+Built with `pnpm --filter office build`; resource set observed in headless Chromium on `/office/?check=1`, 1440×900, fresh page. Includes the HTML entry, all four initially requested JS chunks, CSS, tiles/furniture/sprites/catalog/layout JSON, all three PNG atlases and the font. Dynamic API/WS payloads and HTTP headers are excluded. Gzip figures are the sum of each resource compressed separately using Node zlib level 9, not an assertion that the server compresses every format. Both columns use the final rebased build’s unchanged JS/CSS/HTML/JSON/font bytes; the before column substitutes main’s original PNGs, which W69a did not change. `rebased-resources.json` records the final build’s requested URLs. This isolates the W70 encoding saving.
 
 | Resource | Before raw B | Before gzip B | After raw B | After gzip B |
 | --- | ---: | ---: | ---: | ---: |
-| index.html | 691 | 368 | 691 | 367 |
+| index.html | 691 | 367 | 691 | 367 |
 | CSS | 7922 | 2077 | 7922 | 2077 |
-| JS (4 initial chunks) | 1000378 | 289567 | 1000378 | 289566 |
+| JS (4 initial chunks) | 1000339 | 289419 | 1000339 | 289419 |
 | catalog.json | 9621 | 858 | 9621 | 858 |
 | fonts/fusion-pixel-12px-proportional-zh_hans.otf.woff2 | 666264 | 654195 | 666264 | 654195 |
 | furniture.json | 3958 | 552 | 3958 | 552 |
@@ -29,9 +29,9 @@ Built with `pnpm --filter office build`; resource set observed in headless Chrom
 | sprites.png | 459751 | 398173 | 132137 | 131458 |
 | tiles.json | 832 | 222 | 832 | 222 |
 | tiles.png | 1681 | 1273 | 526 | 528 |
-| **Total** | 2241216 | 1369127 | 1898802 | 1090203 |
+| **Total** | 2241177 | 1368978 | 1898763 | 1090056 |
 
-Raw saving: 342414 bytes (15.3%); gzip saving: 278924 bytes (20.4%). Font alone: 666264 raw / 654195 gzip bytes, 60.0% of the new gzip total; it is the largest remaining resource and is unchanged.
+Raw saving: 342414 bytes (15.3%); gzip saving: 278922 bytes (20.4%). Font alone: 666264 raw / 654195 gzip bytes, 60.0% of the new gzip total; it is the largest remaining resource and is unchanged.
 
 ## Browser screenshots
 
