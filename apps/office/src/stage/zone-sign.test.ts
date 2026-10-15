@@ -12,5 +12,7 @@ describe("zone sign width", () => {
   it("covers the original wooden plaque and widens for long hosts", () => {
     expect(signWidth(24)).toBe(132);
     expect(signWidth(200)).toBe(212);
+    expect(signWidth(80 * signScale(0.5))).toBe(172);
+    expect(signWidth(80 * signScale(1))).toBe(132);
   });
 });

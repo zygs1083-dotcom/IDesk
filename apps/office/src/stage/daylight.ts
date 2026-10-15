@@ -1,6 +1,5 @@
 import { Container, Graphics, Sprite, Texture } from "pixi.js";
 import type { Character } from "./character.ts";
-import { lightCover, shadeCovers } from "./seat-lighting.ts";
 import type { Stage } from "./stage.ts";
 
 export function phase(date: Date): "day" | "dusk" | "night" {
@@ -17,9 +16,7 @@ export function createDaylight(stage: Stage, characters: Map<string, Character>)
     .rect(0, 0, background.width, background.height)
     .fill({ color: 0x1a2340, alpha: 0.25 });
   const lights = new Container();
-  stage.world.addChildAt(shade, 1);
-  stage.world.addChildAt(tint, 2);
-  stage.world.addChildAt(lights, 3);
+  stage.world.addChild(shade, tint, lights);
   const canvas = document.createElement("canvas");
   canvas.width = canvas.height = 80;
   const context = canvas.getContext("2d");
@@ -42,7 +39,6 @@ export function createDaylight(stage: Stage, characters: Map<string, Character>)
     shade.visible = !editing && current !== "day";
     tint.visible = !editing && current === "night";
     lights.visible = !editing && current === "night";
-    shadeCovers(stage, shade, tint);
   };
   const updateLights = () => {
     for (const [id, glow] of glows) {
@@ -64,7 +60,6 @@ export function createDaylight(stage: Stage, characters: Map<string, Character>)
         current === "night" &&
         (character.state === "sit" || character.state === "typing");
       glow.position.set(character.x, character.y - 40);
-      lightCover(stage, character.position, glow);
     }
   };
   updateShade();

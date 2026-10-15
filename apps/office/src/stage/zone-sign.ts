@@ -13,8 +13,8 @@ export function signScale(worldScale: number) {
   return Math.max(1, 1 / worldScale);
 }
 
-export function signWidth(textWidth: number) {
-  return Math.max(SIGN_WIDTH, textWidth + 12);
+export function signWidth(scaledTextWidth: number) {
+  return Math.max(SIGN_WIDTH, scaledTextWidth + 12);
 }
 
 export class ZoneSign extends Container {
@@ -30,7 +30,8 @@ export class ZoneSign extends Container {
     this.title.anchor.set(0.5);
     this.addChild(this.panel, this.title);
     const resize = () => {
-      this.scale.set(signScale(stage.world.scale.x));
+      this.title.scale.set(signScale(stage.world.scale.x));
+      this.draw();
     };
     stage.app.renderer.on("resize", resize);
     this.on("destroyed", () => stage.app.renderer.off("resize", resize));

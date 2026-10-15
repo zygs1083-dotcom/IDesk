@@ -2,6 +2,7 @@ import { Container, type FederatedPointerEvent, Graphics, Rectangle } from "pixi
 import type { Point, Scene } from "../scene/scene.ts";
 import { updateSeatCover } from "./seat-covers.ts";
 import type { Stage } from "./stage.ts";
+
 export function createEditor(stage: Stage, scene: Scene, onToggle: (active: boolean) => void) {
   const overlay = new Container({ visible: false, eventMode: "static" });
   const lines = new Graphics();

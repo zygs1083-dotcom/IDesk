@@ -1,4 +1,5 @@
 import { Application, Assets, Container, Sprite, type Texture } from "pixi.js";
+
 export async function createStage(host: HTMLElement) {
   const app = new Application();
   // 像素画用 WebGL 就够了；固定它，避免 Pixi 在部分 Chrome 上自动选 WebGPU 时初始化失败而画布空白

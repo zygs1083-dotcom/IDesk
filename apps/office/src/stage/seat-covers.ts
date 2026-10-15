@@ -1,6 +1,5 @@
 import { Rectangle, Sprite, Texture } from "pixi.js";
 import type { Point, Scene } from "../scene/scene.ts";
-import { moveCoverLighting, registerCover } from "./seat-lighting.ts";
 import type { Stage } from "./stage.ts";
 
 const sprites = new WeakMap<Point, Sprite>();
@@ -21,7 +20,6 @@ export function createSeatCovers(stage: Stage, scene: Scene) {
     });
     const sprite = new Sprite(texture);
     sprites.set(seat.cover, sprite);
-    registerCover(stage, seat, sprite);
     sprite.position.set(x, y);
     sprite.zIndex = y + height;
     stage.characters.addChild(sprite);
@@ -37,5 +35,4 @@ export function updateSeatCover(point: Point) {
   sprite.texture.update();
   sprite.position.copyFrom(point);
   sprite.zIndex = point.y + height;
-  moveCoverLighting(sprite);
 }
