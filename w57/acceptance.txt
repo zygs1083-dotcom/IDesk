@@ -1,0 +1,15 @@
+W57 browser acceptance
+
+API: temporary /tmp/w57-data, port 3359, IDESK_OFFICE_DIST points at this worktree's office/dist.
+Independent Playwright Chromium, closed in finally after each run; user Chrome untouched.
+GIF: 240 screenshots at 4 fps, cropped to office background, 60.00 seconds, 1,683,633 bytes.
+Only browser response interception shortened idleDelay from 10–40 s to 2–5 s for recording; committed intervals unchanged.
+10 online agents received real API heartbeats; 2 in_progress agents remained typing in every one of 240 samples.
+For each sample, counted state=walk among the other 8 nonhuman agents: maximum 2, assertion never failed.
+Frame 75 shows Reading a book at bookshelf; GIF also contains small motions and alternating chat.
+Dozing: Playwright clock setSystemTime +181 s then fastForward 10 s; 2 sleepers at floor(eligible/3).
+Assign: real task.assign targeted a sleeper; zZ disappeared and ! appeared while state stayed sit.
+Claim: real task.claim; ! appeared, then state walk; intercepted walkTo argument was 182 (=140*1.3).
+Reduced motion: separate context with reducedMotion=reduce; saw stretch bubble and sprite y=-1; sampled walkers=0.
+English spot: naturally selected spot bubble; English chat: fixed browser-only random 0.9 to exercise chat predictably.
+Spot layout screenshot overlays the eight schema-defined points; sofa stands beside the coffee table using sofa-side waypoint.
