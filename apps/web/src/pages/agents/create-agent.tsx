@@ -58,36 +58,30 @@ export function CreateAgent({ agent, onClose }: { agent?: Agent; onClose: () => 
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
-      setCopyError(t("agents.copyFailed"));
+      setCopyError(t("agents.copyKeyFailed"));
     }
   }
   return (
     <Dialog
       open
       onClose={onClose}
-      title={
-        agent
-          ? t("agents.editAgent")
-          : create.data
-            ? t("agents.agentCreated")
-            : t("agents.createAgent")
-      }
+      title={agent ? t("agents.edit") : create.data ? t("agents.created") : t("agents.create")}
     >
       {create.data ? (
         <div className="space-y-4">
           <code className="block break-all rounded-control bg-surface-2 p-3 text-secondary">
             {create.data.apiKey}
           </code>
-          <p className="text-secondary text-text-2">{t("agents.shownOnlyOnce")}</p>
+          <p className="text-secondary text-text-2">{t("agents.keyOnce")}</p>
           {copyError && (
             <p role="alert" className="text-secondary text-status-failed">
               {copyError}
             </p>
           )}
           <div className="flex justify-end gap-2">
-            <Button onClick={copyKey}>{copied ? t("agents.copied") : t("agents.copy")}</Button>
+            <Button onClick={copyKey}>{copied ? t("common.copied") : t("common.copy")}</Button>
             <Button variant="primary" onClick={onClose}>
-              {t("agents.complete")}
+              {t("common.complete")}
             </Button>
           </div>
         </div>
@@ -110,15 +104,15 @@ export function CreateAgent({ agent, onClose }: { agent?: Agent; onClose: () => 
           }}
         >
           <Field
-            label={t("agents.name")}
+            label={t("common.name")}
             value={name}
             onChange={(event) => setName(event.target.value)}
           />
           {agent ? (
-            <Field label={t("agents.type")} value={kind} readOnly />
+            <Field label={t("common.type")} value={kind} readOnly />
           ) : (
             <label className="block space-y-2 text-secondary text-text-2">
-              {t("agents.type")}
+              {t("common.type")}
               <select
                 className="block w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body text-text focus:border-accent"
                 value={kind}
@@ -131,13 +125,13 @@ export function CreateAgent({ agent, onClose }: { agent?: Agent; onClose: () => 
             </label>
           )}
           <Field
-            label={t("agents.host")}
+            label={t("common.host")}
             value={host}
             onChange={(event) => setHost(event.target.value)}
           />
           <Field
-            label={t("agents.capabilities")}
-            placeholder={t("agents.separateWithSpacesOrCommas")}
+            label={t("common.capabilities")}
+            placeholder={t("common.listSeparator")}
             value={capabilities}
             onChange={(event) => setCapabilities(event.target.value)}
           />
@@ -153,13 +147,13 @@ export function CreateAgent({ agent, onClose }: { agent?: Agent; onClose: () => 
             </p>
           )}
           <div className="flex justify-end gap-2">
-            <Button onClick={onClose}>{t("agents.cancel")}</Button>
+            <Button onClick={onClose}>{t("common.cancel")}</Button>
             <Button
               type="submit"
               variant="primary"
               disabled={!name.trim() || create.isPending || update.isPending}
             >
-              {t("agents.confirm")}
+              {t("common.confirm")}
             </Button>
           </div>
         </form>

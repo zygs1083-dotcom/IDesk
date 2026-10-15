@@ -60,7 +60,7 @@ export function ActionDialog({
         ) : (
           <div className="space-y-2">
             <label htmlFor={selectId} className="block text-secondary text-text-2">
-              {action === "handoff" ? t("desk.recipientAIOptional") : t("desk.recipientAI")}
+              {action === "handoff" ? t("desk.recipientOptional") : t("desk.recipient")}
             </label>
             <select
               id={selectId}
@@ -69,7 +69,7 @@ export function ActionDialog({
               className="block w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body text-text focus:outline-accent"
             >
               <option value="">
-                {action === "handoff" ? t("desk.releaseToOpen") : t("desk.selectAI")}
+                {action === "handoff" ? t("desk.releaseToOpen") : t("desk.selectAgent")}
               </option>
               {agents.map((agent) => (
                 <option key={agent.id} value={agent.id}>
@@ -91,7 +91,7 @@ export function ActionDialog({
         )}
         <Toast message={error} onClose={onDismissError} />
         <div className="flex justify-end gap-2">
-          <Button onClick={onClose}>{t("desk.cancel")}</Button>
+          <Button onClick={onClose}>{t("common.cancel")}</Button>
           <Button type="submit" variant="primary" disabled={pending || !enabled}>
             {labels(lang).action[action]}
           </Button>

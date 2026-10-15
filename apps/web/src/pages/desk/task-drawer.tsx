@@ -90,7 +90,7 @@ export function TaskDrawer({ taskId, onClose }: { taskId: string; onClose: () =>
               <div className="flex gap-2">
                 <dt className="w-18 shrink-0 text-text-2">{t("desk.assignee")}</dt>
                 <dd className="min-w-0 flex-1 break-words">
-                  {task.assigneeId === null ? t("desk.unassigned2") : agentName(task.assigneeId)}
+                  {task.assigneeId === null ? t("desk.noAssignee") : agentName(task.assigneeId)}
                 </dd>
               </div>
               <div className="flex gap-2">
@@ -98,7 +98,7 @@ export function TaskDrawer({ taskId, onClose }: { taskId: string; onClose: () =>
                 <dd className="min-w-0 flex-1 break-words">{agentName(task.publisherId)}</dd>
               </div>
               <div className="flex gap-2">
-                <dt className="w-18 shrink-0 text-text-2">{t("desk.capabilities")}</dt>
+                <dt className="w-18 shrink-0 text-text-2">{t("common.capabilities")}</dt>
                 <dd className="min-w-0 flex-1 break-words text-text-2">
                   {task.capabilities.join(" · ") || "—"}
                 </dd>

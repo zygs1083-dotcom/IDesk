@@ -15,14 +15,14 @@ export function ActionTabs({
   const { t } = useLang();
   const firstTrigger = connectors[0];
   const options: { value: ScheduleAction["type"]; label: string }[] = [
-    { value: "publish_task", label: t("schedules.publishTask") },
+    { value: "publish_task", label: t("common.publishTask") },
     { value: "http", label: t("schedules.httpRequest") },
   ];
   if (firstTrigger)
     options.push({ value: "connector_trigger", label: t("schedules.triggerConnector") });
   return (
     <Segmented
-      label={t("schedules.action")}
+      label={t("common.action")}
       options={options}
       value={action.type}
       onChange={(type) => {

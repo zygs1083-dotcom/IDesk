@@ -31,63 +31,60 @@ export function eventText(
 ): string {
   const t = translator(lang);
   if (event.type === "task.reported")
-    return t("common.reported", {
-      p1: agentName(event.agentId),
-      p2: String(event.payload.message),
+    return t("event.reported", {
+      agent: agentName(event.agentId),
+      message: String(event.payload.message),
     });
   if (event.type === "relay.sent") {
     const to = event.payload.to as RelayRecipient;
-    return t("common.sentAMessageTo", {
-      p1: agentName(event.agentId),
-      p2: recipientText(to, agentName, lang),
+    return t("event.messageSent", {
+      agent: agentName(event.agentId),
+      recipient: recipientText(to, agentName, lang),
     });
   }
   if (event.type === "task.dependencies")
-    return t("common.updatedDependencies", { p1: agentName(event.agentId) });
-  if (event.type === "task.created") return t("common.published", { p1: agentName(event.agentId) });
-  if (event.type === "task.lease_expired") return t("common.leaseExpiredReleased");
+    return t("event.dependenciesChanged", { agent: agentName(event.agentId) });
+  if (event.type === "task.created")
+    return t("event.published", { agent: agentName(event.agentId) });
+  if (event.type === "task.lease_expired") return t("event.leaseExpiredReleased");
   if (event.type.startsWith("task.")) {
     const action = event.type.slice(5);
     if (action in actionKeys)
-      return t(actionKeys[action as TaskAction["type"]], { name: agentName(event.agentId) });
+      return t(actionKeys[action as TaskAction["type"]], { agent: agentName(event.agentId) });
   }
   if (event.type === "agent.registered")
-    return t("common.createdAgent", { p1: String(event.payload.name) });
+    return t("event.agentCreated", { name: String(event.payload.name) });
   if (event.type === "agent.updated")
-    return t("common.updatedAgent", { p1: String(event.payload.name) });
+    return t("event.agentUpdated", { name: String(event.payload.name) });
   if (event.type === "agent.deleted")
-    return t("common.deletedAgent", { p1: String(event.payload.name) });
+    return t("event.agentDeleted", { name: String(event.payload.name) });
   if (event.type === "connector.polled") {
-    const name =
-      event.payload.name === undefined
-        ? t("event.connector")
-        : lang === "zh"
-          ? ` ${String(event.payload.name)}`
-          : String(event.payload.name);
-    return t("common.syncedChanges", { p1: name, p2: String(event.payload.changed) });
+    const changed = String(event.payload.changed);
+    return event.payload.name === undefined
+      ? t("event.connectorSyncedUnnamed", { changed })
+      : t("event.connectorSynced", { name: String(event.payload.name), changed });
   }
   if (event.type === "schedule.fired") {
-    const name =
-      event.payload.name === undefined
-        ? ""
-        : lang === "zh"
-          ? `「${String(event.payload.name)}」`
-          : ` “${String(event.payload.name)}”`;
-    return event.payload.status === "success"
-      ? t("common.scheduleRan", { p1: name })
-      : t("common.scheduleFailed", { p1: name, p2: String(event.payload.error) });
+    const { name, status, error } = event.payload;
+    if (status === "success")
+      return name === undefined
+        ? t("event.scheduleRanUnnamed")
+        : t("event.scheduleRan", { name: String(name) });
+    return name === undefined
+      ? t("event.scheduleFailedUnnamed", { error: String(error) })
+      : t("event.scheduleFailed", { name: String(name), error: String(error) });
   }
   if (event.type === "webhook.failed")
-    return t("common.webhookToFailed", {
-      p1: agentName(String(event.payload.agentId)),
-      p2: String(event.payload.error),
+    return t("event.webhookFailed", {
+      agent: agentName(String(event.payload.agentId)),
+      error: String(event.payload.error),
     });
   if (event.type === "chat.failed")
-    return t("common.chatNotificationFailed", { p1: String(event.payload.error) });
+    return t("event.chatFailed", { error: String(event.payload.error) });
   if (event.type === "archive.events")
-    return t("common.archivedEvents", { p1: String(event.payload.count) });
+    return t("event.archived", { count: String(event.payload.count) });
   const dot = event.type.indexOf(".");
-  return t("common.plugin", { p1: event.type.slice(0, dot), p2: event.type.slice(dot + 1) });
+  return t("event.plugin", { plugin: event.type.slice(0, dot), event: event.type.slice(dot + 1) });
 }
 
 function recipientText(
@@ -100,7 +97,7 @@ function recipientText(
     case "agent":
       return agentName(to.id);
     case "capability":
-      return t("common.capability", { p1: to.value });
+      return t("event.capability", { capability: to.value });
     case "broadcast":
       return t("common.everyone");
   }

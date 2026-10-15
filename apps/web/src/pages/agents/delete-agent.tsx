@@ -17,7 +17,7 @@ export function DeleteAgent({ agent, onClose }: { agent: Agent; onClose: () => v
     },
   });
   return (
-    <Dialog open title={t("agents.deleteAgent")} onClose={onClose}>
+    <Dialog open title={t("agents.delete")} onClose={onClose}>
       <p className="text-secondary text-text-2">{t("agents.deleteWarning")}</p>
       {remove.error && (
         <p role="alert" className="mt-4 text-secondary text-status-failed">
@@ -25,9 +25,9 @@ export function DeleteAgent({ agent, onClose }: { agent: Agent; onClose: () => v
         </p>
       )}
       <div className="mt-4 flex justify-end gap-2">
-        <Button onClick={onClose}>{t("agents.cancel")}</Button>
+        <Button onClick={onClose}>{t("common.cancel")}</Button>
         <Button variant="danger" disabled={remove.isPending} onClick={() => remove.mutate()}>
-          {t("agents.delete")}
+          {t("common.delete")}
         </Button>
       </div>
     </Dialog>

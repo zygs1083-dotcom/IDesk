@@ -46,7 +46,9 @@ export function ColumnContent({
       key={host === null ? "unassigned" : `host:${host}`}
       className="flex flex-col gap-2 [&+&]:mt-2"
     >
-      <h3 className="text-secondary text-text-2">{host === null ? t("desk.unassigned") : host}</h3>
+      <h3 className="text-secondary text-text-2">
+        {host === null ? t("desk.unassignedHost") : host}
+      </h3>
       {tasks.map(card)}
     </div>
   ));

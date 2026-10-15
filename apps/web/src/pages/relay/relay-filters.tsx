@@ -26,10 +26,10 @@ export function RelayFilters({
         value={recipient}
         onChange={onRecipient}
         options={[
-          { value: "all", label: t("relay.all") },
+          { value: "all", label: t("common.all") },
           { value: "agent", label: t("relay.specific") },
-          { value: "capability", label: t("relay.capabilities") },
-          { value: "broadcast", label: t("relay.everyone") },
+          { value: "capability", label: t("common.capabilities") },
+          { value: "broadcast", label: t("common.everyone") },
         ]}
       />
       <Segmented

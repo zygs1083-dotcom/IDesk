@@ -71,12 +71,12 @@ export function ConnectorDialog({
       >
         {connector ? (
           <p className="text-secondary text-text-2">
-            {t("settings.plugin")}
+            {t("settings.pluginLabel")}
             {plugin?.name ?? connector.pluginId}
           </p>
         ) : plugins.length > 0 ? (
           <Segmented
-            label={t("settings.plugins")}
+            label={t("common.plugins")}
             value={pluginId}
             options={plugins.map((entry) => ({ value: entry.id, label: entry.name }))}
             onChange={(id) => {
@@ -87,10 +87,10 @@ export function ConnectorDialog({
             }}
           />
         ) : (
-          <p className="text-secondary text-text-2">{t("settings.noEnabledConnectorPlugins")}</p>
+          <p className="text-secondary text-text-2">{t("settings.noConnectorPlugins")}</p>
         )}
         <Field
-          label={t("settings.name")}
+          label={t("common.name")}
           required
           value={name}
           onChange={(event) => setName(event.target.value)}
@@ -112,7 +112,7 @@ export function ConnectorDialog({
             {test.data?.success && (
               <span className="flex items-center gap-2">
                 <span className="size-2 rounded-full bg-status-done" />
-                {t("settings.connectionSuccessful")}
+                {t("settings.connectionOk")}
               </span>
             )}
             {(test.error || test.data?.success === false) && (
@@ -124,11 +124,7 @@ export function ConnectorDialog({
             variant="primary"
             disabled={!ready || create.isPending || test.isPending}
           >
-            {create.isPending
-              ? t("settings.saving")
-              : connector
-                ? t("settings.save")
-                : t("settings.add")}
+            {create.isPending ? t("common.saving") : connector ? t("common.save") : t("common.add")}
           </Button>
         </div>
       </form>

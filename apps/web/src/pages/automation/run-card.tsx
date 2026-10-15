@@ -20,8 +20,8 @@ export function RunCard({ run, now }: { run: Run; now: number }) {
   const statusLabels: Record<Run["status"], string> = {
     waiting: t("automation.waiting"),
     running: t("automation.running"),
-    success: t("automation.success"),
-    failed: t("automation.failed"),
+    success: t("common.success"),
+    failed: t("common.failed"),
     canceled: t("automation.cancelled"),
   };
   const metadata = [
@@ -44,7 +44,7 @@ export function RunCard({ run, now }: { run: Run; now: number }) {
             href={run.url}
             target="_blank"
             rel="noreferrer"
-            aria-label={t("automation.open", { p1: run.jobName })}
+            aria-label={t("automation.openRun", { name: run.jobName })}
             className="shrink-0 rounded-control text-text-2 hover:text-text focus-visible:outline-2 focus-visible:outline-accent"
           >
             <ExternalLink size={16} strokeWidth={1.5} />

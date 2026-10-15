@@ -12,9 +12,9 @@ import type { Plugin } from "./types.ts";
 export function PluginsPage() {
   const { t } = useLang();
   const kinds = {
-    connector: t("settings.connectors"),
+    connector: t("common.connectors"),
     notifier: t("settings.notifications"),
-    action: t("settings.action"),
+    action: t("common.action"),
   };
   const client = useQueryClient();
   const plugins = useQuery({ queryKey: ["plugins"], queryFn: () => request<Plugin[]>("/plugins") });
@@ -44,22 +44,22 @@ export function PluginsPage() {
     mutationFn: (plugin: Plugin) =>
       request<Plugin>(`/plugins/${plugin.id}/reload`, { method: "POST" }),
     onSuccess: (_result, plugin) => {
-      setMessage(t("settings.reloaded", { p1: plugin.name }));
+      setMessage(t("settings.reloaded", { name: plugin.name }));
       void client.invalidateQueries({ queryKey: ["plugins"] });
     },
     onError: (error) => setMessage(error.message),
   });
   return (
-    <section className="space-y-4" aria-label={t("settings.plugins")}>
-      <h2 className="text-section">{t("settings.plugins")}</h2>
+    <section className="space-y-4" aria-label={t("common.plugins")}>
+      <h2 className="text-section">{t("common.plugins")}</h2>
       {plugins.error && (
         <p role="alert" className="text-secondary text-status-failed">
           {plugins.error.message}
         </p>
       )}
-      {plugins.isPending && <p className="text-secondary text-text-2">{t("settings.loading")}</p>}
+      {plugins.isPending && <p className="text-secondary text-text-2">{t("common.loading")}</p>}
       {plugins.data?.length === 0 && (
-        <p className="py-16 text-center text-secondary text-text-2">{t("settings.noPluginsYet")}</p>
+        <p className="py-16 text-center text-secondary text-text-2">{t("settings.noPlugins")}</p>
       )}
       <div className="rounded-panel border border-line bg-surface">
         {plugins.data?.map((plugin) => (
@@ -69,7 +69,7 @@ export function PluginsPage() {
               <span className="text-secondary tabular-nums text-text-2">{plugin.version}</span>
               <span className="w-12 text-secondary text-text-2">{kinds[plugin.kind]}</span>
               <Switch
-                label={t("settings.enable2", { p1: plugin.name })}
+                label={t("common.enableNamed", { name: plugin.name })}
                 checked={plugin.enabled}
                 disabled={toggle.isPending || reload.isPending}
                 onChange={(enabled) => toggle.mutate({ id: plugin.id, enabled })}
@@ -80,7 +80,7 @@ export function PluginsPage() {
                   aria-expanded={expanded === plugin.id}
                   onClick={() => setExpanded(expanded === plugin.id ? null : plugin.id)}
                 >
-                  {t("settings.configure2")}
+                  {t("settings.configure")}
                 </Button>
               )}
               <Button

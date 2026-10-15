@@ -39,8 +39,8 @@ export function AccessRow({
           </p>
         )}
       </div>
-      <Button aria-label={t("settings.copy", { p1: title })} onClick={copy}>
-        {copied ? t("settings.copied") : t("settings.copy2")}
+      <Button aria-label={t("settings.copyNamed", { title })} onClick={copy}>
+        {copied ? t("common.copied") : t("common.copy")}
       </Button>
     </div>
   );

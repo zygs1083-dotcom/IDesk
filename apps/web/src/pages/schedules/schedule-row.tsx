@@ -28,7 +28,7 @@ export function ScheduleRow({
   let summary: string;
   switch (action.type) {
     case "publish_task":
-      summary = t("schedules.publish", { p1: action.template.title });
+      summary = t("schedules.publish", { task: action.template.title });
       break;
     case "http": {
       const url = new URL(action.url);
@@ -37,10 +37,10 @@ export function ScheduleRow({
     }
     case "connector_trigger":
       summary = t("schedules.trigger", {
-        p1:
+        connector:
           connectors.find((connector) => connector.id === action.connectorId)?.name ??
           action.connectorId,
-        p2: action.jobExternalId,
+        workflow: action.jobExternalId,
       });
       break;
   }
@@ -79,9 +79,7 @@ export function ScheduleRow({
         <span className="flex items-center gap-2">
           {schedule.lastStatus && (
             <span
-              title={
-                schedule.lastStatus === "success" ? t("schedules.success") : t("schedules.failed")
-              }
+              title={schedule.lastStatus === "success" ? t("common.success") : t("common.failed")}
               className={cn(
                 "size-2 shrink-0 rounded-full",
                 schedule.lastStatus === "success" ? "bg-status-done" : "bg-status-failed",
@@ -99,7 +97,7 @@ export function ScheduleRow({
       </td>
       <td className="px-4 py-3">
         <Switch
-          label={t("schedules.enable2", { p1: schedule.name })}
+          label={t("common.enableNamed", { name: schedule.name })}
           checked={schedule.enabled}
           disabled={busy}
           onChange={onToggle}
@@ -107,12 +105,12 @@ export function ScheduleRow({
       </td>
       <td className="px-2 py-2">
         <Menu
-          label={t("schedules.actionsFor", { p1: schedule.name })}
+          label={t("common.actionsFor", { name: schedule.name })}
           disabled={busy}
           items={[
             { label: t("schedules.runNow"), onSelect: onRun },
-            { label: t("schedules.edit"), onSelect: onEdit },
-            { label: t("schedules.delete"), onSelect: onDelete, danger: true },
+            { label: t("common.edit"), onSelect: onEdit },
+            { label: t("common.delete"), onSelect: onDelete, danger: true },
           ]}
         />
       </td>

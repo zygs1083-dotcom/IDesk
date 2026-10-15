@@ -6,7 +6,8 @@ import { type Translate, translator } from "./translate.ts";
 type LanguageContext = { lang: Lang; setLang: (lang: Lang) => void; t: Translate };
 const LangContext = createContext<LanguageContext | null>(null);
 let language = initialLang(localStorage.getItem("idesk.lang"), navigator.language);
-document.documentElement.lang = language === "zh" ? "zh-CN" : "en";
+const htmlLang = { zh: "zh-CN", en: "en" };
+document.documentElement.lang = htmlLang[language];
 
 export function currentLang(): Lang {
   return language;
@@ -17,7 +18,7 @@ export function LangProvider({ children }: { children: ReactNode }) {
   function setLang(value: Lang) {
     language = value;
     localStorage.setItem("idesk.lang", value);
-    document.documentElement.lang = value === "zh" ? "zh-CN" : "en";
+    document.documentElement.lang = htmlLang[value];
     updateLang(value);
   }
   const t = translator(lang);

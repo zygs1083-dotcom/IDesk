@@ -41,7 +41,7 @@ export function RelayPage() {
   const selected = filtered.find((message) => message.id === selectedId) ?? filtered[0];
   return (
     <div className="flex h-full flex-col gap-6">
-      <PageHeader title={t("relay.relay")}>
+      <PageHeader title={t("nav.relay")}>
         <Button variant="primary" onClick={() => setCompose({})}>
           {t("relay.sendMessage")}
         </Button>
@@ -61,7 +61,7 @@ export function RelayPage() {
       )}
       {!isPending && !error && messages.length === 0 ? (
         <div className="py-16 text-center text-secondary text-text-2">
-          <p>{t("relay.noMessagesYet")}</p>
+          <p>{t("relay.empty")}</p>
           <Button className="mt-3" onClick={() => setCompose({})}>
             {t("relay.sendOne")}
           </Button>
@@ -102,7 +102,7 @@ export function RelayPage() {
               </button>
             ))}
             {!isPending && !error && filtered.length === 0 && (
-              <p className="p-4 text-secondary text-text-2">{t("relay.noMatchingMessages")}</p>
+              <p className="p-4 text-secondary text-text-2">{t("relay.noMatches")}</p>
             )}
           </div>
           <div className="min-w-0 flex-1 overflow-y-auto">

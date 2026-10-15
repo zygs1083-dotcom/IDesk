@@ -7,15 +7,15 @@ export function SettingsPage() {
   const { t } = useLang();
   return (
     <div className="space-y-6">
-      <PageHeader title={t("settings.settings")} />
+      <PageHeader title={t("nav.settings")} />
       <div className="flex flex-col gap-6 sidebar:flex-row">
         <nav
-          aria-label={t("settings.settingsNavigation")}
+          aria-label={t("settings.navigation")}
           className="flex shrink-0 gap-1 sidebar:w-40 sidebar:flex-col"
         >
           {[
-            ["connectors", t("settings.connectors")],
-            ["plugins", t("settings.plugins")],
+            ["connectors", t("common.connectors")],
+            ["plugins", t("common.plugins")],
             ["access", t("settings.access")],
           ].map(([path, label]) => (
             <NavLink

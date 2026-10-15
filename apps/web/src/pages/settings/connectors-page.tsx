@@ -34,7 +34,7 @@ export function ConnectorsPage() {
         }),
       }),
     onSuccess: (result) =>
-      setMessage(result.success ? t("settings.connectionSuccessful") : (result.error ?? null)),
+      setMessage(result.success ? t("settings.connectionOk") : (result.error ?? null)),
     onError: (error) => setMessage(error.message),
   });
   const toggle = useMutation({
@@ -60,9 +60,9 @@ export function ConnectorsPage() {
   });
   const error = connectors.error ?? plugins.error;
   return (
-    <section className="space-y-4" aria-label={t("settings.connectors")}>
+    <section className="space-y-4" aria-label={t("common.connectors")}>
       <header className="flex items-center justify-between gap-2">
-        <h2 className="text-section">{t("settings.connectors")}</h2>
+        <h2 className="text-section">{t("common.connectors")}</h2>
         <Button variant="primary" disabled={!plugins.data} onClick={() => setCreating(true)}>
           {t("settings.addConnector")}
         </Button>
@@ -72,12 +72,10 @@ export function ConnectorsPage() {
           {error.message}
         </p>
       )}
-      {connectors.isPending && (
-        <p className="text-secondary text-text-2">{t("settings.loading")}</p>
-      )}
+      {connectors.isPending && <p className="text-secondary text-text-2">{t("common.loading")}</p>}
       {!error && connectors.data?.length === 0 && (
         <div className="py-16 text-center text-secondary text-text-2">
-          <p>{t("settings.noConnectorsYet")}</p>
+          <p>{t("settings.noConnectors")}</p>
           <Button className="mt-3" disabled={!plugins.data} onClick={() => setCreating(true)}>
             {t("settings.addConnector")}
           </Button>
@@ -113,12 +111,12 @@ export function ConnectorsPage() {
       )}
       <Dialog
         open={!!deleting}
-        title={t("settings.deleteConnector", { p1: deleting?.name ?? "" })}
+        title={t("settings.deleteConnector", { name: deleting?.name ?? "" })}
         onClose={() => setDeleting(null)}
       >
-        <p className="text-secondary text-text-2">{t("settings.itsWorkflowsAndRunsWillAlsoBe")}</p>
+        <p className="text-secondary text-text-2">{t("settings.deleteWarning")}</p>
         <div className="mt-4 flex justify-end gap-2">
-          <Button onClick={() => setDeleting(null)}>{t("settings.cancel")}</Button>
+          <Button onClick={() => setDeleting(null)}>{t("common.cancel")}</Button>
           <Button
             disabled={remove.isPending}
             className="text-status-failed"
@@ -126,7 +124,7 @@ export function ConnectorsPage() {
               if (deleting) remove.mutate(deleting);
             }}
           >
-            {t("settings.delete")}
+            {t("common.delete")}
           </Button>
         </div>
       </Dialog>

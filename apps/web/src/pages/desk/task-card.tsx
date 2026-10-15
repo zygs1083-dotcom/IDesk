@@ -64,7 +64,7 @@ export function TaskCard({
           <span className="mr-2 inline-flex items-center gap-1 text-text-3 tabular-nums">
             <Lock size={16} strokeWidth={1.5} aria-hidden="true" />
             {blockers}
-            <span className="sr-only"> {t("desk.unfinishedDependencies")}</span>
+            <span className="sr-only"> {t("desk.blockers")}</span>
           </span>
         )}
         {task.title}
@@ -84,7 +84,7 @@ export function TaskCard({
       )}
       {task.status === "assigned" && handoff && (
         <span className="mb-2 block truncate text-label text-text-2">
-          ← {handoff} {t("desk.handoff")}
+          ← {handoff} {t("common.handoff")}
         </span>
       )}
       <span className="flex items-center gap-2 text-label">

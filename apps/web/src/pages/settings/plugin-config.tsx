@@ -25,7 +25,7 @@ export function PluginConfig({ plugin, onClose }: { plugin: Plugin; onClose: () 
   return (
     <form
       noValidate
-      aria-label={t("settings.configure", { p1: plugin.name })}
+      aria-label={t("settings.configureNamed", { name: plugin.name })}
       className="max-w-lg space-y-4 px-4 pb-4"
       onSubmit={(event) => {
         event.preventDefault();
@@ -46,7 +46,7 @@ export function PluginConfig({ plugin, onClose }: { plugin: Plugin; onClose: () 
         </p>
       )}
       <Button variant="primary" type="submit" disabled={!ready || save.isPending}>
-        {save.isPending ? t("settings.saving") : t("settings.save")}
+        {save.isPending ? t("common.saving") : t("common.save")}
       </Button>
     </form>
   );

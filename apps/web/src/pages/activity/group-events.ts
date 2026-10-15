@@ -2,6 +2,7 @@ import type { Lang } from "@idesk/shared/labels";
 import type { eventSchema } from "@idesk/shared/task-schemas";
 import type { z } from "zod";
 import { translator } from "../../i18n/translate.ts";
+import { monthDay } from "../../lib/format.ts";
 
 type Event = z.infer<typeof eventSchema>;
 
@@ -23,23 +24,10 @@ export function groupEvents(
     if (!group) {
       const label =
         midnight.getTime() === today.getTime()
-          ? t("activity.today")
+          ? t("time.today")
           : midnight.getTime() === yesterday.getTime()
-            ? t("activity.yesterday")
-            : lang === "en"
-              ? new Intl.DateTimeFormat("en", {
-                  month: "short",
-                  day: "numeric",
-                  ...(date.getFullYear() === now.getFullYear() ? {} : { year: "numeric" }),
-                }).format(date)
-              : t("activity.monthDay", {
-                  p1:
-                    date.getFullYear() === now.getFullYear()
-                      ? ""
-                      : t("activity.yearPrefix", { year: date.getFullYear() }),
-                  p2: date.getMonth() + 1,
-                  p3: date.getDate(),
-                });
+            ? t("time.yesterday")
+            : monthDay(date, lang, now);
       group = { day, label, events: [] };
       groups.set(day, group);
     }

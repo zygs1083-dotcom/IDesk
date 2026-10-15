@@ -1,5 +1,6 @@
 import { readFile } from "node:fs/promises";
 import { labels } from "@idesk/shared/labels";
+import type { TaskPriority, TaskStatus } from "@idesk/shared/task-status";
 
 import type { Command } from "commander";
 import { api } from "../client.js";
@@ -9,8 +10,8 @@ import { output } from "../output.js";
 type Task = {
   id: string;
   title: string;
-  status: keyof ReturnType<typeof labels>["status"];
-  priority: keyof ReturnType<typeof labels>["priority"];
+  status: TaskStatus;
+  priority: TaskPriority;
   capabilities: string[];
   assigneeId: string | null;
 };

@@ -79,10 +79,13 @@ test.each([
   ["task.dependencies", {}, "Human updated dependencies"],
   ["relay.sent", { to: { kind: "broadcast" } }, "Human sent a message to Everyone"],
   ["connector.polled", { name: "GitHub", changed: 3 }, "Synced GitHub, 3 changes"],
+  ["connector.polled", { changed: 0 }, "Synced a connector, 0 changes"],
   ["agent.registered", { name: "Codex" }, "Created agent Codex"],
   ["agent.updated", { name: "Codex" }, "Updated agent Codex"],
   ["agent.deleted", { name: "Codex" }, "Deleted agent Codex"],
   ["schedule.fired", { status: "success" }, "Schedule ran"],
+  ["schedule.fired", { name: "Daily", status: "success" }, "Schedule “Daily” ran"],
+  ["schedule.fired", { status: "failed", error: "HTTP 500" }, "Schedule failed: HTTP 500"],
   [
     "schedule.fired",
     { name: "Daily", status: "failed", error: "HTTP 500" },

@@ -36,11 +36,9 @@ export function ActionFields({
     case "publish_task":
       return (
         <>
-          <p className="text-secondary text-text-2">
-            {t("schedules.disabledEntriesAreAvailableAsTemplatesWhen")}
-          </p>
+          <p className="text-secondary text-text-2">{t("schedules.templateHint")}</p>
           <Field
-            label={t("schedules.title")}
+            label={t("common.title")}
             required
             value={action.template.title}
             onChange={(event) =>
@@ -48,7 +46,7 @@ export function ActionFields({
             }
           />
           <Field
-            label={t("schedules.body")}
+            label={t("common.body")}
             multiline
             rows={3}
             value={action.template.body ?? ""}
@@ -57,19 +55,19 @@ export function ActionFields({
             }
           />
           <Field
-            label={t("schedules.capabilities")}
-            placeholder={t("schedules.separateWithSpacesOrCommas")}
+            label={t("common.capabilities")}
+            placeholder={t("common.listSeparator")}
             value={capabilities}
             onChange={(event) => setCapabilities(event.target.value)}
           />
           <Field
-            label={t("schedules.tags")}
-            placeholder={t("schedules.separateWithSpacesOrCommas")}
+            label={t("common.tags")}
+            placeholder={t("common.listSeparator")}
             value={tags}
             onChange={(event) => setTags(event.target.value)}
           />
           <Segmented
-            label={t("schedules.priority")}
+            label={t("common.priority")}
             value={action.template.priority ?? "normal"}
             options={TASK_PRIORITIES.map((value) => ({
               value,
@@ -123,7 +121,7 @@ export function ActionFields({
       return (
         <>
           <label className="block space-y-2 text-secondary text-text-2">
-            <span>{t("schedules.connectors")}</span>
+            <span>{t("common.connectors")}</span>
             <select
               className="w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body text-text focus:outline-accent"
               value={action.connectorId}
@@ -131,7 +129,7 @@ export function ActionFields({
             >
               {!connectors.some((connector) => connector.id === action.connectorId) && (
                 <option value={action.connectorId} disabled>
-                  {t("schedules.thisConnectorDoesNotSupportTriggers")}
+                  {t("schedules.triggerUnsupported")}
                 </option>
               )}
               {connectors.map((connector) => (
@@ -142,7 +140,7 @@ export function ActionFields({
             </select>
           </label>
           <Field
-            label={t("schedules.workflowID")}
+            label={t("schedules.workflowId")}
             required
             value={action.jobExternalId}
             onChange={(event) => onChange({ ...action, jobExternalId: event.target.value })}

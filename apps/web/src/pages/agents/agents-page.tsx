@@ -22,9 +22,9 @@ export function AgentsPage() {
   useShortcut("n", () => setCreating(true));
   return (
     <div className="space-y-6">
-      <PageHeader title={t("agents.agents")}>
+      <PageHeader title={t("nav.agents")}>
         <Button variant="primary" onClick={() => setCreating(true)}>
-          {t("agents.create")}
+          {t("common.create")}
         </Button>
       </PageHeader>
       {error && (
@@ -34,9 +34,9 @@ export function AgentsPage() {
       )}
       {!isPending && !error && agents.length === 0 ? (
         <div className="py-16 text-center text-secondary text-text-2">
-          <p>{t("agents.noAgentsYet")}</p>
+          <p>{t("agents.empty")}</p>
           <Button className="mt-3" onClick={() => setCreating(true)}>
-            {t("agents.createOne")}
+            {t("common.createOne")}
           </Button>
         </div>
       ) : (
@@ -46,10 +46,10 @@ export function AgentsPage() {
               <thead className="border-b border-line text-label text-text-2">
                 <tr>
                   {[
-                    t("agents.name"),
-                    t("agents.type"),
-                    t("agents.host"),
-                    t("agents.capabilities"),
+                    t("common.name"),
+                    t("common.type"),
+                    t("common.host"),
+                    t("common.capabilities"),
                     t("agents.lastActive"),
                     "Webhook",
                     "",
@@ -74,7 +74,7 @@ export function AgentsPage() {
                         >
                           <span
                             title={
-                              agent.status === "online" ? t("agents.online") : t("agents.offline")
+                              agent.status === "online" ? t("common.online") : t("common.offline")
                             }
                             className={cn(
                               "size-2 shrink-0 rounded-full",
@@ -106,11 +106,11 @@ export function AgentsPage() {
                         onKeyDown={(event) => event.stopPropagation()}
                       >
                         <Menu
-                          label={t("agents.actionsFor", { p1: agent.name })}
+                          label={t("common.actionsFor", { name: agent.name })}
                           items={[
-                            { label: t("agents.edit"), onSelect: () => setEditing(agent) },
+                            { label: t("common.edit"), onSelect: () => setEditing(agent) },
                             {
-                              label: t("agents.delete"),
+                              label: t("common.delete"),
                               danger: true,
                               onSelect: () => setDeleting(agent),
                             },

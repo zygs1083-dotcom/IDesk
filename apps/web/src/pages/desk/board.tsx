@@ -114,7 +114,7 @@ export function Board({
       >
         <section
           className="relative flex min-h-0 flex-1 gap-3 overflow-x-auto pb-3"
-          aria-label={t("desk.taskBoard")}
+          aria-label={t("desk.board")}
         >
           {BOARD_COLUMNS.map((status) => {
             const columnTasks = visible.filter((task) => task.status === status);
@@ -142,14 +142,14 @@ export function Board({
           {!search && boardTasks.length === 0 && !loading && (
             <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
               <div className="pointer-events-auto space-y-3 text-center">
-                <p className="text-secondary text-text-2">{t("desk.noTasksYet")}</p>
+                <p className="text-secondary text-text-2">{t("desk.empty")}</p>
                 <Button onClick={() => onPublish()}>{t("desk.publishOne")}</Button>
               </div>
             </div>
           )}
           {search && boardTasks.length === 0 && !loading && (
             <p className="absolute inset-x-0 top-20 text-center text-secondary text-text-2">
-              {t("desk.noMatchingTasks")}
+              {t("desk.noMatches")}
             </p>
           )}
         </section>

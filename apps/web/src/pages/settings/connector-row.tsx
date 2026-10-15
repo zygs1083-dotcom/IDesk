@@ -25,7 +25,9 @@ export function ConnectorRow({
   const status = !connector.enabled
     ? t("settings.disabled")
     : progress
-      ? t("settings.syncing", { p1: progress.total ? ` ${progress.done}/${progress.total}` : "" })
+      ? progress.total
+        ? t("settings.syncProgress", { done: progress.done, total: progress.total })
+        : t("settings.syncing")
       : connector.lastError || t("settings.healthy");
   return (
     <div className="flex items-center gap-4 border-b border-line px-4 py-3 last:border-b-0">
@@ -82,16 +84,16 @@ export function ConnectorRow({
         {connector.lastPolledAt ? relativeTime(new Date(connector.lastPolledAt), lang) : "—"}
       </span>
       <Menu
-        label={t("settings.actionsForConnector", { p1: connector.name })}
+        label={t("settings.connectorActions", { name: connector.name })}
         disabled={busy}
         items={[
-          { label: t("settings.test"), onSelect: onTest },
-          { label: t("settings.edit"), onSelect: onEdit },
+          { label: t("common.test"), onSelect: onTest },
+          { label: t("common.edit"), onSelect: onEdit },
           {
-            label: connector.enabled ? t("settings.disable") : t("settings.enable"),
+            label: connector.enabled ? t("common.disable") : t("common.enable"),
             onSelect: onToggle,
           },
-          { label: t("settings.delete"), onSelect: onDelete, danger: true },
+          { label: t("common.delete"), onSelect: onDelete, danger: true },
         ]}
       />
     </div>

@@ -8,20 +8,17 @@ export function AccessPage() {
     <section className="space-y-4" aria-label={t("settings.access")}>
       <h2 className="text-section">{t("settings.access")}</h2>
       <div className="rounded-panel border border-line bg-surface">
-        <AccessRow title={t("settings.restBaseURL")} value={`${origin}/api/v1`} />
+        <AccessRow title={t("settings.restUrl")} value={`${origin}/api/v1`} />
         <AccessRow
-          title={t("settings.mcpURL")}
+          title={t("settings.mcpUrl")}
           value={`${origin}/mcp`}
           description="Streamable HTTP，Authorization: Bearer <key>"
         />
-        <AccessRow
-          title={t("settings.cliLogin")}
-          value={t("settings.ideskLoginUrlKeyKeyFromAgent", { p1: origin })}
-        />
+        <AccessRow title={t("settings.cliLogin")} value={t("settings.cliCommand", { origin })} />
         <AccessRow
           title={t("settings.webhookSignature")}
           value="X-IDesk-Signature: sha256=HMAC(sha256(key), body)"
-          description={t("settings.useTheSHA256HexDigestOf")}
+          description={t("settings.signatureHint")}
         />
       </div>
     </section>

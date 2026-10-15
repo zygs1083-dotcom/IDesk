@@ -12,8 +12,8 @@ export function recipientLabel(
     case "agent":
       return agentName(to.id);
     case "capability":
-      return t("relay.capability", { p1: to.value });
+      return t("relay.capability", { capability: to.value });
     case "broadcast":
-      return t("relay.everyone");
+      return t("common.everyone");
   }
 }

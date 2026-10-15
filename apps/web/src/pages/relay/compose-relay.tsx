@@ -28,7 +28,9 @@ export function ComposeRelay({
   const [agentId, setAgentId] = useState(reply?.fromAgentId ?? "");
   const [capability, setCapability] = useState("");
   const [kind, setKind] = useState<Input["kind"]>(reply ? "reply" : "note");
-  const [subject, setSubject] = useState(reply ? t("relay.re", { p1: reply.subject }) : "");
+  const [subject, setSubject] = useState(
+    reply ? t("relay.replySubject", { subject: reply.subject }) : "",
+  );
   const [body, setBody] = useState("");
   const [taskId, setTaskId] = useState(reply?.taskId ?? "");
   const send = useMutation({
@@ -46,11 +48,7 @@ export function ComposeRelay({
     subject.trim() &&
     (recipient === "broadcast" || (recipient === "agent" ? agentId : capability.trim()));
   return (
-    <Dialog
-      open
-      onClose={onClose}
-      title={reply ? t("relay.replyToMessage") : t("relay.sendMessage")}
-    >
+    <Dialog open onClose={onClose} title={reply ? t("relay.replyMessage") : t("relay.sendMessage")}>
       <form
         className="space-y-4"
         onSubmit={(event) => {
@@ -78,15 +76,15 @@ export function ComposeRelay({
             value={recipient}
             onChange={setRecipient}
             options={[
-              { value: "agent", label: t("relay.specificAI") },
-              { value: "capability", label: t("relay.capabilities") },
-              { value: "broadcast", label: t("relay.everyone") },
+              { value: "agent", label: t("relay.specificAgent") },
+              { value: "capability", label: t("common.capabilities") },
+              { value: "broadcast", label: t("common.everyone") },
             ]}
           />
         </div>
         {recipient === "agent" && (
           <label className="block space-y-2 text-secondary text-text-2">
-            {t("relay.agents")}
+            {t("nav.agents")}
             <select
               className="block w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body text-text focus:border-accent"
               value={agentId}
@@ -103,7 +101,7 @@ export function ComposeRelay({
         )}
         {recipient === "capability" && (
           <Field
-            label={t("relay.capabilities")}
+            label={t("common.capabilities")}
             value={capability}
             onChange={(event) => setCapability(event.target.value)}
           />
@@ -118,20 +116,20 @@ export function ComposeRelay({
           />
         </div>
         <Field
-          label={t("relay.title")}
+          label={t("common.title")}
           value={subject}
           onChange={(event) => setSubject(event.target.value)}
         />
         <Field
           multiline
-          label={t("relay.body")}
+          label={t("common.body")}
           rows={6}
           placeholder="Markdown"
           value={body}
           onChange={(event) => setBody(event.target.value)}
         />
         <Field
-          label={t("relay.taskIDOptional")}
+          label={t("relay.taskOptional")}
           className="tabular-nums"
           value={taskId}
           onChange={(event) => setTaskId(event.target.value)}
@@ -142,9 +140,9 @@ export function ComposeRelay({
           </p>
         )}
         <div className="flex justify-end gap-2">
-          <Button onClick={onClose}>{t("relay.cancel")}</Button>
+          <Button onClick={onClose}>{t("common.cancel")}</Button>
           <Button type="submit" variant="primary" disabled={!valid || send.isPending}>
-            {t("relay.send")}
+            {t("common.send")}
           </Button>
         </div>
       </form>

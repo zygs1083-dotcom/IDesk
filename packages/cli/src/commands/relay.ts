@@ -1,5 +1,6 @@
 import { readFile } from "node:fs/promises";
 import { labels } from "@idesk/shared/labels";
+import type { RelayKind } from "@idesk/shared/relay";
 
 import type { Command } from "commander";
 import { api } from "../client.js";
@@ -8,7 +9,7 @@ import { output } from "../output.js";
 
 type Message = {
   id: string;
-  kind: keyof ReturnType<typeof labels>["relayKind"];
+  kind: RelayKind;
   fromAgentId: string;
   subject: string;
   createdAt: string;

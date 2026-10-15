@@ -16,7 +16,7 @@ export function useAgents() {
   const names = new Map(agents.map((agent) => [agent.id, `${agent.name}@${agent.host}`]));
   function agentName(id: string | null): string {
     if (id === null || id === "human") return t("common.human");
-    return names.get(id) ?? t("common.deletedAgent2");
+    return names.get(id) ?? t("common.deletedAgent");
   }
   return { agents, agentName, error, isPending };
 }

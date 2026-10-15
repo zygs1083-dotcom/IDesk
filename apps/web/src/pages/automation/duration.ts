@@ -12,8 +12,8 @@ export function duration(
     ((finishedAt === null ? now : new Date(finishedAt).getTime()) - new Date(startedAt).getTime()) /
       1000,
   );
-  if (seconds < 60) return t("automation.s", { p1: seconds });
+  if (seconds < 60) return t("time.seconds", { seconds });
   const minutes = Math.floor(seconds / 60);
-  if (minutes < 60) return t("automation.minS", { p1: minutes, p2: seconds % 60 });
-  return t("automation.hMin", { p1: Math.floor(minutes / 60), p2: minutes % 60 });
+  if (minutes < 60) return t("time.minutesSeconds", { minutes, seconds: seconds % 60 });
+  return t("time.hoursMinutes", { hours: Math.floor(minutes / 60), minutes: minutes % 60 });
 }

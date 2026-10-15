@@ -67,9 +67,9 @@ export function SchedulesPage() {
   const error = schedules.error ?? connectors.error;
   return (
     <div className="space-y-6">
-      <PageHeader title={t("schedules.schedules")}>
+      <PageHeader title={t("nav.schedules")}>
         <Button variant="primary" disabled={!connectors.data} onClick={() => setCreating(true)}>
-          {t("schedules.create")}
+          {t("common.create")}
         </Button>
       </PageHeader>
       {error && (
@@ -77,14 +77,12 @@ export function SchedulesPage() {
           {error.message}
         </p>
       )}
-      {schedules.isPending && (
-        <p className="text-secondary text-text-2">{t("schedules.loading")}</p>
-      )}
+      {schedules.isPending && <p className="text-secondary text-text-2">{t("common.loading")}</p>}
       {!error && schedules.data?.length === 0 && (
         <div className="py-16 text-center text-secondary text-text-2">
-          <p>{t("schedules.noSchedulesYet")}</p>
+          <p>{t("schedules.empty")}</p>
           <Button className="mt-3" disabled={!connectors.data} onClick={() => setCreating(true)}>
-            {t("schedules.createOne")}
+            {t("common.createOne")}
           </Button>
         </div>
       )}
@@ -94,12 +92,12 @@ export function SchedulesPage() {
             <thead className="border-b border-line text-label text-text-2">
               <tr>
                 {[
-                  t("schedules.name"),
+                  t("common.name"),
                   t("schedules.frequency"),
-                  t("schedules.action"),
+                  t("common.action"),
                   t("schedules.lastRun"),
                   t("schedules.nextRun"),
-                  t("schedules.enable"),
+                  t("common.enable"),
                   "",
                 ].map((label) => (
                   <th key={label} scope="col" className="whitespace-nowrap px-4 py-3 font-medium">
@@ -137,11 +135,11 @@ export function SchedulesPage() {
       )}
       <Dialog
         open={!!deleting}
-        title={t("schedules.deleteSchedule", { p1: deleting?.name ?? "" })}
+        title={t("schedules.delete", { name: deleting?.name ?? "" })}
         onClose={() => setDeleting(null)}
       >
         <div className="flex justify-end gap-2">
-          <Button onClick={() => setDeleting(null)}>{t("schedules.cancel")}</Button>
+          <Button onClick={() => setDeleting(null)}>{t("common.cancel")}</Button>
           <Button
             className="text-status-failed"
             disabled={remove.isPending}
@@ -149,7 +147,7 @@ export function SchedulesPage() {
               if (deleting) remove.mutate(deleting.id);
             }}
           >
-            {t("schedules.delete")}
+            {t("common.delete")}
           </Button>
         </div>
       </Dialog>

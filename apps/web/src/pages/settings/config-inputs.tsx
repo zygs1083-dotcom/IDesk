@@ -65,7 +65,7 @@ export function ConfigInputs({
           value={typeof values[field.name] === "string" ? (values[field.name] as string) : ""}
           onChange={(event) => onChange(field.name, event.target.value)}
         >
-          {field.default === undefined && <option value="">{t("settings.selectAnOption")}</option>}
+          {field.default === undefined && <option value="">{t("settings.selectOption")}</option>}
           {field.options.map((option) => (
             <option key={option} value={option}>
               {option}

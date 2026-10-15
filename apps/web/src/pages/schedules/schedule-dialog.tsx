@@ -93,11 +93,7 @@ export function ScheduleDialog({
     },
   });
   return (
-    <Dialog
-      open
-      title={schedule ? t("schedules.editSchedule") : t("schedules.createSchedule")}
-      onClose={onClose}
-    >
+    <Dialog open title={schedule ? t("schedules.edit") : t("schedules.create")} onClose={onClose}>
       <form
         noValidate
         className="space-y-4"
@@ -107,7 +103,7 @@ export function ScheduleDialog({
         }}
       >
         <Field
-          label={t("schedules.name")}
+          label={t("common.name")}
           required
           value={name}
           onChange={(event) => setName(event.target.value)}
@@ -121,7 +117,7 @@ export function ScheduleDialog({
             onChange={(event) => setCron(event.target.value)}
           />
           <p aria-live="polite" className="text-secondary text-text-2">
-            {cron ? cronText(cron, lang) : t("schedules.enterACronExpression")}
+            {cron ? cronText(cron, lang) : t("schedules.cronPlaceholder")}
           </p>
         </div>
         <div className="flex items-end gap-4">
@@ -133,8 +129,8 @@ export function ScheduleDialog({
             />
           </div>
           <div className="flex items-center gap-2 pb-2">
-            <span className="text-secondary text-text-2">{t("schedules.enable")}</span>
-            <Switch label={t("schedules.enable")} checked={enabled} onChange={setEnabled} />
+            <span className="text-secondary text-text-2">{t("common.enable")}</span>
+            <Switch label={t("common.enable")} checked={enabled} onChange={setEnabled} />
           </div>
         </div>
         <ActionTabs action={action} onChange={setAction} connectors={triggerConnectors} />
@@ -157,13 +153,9 @@ export function ScheduleDialog({
           </p>
         )}
         <div className="flex justify-end gap-2">
-          <Button onClick={onClose}>{t("schedules.cancel")}</Button>
+          <Button onClick={onClose}>{t("common.cancel")}</Button>
           <Button type="submit" variant="primary" disabled={!ready || save.isPending}>
-            {save.isPending
-              ? t("schedules.saving")
-              : schedule
-                ? t("schedules.save")
-                : t("schedules.create")}
+            {save.isPending ? t("common.saving") : schedule ? t("common.save") : t("common.create")}
           </Button>
         </div>
       </form>

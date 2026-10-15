@@ -50,7 +50,7 @@ export function PublishDialog({ onClose }: { onClose: () => void }) {
     <Dialog
       open
       onClose={onClose}
-      title={t("desk.publishTask")}
+      title={t("common.publishTask")}
       actions={
         templates.length > 0 && (
           <Menu
@@ -78,7 +78,7 @@ export function PublishDialog({ onClose }: { onClose: () => void }) {
         }}
       >
         <Field
-          label={t("desk.title")}
+          label={t("common.title")}
           value={title}
           onChange={(event) => setTitle(event.target.value)}
           autoFocus
@@ -86,28 +86,28 @@ export function PublishDialog({ onClose }: { onClose: () => void }) {
         />
         <Field
           multiline
-          label={t("desk.body")}
+          label={t("common.body")}
           rows={6}
           placeholder="Markdown"
           value={body}
           onChange={(event) => setBody(event.target.value)}
         />
         <Field
-          label={t("desk.capabilities")}
+          label={t("common.capabilities")}
           placeholder="coding, browser"
           value={capabilities}
           onChange={(event) => setCapabilities(event.target.value)}
         />
         <Field
-          label={t("desk.tags")}
-          placeholder={t("desk.separateWithSpacesOrCommas")}
+          label={t("common.tags")}
+          placeholder={t("common.listSeparator")}
           value={tags}
           onChange={(event) => setTags(event.target.value)}
         />
         <div className="space-y-2">
-          <span className="text-secondary text-text-2">{t("desk.priority")}</span>
+          <span className="text-secondary text-text-2">{t("common.priority")}</span>
           <Segmented
-            label={t("desk.priority")}
+            label={t("common.priority")}
             value={priority}
             onChange={setPriority}
             options={TASK_PRIORITIES.map((value) => ({
@@ -123,7 +123,7 @@ export function PublishDialog({ onClose }: { onClose: () => void }) {
         )}
         <div className="flex justify-end">
           <Button type="submit" variant="primary" disabled={!title.trim() || mutation.isPending}>
-            {t("desk.publish")}
+            {t("common.publish")}
           </Button>
         </div>
       </form>

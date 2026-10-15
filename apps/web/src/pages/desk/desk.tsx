@@ -56,13 +56,13 @@ export function Desk() {
   return (
     <div className="flex h-full min-h-0 flex-col gap-6">
       <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 sidebar:flex sidebar:gap-4">
-        <PageHeader title={t("desk.desk")} />
+        <PageHeader title={t("nav.desk")} />
         <label className="order-3 flex min-w-0 flex-1 sidebar:order-none sidebar:max-w-60 items-center gap-2 rounded-control border border-line bg-surface px-3 py-2 text-text-2">
           <Search size={16} strokeWidth={1.5} />
           <input
             ref={searchInput}
-            aria-label={t("desk.searchTasks")}
-            placeholder={t("desk.searchTasks")}
+            aria-label={t("desk.search")}
+            placeholder={t("desk.search")}
             value={search}
             onChange={(event) => setSearch(event.target.value)}
             className="min-w-0 w-full bg-transparent text-secondary text-text outline-none placeholder:text-text-3 focus-visible:outline-1 focus-visible:outline-accent"
@@ -87,7 +87,7 @@ export function Desk() {
           className="order-2 ml-auto shrink-0 sidebar:order-none"
           onClick={() => setPublish(true)}
         >
-          {t("desk.publish")}
+          {t("common.publish")}
         </Button>
       </div>
       {error && (

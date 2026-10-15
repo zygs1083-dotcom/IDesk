@@ -35,7 +35,7 @@ export function Login() {
       >
         <h1 className="text-title">IDesk</h1>
         <Field
-          label={t("login.tsx.password")}
+          label={t("login.password")}
           type="password"
           autoComplete="current-password"
           autoFocus
@@ -49,7 +49,7 @@ export function Login() {
           className="w-full"
           disabled={!password || mutation.isPending}
         >
-          {t("login.tsx.logIn")}
+          {t("login.submit")}
         </Button>
       </form>
     </main>

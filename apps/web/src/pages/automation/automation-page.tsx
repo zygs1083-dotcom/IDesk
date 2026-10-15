@@ -61,7 +61,7 @@ export function AutomationPage() {
     mutationFn: (id: string) =>
       request<z.infer<typeof pollResultSchema>>(`/connectors/${id}/poll`, { method: "POST" }),
     onSuccess: (result) => {
-      if (!result.refreshed) setMessage(t("automation.polledJustNowTryAgainShortly"));
+      if (!result.refreshed) setMessage(t("automation.pollTooSoon"));
       else void client.invalidateQueries({ queryKey: ["automation"] });
     },
     onError: (error) => setMessage(error.message),
@@ -71,18 +71,18 @@ export function AutomationPage() {
   const now = Date.now();
   return (
     <div className="flex h-full min-h-0 flex-col gap-6">
-      <PageHeader title={t("automation.automation")}>
+      <PageHeader title={t("nav.automation")}>
         {connector && (
           <>
             <span className="text-secondary text-text-2">
               {connector.lastPolledAt === null
-                ? t("automation.notPolledYet")
+                ? t("automation.notPolled")
                 : t("automation.lastPolled", {
-                    p1: relativeTime(new Date(connector.lastPolledAt), lang),
+                    time: relativeTime(new Date(connector.lastPolledAt), lang),
                   })}
             </span>
             <Button disabled={poll.isPending} onClick={() => poll.mutate(connector.id)}>
-              {t("automation.refresh")}
+              {t("common.refresh")}
             </Button>
           </>
         )}
@@ -94,12 +94,12 @@ export function AutomationPage() {
       )}
       {connectorsQuery.isSuccess && connectors.length === 0 && (
         <div className="py-16 text-center text-secondary text-text-2">
-          <p>{t("automation.noConnectorsYet")}</p>
+          <p>{t("settings.noConnectors")}</p>
           <Link
             to="/settings/connectors"
             className="mt-3 inline-flex rounded-control border border-line bg-surface px-3 py-2 text-body text-text hover:bg-surface-2 focus-visible:outline-2 focus-visible:outline-accent"
           >
-            {t("automation.addConnector")}
+            {t("settings.addConnector")}
           </Link>
         </div>
       )}
@@ -108,7 +108,7 @@ export function AutomationPage() {
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div className="flex min-w-0 overflow-x-auto">
               <Segmented
-                label={t("automation.connectors")}
+                label={t("common.connectors")}
                 options={connectors.map((item) => ({ value: item.id, label: item.name }))}
                 value={connector.id}
                 onChange={setSelected}
@@ -117,8 +117,8 @@ export function AutomationPage() {
             <label className="flex min-w-0 flex-1 sidebar:max-w-60 items-center gap-2 rounded-control border border-line bg-surface px-3 py-2 text-text-2">
               <Search size={16} strokeWidth={1.5} />
               <input
-                aria-label={t("automation.searchWorkflows")}
-                placeholder={t("automation.searchWorkflows")}
+                aria-label={t("automation.search")}
+                placeholder={t("automation.search")}
                 value={search}
                 onChange={(event) => setSearch(event.target.value)}
                 className="min-w-0 w-full bg-transparent text-secondary text-text outline-none placeholder:text-text-3 focus-visible:outline-1 focus-visible:outline-accent"
@@ -132,7 +132,7 @@ export function AutomationPage() {
             </div>
           )}
           <section
-            aria-label={t("automation.automationBoard")}
+            aria-label={t("automation.board")}
             className="flex min-h-0 flex-1 gap-3 overflow-x-auto pb-3"
           >
             {columns.map((column) => {

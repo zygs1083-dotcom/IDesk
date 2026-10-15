@@ -13,9 +13,9 @@ export function AgentStats({ agentId }: { agentId: string }) {
       request<z.infer<typeof agentStatsSchema>>(`/agents/${encodeURIComponent(agentId)}/stats`),
   });
   const values = [
-    [t("agents.complete"), data?.completed ?? "—"],
-    [t("agents.completedIn7Days"), data?.last7dCompleted ?? "—"],
-    [t("agents.handoff"), data?.handoffs ?? "—"],
+    [t("common.complete"), data?.completed ?? "—"],
+    [t("agents.completedWeek"), data?.last7dCompleted ?? "—"],
+    [t("common.handoff"), data?.handoffs ?? "—"],
     [t("agents.averageDuration"), formatDuration(data?.avgDurationMs ?? null, lang)],
   ];
   return (

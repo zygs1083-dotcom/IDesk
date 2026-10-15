@@ -43,7 +43,7 @@ export function RelayMessage({
             className="shrink-0 text-secondary text-accent"
             onClick={() => onReply(message)}
           >
-            {t("relay.reply")}
+            {t("common.reply")}
           </button>
         )}
       </div>
@@ -61,7 +61,7 @@ export function RelayMessage({
       <Markdown>{message.body}</Markdown>
       <p className="text-label text-text-2">
         {message.readBy.length > 0
-          ? t("relay.readBy", { p1: message.readBy.map(agentName).join(" · ") })
+          ? t("relay.readBy", { agents: message.readBy.map(agentName).join(" · ") })
           : t("relay.unread")}
       </p>
     </article>
