@@ -9,7 +9,7 @@ import type {
 const configSchema = z.object({
   baseUrl: z
     .url()
-    .meta({ title: "地址", titleEn: "Address" })
+    .meta({ title: "地址", titleEn: "Base URL" })
     .transform((url) => url.replace(/\/+$/, "")),
   apiKey: z.string().min(1).meta({ title: "API Key", titleEn: "API Key" }),
 });

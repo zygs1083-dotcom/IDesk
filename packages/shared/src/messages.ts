@@ -78,7 +78,7 @@ export const en: { [K in MessageKey]: (typeof zh)[K] } = {
   "transition.humanReopenOnly": () => "Only humans can reopen tasks",
   "transition.missingCapabilities": (p) => `Missing capabilities: ${p.missing.join(", ")}`,
   "transition.notAllowed": (p) =>
-    `Cannot ${labels("en").action[p.action].toLowerCase()} a task that is ${labels("en").status[p.status]}`,
+    `Cannot ${labels("en").action[p.action].toLowerCase()} a task that is ${labels("en").status[p.status].toLowerCase()}`,
   "transition.recruitMinimum": () => "Recruitment requires at least 2 agents",
   "transition.systemLeaseOnly": () => "Only the system can handle lease expiry",
 

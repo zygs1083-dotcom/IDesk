@@ -10,7 +10,7 @@ const configSchema = z.object({
   baseUrl: z
     .url()
     .default("https://api.github.com")
-    .meta({ title: "地址", titleEn: "Address" })
+    .meta({ title: "地址", titleEn: "Base URL" })
     .transform((url) => url.replace(/\/+$/, "")),
   token: z.string().min(1).meta({ title: "Token", titleEn: "Token" }),
   repo: z

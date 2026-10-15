@@ -16,7 +16,7 @@ test("parameterized messages preserve user data and localize labels", () => {
     ],
     [
       "en",
-      "Cannot claim a task that is Done",
+      "Cannot claim a task that is done",
       "Missing capabilities: gpu, coding",
       "Blocked by “用户任务”",
       "Dependency task not found: task-id",

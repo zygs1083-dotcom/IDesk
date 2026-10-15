@@ -3,7 +3,7 @@ import { z } from "zod";
 export const configSchema = z.object({
   baseUrl: z
     .url()
-    .meta({ title: "地址", titleEn: "Address" })
+    .meta({ title: "地址", titleEn: "Base URL" })
     .transform((url) => url.replace(/\/+$/, "")),
   token: z.string().min(1).meta({ title: "Token", titleEn: "Token" }),
   projectCode: z.string().regex(/^\d*$/).default("").meta({

@@ -58,7 +58,7 @@ test("REST translates 409 and 404 responses while validation stays Chinese", asy
       .status,
   ).toBe(200);
   for (const [lang, conflict, missing] of [
-    ["en", "Cannot claim a task that is Done", "Task not found"],
+    ["en", "Cannot claim a task that is done", "Task not found"],
     [undefined, "已完成的任务不能领取", "任务不存在"],
     ["zh-CN", "已完成的任务不能领取", "任务不存在"],
   ] as const) {
