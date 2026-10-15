@@ -1,5 +1,5 @@
+import type { Layout } from "@idesk/shared/office-schemas";
 import { useLang } from "../i18n/lang.tsx";
-import type { Layout } from "../world/layout.ts";
 import type { Seat } from "../world/seats.ts";
 import { RosterItem } from "./roster-item.tsx";
 import type { Agent, Task } from "./use-office-data.ts";

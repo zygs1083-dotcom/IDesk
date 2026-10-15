@@ -1,8 +1,7 @@
+import { catalogSchema, type Furniture, parseLayout } from "@idesk/shared/office-schemas";
 import { expect, test } from "vitest";
 import rawCatalog from "../../public/catalog.json";
 import rawLayout from "../../public/layout.json";
-import { catalogSchema, type Furniture } from "./catalog.ts";
-import { parseLayout } from "./layout.ts";
 import { findPath } from "./path.ts";
 
 const catalog = catalogSchema.parse(rawCatalog);

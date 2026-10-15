@@ -1,5 +1,4 @@
-import { type Catalog, type Furniture, TILE } from "./catalog.ts";
-import type { Layout } from "./layout.ts";
+import { type Catalog, type Furniture, type Layout, TILE } from "@idesk/shared/office-schemas";
 
 export type Point = { x: number; y: number };
 export type TileCodes = Record<string, string>;

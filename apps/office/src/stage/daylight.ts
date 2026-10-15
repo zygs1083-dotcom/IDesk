@@ -1,5 +1,5 @@
+import { TILE } from "@idesk/shared/office-schemas";
 import { Container, Graphics, Sprite, Texture } from "pixi.js";
-import { TILE } from "../world/catalog.ts";
 import { deskFor } from "../world/places.ts";
 import { seats } from "../world/seats.ts";
 import type { Stage } from "../world/stage.ts";

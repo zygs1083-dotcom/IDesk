@@ -1,8 +1,7 @@
+import { catalogSchema, parseLayout } from "@idesk/shared/office-schemas";
 import { expect, test } from "vitest";
 import rawCatalog from "../../public/catalog.json";
 import rawLayout from "../../public/layout.json";
-import { catalogSchema } from "./catalog.ts";
-import { parseLayout } from "./layout.ts";
 import { cellCenter } from "./path.ts";
 import { assignSeats, assignStanding, deskFor } from "./places.ts";
 import { seats } from "./seats.ts";

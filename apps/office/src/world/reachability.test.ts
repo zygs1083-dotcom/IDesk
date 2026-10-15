@@ -1,9 +1,8 @@
+import { catalogSchema, parseLayout, TILE } from "@idesk/shared/office-schemas";
 import { expect, test } from "vitest";
 import rawCatalog from "../../public/catalog.json";
 import rawLayout from "../../public/layout.json";
 import tiles from "../../public/tiles.json";
-import { catalogSchema, TILE } from "./catalog.ts";
-import { parseLayout } from "./layout.ts";
 import { findPath, walkableGrid } from "./path.ts";
 import { seats } from "./seats.ts";
 

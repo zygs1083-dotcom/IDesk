@@ -1,7 +1,6 @@
+import { type Catalog, type Layout, TILE } from "@idesk/shared/office-schemas";
 import { Application, Container } from "pixi.js";
 import type { WorldAssets } from "./assets.ts";
-import { type Catalog, TILE } from "./catalog.ts";
-import type { Layout } from "./layout.ts";
 import { renderWorld } from "./render.ts";
 import { worldScale } from "./scale.ts";
 

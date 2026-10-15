@@ -1,8 +1,7 @@
+import { catalogSchema, parseLayout } from "@idesk/shared/office-schemas";
 import { expect, test, vi } from "vitest";
 import rawCatalog from "../../public/catalog.json";
 import rawLayout from "../../public/layout.json";
-import { catalogSchema } from "../world/catalog.ts";
-import { parseLayout } from "../world/layout.ts";
 import { cellCenter, cellOf, type Point, walkableGrid } from "../world/path.ts";
 import { seats } from "../world/seats.ts";
 import { Cast } from "./cast.ts";

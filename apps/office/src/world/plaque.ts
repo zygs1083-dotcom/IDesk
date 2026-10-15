@@ -1,5 +1,5 @@
+import { TILE } from "@idesk/shared/office-schemas";
 import { CanvasTextMetrics, Container, Text } from "pixi.js";
-import { TILE } from "./catalog.ts";
 import { zIndexOf } from "./sort.ts";
 import type { Stage } from "./stage.ts";
 
