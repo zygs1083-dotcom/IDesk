@@ -19,7 +19,7 @@ function page(totalList: object[], currentPage = 1, totalPage = 1): Response {
 }
 afterEach(() => vi.unstubAllGlobals());
 
-it("pages visible projects, preserves 19-digit codes and prefixes workflow identity and names", async () => {
+it("pages visible projects, preserves 19-digit codes and keeps workflow names separate from project groups", async () => {
   const fetch = vi
     .fn()
     .mockResolvedValueOnce(
@@ -34,13 +34,15 @@ it("pages visible projects, preserves 19-digit codes and prefixes workflow ident
   expect(await plugin.listJobs(config)).toEqual([
     {
       externalId: "9123456789012345678/7",
-      name: "Alpha / daily",
+      name: "daily",
+      group: "Alpha",
       enabled: true,
       url: `${baseUrl}/ui/projects/9123456789012345678/workflow/definitions/7`,
     },
     {
       externalId: "42/7",
-      name: "Beta / daily",
+      name: "daily",
+      group: "Beta",
       enabled: true,
       url: `${baseUrl}/ui/projects/42/workflow/definitions/7`,
     },
@@ -54,15 +56,25 @@ it("pages visible projects, preserves 19-digit codes and prefixes workflow ident
 });
 
 it("keeps single-project names and never requests the project list", async () => {
-  const fetch = vi.fn().mockResolvedValue(page([definition]));
+  const fetch = vi
+    .fn()
+    .mockResolvedValueOnce(
+      new Response('{"code":0,"data":{"code":9123456789012345678,"name":"Alpha"}}'),
+    )
+    .mockResolvedValueOnce(page([definition]));
   vi.stubGlobal("fetch", fetch);
-  expect(await plugin.listJobs({ ...config, projectCode: "42" })).toEqual([
+  expect(await plugin.listJobs({ ...config, projectCode: "9123456789012345678" })).toEqual([
     {
-      externalId: "42/7",
+      externalId: "9123456789012345678/7",
       name: "daily",
+      group: "Alpha",
       enabled: true,
-      url: `${baseUrl}/ui/projects/42/workflow/definitions/7`,
+      url: `${baseUrl}/ui/projects/9123456789012345678/workflow/definitions/7`,
     },
+  ]);
+  expect(fetch.mock.calls.map(([url]) => url)).toEqual([
+    `${baseUrl}/projects/9123456789012345678`,
+    `${baseUrl}/projects/9123456789012345678/process-definition?pageNo=1&pageSize=100`,
   ]);
   expect(fetch.mock.calls.every(([url]) => !url.includes("/projects?"))).toBe(true);
 });

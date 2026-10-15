@@ -33,7 +33,13 @@ const plugin: ConnectorPlugin = {
       : { success: false, error: "错误密钥" };
   },
   async listJobs() {
-    return ["Z", "A"].map((name) => ({ externalId: name, name, enabled: true, url: null }));
+    return ["Z", "A"].map((name) => ({
+      externalId: name,
+      name,
+      group: null,
+      enabled: true,
+      url: null,
+    }));
   },
   async listRuns() {
     calls++;

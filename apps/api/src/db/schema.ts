@@ -112,6 +112,7 @@ export const automationJobs = sqliteTable(
       .references(() => connectors.id, { onDelete: "cascade" }),
     externalId: text("external_id").notNull(),
     name: text().notNull(),
+    group: text(),
     enabled: integer({ mode: "boolean" }).notNull().default(true),
     url: text(),
     lastRunStatus: text("last_run_status", { enum: RUN_STATUSES }),

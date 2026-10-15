@@ -122,8 +122,20 @@ describe("github-actions connector", () => {
     );
     vi.stubGlobal("fetch", fetch);
     expect(await plugin.listJobs(config)).toEqual([
-      { externalId: "1", name: "Build", enabled: true, url: "https://github.com/build" },
-      { externalId: "2", name: "Deploy", enabled: false, url: "https://github.com/deploy" },
+      {
+        externalId: "1",
+        name: "Build",
+        group: "owner/repo",
+        enabled: true,
+        url: "https://github.com/build",
+      },
+      {
+        externalId: "2",
+        name: "Deploy",
+        group: "owner/repo",
+        enabled: false,
+        url: "https://github.com/deploy",
+      },
     ]);
     expect(fetch.mock.calls[0]?.[0]).toBe(`${repoUrl}/actions/workflows?per_page=100`);
     expect(fetch).toHaveBeenCalledTimes(1);

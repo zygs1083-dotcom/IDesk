@@ -23,10 +23,13 @@ function page(totalList: object[], currentPage = 1, totalPage = 1): Response {
   );
 }
 afterEach(() => vi.unstubAllGlobals());
+const project = () =>
+  new Response('{"code":0,"data":{"code":"9876543210987654321","name":"Alpha"}}');
 describe("listJobs", () => {
   it("preserves long codes, pages definitions and authenticates with token", async () => {
     const fetch = vi
       .fn()
+      .mockResolvedValueOnce(project())
       .mockResolvedValueOnce(
         new Response(
           '{"code":0,"msg":"success","data":{"totalList":[{"code":1234567890123456789,"name":"daily","releaseState":"ONLINE"}],"currentPage":1,"totalPage":2}}',
@@ -38,17 +41,19 @@ describe("listJobs", () => {
       {
         externalId: "9876543210987654321/1234567890123456789",
         name: "daily",
+        group: "Alpha",
         enabled: true,
         url: `${baseUrl}/ui/projects/9876543210987654321/workflow/definitions/1234567890123456789`,
       },
       {
         externalId: "9876543210987654321/2",
         name: "daily",
+        group: "Alpha",
         enabled: false,
         url: `${baseUrl}/ui/projects/9876543210987654321/workflow/definitions/2`,
       },
     ]);
-    expect(fetch.mock.calls).toEqual(
+    expect(fetch.mock.calls.slice(1)).toEqual(
       [1, 2].map((pageNo) => [
         `${projectPath}/process-definition?pageNo=${pageNo}&pageSize=100`,
         { headers: { token: "secret" }, signal: expect.any(AbortSignal) },
@@ -82,7 +87,13 @@ describe("listRuns", () => {
     ["WAIT_TO_RUN", "waiting"],
     ["DELAY_EXECUTION", "waiting"],
   ])("maps %s to %s", async (state, status) => {
-    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(page([{ ...instance, state }])));
+    vi.stubGlobal(
+      "fetch",
+      vi
+        .fn()
+        .mockResolvedValueOnce(project())
+        .mockResolvedValue(page([{ ...instance, state }])),
+    );
     expect(await plugin.listRuns(config, { since: null, limit: 50 })).toEqual([
       {
         externalId: "1",
@@ -99,6 +110,7 @@ describe("listRuns", () => {
   it("formats since in UTC, pages, sorts and limits unsorted instances", async () => {
     const fetch = vi
       .fn()
+      .mockResolvedValueOnce(project())
       .mockResolvedValueOnce(page([{ ...instance, id: 1, startTime: null, endTime: "" }], 1, 3))
       .mockResolvedValueOnce(
         page(
@@ -117,8 +129,8 @@ describe("listRuns", () => {
     });
     expect(runs.map((run) => run.externalId)).toEqual(["2", "3"]);
     expect(runs[0]?.startedAt).toEqual(new Date("2026-10-14T03:00:00Z"));
-    expect(fetch).toHaveBeenCalledTimes(2);
-    for (const [index, call] of fetch.mock.calls.entries()) {
+    expect(fetch).toHaveBeenCalledTimes(3);
+    for (const [index, call] of fetch.mock.calls.slice(1).entries()) {
       const url = new URL(call[0]);
       expect(url.pathname).toBe("/dolphinscheduler/projects/9876543210987654321/process-instances");
       expect(url.searchParams.get("pageNo")).toBe(String(index + 1));
@@ -131,6 +143,7 @@ describe("listRuns", () => {
     vi.setSystemTime(new Date("2026-10-15T12:00:00Z"));
     const fetch = vi
       .fn()
+      .mockResolvedValueOnce(project())
       .mockResolvedValue(
         new Response(
           '{"code":0,"msg":"success","data":{"totalList":[{"id":1,"processDefinitionCode":1234567890123456789,"state":"WAIT_TO_RUN","commandType":null,"startTime":null,"endTime":""}],"currentPage":1,"totalPage":1}}',
@@ -144,7 +157,7 @@ describe("listRuns", () => {
       startedAt: null,
       finishedAt: null,
     });
-    expect(new URL(fetch.mock.calls[0]?.[0]).searchParams.get("startDate")).toBe(
+    expect(new URL(fetch.mock.calls[1]?.[0]).searchParams.get("startDate")).toBe(
       "2026-10-08 12:00:00",
     );
     vi.useRealTimers();
