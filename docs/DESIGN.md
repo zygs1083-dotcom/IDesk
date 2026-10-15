@@ -529,10 +529,10 @@ completedAt: <ISO>
 ### 12.18 中英双语（W43）
 
 - 语言只有 zh、en 两种。前端存 `localStorage` 的 `idesk.lang`；没有时按 `navigator.language` 以 `zh` 开头选 zh，否则 en。切换入口：主前端侧栏底部「EN / 中」文字按钮，办公室顶栏同样式像素按钮；切换即时生效，不刷新。
-- 不引 i18n 库。`apps/web/src/i18n/zh.ts`、`en.ts` 两张同键字典（`Record<Key, string>`，en 用 zh 的键类型约束，缺键编译不过），`t(key, params?)` 用 `{name}` 占位替换，`useLang()` 一个 context。办公室复制同一套机制到 `apps/office/src/i18n/`，不跨 app import。
+- 不引 i18n 库。`apps/web/src/i18n/zh.ts`、`en.ts` 两张同键字典（`Record<Key, string>`，en 用 zh 的键类型约束，缺键编译不过；字典是数据文件，不受 200 行限制），`t(key, params?)` 用 `{name}` 占位替换，`useLang()` 一个 context。办公室复制同一套机制到 `apps/office/src/i18n/`，不跨 app import。
 - `packages/shared` 里的中文标签（`TASK_STATUS_LABEL`、`TASK_PRIORITY_LABEL`、`RELAY_KIND_LABEL`、`ACTION_LABEL`）改成 `labels(lang)` 返回对应语言的一组；API 的 MCP 工具描述固定用 zh。
 - 相对时间、cron 人话、耗时、日期分组全部按语言输出；英文用 `Intl.RelativeTimeFormat` / `Intl.DateTimeFormat("en")`。
-- API 错误信息：`HttpError` 和 `TransitionError` 改为带 `key` 与 `params`，中英文文案表放 `packages/shared/src/messages.ts`，API 按请求的 `Accept-Language`（以 `en` 开头用 en，其他 zh）渲染 `message`；前端 `request()` 按当前语言发 `Accept-Language`。Zod 校验信息保持中文（zod 的 locale 是全局的，不按请求切）。
+- API 错误信息：`HttpError` 和 `TransitionError` 改为带 `key` 与 `params`，中英文文案表放 `packages/shared/src/messages.ts`，API 按请求的 `Accept-Language`（以 `en` 开头用 en，其他 zh）渲染 `message`；前端 `request()` 按当前语言发 `Accept-Language`。Zod 校验信息保持中文（zod 的 locale 是全局的，不按请求切）。插件 configSchema 的字段标题：`meta({ title, titleEn })`，`GET /plugins` 按 `Accept-Language` 把 `title` 换成对应语言后再输出 JSON Schema（这条属于 W43c）。插件写进 `run.error` 的文案和用户自己的数据（任务标题、连接器名）不翻译。
 
 ### 12.19 作业的项目/分组（W45）
 
