@@ -1,9 +1,13 @@
 import { playSound } from "../engine/sound.ts";
 import type { Cards } from "../stage/card.ts";
+import { WALK_SPEED } from "../stage/character.ts";
 import { confetti, envelope } from "../stage/effects.ts";
 import type { Cast } from "./cast.ts";
 import type { OfficeEvent, Task } from "./events.ts";
 import { type Intent, intentions } from "./intents.ts";
+
+const ALERT_MS = 800;
+const RUN_MULTIPLIER = 1.3;
 
 type ActionEvent = OfficeEvent & { task: Task | undefined; previous: Task | undefined };
 
@@ -22,25 +26,37 @@ export function createActions(cast: Cast, cards: Cards) {
   const flights = new Map<string, Promise<void>>();
   const taskAction = (task: Task, id: string, action: () => Promise<void>) => {
     const previous = flights.get(task.id);
-    const next = queue.enqueue(id, async () => {
+    const next = cast.enqueue(id, async () => {
       await previous;
       await action();
     });
     flights.set(task.id, next);
   };
   const team = (task: Task) => task.recruit?.joined ?? [];
+  const alert = async (id: string) => {
+    characters.get(id)?.bubble.show("!", ALERT_MS);
+    await new Promise((resolve) => setTimeout(resolve, ALERT_MS));
+  };
   const perform: { [K in Intent["kind"]]: (intent: Extract<Intent, { kind: K }>) => void } = {
     create: (intent) => {
       const { task } = intent;
       const from = task.publisherId === "human" ? cast.desk("human") : undefined;
       flights.set(task.id, cards.toBoard(task, from, true));
     },
+    assigned: (intent) => {
+      void cast.enqueue(intent.agentId, () => alert(intent.agentId));
+    },
     claim: (intent) => {
       const { agentId, task } = intent;
       taskAction(task, agentId, async () => {
         const board = scene.waypoints.find((point) => point.id === "board");
         if (!board) return;
-        await cast.walk(agentId, { ...board, via: board.id, facing: "up" });
+        await alert(agentId);
+        await cast.walk(
+          agentId,
+          { ...board, via: board.id, facing: "up" },
+          WALK_SPEED * RUN_MULTIPLIER,
+        );
         const character = characters.get(agentId);
         if (!character) return;
         await cards.fly(task, { x: character.x + 20, y: character.y - 48 });
@@ -51,7 +67,7 @@ export function createActions(cast: Cast, cards: Cards) {
       });
     },
     report: (intent) => {
-      void queue.enqueue(intent.agentId, () =>
+      void cast.enqueue(intent.agentId, () =>
         characters.get(intent.agentId)?.bubble.show(intent.message, 4000),
       );
     },
@@ -95,13 +111,13 @@ export function createActions(cast: Cast, cards: Cards) {
       const index = [...cast.present].indexOf(agentId) % scene.lounge.spots.length;
       const spot = scene.lounge.spots[index];
       if (spot)
-        void queue.enqueue(agentId, async () => {
+        void cast.enqueue(agentId, async () => {
           await cast.walk(agentId, spot);
           characters.get(agentId)?.setState("coffee");
         });
     },
     resume: (intent) => {
-      void queue.enqueue(intent.agentId, () => home(intent.agentId, "typing"));
+      void cast.enqueue(intent.agentId, () => home(intent.agentId, "typing"));
     },
     return: (intent) => {
       taskAction(intent.task, intent.agentId, async () => {
@@ -114,7 +130,7 @@ export function createActions(cast: Cast, cards: Cards) {
       const task = intent.task;
       const previous = flights.get(task.id);
       const arrivals = team(task).map((id, index) =>
-        queue.enqueue(id, async () => {
+        cast.enqueue(id, async () => {
           await previous;
           const seat = scene.meeting.seats[index];
           if (!seat) return;
@@ -128,14 +144,14 @@ export function createActions(cast: Cast, cards: Cards) {
       );
     },
     disband: (intent) => {
-      for (const id of team(intent.task)) void queue.enqueue(id, () => home(id, "idle"));
+      for (const id of team(intent.task)) void cast.enqueue(id, () => home(id, "idle"));
     },
     cancel: (intent) => {
       void (flights.get(intent.task.id) ?? Promise.resolve()).then(() =>
         cards.remove(intent.task.id),
       );
       const id = intent.task.assigneeId;
-      if (id) void queue.enqueue(id, () => home(id, "idle"));
+      if (id) void cast.enqueue(id, () => home(id, "idle"));
     },
     relay: (intent) => {
       const { agentId, to } = intent;
@@ -145,7 +161,7 @@ export function createActions(cast: Cast, cards: Cards) {
           : to.kind === "capability"
             ? [...cast.present].filter((id) => cast.agents.get(id)?.capabilities.includes(to.value))
             : [];
-      void queue.enqueue(agentId, async () => {
+      void cast.enqueue(agentId, async () => {
         const from = characters.get(agentId)?.position ?? scene.frontDesk.human;
         if (to.kind === "broadcast") {
           await envelope(stage, from, scene.bulletin);
@@ -155,7 +171,7 @@ export function createActions(cast: Cast, cards: Cards) {
             recipients.map(async (id) => {
               await envelope(stage, from, cast.desk(id));
               playSound("envelope");
-              void queue.enqueue(id, async () => {
+              void cast.enqueue(id, async () => {
                 const character = characters.get(id);
                 if (!character) return;
                 const facing = character.facing;

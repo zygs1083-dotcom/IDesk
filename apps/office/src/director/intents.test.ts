@@ -93,3 +93,10 @@ test.each([
 test("unknown event types are ignored", () => {
   expect(plan("agent.registered")).toBeUndefined();
 });
+
+test("assignment alerts the assignee rather than the assigning actor", () => {
+  const current = { ...task, assigneeId: "b", status: "assigned" as const };
+  expect(plan("task.assign", {}, current, "human")).toEqual([
+    { kind: "assigned", task: current, agentId: "b" },
+  ]);
+});

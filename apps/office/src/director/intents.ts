@@ -1,7 +1,7 @@
 import type { RelayRecipient } from "@idesk/shared/relay";
 import type { OfficeEvent, Task } from "./events.ts";
 
-type OwnedKind = "claim" | "complete" | "pause" | "resume" | "return";
+type OwnedKind = "assigned" | "claim" | "complete" | "pause" | "resume" | "return";
 type TeamKind = "meeting" | "disband" | "cancel";
 export type Intent =
   | { kind: "create"; task: Task }
@@ -25,6 +25,8 @@ const finish = (snapshot: Snapshot): Intent[] => [
 
 export const intentions: Record<string, (snapshot: Snapshot) => Intent[]> = {
   "task.created": ({ task }) => (task ? [{ kind: "create", task }] : []),
+  "task.assign": ({ task }) =>
+    task?.assigneeId ? [{ kind: "assigned", task, agentId: task.assigneeId }] : [],
   "task.claim": (snapshot) => owned("claim", snapshot),
   "task.accept": (snapshot) => owned("claim", snapshot),
   "task.join": (snapshot) =>
