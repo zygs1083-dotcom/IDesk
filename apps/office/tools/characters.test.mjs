@@ -42,24 +42,25 @@ describe("v1 character atlas", () => {
     });
   }
 
-  it("anchors back-facing seated frames at cushion height and all others at ground level", () => {
-    const backFrames = kinds
-      .filter((kind) => kind !== "receptionist")
-      .flatMap((kind) => [`${kind}/sit/back`, `${kind}/typing/back/0`, `${kind}/typing/back/1`]);
-    for (const [name, frame] of Object.entries(atlas.frames)) {
-      expect(frame.anchor, name).toEqual({
-        x: 0.5,
-        y: backFrames.includes(name) ? 116 / 96 : 1,
-      });
+  it("draws seated bottoms at the measured lift above their world seat coordinates", () => {
+    const layout = JSON.parse(readFileSync(new URL("../assets/layout.json", import.meta.url)));
+    for (const seat of layout.seats) {
+      const kind = seat.id === layout.reception.seat ? "receptionist" : "codex";
+      const facing = seat.facing === "left" ? "right" : seat.facing;
+      const lift = facing === "back" ? 32 : facing === "down" ? -7 : 0;
+      for (const pose of [`sit/${facing}`, `typing/${facing}/0`, `typing/${facing}/1`]) {
+        const frame = atlas.frames[`${kind}/${pose}`];
+        const bottomY = seat.y + (1 - frame.anchor.y) * frame.sourceSize.h;
+        expect(bottomY, `${seat.id} ${pose}`).toBeCloseTo(seat.y - lift);
+      }
     }
-  });
-
-  it("draws back-facing seated bottoms 20px above the unchanged seat position", () => {
-    const seatY = 400;
     for (const [name, frame] of Object.entries(atlas.frames)) {
-      if (!name.includes("/back")) continue;
-      const bottomY = seatY + (1 - frame.anchor.y) * frame.sourceSize.h;
-      expect(bottomY, name).toBeCloseTo(seatY - 20);
+      const lift = name.includes("/back")
+        ? 32
+        : /^receptionist\/(sit\/down|typing\/down\/[01])$/.test(name)
+          ? -7
+          : 0;
+      expect(frame.anchor, name).toEqual({ x: 0.5, y: (96 + lift) / 96 });
     }
   });
 

@@ -159,19 +159,30 @@ Use case: identity-preserve. Reference image is original custom pixel worker atl
 Uniformly make ALL six custom seated figures smaller by15percent inside same cells. Keep full figures IDENTICAL proportions and poses, just more magenta space. Current opaque height350px at1774wide should be300px, head184px should be157px. Target1122wide figure190px head100px. Preserve burgundy sweater white collar khaki pants brown shoes brown hair pixel art same three-quarter front lower right/back upper right. 4columns2rows final2empty magenta. No props shadows text lines.
 ```
 
-## 第三版帧锚点（W72）
+## 第三版帧锚点（W73c）
 
-back 帧底边 = 臀，比落地点高一个坐垫高度（办公椅 20px），由 W73 合成图确定。front 帧底边是落在地板上的脚；座位坐标始终取椅子落地点中心，排序也用它，抬升归于帧姿势。以 96px 帧高归一化，anchor.y = (帧高 + 抬升)/帧高，抬升 20px 表示精灵底边在落地点上方 20px，因此 back 的 anchor.y 为 `(96 + 20) / 96 = 1.2083333333333333`。Pixi 将帧上的 anchor 点放在 position 上，精灵顶边是 `座位 y - anchor.y × 96`，底边是 `座位 y - 20`；图片像素不变。
+所有帧高 96px，锚点统一为 `anchor.y = (96 + lift) / 96`。lift 有符号：正数上抬，负数下移。精灵世界坐标底边是 `座位 y − lift`；座位落地点与 sortY 不变，PNG 像素不变。
 
-| 适用角色 | 帧 | anchor.x | anchor.y |
-| --- | --- | ---: | ---: |
-| claude-code、codex、n8n、script、custom | `sit/back`、`typing/back/0`、`typing/back/1` | 0.5 | 1.2083333333333333 |
-| 全部角色 | 其余帧 | 0.5 | 1 |
+| 适用角色 | 帧 | lift | anchor.x | anchor.y |
+| --- | --- | ---: | ---: | ---: |
+| claude-code、codex、n8n、script、custom | `sit/back`、`typing/back/0`、`typing/back/1` | 32 | 0.5 | 128/96 |
+| receptionist | `sit/down`、`typing/down/0`、`typing/down/1` | −7 | 0.5 | 89/96 |
+| 全部角色 | `sit/right`、`typing/right/0`、`typing/right/1` | 0 | 0.5 | 1 |
+| 全部角色 | 其余帧 | 0 | 0.5 | 1 |
 
-`tools/characters.mjs` 的同一张锚点表生成每帧的 `anchor`。侧坐 `sit/right`、`typing/right/*` 和礼仪 `sit/down`、`typing/down/*` 暂用默认值，等 W73c 合成图量完后更新此表。
+back 按肩膀量，不按被椅背挡住的臀量。工作区 1 四人坐满，以 codex back 帧外侧肩膀上沿 local y57 为标记，椅背对应上沿为世界 y325：
 
-W73 对比图（均为 3 倍最近邻）：
+| lift | 肩膀世界 y（392 − 96 − lift + 57） | 露出椅背 |
+| ---: | ---: | ---: |
+| 20 | 333 | −8px，肩膀被盖住 |
+| 24 | 329 | −4px，肩膀被盖住 |
+| 28 | 325 | 0px，肩线贴住椅背 |
+| 32 | 321 | 4px，符合 4–6px |
 
-- [底边对齐落地点的标注图](https://raw.githubusercontent.com/zygs1083-dotcom/IDesk/pr-assets/w72/zone-1-ground-annotated%403x.png)：back 帧底边代表臀，按落地点画会低一个坐垫高度。
-- [back 抬高 20px 的标注图](https://raw.githubusercontent.com/zygs1083-dotcom/IDesk/pr-assets/w72/zone-1-lift20-annotated%403x.png)：与上图比较，办公椅坐垫高度取 20px。
-- [front/back 坐姿合成图](https://raw.githubusercontent.com/zygs1083-dotcom/IDesk/pr-assets/w72/zone-1-seated%403x.png)：对照脸朝前帧的落地脚与背对观众帧的臀，front 保持默认锚点。
+负责人审图通过 32px。四档比较图为 `pr-assets/w73c/back-lift{20,24,28,32}@3x.png`：青线是肩膀上沿，紫线是椅背上沿；图中数值均为原背景像素，图片最近邻放大三倍。
+
+礼仪按双手落在台面后沿量。前台座位 (162,637) 不变；原 down 帧手下沿在世界 y615，柜台台面后沿 y623，默认锚点使手悬在台面上方。lift = −7 把手下沿放到 y622，贴住台面后沿；柜台覆盖膝盖和腿，椅背在身后。静坐与两张 typing 帧逐张核对，打字高帧的手仍在后沿上方做小幅动作。负责人审图接受有符号的 −7px，而非移动座位。
+
+侧坐只用于右侧沙发的一个中央座位 (1594,608)，面向左，取 `sit/right` 并水平镜像。可见坐垫中心约 (1594,588)，人物臀/大腿在世界 y588–598，脚底在 y608；不抬升。两张 typing/right 帧同样检查臀/大腿接触坐垫，保留 lift = 0。后排双人沙发用 front 帧。会议室按原画前后各三把椅子，分别用 front/back，不造桌端侧座。
+
+`tools/characters.mjs` 是唯一锚点表，生成图集 JSON；`tools/characters.test.mjs` 按真实座位与三个坐姿帧分别断言世界底边 = 座位 y − lift。重跑生成器时 `characters.png` 的哈希保持不变。
