@@ -4,11 +4,9 @@ import { z } from "zod";
 import type { Translate } from "../i18n/translate.ts";
 import { request } from "../lib/api.ts";
 import { onRealtimeEvent } from "../lib/realtime.ts";
-import type { Scene } from "../scene/scene.ts";
 import { Cards } from "../stage/card.ts";
 import { createDaylight } from "../stage/daylight.ts";
-import type { Stage } from "../stage/stage.ts";
-import { sprites } from "../stage/textures.ts";
+import type { Stage } from "../world/stage.ts";
 import { createActions } from "./actions.ts";
 import { Cast } from "./cast.ts";
 import { eventPull } from "./events.ts";
@@ -18,11 +16,11 @@ import { placeSnapshot } from "./snapshot.ts";
 const PRESENCE_MS = 30_000;
 const LEASE_WARNING_MS = 120_000;
 
-export async function direct(stage: Stage, scene: Scene, t: Translate) {
+export async function direct(stage: Stage, t: Translate) {
   const initialEvents = z.array(eventSchema).parse(await request("/events"));
-  const initialized = await initialize(stage, scene, t);
+  const initialized = await initialize(stage, t);
   if (!initialized) return;
-  const { cast, snapshot, actions, daylight, tasks, cards } = initialized;
+  const { cast, snapshot, actions, tasks, cards } = initialized;
   placeSnapshot(cast, cards, tasks);
   const syncIdle = startIdle(cast, snapshot, t);
   const warned = new Set<string>();
@@ -86,22 +84,19 @@ export async function direct(stage: Stage, scene: Scene, t: Translate) {
     unsubscribe();
   });
   await pull();
-  return daylight;
 }
 
-export async function initialize(stage: Stage, scene: Scene, t: Translate) {
-  const [atlas, agents, tasks] = await Promise.all([
-    sprites,
+export async function initialize(stage: Stage, t: Translate) {
+  const [agents, tasks] = await Promise.all([
     request("/agents").then((data) => z.array(publicAgentSchema).parse(data)),
     request("/tasks").then((data) => z.array(taskSchema).parse(data)),
   ]);
   if (stage.world.destroyed) return;
-  atlas.textureSource.scaleMode = "nearest";
-  const cast = new Cast(stage, scene, atlas.textures, t("reception.name"));
-  const daylight = createDaylight(stage, cast.characters);
+  const cast = new Cast(stage, stage.assets.sprites, t("reception.name"));
+  createDaylight(stage, cast.characters);
   cast.update(agents, true);
-  const cards = new Cards(stage, scene);
+  const cards = new Cards(stage);
   const snapshot = new Map(tasks.map((task) => [task.id, task]));
   const actions = createActions(cast, cards);
-  return { cast, cards, snapshot, actions, daylight, tasks };
+  return { cast, cards, snapshot, actions, tasks };
 }

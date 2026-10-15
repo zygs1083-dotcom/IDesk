@@ -1,4 +1,4 @@
-import type { Point } from "../scene/scene.ts";
+import type { Point } from "../world/path.ts";
 
 export const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
 

@@ -1,8 +1,11 @@
 import { Container, Graphics, Text } from "pixi.js";
 import type { Task } from "../director/events.ts";
 import { tween } from "../engine/tween.ts";
-import type { Point, Scene } from "../scene/scene.ts";
-import type { Stage } from "./stage.ts";
+import { TILE } from "../world/catalog.ts";
+import type { Point } from "../world/path.ts";
+import { zIndexOf } from "../world/sort.ts";
+import type { Stage } from "../world/stage.ts";
+import { boardLayout } from "./board-layout.ts";
 
 export class TaskCard extends Container {
   constructor(task: Task) {
@@ -39,15 +42,20 @@ export class Cards {
     style: { fontFamily: "Fusion Pixel", fontSize: 12, fill: 0x302a2a },
   });
 
-  constructor(
-    private stage: Stage,
-    private scene: Scene,
-  ) {
-    this.overflow.position.set(
-      scene.taskBoard.x + scene.taskBoard.width - 32,
-      scene.taskBoard.y + scene.taskBoard.height - 22,
-    );
-    stage.world.addChild(this.overflow);
+  private area;
+
+  constructor(private stage: Stage) {
+    const object = stage.layout.objects.find((object) => object.item === "whiteboard");
+    if (!object) throw new Error("Missing whiteboard");
+    const item = stage.catalog.items[object.item];
+    const part = item?.parts[0];
+    if (!part || !item?.textArea) throw new Error("Missing board textArea");
+    this.area = {
+      ...item.textArea,
+      x: object.x * TILE + part.dx + item.textArea.x,
+      y: object.y * TILE + part.dy + item.textArea.y,
+    };
+    stage.board.addChild(this.overflow);
   }
 
   get(task: Task) {
@@ -55,7 +63,7 @@ export class Cards {
     if (!card) {
       card = new TaskCard(task);
       this.cards.set(task.id, card);
-      this.stage.world.addChild(card);
+      this.stage.effects.addChild(card);
     }
     return card;
   }
@@ -69,19 +77,23 @@ export class Cards {
     const card = this.get(task);
     character.addChild(card);
     card.visible = true;
+    card.scale.set(1);
     card.position.set(20, -48);
   }
 
   private ground(card: TaskCard) {
     const point = this.position(card);
-    this.stage.world.addChild(card);
+    this.stage.effects.addChild(card);
     card.position.copyFrom(point);
   }
 
-  place(task: Task, point: Point) {
+  place(task: Task, point: Point & { sortY: number }) {
     this.detach(task.id);
     const card = this.get(task);
     this.ground(card);
+    this.stage.objects.addChild(card);
+    card.zIndex = zIndexOf(point.sortY, 1);
+    card.scale.set(1);
     card.visible = true;
     card.position.copyFrom(point);
   }
@@ -92,22 +104,26 @@ export class Cards {
   }
 
   private layout() {
-    const { x, y, width, height } = this.scene.taskBoard;
-    const columns = Math.floor(width / 42);
-    const rows = Math.floor(height / 30);
-    const capacity = columns * rows - 1;
+    const { x, y, w, h } = this.area;
+    const arrangement = boardLayout(w, h, this.board.size);
     [...this.board].forEach((id, index) => {
       const card = this.cards.get(id);
       if (!card) return;
-      card.visible = index < capacity;
-      card.position.set(x + 22 + (index % columns) * 42, y + 16 + Math.floor(index / columns) * 30);
+      const point = arrangement.point(index);
+      card.visible = index < arrangement.visible;
+      card.position.set(x + point.x, y + point.y);
     });
-    this.overflow.text = this.board.size > capacity ? `+${this.board.size - capacity}` : "";
+    this.overflow.text = arrangement.overflow ? `+${arrangement.overflow}` : "";
+    this.overflow.position.set(
+      x + arrangement.overflowPoint.x - 8,
+      y + arrangement.overflowPoint.y - 5,
+    );
   }
 
   pin(task: Task) {
     const card = this.get(task);
-    this.ground(card);
+    this.stage.board.addChild(card);
+    card.scale.set(0.5);
     this.board.add(task.id);
     this.layout();
     return card;
@@ -118,6 +134,7 @@ export class Cards {
     const card = this.get(task);
     this.ground(card);
     card.visible = true;
+    card.scale.set(1);
     const ms = Math.min(600, Math.hypot(card.x - point.x, card.y - point.y) * 2);
     await tween(this.stage.app.ticker, card.position, point, ms);
   }
@@ -132,8 +149,8 @@ export class Cards {
       this.pin(task);
     }
     if (bounce && visible) {
-      await tween(this.stage.app.ticker, card.scale, { x: 1.15, y: 1.15 }, 120);
-      await tween(this.stage.app.ticker, card.scale, { x: 1, y: 1 }, 120);
+      await tween(this.stage.app.ticker, card.scale, { x: 0.6, y: 0.6 }, 120);
+      await tween(this.stage.app.ticker, card.scale, { x: 0.5, y: 0.5 }, 120);
     }
   }
 

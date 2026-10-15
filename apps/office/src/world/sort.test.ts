@@ -3,18 +3,23 @@ import rawCatalog from "../../public/catalog.json";
 import rawLayout from "../../public/layout.json";
 import { catalogSchema, type Furniture, TILE } from "./catalog.ts";
 import { parseLayout } from "./layout.ts";
+import { deskFor } from "./places.ts";
 import { seats } from "./seats.ts";
-import { sortDrawables } from "./sort.ts";
+import { zIndexOf } from "./sort.ts";
 
 const catalog = catalogSchema.parse(rawCatalog);
 const layout = parseLayout(rawLayout, catalog);
 test("sort by contact line, then bias", () => {
   const keys = [
-    { sortY: 8, bias: 9 },
-    { sortY: 4, bias: 2 },
-    { sortY: 4, bias: 0 },
+    { sortY: 8, bias: 1 as const },
+    { sortY: 4, bias: 1 as const },
+    { sortY: 4, bias: 0 as const },
   ];
-  expect(sortDrawables(keys)).toEqual([keys[2], keys[1], keys[0]]);
+  expect([...keys].sort((a, b) => zIndexOf(a.sortY, a.bias) - zIndexOf(b.sortY, b.bias))).toEqual([
+    keys[2],
+    keys[1],
+    keys[0],
+  ]);
   expect(keys[0]?.sortY).toBe(8);
 });
 for (const seat of seats(layout, catalog)) {
@@ -23,13 +28,15 @@ for (const seat of seats(layout, catalog)) {
     expect(object).toBeDefined();
     if (!object) return;
     const chair = catalog.items[object.item] as Furniture;
-    const person = { id: "person", sortY: seat.y, bias: 0 };
+    const person = { id: "person", sortY: seat.y, bias: 0 as const };
     const parts = chair.parts.map((part) => ({
       id: part.frame,
       sortY: object.y * TILE + part.sortY,
       bias: part.bias,
     }));
-    const ordered = sortDrawables([...parts, person]).map((part) => part.id);
+    const ordered = [...parts, person]
+      .sort((a, b) => zIndexOf(a.sortY, a.bias) - zIndexOf(b.sortY, b.bias))
+      .map((part) => part.id);
     expect(ordered.findIndex((id) => id.endsWith("behind"))).toBeLessThan(
       ordered.indexOf("person"),
     );
@@ -38,30 +45,13 @@ for (const seat of seats(layout, catalog)) {
     );
     expect(seat.x).toBe(object.x * TILE + (chair.seat?.x ?? 0));
     if (object.item === "sofa") return;
-    const desk = layout.objects.find((candidate) => {
-      const item = catalog.items[candidate.item] as Furniture;
-      return (
-        (item.workSpot || candidate.item === "counter") &&
-        (seat.facing === "left" || seat.facing === "right"
-          ? (seat.facing === "left"
-              ? candidate.x + item.footprint.w === object.x
-              : object.x + chair.footprint.w === candidate.x) &&
-            object.y >= candidate.y &&
-            object.y < candidate.y + item.footprint.h
-          : (seat.facing === "down"
-              ? candidate.y === object.y + chair.footprint.h
-              : candidate.y + item.footprint.h === object.y) &&
-            Math.floor(seat.x / TILE) >= candidate.x &&
-            Math.floor(seat.x / TILE) < candidate.x + item.footprint.w)
-      );
-    });
+    const desk = deskFor(seat, layout, catalog);
     expect(desk).toBeDefined();
     if (!desk) return;
-    const item = catalog.items[desk.item] as Furniture;
-    for (const part of item.parts) {
-      const deskY = desk.y * TILE + part.sortY;
-      if (seat.facing !== "up") expect(deskY).toBeGreaterThan(person.sortY);
-      else expect(deskY).toBeLessThan(person.sortY);
-    }
+    const deskIndex = zIndexOf(desk.sortY, 0);
+    const personIndex = zIndexOf(person.sortY, 0);
+    if (seat.facing === "up") expect(deskIndex).toBeLessThan(personIndex);
+    else expect(deskIndex).toBeGreaterThan(personIndex);
+    expect(zIndexOf(desk.sortY, 1)).toBeGreaterThan(deskIndex);
   });
 }

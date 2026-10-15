@@ -3,14 +3,13 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { expect, test, vi } from "vitest";
 
-test("office metadata, optional hosting, SPA fallback and runtime scene override", async () => {
+test("office metadata, optional hosting, SPA fallback and runtime layout override", async () => {
   const directory = mkdtempSync(join(tmpdir(), "idesk-office-"));
   const dist = join(directory, "dist");
   const data = join(directory, "data");
   mkdirSync(dist);
   mkdirSync(join(data, "office"), { recursive: true });
   writeFileSync(join(dist, "index.html"), "office canvas");
-  writeFileSync(join(dist, "scene.json"), '{"hostZones":{}}');
   writeFileSync(join(dist, "asset.js"), "office asset");
   vi.stubEnv("IDESK_OFFICE_DIST", undefined);
   vi.stubEnv("IDESK_WEB_DIST", dist);
@@ -34,11 +33,7 @@ test("office metadata, optional hosting, SPA fallback and runtime scene override
   expect(await (await enabled.request("/office/")).text()).toBe("office canvas");
   expect(await (await enabled.request("/office/room")).text()).toBe("office canvas");
   expect(await (await enabled.request("/office/asset.js")).text()).toBe("office asset");
-  expect(await (await enabled.request("/office/scene.json")).json()).toEqual({ hostZones: {} });
-  writeFileSync(join(data, "office", "scene.json"), '{"hostZones":{"test":2}}');
-  expect(await (await enabled.request("/office/scene.json")).json()).toEqual({
-    hostZones: { test: 2 },
-  });
+  expect(await (await enabled.request("/office/scene.json")).text()).toBe("office canvas");
   writeFileSync(join(dist, "layout.json"), '{"source":"dist"}');
   const layout = await enabled.request("/office/layout.json");
   expect(await layout.json()).toEqual({ source: "dist" });

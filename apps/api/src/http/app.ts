@@ -86,11 +86,6 @@ export const injectWebSocket = registerWebSocket(app);
 
 if (config.IDESK_OFFICE_DIST !== undefined) {
   const dist = config.IDESK_OFFICE_DIST;
-  app.get("/office/scene.json", (c) => {
-    const override = join(config.IDESK_DATA_DIR, "office", "scene.json");
-    const path = existsSync(override) ? override : join(dist, "scene.json");
-    return c.body(readFileSync(path, "utf8"), 200, { "Content-Type": "application/json" });
-  });
   app.get("/office/layout.json", (c) => {
     const override = join(config.IDESK_DATA_DIR, "office", "layout.json");
     const path = existsSync(override) ? override : join(dist, "layout.json");

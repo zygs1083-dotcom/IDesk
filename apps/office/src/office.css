@@ -135,11 +135,6 @@ a:focus-visible {
   background: var(--office-paper);
   border: 2px solid var(--office-ink);
 }
-.editor-export {
-  position: absolute;
-  top: 32px;
-  right: 160px;
-}
 @media (max-width: 1099px) {
   .top-bar {
     flex-wrap: wrap;

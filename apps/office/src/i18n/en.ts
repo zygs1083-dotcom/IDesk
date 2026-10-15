@@ -127,5 +127,4 @@ export const en: Record<Key, string> = {
   "replay.pause": "Pause",
   "replay.play": "Play",
   "replay.time": "Replay time",
-  "editor.export": "Export JSON",
 };

@@ -14,7 +14,7 @@ const directions = ["down", "left", "right", "up"];
 const root = fileURLToPath(new URL("../", import.meta.url));
 const frameWidth = 64;
 const frameHeight = 96;
-const atlas = new PNG({ width: frameWidth * 31, height: frameHeight * kinds.length });
+const atlas = new PNG({ width: frameWidth * 25, height: frameHeight * kinds.length });
 const frames = {};
 const cleanup = [];
 const animations = {};
@@ -32,16 +32,8 @@ for (const [kindIndex, kind] of kinds.entries()) {
     `${kind}/typing/${direction}/1`,
   ];
   const original = PNG.sync.read(readFileSync(`${root}assets/raw/${kind}.png`));
-  const supplement = PNG.sync.read(readFileSync(`${root}assets/raw/${kind}-seated.png`));
-  const supplementDirections = kind === "receptionist" ? ["upright"] : ["front", "back"];
   const cells = [
     ...spriteCells(original, 5, [...walking, ...seated("right")], kind),
-    ...spriteCells(
-      supplement,
-      supplementDirections.length,
-      supplementDirections.flatMap(seated),
-      kind,
-    ),
     ...spriteCells(
       PNG.sync.read(readFileSync(`${root}assets/raw/${kind}-seated-front.png`)),
       2,
@@ -123,7 +115,7 @@ for (const [kindIndex, kind] of kinds.entries()) {
     const name = `${kind}/walk/${direction}`;
     animations[name] = [0, 1, 2, 3].map((frame) => `${name}/${frame}`);
   }
-  for (const direction of ["right", ...supplementDirections, "down", "up"]) {
+  for (const direction of ["right", "down", "up"]) {
     const name = `${kind}/typing/${direction}`;
     animations[name] = [0, 1].map((frame) => `${name}/${frame}`);
   }

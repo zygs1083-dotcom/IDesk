@@ -3,11 +3,6 @@ import { direct } from "./director/director.ts";
 import { type ReplayControls, replay } from "./director/replay.ts";
 import { setTimeScale } from "./engine/tween.ts";
 import { useLang } from "./i18n/lang.tsx";
-import { type Scene, sceneSchema } from "./scene/scene.ts";
-import { assignSeats, assignStanding } from "./scene/seats.ts";
-import { createEditor } from "./stage/editor.ts";
-import { createStage } from "./stage/stage.ts";
-import { PixelButton } from "./ui/pixel-button.tsx";
 import { ProfileModal } from "./ui/profile-modal.tsx";
 import { ReceptionProfile } from "./ui/reception-profile.tsx";
 import { ReplayBar } from "./ui/replay-bar.tsx";
@@ -16,14 +11,17 @@ import { RosterItem } from "./ui/roster-item.tsx";
 import { TaskPanel } from "./ui/task-panel.tsx";
 import { TopBar } from "./ui/top-bar.tsx";
 import { useOfficeData } from "./ui/use-office-data.ts";
+import { loadWorldAssets } from "./world/assets.ts";
+import { type Catalog, loadCatalog } from "./world/catalog.ts";
+import { type Layout, loadLayout } from "./world/layout.ts";
+import { assignSeats, assignStanding } from "./world/places.ts";
+import { createStage } from "./world/stage.ts";
 
 export function App() {
   const { t } = useLang();
   const stageText = useRef(t);
   stageText.current = t;
   const host = useRef<HTMLDivElement>(null);
-  const editor = useRef<ReturnType<typeof createEditor>>(null);
-  const [editing, setEditing] = useState(false);
   const [error, setError] = useState("");
   const [mode, setMode] = useState<{ mode: "live" } | { mode: "replay"; at: number }>({
     mode: "live",
@@ -52,7 +50,8 @@ export function App() {
     setPlaying(true);
     setMode({ mode: "replay", at: controls.current.start });
   };
-  const [scene, setScene] = useState<Scene>();
+  const [world, setWorld] = useState<{ layout: Layout; catalog: Catalog }>();
+  const layout = world?.layout;
   const [selection, setSelection] = useState<{ type: "agent" | "task"; id: string }>();
   const closePanel = useCallback(() => setSelection(undefined), []);
   const selectAgent = (id: string) => setSelection({ type: "agent", id });
@@ -67,32 +66,26 @@ export function App() {
     let observer: ResizeObserver;
     let stage: Awaited<ReturnType<typeof createStage>>;
     const start = async () => {
-      const response = await fetch("/office/scene.json");
-      if (!response.ok) throw new Error(stageText.current("office.loadFailed"));
-      const scene = sceneSchema.parse(await response.json());
+      const catalog = await loadCatalog();
+      const layout = await loadLayout(catalog);
+      const assets = await loadWorldAssets();
       const element = host.current;
       if (!element || disposed) return;
-      setScene(scene);
+      setWorld({ layout, catalog });
       await document.fonts.load('12px "Fusion Pixel"');
       if (disposed) return;
-      stage = await createStage(element);
+      stage = await createStage(element, layout, catalog, assets);
       if (disposed) {
         stage.world.destroy({ children: true });
         stage.app.destroy(true, { children: true });
         return;
       }
-      stage.app.resizeTo = element;
       observer = new ResizeObserver(() => stage.app.resize());
       observer.observe(element);
       setTimeScale(1);
-      const daylight = await (mode.mode === "live"
-        ? direct(stage, scene, stageText.current)
-        : replay(stage, scene, mode.at, controls.current, stageText.current));
-      if (disposed) return;
-      editor.current = createEditor(stage, scene, (active) => {
-        setEditing(active);
-        daylight?.setEditing(active);
-      });
+      await (mode.mode === "live"
+        ? direct(stage, stageText.current)
+        : replay(stage, mode.at, controls.current, stageText.current));
     };
     void start().catch((reason: Error) => {
       if (!disposed) setError(reason.message);
@@ -100,14 +93,12 @@ export function App() {
     return () => {
       disposed = true;
       observer?.disconnect();
-      editor.current?.destroy();
-      editor.current = null;
       stage?.world.destroy({ children: true });
       stage?.app.destroy(true, { children: true });
     };
   }, [mode]);
-  const seats = scene ? assignSeats(agents, scene) : new Map();
-  const standing = scene ? assignStanding(agents, seats, scene) : new Map();
+  const seats = world ? assignSeats(agents, world.layout, world.catalog) : new Map();
+  const standing = layout ? assignStanding(agents, seats, layout) : new Map();
   const agent =
     selection?.type === "agent" ? agents.find((item) => item.id === selection.id) : undefined;
   const task =
@@ -115,7 +106,7 @@ export function App() {
   return (
     <main className="office-frame" aria-label={t("office.label")}>
       <TopBar
-        title={scene?.title ?? t("office.title")}
+        title={layout?.title ?? t("office.title")}
         agents={agents}
         tasks={tasks}
         replaying={mode.mode === "replay"}
@@ -123,14 +114,16 @@ export function App() {
       />
       <section className="pixel-panel avatar-strip" aria-label={t("roster.duty")}>
         <h2>{t("roster.duty")}</h2>
-        {agents.map((item) => (
-          <RosterItem key={item.id} agent={item} tasks={tasks} onSelect={selectAgent} />
-        ))}
+        {agents
+          .filter((item) => seats.has(item.id) || standing.has(item.id))
+          .map((item) => (
+            <RosterItem key={item.id} agent={item} tasks={tasks} onSelect={selectAgent} />
+          ))}
       </section>
       <div className={`office-body${task ? " has-detail" : ""}`}>
-        {scene && (
+        {layout && (
           <Roster
-            zones={scene.zones.slice(0, 2)}
+            zones={layout.zones.slice(0, 2)}
             agents={agents}
             tasks={tasks}
             seats={seats}
@@ -140,10 +133,10 @@ export function App() {
         <div className="stage-host" ref={host} />
         {task ? (
           <TaskPanel task={task} agents={agents} onClose={closePanel} />
-        ) : scene ? (
+        ) : layout ? (
           <Roster
             standing={standing}
-            zones={scene.zones.slice(2)}
+            zones={layout.zones.slice(2)}
             agents={agents}
             tasks={tasks}
             seats={seats}
@@ -185,13 +178,6 @@ export function App() {
         <p className="office-error" role="alert">
           {error || dataError}
         </p>
-      )}
-      {editing && (
-        <div className="editor-export">
-          <PixelButton onClick={() => void editor.current?.exportJson()}>
-            {t("editor.export")}
-          </PixelButton>
-        </div>
       )}
     </main>
   );

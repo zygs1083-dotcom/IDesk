@@ -1,15 +1,10 @@
 import type { Translate } from "../i18n/translate.ts";
 import type { Key } from "../i18n/zh.ts";
-import type { SpotId } from "../scene/scene.ts";
+import { cellCenter } from "../world/path.ts";
+import { chatSeats } from "../world/places.ts";
+import type { SpotId } from "../world/seats.ts";
 import type { Cast } from "./cast.ts";
-import {
-  chatSeats,
-  idleEligible,
-  idleSpeed,
-  idleStay,
-  pickSpots,
-  type Snapshot,
-} from "./idle-pick.ts";
+import { idleEligible, idleSpeed, idleStay, pickSpots, type Snapshot } from "./idle-pick.ts";
 
 const BUBBLE_MS = 3000;
 const LOOK_MS = 800;
@@ -73,8 +68,8 @@ export function idleMoves(
       }
     },
     async spot(id: string) {
-      for (const spot of pickSpots(cast.scene.spots, random)) {
-        await cast.walk(id, spot, idleSpeed(random));
+      for (const spot of pickSpots(cast.stage.layout.spots, random)) {
+        await cast.walk(id, cellCenter(spot), idleSpeed(random));
         if (!alive()) return;
         const duration = idleStay(random);
         cast.characters.get(id)?.bubble.show(t(spotKeys[spot.id]), duration);
@@ -100,9 +95,8 @@ export function idleMoves(
       const a = cast.seats.get(id);
       const b = cast.seats.get(other);
       if (eligible && idleEligible(cast, snapshot, id) && a && b && alive()) {
-        const via = cast.scene.waypoints.find((point) => point.id === a.via);
-        if (via) {
-          const targets = chatSeats(via);
+        const targets = chatSeats(a, cast.stage.layout, cast.stage.catalog);
+        if (targets) {
           await Promise.all([
             cast.walk(id, targets[0], idleSpeed(random)),
             cast.walk(other, targets[1], idleSpeed(random)),

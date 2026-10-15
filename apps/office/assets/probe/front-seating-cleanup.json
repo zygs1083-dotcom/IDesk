@@ -1,186 +1,188 @@
 [
   {
     "kind": "claude-code",
-    "before": 97877,
-    "after": 97619,
-    "removed": 258,
+    "before": 80917,
+    "after": 80703,
+    "removed": 214,
     "remaining": 0,
-    "loss": 0.002635961461834752,
+    "loss": 0.00264468529480826,
     "unbounded": {
-      "total": 5045,
+      "total": 4368,
       "remaining": 0,
       "rounds": {
-        "1": 4111,
-        "2": 747,
-        "3": 100,
-        "4": 32,
-        "5": 21,
-        "6": 14,
-        "7": 7,
-        "8": 5,
-        "9": 5,
-        "10": 3
+        "1": 3441,
+        "2": 759,
+        "3": 99,
+        "4": 34,
+        "5": 14,
+        "6": 9,
+        "7": 5,
+        "8": 3,
+        "9": 3,
+        "10": 1
       },
-      "valueBands": [4786, 197, 62]
+      "valueBands": [4154, 175, 39]
     },
     "fourNeighbor": {
-      "total": 244,
-      "remaining": 4,
+      "total": 196,
+      "remaining": 5,
       "rounds": {
-        "1": 237,
-        "2": 7
+        "1": 190,
+        "2": 6
       },
-      "valueBands": [0, 195, 49]
+      "valueBands": [0, 175, 21]
     },
     "twoRounds": {
-      "total": 245,
-      "remaining": 4,
+      "total": 196,
+      "remaining": 5,
       "rounds": {
-        "1": 238,
-        "2": 7
+        "1": 190,
+        "2": 6
       },
-      "valueBands": [0, 195, 50]
+      "valueBands": [0, 175, 21]
     },
     "current": {
-      "total": 258,
+      "total": 214,
       "remaining": 0,
       "rounds": {
-        "1": 238,
-        "2": 7,
-        "3": 4,
-        "4": 2,
-        "5": 2,
-        "6": 1,
-        "7": 1,
+        "1": 190,
+        "2": 6,
+        "3": 5,
+        "4": 3,
+        "5": 3,
+        "6": 2,
+        "7": 2,
         "8": 1,
         "9": 1,
         "10": 1
       },
-      "valueBands": [0, 196, 62]
+      "valueBands": [0, 175, 39]
     },
-    "interiorRepairs": 1
+    "interiorRepairs": 0
   },
   {
     "kind": "codex",
-    "before": 98357,
-    "after": 98233,
-    "removed": 124,
+    "before": 79548,
+    "after": 79447,
+    "removed": 101,
     "remaining": 0,
-    "loss": 0.001260713523185945,
+    "loss": 0.0012696736561572887,
     "unbounded": {
-      "total": 4668,
+      "total": 3910,
       "remaining": 0,
       "rounds": {
-        "1": 3909,
-        "2": 614,
-        "3": 72,
-        "4": 31,
-        "5": 17,
-        "6": 11,
-        "7": 6,
-        "8": 3,
+        "1": 3276,
+        "2": 518,
+        "3": 65,
+        "4": 28,
+        "5": 10,
+        "6": 5,
+        "7": 2,
+        "8": 1,
         "9": 1,
         "10": 1,
         "11": 1,
         "12": 1,
         "13": 1
       },
-      "valueBands": [4544, 118, 6]
+      "valueBands": [3809, 97, 4]
     },
     "fourNeighbor": {
-      "total": 122,
+      "total": 99,
       "remaining": 0,
       "rounds": {
-        "1": 122,
+        "1": 99,
         "2": 0
       },
-      "valueBands": [0, 116, 6]
+      "valueBands": [0, 95, 4]
     },
     "twoRounds": {
-      "total": 124,
+      "total": 101,
       "remaining": 0,
       "rounds": {
-        "1": 123,
+        "1": 100,
         "2": 1
       },
-      "valueBands": [0, 118, 6]
+      "valueBands": [0, 97, 4]
     },
     "current": {
-      "total": 124,
+      "total": 101,
       "remaining": 0,
       "rounds": {
-        "1": 123,
+        "1": 100,
         "2": 1
       },
-      "valueBands": [0, 118, 6]
+      "valueBands": [0, 97, 4]
     },
-    "interiorRepairs": 11
+    "interiorRepairs": 10
   },
   {
     "kind": "n8n",
-    "before": 97194,
-    "after": 96919,
-    "removed": 275,
+    "before": 80917,
+    "after": 80675,
+    "removed": 242,
     "remaining": 0,
-    "loss": 0.0028293927608700124,
+    "loss": 0.002990718884783173,
     "unbounded": {
-      "total": 2473,
+      "total": 1692,
       "remaining": 0,
       "rounds": {
-        "1": 2289,
-        "2": 161,
-        "3": 16,
-        "4": 6,
-        "5": 1
+        "1": 1611,
+        "2": 70,
+        "3": 6,
+        "4": 2,
+        "5": 1,
+        "6": 1,
+        "7": 1
       },
-      "valueBands": [2198, 257, 18]
+      "valueBands": [1450, 229, 13]
     },
     "fourNeighbor": {
-      "total": 272,
+      "total": 237,
       "remaining": 1,
       "rounds": {
-        "1": 271,
+        "1": 236,
         "2": 1
       },
-      "valueBands": [0, 255, 17]
+      "valueBands": [0, 225, 12]
     },
     "twoRounds": {
-      "total": 275,
+      "total": 242,
       "remaining": 0,
       "rounds": {
-        "1": 273,
-        "2": 2
+        "1": 239,
+        "2": 3
       },
-      "valueBands": [0, 257, 18]
+      "valueBands": [0, 229, 13]
     },
     "current": {
-      "total": 275,
+      "total": 242,
       "remaining": 0,
       "rounds": {
-        "1": 273,
-        "2": 2
+        "1": 239,
+        "2": 3
       },
-      "valueBands": [0, 257, 18]
+      "valueBands": [0, 229, 13]
     },
-    "interiorRepairs": 1
+    "interiorRepairs": 0
   },
   {
     "kind": "script",
-    "before": 102582,
-    "after": 102437,
-    "removed": 145,
+    "before": 84904,
+    "after": 84779,
+    "removed": 125,
     "remaining": 0,
-    "loss": 0.0014135033436665301,
+    "loss": 0.0014722510129086968,
     "unbounded": {
-      "total": 5324,
+      "total": 4434,
       "remaining": 0,
       "rounds": {
-        "1": 4134,
-        "2": 977,
-        "3": 105,
-        "4": 45,
-        "5": 22,
-        "6": 14,
+        "1": 3354,
+        "2": 880,
+        "3": 97,
+        "4": 42,
+        "5": 21,
+        "6": 13,
         "7": 10,
         "8": 5,
         "9": 3,
@@ -189,105 +191,106 @@
         "12": 2,
         "13": 1
       },
-      "valueBands": [5179, 135, 10]
+      "valueBands": [4309, 120, 5]
     },
     "fourNeighbor": {
-      "total": 145,
+      "total": 125,
       "remaining": 0,
       "rounds": {
-        "1": 145,
+        "1": 125,
         "2": 0
       },
-      "valueBands": [0, 135, 10]
+      "valueBands": [0, 120, 5]
     },
     "twoRounds": {
-      "total": 145,
+      "total": 125,
       "remaining": 0,
       "rounds": {
-        "1": 145,
+        "1": 125,
         "2": 0
       },
-      "valueBands": [0, 135, 10]
+      "valueBands": [0, 120, 5]
     },
     "current": {
-      "total": 145,
+      "total": 125,
       "remaining": 0,
       "rounds": {
-        "1": 145,
+        "1": 125,
         "2": 0
       },
-      "valueBands": [0, 135, 10]
+      "valueBands": [0, 120, 5]
     },
-    "interiorRepairs": 27
+    "interiorRepairs": 26
   },
   {
     "kind": "custom",
-    "before": 93653,
-    "after": 93337,
-    "removed": 316,
+    "before": 75782,
+    "after": 75553,
+    "removed": 229,
     "remaining": 0,
-    "loss": 0.0033741577952655015,
+    "loss": 0.003021825763373888,
     "unbounded": {
-      "total": 5850,
+      "total": 4715,
       "remaining": 0,
       "rounds": {
-        "1": 4527,
-        "2": 1087,
-        "3": 123,
-        "4": 52,
-        "5": 31,
-        "6": 13,
-        "7": 8,
+        "1": 3550,
+        "2": 956,
+        "3": 109,
+        "4": 42,
+        "5": 25,
+        "6": 14,
+        "7": 7,
         "8": 5,
-        "9": 3,
-        "10": 1
+        "9": 4,
+        "10": 2,
+        "11": 1
       },
-      "valueBands": [5534, 250, 66]
+      "valueBands": [4486, 221, 8]
     },
     "fourNeighbor": {
-      "total": 316,
+      "total": 229,
       "remaining": 0,
       "rounds": {
-        "1": 314,
-        "2": 2
+        "1": 229,
+        "2": 0
       },
-      "valueBands": [0, 250, 66]
+      "valueBands": [0, 221, 8]
     },
     "twoRounds": {
-      "total": 316,
+      "total": 229,
       "remaining": 0,
       "rounds": {
-        "1": 316,
+        "1": 229,
         "2": 0
       },
-      "valueBands": [0, 250, 66]
+      "valueBands": [0, 221, 8]
     },
     "current": {
-      "total": 316,
+      "total": 229,
       "remaining": 0,
       "rounds": {
-        "1": 316,
+        "1": 229,
         "2": 0
       },
-      "valueBands": [0, 250, 66]
+      "valueBands": [0, 221, 8]
     },
-    "interiorRepairs": 5
+    "interiorRepairs": 4
   },
   {
     "kind": "receptionist",
-    "before": 94705,
-    "after": 94427,
-    "removed": 278,
+    "before": 84176,
+    "after": 84016,
+    "removed": 160,
     "remaining": 0,
-    "loss": 0.0029354310754448024,
+    "loss": 0.0019007793195210036,
     "unbounded": {
-      "total": 4902,
+      "total": 4436,
       "remaining": 0,
       "rounds": {
-        "1": 4069,
-        "2": 672,
-        "3": 76,
-        "4": 39,
+        "1": 3653,
+        "2": 629,
+        "3": 71,
+        "4": 37,
         "5": 20,
         "6": 10,
         "7": 5,
@@ -297,35 +300,35 @@
         "11": 2,
         "12": 1
       },
-      "valueBands": [4623, 164, 115]
+      "valueBands": [4275, 156, 5]
     },
     "fourNeighbor": {
-      "total": 277,
+      "total": 159,
       "remaining": 0,
       "rounds": {
-        "1": 276,
-        "2": 1
+        "1": 159,
+        "2": 0
       },
-      "valueBands": [0, 162, 115]
+      "valueBands": [0, 154, 5]
     },
     "twoRounds": {
-      "total": 278,
+      "total": 160,
       "remaining": 0,
       "rounds": {
-        "1": 278,
+        "1": 160,
         "2": 0
       },
-      "valueBands": [0, 163, 115]
+      "valueBands": [0, 155, 5]
     },
     "current": {
-      "total": 278,
+      "total": 160,
       "remaining": 0,
       "rounds": {
-        "1": 278,
+        "1": 160,
         "2": 0
       },
-      "valueBands": [0, 163, 115]
+      "valueBands": [0, 155, 5]
     },
-    "interiorRepairs": 44
+    "interiorRepairs": 41
   }
 ]

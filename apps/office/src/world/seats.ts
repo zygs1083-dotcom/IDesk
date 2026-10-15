@@ -17,3 +17,9 @@ export function seats(layout: Layout, catalog: Catalog) {
       : [];
   });
 }
+
+export type Seat = ReturnType<typeof seats>[number];
+export type Direction = Seat["facing"];
+export type Target = { x: number; y: number; facing: Direction };
+export type Spot = Layout["spots"][number];
+export type SpotId = Spot["id"];

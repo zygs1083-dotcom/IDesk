@@ -1,7 +1,7 @@
 import { Graphics } from "pixi.js";
 import { reducedMotion, tween } from "../engine/tween.ts";
-import type { Point } from "../scene/scene.ts";
-import type { Stage } from "./stage.ts";
+import type { Point } from "../world/path.ts";
+import type { Stage } from "../world/stage.ts";
 
 export async function envelope(stage: Stage, from: Point, to: Point) {
   const letter = new Graphics()
@@ -13,7 +13,7 @@ export async function envelope(stage: Stage, from: Point, to: Point) {
     .lineTo(12, -8)
     .stroke({ color: 0x302a2a, width: 2 });
   letter.position.copyFrom(from);
-  stage.world.addChild(letter);
+  stage.effects.addChild(letter);
   const ms = Math.min(600, Math.hypot(from.x - to.x, from.y - to.y) * 2);
   await tween(stage.app.ticker, letter.position, to, ms);
   letter.destroy();
@@ -26,7 +26,7 @@ export async function confetti(stage: Stage, point: Point) {
     Array.from({ length: 12 }, async (_, index) => {
       const square = new Graphics().rect(-2, -2, 4, 4).fill(colors[index % colors.length]);
       square.position.set(point.x, point.y - 90);
-      stage.world.addChild(square);
+      stage.effects.addChild(square);
       const x = point.x + (index - 5.5) * 9;
       await tween(
         stage.app.ticker,

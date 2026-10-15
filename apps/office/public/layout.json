@@ -397,12 +397,6 @@
       "y": 11
     },
     {
-      "id": "meeting-glass-west-3",
-      "item": "glass-wall-v",
-      "x": 27,
-      "y": 3
-    },
-    {
       "id": "meeting-glass-west-4",
       "item": "glass-wall-v",
       "x": 27,
@@ -502,7 +496,7 @@
       "id": "meeting-glass-west-2",
       "item": "glass-wall-v",
       "x": 27,
-      "y": 2
+      "y": 3
     },
     {
       "id": "entrance-mat",
@@ -632,5 +626,54 @@
       "facing": "up"
     }
   ],
-  "hostZones": {}
+  "hostZones": {},
+  "title": "IDesk 调度中心",
+  "reception": {
+    "chair": "front-chair",
+    "counter": "front-counter"
+  },
+  "meeting": {
+    "table": "meeting-table",
+    "chairs": [
+      "meeting-north-0",
+      "meeting-north-1",
+      "meeting-south-0",
+      "meeting-south-1",
+      "meeting-west",
+      "meeting-east"
+    ]
+  },
+  "lounge": ["lounge-sofa", "lounge-sofa-2"],
+  "standing": [
+    {
+      "x": 28,
+      "y": 17,
+      "facing": "down"
+    },
+    {
+      "x": 38,
+      "y": 22,
+      "facing": "down"
+    },
+    {
+      "x": 38,
+      "y": 19,
+      "facing": "down"
+    },
+    {
+      "x": 32,
+      "y": 21,
+      "facing": "down"
+    },
+    {
+      "x": 26,
+      "y": 18,
+      "facing": "down"
+    },
+    {
+      "x": 5,
+      "y": 15,
+      "facing": "down"
+    }
+  ]
 }

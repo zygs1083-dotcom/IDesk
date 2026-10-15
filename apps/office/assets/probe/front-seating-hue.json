@@ -1,37 +1,26 @@
 [
   {
     "kind": "claude-code",
-    "participating": 97619,
-    "eligible": 63621,
-    "grey": 6684,
+    "participating": 80703,
+    "eligible": 51912,
+    "grey": 5094,
     "greyColored": 0,
     "jumped": 0,
-    "crossHue": 2,
-    "changed": 2,
-    "fallback": 2,
-    "examples": [
-      {
-        "rgb": [28, 17, 58],
-        "hue": 256.0975609756098,
-        "pixels": 1
-      },
-      {
-        "rgb": [34, 28, 60],
-        "hue": 251.25,
-        "pixels": 1
-      }
-    ]
+    "crossHue": 0,
+    "changed": 0,
+    "fallback": 0,
+    "examples": []
   },
   {
     "kind": "codex",
-    "participating": 98233,
-    "eligible": 64217,
-    "grey": 5705,
+    "participating": 79447,
+    "eligible": 52464,
+    "grey": 3796,
     "greyColored": 0,
     "jumped": 0,
-    "crossHue": 24,
-    "changed": 7,
-    "fallback": 24,
+    "crossHue": 21,
+    "changed": 6,
+    "fallback": 21,
     "examples": [
       {
         "rgb": [35, 31, 56],
@@ -64,8 +53,8 @@
         "pixels": 1
       },
       {
-        "rgb": [38, 33, 58],
-        "hue": 252,
+        "rgb": [40, 34, 67],
+        "hue": 250.90909090909088,
         "pixels": 1
       },
       {
@@ -79,17 +68,17 @@
         "pixels": 1
       },
       {
-        "rgb": [34, 29, 56],
-        "hue": 251.1111111111111,
+        "rgb": [48, 38, 70],
+        "hue": 258.75,
         "pixels": 1
       }
     ]
   },
   {
     "kind": "n8n",
-    "participating": 96919,
-    "eligible": 64145,
-    "grey": 9718,
+    "participating": 80675,
+    "eligible": 53478,
+    "grey": 8181,
     "greyColored": 0,
     "jumped": 0,
     "crossHue": 0,
@@ -99,9 +88,9 @@
   },
   {
     "kind": "script",
-    "participating": 102437,
-    "eligible": 77115,
-    "grey": 521,
+    "participating": 84779,
+    "eligible": 63661,
+    "grey": 446,
     "greyColored": 0,
     "jumped": 0,
     "crossHue": 13,
@@ -162,9 +151,9 @@
   },
   {
     "kind": "custom",
-    "participating": 93337,
-    "eligible": 67951,
-    "grey": 1441,
+    "participating": 75553,
+    "eligible": 54491,
+    "grey": 1189,
     "greyColored": 0,
     "jumped": 0,
     "crossHue": 0,
@@ -174,9 +163,9 @@
   },
   {
     "kind": "receptionist",
-    "participating": 94427,
-    "eligible": 70265,
-    "grey": 2913,
+    "participating": 84016,
+    "eligible": 62645,
+    "grey": 2527,
     "greyColored": 0,
     "jumped": 0,
     "crossHue": 2,

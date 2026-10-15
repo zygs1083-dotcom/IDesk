@@ -3,89 +3,109 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import { resolve } from "node:path";
 import { PNG } from "pngjs";
-import { removeCharacterFringe } from "./character-edges.mjs";
-import { repairCharacterInterior } from "./character-interior.mjs";
-import { palette, quantize } from "./furniture.mjs";
+import { mirror } from "./furniture.mjs";
 import { crop, paste, readJson, readPng, resize } from "./furniture-image.mjs";
-import { people } from "./probe.mjs";
 
 process.env.PLAYWRIGHT_BROWSERS_PATH ??= "/data/cache/ms-playwright";
 const { chromium } = createRequire("/data/tools/playwright/package.json")("playwright");
 const url = new URL(process.argv[2]);
-url.searchParams.set("world", "1");
-url.searchParams.set("fill", "1");
+url.searchParams.set("check", "1");
+url.searchParams.set("hour", "12");
 const output = resolve(process.argv[3] ?? "office-check");
 mkdirSync(output, { recursive: true });
 const suffix = process.argv[4] ? `-${process.argv[4]}` : "";
 const save = (name, png) => writeFileSync(`${output}/${name}${suffix}.png`, PNG.sync.write(png));
 const browser = await chromium.launch({ headless: true });
-const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
 const errors = [];
-page.on("pageerror", (error) => errors.push(error.message));
-await page.goto(url.href);
-await page.locator('canvas[data-ready="true"]').waitFor();
-await page.screenshot({ path: `${output}/panorama-1440x900${suffix}.png` });
-const layout = await page.evaluate(async () => (await fetch("/office/layout.json")).json());
-const catalog = await page.evaluate(async () => (await fetch("/office/catalog.json")).json());
-const width = layout.size.w * 32;
-const height = layout.size.h * 32;
-await page.setViewportSize({ width, height });
-await page.waitForFunction(() => {
-  const canvas = document.querySelector("canvas");
-  return canvas.width === window.innerWidth && canvas.height === window.innerHeight;
-});
-await page.evaluate(
-  () => new Promise((done) => requestAnimationFrame(() => requestAnimationFrame(done))),
-);
-const panorama = PNG.sync.read(
-  await page.screenshot({ path: `${output}/panorama-1x${suffix}.png` }),
-);
-const groups = layout.zones.map((zone) => ({
-  id: zone.id,
-  ids: [...zone.desks, ...zone.chairs, zone.plaque],
-}));
-groups.push(
-  { id: "reception", ids: ["front-chair", "front-counter", "front-bell", "done-tray"] },
-  {
-    id: "meeting",
-    ids: layout.objects.filter((o) => o.id.startsWith("meeting-")).map((o) => o.id),
-  },
-  {
-    id: "lounge",
-    ids: ["lounge-sofa", "lounge-table", "coffee-machine", "lounge-plant", "aisle-plant-1"],
-  },
-  { id: "entrance", ids: ["entrance", "entrance-mat"] },
-  { id: "printer", ids: ["printer"] },
-  { id: "bookshelf", ids: ["bookshelf"] },
-  {
-    id: "north-wall",
-    ids: layout.objects.filter((o) => catalog.items[o.item].layer === "wall").map((o) => o.id),
-  },
-);
-for (const group of groups) {
-  const objects = layout.objects.filter((object) => group.ids.includes(object.id));
-  const x = Math.max(0, Math.min(...objects.map((o) => o.x)) * 32 - 32);
-  const y = Math.max(0, Math.min(...objects.map((o) => o.y)) * 32 - 96);
-  const right = Math.min(
-    width,
-    Math.max(...objects.map((o) => o.x + catalog.items[o.item].footprint.w)) * 32 + 32,
+let catalog;
+let groups;
+try {
+  const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+  page.on("pageerror", (error) => errors.push(error.message));
+  await page.goto(url.href);
+  await page.locator('canvas[data-ready="true"]').waitFor();
+  await page.screenshot({ path: `${output}/panorama-1440x900${suffix}.png` });
+  const layout = await page.evaluate(async () => (await fetch("/office/layout.json")).json());
+  catalog = await page.evaluate(async () => (await fetch("/office/catalog.json")).json());
+  const width = layout.size.w * 32;
+  const height = layout.size.h * 32;
+  await page.setViewportSize({ width, height });
+  await page.waitForFunction(() => {
+    const canvas = document.querySelector("canvas");
+    return canvas.width === window.innerWidth && canvas.height === window.innerHeight;
+  });
+  await page.evaluate(
+    () => new Promise((done) => requestAnimationFrame(() => requestAnimationFrame(done))),
   );
-  const bottom = Math.min(
-    height,
-    Math.max(...objects.map((o) => o.y + catalog.items[o.item].footprint.h)) * 32 + 32,
+  const panorama = PNG.sync.read(
+    await page.screenshot({ path: `${output}/panorama-1x${suffix}.png` }),
   );
-  const image = crop(panorama, { x, y, w: right - x, h: bottom - y });
-  save(`${group.id}@3x`, resize(image, image.width * 3, image.height * 3));
+  groups = layout.zones.map((zone) => ({
+    id: zone.id,
+    ids: [...zone.desks, ...zone.chairs, zone.plaque],
+  }));
+  const near = (point, radius) =>
+    layout.objects
+      .filter((o) => Math.hypot(o.x - point.x, o.y - point.y) <= radius)
+      .map((o) => o.id);
+  const reception = layout.objects.find((o) => o.id === layout.reception.counter);
+  const lounge = layout.objects.filter((o) => layout.lounge.includes(o.id));
+  const coffee = layout.spots.find((spot) => spot.id === "coffee");
+  groups.push(
+    { id: "reception", ids: near(reception, 4) },
+    { id: "meeting", ids: [layout.meeting.table, ...layout.meeting.chairs] },
+    {
+      id: "lounge",
+      ids: [
+        ...layout.lounge,
+        ...near(coffee, 6).filter(
+          (id) => layout.objects.find((o) => o.id === id).y >= Math.min(...lounge.map((o) => o.y)),
+        ),
+      ],
+    },
+    { id: "entrance", ids: near(layout.points.door, 2) },
+    {
+      id: "north-wall",
+      ids: layout.objects.filter((o) => catalog.items[o.item].layer === "wall").map((o) => o.id),
+    },
+  );
+
+  for (const group of groups) {
+    const objects = layout.objects.filter((object) => group.ids.includes(object.id));
+    const x = Math.max(0, Math.min(...objects.map((o) => o.x)) * 32 - 32);
+    const y = Math.max(0, Math.min(...objects.map((o) => o.y)) * 32 - 96);
+    const right = Math.min(
+      width,
+      Math.max(...objects.map((o) => o.x + catalog.items[o.item].footprint.w)) * 32 + 32,
+    );
+    const bottom = Math.min(
+      height,
+      Math.max(...objects.map((o) => o.y + catalog.items[o.item].footprint.h)) * 32 + 32,
+    );
+    const image = crop(panorama, { x, y, w: right - x, h: bottom - y });
+    save(`${group.id}@3x`, resize(image, image.width * 3, image.height * 3));
+  }
+  for (const [name, hour] of [
+    ["dusk", 7],
+    ["night", 22],
+  ]) {
+    url.searchParams.set("hour", String(hour));
+    await page.goto(url.href);
+    await page.locator('canvas[data-ready="true"]').waitFor();
+    await page.screenshot({ path: `${output}/panorama-${name}${suffix}.png` });
+  }
+} finally {
+  await browser.close();
 }
-await browser.close();
 assert.deepEqual(errors, []);
 const furniture = readPng("public/furniture.png");
 const frames = readJson("public/furniture.json").frames;
-const characters = people();
-for (const png of Object.values(characters)) {
-  removeCharacterFringe(png);
-  repairCharacterInterior(png, palette());
-  quantize(png, palette(), undefined, true);
+const atlas = readPng("public/sprites.png");
+const spriteFrames = readJson("public/sprites.json").frames;
+const characters = {};
+for (const facing of ["down", "up", "right", "left"]) {
+  const png = crop(atlas, spriteFrames[`codex/sit/${facing === "left" ? "right" : facing}`].frame);
+  characters[`sit/${facing}`] = facing === "left" ? mirror(png) : png;
 }
 const comparison = new PNG({ width: 384, height: 128 });
 for (let p = 0; p < comparison.data.length; p += 4) comparison.data.set([246, 233, 206, 255], p);
@@ -106,6 +126,6 @@ for (const [i, facing] of ["left", "left", "right", "right", "down", "up"].entri
     paste(comparison, part.png, part.x, part.y);
 }
 save("side-chairs@3x", resize(comparison, 1152, 384));
-console.log(
-  `Office check: ${groups.length + 3} screenshots; browser errors ${errors.length}; ${output}`,
+process.stdout.write(
+  `Office check: ${groups.length + 5} screenshots; browser errors ${errors.length}; ${output}\n`,
 );

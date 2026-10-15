@@ -16,22 +16,14 @@ export async function loadWorldAssets() {
     fetch(officeUrl("furniture.json")),
     Assets.load(officeUrl("sprites.json")),
   ]);
-  const tiles =
-    tilesResponse.ok && tilesResponse.headers.get("content-type")?.includes("json")
-      ? tileSchema.parse(await tilesResponse.json())
-      : undefined;
-  const furniture =
-    furnitureResponse.ok && furnitureResponse.headers.get("content-type")?.includes("json")
-      ? furnitureSchema.parse(await furnitureResponse.json())
-      : undefined;
+  const tiles = tileSchema.parse(await tilesResponse.json());
+  const furniture = furnitureSchema.parse(await furnitureResponse.json());
   const textures: Record<string, Texture> = {};
   for (const [name, data] of [
     ["tiles", tiles],
     ["furniture", furniture],
   ] as const) {
-    if (!data) continue;
     const response = await fetch(officeUrl(`${name}.png`));
-    if (!response.ok || !response.headers.get("content-type")?.startsWith("image/")) continue;
     const bitmap = await createImageBitmap(await response.blob());
     const source = Texture.from(bitmap).source;
     source.scaleMode = "nearest";
@@ -42,7 +34,7 @@ export async function loadWorldAssets() {
   }
   return {
     textures,
-    codes: tiles?.codes ?? {},
+    codes: tiles.codes,
     sprites: sprites.textures as Record<string, Texture>,
   };
 }

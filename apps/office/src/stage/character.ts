@@ -1,10 +1,12 @@
 import { ColorMatrixFilter, Container, Graphics, Sprite, Text, type Texture } from "pixi.js";
 import { reducedMotion, tween } from "../engine/tween.ts";
-import type { Direction, Point } from "../scene/scene.ts";
+import type { Point } from "../world/path.ts";
+import { type Direction, seats } from "../world/seats.ts";
+import { zIndexOf } from "../world/sort.ts";
+import type { Stage } from "../world/stage.ts";
 import { Bubble } from "./bubble.ts";
 import { hueOffset } from "./hue.ts";
 import { characterPose } from "./pose.ts";
-import type { Stage } from "./stage.ts";
 import type { OfficeAgent } from "./textures.ts";
 
 export const WALK_SPEED = 140;
@@ -14,8 +16,6 @@ export type CharacterState = "idle" | "walk" | "sit" | "typing" | "talk" | "coff
 export class Character extends Container {
   state: CharacterState = "idle";
   facing: Direction = "down";
-  mirrored = false;
-  upright = false;
   private sprite: Sprite;
   private cup = new Graphics()
     .rect(12, -42, 10, 9)
@@ -24,7 +24,6 @@ export class Character extends Container {
     .rect(22, -40, 4, 5)
     .stroke({ color: 0x302a2a, width: 2 });
   readonly bubble = new Bubble();
-  private fallback: Texture;
   private elapsed = 0;
   private nodTimers = new Map<ReturnType<typeof setTimeout>, () => void>();
   private nodVersion = 0;
@@ -38,7 +37,6 @@ export class Character extends Container {
     super();
     const fallback = frames[`${agent.kind}/walk/down/0`];
     if (!fallback) throw new Error(`Missing sprite frames for ${agent.kind}`);
-    this.fallback = fallback;
     this.sprite = new Sprite(fallback);
     const tint = new ColorMatrixFilter();
     if (agent.kind !== "receptionist") tint.hue(hueOffset(agent.id), false);
@@ -71,14 +69,15 @@ export class Character extends Container {
     this.on("pointerout", () => {
       label.visible = false;
     });
-    this.bubble.y = -104;
+    stage.effects.addChild(this.bubble);
     this.cup.visible = false;
-    this.addChild(this.sprite, this.cup, label, this.bubble);
+    this.addChild(this.sprite, this.cup, label);
     stage.app.ticker.add(this.animate, undefined, -1);
     this.on("destroyed", () => {
       stage.app.ticker.remove(this.animate);
       this.stopNod();
       tint.destroy();
+      this.bubble.destroy({ children: true });
     });
   }
 
@@ -88,13 +87,24 @@ export class Character extends Container {
     this.visible = state !== "away";
     this.cup.visible = state === "coffee";
     if (state === "talk") this.bubble.show("…", Number.POSITIVE_INFINITY);
+    this.animate();
   }
 
   private animate = () => {
-    this.zIndex = this.y;
+    this.zIndex = zIndexOf(this.y, 0);
+    this.bubble.position.set(this.x, this.y - 104);
     if (!reducedMotion.matches) this.elapsed += this.stage.app.ticker.deltaMS;
-    const pose = characterPose(this.state, this.facing, this.elapsed, this.mirrored, this.upright);
-    this.sprite.texture = this.frames[`${this.agent.kind}/${pose.frame}`] ?? this.fallback;
+    const state =
+      this.state === "coffee" &&
+      seats(this.stage.layout, this.stage.catalog).some(
+        (seat) => seat.x === this.x && seat.y === this.y,
+      )
+        ? "sit"
+        : this.state;
+    const pose = characterPose(state, this.facing, this.elapsed);
+    const frame = this.frames[`${this.agent.kind}/${pose.frame}`];
+    if (!frame) throw new Error(`Missing frame: ${this.agent.kind}/${pose.frame}`);
+    this.sprite.texture = frame;
     this.sprite.scale.set((pose.mirror ? -1 : 1) * this.bounce.x, this.bounce.y);
   };
 

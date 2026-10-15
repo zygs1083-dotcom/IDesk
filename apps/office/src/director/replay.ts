@@ -3,8 +3,7 @@ import { z } from "zod";
 import { setTimeScale } from "../engine/tween.ts";
 import type { Translate } from "../i18n/translate.ts";
 import { request } from "../lib/api.ts";
-import type { Scene } from "../scene/scene.ts";
-import type { Stage } from "../stage/stage.ts";
+import type { Stage } from "../world/stage.ts";
 import { initialize } from "./director.ts";
 import type { OfficeEvent } from "./events.ts";
 import { ulidAt } from "./replay-time.ts";
@@ -17,17 +16,11 @@ export type ReplayControls = {
   update: (at: number, ended: boolean) => void;
 };
 
-export async function replay(
-  stage: Stage,
-  scene: Scene,
-  at: number,
-  controls: ReplayControls,
-  t: Translate,
-) {
-  const initialized = await initialize(stage, scene, t);
+export async function replay(stage: Stage, at: number, controls: ReplayControls, t: Translate) {
+  const initialized = await initialize(stage, t);
   if (!initialized) return;
-  const { cast, cards, snapshot, actions, daylight, tasks } = initialized;
-  for (const id of cast.present) cast.settle(id, "idle");
+  const { cast, cards, snapshot, actions, tasks } = initialized;
+  for (const id of cast.present) cast.settle(id, "sit");
   for (const task of tasks) if (task.status === "open") cards.pin(task);
   const events: OfficeEvent[] = [];
   let since = ulidAt(controls.start);
@@ -81,5 +74,4 @@ export async function replay(
     stage.app.ticker.remove(tick);
     setTimeScale(1);
   });
-  return daylight;
 }
