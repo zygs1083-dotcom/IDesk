@@ -71,6 +71,7 @@ async function deliver(ctx: PluginContext, agent: Agent, event: Event): Promise<
         method: "POST",
         headers: { "Content-Type": "application/json", "X-IDesk-Signature": `sha256=${signature}` },
         body,
+        signal: AbortSignal.timeout(30_000),
       });
       await response.body?.cancel();
       if (response.ok) return;

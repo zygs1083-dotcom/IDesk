@@ -226,6 +226,7 @@ export const en: Record<Key, string> = {
   "settings.editConnector": "Edit connector",
   "settings.healthy": "Healthy",
   "settings.lastPolled": "Last polled",
+  "settings.mcpDescription": "Streamable HTTP, header Authorization: Bearer <key>",
   "settings.mcpUrl": "MCP URL",
   "settings.navigation": "Settings navigation",
   "settings.noConnectorPlugins": "No enabled connector plugins",
@@ -237,13 +238,29 @@ export const en: Record<Key, string> = {
   "settings.reloaded": "Reloaded {name}",
   "settings.restUrl": "REST base URL",
   "settings.selectOption": "Select an option",
-  "settings.signatureHint":
-    "Use the SHA-256 hex digest of the agent key as the HMAC key over the raw request body",
   "settings.syncProgress": "Syncing {done}/{total}",
   "settings.syncing": "Syncing",
   "settings.testConnection": "Test connection",
   "settings.testing": "Testing…",
-  "settings.webhookSignature": "Webhook signature",
+  "settings.webhookBody": "Request body",
+  "settings.webhookBodyDescription":
+    "The body is the full event record as JSON, with the same fields as {endpoint}: {fields}.",
+  "settings.webhookDeduplication": "Deduplication",
+  "settings.webhookDeduplicationDescription":
+    "Deduplicate by event {id} and make processing idempotent.",
+  "settings.webhookEvents": "Events delivered",
+  "settings.webhookEventsDescription":
+    "Delivery is triggered by a new task matching capabilities ({created}), assignment ({assign}), handoff ({handoff}), or a relay message received ({relay}).",
+  "settings.webhookHeartbeat": "Heartbeat",
+  "settings.webhookHeartbeatDescription":
+    "Receivers that only accept pushes must call {endpoint} with their key every 60 seconds, or appear offline after 2 minutes.",
+  "settings.webhookReceiver": "Webhook receiver",
+  "settings.webhookRetry": "Retries",
+  "settings.webhookRetryDescription":
+    "2xx means success; other statuses, timeouts (30 seconds), or network errors trigger three retries after 1, 5, and 30 seconds. Continued failure records a {event} event.",
+  "settings.webhookSignature": "Signature",
+  "settings.webhookSignatureDescription":
+    "The header is {header}, where {formula} and body is the raw request body.",
   "time.days": "{days} d",
   "time.daysHours": "{days} d {hours} h",
   "time.hours": "{hours} h",
