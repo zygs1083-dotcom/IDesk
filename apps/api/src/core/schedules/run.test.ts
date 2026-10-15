@@ -49,7 +49,7 @@ test("publish_task creates a human task and records execution and the next run",
   expect(updated?.lastStatus).toBe("success");
   expect(updated?.lastRunAt).toBeInstanceOf(Date);
   expect(updated?.nextRunAt?.getTime()).toBeGreaterThan(Date.now());
-  expect(fired(row.id)).toEqual({ scheduleId: row.id, status: "success" });
+  expect(fired(row.id)).toEqual({ scheduleId: row.id, name: row.name, status: "success" });
 });
 
 test("http forwards method, headers and body and records HTTP and network failures", async () => {
@@ -81,6 +81,7 @@ test("http forwards method, headers and body and records HTTP and network failur
     expect(fired(row.id)).toMatchObject({ status: "success" });
     expect(db.select().from(events).all().at(-1)?.payload).toEqual({
       scheduleId: row.id,
+      name: row.name,
       status: "failed",
       error: "HTTP 500",
     });

@@ -102,7 +102,7 @@ test("vanished jobs cascade their runs and count deletion without touching anoth
   ).toHaveLength(2);
   expect(
     db.select().from(events).where(eq(events.type, "connector.polled")).all().at(-1)?.payload,
-  ).toEqual({ connectorId: connector.id, changed: 1 });
+  ).toEqual({ connectorId: connector.id, name: connector.name, changed: 1 });
 });
 
 test("an empty successful job listing removes every job and its runs", async () => {
@@ -113,7 +113,7 @@ test("an empty successful job listing removes every job and its runs", async () 
   expect(db.select().from(automationRuns).all()).toHaveLength(0);
   expect(
     db.select().from(events).where(eq(events.type, "connector.polled")).all().at(-1)?.payload,
-  ).toEqual({ connectorId: connector.id, changed: 2 });
+  ).toEqual({ connectorId: connector.id, name: connector.name, changed: 2 });
 });
 
 test("listJobs errors retain all mirrored jobs and runs", async () => {

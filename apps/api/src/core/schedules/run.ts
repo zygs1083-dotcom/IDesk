@@ -64,6 +64,6 @@ export async function runSchedule(id: string): Promise<Schedule | undefined> {
     .where(eq(schedules.id, id))
     .returning()
     .get();
-  emitEvent({ type: "schedule.fired", payload: { scheduleId: id, ...result } });
+  emitEvent({ type: "schedule.fired", payload: { scheduleId: id, name: row.name, ...result } });
   return updated;
 }

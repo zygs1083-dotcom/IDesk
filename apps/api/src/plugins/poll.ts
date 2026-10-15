@@ -127,7 +127,10 @@ export async function pollConnector(
     return count;
   });
   if (changed > 0)
-    emitEvent({ type: "connector.polled", payload: { connectorId: connector.id, changed } });
+    emitEvent({
+      type: "connector.polled",
+      payload: { connectorId: connector.id, name: connector.name, changed },
+    });
 }
 
 export async function pollDueConnectors(now: Date): Promise<void> {
