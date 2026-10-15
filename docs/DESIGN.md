@@ -539,3 +539,7 @@ completedAt: <ISO>
 - `automation_jobs` 加 `group` 列（text，可空），迁移 `0004`。`ExternalJob` 随之多出 `group`。
 - DolphinScheduler：`name` 只写工作流名，`group` 写项目名；单项目模式下用 `GET /projects/{code}` 取一次项目名。GitHub Actions：`group` 为 `owner/repo`。n8n：null。
 - `GET /automation/runs` 每条多带 `jobGroup`。界面见 UI.md 自动化页。
+
+### 12.20 办公室事件文案（W46）
+
+办公室详情面板的「最近事件」和主前端活动页同一套规则（§12.17），不显示原始类型名。文案走办公室自己的字典（zh / en 各一份，键 `event.*`），`eventText(event, t, agentName)` 放 `apps/office/src/ui/event-text.ts`，不跨 app import 主前端的实现。
