@@ -1,5 +1,5 @@
+import type { Translate } from "../i18n/translate.ts";
 import type { Agent, Task } from "./use-office-data.ts";
-
 export function statusText(agent: Agent, tasks: Task[], t: Translate): string {
   if (agent.status === "offline") return t("status.offline");
   const owned = tasks.filter(
@@ -14,5 +14,3 @@ export function statusText(agent: Agent, tasks: Task[], t: Translate): string {
   if (assigned) return t("status.assigned", { title: title(assigned.title) });
   return t("status.idle");
 }
-
-import type { Translate } from "../i18n/translate.ts";

@@ -1,3 +1,4 @@
+import { currentLang } from "../i18n/lang.tsx";
 export async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const headers = new Headers(init?.headers);
   headers.set("Content-Type", "application/json");
@@ -15,5 +16,3 @@ export async function request<T>(path: string, init?: RequestInit): Promise<T> {
   if (response.status === 204) return undefined as T;
   return response.json();
 }
-
-import { currentLang } from "../i18n/lang.tsx";
