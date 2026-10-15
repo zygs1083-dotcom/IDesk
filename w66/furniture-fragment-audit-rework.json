@@ -1,0 +1,178 @@
+[
+  {
+    "name": "desk-monitor",
+    "components": 1,
+    "separated": []
+  },
+  {
+    "name": "desk-laptop",
+    "components": 1,
+    "separated": []
+  },
+  {
+    "name": "counter",
+    "components": 1,
+    "separated": []
+  },
+  {
+    "name": "bookshelf",
+    "components": 1,
+    "separated": []
+  },
+  {
+    "name": "chair-down-behind",
+    "components": 1,
+    "separated": []
+  },
+  {
+    "name": "chair-down-front",
+    "components": 2,
+    "separated": [
+      {
+        "x": 47,
+        "y": 13,
+        "w": 9,
+        "h": 15,
+        "pixels": 104
+      }
+    ]
+  },
+  {
+    "name": "chair-up-behind",
+    "components": 1,
+    "separated": []
+  },
+  {
+    "name": "chair-up-front",
+    "components": 1,
+    "separated": []
+  },
+  {
+    "name": "chair-left-behind",
+    "components": 1,
+    "separated": []
+  },
+  {
+    "name": "chair-left-front",
+    "components": 1,
+    "separated": []
+  },
+  {
+    "name": "chair-right-behind",
+    "components": 1,
+    "separated": []
+  },
+  {
+    "name": "chair-right-front",
+    "components": 1,
+    "separated": []
+  },
+  {
+    "name": "plant",
+    "components": 1,
+    "separated": []
+  },
+  {
+    "name": "plaque",
+    "components": 1,
+    "separated": []
+  },
+  {
+    "name": "meeting-table",
+    "components": 1,
+    "separated": []
+  },
+  {
+    "name": "glass-wall",
+    "components": 1,
+    "separated": []
+  },
+  {
+    "name": "glass-wall-v",
+    "components": 1,
+    "separated": []
+  },
+  {
+    "name": "sofa-behind",
+    "components": 1,
+    "separated": []
+  },
+  {
+    "name": "sofa-front",
+    "components": 2,
+    "separated": [
+      {
+        "x": 80,
+        "y": 22,
+        "w": 16,
+        "h": 34,
+        "pixels": 434
+      }
+    ]
+  },
+  {
+    "name": "coffee-machine",
+    "components": 1,
+    "separated": []
+  },
+  {
+    "name": "printer",
+    "components": 1,
+    "separated": []
+  },
+  {
+    "name": "plant-tall",
+    "components": 1,
+    "separated": []
+  },
+  {
+    "name": "whiteboard",
+    "components": 1,
+    "separated": []
+  },
+  {
+    "name": "clock",
+    "components": 1,
+    "separated": []
+  },
+  {
+    "name": "bulletin",
+    "components": 1,
+    "separated": []
+  },
+  {
+    "name": "file-tray",
+    "components": 1,
+    "separated": []
+  },
+  {
+    "name": "bell",
+    "components": 1,
+    "separated": []
+  },
+  {
+    "name": "door",
+    "components": 1,
+    "separated": []
+  },
+  {
+    "name": "plaque-stand",
+    "components": 1,
+    "separated": []
+  },
+  {
+    "name": "cabinet",
+    "components": 1,
+    "separated": []
+  },
+  {
+    "name": "coffee-table",
+    "components": 1,
+    "separated": []
+  },
+  {
+    "name": "doormat",
+    "components": 1,
+    "separated": []
+  }
+]
