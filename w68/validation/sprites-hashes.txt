@@ -1,0 +1,7 @@
+Run 1:
+540302bdcf4e3b2f77e1f148b36402c876aee16007fbb4b7be32b2807d0a8de5  sprites.png
+f90489370b589f2a950e3b2539e8ccadd2525e482b922d4ae65bc3ce21a292ef  sprites.json
+Run 2:
+540302bdcf4e3b2f77e1f148b36402c876aee16007fbb4b7be32b2807d0a8de5  sprites.png
+f90489370b589f2a950e3b2539e8ccadd2525e482b922d4ae65bc3ce21a292ef  sprites.json
+角色 150 帧；调色板外颜色数 0；半透明像素 0；RGB误差均值 19.357；P95 40.902

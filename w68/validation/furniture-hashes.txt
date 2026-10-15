@@ -1,0 +1,2 @@
+b45f68c7a9cc542a2577f57e5979b38912e76f36f76586af0720f5bb13318b45  apps/office/public/furniture.png
+b45f68c7a9cc542a2577f57e5979b38912e76f36f76586af0720f5bb13318b45  apps/office/public/furniture.png

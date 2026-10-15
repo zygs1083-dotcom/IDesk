@@ -1,0 +1,2 @@
+$ node tools/furniture.mjs
+家具 32 帧；调色板外颜色数 0；半透明像素 0；每材质不超过 3 色
