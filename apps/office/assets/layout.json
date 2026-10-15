@@ -1401,7 +1401,7 @@
     {
       "id": "lounge-back-left",
       "x": 1480,
-      "y": 538,
+      "y": 544,
       "facing": "front",
       "workSpot": {
         "x": 1484,
@@ -1411,7 +1411,7 @@
     {
       "id": "lounge-back-right",
       "x": 1540,
-      "y": 538,
+      "y": 544,
       "facing": "front",
       "workSpot": {
         "x": 1520,

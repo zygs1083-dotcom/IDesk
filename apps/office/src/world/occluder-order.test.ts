@@ -66,8 +66,8 @@ const relationships = [
   ]),
   ...["left", "right"].map((side) => ({
     seat: `lounge-back-${side}`,
-    ahead: ["lounge-sofa-front", "lounge-coffee-table"],
-    behind: [],
+    ahead: ["lounge-coffee-table"],
+    behind: ["lounge-sofa-front"],
   })),
   {
     seat: "lounge-side",
@@ -76,6 +76,11 @@ const relationships = [
   },
 ];
 describe("office silhouette ordering", () => {
+  it("covers every seat exactly once", () => {
+    expect(relationships.map(({ seat }) => seat).sort()).toEqual(
+      layout.seats.map(({ id }) => id).sort(),
+    );
+  });
   for (const { seat: seatId, ahead, behind } of relationships) {
     it(`${seatId} has the measured silhouette ordering`, () => {
       const seat = layout.seats.find((seat) => seat.id === seatId);

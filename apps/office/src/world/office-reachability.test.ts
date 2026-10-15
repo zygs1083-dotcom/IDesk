@@ -36,6 +36,10 @@ const destinations = [
 ];
 
 describe("v3 measured walk grid", () => {
+  it("includes all sixteen workstation seats and all twenty-six seats", () => {
+    expect(office.seats.filter((seat) => seat.zone)).toHaveLength(16);
+    expect(office.seats).toHaveLength(26);
+  });
   for (const destination of destinations) {
     it(`connects the door to ${destination.id} without crossing furniture or walls`, () => {
       const start = cell(points.door as { x: number; y: number });
