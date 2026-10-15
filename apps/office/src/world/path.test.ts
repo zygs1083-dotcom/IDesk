@@ -11,7 +11,7 @@ const layout: Layout = {
   ground: ["UUUUUU", "LLLLLL", "wwwwww", "wwwwww", "wwwwww", "wwwwww"],
   objects: [
     { id: "shelf", item: "bookshelf", x: 2, y: 3 },
-    { id: "chair", item: "chair-down", x: 1, y: 4 },
+    { id: "chair", item: "chair-left", x: 1, y: 4 },
   ],
   zones: [],
   points: {},

@@ -42,9 +42,9 @@ for (const seat of seats(layout, catalog)) {
       const item = catalog.items[candidate.item] as Furniture;
       return (
         (item.workSpot || candidate.item === "counter") &&
-        candidate.y === object.y + dy &&
-        object.x >= candidate.x &&
-        object.x < candidate.x + item.footprint.w
+        candidate.y === Math.floor(seat.y / TILE) + dy &&
+        Math.floor(seat.x / TILE) >= candidate.x &&
+        Math.floor(seat.x / TILE) < candidate.x + item.footprint.w
       );
     });
     expect(desk).toBeDefined();

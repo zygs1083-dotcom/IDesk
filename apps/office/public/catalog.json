@@ -16,24 +16,24 @@
       "workSpot": { "x": 32, "y": 6 }
     },
     "chair-down": {
-      "footprint": { "w": 1, "h": 1 },
-      "blocks": true,
+      "footprint": { "w": 2, "h": 1 },
+      "blocks": false,
       "layer": "object",
       "parts": [
         { "frame": "chair-down-behind", "dx": 0, "dy": 0, "sortY": 18, "bias": 0 },
         { "frame": "chair-down-front", "dx": 0, "dy": 0, "sortY": 30, "bias": 0 }
       ],
-      "seat": { "x": 16, "y": 26, "facing": "down" }
+      "seat": { "x": 32, "y": 26, "facing": "down" }
     },
     "chair-up": {
-      "footprint": { "w": 1, "h": 1 },
-      "blocks": true,
+      "footprint": { "w": 2, "h": 1 },
+      "blocks": false,
       "layer": "object",
       "parts": [
         { "frame": "chair-up-behind", "dx": 0, "dy": 0, "sortY": 18, "bias": 0 },
         { "frame": "chair-up-front", "dx": 0, "dy": 0, "sortY": 30, "bias": 0 }
       ],
-      "seat": { "x": 16, "y": 26, "facing": "up" }
+      "seat": { "x": 32, "y": 26, "facing": "up" }
     },
     "chair-left": {
       "footprint": { "w": 1, "h": 1 },
