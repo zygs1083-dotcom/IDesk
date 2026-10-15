@@ -131,6 +131,7 @@ export class Cast {
     if (!from) return;
     await character.walkTo([...findPath(this.scene, from.id, target.via), target]);
     character.facing = target.facing;
+    character.mirrored = target.mirror === true;
   }
 
   place(id: string, target: Seat, state: CharacterState) {
@@ -138,6 +139,7 @@ export class Cast {
     if (!character) return;
     character.position.copyFrom(target);
     character.facing = target.facing;
+    character.mirrored = target.mirror === true;
     this.settle(id, state);
   }
 

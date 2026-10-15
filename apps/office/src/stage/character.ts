@@ -14,6 +14,7 @@ export type CharacterState = "idle" | "walk" | "sit" | "typing" | "talk" | "coff
 export class Character extends Container {
   state: CharacterState = "idle";
   facing: Direction = "down";
+  mirrored = false;
   private sprite: Sprite;
   private cup = new Graphics()
     .rect(12, -42, 10, 9)
@@ -87,7 +88,7 @@ export class Character extends Container {
   private animate = () => {
     this.zIndex = this.y;
     if (!reducedMotion.matches) this.elapsed += this.stage.app.ticker.deltaMS;
-    const pose = characterPose(this.state, this.facing, this.elapsed);
+    const pose = characterPose(this.state, this.facing, this.elapsed, this.mirrored);
     this.sprite.texture = this.frames[`${this.agent.kind}/${pose.frame}`] ?? this.fallback;
     this.sprite.scale.x = pose.mirror ? -1 : 1;
   };

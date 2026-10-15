@@ -11,6 +11,7 @@ const spot = point.extend({
   via: z.string(),
   facing: z.enum(["down", "left", "right", "up"]),
   cover: cover.optional(),
+  mirror: z.literal(true).optional(),
 });
 export const sceneSchema = z.object({
   hostZones: z.record(z.string(), z.number().int().min(1).max(4)).optional(),
