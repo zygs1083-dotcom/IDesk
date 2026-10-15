@@ -15,6 +15,7 @@ export class Character extends Container {
   state: CharacterState = "idle";
   facing: Direction = "down";
   mirrored = false;
+  upright = false;
   private sprite: Sprite;
   private cup = new Graphics()
     .rect(12, -42, 10, 9)
@@ -92,7 +93,7 @@ export class Character extends Container {
   private animate = () => {
     this.zIndex = this.y;
     if (!reducedMotion.matches) this.elapsed += this.stage.app.ticker.deltaMS;
-    const pose = characterPose(this.state, this.facing, this.elapsed, this.mirrored);
+    const pose = characterPose(this.state, this.facing, this.elapsed, this.mirrored, this.upright);
     this.sprite.texture = this.frames[`${this.agent.kind}/${pose.frame}`] ?? this.fallback;
     this.sprite.scale.set((pose.mirror ? -1 : 1) * this.bounce.x, this.bounce.y);
   };
