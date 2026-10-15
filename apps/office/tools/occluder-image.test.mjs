@@ -14,6 +14,7 @@ describe("occluder rasterization", () => {
     const { png, box } = cutPolygon(source, polygon);
     expect(box).toEqual({ x: 1, y: 1, w: 3, h: 3 });
     expect([...png.data.subarray(0, 4)]).toEqual([20, 80, 120, 255]);
+    expect([...png.data.subarray(8, 12)]).toEqual([28, 80, 120, 255]);
     expect([...png.data.subarray(32, 36)]).toEqual([0, 0, 0, 0]);
     expect(new Set([...png.data].filter((_, i) => i % 4 === 3))).toEqual(new Set([0, 255]));
     expect(PNG.sync.write(cutPolygon(source, polygon).png)).toEqual(PNG.sync.write(png));

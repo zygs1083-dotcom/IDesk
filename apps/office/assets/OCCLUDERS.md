@@ -15,7 +15,7 @@ node apps/office/tools/occluder-seated.mjs /tmp/w73-review
 
 overlay 的青色 1px 线是多边形，紫色横线是 baseline，黄色十字是座位落地点中心，绿色小方框是 workSpot，橙色框是文字区；区域图和全景均为 3 倍最近邻放大。栅格草稿只把多边形靠近 baseline 的 16px 带投影成障碍（baseline 在多边形下方时，把底部带平移到 baseline），并打开座位/目的地格；不是最终通行图。W73 数据暂全 `.`，W73c 必须按桌柜实际占地、过道和入口手修。
 
-`occluders.json` 使用 TexturePacker hash：`frame` 是图集矩形，`background` 是该帧在背景的左上角；`spriteSourceSize` 从零开始，未裁掉任何包围盒内的透明边。按 id 固定顺序打包，无时间戳。像素中心按奇偶规则测试是否在多边形内，内部 RGB 原样复制、alpha=255，外部 RGBA 全零。
+`occluders.json` 使用 TexturePacker hash：`frame` 是图集矩形，`background` 是该帧在背景的左上角；`spriteSourceSize` 从零开始，未裁掉任何包围盒内的透明边。按 id 固定顺序打包，无时间戳。像素中心按奇偶规则测试是否在多边形内（恰好在边界上也保留），内部 RGB 原样复制、alpha=255，外部 RGBA 全零。
 
 ## 轮廓与 baseline
 
