@@ -1,4 +1,5 @@
 import { Container, Graphics, Text } from "pixi.js";
+import { setGlyphText } from "./glyphs.ts";
 
 export class Bubble extends Container {
   private background = new Graphics();
@@ -24,7 +25,12 @@ export class Bubble extends Container {
 
   show(text: string, ms: number) {
     clearTimeout(this.timer);
-    this.text.text = text;
+    void setGlyphText(this.text, text, () => this.draw());
+    this.visible = true;
+    if (Number.isFinite(ms)) this.timer = setTimeout(() => this.hide(), ms);
+  }
+
+  private draw() {
     const width = Math.ceil(this.text.width / 2) * 2 + 20;
     const height = this.text.height + 16;
     this.background
@@ -57,8 +63,6 @@ export class Bubble extends Container {
       ])
       .fill(0xfff0ce)
       .stroke({ color: 0x302a2a, width: 2 });
-    this.visible = true;
-    if (Number.isFinite(ms)) this.timer = setTimeout(() => this.hide(), ms);
   }
 
   hide() {

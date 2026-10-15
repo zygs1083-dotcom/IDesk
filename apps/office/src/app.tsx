@@ -4,6 +4,7 @@ import { direct } from "./director/director.ts";
 import { type ReplayControls, replay } from "./director/replay.ts";
 import { setTimeScale } from "./engine/tween.ts";
 import { useLang } from "./i18n/lang.tsx";
+import { initialGlyphs, loadGlyphs } from "./stage/glyphs.ts";
 import { ProfileModal } from "./ui/profile-modal.tsx";
 import { ReceptionProfile } from "./ui/reception-profile.tsx";
 import { ReplayBar } from "./ui/replay-bar.tsx";
@@ -73,7 +74,7 @@ export function App() {
       const element = host.current;
       if (!element || disposed) return;
       setWorld({ layout, catalog });
-      await document.fonts.load('12px "Fusion Pixel"');
+      await loadGlyphs(initialGlyphs);
       if (disposed) return;
       stage = await createStage(element, layout, catalog, assets);
       if (disposed) {
