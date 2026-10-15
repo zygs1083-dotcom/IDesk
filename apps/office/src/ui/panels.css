@@ -29,14 +29,6 @@
   font-size: 24px;
   line-height: 1.5;
 }
-.agent-identity {
-  display: flex;
-  align-items: center;
-  margin-left: -12px;
-}
-.agent-identity h3 {
-  margin: 0;
-}
 dl {
   display: grid;
   grid-template-columns: max-content minmax(0, 1fr);

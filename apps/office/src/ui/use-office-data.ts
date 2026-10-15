@@ -13,6 +13,12 @@ export function useOfficeData(live: boolean) {
   const [agents, setAgents] = useState<Agent[]>([]);
   const [tasks, setTasks] = useState<Task[]>([]);
   const [error, setError] = useState("");
+  const [admin, setAdmin] = useState(false);
+  useEffect(() => {
+    void request<{ role: "admin" | "viewer" }>("/auth/me")
+      .then(({ role }) => setAdmin(role === "admin"))
+      .catch((reason: Error) => setError(reason.message));
+  }, []);
   useEffect(() => {
     const refreshAgents = () => {
       void request<Agent[]>("/agents")
@@ -45,5 +51,5 @@ export function useOfficeData(live: boolean) {
       clearInterval(interval);
     };
   }, [live]);
-  return { agents, tasks, error };
+  return { agents, tasks, admin, error };
 }

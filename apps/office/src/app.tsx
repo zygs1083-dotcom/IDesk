@@ -7,8 +7,8 @@ import { type Scene, sceneSchema } from "./scene/scene.ts";
 import { assignSeats, assignStanding } from "./scene/seats.ts";
 import { createEditor } from "./stage/editor.ts";
 import { createStage } from "./stage/stage.ts";
-import { AgentPanel } from "./ui/agent-panel.tsx";
 import { PixelButton } from "./ui/pixel-button.tsx";
+import { ProfileModal } from "./ui/profile-modal.tsx";
 import { ReplayBar } from "./ui/replay-bar.tsx";
 import { Roster } from "./ui/roster.tsx";
 import { RosterItem } from "./ui/roster-item.tsx";
@@ -42,7 +42,7 @@ export function App() {
   });
   controls.current.playing = playing;
   controls.current.speed = speed;
-  const { agents, tasks, error: dataError } = useOfficeData(mode.mode === "live");
+  const { agents, tasks, admin, error: dataError } = useOfficeData(mode.mode === "live");
   const enterReplay = () => {
     const end = Date.now();
     controls.current.end = end;
@@ -126,7 +126,7 @@ export function App() {
           <RosterItem key={item.id} agent={item} tasks={tasks} onSelect={selectAgent} />
         ))}
       </section>
-      <div className={`office-body${agent || task ? " has-detail" : ""}`}>
+      <div className={`office-body${task ? " has-detail" : ""}`}>
         {scene && (
           <Roster
             zones={scene.zones.slice(0, 2)}
@@ -137,15 +137,7 @@ export function App() {
           />
         )}
         <div className="stage-host" ref={host} />
-        {agent ? (
-          <AgentPanel
-            key={agent.id}
-            agent={agent}
-            agents={agents}
-            tasks={tasks}
-            onClose={closePanel}
-          />
-        ) : task ? (
+        {task ? (
           <TaskPanel task={task} agents={agents} onClose={closePanel} />
         ) : scene ? (
           <Roster
@@ -158,6 +150,16 @@ export function App() {
           />
         ) : null}
       </div>
+      {agent && (
+        <ProfileModal
+          key={agent.id}
+          agent={agent}
+          agents={agents}
+          tasks={tasks}
+          admin={admin}
+          onClose={closePanel}
+        />
+      )}
       {mode.mode === "replay" && (
         <ReplayBar
           start={controls.current.start}

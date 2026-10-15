@@ -7,23 +7,19 @@ import { useLang } from "../i18n/lang.tsx";
 import { relativeTime } from "../i18n/relative-time.ts";
 import { request } from "../lib/api.ts";
 import { onRealtimeEvent } from "../lib/realtime.ts";
-import { Avatar } from "./avatar.tsx";
 import { eventText } from "./event-text.ts";
-import { PixelPanel } from "./pixel-panel.tsx";
-import { statusText } from "./status-text.ts";
+import { isCurrentTask } from "./profile-current-task.ts";
 import type { Agent, Task } from "./use-office-data.ts";
 
 type TaskEvent = z.infer<typeof eventSchema>;
-export function AgentPanel({
+export function ProfileActivity({
   agent,
   agents,
   tasks,
-  onClose,
 }: {
   agent: Agent;
   agents: Agent[];
   tasks: Task[];
-  onClose: () => void;
 }) {
   const { lang, t } = useLang();
   const agentName = (id: string | null) =>
@@ -37,7 +33,7 @@ export function AgentPanel({
     const refresh = () => {
       void request<TaskEvent[]>(`/events?agentId=${encodeURIComponent(agent.id)}`)
         .then((data) => {
-          if (!disposed) setEvents(data.slice(0, 5));
+          if (!disposed) setEvents(data.slice(0, 10));
         })
         .catch((reason: Error) => {
           if (!disposed) setError(reason.message);
@@ -52,35 +48,20 @@ export function AgentPanel({
       unsubscribe();
     };
   }, [agent.id]);
-  const current = tasks.filter(
-    (task) =>
-      (task.assigneeId === agent.id || task.recruit?.joined.includes(agent.id)) &&
-      ["in_progress", "paused", "assigned"].includes(task.status),
-  );
+  const current = tasks.filter((task) => isCurrentTask(task, agent.id));
   return (
-    <PixelPanel title={t("panel.agent")} onClose={onClose}>
-      <div className="agent-identity">
-        <Avatar kind={agent.kind} />
-        <div>
-          <h3>{agent.name}</h3>
-          <p>{statusText(agent, tasks, t)}</p>
-        </div>
-      </div>
-      <dl>
-        <dt>{t("panel.type")}</dt>
-        <dd>{agent.kind}</dd>
-        <dt>{t("panel.host")}</dt>
-        <dd>{agent.host}</dd>
-        <dt>{t("common.capabilities")}</dt>
-        <dd>{agent.capabilities.join(" · ") || t("common.none")}</dd>
-      </dl>
+    <>
       <h3>{t("panel.currentTasks")}</h3>
       {current.length ? (
         current.map((task) => (
-          <p key={task.id}>
+          <a
+            className="profile-task"
+            key={task.id}
+            href={`/desk?task=${encodeURIComponent(task.id)}`}
+          >
             {task.title}
             <span className="task-status">{labels(lang).status[task.status]}</span>
-          </p>
+          </a>
         ))
       ) : (
         <p>{t("panel.emptyTasks")}</p>
@@ -101,6 +82,6 @@ export function AgentPanel({
       })}
       {!events.length && <p>{t("panel.emptyEvents")}</p>}
       {error && <p role="alert">{error}</p>}
-    </PixelPanel>
+    </>
   );
 }
