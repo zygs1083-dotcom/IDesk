@@ -1,0 +1,1 @@
+ALTER TABLE `automation_jobs` ADD `schedule` text;

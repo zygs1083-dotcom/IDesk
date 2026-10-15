@@ -39,6 +39,7 @@ beforeEach(async () => {
     externalId,
     name: externalId,
     group: null,
+    schedule: null,
     enabled: true,
     url: null,
   }));

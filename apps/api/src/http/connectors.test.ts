@@ -37,6 +37,7 @@ const plugin: ConnectorPlugin = {
       externalId: name,
       name,
       group: null,
+      schedule: null,
       enabled: true,
       url: null,
     }));
