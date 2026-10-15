@@ -1,5 +1,6 @@
 # 像素办公室素材生成记录
-角色使用正面四向坐姿，走路与侧坐沿用原始角色图。
+第三版背景与角色图沿用第一版；四分之三坐姿的生成记录见 [PROMPTS-seated.md](PROMPTS-seated.md)，礼仪正面坐姿见 [PROMPTS-receptionist.md#receptionist-seatedpng](PROMPTS-receptionist.md#receptionist-seatedpng)。
+运行 `pnpm --filter office characters` 重建未量化的 `public/characters.png/json`；第二版素材保留到 W74 切换。
 第二版正面四向坐姿与全图集42色量化见 [PROMPTS-front-seating.md](PROMPTS-front-seating.md)。
 礼仪专属走路原图的提示词、候选及比例记录见 [PROMPTS-receptionist.md](PROMPTS-receptionist.md)。
 使用 Codex 内置 image_gen 工具，2026-10-14 生成。画风参考 `docs/office-samples/background-sample.png` 与 `sprite-sample.png`。
