@@ -218,23 +218,23 @@
     },
     {
       "name": "chair-left",
-      "source": "assets/raw/furniture/office-sheet-corrected.png",
+      "source": "assets/raw/furniture/chair-left.png",
       "box": {
-        "x": 724,
-        "y": 362,
-        "w": 362,
-        "h": 362
+        "x": 0,
+        "y": 0,
+        "w": 1070,
+        "h": 1470
       },
       "w": 32,
-      "h": 40,
+      "h": 44,
       "parts": [
         {
           "name": "chair-left-behind",
-          "rects": [[0, 0, 21, 14], [0, 18, 20, 22], [21, 25, 11, 15]]
+          "rects": [[18, 0, 14, 30], [0, 23, 32, 21]]
         },
         {
           "name": "chair-left-front",
-          "rects": [[0, 0, 21, 14], [0, 18, 20, 22], [21, 25, 11, 15]],
+          "rects": [[18, 0, 14, 30], [0, 23, 32, 21]],
           "exclude": true
         }
       ],
@@ -242,57 +242,51 @@
         {
           "name": "outline",
           "colors": [0],
-          "source": [[22, 20, 18], [44, 31, 22]]
+          "source": [[48, 35, 31]]
         },
         {
           "name": "teal",
           "colors": [20, 26, 27],
-          "source": [[26, 66, 61], [31, 104, 96], [62, 155, 141]]
+          "source": [[49, 86, 65], [40, 101, 104], [75, 139, 135]]
         },
         {
           "name": "metal",
           "colors": [16, 17, 18],
-          "source": [[45, 45, 42], [88, 88, 82], [135, 137, 130]]
+          "source": [[38, 51, 67], [70, 89, 107], [113, 139, 153]]
         }
       ]
     },
     {
       "name": "chair-right",
-      "source": "assets/raw/furniture/office-sheet-corrected.png",
-      "box": {
-        "x": 1086,
-        "y": 362,
-        "w": 362,
-        "h": 362
-      },
+      "mirrorOf": "chair-left",
       "w": 32,
-      "h": 40,
-      "parts": [
-        {
-          "name": "chair-right-behind",
-          "rects": [[11, 0, 21, 14], [12, 18, 20, 22], [0, 25, 11, 15]]
-        },
-        {
-          "name": "chair-right-front",
-          "rects": [[11, 0, 21, 14], [12, 18, 20, 22], [0, 25, 11, 15]],
-          "exclude": true
-        }
-      ],
+      "h": 44,
       "materials": [
         {
           "name": "outline",
           "colors": [0],
-          "source": [[22, 20, 18], [44, 31, 22]]
+          "source": [[48, 35, 31]]
         },
         {
           "name": "teal",
           "colors": [20, 26, 27],
-          "source": [[26, 66, 61], [31, 104, 96], [62, 155, 141]]
+          "source": [[49, 86, 65], [40, 101, 104], [75, 139, 135]]
         },
         {
           "name": "metal",
           "colors": [16, 17, 18],
-          "source": [[45, 45, 42], [88, 88, 82], [135, 137, 130]]
+          "source": [[38, 51, 67], [70, 89, 107], [113, 139, 153]]
+        }
+      ],
+      "parts": [
+        {
+          "name": "chair-right-behind",
+          "rects": [[0, 0, 14, 30], [0, 23, 32, 21]]
+        },
+        {
+          "name": "chair-right-front",
+          "rects": [[0, 0, 14, 30], [0, 23, 32, 21]],
+          "exclude": true
         }
       ]
     },
@@ -351,6 +345,408 @@
           "name": "paper",
           "colors": [6, 7, 9],
           "source": [[238, 222, 181], [255, 242, 215]]
+        }
+      ]
+    },
+    {
+      "name": "meeting-table",
+      "source": "assets/raw/furniture/meeting-table.png",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "w": 1756,
+        "h": 896
+      },
+      "w": 192,
+      "h": 98,
+      "materials": [
+        {
+          "name": "outline",
+          "colors": [0],
+          "source": [[48, 35, 31]]
+        },
+        {
+          "name": "wood",
+          "colors": [2, 4, 29],
+          "source": [[128, 84, 57], [201, 153, 98], [232, 185, 78]]
+        }
+      ]
+    },
+    {
+      "name": "glass-wall",
+      "source": "assets/raw/furniture/glass-wall.png",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "w": 887,
+        "h": 1774
+      },
+      "w": 32,
+      "h": 64,
+      "materials": [
+        {
+          "name": "outline",
+          "colors": [0],
+          "source": [[48, 35, 31]]
+        },
+        {
+          "name": "glass",
+          "colors": [18, 19, 9],
+          "source": [[113, 139, 153], [168, 197, 199], [255, 255, 255]]
+        }
+      ]
+    },
+    {
+      "name": "glass-wall-v",
+      "source": "assets/raw/furniture/glass-wall-v.png",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "w": 887,
+        "h": 1774
+      },
+      "w": 12,
+      "h": 64,
+      "materials": [
+        {
+          "name": "outline",
+          "colors": [0],
+          "source": [[48, 35, 31]]
+        },
+        {
+          "name": "glass",
+          "colors": [18, 19, 9],
+          "source": [[113, 139, 153], [168, 197, 199], [255, 255, 255]]
+        }
+      ]
+    },
+    {
+      "name": "sofa",
+      "source": "assets/raw/furniture/sofa.png",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "w": 1643,
+        "h": 957
+      },
+      "w": 96,
+      "h": 56,
+      "materials": [
+        {
+          "name": "outline",
+          "colors": [0],
+          "source": [[48, 35, 31]]
+        },
+        {
+          "name": "cloth",
+          "colors": [10, 11, 12],
+          "source": [[57, 75, 69], [82, 104, 90], [112, 132, 115]]
+        },
+        {
+          "name": "wood",
+          "colors": [2, 4, 29],
+          "source": [[128, 84, 57], [201, 153, 98], [232, 185, 78]]
+        }
+      ],
+      "parts": [
+        {
+          "name": "sofa-behind",
+          "rects": [[0, 0, 96, 22], [16, 22, 64, 34]]
+        },
+        {
+          "name": "sofa-front",
+          "rects": [[0, 0, 96, 22], [16, 22, 64, 34]],
+          "exclude": true
+        }
+      ]
+    },
+    {
+      "name": "coffee-machine",
+      "source": "assets/raw/furniture/coffee-machine.png",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "w": 1122,
+        "h": 1402
+      },
+      "w": 32,
+      "h": 40,
+      "materials": [
+        {
+          "name": "outline",
+          "colors": [0],
+          "source": [[48, 35, 31]]
+        },
+        {
+          "name": "cream",
+          "colors": [6, 7, 8],
+          "source": [[246, 233, 206], [216, 200, 167], [181, 160, 131]]
+        },
+        {
+          "name": "metal",
+          "colors": [16, 17, 18],
+          "source": [[38, 51, 67], [70, 89, 107], [113, 139, 153]]
+        }
+      ]
+    },
+    {
+      "name": "printer",
+      "source": "assets/raw/furniture/printer.png",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "w": 1586,
+        "h": 992
+      },
+      "w": 64,
+      "h": 40,
+      "materials": [
+        {
+          "name": "outline",
+          "colors": [0],
+          "source": [[48, 35, 31]]
+        },
+        {
+          "name": "cream",
+          "colors": [6, 7, 8],
+          "source": [[246, 233, 206], [216, 200, 167], [181, 160, 131]]
+        },
+        {
+          "name": "metal",
+          "colors": [16, 17, 18],
+          "source": [[38, 51, 67], [70, 89, 107], [113, 139, 153]]
+        }
+      ]
+    },
+    {
+      "name": "plant-tall",
+      "source": "assets/raw/furniture/plant-tall.png",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "w": 887,
+        "h": 1774
+      },
+      "w": 32,
+      "h": 80,
+      "materials": [
+        {
+          "name": "outline",
+          "colors": [0],
+          "source": [[48, 35, 31]]
+        },
+        {
+          "name": "green",
+          "colors": [20, 21, 22],
+          "source": [[49, 86, 65], [86, 128, 74], [145, 171, 92]]
+        },
+        {
+          "name": "pot",
+          "colors": [2, 23, 28],
+          "source": [[128, 84, 57], [181, 119, 86], [204, 121, 62]]
+        }
+      ]
+    },
+    {
+      "name": "whiteboard",
+      "source": "assets/raw/furniture/whiteboard.png",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "w": 1774,
+        "h": 887
+      },
+      "w": 128,
+      "h": 64,
+      "materials": [
+        {
+          "name": "outline",
+          "colors": [0],
+          "source": [[48, 35, 31]]
+        },
+        {
+          "name": "wood",
+          "colors": [2, 4, 29],
+          "source": [[128, 84, 57], [201, 153, 98], [232, 185, 78]]
+        },
+        {
+          "name": "cream",
+          "colors": [6, 7, 8],
+          "source": [[246, 233, 206], [216, 200, 167], [181, 160, 131]]
+        }
+      ]
+    },
+    {
+      "name": "clock",
+      "source": "assets/raw/furniture/clock.png",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "w": 1254,
+        "h": 1254
+      },
+      "w": 32,
+      "h": 32,
+      "materials": [
+        {
+          "name": "outline",
+          "colors": [0],
+          "source": [[48, 35, 31]]
+        },
+        {
+          "name": "wood",
+          "colors": [2, 4, 29],
+          "source": [[128, 84, 57], [201, 153, 98], [232, 185, 78]]
+        },
+        {
+          "name": "cream",
+          "colors": [6, 7, 8],
+          "source": [[246, 233, 206], [216, 200, 167], [181, 160, 131]]
+        }
+      ]
+    },
+    {
+      "name": "bulletin",
+      "source": "assets/raw/furniture/bulletin.png",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "w": 1254,
+        "h": 1254
+      },
+      "w": 64,
+      "h": 64,
+      "materials": [
+        {
+          "name": "outline",
+          "colors": [0],
+          "source": [[48, 35, 31]]
+        },
+        {
+          "name": "wood",
+          "colors": [2, 4, 29],
+          "source": [[128, 84, 57], [201, 153, 98], [232, 185, 78]]
+        },
+        {
+          "name": "cream",
+          "colors": [6, 7, 8],
+          "source": [[246, 233, 206], [216, 200, 167], [181, 160, 131]]
+        },
+        {
+          "name": "red",
+          "colors": [13, 14, 15],
+          "source": [[139, 48, 69], [173, 96, 96], [210, 138, 120]]
+        }
+      ]
+    },
+    {
+      "name": "file-tray",
+      "source": "assets/raw/furniture/file-tray.png",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "w": 1672,
+        "h": 941
+      },
+      "w": 32,
+      "h": 18,
+      "materials": [
+        {
+          "name": "outline",
+          "colors": [0],
+          "source": [[48, 35, 31]]
+        },
+        {
+          "name": "metal",
+          "colors": [16, 17, 18],
+          "source": [[38, 51, 67], [70, 89, 107], [113, 139, 153]]
+        },
+        {
+          "name": "cream",
+          "colors": [6, 7, 8],
+          "source": [[246, 233, 206], [216, 200, 167], [181, 160, 131]]
+        }
+      ]
+    },
+    {
+      "name": "bell",
+      "source": "assets/raw/furniture/bell.png",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "w": 1402,
+        "h": 1122
+      },
+      "w": 20,
+      "h": 16,
+      "materials": [
+        {
+          "name": "outline",
+          "colors": [0],
+          "source": [[48, 35, 31]]
+        },
+        {
+          "name": "wood",
+          "colors": [2, 4, 29],
+          "source": [[128, 84, 57], [201, 153, 98], [232, 185, 78]]
+        }
+      ]
+    },
+    {
+      "name": "door",
+      "source": "assets/raw/furniture/door.png",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "w": 1048,
+        "h": 1501
+      },
+      "w": 64,
+      "h": 92,
+      "materials": [
+        {
+          "name": "outline",
+          "colors": [0],
+          "source": [[48, 35, 31]]
+        },
+        {
+          "name": "wood",
+          "colors": [2, 4, 29],
+          "source": [[128, 84, 57], [201, 153, 98], [232, 185, 78]]
+        },
+        {
+          "name": "cream",
+          "colors": [6, 7, 8],
+          "source": [[246, 233, 206], [216, 200, 167], [181, 160, 131]]
+        }
+      ]
+    },
+    {
+      "name": "plaque-stand",
+      "source": "assets/raw/furniture/plaque-stand.png",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "w": 1513,
+        "h": 1040
+      },
+      "w": 64,
+      "h": 44,
+      "materials": [
+        {
+          "name": "outline",
+          "colors": [0],
+          "source": [[48, 35, 31]]
+        },
+        {
+          "name": "wood",
+          "colors": [2, 4, 29],
+          "source": [[128, 84, 57], [201, 153, 98], [232, 185, 78]]
+        },
+        {
+          "name": "cream",
+          "colors": [6, 7, 8],
+          "source": [[246, 233, 206], [216, 200, 167], [181, 160, 131]]
         }
       ]
     }
@@ -501,21 +897,21 @@
         {
           "frame": "chair-left-behind",
           "dx": 0,
-          "dy": -8,
-          "sortY": 24,
+          "dy": -18,
+          "sortY": 20,
           "bias": 0
         },
         {
           "frame": "chair-left-front",
           "dx": 0,
-          "dy": -8,
-          "sortY": 32,
+          "dy": -18,
+          "sortY": 28,
           "bias": 0
         }
       ],
       "seat": {
-        "x": 16,
-        "y": 30,
+        "x": 10,
+        "y": 26,
         "facing": "left"
       }
     },
@@ -530,21 +926,21 @@
         {
           "frame": "chair-right-behind",
           "dx": 0,
-          "dy": -8,
-          "sortY": 24,
+          "dy": -18,
+          "sortY": 20,
           "bias": 0
         },
         {
           "frame": "chair-right-front",
           "dx": 0,
-          "dy": -8,
-          "sortY": 32,
+          "dy": -18,
+          "sortY": 28,
           "bias": 0
         }
       ],
       "seat": {
-        "x": 16,
-        "y": 30,
+        "x": 22,
+        "y": 26,
         "facing": "right"
       }
     },
@@ -586,6 +982,272 @@
         "y": 6,
         "w": 50,
         "h": 12
+      }
+    },
+    "meeting-table": {
+      "footprint": {
+        "w": 6,
+        "h": 2
+      },
+      "blocks": true,
+      "layer": "object",
+      "parts": [
+        {
+          "frame": "meeting-table",
+          "dx": 0,
+          "dy": -34,
+          "sortY": 64,
+          "bias": 0
+        }
+      ],
+      "workSpot": {
+        "x": 96,
+        "y": 0
+      }
+    },
+    "glass-wall": {
+      "footprint": {
+        "w": 1,
+        "h": 1
+      },
+      "blocks": true,
+      "layer": "object",
+      "parts": [
+        {
+          "frame": "glass-wall",
+          "dx": 0,
+          "dy": -32,
+          "sortY": 32,
+          "bias": 0
+        }
+      ]
+    },
+    "glass-wall-v": {
+      "footprint": {
+        "w": 1,
+        "h": 1
+      },
+      "blocks": true,
+      "layer": "object",
+      "parts": [
+        {
+          "frame": "glass-wall-v",
+          "dx": 0,
+          "dy": -32,
+          "sortY": 32,
+          "bias": 0
+        }
+      ]
+    },
+    "sofa": {
+      "footprint": {
+        "w": 3,
+        "h": 1
+      },
+      "blocks": true,
+      "layer": "object",
+      "parts": [
+        {
+          "frame": "sofa-behind",
+          "dx": 0,
+          "dy": -24,
+          "sortY": 24,
+          "bias": 0
+        },
+        {
+          "frame": "sofa-front",
+          "dx": 0,
+          "dy": -24,
+          "sortY": 32,
+          "bias": 0
+        }
+      ],
+      "seat": {
+        "x": 48,
+        "y": 30,
+        "facing": "down"
+      }
+    },
+    "coffee-machine": {
+      "footprint": {
+        "w": 1,
+        "h": 1
+      },
+      "blocks": true,
+      "layer": "object",
+      "parts": [
+        {
+          "frame": "coffee-machine",
+          "dx": 0,
+          "dy": -8,
+          "sortY": 32,
+          "bias": 0
+        }
+      ]
+    },
+    "printer": {
+      "footprint": {
+        "w": 2,
+        "h": 1
+      },
+      "blocks": true,
+      "layer": "object",
+      "parts": [
+        {
+          "frame": "printer",
+          "dx": 0,
+          "dy": -8,
+          "sortY": 32,
+          "bias": 0
+        }
+      ]
+    },
+    "plant-tall": {
+      "footprint": {
+        "w": 1,
+        "h": 1
+      },
+      "blocks": true,
+      "layer": "object",
+      "parts": [
+        {
+          "frame": "plant-tall",
+          "dx": 0,
+          "dy": -48,
+          "sortY": 32,
+          "bias": 0
+        }
+      ]
+    },
+    "whiteboard": {
+      "footprint": {
+        "w": 4,
+        "h": 2
+      },
+      "blocks": false,
+      "layer": "wall",
+      "parts": [
+        {
+          "frame": "whiteboard",
+          "dx": 0,
+          "dy": 0,
+          "sortY": 64,
+          "bias": 0
+        }
+      ],
+      "textArea": {
+        "x": 8,
+        "y": 6,
+        "w": 112,
+        "h": 48
+      }
+    },
+    "clock": {
+      "footprint": {
+        "w": 1,
+        "h": 1
+      },
+      "blocks": false,
+      "layer": "wall",
+      "parts": [
+        {
+          "frame": "clock",
+          "dx": 0,
+          "dy": 0,
+          "sortY": 32,
+          "bias": 0
+        }
+      ]
+    },
+    "bulletin": {
+      "footprint": {
+        "w": 2,
+        "h": 2
+      },
+      "blocks": false,
+      "layer": "wall",
+      "parts": [
+        {
+          "frame": "bulletin",
+          "dx": 0,
+          "dy": 0,
+          "sortY": 64,
+          "bias": 0
+        }
+      ]
+    },
+    "file-tray": {
+      "footprint": {
+        "w": 1,
+        "h": 1
+      },
+      "blocks": false,
+      "layer": "object",
+      "parts": [
+        {
+          "frame": "file-tray",
+          "dx": 0,
+          "dy": -10,
+          "sortY": 33,
+          "bias": 0
+        }
+      ]
+    },
+    "bell": {
+      "footprint": {
+        "w": 1,
+        "h": 1
+      },
+      "blocks": false,
+      "layer": "object",
+      "parts": [
+        {
+          "frame": "bell",
+          "dx": 6,
+          "dy": -34,
+          "sortY": 33,
+          "bias": 0
+        }
+      ]
+    },
+    "door": {
+      "footprint": {
+        "w": 2,
+        "h": 1
+      },
+      "blocks": false,
+      "layer": "object",
+      "parts": [
+        {
+          "frame": "door",
+          "dx": 0,
+          "dy": -60,
+          "sortY": 32,
+          "bias": 0
+        }
+      ]
+    },
+    "plaque-stand": {
+      "footprint": {
+        "w": 2,
+        "h": 1
+      },
+      "blocks": true,
+      "layer": "object",
+      "parts": [
+        {
+          "frame": "plaque-stand",
+          "dx": 0,
+          "dy": -12,
+          "sortY": 32,
+          "bias": 0
+        }
+      ],
+      "textArea": {
+        "x": 7,
+        "y": 7,
+        "w": 50,
+        "h": 15
       }
     }
   }

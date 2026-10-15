@@ -82,27 +82,42 @@ export function cleanIsolated(png, outline) {
   return png;
 }
 
+export function mirror(png) {
+  const result = new PNG({ width: png.width, height: png.height });
+  for (let y = 0; y < png.height; y++)
+    for (let x = 0; x < png.width; x++) {
+      const from = (y * png.width + png.width - 1 - x) * 4;
+      result.data.set(png.data.subarray(from, from + 4), (y * png.width + x) * 4);
+    }
+  return result;
+}
+
 export function buildFurniture() {
   const colors = palette();
   const manifest = readJson("assets/furniture-manifest.json");
-  const atlas = new PNG({ width: 512, height: 256 });
-  const before = new PNG({ width: 512, height: 256 });
+  const atlas = new PNG({ width: 512, height: 512 });
+  const before = new PNG({ width: 512, height: 512 });
   const frames = {};
+  const images = new Map();
   let x = 0;
   let y = 0;
   let rowHeight = 0;
   for (const entry of manifest.frames) {
-    const source = readPng(entry.source);
-    removeMagenta(source);
-    const cell = crop(source, entry.box);
-    const png = quantize(
-      resize(crop(cell, bounds(cell)), entry.w, entry.h),
-      colors,
-      entry.materials,
-    );
+    let png;
+    let unclean;
+    if (entry.mirrorOf) {
+      png = mirror(images.get(entry.mirrorOf).png);
+      unclean = mirror(images.get(entry.mirrorOf).unclean);
+    } else {
+      const source = readPng(entry.source);
+      removeMagenta(source);
+      const cell = crop(source, entry.box);
+      png = quantize(resize(crop(cell, bounds(cell)), entry.w, entry.h), colors, entry.materials);
+      unclean = crop(png, { x: 0, y: 0, w: png.width, h: png.height });
+      cleanIsolated(png, colors[0]);
+    }
+    images.set(entry.name, { png, unclean });
     for (const group of entry.materials) assert.ok(group.colors.length <= 3);
-    const unclean = crop(png, { x: 0, y: 0, w: png.width, h: png.height });
-    cleanIsolated(png, colors[0]);
     verify(
       png,
       entry.materials.flatMap((group) => group.colors.map((i) => colors[i])),
@@ -135,8 +150,8 @@ export function buildFurniture() {
   }
   verify(atlas, colors);
   savePng("public/furniture.png", atlas);
-  savePng("assets/probe/furniture-before-clean@3x.png", resize(before, 1536, 768));
-  savePng("assets/probe/furniture-after-clean@3x.png", resize(atlas, 1536, 768));
+  savePng("assets/probe/furniture-before-clean@3x.png", resize(before, 1536, 1536));
+  savePng("assets/probe/furniture-after-clean@3x.png", resize(atlas, 1536, 1536));
   saveJson("public/furniture.json", { frames, meta: { image: "furniture.png", scale: "1" } });
   saveJson("public/catalog.json", { tile: 32, items: manifest.items });
   console.log(
