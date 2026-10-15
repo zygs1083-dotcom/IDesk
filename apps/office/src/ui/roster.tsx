@@ -17,9 +17,10 @@ export function Roster({
   standing?: Map<string, Seat>;
   onSelect: (id: string) => void;
 }) {
+  const { t } = useLang();
   return (
     <aside className="pixel-panel roster">
-      <h2>今日值班</h2>
+      <h2>{t("roster.duty")}</h2>
       <div className="roster-groups">
         {zones.map((zone) => {
           const members = agents.filter((agent) => {
@@ -29,7 +30,7 @@ export function Roster({
           const hosts = [...new Set(members.map((agent) => agent.host))];
           return (
             <section key={`${zone.name.x},${zone.name.y}`}>
-              <h3>{hosts.join(" · ") || "暂无值班主机"}</h3>
+              <h3>{hosts.join(" · ") || t("roster.emptyHost")}</h3>
               {members.map((agent) => (
                 <RosterItem key={agent.id} agent={agent} tasks={tasks} onSelect={onSelect} />
               ))}
@@ -38,7 +39,7 @@ export function Roster({
         })}
         {standing && standing.size > 0 && (
           <section>
-            <h3>站着的</h3>
+            <h3>{t("roster.standing")}</h3>
             {agents
               .filter((agent) => standing.has(agent.id))
               .map((agent) => (
@@ -50,3 +51,5 @@ export function Roster({
     </aside>
   );
 }
+
+import { useLang } from "../i18n/lang.tsx";

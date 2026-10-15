@@ -16,8 +16,14 @@ export type ReplayControls = {
   update: (at: number, ended: boolean) => void;
 };
 
-export async function replay(stage: Stage, scene: Scene, at: number, controls: ReplayControls) {
-  const initialized = await initialize(stage, scene);
+export async function replay(
+  stage: Stage,
+  scene: Scene,
+  at: number,
+  controls: ReplayControls,
+  humanName: string,
+) {
+  const initialized = await initialize(stage, scene, humanName);
   if (!initialized) return;
   const { cast, cards, snapshot, actions, daylight, tasks } = initialized;
   for (const id of cast.present) cast.settle(id, "idle");

@@ -16,9 +16,9 @@ import { placeSnapshot } from "./snapshot.ts";
 const PRESENCE_MS = 30_000;
 const LEASE_WARNING_MS = 120_000;
 
-export async function direct(stage: Stage, scene: Scene) {
+export async function direct(stage: Stage, scene: Scene, humanName: string) {
   const initialEvents = z.array(eventSchema).parse(await request("/events"));
-  const initialized = await initialize(stage, scene);
+  const initialized = await initialize(stage, scene, humanName);
   if (!initialized) return;
   const { cast, snapshot, actions, daylight, tasks, cards } = initialized;
   placeSnapshot(cast, cards, tasks);
@@ -84,7 +84,7 @@ export async function direct(stage: Stage, scene: Scene) {
   return daylight;
 }
 
-export async function initialize(stage: Stage, scene: Scene) {
+export async function initialize(stage: Stage, scene: Scene, humanName: string) {
   const [atlas, agents, tasks] = await Promise.all([
     sprites,
     request("/agents").then((data) => z.array(publicAgentSchema).parse(data)),
@@ -92,7 +92,7 @@ export async function initialize(stage: Stage, scene: Scene) {
   ]);
   if (stage.world.destroyed) return;
   atlas.textureSource.scaleMode = "nearest";
-  const cast = new Cast(stage, scene, atlas.textures);
+  const cast = new Cast(stage, scene, atlas.textures, humanName);
   const daylight = createDaylight(stage, cast.characters);
   cast.update(agents, true);
   const cards = new Cards(stage, scene);

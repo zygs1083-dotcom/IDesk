@@ -1,11 +1,13 @@
 import { useEffect, useRef } from "react";
 import atlas from "../../public/sprites.json";
+import { useLang } from "../i18n/lang.tsx";
 import type { Agent } from "./use-office-data.ts";
 
 const spriteImage = new Image();
 spriteImage.src = "/office/sprites.png";
 
 export function Avatar({ kind }: { kind: Agent["kind"] }) {
+  const { t } = useLang();
   const canvas = useRef<HTMLCanvasElement>(null);
   useEffect(() => {
     let disposed = false;
@@ -29,7 +31,7 @@ export function Avatar({ kind }: { kind: Agent["kind"] }) {
       height={96}
       className="avatar"
       role="img"
-      aria-label={`${kind} 像素头像`}
+      aria-label={t("common.pixelAvatar", { kind })}
     />
   );
 }

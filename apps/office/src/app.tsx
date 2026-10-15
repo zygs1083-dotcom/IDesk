@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { direct } from "./director/director.ts";
 import { type ReplayControls, replay } from "./director/replay.ts";
 import { setTimeScale } from "./engine/tween.ts";
+import { useLang } from "./i18n/lang.tsx";
 import { type Scene, sceneSchema } from "./scene/scene.ts";
 import { assignSeats, assignStanding } from "./scene/seats.ts";
 import { createEditor } from "./stage/editor.ts";
@@ -16,6 +17,9 @@ import { TopBar } from "./ui/top-bar.tsx";
 import { useOfficeData } from "./ui/use-office-data.ts";
 
 export function App() {
+  const { t } = useLang();
+  const stageText = useRef(t);
+  stageText.current = t;
   const host = useRef<HTMLDivElement>(null);
   const editor = useRef<ReturnType<typeof createEditor>>(null);
   const [editing, setEditing] = useState(false);
@@ -63,7 +67,7 @@ export function App() {
     let stage: Awaited<ReturnType<typeof createStage>>;
     const start = async () => {
       const response = await fetch("/office/scene.json");
-      if (!response.ok) throw new Error("场景加载失败");
+      if (!response.ok) throw new Error(stageText.current("office.loadFailed"));
       const scene = sceneSchema.parse(await response.json());
       const element = host.current;
       if (!element || disposed) return;
@@ -81,8 +85,8 @@ export function App() {
       observer.observe(element);
       setTimeScale(1);
       const daylight = await (mode.mode === "live"
-        ? direct(stage, scene)
-        : replay(stage, scene, mode.at, controls.current));
+        ? direct(stage, scene, stageText.current("cast.human"))
+        : replay(stage, scene, mode.at, controls.current, stageText.current("cast.human")));
       if (disposed) return;
       editor.current = createEditor(stage, scene, (active) => {
         setEditing(active);
@@ -108,16 +112,16 @@ export function App() {
   const task =
     selection?.type === "task" ? tasks.find((item) => item.id === selection.id) : undefined;
   return (
-    <main className="office-frame" aria-label="像素办公室">
+    <main className="office-frame" aria-label={t("office.label")}>
       <TopBar
-        title={scene?.title ?? "IDesk 调度中心"}
+        title={scene?.title ?? t("office.title")}
         agents={agents}
         tasks={tasks}
         replaying={mode.mode === "replay"}
         onReplay={enterReplay}
       />
-      <section className="pixel-panel avatar-strip" aria-label="今日值班">
-        <h2>今日值班</h2>
+      <section className="pixel-panel avatar-strip" aria-label={t("roster.duty")}>
+        <h2>{t("roster.duty")}</h2>
         {agents.map((item) => (
           <RosterItem key={item.id} agent={item} tasks={tasks} onSelect={selectAgent} />
         ))}
@@ -172,7 +176,9 @@ export function App() {
       )}
       {editing && (
         <div className="editor-export">
-          <PixelButton onClick={() => void editor.current?.exportJson()}>导出 JSON</PixelButton>
+          <PixelButton onClick={() => void editor.current?.exportJson()}>
+            {t("editor.export")}
+          </PixelButton>
         </div>
       )}
     </main>
