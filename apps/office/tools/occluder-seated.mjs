@@ -24,7 +24,7 @@ const layers = layout.occluders.map((item) => {
   return { png, x: box.x, y: box.y, z: zIndexOf(item.baseline, 0) };
 });
 for (const seat of layout.seats) {
-  const frame = atlas.frames[`codex/sit/${seat.facing}`].frame;
+  const { frame, anchor } = atlas.frames[`codex/sit/${seat.facing}`];
   const png = new PNG({ width: frame.w, height: frame.h });
   for (let y = 0; y < frame.h; y++)
     for (let x = 0; x < frame.w; x++) {
@@ -34,8 +34,8 @@ for (const seat of layout.seats) {
     }
   layers.push({
     png,
-    x: Math.round(seat.x - frame.w / 2),
-    y: Math.round(seat.y - frame.h),
+    x: Math.round(seat.x - frame.w * (seat.mirror ? 1 - anchor.x : anchor.x)),
+    y: Math.round(seat.y - frame.h * anchor.y),
     z: zIndexOf(seat.y, 1),
   });
 }
