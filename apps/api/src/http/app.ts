@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { serveStatic } from "@hono/node-server/serve-static";
@@ -52,7 +53,15 @@ for (const path of ["/assets/*", "/office/assets/*"])
 app.use("/office/:file{.+\\.(png|webp|woff2)}", cached("public, max-age=86400"));
 app.use("/office/sprites.json", cached("public, max-age=86400"), compress());
 
-app.get("/api/meta", (c) => c.json({ office: config.IDESK_OFFICE_DIST !== undefined }));
+// 办公室页常年开着，部署后靠 build 变化让它自己刷新；index.html 里的 bundle 名每次构建都不同。
+const officeBuild =
+  config.IDESK_OFFICE_DIST === undefined
+    ? null
+    : createHash("sha1")
+        .update(readFileSync(join(config.IDESK_OFFICE_DIST, "index.html")))
+        .digest("hex")
+        .slice(0, 8);
+app.get("/api/meta", (c) => c.json({ office: officeBuild !== null, build: officeBuild }));
 
 app.get("/api/health", (c) => c.json({ ok: true }));
 

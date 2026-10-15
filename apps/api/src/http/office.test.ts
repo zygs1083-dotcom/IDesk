@@ -16,7 +16,10 @@ test("office metadata, optional hosting, SPA fallback and runtime scene override
   vi.stubEnv("IDESK_WEB_DIST", dist);
   vi.resetModules();
   const disabled = (await import("./app.ts")).app;
-  expect(await (await disabled.request("/api/meta")).json()).toEqual({ office: false });
+  expect(await (await disabled.request("/api/meta")).json()).toEqual({
+    office: false,
+    build: null,
+  });
   expect((await disabled.request("/office/")).status).toBe(404);
   expect((await disabled.request("/office/scene.json")).status).toBe(404);
 
@@ -24,7 +27,10 @@ test("office metadata, optional hosting, SPA fallback and runtime scene override
   vi.stubEnv("IDESK_DATA_DIR", data);
   vi.resetModules();
   const enabled = (await import("./app.ts")).app;
-  expect(await (await enabled.request("/api/meta")).json()).toEqual({ office: true });
+  expect(await (await enabled.request("/api/meta")).json()).toEqual({
+    office: true,
+    build: expect.stringMatching(/^[0-9a-f]{8}$/),
+  });
   expect(await (await enabled.request("/office/")).text()).toBe("office canvas");
   expect(await (await enabled.request("/office/room")).text()).toBe("office canvas");
   expect(await (await enabled.request("/office/asset.js")).text()).toBe("office asset");
