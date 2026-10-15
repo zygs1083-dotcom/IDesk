@@ -10,6 +10,7 @@ import {
   Workflow,
 } from "lucide-react";
 import { NavLink } from "react-router";
+import { request } from "../lib/api.ts";
 import { cn } from "../lib/cn.ts";
 import { useAgents } from "../lib/use-agents.ts";
 
@@ -25,6 +26,10 @@ const items = [
 
 export function Sidebar() {
   const { agents } = useAgents();
+  const { data: session } = useQuery({
+    queryKey: ["auth", "me"],
+    queryFn: () => request<{ role: "admin" | "viewer" }>("/auth/me"),
+  });
   const { data: meta } = useQuery<{ office: boolean }>({
     queryKey: ["meta"],
     queryFn: async () => {
@@ -39,7 +44,7 @@ export function Sidebar() {
       <div className="hidden px-5 pt-5 pb-4 text-section sidebar:block">IDesk</div>
       <nav
         aria-label="主导航"
-        className="flex gap-2 p-3 sidebar:flex-col sidebar:gap-1 sidebar:py-0"
+        className="flex gap-0 p-2 sidebar:flex-col sidebar:gap-1 sidebar:px-3 sidebar:py-0"
       >
         {items.map(({ to, label, icon: Icon }) => (
           <NavLink
@@ -49,7 +54,7 @@ export function Sidebar() {
             title={label}
             className={({ isActive }) =>
               cn(
-                "flex items-center gap-2 rounded-control p-3 text-body transition-colors duration-hover ease-hover sidebar:px-3 sidebar:py-2",
+                "flex items-center gap-2 rounded-control p-2.5 text-body transition-colors duration-hover ease-hover sidebar:px-3 sidebar:py-2",
                 isActive ? "bg-line text-text" : "text-text-2 hover:text-text",
               )
             }
@@ -63,18 +68,24 @@ export function Sidebar() {
             href="/office/"
             aria-label="像素办公室"
             title="像素办公室"
-            className="flex items-center gap-2 rounded-control p-3 text-body text-text-2 transition-colors duration-hover ease-hover hover:text-text sidebar:px-3 sidebar:py-2"
+            className="flex items-center gap-2 rounded-control p-2.5 text-body text-text-2 transition-colors duration-hover ease-hover hover:text-text sidebar:px-3 sidebar:py-2"
           >
             <Building2 aria-hidden="true" size={16} strokeWidth={1.5} />
             <span className="hidden sidebar:inline">像素办公室</span>
           </a>
         )}
       </nav>
-      <div className="mt-auto hidden items-center gap-2 px-5 py-4 text-secondary text-text-2 sidebar:flex">
+      <div className="ml-auto flex shrink-0 items-center gap-2 pr-2 text-secondary text-text-2 sidebar:mt-auto sidebar:ml-0 sidebar:px-5 sidebar:py-4">
         <span
-          className={cn("size-2 rounded-full", online > 0 ? "bg-status-done" : "bg-status-open")}
+          className={cn(
+            "hidden size-2 rounded-full sidebar:block",
+            online > 0 ? "bg-status-done" : "bg-status-open",
+          )}
         />
-        <span>{online} 在线</span>
+        <span className="hidden sidebar:inline">{online} 在线</span>
+        {session?.role === "viewer" && (
+          <span className="rounded-control border border-line px-2 py-1">只读</span>
+        )}
       </div>
     </aside>
   );
