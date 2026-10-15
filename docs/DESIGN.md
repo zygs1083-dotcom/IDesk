@@ -561,5 +561,5 @@ completedAt: <ISO>
 
 ### 12.23 发布时直接指定或招募（W50）
 
-- `POST /tasks` 和 MCP `idesk_publish_task` 的 body 加可选 `dispatch`：`{ type: "assign", agentId }` 或 `{ type: "recruit", needed }`（needed ≥ 2）。服务端先 `createTask`，再以同一个 actor 调 `actOnTask`；动作被状态机拒绝时返回 409，任务已创建并停在 open（发布者可以之后再指派）。定时任务的 `publish_task` 模板不加 dispatch。
-- 发布弹层在优先级下面加一个分段「待领取 · 指定 · 招募」（默认待领取）：选「指定」出现智能体下拉（`name@host`，在线的排前面并带绿点）；选「招募」出现人数输入（默认 2，最小 2）。模板不填这一项。
+- `POST /tasks` 和 MCP `idesk_publish_task` 的 body 加可选 `dispatch`：`{ type: "assign", agentId }` 或 `{ type: "recruit", needed }`（needed ≥ 2）。服务端 `core/tasks/publish.ts` 的 `publishTask(input, actor, dispatch)` 先 `createTask`，再同步以同一个 actor 调 `actOnTask`（同步保证 auto-assign 在 microtask 里看到的任务已不是 open）；路由和 MCP 都调它；动作被状态机拒绝时返回 409，任务已创建并停在 open（发布者可以之后再指派）。定时任务的 `publish_task` 模板不加 dispatch。
+- 发布弹层在优先级下面加一个分段「待领取 · 指定 · 招募」（默认待领取）：选「指定」出现原生 select，用「在线」「离线」两个 optgroup 分组（和协作台的指派弹层一致，不画点）；选「招募」出现人数输入（默认 2，最小 2）。模板不填这一项。
