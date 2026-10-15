@@ -117,3 +117,28 @@ it("allows omitted projectCode and refreshes the project list on every listing",
     Array(2).fill(`${baseUrl}/projects?pageNo=1&pageSize=100`),
   );
 });
+
+it("skips projects without workflows when listing runs after listing jobs", async () => {
+  const settings = plugin.configSchema.parse({ baseUrl, token: "secret" });
+  const fetch = vi.fn((url: string) => {
+    if (url.includes("/projects?"))
+      return Promise.resolve(
+        page([
+          { code: "41", name: "空项目" },
+          { code: "42", name: "有活" },
+        ]),
+      );
+    if (url.includes("/projects/41/process-definition")) return Promise.resolve(page([]));
+    if (url.includes("/process-definition"))
+      return Promise.resolve(page([{ code: 7, name: "wf", releaseState: "ONLINE" }]));
+    return Promise.resolve(page([]));
+  });
+  vi.stubGlobal("fetch", fetch);
+  const jobs = await plugin.listJobs(settings);
+  await plugin.listRuns(settings, { since: null, limit: 50, jobs });
+  const instanceUrls = fetch.mock.calls
+    .map(([url]) => String(url))
+    .filter((url) => url.includes("/process-instances"));
+  expect(instanceUrls).toHaveLength(1);
+  expect(instanceUrls[0]).toContain("/projects/42/process-instances");
+});

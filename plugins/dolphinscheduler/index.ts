@@ -105,10 +105,14 @@ export default {
     }
     return jobs;
   },
-  async listRuns(config, { since, limit, progress }) {
+  async listRuns(config, { since, limit, progress, jobs }) {
     const settings = config as Config;
     const runs: ExternalRun[] = [];
-    const projects = await listProjects(settings);
+    // 全部项目模式下多数项目一个工作流都没有，只查本次 listJobs 见到工作流的项目
+    const withJobs = jobs && new Set(jobs.map((job) => job.externalId.split("/")[0]));
+    const projects = (await listProjects(settings)).filter(
+      (project) => !withJobs || withJobs.has(String(project.code)),
+    );
     for (const [index, project] of projects.entries()) {
       progress?.(index, projects.length);
       let projectRunCount = 0;
