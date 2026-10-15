@@ -101,13 +101,15 @@ export function AutomationPage() {
       {connector && (
         <>
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <Segmented
-              label="连接器"
-              options={connectors.map((item) => ({ value: item.id, label: item.name }))}
-              value={connector.id}
-              onChange={setSelected}
-            />
-            <label className="order-3 flex min-w-0 flex-1 sidebar:order-none sidebar:max-w-60 items-center gap-2 rounded-control border border-line bg-surface px-3 py-2 text-text-2">
+            <div className="flex min-w-0 overflow-x-auto">
+              <Segmented
+                label="连接器"
+                options={connectors.map((item) => ({ value: item.id, label: item.name }))}
+                value={connector.id}
+                onChange={setSelected}
+              />
+            </div>
+            <label className="flex min-w-0 flex-1 sidebar:max-w-60 items-center gap-2 rounded-control border border-line bg-surface px-3 py-2 text-text-2">
               <Search size={16} strokeWidth={1.5} />
               <input
                 aria-label="搜索工作流"
