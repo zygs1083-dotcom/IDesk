@@ -41,6 +41,7 @@ export const automationJobSchema = z
     connectorId: z.string(),
     externalId: z.string(),
     name: z.string(),
+    group: z.string().nullable(),
     enabled: z.boolean(),
     url: z.string().nullable(),
     lastRunStatus: runStatusSchema.nullable(),
@@ -61,4 +62,7 @@ export const automationRunSchema = z
   })
   .meta({ id: "AutomationRun" });
 
-export const automationRunWithJobSchema = automationRunSchema.extend({ jobName: z.string() });
+export const automationRunWithJobSchema = automationRunSchema.extend({
+  jobName: z.string(),
+  jobGroup: z.string().nullable(),
+});

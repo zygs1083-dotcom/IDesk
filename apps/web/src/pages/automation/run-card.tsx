@@ -48,6 +48,11 @@ export function RunCard({ run, now }: { run: Run; now: number }) {
           </a>
         )}
       </div>
+      {run.jobGroup !== null && (
+        <p title={run.jobGroup} className="mb-2 truncate text-label text-text-2">
+          {run.jobGroup}
+        </p>
+      )}
       <p className="text-label text-text-2 tabular-nums">{metadata.join(" · ")}</p>
       {run.status === "failed" && run.error !== null && (
         <p title={run.error} className="mt-2 truncate text-label text-status-failed">

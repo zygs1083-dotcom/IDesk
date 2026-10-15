@@ -38,6 +38,7 @@ beforeEach(async () => {
   jobs = ["A", "B"].map((externalId) => ({
     externalId,
     name: externalId,
+    group: null,
     enabled: true,
     url: null,
   }));

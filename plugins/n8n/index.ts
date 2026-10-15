@@ -113,6 +113,7 @@ export default {
         jobs.push({
           externalId: workflow.id,
           name: workflow.name,
+          group: null,
           enabled:
             workflow.active === true ||
             workflow.activeVersionId != null ||

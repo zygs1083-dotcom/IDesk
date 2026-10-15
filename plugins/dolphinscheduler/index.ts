@@ -94,7 +94,8 @@ export default {
         jobs.push(
           ...page.totalList.map((definition) => ({
             externalId: `${project.code}/${definition.code}`,
-            name: settings.projectCode ? definition.name : `${project.name} / ${definition.name}`,
+            name: definition.name,
+            group: project.name,
             enabled: definition.releaseState === "ONLINE",
             // UI 深链未在真实实例上验证。
             url: `${settings.baseUrl}/ui/projects/${project.code}/workflow/definitions/${definition.code}`,
