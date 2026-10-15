@@ -9,13 +9,13 @@ export function renderWorld(
   world: Container,
   objects: Container,
 ) {
-  world.addChildAt(new Sprite(assets.background), 0);
+  world.addChildAt(new Sprite({ texture: assets.background, eventMode: "none" }), 0);
   for (const item of layout.occluders) {
     const texture = assets.occluders.textures[item.id];
     const data = assets.occluders.data.frames[item.id];
     if (!texture || !data) throw new Error(`Missing occluder: ${item.id}`);
     const point = (data as typeof data & { background: { x: number; y: number } }).background;
-    const sprite = new Sprite(texture);
+    const sprite = new Sprite({ texture, eventMode: "none" });
     sprite.position.copyFrom(point);
     sprite.label = item.id;
     sprite.zIndex = zIndexOf(item.baseline, 0);

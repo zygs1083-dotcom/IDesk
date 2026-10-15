@@ -40,7 +40,7 @@ export class Plaque extends Container {
     private stage: Stage,
     area: { x: number; y: number; w: number; h: number },
   ) {
-    super();
+    super({ eventMode: "none" });
     this.area = area;
     this.position.set(area.x + area.w / 2, area.y + area.h / 2);
     stage.board.addChild(this);

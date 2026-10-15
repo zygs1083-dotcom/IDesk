@@ -12,7 +12,7 @@ export async function createStage(host: HTMLElement, layout: OfficeLayout, asset
   const board = world.addChild(new Container());
   const objects = world.addChild(new Container({ sortableChildren: true }));
   const effects = world.addChild(new Container());
-  const lights = world.addChild(new Container());
+  const lights = world.addChild(new Container({ eventMode: "none" }));
   renderWorld(layout, assets, world, objects);
   const resize = () => {
     const width = layout.size.w;
