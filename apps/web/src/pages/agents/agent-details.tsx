@@ -5,6 +5,8 @@ import { relativeTime } from "../../lib/format.ts";
 import type { Task, TaskEvent } from "../../lib/types.ts";
 import { useAgents } from "../../lib/use-agents.ts";
 
+import { AgentStats } from "./agent-stats.tsx";
+
 export function AgentDetails({ agentId }: { agentId: string }) {
   const { agentName } = useAgents();
   const tasks = useQuery({
@@ -23,6 +25,7 @@ export function AgentDetails({ agentId }: { agentId: string }) {
   const taskTitles = new Map(tasks.data?.map((task) => [task.id, task.title]));
   return (
     <div className="grid gap-6 md:grid-cols-2">
+      <AgentStats agentId={agentId} />
       <section className="space-y-2">
         <h2 className="text-label text-text-2">当前任务</h2>
         {tasks.error && (
