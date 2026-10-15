@@ -17,3 +17,11 @@ test.each([0, -1])("cover dimensions reject %s", (dimension) => {
     expect(sceneSchema.safeParse(scene).success).toBe(false);
   }
 });
+
+test("seat mirroring accepts only true or omission", () => {
+  for (const mirror of [true, false]) {
+    const scene = structuredClone(data);
+    Object.assign(scene.frontDesk.human, { mirror });
+    expect(sceneSchema.safeParse(scene).success).toBe(mirror);
+  }
+});
