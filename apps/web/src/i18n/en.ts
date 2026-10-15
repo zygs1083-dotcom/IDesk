@@ -83,6 +83,7 @@ export const en: Record<Key, string> = {
   "desk.board": "Task board",
   "desk.byHost": "By host",
   "desk.dependencies": "Dependencies",
+  "desk.dispatch": "Dispatch",
   "desk.empty": "No tasks yet",
   "desk.flat": "Flat",
   "desk.grouping": "Grouping",
