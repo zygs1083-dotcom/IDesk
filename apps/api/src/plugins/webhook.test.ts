@@ -134,7 +134,7 @@ test("HTTP failures retry after 1s, 5s and 30s then record one failed event", as
 test("hanging deliveries time out after 30s and exhaust all three retries", async () => {
   hanging = true;
   vi.useFakeTimers({ toFake: ["setTimeout"] });
-  // Node's native AbortSignal.timeout uses internal timers, outside Vitest's fake clock.
+  // Node 自带的 AbortSignal.timeout 用的是内部计时器，不受 Vitest 假时钟控制，所以要 mock
   const timeout = vi.spyOn(AbortSignal, "timeout").mockImplementation((delay) => {
     const controller = new AbortController();
     setTimeout(
