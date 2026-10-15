@@ -1,5 +1,5 @@
 import { afterEach, expect, test, vi } from "vitest";
-import { easeInOut, tween } from "./tween.ts";
+import { easeInOut, setTimeScale, tween } from "./tween.ts";
 
 const motion = vi.hoisted(() => {
   const media = { matches: false };
@@ -8,6 +8,7 @@ const motion = vi.hoisted(() => {
 });
 afterEach(() => {
   motion.matches = false;
+  setTimeScale(1);
 });
 
 function manualTicker() {
@@ -57,5 +58,20 @@ test("reduced motion reaches the destination without waiting for a tick", async 
   expect(ticker.updates.size).toBe(0);
   await finished;
   expect(point).toEqual({ x: 100, y: 200 });
+  expect(ticker.updates.size).toBe(0);
+});
+
+test("time scale divides tween duration and infinity finishes without a tick", async () => {
+  const ticker = manualTicker();
+  const point = { x: 0, y: 0 };
+  setTimeScale(10);
+  const finished = tween(ticker, point, { x: 10, y: 20 }, 1000);
+  ticker.advance(100);
+  await finished;
+  expect(point).toEqual({ x: 10, y: 20 });
+  expect(ticker.updates.size).toBe(0);
+  setTimeScale(Number.POSITIVE_INFINITY);
+  await tween(ticker, point, { x: 30, y: 40 }, 1000);
+  expect(point).toEqual({ x: 30, y: 40 });
   expect(ticker.updates.size).toBe(0);
 });

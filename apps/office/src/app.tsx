@@ -1,11 +1,14 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { direct } from "./director/director.ts";
+import { type ReplayControls, replay } from "./director/replay.ts";
+import { setTimeScale } from "./engine/tween.ts";
 import { type Scene, sceneSchema } from "./scene/scene.ts";
 import { assignSeats, assignStanding } from "./scene/seats.ts";
 import { createEditor } from "./stage/editor.ts";
 import { createStage } from "./stage/stage.ts";
 import { AgentPanel } from "./ui/agent-panel.tsx";
 import { PixelButton } from "./ui/pixel-button.tsx";
+import { ReplayBar } from "./ui/replay-bar.tsx";
 import { Roster } from "./ui/roster.tsx";
 import { RosterItem } from "./ui/roster-item.tsx";
 import { TaskPanel } from "./ui/task-panel.tsx";
@@ -17,7 +20,33 @@ export function App() {
   const editor = useRef<ReturnType<typeof createEditor>>(null);
   const [editing, setEditing] = useState(false);
   const [error, setError] = useState("");
-  const { agents, tasks, error: dataError } = useOfficeData();
+  const [mode, setMode] = useState<{ mode: "live" } | { mode: "replay"; at: number }>({
+    mode: "live",
+  });
+  const [at, setAt] = useState(0);
+  const [playing, setPlaying] = useState(true);
+  const [speed, setSpeed] = useState(1);
+  const controls = useRef<ReplayControls>({
+    start: 0,
+    end: 0,
+    playing,
+    speed,
+    update: (at, ended) => {
+      setAt(at);
+      if (ended) setPlaying(false);
+    },
+  });
+  controls.current.playing = playing;
+  controls.current.speed = speed;
+  const { agents, tasks, error: dataError } = useOfficeData(mode.mode === "live");
+  const enterReplay = () => {
+    const end = Date.now();
+    controls.current.end = end;
+    controls.current.start = end - 3600000;
+    setAt(controls.current.start);
+    setPlaying(true);
+    setMode({ mode: "replay", at: controls.current.start });
+  };
   const [scene, setScene] = useState<Scene>();
   const [selection, setSelection] = useState<{ type: "agent" | "task"; id: string }>();
   const closePanel = useCallback(() => setSelection(undefined), []);
@@ -43,13 +72,17 @@ export function App() {
       if (disposed) return;
       stage = await createStage(element);
       if (disposed) {
+        stage.world.destroy({ children: true });
         stage.app.destroy(true, { children: true });
         return;
       }
       stage.app.resizeTo = element;
       observer = new ResizeObserver(() => stage.app.resize());
       observer.observe(element);
-      const daylight = await direct(stage, scene);
+      setTimeScale(1);
+      const daylight = await (mode.mode === "live"
+        ? direct(stage, scene)
+        : replay(stage, scene, mode.at, controls.current));
       if (disposed) return;
       editor.current = createEditor(stage, scene, (active) => {
         setEditing(active);
@@ -64,9 +97,10 @@ export function App() {
       observer?.disconnect();
       editor.current?.destroy();
       editor.current = null;
+      stage?.world.destroy({ children: true });
       stage?.app.destroy(true, { children: true });
     };
-  }, []);
+  }, [mode]);
   const seats = scene ? assignSeats(agents, scene) : new Map();
   const standing = scene ? assignStanding(agents, seats, scene) : new Map();
   const agent =
@@ -75,7 +109,13 @@ export function App() {
     selection?.type === "task" ? tasks.find((item) => item.id === selection.id) : undefined;
   return (
     <main className="office-frame" aria-label="像素办公室">
-      <TopBar title={scene?.title ?? "IDesk 调度中心"} agents={agents} tasks={tasks} />
+      <TopBar
+        title={scene?.title ?? "IDesk 调度中心"}
+        agents={agents}
+        tasks={tasks}
+        replaying={mode.mode === "replay"}
+        onReplay={enterReplay}
+      />
       <section className="pixel-panel avatar-strip" aria-label="今日值班">
         <h2>今日值班</h2>
         {agents.map((item) => (
@@ -108,6 +148,23 @@ export function App() {
           />
         ) : null}
       </div>
+      {mode.mode === "replay" && (
+        <ReplayBar
+          start={controls.current.start}
+          end={controls.current.end}
+          at={at}
+          playing={playing}
+          speed={speed}
+          onSpeed={setSpeed}
+          onSeek={(at) => setMode({ mode: "replay", at })}
+          onPlay={() => {
+            if (at === controls.current.end)
+              setMode({ mode: "replay", at: controls.current.start });
+            setPlaying(!playing);
+          }}
+          onLive={() => setMode({ mode: "live" })}
+        />
+      )}
       {(error || dataError) && (
         <p className="office-error" role="alert">
           {error || dataError}

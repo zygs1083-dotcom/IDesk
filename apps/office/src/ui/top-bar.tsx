@@ -7,7 +7,11 @@ export function TopBar({
   title,
   agents,
   tasks,
+  replaying,
+  onReplay,
 }: {
+  replaying: boolean;
+  onReplay: () => void;
   title: string;
   agents: Agent[];
   tasks: Task[];
@@ -52,6 +56,9 @@ export function TopBar({
               </>
             )}
           </svg>
+        </PixelButton>
+        <PixelButton aria-pressed={replaying} onClick={onReplay}>
+          回放
         </PixelButton>
         <PixelButton href="/desk">回到看板</PixelButton>
       </div>

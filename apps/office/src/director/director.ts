@@ -18,20 +18,10 @@ const LEASE_WARNING_MS = 120_000;
 
 export async function direct(stage: Stage, scene: Scene) {
   const initialEvents = z.array(eventSchema).parse(await request("/events"));
-  const [atlas, agents, tasks] = await Promise.all([
-    sprites,
-    request("/agents").then((data) => z.array(publicAgentSchema).parse(data)),
-    request("/tasks").then((data) => z.array(taskSchema).parse(data)),
-  ]);
-  if (stage.app.stage.destroyed) return;
-  atlas.textureSource.scaleMode = "nearest";
-  const cast = new Cast(stage, scene, atlas.textures);
-  const daylight = createDaylight(stage, cast.characters);
-  cast.update(agents, true);
-  const cards = new Cards(stage, scene);
-  const snapshot = new Map(tasks.map((task) => [task.id, task]));
+  const initialized = await initialize(stage, scene);
+  if (!initialized) return;
+  const { cast, snapshot, actions, daylight, tasks, cards } = initialized;
   placeSnapshot(cast, cards, tasks);
-  const actions = createActions(cast, cards);
   const warned = new Set<string>();
   const checkLeases = () => {
     const nearExpiry = new Set(
@@ -62,7 +52,7 @@ export async function direct(stage: Stage, scene: Scene) {
     initialEvents[0]?.id ?? "",
     async (since) => z.array(eventSchema).parse(await request(`/events?since=${since}`)),
     async (event) => {
-      if (stage.app.stage.destroyed) return;
+      if (stage.world.destroyed) return;
       if (event.agentId) {
         if (!cast.agents.has(event.agentId))
           cast.update(z.array(publicAgentSchema).parse(await request("/agents")));
@@ -81,7 +71,7 @@ export async function direct(stage: Stage, scene: Scene) {
   const unsubscribe = onRealtimeEvent(() => void pull());
   const timer = setInterval(async () => {
     const agents = z.array(publicAgentSchema).parse(await request("/agents"));
-    if (stage.app.stage.destroyed) return;
+    if (stage.world.destroyed) return;
     cast.update(agents);
     checkLeases();
   }, PRESENCE_MS);
@@ -92,4 +82,21 @@ export async function direct(stage: Stage, scene: Scene) {
   });
   await pull();
   return daylight;
+}
+
+export async function initialize(stage: Stage, scene: Scene) {
+  const [atlas, agents, tasks] = await Promise.all([
+    sprites,
+    request("/agents").then((data) => z.array(publicAgentSchema).parse(data)),
+    request("/tasks").then((data) => z.array(taskSchema).parse(data)),
+  ]);
+  if (stage.world.destroyed) return;
+  atlas.textureSource.scaleMode = "nearest";
+  const cast = new Cast(stage, scene, atlas.textures);
+  const daylight = createDaylight(stage, cast.characters);
+  cast.update(agents, true);
+  const cards = new Cards(stage, scene);
+  const snapshot = new Map(tasks.map((task) => [task.id, task]));
+  const actions = createActions(cast, cards);
+  return { cast, cards, snapshot, actions, daylight, tasks };
 }

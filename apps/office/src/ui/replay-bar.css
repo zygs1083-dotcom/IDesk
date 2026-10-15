@@ -1,0 +1,44 @@
+.replay-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  flex-shrink: 0;
+}
+.replay-timeline {
+  flex: 1;
+  min-width: 0;
+}
+.replay-timeline label {
+  display: block;
+  margin-bottom: 4px;
+}
+.replay-timeline input {
+  display: block;
+  width: 100%;
+  margin: 0;
+  accent-color: var(--office-focus);
+}
+.replay-ticks {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 4px;
+}
+.replay-speeds {
+  display: flex;
+  gap: 4px;
+}
+.pixel-button[aria-pressed="true"] {
+  background: var(--office-highlight);
+  box-shadow: inset 2px 2px 0 var(--office-shadow);
+  transform: translateY(1px);
+}
+@media (max-width: 600px) {
+  .replay-bar {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .replay-timeline {
+    flex-basis: 100%;
+  }
+}
