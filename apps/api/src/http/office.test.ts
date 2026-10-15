@@ -39,6 +39,14 @@ test("office metadata, optional hosting, SPA fallback and runtime scene override
   expect(await (await enabled.request("/office/scene.json")).json()).toEqual({
     hostZones: { test: 2 },
   });
+  writeFileSync(join(dist, "layout.json"), '{"source":"dist"}');
+  const layout = await enabled.request("/office/layout.json");
+  expect(await layout.json()).toEqual({ source: "dist" });
+  expect(layout.headers.get("Cache-Control")).toBe("no-store");
+  writeFileSync(join(data, "office", "layout.json"), '{"source":"override"}');
+  const override = await enabled.request("/office/layout.json");
+  expect(await override.json()).toEqual({ source: "override" });
+  expect(override.headers.get("Cache-Control")).toBe("no-store");
   vi.unstubAllEnvs();
   rmSync(directory, { recursive: true });
 });
