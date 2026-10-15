@@ -40,7 +40,7 @@ export function createActions(cast: Cast, cards: Cards) {
   const perform: { [K in Intent["kind"]]: (intent: Extract<Intent, { kind: K }>) => void } = {
     create: (intent) => {
       const { task } = intent;
-      const from = task.publisherId === "human" ? cast.desk("human") : undefined;
+      const from = task.publisherId === "human" ? scene.frontDesk.counter : undefined;
       flights.set(task.id, cards.toBoard(task, from, true));
     },
     assigned: (intent) => {

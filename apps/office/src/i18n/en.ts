@@ -115,6 +115,13 @@ export const en: Record<Key, string> = {
   "time.minutes": "{minutes} min",
   "time.minutesAgo": "{count} minutes ago",
   "time.underMinute": "< 1 min",
+  "reception.name": "Receptionist",
+  "reception.post": "Post",
+  "reception.postValue": "Front desk",
+  "reception.likes": "Likes",
+  "reception.likesValue": "Bear-shaped biscuits",
+  "reception.note":
+    "Takes no tasks. Greets everyone from the front desk and wanders off for a chat when it is quiet.",
   "replay.controls": "Replay controls",
   "replay.live": "Back to live",
   "replay.pause": "Pause",

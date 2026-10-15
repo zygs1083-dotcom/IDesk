@@ -9,6 +9,7 @@ import { createEditor } from "./stage/editor.ts";
 import { createStage } from "./stage/stage.ts";
 import { PixelButton } from "./ui/pixel-button.tsx";
 import { ProfileModal } from "./ui/profile-modal.tsx";
+import { ReceptionProfile } from "./ui/reception-profile.tsx";
 import { ReplayBar } from "./ui/replay-bar.tsx";
 import { Roster } from "./ui/roster.tsx";
 import { RosterItem } from "./ui/roster-item.tsx";
@@ -150,6 +151,9 @@ export function App() {
           />
         ) : null}
       </div>
+      {selection?.type === "agent" && selection.id === "human" && (
+        <ReceptionProfile onClose={closePanel} />
+      )}
       {agent && (
         <ProfileModal
           key={agent.id}

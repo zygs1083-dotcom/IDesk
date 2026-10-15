@@ -32,7 +32,7 @@ export const sceneSchema = z.object({
   hostZones: z.record(z.string(), z.number().int().min(1).max(4)).optional(),
   title: z.string().optional(),
   door: point.extend({ via: z.string() }),
-  frontDesk: z.object({ human: spot }),
+  frontDesk: z.object({ human: spot, counter: point }),
   taskBoard: point.extend({ width: z.number(), height: z.number() }),
   zones: z.array(z.object({ name: point, seats: z.array(spot).length(4) })).length(4),
   meeting: z.object({ seats: z.array(spot).length(6) }),
