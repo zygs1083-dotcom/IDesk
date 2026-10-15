@@ -543,3 +543,12 @@ completedAt: <ISO>
 ### 12.20 办公室事件文案（W46）
 
 办公室详情面板的「最近事件」和主前端活动页同一套规则（§12.17），不显示原始类型名。文案走办公室自己的字典（zh / en 各一份，键 `event.*`），`eventText(event, t, agentName)` 放 `apps/office/src/ui/event-text.ts`，不跨 app import 主前端的实现。
+
+### 12.21 待执行列显示下一次计划执行（W48）
+
+「待执行」列原来只放已创建未开始的实例，DolphinScheduler 里这种实例几乎不存在（到点才生成实例，几秒就跑完），这一列一直是空的。改成：
+
+- `automation_jobs` 加 `schedule` 列（JSON，可空）：`{ cron: string, timezone: string }`，迁移 `0005`。`ExternalJob` 随之多出 `schedule`。
+- DolphinScheduler：对有工作流的项目各拉一次 `GET /projects/{code}/schedules?pageNo=<n>&pageSize=100`（翻页），只取 `releaseState` 为 ONLINE 的，按 `processDefinitionCode` 挂到作业上；`timezone` 取 `timezoneId`，没有则 `Asia/Shanghai`。海豚的 crontab 是 Quartz 七段：去掉第七段（年），`?` 换成 `*`；含 `L`、`W`、`#` 的不支持，`schedule` 置 null。一个作业多条在线定时时取第一条。GitHub Actions、n8n：null。
+- 前端不存下一次时间，用 `croner` 在浏览器里按 `cron` + `timezone` 算 `nextRun()`，永远是新鲜的；解析失败的作业不出现在列里。
+- 「待执行」列内容 = 仍在 waiting 状态的实例（照旧，排前面）+ 有 `schedule` 的作业（按下一次时间升序）。作业卡：工作流名、项目名、第三行「下次 HH:mm」（不是当天带 `MM-DD`），title 是 cron 原文和时区；没有外链时不显示外链图标。计数是两类相加。搜索按工作流名、项目名过滤两类。页面每 30 秒重算一次「下次」。
