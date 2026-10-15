@@ -7,8 +7,8 @@ $ vitest run --passWithNoTests
 
  Test Files  5 passed (5)
       Tests  175 passed (175)
-   Start at  01:49:13
-   Duration  461ms (import 48%, tests 32%, transform 12%, worker 9%)
+   Start at  01:57:20
+   Duration  785ms (import 55%, tests 25%, transform 12%, worker 8%)
 
 $ vitest run
 
@@ -17,8 +17,8 @@ $ vitest run
 
  Test Files  5 passed (5)
       Tests  48 passed (48)
-   Start at  01:49:14
-   Duration  624ms (import 56%, tests 33%, transform 8%, worker 3%)
+   Start at  01:57:21
+   Duration  995ms (import 62%, tests 31%, worker 4%, transform 3%)
 
 $ vitest run
 
@@ -27,8 +27,8 @@ $ vitest run
 
  Test Files  1 passed (1)
       Tests  30 passed (30)
-   Start at  01:49:16
-   Duration  575ms (import 50%, tests 38%, transform 10%, worker 2%)
+   Start at  01:57:23
+   Duration  531ms (import 50%, tests 38%, transform 7%, worker 5%)
 
 $ vitest run
 
@@ -37,8 +37,8 @@ $ vitest run
 
  Test Files  1 passed (1)
       Tests  13 passed (13)
-   Start at  01:49:17
-   Duration  596ms (import 54%, tests 42%, transform 2%, worker 2%)
+   Start at  01:57:24
+   Duration  453ms (import 59%, tests 28%, transform 10%, worker 3%)
 
 $ vitest run --passWithNoTests
 
@@ -47,11 +47,11 @@ $ vitest run --passWithNoTests
 
  Test Files  38 passed (38)
       Tests  133 passed (133)
-   Start at  01:49:19
-   Duration  71.66s (import 73%, tests 26%, worker 1%)
+   Start at  01:57:25
+   Duration  73.56s (import 75%, tests 24%, worker 1%)
 
-     Import  132 modules were evaluated 617 times · 46.38s total, 73% of tracked time
-             ~36.46s faster with isolate: false — shared modules are evaluated once per worker instead of once per file
+     Import  132 modules were evaluated 617 times · 48.72s total, 75% of tracked time
+             ~38.30s faster with isolate: false — shared modules are evaluated once per worker instead of once per file
              learn more: https://vitest.dev/guide/improving-performance#test-isolation
 
 $ vitest run
@@ -61,11 +61,11 @@ $ vitest run
 
  Test Files  32 passed (32)
       Tests  491 passed (491)
-   Start at  01:50:31
-   Duration  3.68s (import 59%, tests 32%, transform 6%, worker 3%)
+   Start at  01:58:40
+   Duration  3.60s (import 64%, tests 29%, transform 5%, worker 3%)
 
-    Isolate  32 workers spawned · ~284ms startup each (spawn + environment, per file)
-             at least ~1.01s faster with isolate: false — reuses workers across files instead of one per file
+    Isolate  32 workers spawned · ~287ms startup each (spawn + environment, per file)
+             at least ~1.03s faster with isolate: false — reuses workers across files instead of one per file
 
 $ vitest run --passWithNoTests
 
@@ -74,8 +74,11 @@ $ vitest run --passWithNoTests
 
  Test Files  15 passed (15)
       Tests  179 passed (179)
-   Start at  01:50:35
-   Duration  845ms (transform 44%, import 25%, tests 22%, worker 9%)
+   Start at  01:58:44
+   Duration  996ms (import 31%, transform 30%, tests 28%, worker 10%)
+
+    Isolate  15 workers spawned · ~230ms startup each (spawn + environment, per file)
+             at least ~263ms faster with isolate: false — reuses workers across files instead of one per file
 
 $ vitest run --passWithNoTests
 
