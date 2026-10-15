@@ -3,8 +3,8 @@ import { ExternalLink } from "lucide-react";
 import type { z } from "zod";
 import { useLang } from "../../i18n/lang.tsx";
 import { cn } from "../../lib/cn.ts";
-import { relativeTime } from "../../lib/format.ts";
 import { duration } from "./duration.ts";
+import { runTimes } from "./run-times.ts";
 
 type Run = z.infer<typeof automationRunWithJobSchema>;
 const statusColors: Record<Run["status"], string> = {
@@ -24,9 +24,10 @@ export function RunCard({ run, now }: { run: Run; now: number }) {
     failed: t("common.failed"),
     canceled: t("automation.cancelled"),
   };
+  const times = runTimes(run.startedAt, run.finishedAt, now);
   const metadata = [
     run.trigger,
-    run.startedAt === null ? "—" : relativeTime(new Date(run.startedAt), lang, new Date(now)),
+    times.text,
     run.finishedAt === null && run.status !== "running"
       ? "—"
       : duration(run.startedAt, run.finishedAt, now, lang),
@@ -56,7 +57,9 @@ export function RunCard({ run, now }: { run: Run; now: number }) {
           {run.jobGroup}
         </p>
       )}
-      <p className="text-label text-text-2 tabular-nums">{metadata.join(" · ")}</p>
+      <p title={times.title || undefined} className="text-label text-text-2 tabular-nums">
+        {metadata.join(" · ")}
+      </p>
       {run.status === "failed" && run.error !== null && (
         <p title={run.error} className="mt-2 truncate text-label text-status-failed">
           {run.error}

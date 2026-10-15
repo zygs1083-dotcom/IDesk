@@ -21,11 +21,11 @@ import { RunColumn } from "./run-column.tsx";
 
 type Run = z.infer<typeof automationRunWithJobSchema>;
 
-const runColumns: Record<Run["status"], "waiting" | "running" | "completed"> = {
+const runColumns: Record<Run["status"], "waiting" | "running" | "completed" | "failed"> = {
   waiting: "waiting",
   running: "running",
   success: "completed",
-  failed: "completed",
+  failed: "failed",
   canceled: "completed",
 };
 export function AutomationPage() {
@@ -34,6 +34,7 @@ export function AutomationPage() {
     { id: "waiting", label: t("automation.waiting"), color: "bg-status-open" },
     { id: "running", label: t("automation.running"), color: "bg-status-in-progress" },
     { id: "completed", label: t("automation.done"), color: "bg-status-done" },
+    { id: "failed", label: t("common.failed"), color: "bg-status-failed" },
   ] as const;
   const client = useQueryClient();
   const [selected, setSelected] = useState<string | null>(null);
