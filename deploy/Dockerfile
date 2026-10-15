@@ -9,6 +9,7 @@ COPY apps/web/package.json apps/web/package.json
 COPY apps/office/package.json apps/office/package.json
 COPY packages/shared/package.json packages/shared/package.json
 COPY packages/cli/package.json packages/cli/package.json
+COPY plugins/auto-assign/package.json plugins/auto-assign/package.json
 COPY plugins/chat-notifier/package.json plugins/chat-notifier/package.json
 COPY plugins/event-archive/package.json plugins/event-archive/package.json
 COPY plugins/result-archive/package.json plugins/result-archive/package.json
@@ -27,6 +28,7 @@ WORKDIR /app
 COPY --from=build /app/package.json /app/pnpm-lock.yaml /app/pnpm-workspace.yaml ./
 COPY --from=build /app/apps/api/package.json apps/api/package.json
 COPY --from=build /app/packages/shared/package.json packages/shared/package.json
+COPY --from=build /app/plugins/auto-assign/package.json plugins/auto-assign/package.json
 COPY --from=build /app/plugins/chat-notifier/package.json plugins/chat-notifier/package.json
 COPY --from=build /app/plugins/event-archive/package.json plugins/event-archive/package.json
 COPY --from=build /app/plugins/result-archive/package.json plugins/result-archive/package.json
