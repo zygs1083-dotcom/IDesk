@@ -26,6 +26,7 @@ export const connectorSchema = z
     canTrigger: z.boolean(),
     lastPolledAt: z.iso.datetime().nullable(),
     lastError: z.string().nullable(),
+    progress: z.object({ done: z.number().int(), total: z.number().int() }).nullable(),
   })
   .meta({ id: "Connector" });
 export const connectionResultSchema = z.object({

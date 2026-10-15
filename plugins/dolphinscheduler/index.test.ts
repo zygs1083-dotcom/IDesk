@@ -51,7 +51,7 @@ describe("listJobs", () => {
     expect(fetch.mock.calls).toEqual(
       [1, 2].map((pageNo) => [
         `${projectPath}/process-definition?pageNo=${pageNo}&pageSize=100`,
-        { headers: { token: "secret" } },
+        { headers: { token: "secret" }, signal: expect.any(AbortSignal) },
       ]),
     );
   });
@@ -126,7 +126,9 @@ describe("listRuns", () => {
       expect(url.searchParams.get("startDate")).toBe("2026-10-14 00:00:00");
     }
   });
-  it("preserves long processDefinitionCode and nullable dates without since", async () => {
+  it("preserves long processDefinitionCode and nullable dates, bounding the first poll to 7 days", async () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2026-10-15T12:00:00Z"));
     const fetch = vi
       .fn()
       .mockResolvedValue(
@@ -142,7 +144,10 @@ describe("listRuns", () => {
       startedAt: null,
       finishedAt: null,
     });
-    expect(new URL(fetch.mock.calls[0]?.[0]).searchParams.has("startDate")).toBe(false);
+    expect(new URL(fetch.mock.calls[0]?.[0]).searchParams.get("startDate")).toBe(
+      "2026-10-08 12:00:00",
+    );
+    vi.useRealTimers();
   });
   it("propagates HTTP and network failures", async () => {
     const fetch = vi
@@ -164,6 +169,7 @@ describe("testConnection", () => {
     expect(await plugin.testConnection(config)).toEqual({ success: true });
     expect(fetch).toHaveBeenCalledWith(`${projectPath}/process-definition?pageNo=1&pageSize=1`, {
       headers: { token: "secret" },
+      signal: expect.any(AbortSignal),
     });
   });
   it.each([

@@ -90,7 +90,7 @@ test("polling upserts jobs and runs, derives latest status and emits only change
     lastRunAt: runs[0]?.startedAt,
   });
   expect(polled()[0]?.payload).toEqual({ connectorId: connector.id, changed: 3 });
-  expect(calls[0]).toEqual({ since: null, limit: 50 });
+  expect(calls[0]).toMatchObject({ since: null, limit: 50 });
   await pollConnector(refreshed(), new Date(now.getTime() + 60000));
   expect(polled()).toHaveLength(1);
   expect(calls[1]?.since).toEqual(runs[0]?.startedAt);

@@ -19,7 +19,10 @@ type Project = { code: string | number; name: string };
 export async function dsGet<T>(config: Config, path: string): Promise<T> {
   let response: Response;
   try {
-    response = await fetch(`${config.baseUrl}${path}`, { headers: { token: config.token } });
+    response = await fetch(`${config.baseUrl}${path}`, {
+      headers: { token: config.token },
+      signal: AbortSignal.timeout(30_000),
+    });
   } catch (failure) {
     throw new Error(`无法连接 DolphinScheduler：${(failure as Error).message}`);
   }

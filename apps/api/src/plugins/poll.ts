@@ -5,6 +5,8 @@ import { automationJobs, automationRuns, connectors } from "../db/schema.ts";
 import { connectorPlugin } from "./registry.ts";
 import type { ExternalJob, ExternalRun } from "./types.ts";
 
+export const polling = new Map<string, { done: number; total: number }>();
+
 export async function pollConnector(
   connector: typeof connectors.$inferSelect,
   now: Date,
@@ -27,16 +29,20 @@ export async function pollConnector(
   const since = active ? active.startedAt : connector.lastPolledAt;
   let jobs: ExternalJob[];
   let runs: ExternalRun[];
+  const progress = (done: number, total: number) => polling.set(connector.id, { done, total });
+  progress(0, 0);
   try {
     const config = plugin.configSchema.parse(connector.config);
-    jobs = await plugin.listJobs(config);
-    runs = await plugin.listRuns(config, { since, limit: 50 });
+    jobs = await plugin.listJobs(config, { progress });
+    runs = await plugin.listRuns(config, { since, limit: 50, progress });
   } catch (error) {
     db.update(connectors)
       .set({ lastError: error instanceof Error ? error.message : String(error), lastPolledAt: now })
       .where(eq(connectors.id, connector.id))
       .run();
     return;
+  } finally {
+    polling.delete(connector.id);
   }
   const changed = db.transaction((tx) => {
     let count = 0;

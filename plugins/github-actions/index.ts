@@ -62,6 +62,7 @@ const connectionErrors: Partial<Record<number, string>> = {
 async function githubFetch(config: Config, path: string, options?: RequestInit): Promise<Response> {
   const response = await fetch(`${config.baseUrl}/repos/${config.repo}${path}`, {
     ...options,
+    signal: AbortSignal.timeout(30_000),
     headers: {
       Authorization: `Bearer ${config.token}`,
       Accept: "application/vnd.github+json",

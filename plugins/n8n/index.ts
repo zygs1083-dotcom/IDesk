@@ -68,6 +68,7 @@ async function n8nGet<T>(config: Config, path: string): Promise<T> {
   try {
     response = await fetch(`${config.baseUrl}/api/v1${path}`, {
       headers: { "X-N8N-API-KEY": config.apiKey },
+      signal: AbortSignal.timeout(30_000),
     });
   } catch (failure) {
     throw new Error(`无法连接 n8n：${(failure as Error).message}`);

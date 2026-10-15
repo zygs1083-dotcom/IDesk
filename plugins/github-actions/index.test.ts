@@ -136,6 +136,7 @@ describe("github-actions connector", () => {
     expect(fetch).toHaveBeenCalledWith(`${repoUrl}/actions/workflows/456/dispatches`, {
       method: "POST",
       body: JSON.stringify({ ref: "release" }),
+      signal: expect.any(AbortSignal),
       headers: {
         Authorization: "Bearer test-token",
         Accept: "application/vnd.github+json",

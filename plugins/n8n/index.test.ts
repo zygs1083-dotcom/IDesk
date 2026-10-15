@@ -1,7 +1,10 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import plugin from "./index.ts";
 
-const requestOptions = { headers: { "X-N8N-API-KEY": "test-key" } };
+const requestOptions = {
+  headers: { "X-N8N-API-KEY": "test-key" },
+  signal: expect.any(AbortSignal),
+};
 const config = plugin.configSchema.parse({ baseUrl: "https://n8n.test/", apiKey: "test-key" });
 const startTime = "2026-10-14T10:00:00Z";
 function execution(id: number, status = "success", startedAt: string | null = startTime) {

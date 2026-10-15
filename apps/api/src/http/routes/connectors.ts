@@ -74,8 +74,9 @@ export function connectorRoutes(app: OpenAPIHono<AuthEnv>) {
       const input = c.req.valid("json");
       validatedPlugin(input.pluginId, input.config);
       const connector = createConnector(input);
-      await pollConnector(connector, new Date());
-      return c.json(toPublicConnector(existingConnector(connector.id)), 201);
+      // 首次轮询在后台跑：项目多时要几十个外部请求，不能让保存按钮等它
+      void pollConnector(connector, new Date());
+      return c.json(toPublicConnector(connector), 201);
     },
   );
   app.openapi(
