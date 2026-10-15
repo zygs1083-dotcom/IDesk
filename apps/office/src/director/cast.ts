@@ -6,6 +6,7 @@ import { Character, type CharacterState } from "../stage/character.ts";
 import type { Stage } from "../stage/stage.ts";
 import type { Agent } from "../stage/textures.ts";
 import { ZoneSign } from "../stage/zone-sign.ts";
+import { deskPoint } from "./desk-point.ts";
 import { ActionQueue } from "./queue.ts";
 
 export class Cast {
@@ -145,6 +146,6 @@ export class Cast {
 
   desk(id: string): Point {
     const seat = this.seats.get(id) ?? this.scene.frontDesk.human;
-    return { x: seat.x + (seat.facing === "left" ? -35 : 35), y: seat.y + 25 };
+    return deskPoint(seat);
   }
 }

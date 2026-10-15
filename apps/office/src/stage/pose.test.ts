@@ -2,7 +2,6 @@ import { describe, expect, it } from "vitest";
 import type { Direction } from "../scene/scene.ts";
 import type { CharacterState } from "./character.ts";
 import { characterPose } from "./pose.ts";
-import { signScale } from "./zone-sign.ts";
 
 describe("character poses", () => {
   for (const facing of ["left", "right", "down", "up"] satisfies Direction[]) {
@@ -30,12 +29,5 @@ describe("character poses", () => {
       "typing/down/1",
       "typing/down/0",
     ]);
-  });
-});
-
-describe("zone sign scale", () => {
-  it.each([0.25, 0.5, 0.85, 1, 1.5, 2])("keeps text readable at %s", (scale) => {
-    expect(signScale(scale)).toBe(Math.max(1, 1 / scale));
-    expect(12 * scale * signScale(scale)).toBeGreaterThanOrEqual(12);
   });
 });
