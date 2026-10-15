@@ -14,6 +14,8 @@ const BUBBLE_MS = 3000;
 const LOOK_MS = 800;
 const COFFEE_MS = 5000;
 const BOARD_MS = 3000;
+// 看板前的站位：任务板底边再往下一个身位
+const BOARD_STAND_OFFSET = 115;
 
 export function idleEligible(cast: IdleCast, snapshot: Snapshot, id: string) {
   const character = cast.characters.get(id);
@@ -95,7 +97,7 @@ export function startIdle(cast: Cast, snapshot: Snapshot, lines: string[], rando
     } else {
       const board = {
         x: scene.taskBoard.x + scene.taskBoard.width / 2,
-        y: scene.taskBoard.y + scene.taskBoard.height + 115,
+        y: scene.taskBoard.y + scene.taskBoard.height + BOARD_STAND_OFFSET,
       };
       const via = cast.nearest(board);
       const target =
