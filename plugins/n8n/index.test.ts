@@ -58,6 +58,7 @@ describe("n8n connector", () => {
       ["version", true],
       ["inactive", false],
     ]);
+    expect(jobs.map(({ group }) => group)).toEqual([null, null, null, null]);
     expect(jobs.map(({ name }) => name)).toEqual(["Active", "Version ID", "Version", "Inactive"]);
     expect(jobs.map(({ url }) => url)).toEqual([
       "https://n8n.test/workflow/active",

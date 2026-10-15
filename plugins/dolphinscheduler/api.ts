@@ -49,7 +49,7 @@ export function parseDate(value: string | null): Date | null {
 }
 
 export async function listProjects(config: Config): Promise<Project[]> {
-  if (config.projectCode) return [{ code: config.projectCode, name: "" }];
+  if (config.projectCode) return [await dsGet<Project>(config, `/projects/${config.projectCode}`)];
   const projects: Project[] = [];
   for (let pageNo = 1; ; pageNo++) {
     const page = await dsGet<Page<Project>>(config, `/projects?pageNo=${pageNo}&pageSize=100`);

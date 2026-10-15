@@ -23,7 +23,11 @@ export function listRuns(jobId: string) {
 
 export function listRunsForConnector(connectorId: string) {
   return db
-    .select({ ...getTableColumns(automationRuns), jobName: automationJobs.name })
+    .select({
+      ...getTableColumns(automationRuns),
+      jobName: automationJobs.name,
+      jobGroup: automationJobs.group,
+    })
     .from(automationRuns)
     .innerJoin(automationJobs, eq(automationRuns.jobId, automationJobs.id))
     .where(eq(automationJobs.connectorId, connectorId))
