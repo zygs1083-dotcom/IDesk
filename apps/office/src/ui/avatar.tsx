@@ -6,7 +6,7 @@ import type { Agent } from "./use-office-data.ts";
 const spriteImage = new Image();
 spriteImage.src = "/office/sprites.png";
 
-export function Avatar({ kind }: { kind: Agent["kind"] }) {
+export function Avatar({ kind, fullFrame = false }: { kind: Agent["kind"]; fullFrame?: boolean }) {
   const { t } = useLang();
   const canvas = useRef<HTMLCanvasElement>(null);
   useEffect(() => {
@@ -17,19 +17,29 @@ export function Avatar({ kind }: { kind: Agent["kind"] }) {
       if (!context) return;
       const frame = atlas.frames[`${kind}/walk/down/0`].frame;
       context.imageSmoothingEnabled = false;
-      context.clearRect(0, 0, 128, 96);
-      context.drawImage(spriteImage, frame.x, frame.y, frame.w, 48, 0, 0, 128, 96);
+      context.clearRect(0, 0, fullFrame ? 192 : 128, fullFrame ? 288 : 96);
+      context.drawImage(
+        spriteImage,
+        frame.x,
+        frame.y,
+        frame.w,
+        fullFrame ? frame.h : 48,
+        0,
+        0,
+        fullFrame ? 192 : 128,
+        fullFrame ? 288 : 96,
+      );
     });
     return () => {
       disposed = true;
     };
-  }, [kind]);
+  }, [kind, fullFrame]);
   return (
     <canvas
       ref={canvas}
-      width={128}
-      height={96}
-      className="avatar"
+      width={fullFrame ? 192 : 128}
+      height={fullFrame ? 288 : 96}
+      className={fullFrame ? "profile-avatar" : "avatar"}
       role="img"
       aria-label={t("common.pixelAvatar", { kind })}
     />
