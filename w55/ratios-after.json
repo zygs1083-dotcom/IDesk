@@ -1,0 +1,222 @@
+{
+  "claude-code": {
+    "standing": {
+      "height": 209,
+      "head": 105
+    },
+    "before": [
+      {
+        "height": 185,
+        "head": 105,
+        "ratio": 0.8851674641148325,
+        "headDelta": 0
+      },
+      {
+        "height": 185,
+        "head": 104,
+        "ratio": 0.8851674641148325,
+        "headDelta": -0.00952380952380949
+      },
+      {
+        "height": 185,
+        "head": 104,
+        "ratio": 0.8851674641148325,
+        "headDelta": -0.00952380952380949
+      },
+      {
+        "height": 182,
+        "head": 105,
+        "ratio": 0.8708133971291866,
+        "headDelta": 0
+      },
+      {
+        "height": 182,
+        "head": 107,
+        "ratio": 0.8708133971291866,
+        "headDelta": 0.01904761904761898
+      },
+      {
+        "height": 182,
+        "head": 109,
+        "ratio": 0.8708133971291866,
+        "headDelta": 0.03809523809523818
+      }
+    ]
+  },
+  "codex": {
+    "standing": {
+      "height": 217,
+      "head": 110
+    },
+    "before": [
+      {
+        "height": 191,
+        "head": 112,
+        "ratio": 0.880184331797235,
+        "headDelta": 0.018181818181818077
+      },
+      {
+        "height": 191,
+        "head": 111,
+        "ratio": 0.880184331797235,
+        "headDelta": 0.009090909090909038
+      },
+      {
+        "height": 191,
+        "head": 112,
+        "ratio": 0.880184331797235,
+        "headDelta": 0.018181818181818077
+      },
+      {
+        "height": 191,
+        "head": 113,
+        "ratio": 0.880184331797235,
+        "headDelta": 0.027272727272727337
+      },
+      {
+        "height": 191,
+        "head": 116,
+        "ratio": 0.880184331797235,
+        "headDelta": 0.05454545454545445
+      },
+      {
+        "height": 191,
+        "head": 115,
+        "ratio": 0.880184331797235,
+        "headDelta": 0.045454545454545414
+      }
+    ]
+  },
+  "n8n": {
+    "standing": {
+      "height": 200,
+      "head": 100
+    },
+    "before": [
+      {
+        "height": 176,
+        "head": 94,
+        "ratio": 0.88,
+        "headDelta": -0.06000000000000005
+      },
+      {
+        "height": 176,
+        "head": 95,
+        "ratio": 0.88,
+        "headDelta": -0.050000000000000044
+      },
+      {
+        "height": 176,
+        "head": 94,
+        "ratio": 0.88,
+        "headDelta": -0.06000000000000005
+      },
+      {
+        "height": 176,
+        "head": 92,
+        "ratio": 0.88,
+        "headDelta": -0.07999999999999996
+      },
+      {
+        "height": 178,
+        "head": 94,
+        "ratio": 0.89,
+        "headDelta": -0.06000000000000005
+      },
+      {
+        "height": 178,
+        "head": 94,
+        "ratio": 0.89,
+        "headDelta": -0.06000000000000005
+      }
+    ]
+  },
+  "script": {
+    "standing": {
+      "height": 201,
+      "head": 99
+    },
+    "before": [
+      {
+        "height": 178,
+        "head": 106,
+        "ratio": 0.8855721393034826,
+        "headDelta": 0.07070707070707072
+      },
+      {
+        "height": 178,
+        "head": 105,
+        "ratio": 0.8855721393034826,
+        "headDelta": 0.06060606060606055
+      },
+      {
+        "height": 178,
+        "head": 105,
+        "ratio": 0.8855721393034826,
+        "headDelta": 0.06060606060606055
+      },
+      {
+        "height": 180,
+        "head": 91,
+        "ratio": 0.8955223880597015,
+        "headDelta": -0.08080808080808077
+      },
+      {
+        "height": 172,
+        "head": 105,
+        "ratio": 0.8557213930348259,
+        "headDelta": 0.06060606060606055
+      },
+      {
+        "height": 172,
+        "head": 103,
+        "ratio": 0.8557213930348259,
+        "headDelta": 0.04040404040404044
+      }
+    ]
+  },
+  "custom": {
+    "standing": {
+      "height": 200,
+      "head": 97
+    },
+    "before": [
+      {
+        "height": 179,
+        "head": 93,
+        "ratio": 0.895,
+        "headDelta": -0.04123711340206182
+      },
+      {
+        "height": 179,
+        "head": 94,
+        "ratio": 0.895,
+        "headDelta": -0.030927835051546393
+      },
+      {
+        "height": 180,
+        "head": 96,
+        "ratio": 0.9,
+        "headDelta": -0.010309278350515427
+      },
+      {
+        "height": 177,
+        "head": 94,
+        "ratio": 0.885,
+        "headDelta": -0.030927835051546393
+      },
+      {
+        "height": 180,
+        "head": 95,
+        "ratio": 0.9,
+        "headDelta": -0.020618556701030966
+      },
+      {
+        "height": 180,
+        "head": 95,
+        "ratio": 0.9,
+        "headDelta": -0.020618556701030966
+      }
+    ]
+  }
+}
