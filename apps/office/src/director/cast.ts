@@ -5,13 +5,13 @@ import { assignSeats, assignStanding } from "../scene/seats.ts";
 import { Character, type CharacterState } from "../stage/character.ts";
 import { createSeatCovers } from "../stage/seat-covers.ts";
 import type { Stage } from "../stage/stage.ts";
-import type { Agent } from "../stage/textures.ts";
+import type { Agent, OfficeAgent } from "../stage/textures.ts";
 import { ZoneSign } from "../stage/zone-sign.ts";
 import { deskPoint } from "./desk-point.ts";
 import { ActionQueue } from "./queue.ts";
 
 export class Cast {
-  readonly agents = new Map<string, Agent>();
+  readonly agents = new Map<string, OfficeAgent>();
   readonly characters = new Map<string, Character>();
   readonly queue = new ActionQueue();
   readonly sleeping = new Set<string>();
@@ -29,10 +29,10 @@ export class Cast {
   ) {
     createSeatCovers(stage, scene);
     this.labels = scene.zones.map((zone) => new ZoneSign(stage, zone.name));
-    const human: Agent = {
+    const human: OfficeAgent = {
       id: "human",
       name: receptionistName,
-      kind: "custom",
+      kind: "receptionist",
       host: "",
       capabilities: [],
       webhookUrl: null,
@@ -91,7 +91,7 @@ export class Cast {
     });
   }
 
-  private add(agent: Agent) {
+  private add(agent: OfficeAgent) {
     const character = new Character(this.stage, agent, this.frames);
     character.position.copyFrom(this.scene.door);
     character.setState("away");

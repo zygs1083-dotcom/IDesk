@@ -5,7 +5,7 @@ import { Bubble } from "./bubble.ts";
 import { hueOffset } from "./hue.ts";
 import { characterPose } from "./pose.ts";
 import type { Stage } from "./stage.ts";
-import type { Agent } from "./textures.ts";
+import type { OfficeAgent } from "./textures.ts";
 
 export const WALK_SPEED = 140;
 
@@ -32,7 +32,7 @@ export class Character extends Container {
 
   constructor(
     private stage: Stage,
-    private agent: Agent,
+    private agent: OfficeAgent,
     private frames: Record<string, Texture>,
   ) {
     super();
@@ -41,7 +41,7 @@ export class Character extends Container {
     this.fallback = fallback;
     this.sprite = new Sprite(fallback);
     const tint = new ColorMatrixFilter();
-    tint.hue(hueOffset(agent.id), false);
+    if (agent.kind !== "receptionist") tint.hue(hueOffset(agent.id), false);
     this.sprite.filters = [tint];
     this.sprite.anchor.set(0.5, 1);
     const label = new Text({

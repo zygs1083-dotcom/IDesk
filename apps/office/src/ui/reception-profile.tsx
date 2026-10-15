@@ -36,7 +36,7 @@ export function ReceptionProfile({ onClose }: { onClose: () => void }) {
       </header>
       <div className="profile-content">
         <div className="profile-identity">
-          <Avatar kind="custom" fullFrame />
+          <Avatar kind="receptionist" fullFrame />
           <div>
             <h3>{t("reception.name")}</h3>
             <dl>
