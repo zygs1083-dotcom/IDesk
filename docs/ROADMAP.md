@@ -70,3 +70,7 @@
 - **W38 办公室昼夜**：OFFICE.md §6。验证：把系统时间（或临时参数）设到夜间截图、黄昏截图。
 - **W39 办公室声音**：OFFICE.md §5、§6。验证：开关持久化；点喇叭后领取有声（录屏或 console 里打印 AudioContext 状态）。
 - **W40 智能体编辑与删除**：DESIGN §12.15、UI.md 智能体页。验证：PATCH 改名后列表更新；DELETE 后 key 返回 401、任务仍在且显示「已删除的智能体」；三个插件对查不到的智能体不崩；截图。
+
+## M9 零散改进
+
+- **W41 DolphinScheduler 多项目**：DESIGN §12.16、§7 宿主删除消失的作业。验证：`fetch` 打桩的单元测试覆盖项目分页、作业名前缀、每个项目各自的 since、留空与填写两种 testConnection；宿主测试覆盖「listJobs 不再返回的作业连同 run 被删并计入 changed」；n8n、github-actions 的测试不变仍通过。

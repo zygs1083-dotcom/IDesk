@@ -316,7 +316,7 @@ export interface ConnectorPlugin extends Plugin {
 
 - 启动时扫描 `plugins/*/index.ts`（内置）和 `IDESK_PLUGIN_DIR/*/index.js`（外置）。
 - 每个插件的启用状态和插件级配置存 `plugin_state` 表（`enabled`、`config` JSON）；没有记录的按 `enabledByDefault` 决定。`PATCH /plugins/:id { config }` 按 configSchema 校验后写库，插件已启用时 teardown 再 setup 让新配置生效。`enable` 动态 `import()` 并 `setup`；`disable` 调 `teardown` 并撤销它注册的所有订阅、cron、路由。`reload` = disable + 清 import cache（带 `?t=` query）+ enable。
-- 连接器轮询由宿主统一驱动：每分钟扫 `enabled` 的连接器，按各自 `pollIntervalSec` 决定是否轮询，顺序执行，upsert job 和 run，每个 job 只留最近 50 条 run，单个失败只写 `lastError` 不影响其他，有变化时 emit `connector.polled { connectorId, changed }`。
+- 连接器轮询由宿主统一驱动：每分钟扫 `enabled` 的连接器，按各自 `pollIntervalSec` 决定是否轮询，顺序执行，upsert job 和 run，每个 job 只留最近 50 条 run，单个失败只写 `lastError` 不影响其他，有变化时 emit `connector.polled { connectorId, changed }`。`listJobs` 成功返回后，该连接器下不在返回列表里的 job 连同它的 run 一起删除（看板是外部系统的镜像，那边删了作业或项目，这边也消失；删除计入 changed）。
 - 连接器 config 出 API 时按键名掩码：键名匹配 `/token|key|secret|password/i` 的值替换成 `••••••`；PATCH 时收到 `••••••` 就保留原值。
 - 核心代码不出现任何插件 id。
 
@@ -498,3 +498,13 @@ completedAt: <ISO>
 - `DELETE /agents/:id`：只有人；删行，不动任务和事件（它们保留 agent id，前端显示找不到名字时显示「已删除的智能体」）；写事件 `agent.deleted { name, kind }`（agentId 留空，id 放 payload）。该智能体正在负责的 in_progress / assigned / paused 任务不自动处理，由人在看板上重新指派或放回。
 - 插件里按 id 查智能体名字的地方（chat-notifier、result-archive、webhook-notifier）查不到时用 id 代替，不能 `as` 断言非空。
 - 界面见 UI.md 智能体页。
+
+### 12.16 DolphinScheduler 多项目（W41）
+
+- `projectCode` 改为可选（`^\d*$`，标题「项目编码（留空 = Token 可见的全部项目）」）。
+- 项目列表：留空时每次 `listJobs` / `listRuns` 先 `GET /projects?pageNo=<n>&pageSize=100` 翻页拿全部 `{ code, name }`（DolphinScheduler 3.2 的项目分页接口，实现前对照 `/dolphinscheduler/swagger-ui` 确认路径和字段名）；填了就只有这一个项目，不调项目接口。海豚那边新建的项目在下一次轮询或点自动化页的「刷新」（`POST /connectors/:id/poll`）时自动进来，不另做更新机制。
+- `externalId` 统一为 `<projectCode>/<definitionCode>`，run 的 `jobExternalId` 同样；两种模式都如此，不再有裸的 definitionCode。url 用该作业所属项目的 code 拼。
+- 作业名：全部项目模式下 `<项目名> / <工作流名>`，单项目模式只写工作流名。
+- `listRuns`：逐个项目用同一个 `since` 分页拉取，合并后按 `startedAt` 倒序取 `limit` 条。
+- `testConnection`：留空时 `GET /projects?pageNo=1&pageSize=1`，填了照旧。
+- 项目被删或 Token 失去权限：该项目的作业不再出现在 `listJobs` 里，按 §7 的宿主规则连同 run 一起删除。
