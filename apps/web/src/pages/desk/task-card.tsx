@@ -1,5 +1,6 @@
 import type { useDraggable } from "@dnd-kit/core";
 import { TASK_PRIORITY_LABEL } from "@idesk/shared/task-status";
+import { Lock } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
 import { cn } from "../../lib/cn.ts";
 import { relativeTime } from "../../lib/format.ts";
@@ -8,6 +9,7 @@ import { StatusDot } from "./status-dot.tsx";
 
 export function TaskCard({
   task,
+  blockers,
   name,
   handoff,
   onOpen,
@@ -17,6 +19,7 @@ export function TaskCard({
   drag,
 }: {
   task: Task;
+  blockers: number;
   name: string;
   handoff?: string;
   onOpen: () => void;
@@ -54,7 +57,16 @@ export function TaskCard({
         overlay && "shadow-card",
       )}
     >
-      <span className="mb-3 block line-clamp-2 text-body">{task.title}</span>
+      <span className="mb-3 block line-clamp-2 text-body">
+        {blockers > 0 && (
+          <span className="mr-2 inline-flex items-center gap-1 text-text-3 tabular-nums">
+            <Lock size={16} strokeWidth={1.5} aria-hidden="true" />
+            {blockers}
+            <span className="sr-only"> 个未完成依赖</span>
+          </span>
+        )}
+        {task.title}
+      </span>
       <span className="mb-2 flex items-baseline justify-between gap-2 text-label text-text-2">
         <span className="truncate">{task.capabilities.join(" · ")}</span>
         {(task.priority === "high" || task.priority === "urgent") && (

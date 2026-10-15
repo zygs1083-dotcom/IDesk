@@ -61,6 +61,7 @@ test("SDK tools and resources share task transitions and relay read state", asyn
     { title: "MCP GPU", capabilities: ["coding", "gpu"] },
     "human",
   );
+  const blocked = createTask({ title: "MCP blocked", blockedBy: [matching.id] }, "human");
   const clientA = await connect(a.apiKey);
   const clientB = await connect(b.apiKey);
   try {
@@ -92,6 +93,7 @@ test("SDK tools and resources share task transitions and relay read state", asyn
     const open = JSON.parse(payload(await clientA.callTool({ name: "idesk_list_tasks" })));
     expect(open).toContainEqual(expect.objectContaining({ id: matching.id }));
     expect(open).not.toContainEqual(expect.objectContaining({ id: missingCapability.id }));
+    expect(open).not.toContainEqual(expect.objectContaining({ id: blocked.id }));
     const callA = (name: string, extra: object = {}) =>
       clientA.callTool({ name, arguments: { taskId: matching.id, ...extra } });
     expect(JSON.parse(payload(await callA("idesk_claim_task")))).toMatchObject({
@@ -155,13 +157,27 @@ test("SDK tools and resources share task transitions and relay read state", asyn
     ).toContainEqual(expect.objectContaining({ subject: "广播" }));
     const published = await clientA.callTool({
       name: "idesk_publish_task",
-      arguments: { title: "SDK 发布", dueAt: "2030-01-01T00:00:00Z" },
+      arguments: {
+        title: "SDK 发布",
+        blockedBy: [missingCapability.id],
+        dueAt: "2030-01-01T00:00:00Z",
+      },
     });
     expect(JSON.parse(payload(published))).toMatchObject({
       publisherId: a.agent.id,
+      blockedBy: [missingCapability.id],
       dueAt: "2030-01-01T00:00:00.000Z",
     });
+    const invalid = await clientA.callTool({
+      name: "idesk_publish_task",
+      arguments: { title: "invalid dependency", blockedBy: ["missing-task"] },
+    });
+    expect(invalid.isError).toBe(true);
+    expect(payload(invalid)).toContain("missing-task");
     const available = await clientA.readResource({ uri: "idesk://tasks/open" });
+    expect(JSON.parse(resourceContent.parse(available).contents[0].text)).toContainEqual(
+      expect.objectContaining({ id: blocked.id }),
+    );
     expect(resourceContent.parse(available).contents[0].mimeType).toBe("application/json");
     expect(JSON.parse(resourceContent.parse(available).contents[0].text)).not.toContainEqual(
       expect.objectContaining({ id: missingCapability.id }),

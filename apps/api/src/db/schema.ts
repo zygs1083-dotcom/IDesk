@@ -18,6 +18,7 @@ export const tasks = sqliteTable(
     body: text().notNull().default(""),
     status: text({ enum: TASK_STATUSES }).notNull().default("open"),
     priority: text({ enum: TASK_PRIORITIES }).notNull().default("normal"),
+    blockedBy: text("blocked_by", { mode: "json" }).$type<string[]>().notNull().default([]),
     tags: text({ mode: "json" }).$type<string[]>().notNull().default([]),
     capabilities: text({ mode: "json" }).$type<string[]>().notNull().default([]),
     publisherId: text("publisher_id").notNull(),

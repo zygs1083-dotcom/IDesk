@@ -9,6 +9,7 @@ import { db } from "../../db/client.ts";
 import { tasks } from "../../db/schema.ts";
 import { type Event, publishEvent, recordEvent } from "../events/bus.ts";
 import { writeRelay } from "../relay/relay.ts";
+import { firstBlocker } from "./dependencies.ts";
 import type { Task } from "./store.ts";
 
 function applyAction(
@@ -22,6 +23,11 @@ function applyAction(
   const result = db.transaction((tx) => {
     const task = tx.select().from(tasks).where(eq(tasks.id, id)).get();
     if (!task) return undefined;
+    if (task.status === "open" && ["claim", "assign", "recruit"].includes(action.type)) {
+      const blocked = firstBlocker(tx, task);
+      if (blocked)
+        return new TransitionError(task.status, action.type, `被「${blocked.title}」阻塞`);
+    }
     const next = transition(task, action, actor, now);
     if (next instanceof TransitionError) return next;
     const updated = tx

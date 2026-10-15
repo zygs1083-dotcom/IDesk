@@ -15,6 +15,7 @@ import { useAgents } from "../../lib/use-agents.ts";
 import { ActionDialog } from "./action-dialog.tsx";
 import { actionSamples, type HumanAction, previewAction } from "./drop-action.ts";
 import { StatusDot } from "./status-dot.tsx";
+import { TaskDependencies } from "./task-dependencies.tsx";
 import { useTaskAction } from "./use-task-action.ts";
 
 export function TaskDrawer({ taskId, onClose }: { taskId: string; onClose: () => void }) {
@@ -101,6 +102,7 @@ export function TaskDrawer({ taskId, onClose }: { taskId: string; onClose: () =>
                 </dd>
               </div>
             </dl>
+            <TaskDependencies task={task} onError={setError} />
             <section>
               <h3 className="mb-4 text-section">时间线</h3>
               <ol className="space-y-4">

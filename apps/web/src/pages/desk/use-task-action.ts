@@ -5,7 +5,7 @@ import { request } from "../../lib/api.ts";
 import type { Task } from "../../lib/types.ts";
 import { previewAction } from "./drop-action.ts";
 
-export function useTaskAction(onSuccess: () => void) {
+export function useTaskAction(onSuccess: () => void, onError?: (error: Error, task: Task) => void) {
   const client = useQueryClient();
   const [error, setError] = useState<string | null>(null);
   const mutation = useMutation({
@@ -33,6 +33,7 @@ export function useTaskAction(onSuccess: () => void) {
       if (context?.previous) client.setQueryData(["tasks"], context.previous);
       if (context?.detail) client.setQueryData(["task", task.id], context.detail);
       setError(error.message);
+      onError?.(error, task);
     },
     onSuccess,
     onSettled: (_, __, { task }) => {
