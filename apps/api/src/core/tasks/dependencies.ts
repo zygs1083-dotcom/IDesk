@@ -1,9 +1,18 @@
 import type { Actor } from "@idesk/shared/task-machine";
 import { eq, inArray } from "drizzle-orm";
-import { db, type Tx } from "../../db/client.ts";
+import { type Db, db, type Tx } from "../../db/client.ts";
 import { tasks } from "../../db/schema.ts";
 import { HttpError } from "../../http/errors.ts";
 import { publishEvent, recordEvent } from "../events/bus.ts";
+import type { Task } from "./store.ts";
+
+export function firstBlocker(tx: Tx | Db, task: Task): Task | undefined {
+  if (!task.blockedBy.length) return undefined;
+  const dependencies = tx.select().from(tasks).where(inArray(tasks.id, task.blockedBy)).all();
+  return task.blockedBy
+    .map((id) => dependencies.find((item) => item.id === id))
+    .find((item) => item && item.status !== "done" && item.status !== "cancelled");
+}
 
 export function validateDependencies(tx: Tx, ids: string[], selfId?: string): string[] {
   const blockedBy = [...new Set(ids)];

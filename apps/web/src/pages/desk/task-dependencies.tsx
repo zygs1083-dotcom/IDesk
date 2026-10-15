@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useSearchParams } from "react-router";
 import { request } from "../../lib/api.ts";
 import type { Task } from "../../lib/types.ts";
+import { useTasks } from "../../lib/use-tasks.ts";
 import { StatusDot } from "./status-dot.tsx";
 
 export function TaskDependencies({
@@ -14,7 +15,7 @@ export function TaskDependencies({
   onError: (message: string) => void;
 }) {
   const client = useQueryClient();
-  const tasks = client.getQueryData<Task[]>(["tasks"]) ?? [];
+  const { tasks } = useTasks();
   const [, setParams] = useSearchParams();
   const [search, setSearch] = useState<string | null>(null);
   const missing = task.blockedBy.filter((id) => !tasks.some((item) => item.id === id));
@@ -24,6 +25,7 @@ export function TaskDependencies({
       queryFn: () => request<Task>(`/tasks/${id}`),
     })),
   });
+  const queryError = queries.find((query) => query.error)?.error;
   const mutation = useMutation({
     mutationFn: (blockedBy: string[]) =>
       request<Task>(`/tasks/${task.id}`, {
@@ -48,9 +50,9 @@ export function TaskDependencies({
   return (
     <section className="space-y-3">
       <h3 className="text-section">依赖</h3>
-      {queries.find((query) => query.error)?.error && (
+      {queryError && (
         <p role="alert" className="text-secondary text-status-failed">
-          {queries.find((query) => query.error)?.error?.message}
+          {queryError.message}
         </p>
       )}
       {task.blockedBy.map((id) => {

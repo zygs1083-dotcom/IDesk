@@ -4,11 +4,12 @@ import {
   TransitionError,
   transition,
 } from "@idesk/shared/task-machine";
-import { eq, inArray } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { db } from "../../db/client.ts";
 import { tasks } from "../../db/schema.ts";
 import { type Event, publishEvent, recordEvent } from "../events/bus.ts";
 import { writeRelay } from "../relay/relay.ts";
+import { firstBlocker } from "./dependencies.ts";
 import type { Task } from "./store.ts";
 
 function applyAction(
@@ -22,15 +23,8 @@ function applyAction(
   const result = db.transaction((tx) => {
     const task = tx.select().from(tasks).where(eq(tasks.id, id)).get();
     if (!task) return undefined;
-    if (
-      task.status === "open" &&
-      ["claim", "assign", "recruit"].includes(action.type) &&
-      task.blockedBy.length
-    ) {
-      const dependencies = tx.select().from(tasks).where(inArray(tasks.id, task.blockedBy)).all();
-      const blocked = task.blockedBy
-        .map((id) => dependencies.find((item) => item.id === id))
-        .find((item) => item && item.status !== "done" && item.status !== "cancelled");
+    if (task.status === "open" && ["claim", "assign", "recruit"].includes(action.type)) {
+      const blocked = firstBlocker(tx, task);
       if (blocked)
         return new TransitionError(task.status, action.type, `被「${blocked.title}」阻塞`);
     }

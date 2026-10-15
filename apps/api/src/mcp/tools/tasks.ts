@@ -1,27 +1,18 @@
 import { createTaskSchema, idSchema, taskQuerySchema } from "@idesk/shared/task-schemas";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { inArray } from "drizzle-orm";
 import { z } from "zod";
 import type { PublicAgent } from "../../core/agents/agents.ts";
 import { listEvents } from "../../core/events/query.ts";
+import { firstBlocker } from "../../core/tasks/dependencies.ts";
 import { createTask, getTask, listTasks } from "../../core/tasks/store.ts";
 import { db } from "../../db/client.ts";
-import { tasks } from "../../db/schema.ts";
 import { toolResult } from "../result.ts";
 
 export function claimableTasks(agent: PublicAgent) {
-  const unfinished = new Set(
-    db
-      .select({ id: tasks.id })
-      .from(tasks)
-      .where(inArray(tasks.status, ["open", "assigned", "recruiting", "in_progress", "paused"]))
-      .all()
-      .map((task) => task.id),
-  );
   return listTasks({ status: "open" }).filter(
     (task) =>
       task.capabilities.every((capability) => agent.capabilities.includes(capability)) &&
-      !task.blockedBy.some((id) => unfinished.has(id)),
+      !firstBlocker(db, task),
   );
 }
 
