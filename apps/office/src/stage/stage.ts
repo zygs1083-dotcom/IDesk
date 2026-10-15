@@ -2,7 +2,13 @@ import { Application, Assets, Container, Sprite, type Texture } from "pixi.js";
 
 export async function createStage(host: HTMLElement) {
   const app = new Application();
-  await app.init({ resizeTo: window, background: "#6c5745", antialias: false });
+  // 像素画用 WebGL 就够了；固定它，避免 Pixi 在部分 Chrome 上自动选 WebGPU 时初始化失败而画布空白
+  await app.init({
+    resizeTo: window,
+    background: "#6c5745",
+    antialias: false,
+    preference: "webgl",
+  });
   host.appendChild(app.canvas);
   const background = await Assets.load<Texture>("/office/background.webp");
   background.source.scaleMode = "nearest";
