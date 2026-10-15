@@ -26,7 +26,9 @@ function applyAction(
     if (task.status === "open" && ["claim", "assign", "recruit"].includes(action.type)) {
       const blocked = firstBlocker(tx, task);
       if (blocked)
-        return new TransitionError(task.status, action.type, `被「${blocked.title}」阻塞`);
+        return new TransitionError(task.status, action.type, "transition.blocked", {
+          title: blocked.title,
+        });
     }
     const next = transition(task, action, actor, now);
     if (next instanceof TransitionError) return next;

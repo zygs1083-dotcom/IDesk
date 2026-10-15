@@ -55,7 +55,7 @@ export function authRoutes(app: OpenAPIHono<AuthEnv>) {
         matchesPassword(password, config.IDESK_VIEWER_PASSWORD)
       )
         role = "viewer";
-      else throw new HttpError(401, "密码不对");
+      else throw new HttpError(401, "auth.wrongPassword");
       await setSignedCookie(c, "idesk_session", role, config.IDESK_SESSION_SECRET, {
         httpOnly: true,
         sameSite: "Lax",

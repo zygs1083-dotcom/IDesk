@@ -17,11 +17,11 @@ export function firstBlocker(tx: Tx | Db, task: Task): Task | undefined {
 export function validateDependencies(tx: Tx, ids: string[], selfId?: string): string[] {
   const blockedBy = [...new Set(ids)];
   if (selfId !== undefined && blockedBy.includes(selfId))
-    throw new HttpError(400, "任务不能依赖自己");
+    throw new HttpError(400, "task.selfDependency");
   if (blockedBy.length) {
     const found = tx.select({ id: tasks.id }).from(tasks).where(inArray(tasks.id, blockedBy)).all();
     const missing = blockedBy.find((id) => !found.some((task) => task.id === id));
-    if (missing !== undefined) throw new HttpError(400, `依赖的任务不存在：${missing}`);
+    if (missing !== undefined) throw new HttpError(400, "task.dependencyNotFound", { id: missing });
   }
   return blockedBy;
 }
@@ -29,9 +29,9 @@ export function validateDependencies(tx: Tx, ids: string[], selfId?: string): st
 export function updateDependencies(id: string, ids: string[], actor: Actor) {
   const { task, event } = db.transaction((tx) => {
     const current = tx.select().from(tasks).where(eq(tasks.id, id)).get();
-    if (!current) throw new HttpError(404, "任务不存在");
+    if (!current) throw new HttpError(404, "task.notFound");
     if (actor.kind !== "human" && !(actor.kind === "agent" && actor.id === current.publisherId))
-      throw new HttpError(403, "只有人或发布者可以操作");
+      throw new HttpError(403, "auth.humanOrPublisherOnly");
     const blockedBy = validateDependencies(tx, ids, id);
     const task = tx
       .update(tasks)

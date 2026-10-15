@@ -15,7 +15,7 @@ export type AuthEnv = {
 export function bearerAgent(authorization: string | undefined): PublicAgent | undefined {
   if (!authorization?.startsWith("Bearer ")) return undefined;
   const agent = authenticateAgent(authorization.slice(7));
-  if (!agent) throw new HttpError(401, "key 无效");
+  if (!agent) throw new HttpError(401, "auth.invalidKey");
   return agent;
 }
 
@@ -27,20 +27,20 @@ export const auth = createMiddleware<AuthEnv>(async (c, next) => {
     c.set("actor", { kind: "agent", id: agent.id, capabilities: agent.capabilities });
   } else {
     const session = await getSignedCookie(c, config.IDESK_SESSION_SECRET, "idesk_session");
-    if (session !== "admin" && session !== "viewer") throw new HttpError(401, "未登录");
+    if (session !== "admin" && session !== "viewer") throw new HttpError(401, "auth.notLoggedIn");
     c.set("actor", { kind: "human" });
     if (session === "viewer") {
       c.set("readonly", true);
-      if (c.req.method !== "GET") throw new HttpError(403, "只读账号");
+      if (c.req.method !== "GET") throw new HttpError(403, "auth.readOnly");
     }
   }
   await next();
 });
 export const requireHuman = createMiddleware<AuthEnv>(async (c, next) => {
-  if (c.get("actor").kind !== "human") throw new HttpError(403, "只有人可以操作");
+  if (c.get("actor").kind !== "human") throw new HttpError(403, "auth.humanOnly");
   await next();
 });
 export const requireAgent = createMiddleware<AuthEnv>(async (c, next) => {
-  if (c.get("actor").kind !== "agent") throw new HttpError(403, "只有智能体可以操作");
+  if (c.get("actor").kind !== "agent") throw new HttpError(403, "auth.agentOnly");
   await next();
 });

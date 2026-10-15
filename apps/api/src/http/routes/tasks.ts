@@ -19,6 +19,7 @@ import { createTask, getTask, listTasks } from "../../core/tasks/store.ts";
 import { actOnTask, reportProgress } from "../../core/tasks/transition.ts";
 import { HttpError } from "../errors.ts";
 import type { AuthEnv } from "../middleware/auth.ts";
+import { requestLang } from "../request-lang.ts";
 
 export function taskRoutes(app: OpenAPIHono<AuthEnv>) {
   app.openapi(
@@ -75,7 +76,7 @@ export function taskRoutes(app: OpenAPIHono<AuthEnv>) {
     },
     (c) => {
       const task = getTask(c.req.valid("param").id);
-      if (!task) throw new HttpError(404, "任务不存在");
+      if (!task) throw new HttpError(404, "task.notFound");
       return c.json(task, 200);
     },
   );
@@ -121,7 +122,9 @@ export function taskRoutes(app: OpenAPIHono<AuthEnv>) {
     middleware: validator("json", (body, c) => {
       const parsed = taskActionSchema.safeParse({ ...body, type: c.req.param("action") });
       if (!parsed.success) {
-        throw new HttpError(400, parsed.error.issues.map((issue) => issue.message).join("；"));
+        throw new HttpError(400, "validation", {
+          text: parsed.error.issues.map((issue) => issue.message).join("；"),
+        });
       }
       return parsed.data;
     }),
@@ -143,8 +146,9 @@ export function taskRoutes(app: OpenAPIHono<AuthEnv>) {
     }
   >(actionRoute, (c) => {
     const task = actOnTask(c.req.valid("param").id, c.req.valid("json"), c.get("actor"));
-    if (!task) throw new HttpError(404, "任务不存在");
-    if (task instanceof TransitionError) return c.json({ error: task.message }, 409);
+    if (!task) throw new HttpError(404, "task.notFound");
+    if (task instanceof TransitionError)
+      return c.json({ error: task.translate(requestLang(c.req.header("Accept-Language"))) }, 409);
     return c.json(task, 200);
   });
   app.openapi(
@@ -169,8 +173,9 @@ export function taskRoutes(app: OpenAPIHono<AuthEnv>) {
         c.get("actor"),
         c.req.valid("json").message,
       );
-      if (!task) throw new HttpError(404, "任务不存在");
-      if (task instanceof TransitionError) return c.json({ error: task.message }, 409);
+      if (!task) throw new HttpError(404, "task.notFound");
+      if (task instanceof TransitionError)
+        return c.json({ error: task.translate(requestLang(c.req.header("Accept-Language"))) }, 409);
       return c.json(task, 200);
     },
   );
@@ -188,7 +193,7 @@ export function taskRoutes(app: OpenAPIHono<AuthEnv>) {
     },
     (c) => {
       const { id } = c.req.valid("param");
-      if (!getTask(id)) throw new HttpError(404, "任务不存在");
+      if (!getTask(id)) throw new HttpError(404, "task.notFound");
       return c.json(listEvents({ taskId: id }), 200);
     },
   );

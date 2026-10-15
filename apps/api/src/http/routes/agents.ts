@@ -32,7 +32,7 @@ export function agentRoutes(app: OpenAPIHono<AuthEnv>) {
     },
     (c) => {
       const agent = updateAgent(c.req.valid("param").id, c.req.valid("json"));
-      if (!agent) throw new HttpError(404, "智能体不存在");
+      if (!agent) throw new HttpError(404, "agent.notFound");
       return c.json(agent, 200);
     },
   );
@@ -45,7 +45,7 @@ export function agentRoutes(app: OpenAPIHono<AuthEnv>) {
       responses: { 204: { description: "Deleted agent" } },
     },
     (c) => {
-      if (!deleteAgent(c.req.valid("param").id)) throw new HttpError(404, "智能体不存在");
+      if (!deleteAgent(c.req.valid("param").id)) throw new HttpError(404, "agent.notFound");
       return c.body(null, 204);
     },
   );
@@ -63,7 +63,7 @@ export function agentRoutes(app: OpenAPIHono<AuthEnv>) {
     },
     (c) => {
       const stats = getAgentStats(c.req.valid("param").id);
-      if (!stats) throw new HttpError(404, "智能体不存在");
+      if (!stats) throw new HttpError(404, "agent.notFound");
       return c.json(stats, 200);
     },
   );

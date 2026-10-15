@@ -66,7 +66,7 @@ export function relayRoutes(app: OpenAPIHono<AuthEnv>) {
         id: agent.id,
         capabilities: agent.capabilities,
       });
-      if (!message) throw new HttpError(404, "消息不存在");
+      if (!message) throw new HttpError(404, "relay.notFound");
       return c.json(message, 200);
     },
   );

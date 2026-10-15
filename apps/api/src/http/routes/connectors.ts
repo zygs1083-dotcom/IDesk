@@ -26,15 +26,17 @@ import { type AuthEnv, requireHuman } from "../middleware/auth.ts";
 export const MANUAL_POLL_COOLDOWN_MS = 15_000;
 function existingConnector(id: string) {
   const connector = getConnector(id);
-  if (!connector) throw new HttpError(404, "连接器不存在");
+  if (!connector) throw new HttpError(404, "connector.notFound");
   return connector;
 }
 function validatedPlugin(pluginId: string, config: Record<string, unknown>) {
   const plugin = connectorPlugin(pluginId);
-  if (!plugin) throw new HttpError(400, "没有这个连接器插件或已停用");
+  if (!plugin) throw new HttpError(400, "connector.pluginUnavailable");
   const parsed = plugin.configSchema.safeParse(config);
   if (!parsed.success)
-    throw new HttpError(400, parsed.error.issues.map((issue) => issue.message).join("；"));
+    throw new HttpError(400, "validation", {
+      text: parsed.error.issues.map((issue) => issue.message).join("；"),
+    });
   return { plugin, config: parsed.data };
 }
 
@@ -114,7 +116,7 @@ export function connectorRoutes(app: OpenAPIHono<AuthEnv>) {
       responses: { 204: { description: "Deleted" } },
     },
     (c) => {
-      if (!deleteConnector(c.req.valid("param").id)) throw new HttpError(404, "连接器不存在");
+      if (!deleteConnector(c.req.valid("param").id)) throw new HttpError(404, "connector.notFound");
       return c.body(null, 204);
     },
   );

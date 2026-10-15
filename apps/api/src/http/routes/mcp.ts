@@ -7,7 +7,7 @@ import { type AuthEnv, bearerAgent } from "../middleware/auth.ts";
 export function mcpRoutes(app: OpenAPIHono<AuthEnv>) {
   app.all("/mcp", async (c) => {
     const agent = bearerAgent(c.req.header("Authorization"));
-    if (!agent) throw new HttpError(401, "未登录");
+    if (!agent) throw new HttpError(401, "auth.notLoggedIn");
     const server = createMcpServer(agent);
     const transport = new WebStandardStreamableHTTPServerTransport({});
     await server.connect(transport);

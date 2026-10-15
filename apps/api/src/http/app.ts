@@ -2,6 +2,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { serveStatic } from "@hono/node-server/serve-static";
 import { OpenAPIHono } from "@hono/zod-openapi";
+import { message } from "@idesk/shared/messages";
 import { compress } from "hono/compress";
 import { createMiddleware } from "hono/factory";
 import { z } from "zod";
@@ -9,6 +10,7 @@ import { config } from "../config.ts";
 import { registerWebSocket } from "../realtime/ws.ts";
 import { HttpError } from "./errors.ts";
 import { type AuthEnv, auth } from "./middleware/auth.ts";
+import { requestLang } from "./request-lang.ts";
 import { agentRoutes } from "./routes/agents.ts";
 import { authRoutes } from "./routes/auth.ts";
 import { automationRoutes } from "./routes/automation.ts";
@@ -31,9 +33,10 @@ export const app = new OpenAPIHono<AuthEnv>({
 });
 
 app.onError((err, c) => {
-  if (err instanceof HttpError) return c.json({ error: err.message }, err.status);
+  const lang = requestLang(c.req.header("Accept-Language"));
+  if (err instanceof HttpError) return c.json({ error: err.translate(lang) }, err.status);
   console.error(err);
-  return c.json({ error: "internal error" }, 500);
+  return c.json({ error: message(lang, "internal.error", undefined) }, 500);
 });
 
 // 内网带宽常常只有 10 Mbps：JS 压缩后缩到三分之一，带 hash 的构建产物一年不再下载。
