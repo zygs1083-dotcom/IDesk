@@ -27,7 +27,8 @@ export function startIdle(cast: Cast, snapshot: Snapshot, t: Translate, random =
       timers.set(timer, resolve);
     });
   const moves = idleMoves(cast, snapshot, t, wait, random);
-  startDozing(cast, snapshot, reserved, t, random, (id) => schedule(id));
+  const wake = startDozing(cast, snapshot, reserved, t, random, (id) => schedule(id));
+  cast.stage.world.on("office:active", wake);
   const perform = async (id: string) => {
     if (cast.stage.world.destroyed || !idleEligible(cast, snapshot, id)) return;
     const walking = [...cast.characters.values()].filter(
@@ -84,6 +85,7 @@ export function startIdle(cast: Cast, snapshot: Snapshot, t: Translate, random =
   };
   sync();
   cast.stage.world.on("destroyed", () => {
+    cast.stage.world.off("office:active", wake);
     for (const [timer, resolve] of timers) {
       clearTimeout(timer);
       resolve();

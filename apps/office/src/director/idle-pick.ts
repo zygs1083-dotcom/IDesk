@@ -22,11 +22,11 @@ type IdleCast = {
   characters: ReadonlyMap<string, IdleCharacter>;
 };
 export type Snapshot = ReadonlyMap<string, Pick<Task, "status" | "assigneeId">>;
-export function idleEligible(cast: IdleCast, snapshot: Snapshot, id: string) {
+export function idleEligible(cast: IdleCast, snapshot: Snapshot, id: string, ignoreSleep = false) {
   const character = cast.characters.get(id);
   return (
     id !== "human" &&
-    !cast.sleeping.has(id) &&
+    (ignoreSleep || !cast.sleeping.has(id)) &&
     cast.present.has(id) &&
     (character?.state === "idle" || character?.state === "sit") &&
     ![...snapshot.values()].some((task) => task.assigneeId === id && task.status === "in_progress")
@@ -77,13 +77,10 @@ export function pickSpots(spots: Spot[], random: () => number) {
   return second ? [first, second] : [first];
 }
 
-export function chatSeats(a: Seat, b: Seat, via: string): [Seat, Seat] {
-  const x = (a.x + b.x) / 2;
-  const y = (a.y + b.y) / 2;
-  const side = a.x <= b.x ? -1 : 1;
+export function chatSeats(center: Point & { id: string }): [Seat, Seat] {
   return [
-    { x: x + side * 24, y, via, facing: side < 0 ? "right" : "left" },
-    { x: x - side * 24, y, via, facing: side < 0 ? "left" : "right" },
+    { x: center.x - 24, y: center.y, via: center.id, facing: "right" },
+    { x: center.x + 24, y: center.y, via: center.id, facing: "left" },
   ];
 }
 

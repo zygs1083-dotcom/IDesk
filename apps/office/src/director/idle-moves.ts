@@ -100,9 +100,9 @@ export function idleMoves(
       const a = cast.seats.get(id);
       const b = cast.seats.get(other);
       if (eligible && idleEligible(cast, snapshot, id) && a && b && alive()) {
-        const via = cast.nearest({ x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 });
+        const via = cast.scene.waypoints.find((point) => point.id === a.via);
         if (via) {
-          const targets = chatSeats(a, b, via.id);
+          const targets = chatSeats(via);
           await Promise.all([
             cast.walk(id, targets[0], idleSpeed(random)),
             cast.walk(other, targets[1], idleSpeed(random)),

@@ -1,5 +1,5 @@
 import { expect, test, vi } from "vitest";
-import type { Seat, Spot } from "../scene/scene.ts";
+import type { Spot } from "../scene/scene.ts";
 import type { CharacterState } from "../stage/character.ts";
 import {
   chatSeats,
@@ -109,14 +109,11 @@ test("spot chaining uses a quarter probability and a different destination", () 
   expect(pickSpots(spots, () => 0.25)).toEqual([spots[0]]);
 });
 
-test("chat positions straddle the seat midpoint and face each other", () => {
-  const a: Seat = { x: 0, y: 0, via: "a", facing: "up" };
-  const b: Seat = { x: 100, y: 40, via: "b", facing: "down" };
-  expect(chatSeats(a, b, "mid")).toEqual([
-    { x: 26, y: 20, via: "mid", facing: "right" },
-    { x: 74, y: 20, via: "mid", facing: "left" },
+test("chat positions straddle the aisle point and face each other", () => {
+  expect(chatSeats({ id: "aisle", x: 480, y: 263 })).toEqual([
+    { x: 456, y: 263, via: "aisle", facing: "right" },
+    { x: 504, y: 263, via: "aisle", facing: "left" },
   ]);
-  expect(chatSeats(b, a, "mid")).toEqual(chatSeats(a, b, "mid").reverse());
 });
 
 test("dozing begins at three minutes and activity resets the threshold", () => {
@@ -148,4 +145,10 @@ test("sleepers neither initiate idle actions nor become chat partners", () => {
   const sleepingCast = { ...cast, sleeping: new Set(["self", "near"]) };
   expect(idleEligible(sleepingCast, snapshot, "self")).toBe(false);
   expect(idleNeighbor(sleepingCast, snapshot, "self")).toBe("far");
+});
+
+test("ignoreSleep counts sleepers without relaxing other eligibility rules", () => {
+  const sleepingCast = { ...cast, sleeping: new Set(["self", "busy"]) };
+  expect(idleEligible(sleepingCast, snapshot, "self", true)).toBe(true);
+  expect(idleEligible(sleepingCast, snapshot, "busy", true)).toBe(false);
 });

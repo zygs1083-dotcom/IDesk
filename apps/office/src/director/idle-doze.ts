@@ -24,7 +24,7 @@ export function startDozing(
     string,
     { nod: ReturnType<typeof setInterval>; wake: ReturnType<typeof setTimeout> }
   >();
-  cast.wake = (id) => {
+  const wake = (id: string) => {
     const sleeping = timers.get(id);
     if (!sleeping) return;
     clearInterval(sleeping.nod);
@@ -36,8 +36,7 @@ export function startDozing(
     resume(id);
   };
   const check = setInterval(() => {
-    const awakeCast = { ...cast, sleeping: new Set<string>() };
-    const eligible = [...cast.present].filter((id) => idleEligible(awakeCast, snapshot, id));
+    const eligible = [...cast.present].filter((id) => idleEligible(cast, snapshot, id, true));
     const capacity = idleSleepCapacity(eligible.length);
     for (const id of [...cast.sleeping].slice(capacity)) cast.active(id);
     for (const id of eligible) {
@@ -71,4 +70,5 @@ export function startDozing(
     timers.clear();
     cast.sleeping.clear();
   });
+  return wake;
 }

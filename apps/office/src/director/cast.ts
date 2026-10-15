@@ -16,7 +16,6 @@ export class Cast {
   readonly queue = new ActionQueue();
   readonly sleeping = new Set<string>();
   readonly lastActive = new Map<string, number>();
-  wake = (_id: string) => {};
   seats = new Map<string, Seat>();
   readonly present = new Set<string>();
   private labels: ZoneSign[];
@@ -153,7 +152,7 @@ export class Cast {
   }
 
   active(id: string) {
-    this.wake(id);
+    this.stage.world.emit("office:active", id);
     this.lastActive.set(id, Date.now());
   }
 
