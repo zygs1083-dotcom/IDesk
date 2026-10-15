@@ -2,18 +2,26 @@ import { Container, Graphics, Text } from "pixi.js";
 import type { Point } from "../scene/scene.ts";
 import type { Stage } from "./stage.ts";
 
-const PAPER = 0xfff0ce;
-const INK = 0x302a2a;
+const FACE = 0xe7c4a0;
+const FRAME = 0x6b4a2b;
+const HIGHLIGHT = 0xf3dcbf;
+const LETTERING = 0x3b2a1a;
+const SIGN_WIDTH = 132;
+const SIGN_HEIGHT = 52;
 
 export function signScale(worldScale: number) {
   return Math.max(1, 1 / worldScale);
+}
+
+export function signWidth(textWidth: number) {
+  return Math.max(SIGN_WIDTH, textWidth + 12);
 }
 
 export class ZoneSign extends Container {
   private panel = new Graphics();
   private title = new Text({
     text: "",
-    style: { fontFamily: "Fusion Pixel", fontSize: 12, fill: INK },
+    style: { fontFamily: "Fusion Pixel", fontSize: 12, fill: LETTERING },
   });
 
   constructor(stage: Stage, position: Point) {
@@ -21,7 +29,9 @@ export class ZoneSign extends Container {
     this.position.copyFrom(position);
     this.title.anchor.set(0.5);
     this.addChild(this.panel, this.title);
-    const resize = () => this.scale.set(signScale(stage.world.scale.x));
+    const resize = () => {
+      this.scale.set(signScale(stage.world.scale.x));
+    };
     stage.app.renderer.on("resize", resize);
     this.on("destroyed", () => stage.app.renderer.off("resize", resize));
     resize();
@@ -32,12 +42,19 @@ export class ZoneSign extends Container {
   setText(text: string) {
     this.visible = text.length > 0;
     this.title.text = text;
-    const width = this.title.width + 12;
-    const height = this.title.height + 8;
+    this.draw();
+  }
+
+  private draw() {
+    const width = signWidth(this.title.width);
     this.panel
       .clear()
-      .rect(-width / 2, -height / 2, width, height)
-      .fill(PAPER);
-    this.panel.stroke({ color: INK, width: 2 });
+      .rect(-width / 2, -SIGN_HEIGHT / 2, width, SIGN_HEIGHT)
+      .fill(FACE)
+      .stroke({ color: FRAME, width: 1 });
+    this.panel
+      .moveTo(-width / 2 + 1, -SIGN_HEIGHT / 2 + 1)
+      .lineTo(width / 2 - 1, -SIGN_HEIGHT / 2 + 1)
+      .stroke({ color: HIGHLIGHT, width: 1 });
   }
 }
