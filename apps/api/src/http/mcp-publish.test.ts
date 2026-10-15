@@ -44,5 +44,7 @@ test("MCP publishes with dispatch and reports rejected dispatch in Chinese", asy
   await client.close();
   expect(rejected.isError).toBe(true);
   expect(rejected.content).toEqual([{ type: "text", text: "被「前置任务」阻塞" }]);
-  expect(listTasks({ q: "MCP publish blocked" })).toEqual([expect.objectContaining({ status: "open" })]);
+  expect(listTasks({ q: "MCP publish blocked" })).toEqual([
+    expect.objectContaining({ status: "open" }),
+  ]);
 });
