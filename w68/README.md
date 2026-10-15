@@ -98,7 +98,7 @@
 
 ## 事件、空闲与交互
 
-- [上线](events/online.gif)、[建任务](events/created.gif)、[领取](events/claim.gif)、[接受](events/accept.gif)：从门入场，去白板领卡，持卡回座打字。
+- [上线](events/online.gif)、[建任务](events/created.gif)、[领取](events/claim.gif)：从门入场，去白板领卡，持卡回座打字。
 - [汇报](events/reported.gif)、[交接](events/handoff.gif)、[完成](events/complete.gif)：气泡、桌边递卡、纸屑与飞入文件筐。
 - [暂停](events/pause.gif)、[恢复](events/resume.gif)、[释放](events/release.gif)：去休息点喝咖啡，回座放卡，或把卡送回白板。
 - [满员会议](events/meeting.gif)、[六人同时落座](events/six-seated.png)、[散会](events/disband.gif)：最后一个 join 触发入会；六张椅子上均有角色和省略号，桌面一张卡，取消后各回原位。
@@ -107,3 +107,5 @@
 - [点击人物](ui/person-profile.png)、[点击礼仪](ui/reception-profile.png)、[点击板卡](ui/task-card.png)、[回放](ui/replay.png)、[回现场](ui/back-to-live.png)、[窄屏与 reduced motion](ui/narrow-reduced-motion.png)。
 
 检查页、完整事件录制、会议补录、交互测试的浏览器错误均为 0。详细复现命令见 W68 PR 描述。
+
+领取、汇报、暂停、恢复、完成与信封 GIF 使用额外的两人独立动作补录，避免前置空闲队列使动作跨过剪辑窗口；该次浏览器错误也为 0。暂停图中智能体坐在第二张沙发上持卡喝咖啡，恢复图中已回到工位打字。
