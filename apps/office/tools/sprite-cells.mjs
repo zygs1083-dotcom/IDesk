@@ -2,7 +2,7 @@ import { PNG } from "pngjs";
 
 const fringeThreshold = 40;
 
-export function spriteCells(source, rowCount, names, kind) {
+export function removeMagenta(source) {
   for (let p = 0; p < source.data.length; p += 4) {
     const distance = Math.hypot(source.data[p] - 255, source.data[p + 1], source.data[p + 2] - 255);
     if (distance <= 60) source.data[p + 3] = 0;
@@ -21,6 +21,10 @@ export function spriteCells(source, rowCount, names, kind) {
     });
     if (edge) source.data[p + 3] = 0;
   }
+}
+
+export function spriteCells(source, rowCount, names, kind) {
+  removeMagenta(source);
   const columns = Array.from({ length: 5 }, (_, i) => Math.round((i * source.width) / 4));
   const rows = Array.from({ length: rowCount + 1 }, (_, i) =>
     Math.round((i * source.height) / rowCount),

@@ -8,7 +8,10 @@
     "build": "vite build",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "sprites": "node tools/sprites.mjs"
+    "sprites": "node tools/sprites.mjs",
+    "tiles": "node tools/tiles.mjs",
+    "furniture": "node tools/furniture.mjs",
+    "probe": "node tools/probe.mjs"
   },
   "dependencies": {
     "@idesk/shared": "workspace:*",

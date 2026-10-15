@@ -1,0 +1,60 @@
+{
+  "standing": {
+    "x": 7,
+    "y": 2,
+    "w": 48,
+    "h": 94
+  },
+  "seated": {
+    "sit/down": {
+      "x": 9,
+      "y": 13,
+      "w": 46,
+      "h": 83
+    },
+    "typing/down/0": {
+      "x": 9,
+      "y": 13,
+      "w": 46,
+      "h": 83
+    },
+    "typing/down/1": {
+      "x": 9,
+      "y": 13,
+      "w": 46,
+      "h": 83
+    },
+    "sit/up": {
+      "x": 8,
+      "y": 13,
+      "w": 47,
+      "h": 83
+    },
+    "typing/up/0": {
+      "x": 7,
+      "y": 13,
+      "w": 50,
+      "h": 83
+    },
+    "typing/up/1": {
+      "x": 7,
+      "y": 13,
+      "w": 50,
+      "h": 83
+    }
+  },
+  "deskTopFrontHeight": {
+    "monitor": 50,
+    "laptop": 48
+  },
+  "deskTopBackHeight": {
+    "monitor": 90,
+    "laptop": 90
+  },
+  "chairBackHeight": {
+    "down": 44,
+    "up": 40
+  },
+  "monitorTopY": 176,
+  "southHeadTopY": 235
+}

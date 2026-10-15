@@ -1,5 +1,8 @@
 {
-  "size": { "w": 40, "h": 24 },
+  "size": {
+    "w": 40,
+    "h": 24
+  },
   "ground": [
     "UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU",
     "LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL",
@@ -27,19 +30,84 @@
     "wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww"
   ],
   "objects": [
-    { "id": "chair-down-0", "item": "chair-down", "x": 14, "y": 7 },
-    { "id": "desk-laptop-0", "item": "desk-laptop", "x": 14, "y": 8 },
-    { "id": "desk-monitor-0", "item": "desk-monitor", "x": 14, "y": 10 },
-    { "id": "chair-up-0", "item": "chair-up", "x": 14, "y": 11 },
-    { "id": "chair-down-1", "item": "chair-down", "x": 18, "y": 7 },
-    { "id": "desk-laptop-1", "item": "desk-laptop", "x": 18, "y": 8 },
-    { "id": "desk-monitor-1", "item": "desk-monitor", "x": 18, "y": 10 },
-    { "id": "chair-up-1", "item": "chair-up", "x": 18, "y": 11 },
-    { "id": "plaque-1", "item": "plaque", "x": 16, "y": 1 },
-    { "id": "front-chair", "item": "chair-down", "x": 4, "y": 18 },
-    { "id": "front-counter", "item": "counter", "x": 3, "y": 19 },
-    { "id": "plant-1", "item": "plant", "x": 27, "y": 15 },
-    { "id": "bookshelf-1", "item": "bookshelf", "x": 30, "y": 4 }
+    {
+      "id": "chair-down-0",
+      "item": "chair-down",
+      "x": 14,
+      "y": 6
+    },
+    {
+      "id": "desk-laptop-0",
+      "item": "desk-laptop",
+      "x": 14,
+      "y": 7
+    },
+    {
+      "id": "desk-monitor-0",
+      "item": "desk-monitor",
+      "x": 14,
+      "y": 10
+    },
+    {
+      "id": "chair-up-0",
+      "item": "chair-up",
+      "x": 14,
+      "y": 12
+    },
+    {
+      "id": "chair-down-1",
+      "item": "chair-down",
+      "x": 18,
+      "y": 6
+    },
+    {
+      "id": "desk-laptop-1",
+      "item": "desk-laptop",
+      "x": 18,
+      "y": 7
+    },
+    {
+      "id": "desk-monitor-1",
+      "item": "desk-monitor",
+      "x": 18,
+      "y": 10
+    },
+    {
+      "id": "chair-up-1",
+      "item": "chair-up",
+      "x": 18,
+      "y": 12
+    },
+    {
+      "id": "plaque-1",
+      "item": "plaque",
+      "x": 16,
+      "y": 1
+    },
+    {
+      "id": "front-chair",
+      "item": "chair-down",
+      "x": 3,
+      "y": 18
+    },
+    {
+      "id": "front-counter",
+      "item": "counter",
+      "x": 3,
+      "y": 19
+    },
+    {
+      "id": "plant-1",
+      "item": "plant",
+      "x": 27,
+      "y": 15
+    },
+    {
+      "id": "bookshelf-1",
+      "item": "bookshelf",
+      "x": 30,
+      "y": 4
+    }
   ],
   "zones": [
     {
@@ -50,12 +118,32 @@
     }
   ],
   "points": {
-    "door": { "x": 34, "y": 23, "facing": "up" },
-    "board": { "x": 20, "y": 2, "facing": "up" }
+    "door": {
+      "x": 34,
+      "y": 23,
+      "facing": "up"
+    },
+    "board": {
+      "x": 20,
+      "y": 2,
+      "facing": "up"
+    }
   },
   "spots": [
-    { "id": "printer", "x": 30, "y": 3, "facing": "up" },
-    { "id": "plant", "x": 27, "y": 16, "facing": "up" }
+    {
+      "id": "printer",
+      "x": 30,
+      "y": 3,
+      "facing": "up"
+    },
+    {
+      "id": "plant",
+      "x": 27,
+      "y": 16,
+      "facing": "up"
+    }
   ],
-  "hostZones": { "mac-mini": 1 }
+  "hostZones": {
+    "mac-mini": 1
+  }
 }

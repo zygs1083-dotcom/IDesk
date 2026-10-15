@@ -1,0 +1,120 @@
+{
+  "frames": {
+    "desk-monitor": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 112
+      }
+    },
+    "desk-laptop": {
+      "frame": {
+        "x": 98,
+        "y": 0,
+        "w": 96,
+        "h": 90
+      }
+    },
+    "counter": {
+      "frame": {
+        "x": 196,
+        "y": 0,
+        "w": 96,
+        "h": 52
+      }
+    },
+    "bookshelf": {
+      "frame": {
+        "x": 294,
+        "y": 0,
+        "w": 64,
+        "h": 88
+      }
+    },
+    "chair-down-behind": {
+      "frame": {
+        "x": 360,
+        "y": 0,
+        "w": 56,
+        "h": 44
+      }
+    },
+    "chair-down-front": {
+      "frame": {
+        "x": 418,
+        "y": 0,
+        "w": 56,
+        "h": 44
+      }
+    },
+    "chair-up-behind": {
+      "frame": {
+        "x": 476,
+        "y": 0,
+        "w": 32,
+        "h": 40
+      }
+    },
+    "chair-up-front": {
+      "frame": {
+        "x": 0,
+        "y": 114,
+        "w": 32,
+        "h": 40
+      }
+    },
+    "chair-left-behind": {
+      "frame": {
+        "x": 34,
+        "y": 114,
+        "w": 32,
+        "h": 40
+      }
+    },
+    "chair-left-front": {
+      "frame": {
+        "x": 68,
+        "y": 114,
+        "w": 32,
+        "h": 40
+      }
+    },
+    "chair-right-behind": {
+      "frame": {
+        "x": 102,
+        "y": 114,
+        "w": 32,
+        "h": 40
+      }
+    },
+    "chair-right-front": {
+      "frame": {
+        "x": 136,
+        "y": 114,
+        "w": 32,
+        "h": 40
+      }
+    },
+    "plant": {
+      "frame": {
+        "x": 170,
+        "y": 114,
+        "w": 32,
+        "h": 56
+      }
+    },
+    "plaque": {
+      "frame": {
+        "x": 204,
+        "y": 114,
+        "w": 64,
+        "h": 24
+      }
+    }
+  },
+  "meta": {
+    "image": "furniture.png",
+    "scale": "1"
+  }
+}
