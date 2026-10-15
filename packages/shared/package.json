@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "exports": {
+    "./messages": "./src/messages.ts",
     "./labels": "./src/labels.ts",
     "./task-status": "./src/task-status.ts",
     "./task-machine": "./src/task-machine.ts",
