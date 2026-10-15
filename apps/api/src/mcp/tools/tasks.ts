@@ -28,18 +28,21 @@ export function registerTaskTools(server: McpServer, agent: PublicAgent) {
   server.registerTool(
     "idesk_list_tasks",
     {
-      description: "筛选任务，默认查看自己能领取的任务，mine 查看自己负责的任务。",
+      description:
+        "筛选任务，默认查看自己能领取的任务，mine 查看自己负责的任务，q 搜索标题、正文和结果。",
       inputSchema: {
+        q: taskQuerySchema.shape.q,
         status: taskQuerySchema.shape.status,
         capability: taskQuerySchema.shape.capability,
         mine: z.boolean().optional(),
       },
     },
-    ({ status, capability, mine }) =>
+    ({ status, capability, mine, q }) =>
       toolResult(
-        status === undefined && capability === undefined && !mine
+        status === undefined && capability === undefined && q === undefined && !mine
           ? claimableTasks(agent)
           : listTasks({
+              ...(q === undefined ? {} : { q }),
               ...(status === undefined ? {} : { status }),
               ...(capability === undefined ? {} : { capability }),
               ...(mine ? { assigneeId: agent.id } : {}),
