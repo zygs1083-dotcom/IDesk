@@ -125,6 +125,7 @@ describe("github-actions connector", () => {
       {
         externalId: "1",
         name: "Build",
+        schedule: null,
         group: "owner/repo",
         enabled: true,
         url: "https://github.com/build",
@@ -132,6 +133,7 @@ describe("github-actions connector", () => {
       {
         externalId: "2",
         name: "Deploy",
+        schedule: null,
         group: "owner/repo",
         enabled: false,
         url: "https://github.com/deploy",

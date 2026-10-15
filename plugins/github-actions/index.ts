@@ -106,6 +106,7 @@ export default {
       (workflow): ExternalJob => ({
         externalId: String(workflow.id),
         name: workflow.name,
+        schedule: null,
         group: (config as Config).repo,
         enabled: workflow.state === "active",
         url: workflow.html_url,

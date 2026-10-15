@@ -29,12 +29,15 @@ it("pages visible projects, preserves 19-digit codes and keeps workflow names se
     )
     .mockResolvedValueOnce(page([{ code: 42, name: "Beta" }], 2, 2))
     .mockResolvedValueOnce(page([definition]))
-    .mockResolvedValueOnce(page([definition]));
+    .mockResolvedValueOnce(page([]))
+    .mockResolvedValueOnce(page([definition]))
+    .mockResolvedValueOnce(page([]));
   vi.stubGlobal("fetch", fetch);
   expect(await plugin.listJobs(config)).toEqual([
     {
       externalId: "9123456789012345678/7",
       name: "daily",
+      schedule: null,
       group: "Alpha",
       enabled: true,
       url: `${baseUrl}/ui/projects/9123456789012345678/workflow/definitions/7`,
@@ -42,6 +45,7 @@ it("pages visible projects, preserves 19-digit codes and keeps workflow names se
     {
       externalId: "42/7",
       name: "daily",
+      schedule: null,
       group: "Beta",
       enabled: true,
       url: `${baseUrl}/ui/projects/42/workflow/definitions/7`,
@@ -51,7 +55,9 @@ it("pages visible projects, preserves 19-digit codes and keeps workflow names se
     `${baseUrl}/projects?pageNo=1&pageSize=100`,
     `${baseUrl}/projects?pageNo=2&pageSize=100`,
     `${baseUrl}/projects/9123456789012345678/process-definition?pageNo=1&pageSize=100`,
+    `${baseUrl}/projects/9123456789012345678/schedules?pageNo=1&pageSize=100`,
     `${baseUrl}/projects/42/process-definition?pageNo=1&pageSize=100`,
+    `${baseUrl}/projects/42/schedules?pageNo=1&pageSize=100`,
   ]);
 });
 
@@ -61,12 +67,14 @@ it("keeps single-project names and never requests the project list", async () =>
     .mockResolvedValueOnce(
       new Response('{"code":0,"data":{"code":9123456789012345678,"name":"Alpha"}}'),
     )
-    .mockResolvedValueOnce(page([definition]));
+    .mockResolvedValueOnce(page([definition]))
+    .mockResolvedValueOnce(page([]));
   vi.stubGlobal("fetch", fetch);
   expect(await plugin.listJobs({ ...config, projectCode: "9123456789012345678" })).toEqual([
     {
       externalId: "9123456789012345678/7",
       name: "daily",
+      schedule: null,
       group: "Alpha",
       enabled: true,
       url: `${baseUrl}/ui/projects/9123456789012345678/workflow/definitions/7`,
@@ -75,6 +83,7 @@ it("keeps single-project names and never requests the project list", async () =>
   expect(fetch.mock.calls.map(([url]) => url)).toEqual([
     `${baseUrl}/projects/9123456789012345678`,
     `${baseUrl}/projects/9123456789012345678/process-definition?pageNo=1&pageSize=100`,
+    `${baseUrl}/projects/9123456789012345678/schedules?pageNo=1&pageSize=100`,
   ]);
   expect(fetch.mock.calls.every(([url]) => !url.includes("/projects?"))).toBe(true);
 });
