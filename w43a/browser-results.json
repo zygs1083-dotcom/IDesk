@@ -1,0 +1,28 @@
+{
+  "noReload": true,
+  "pages": {
+    "desk": [],
+    "relay": [],
+    "automation": [],
+    "agents": [],
+    "schedules": [],
+    "activity": [],
+    "settings": [],
+    "login": []
+  },
+  "errors": [],
+  "persistedEnglish": true,
+  "persistedChinese": true,
+  "collapsedToggleVisible": true,
+  "documentWidth": 800,
+  "localeDefaults": {
+    "zh-CN": {
+      "html": "zh-CN",
+      "stored": null
+    },
+    "en-US": {
+      "html": "en",
+      "stored": null
+    }
+  }
+}
