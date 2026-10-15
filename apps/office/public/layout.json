@@ -4,122 +4,536 @@
     "h": 24
   },
   "ground": [
-    "UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU",
+    "UUNOUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU",
     "LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL",
     "wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww",
     "wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww",
+    "wwwwwwwccccccwwccccccwwwwwwwcccccccccccw",
+    "wwwwwwwccccccwwccccccwwwwwwwcccccccccccw",
+    "wwwwwwwccccccwwccccccwwwwwwwcccccccccccw",
+    "wwwwwwwccccccwwccccccwwwwwwwcccccccccccw",
+    "wwwwwwwccccccwwccccccwwwwwwwcccccccccccw",
+    "wwwwwwwccccccwwccccccwwwwwwwcccccccccccw",
+    "wwwwwwwwwwwwwwwwwwwwwwwwwwwwcccccccccccw",
     "wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww",
     "wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww",
-    "wwwwwwwwwwwwccccccccccwwwwwwwwwwwwwwwwww",
-    "wwwwwwwwwwwwccccccccccwwwwwwwwwwwwwwwwww",
-    "wwwwwwwwwwwwccccccccccwwwwwwwwwwwwwwwwww",
-    "wwwwwwwwwwwwccccccccccwwwwwwwwwwwwwwwwww",
-    "wwwwwwwwwwwwccccccccccwwwwwwwwwwwwwwwwww",
-    "wwwwwwwwwwwwccccccccccwwwwwwwwwwwwwwwwww",
-    "wwwwwwwwwwwwccccccccccwwwwwwwwwwwwwwwwww",
-    "wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww",
-    "wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww",
-    "wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww",
-    "wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww",
-    "wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww",
-    "wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww",
-    "wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww",
-    "wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww",
-    "wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww",
-    "wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww",
+    "wwwwwwwccccccwwccccccwwwwwwwwwwwwwwwwwww",
+    "wwwwwwwccccccwwccccccwwwwwwwwwwwwwwwwwww",
+    "wwwwwwwccccccwwccccccwwwwwwwwwwwwwwwwwww",
+    "wwwwwwwccccccwwccccccwwwwwwwwwwwwwwwwwww",
+    "wwwwwwwccccccwwccccccwwwwwwwwwwwwwwwwwww",
+    "wtttttwccccccwwccccccwwwwwwwwwwwwwwwwwww",
+    "wtttttwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww",
+    "wtttttwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww",
+    "wtttttwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww",
+    "wtttttwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww",
     "wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww"
   ],
   "objects": [
     {
-      "id": "chair-down-0",
+      "id": "z1-down-0",
       "item": "chair-down",
-      "x": 14,
-      "y": 6
+      "x": 7,
+      "y": 4
     },
     {
-      "id": "desk-laptop-0",
+      "id": "z1-desk-laptop-0",
       "item": "desk-laptop",
-      "x": 14,
+      "x": 7,
+      "y": 5
+    },
+    {
+      "id": "z1-up-0",
+      "item": "chair-up",
+      "x": 7,
+      "y": 9
+    },
+    {
+      "id": "z1-desk-monitor-0",
+      "item": "desk-monitor",
+      "x": 7,
       "y": 7
     },
     {
-      "id": "desk-monitor-0",
-      "item": "desk-monitor",
-      "x": 14,
-      "y": 10
-    },
-    {
-      "id": "chair-up-0",
-      "item": "chair-up",
-      "x": 14,
-      "y": 12
-    },
-    {
-      "id": "chair-down-1",
+      "id": "z1-down-1",
       "item": "chair-down",
-      "x": 18,
-      "y": 6
+      "x": 10,
+      "y": 4
     },
     {
-      "id": "desk-laptop-1",
+      "id": "z1-desk-laptop-1",
       "item": "desk-laptop",
-      "x": 18,
-      "y": 7
+      "x": 10,
+      "y": 5
     },
     {
-      "id": "desk-monitor-1",
-      "item": "desk-monitor",
-      "x": 18,
-      "y": 10
-    },
-    {
-      "id": "chair-up-1",
+      "id": "z1-up-1",
       "item": "chair-up",
-      "x": 18,
-      "y": 12
+      "x": 10,
+      "y": 9
+    },
+    {
+      "id": "z1-desk-monitor-1",
+      "item": "desk-monitor",
+      "x": 10,
+      "y": 7
     },
     {
       "id": "plaque-1",
       "item": "plaque",
-      "x": 16,
-      "y": 1
+      "x": 9,
+      "y": 0
+    },
+    {
+      "id": "z2-down-0",
+      "item": "chair-down",
+      "x": 15,
+      "y": 4
+    },
+    {
+      "id": "z2-desk-laptop-0",
+      "item": "desk-laptop",
+      "x": 15,
+      "y": 5
+    },
+    {
+      "id": "z2-up-0",
+      "item": "chair-up",
+      "x": 15,
+      "y": 9
+    },
+    {
+      "id": "z2-desk-monitor-0",
+      "item": "desk-monitor",
+      "x": 15,
+      "y": 7
+    },
+    {
+      "id": "z2-down-1",
+      "item": "chair-down",
+      "x": 18,
+      "y": 4
+    },
+    {
+      "id": "z2-desk-laptop-1",
+      "item": "desk-laptop",
+      "x": 18,
+      "y": 5
+    },
+    {
+      "id": "z2-up-1",
+      "item": "chair-up",
+      "x": 18,
+      "y": 9
+    },
+    {
+      "id": "z2-desk-monitor-1",
+      "item": "desk-monitor",
+      "x": 18,
+      "y": 7
+    },
+    {
+      "id": "plaque-2",
+      "item": "plaque",
+      "x": 17,
+      "y": 0
+    },
+    {
+      "id": "z3-down-0",
+      "item": "chair-down",
+      "x": 7,
+      "y": 13
+    },
+    {
+      "id": "z3-desk-laptop-0",
+      "item": "desk-laptop",
+      "x": 7,
+      "y": 14
+    },
+    {
+      "id": "z3-up-0",
+      "item": "chair-up",
+      "x": 7,
+      "y": 18
+    },
+    {
+      "id": "z3-desk-monitor-0",
+      "item": "desk-monitor",
+      "x": 7,
+      "y": 16
+    },
+    {
+      "id": "z3-down-1",
+      "item": "chair-down",
+      "x": 10,
+      "y": 13
+    },
+    {
+      "id": "z3-desk-laptop-1",
+      "item": "desk-laptop",
+      "x": 10,
+      "y": 14
+    },
+    {
+      "id": "z3-up-1",
+      "item": "chair-up",
+      "x": 10,
+      "y": 18
+    },
+    {
+      "id": "z3-desk-monitor-1",
+      "item": "desk-monitor",
+      "x": 10,
+      "y": 16
+    },
+    {
+      "id": "plaque-3",
+      "item": "plaque-stand",
+      "x": 4,
+      "y": 16
+    },
+    {
+      "id": "z4-down-0",
+      "item": "chair-down",
+      "x": 15,
+      "y": 13
+    },
+    {
+      "id": "z4-desk-laptop-0",
+      "item": "desk-laptop",
+      "x": 15,
+      "y": 14
+    },
+    {
+      "id": "z4-up-0",
+      "item": "chair-up",
+      "x": 15,
+      "y": 18
+    },
+    {
+      "id": "z4-desk-monitor-0",
+      "item": "desk-monitor",
+      "x": 15,
+      "y": 16
+    },
+    {
+      "id": "z4-down-1",
+      "item": "chair-down",
+      "x": 18,
+      "y": 13
+    },
+    {
+      "id": "z4-desk-laptop-1",
+      "item": "desk-laptop",
+      "x": 18,
+      "y": 14
+    },
+    {
+      "id": "z4-up-1",
+      "item": "chair-up",
+      "x": 18,
+      "y": 18
+    },
+    {
+      "id": "z4-desk-monitor-1",
+      "item": "desk-monitor",
+      "x": 18,
+      "y": 16
+    },
+    {
+      "id": "plaque-4",
+      "item": "plaque-stand",
+      "x": 22,
+      "y": 16
+    },
+    {
+      "id": "task-board",
+      "item": "whiteboard",
+      "x": 19,
+      "y": 0
+    },
+    {
+      "id": "wall-clock",
+      "item": "clock",
+      "x": 24,
+      "y": 0
+    },
+    {
+      "id": "notice-board",
+      "item": "bulletin",
+      "x": 29,
+      "y": 0
     },
     {
       "id": "front-chair",
       "item": "chair-down",
-      "x": 3,
-      "y": 18
+      "x": 2,
+      "y": 19
     },
     {
       "id": "front-counter",
       "item": "counter",
-      "x": 3,
+      "x": 2,
+      "y": 20
+    },
+    {
+      "id": "front-bell",
+      "item": "bell",
+      "x": 2,
+      "y": 20
+    },
+    {
+      "id": "done-tray",
+      "item": "file-tray",
+      "x": 5,
+      "y": 20
+    },
+    {
+      "id": "meeting-table",
+      "item": "meeting-table",
+      "x": 30,
+      "y": 6
+    },
+    {
+      "id": "meeting-north-0",
+      "item": "chair-down",
+      "x": 30,
+      "y": 5
+    },
+    {
+      "id": "meeting-south-0",
+      "item": "chair-up",
+      "x": 30,
+      "y": 8
+    },
+    {
+      "id": "meeting-north-1",
+      "item": "chair-down",
+      "x": 33,
+      "y": 5
+    },
+    {
+      "id": "meeting-south-1",
+      "item": "chair-up",
+      "x": 33,
+      "y": 8
+    },
+    {
+      "id": "meeting-west",
+      "item": "chair-right",
+      "x": 29,
+      "y": 6
+    },
+    {
+      "id": "meeting-east",
+      "item": "chair-left",
+      "x": 36,
+      "y": 6
+    },
+    {
+      "id": "meeting-glass-south-27",
+      "item": "glass-wall",
+      "x": 27,
+      "y": 11
+    },
+    {
+      "id": "meeting-glass-south-28",
+      "item": "glass-wall",
+      "x": 28,
+      "y": 11
+    },
+    {
+      "id": "meeting-glass-south-31",
+      "item": "glass-wall",
+      "x": 31,
+      "y": 11
+    },
+    {
+      "id": "meeting-glass-south-32",
+      "item": "glass-wall",
+      "x": 32,
+      "y": 11
+    },
+    {
+      "id": "meeting-glass-south-33",
+      "item": "glass-wall",
+      "x": 33,
+      "y": 11
+    },
+    {
+      "id": "meeting-glass-south-34",
+      "item": "glass-wall",
+      "x": 34,
+      "y": 11
+    },
+    {
+      "id": "meeting-glass-south-35",
+      "item": "glass-wall",
+      "x": 35,
+      "y": 11
+    },
+    {
+      "id": "meeting-glass-south-36",
+      "item": "glass-wall",
+      "x": 36,
+      "y": 11
+    },
+    {
+      "id": "meeting-glass-south-37",
+      "item": "glass-wall",
+      "x": 37,
+      "y": 11
+    },
+    {
+      "id": "meeting-glass-south-38",
+      "item": "glass-wall",
+      "x": 38,
+      "y": 11
+    },
+    {
+      "id": "meeting-glass-south-39",
+      "item": "glass-wall",
+      "x": 39,
+      "y": 11
+    },
+    {
+      "id": "meeting-glass-west-3",
+      "item": "glass-wall-v",
+      "x": 27,
+      "y": 3
+    },
+    {
+      "id": "meeting-glass-west-4",
+      "item": "glass-wall-v",
+      "x": 27,
+      "y": 4
+    },
+    {
+      "id": "meeting-glass-west-5",
+      "item": "glass-wall-v",
+      "x": 27,
+      "y": 5
+    },
+    {
+      "id": "meeting-glass-west-6",
+      "item": "glass-wall-v",
+      "x": 27,
+      "y": 6
+    },
+    {
+      "id": "meeting-glass-west-7",
+      "item": "glass-wall-v",
+      "x": 27,
+      "y": 7
+    },
+    {
+      "id": "meeting-glass-west-8",
+      "item": "glass-wall-v",
+      "x": 27,
+      "y": 8
+    },
+    {
+      "id": "meeting-glass-west-9",
+      "item": "glass-wall-v",
+      "x": 27,
+      "y": 9
+    },
+    {
+      "id": "meeting-glass-west-10",
+      "item": "glass-wall-v",
+      "x": 27,
+      "y": 10
+    },
+    {
+      "id": "lounge-sofa",
+      "item": "sofa",
+      "x": 33,
       "y": 19
     },
     {
-      "id": "plant-1",
-      "item": "plant",
-      "x": 27,
-      "y": 15
+      "id": "coffee-machine",
+      "item": "coffee-machine",
+      "x": 37,
+      "y": 19
     },
     {
-      "id": "bookshelf-1",
+      "id": "lounge-plant",
+      "item": "plant",
+      "x": 38,
+      "y": 21
+    },
+    {
+      "id": "entrance",
+      "item": "door",
+      "x": 36,
+      "y": 23
+    },
+    {
+      "id": "printer",
+      "item": "printer",
+      "x": 2,
+      "y": 12
+    },
+    {
+      "id": "bookshelf",
       "item": "bookshelf",
-      "x": 30,
-      "y": 4
+      "x": 2,
+      "y": 6
+    },
+    {
+      "id": "aisle-plant-0",
+      "item": "plant-tall",
+      "x": 24,
+      "y": 10
+    },
+    {
+      "id": "aisle-plant-1",
+      "item": "plant-tall",
+      "x": 25,
+      "y": 17
+    },
+    {
+      "id": "aisle-plant-2",
+      "item": "plant-tall",
+      "x": 14,
+      "y": 21
+    },
+    {
+      "id": "meeting-glass-west-2",
+      "item": "glass-wall-v",
+      "x": 27,
+      "y": 2
     }
   ],
   "zones": [
     {
       "id": "zone-1",
-      "desks": ["desk-laptop-0", "desk-monitor-0", "desk-laptop-1", "desk-monitor-1"],
-      "chairs": ["chair-down-0", "chair-up-0", "chair-down-1", "chair-up-1"],
+      "desks": ["z1-desk-laptop-0", "z1-desk-monitor-0", "z1-desk-laptop-1", "z1-desk-monitor-1"],
+      "chairs": ["z1-down-0", "z1-up-0", "z1-down-1", "z1-up-1"],
       "plaque": "plaque-1"
+    },
+    {
+      "id": "zone-2",
+      "desks": ["z2-desk-laptop-0", "z2-desk-monitor-0", "z2-desk-laptop-1", "z2-desk-monitor-1"],
+      "chairs": ["z2-down-0", "z2-up-0", "z2-down-1", "z2-up-1"],
+      "plaque": "plaque-2"
+    },
+    {
+      "id": "zone-3",
+      "desks": ["z3-desk-laptop-0", "z3-desk-monitor-0", "z3-desk-laptop-1", "z3-desk-monitor-1"],
+      "chairs": ["z3-down-0", "z3-up-0", "z3-down-1", "z3-up-1"],
+      "plaque": "plaque-3"
+    },
+    {
+      "id": "zone-4",
+      "desks": ["z4-desk-laptop-0", "z4-desk-monitor-0", "z4-desk-laptop-1", "z4-desk-monitor-1"],
+      "chairs": ["z4-down-0", "z4-up-0", "z4-down-1", "z4-up-1"],
+      "plaque": "plaque-4"
     }
   ],
   "points": {
     "door": {
-      "x": 34,
+      "x": 36,
       "y": 23,
       "facing": "up"
     },
@@ -127,23 +541,72 @@
       "x": 20,
       "y": 2,
       "facing": "up"
+    },
+    "doneTray": {
+      "x": 5,
+      "y": 21,
+      "facing": "up"
+    },
+    "bulletin": {
+      "x": 29,
+      "y": 2,
+      "facing": "up"
+    },
+    "sofaStand": {
+      "x": 34,
+      "y": 20,
+      "facing": "up"
     }
   },
   "spots": [
     {
       "id": "printer",
-      "x": 30,
-      "y": 3,
+      "x": 2,
+      "y": 13,
+      "facing": "up"
+    },
+    {
+      "id": "bookshelf",
+      "x": 2,
+      "y": 7,
+      "facing": "up"
+    },
+    {
+      "id": "whiteboard",
+      "x": 20,
+      "y": 2,
+      "facing": "up"
+    },
+    {
+      "id": "window",
+      "x": 2,
+      "y": 2,
       "facing": "up"
     },
     {
       "id": "plant",
-      "x": 27,
-      "y": 16,
+      "x": 24,
+      "y": 11,
+      "facing": "up"
+    },
+    {
+      "id": "sofa",
+      "x": 34,
+      "y": 19,
+      "facing": "down"
+    },
+    {
+      "id": "coffee",
+      "x": 37,
+      "y": 20,
+      "facing": "up"
+    },
+    {
+      "id": "meetingDoor",
+      "x": 29,
+      "y": 11,
       "facing": "up"
     }
   ],
-  "hostZones": {
-    "mac-mini": 1
-  }
+  "hostZones": {}
 }
