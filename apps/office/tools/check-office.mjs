@@ -3,6 +3,8 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import { resolve } from "node:path";
 import { PNG } from "pngjs";
+import { removeCharacterFringe } from "./character-edges.mjs";
+import { repairCharacterInterior } from "./character-interior.mjs";
 import { palette, quantize } from "./furniture.mjs";
 import { crop, paste, readJson, readPng, resize } from "./furniture-image.mjs";
 import { people } from "./probe.mjs";
@@ -80,7 +82,11 @@ assert.deepEqual(errors, []);
 const furniture = readPng("public/furniture.png");
 const frames = readJson("public/furniture.json").frames;
 const characters = people();
-for (const png of Object.values(characters)) quantize(png, palette());
+for (const png of Object.values(characters)) {
+  removeCharacterFringe(png);
+  repairCharacterInterior(png, palette());
+  quantize(png, palette(), undefined, true);
+}
 const comparison = new PNG({ width: 384, height: 128 });
 for (let p = 0; p < comparison.data.length; p += 4) comparison.data.set([246, 233, 206, 255], p);
 for (const [i, facing] of ["left", "left", "right", "right", "down", "up"].entries()) {

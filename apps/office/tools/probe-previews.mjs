@@ -18,7 +18,8 @@ export function renderPreviews(characters, frames, colors = palette()) {
     paste(ruler, frames[`chair-down-${suffix}`], 240, 96 - frames[`chair-down-${suffix}`].height);
   verify(ruler, colors);
   savePng("assets/probe/ruler@3x.png", resize(ruler, 960, 384));
-  savePng("assets/probe/palette@12x.png", resize(readPng("assets/palette.png"), 432, 12));
+  const paletteImage = readPng("assets/palette.png");
+  savePng("assets/probe/palette@12x.png", resize(paletteImage, paletteImage.width * 12, 12));
   const side = new PNG({ width: 256, height: 128 });
   for (let p = 0; p < side.data.length; p += 4) side.data.set([...colors[6], 255], p);
   for (const [i, facing] of ["left", "right"].entries()) {

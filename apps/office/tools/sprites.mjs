@@ -1,8 +1,11 @@
+import assert from "node:assert/strict";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { PNG } from "pngjs";
+import { cleanupTotals, measureCharacterCleanup } from "./character-edges.mjs";
+import { repairCharacterInterior } from "./character-interior.mjs";
 import { palette, quantize, verify } from "./furniture.mjs";
-import { bounds } from "./furniture-image.mjs";
+import { bounds, saveJson } from "./furniture-image.mjs";
 import { spriteCells } from "./sprite-cells.mjs";
 import { characterPreviews } from "./sprite-previews.mjs";
 
@@ -13,6 +16,7 @@ const frameWidth = 64;
 const frameHeight = 96;
 const atlas = new PNG({ width: frameWidth * 31, height: frameHeight * kinds.length });
 const frames = {};
+const cleanup = [];
 const animations = {};
 
 const colors = palette();
@@ -54,6 +58,8 @@ for (const [kindIndex, kind] of kinds.entries()) {
   const scaledWidth = Math.round(commonWidth * scale);
   const scaledHeight = Math.round(commonHeight * scale);
 
+  const measurements = [];
+  let interiorRepairs = 0;
   for (const [index, { png, box, name }] of cells.entries()) {
     const common = new PNG({ width: commonWidth, height: commonHeight });
     png.bitblt(
@@ -80,6 +86,8 @@ for (const [kindIndex, kind] of kinds.entries()) {
       }
     }
     // 缩小可能漏掉窄脚尖，再固定实际不透明底边，不改变共用缩放比例。
+    measurements.push(measureCharacterCleanup(scaled));
+    interiorRepairs += repairCharacterInterior(scaled, colors);
     const scaledBox = bounds(scaled);
     const occupiedHeight = scaledBox.y + scaledBox.h;
     scaled.bitblt(
@@ -108,6 +116,9 @@ for (const [kindIndex, kind] of kinds.entries()) {
       sourceSize: { w: frameWidth, h: frameHeight },
     };
   }
+  const cleaned = cleanupTotals(measurements, kind);
+  cleanup.push({ ...cleaned, interiorRepairs });
+  saveJson("assets/probe/front-seating-cleanup.json", cleanup);
   for (const direction of directions) {
     const name = `${kind}/walk/${direction}`;
     animations[name] = [0, 1, 2, 3].map((frame) => `${name}/${frame}`);
@@ -118,9 +129,17 @@ for (const [kindIndex, kind] of kinds.entries()) {
   }
 }
 
-quantize(atlas, colors);
+quantize(atlas, colors, undefined, true);
 verify(atlas, colors);
 const error = characterPreviews(before, atlas, frames, kinds, colors);
+assert.ok(
+  cleanup.every((row) => row.loss <= 0.02),
+  "品红残边清理损失超过2%",
+);
+assert.ok(
+  cleanup.every((row) => row.remaining === 0),
+  "剩余品红残边",
+);
 console.log(
   `角色 ${Object.keys(frames).length} 帧；调色板外颜色数 0；半透明像素 0；RGB误差均值 ${error.mean.toFixed(3)}；P95 ${error.p95.toFixed(3)}`,
 );

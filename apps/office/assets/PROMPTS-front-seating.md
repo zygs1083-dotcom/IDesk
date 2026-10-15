@@ -120,3 +120,7 @@ Uniformly shrink ALL six complete receptionist figures by exactly10percent insid
 运行 `node apps/office/tools/seating-preview.mjs`：复用 probe 的 objects、assertSorting 和 composeObjects，输出 25 个座位实例及比例数据。front-seating@3x.png 左上至右下依次 claude-code、codex、n8n、script、custom、礼仪；每组左列 sit、右列 typing，上排朝下笔记本桌，下排朝上显示器桌，最下方礼仪前台。
 
 front-seating-before-after@3x.png 同样每种一行，列依次站原色/量化、sit/down 原色/量化、sit/up 原色/量化；front-seating-face-<kind>@6x.png 每种单独放大正坐头部，左原色右量化，重点检查眼睛与轮廓。量化只映射颜色，不删除不透明像素或填补单像素细节。
+
+## W67 返工：40色与角色保色相量化
+
+生成原图与比例系数不变。后续规范覆盖上文36色规则：固定前36色，仅追加4个标志色；角色先去除H260–320°、S≥0.15、V≥0.2且与透明像素相邻的品红残边，再做保色相最近色，不全面清碎点；只对内部品红污染复用cleanIsolated做定点多数色替换。完整选色规则、共有色/无彩色剔除项、区域误差与来源见PALETTE.md；逐kind去边损失和逐轮数据见front-seating-cleanup.json，变色与回退计数见front-seating-hue.json。

@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { fileURLToPath } from "node:url";
 import { PNG } from "pngjs";
+import { hueChoices } from "./character-hue.mjs";
 import {
   bounds,
   crop,
@@ -15,10 +16,12 @@ import { removeMagenta } from "./sprite-cells.mjs";
 
 export const palette = () => {
   const png = readPng("assets/palette.png");
-  assert.equal(png.width, 36);
+  assert.ok(png.width >= 36 && png.width <= 40);
   assert.equal(png.height, 1);
-  const colors = Array.from({ length: 36 }, (_, i) => [...png.data.subarray(i * 4, i * 4 + 3)]);
-  assert.equal(new Set(colors.map(String)).size, 36);
+  const colors = Array.from({ length: png.width }, (_, i) => [
+    ...png.data.subarray(i * 4, i * 4 + 3),
+  ]);
+  assert.equal(new Set(colors.map(String)).size, png.width);
   return colors;
 };
 
@@ -32,7 +35,7 @@ export function nearest(rgb, colors) {
   return best;
 }
 
-export function quantize(png, colors, materials) {
+export function quantize(png, colors, materials, preserveHue = false) {
   for (let p = 0; p < png.data.length; p += 4) {
     if (png.data[p + 3] < 128) png.data.fill(0, p, p + 4);
     else {
@@ -40,7 +43,11 @@ export function quantize(png, colors, materials) {
       const anchors = materials?.flatMap((group) => group.source);
       const anchor = anchors && nearest(rgb, anchors);
       const group = materials?.find((group) => group.source.includes(anchor));
-      const choices = group ? group.colors.map((i) => colors[i]) : colors;
+      const choices = group
+        ? group.colors.map((i) => colors[i])
+        : preserveHue
+          ? hueChoices(rgb, colors)
+          : colors;
       png.data.set([...nearest(rgb, choices), 255], p);
     }
   }
@@ -60,23 +67,28 @@ export function verify(png, colors) {
   assert.equal(translucent, 0, "半透明像素");
 }
 
-export function cleanIsolated(png, outline) {
+export function cleanIsolated(png, outline, selected, colors) {
   const before = Buffer.from(png.data);
   for (let y = 1; y < png.height - 1; y++) {
     for (let x = 1; x < png.width - 1; x++) {
       const p = (y * png.width + x) * 4;
       const rgb = String([...before.subarray(p, p + 3)]);
-      if (!before[p + 3] || rgb === String(outline)) continue;
+      if (!before[p + 3] || rgb === String(outline) || (selected && !selected.has(p))) continue;
       const neighbors = [-png.width, -1, 1, png.width].map((d) => (y * png.width + x + d) * 4);
-      if (neighbors.some((n) => before[n + 3] && String([...before.subarray(n, n + 3)]) === rgb))
+      if (
+        !selected &&
+        neighbors.some((n) => before[n + 3] && String([...before.subarray(n, n + 3)]) === rgb)
+      )
         continue;
       const counts = new Map();
       for (const n of neighbors) {
-        const key = String([...before.subarray(n, n + 3)]);
-        if (before[n + 3] && key !== String(outline)) counts.set(key, (counts.get(key) ?? 0) + 1);
+        const source = [...before.subarray(n, n + 3)];
+        const key = String(colors ? nearest(source, hueChoices(source, colors)) : source);
+        if (before[n + 3] && !selected?.has(n) && (selected || key !== String(outline)))
+          counts.set(key, (counts.get(key) ?? 0) + 1);
       }
       const best = [...counts].sort((a, b) => b[1] - a[1])[0];
-      if (best && best[1] >= 2) png.data.set(best[0].split(",").map(Number), p);
+      if (best && best[1] >= (selected ? 1 : 2)) png.data.set(best[0].split(",").map(Number), p);
     }
   }
   return png;

@@ -1,0 +1,226 @@
+[
+  {
+    "kind": "claude-code",
+    "participating": 97619,
+    "eligible": 64303,
+    "jumped": 0,
+    "crossHue": 2,
+    "changed": 2,
+    "fallback": 2,
+    "examples": [
+      {
+        "rgb": [28, 17, 58],
+        "hue": 256.0975609756098,
+        "pixels": 1
+      },
+      {
+        "rgb": [34, 28, 60],
+        "hue": 251.25,
+        "pixels": 1
+      }
+    ]
+  },
+  {
+    "kind": "codex",
+    "participating": 98233,
+    "eligible": 66162,
+    "jumped": 0,
+    "crossHue": 60,
+    "changed": 23,
+    "fallback": 60,
+    "examples": [
+      {
+        "rgb": [39, 35, 52],
+        "hue": 254.11764705882354,
+        "pixels": 3
+      },
+      {
+        "rgb": [35, 31, 56],
+        "hue": 249.60000000000002,
+        "pixels": 2
+      },
+      {
+        "rgb": [38, 34, 54],
+        "hue": 252,
+        "pixels": 2
+      },
+      {
+        "rgb": [43, 38, 60],
+        "hue": 253.63636363636363,
+        "pixels": 1
+      },
+      {
+        "rgb": [45, 42, 58],
+        "hue": 251.25,
+        "pixels": 1
+      },
+      {
+        "rgb": [47, 43, 67],
+        "hue": 250,
+        "pixels": 1
+      },
+      {
+        "rgb": [38, 34, 53],
+        "hue": 252.63157894736844,
+        "pixels": 1
+      },
+      {
+        "rgb": [37, 32, 55],
+        "hue": 253.0434782608695,
+        "pixels": 1
+      },
+      {
+        "rgb": [49, 43, 76],
+        "hue": 250.90909090909088,
+        "pixels": 1
+      },
+      {
+        "rgb": [45, 38, 71],
+        "hue": 252.72727272727275,
+        "pixels": 1
+      }
+    ]
+  },
+  {
+    "kind": "n8n",
+    "participating": 96919,
+    "eligible": 65608,
+    "jumped": 0,
+    "crossHue": 0,
+    "changed": 0,
+    "fallback": 0,
+    "examples": []
+  },
+  {
+    "kind": "script",
+    "participating": 102437,
+    "eligible": 77246,
+    "jumped": 0,
+    "crossHue": 23,
+    "changed": 18,
+    "fallback": 23,
+    "examples": [
+      {
+        "rgb": [35, 23, 68],
+        "hue": 256,
+        "pixels": 1
+      },
+      {
+        "rgb": [24, 14, 55],
+        "hue": 254.6341463414634,
+        "pixels": 1
+      },
+      {
+        "rgb": [38, 24, 109],
+        "hue": 249.88235294117646,
+        "pixels": 1
+      },
+      {
+        "rgb": [32, 11, 82],
+        "hue": 257.7464788732394,
+        "pixels": 1
+      },
+      {
+        "rgb": [28, 13, 70],
+        "hue": 255.78947368421052,
+        "pixels": 1
+      },
+      {
+        "rgb": [14, 4, 59],
+        "hue": 250.90909090909088,
+        "pixels": 1
+      },
+      {
+        "rgb": [46, 20, 114],
+        "hue": 256.5957446808511,
+        "pixels": 1
+      },
+      {
+        "rgb": [24, 8, 64],
+        "hue": 257.1428571428571,
+        "pixels": 1
+      },
+      {
+        "rgb": [41, 37, 60],
+        "hue": 250.43478260869563,
+        "pixels": 1
+      },
+      {
+        "rgb": [37, 32, 54],
+        "hue": 253.63636363636363,
+        "pixels": 1
+      }
+    ]
+  },
+  {
+    "kind": "custom",
+    "participating": 93337,
+    "eligible": 68062,
+    "jumped": 0,
+    "crossHue": 0,
+    "changed": 0,
+    "fallback": 0,
+    "examples": []
+  },
+  {
+    "kind": "receptionist",
+    "participating": 94427,
+    "eligible": 71549,
+    "jumped": 0,
+    "crossHue": 15,
+    "changed": 3,
+    "fallback": 15,
+    "examples": [
+      {
+        "rgb": [53, 48, 68],
+        "hue": 255,
+        "pixels": 1
+      },
+      {
+        "rgb": [54, 50, 71],
+        "hue": 251.42857142857144,
+        "pixels": 1
+      },
+      {
+        "rgb": [53, 49, 66],
+        "hue": 254.11764705882354,
+        "pixels": 1
+      },
+      {
+        "rgb": [35, 24, 58],
+        "hue": 259.4117647058823,
+        "pixels": 1
+      },
+      {
+        "rgb": [49, 44, 66],
+        "hue": 253.63636363636363,
+        "pixels": 1
+      },
+      {
+        "rgb": [57, 51, 78],
+        "hue": 253.33333333333337,
+        "pixels": 1
+      },
+      {
+        "rgb": [57, 54, 64],
+        "hue": 258,
+        "pixels": 1
+      },
+      {
+        "rgb": [45, 43, 53],
+        "hue": 252,
+        "pixels": 1
+      },
+      {
+        "rgb": [42, 36, 59],
+        "hue": 255.6521739130435,
+        "pixels": 1
+      },
+      {
+        "rgb": [31, 27, 51],
+        "hue": 250,
+        "pixels": 1
+      }
+    ]
+  }
+]

@@ -1,6 +1,8 @@
 import assert from "node:assert/strict";
 import { fileURLToPath } from "node:url";
 import { PNG } from "pngjs";
+import { removeCharacterFringe } from "./character-edges.mjs";
+import { repairCharacterInterior } from "./character-interior.mjs";
 import { palette, quantize, verify } from "./furniture.mjs";
 import {
   bounds,
@@ -128,7 +130,11 @@ export function buildProbe() {
   const comparison = new PNG({ width: 256, height: 96 });
   paste(comparison, characters.standing, 0, 0);
   paste(comparison, characters["sit/down"], 128, 0);
-  for (const png of Object.values(characters)) quantize(png, colors);
+  for (const png of Object.values(characters)) {
+    removeCharacterFringe(png);
+    repairCharacterInterior(png, palette());
+    quantize(png, colors, undefined, true);
+  }
   paste(comparison, characters.standing, 64, 0);
   paste(comparison, characters["sit/down"], 192, 0);
   savePng("assets/probe/characters-before-after@3x.png", resize(comparison, 768, 288));
