@@ -8,6 +8,7 @@ import { relativeTime } from "../i18n/relative-time.ts";
 import { request } from "../lib/api.ts";
 import { onRealtimeEvent } from "../lib/realtime.ts";
 import { Avatar } from "./avatar.tsx";
+import { eventText } from "./event-text.ts";
 import { PixelPanel } from "./pixel-panel.tsx";
 import { statusText } from "./status-text.ts";
 import type { Agent, Task } from "./use-office-data.ts";
@@ -15,14 +16,20 @@ import type { Agent, Task } from "./use-office-data.ts";
 type TaskEvent = z.infer<typeof eventSchema>;
 export function AgentPanel({
   agent,
+  agents,
   tasks,
   onClose,
 }: {
   agent: Agent;
+  agents: Agent[];
   tasks: Task[];
   onClose: () => void;
 }) {
   const { lang, t } = useLang();
+  const agentName = (id: string | null) =>
+    id === null || id === "human"
+      ? t("common.human")
+      : (agents.find((item) => item.id === id)?.name ?? t("common.deletedAgent"));
   const [events, setEvents] = useState<TaskEvent[]>([]);
   const [error, setError] = useState("");
   useEffect(() => {
@@ -83,7 +90,11 @@ export function AgentPanel({
         const minutes = Math.max(0, Math.floor((Date.now() - Date.parse(event.ts)) / 60_000));
         return (
           <p className="event-row" key={event.id}>
-            <span>{event.type}</span>
+            <span>
+              {eventText(event, t, agentName)}
+              {event.taskId &&
+                ` ${tasks.find((task) => task.id === event.taskId)?.title ?? event.taskId.slice(0, 8)}`}
+            </span>
             <time dateTime={event.ts}>{relativeTime(minutes, lang, t)}</time>
           </p>
         );

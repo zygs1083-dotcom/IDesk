@@ -85,8 +85,8 @@ export function App() {
       observer.observe(element);
       setTimeScale(1);
       const daylight = await (mode.mode === "live"
-        ? direct(stage, scene, stageText.current("cast.human"))
-        : replay(stage, scene, mode.at, controls.current, stageText.current("cast.human")));
+        ? direct(stage, scene, stageText.current("common.human"))
+        : replay(stage, scene, mode.at, controls.current, stageText.current("common.human")));
       if (disposed) return;
       editor.current = createEditor(stage, scene, (active) => {
         setEditing(active);
@@ -138,7 +138,13 @@ export function App() {
         )}
         <div className="stage-host" ref={host} />
         {agent ? (
-          <AgentPanel key={agent.id} agent={agent} tasks={tasks} onClose={closePanel} />
+          <AgentPanel
+            key={agent.id}
+            agent={agent}
+            agents={agents}
+            tasks={tasks}
+            onClose={closePanel}
+          />
         ) : task ? (
           <TaskPanel task={task} agents={agents} onClose={closePanel} />
         ) : scene ? (
