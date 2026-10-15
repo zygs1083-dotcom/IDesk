@@ -33,14 +33,17 @@ describe("character poses", () => {
   });
 });
 
-it("upright seats use the front standing frame without mirroring", () => {
-  expect(characterPose("sit", "down", 0, true, true)).toEqual({
-    frame: "walk/down/0",
-    mirror: false,
-  });
-  expect(characterPose("typing", "down", 0, false, true)).toEqual({
-    frame: "walk/down/0",
-    mirror: false,
-  });
+it("upright seats use seated frames without mirroring", () => {
+  for (const mirrored of [false, true]) {
+    expect(characterPose("sit", "down", 0, mirrored, true)).toEqual({
+      frame: "sit/upright",
+      mirror: false,
+    });
+    for (const elapsed of [0, 300, 600])
+      expect(characterPose("typing", "down", elapsed, mirrored, true)).toEqual({
+        frame: `typing/upright/${Math.floor(elapsed / 300) % 2}`,
+        mirror: false,
+      });
+  }
   expect(characterPose("walk", "down", 0, false, true).frame).toBe("walk/down/0");
 });

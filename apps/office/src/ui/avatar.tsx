@@ -2,12 +2,12 @@ import { useEffect, useRef } from "react";
 import atlas from "../../public/sprites.json";
 import { useLang } from "../i18n/lang.tsx";
 import { officeUrl } from "../office-url.ts";
-import type { Agent } from "./use-office-data.ts";
+import type { SpriteKind } from "../stage/textures.ts";
 
 const spriteImage = new Image();
 spriteImage.src = officeUrl("sprites.png");
 
-export function Avatar({ kind, fullFrame = false }: { kind: Agent["kind"]; fullFrame?: boolean }) {
+export function Avatar({ kind, fullFrame = false }: { kind: SpriteKind; fullFrame?: boolean }) {
   const { t } = useLang();
   const canvas = useRef<HTMLCanvasElement>(null);
   useEffect(() => {

@@ -3,7 +3,7 @@ import { fileURLToPath } from "node:url";
 import { PNG } from "pngjs";
 import { spriteCells } from "./sprite-cells.mjs";
 
-const kinds = ["claude-code", "codex", "n8n", "script", "custom"];
+const kinds = ["claude-code", "codex", "n8n", "script", "custom", "receptionist"];
 const directions = ["down", "left", "right", "up"];
 const root = fileURLToPath(new URL("../", import.meta.url));
 const frameWidth = 64;
@@ -41,9 +41,15 @@ for (const [kindIndex, kind] of kinds.entries()) {
   ];
   const original = PNG.sync.read(readFileSync(`${root}assets/raw/${kind}.png`));
   const supplement = PNG.sync.read(readFileSync(`${root}assets/raw/${kind}-seated.png`));
+  const supplementDirections = kind === "receptionist" ? ["upright"] : ["front", "back"];
   const cells = [
     ...spriteCells(original, 5, [...walking, ...seated("right")], kind),
-    ...spriteCells(supplement, 2, [...seated("front"), ...seated("back")], kind),
+    ...spriteCells(
+      supplement,
+      supplementDirections.length,
+      supplementDirections.flatMap(seated),
+      kind,
+    ),
   ];
 
   // 全部姿态共用同一框和缩放比例，底边固定，避免走路时脚底上下抖动。
@@ -103,7 +109,7 @@ for (const [kindIndex, kind] of kinds.entries()) {
     const name = `${kind}/walk/${direction}`;
     animations[name] = [0, 1, 2, 3].map((frame) => `${name}/${frame}`);
   }
-  for (const direction of ["right", "front", "back"]) {
+  for (const direction of ["right", ...supplementDirections]) {
     const name = `${kind}/typing/${direction}`;
     animations[name] = [0, 1].map((frame) => `${name}/${frame}`);
   }
