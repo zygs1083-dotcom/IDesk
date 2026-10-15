@@ -37,12 +37,13 @@ for (const seat of seats(layout, catalog)) {
       ordered.indexOf("person"),
     );
     expect(seat.x).toBe(object.x * TILE + (chair.seat?.x ?? 0));
-    const dy = seat.facing === "down" ? 1 : -1;
     const desk = layout.objects.find((candidate) => {
       const item = catalog.items[candidate.item] as Furniture;
       return (
         (item.workSpot || candidate.item === "counter") &&
-        candidate.y === Math.floor(seat.y / TILE) + dy &&
+        (seat.facing === "down"
+          ? candidate.y === object.y + chair.footprint.h
+          : candidate.y + item.footprint.h === object.y) &&
         Math.floor(seat.x / TILE) >= candidate.x &&
         Math.floor(seat.x / TILE) < candidate.x + item.footprint.w
       );

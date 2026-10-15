@@ -4,7 +4,7 @@
 
 ## 家具
 
-生成次数 3，选中第 3 次。三次实测均为 1448×1086（请求 1536×1152，编辑沿用实际尺寸），4×3，每格 362×362。第 1 次 `raw/furniture/office-sheet.png`；第 2 次 `office-sheet-flat.png`；选中 `office-sheet-corrected.png`。完整提示词按顺序如下；第 2 次引用第 1 次，第 3 次引用第 2 次。
+生成次数 4；desk-laptop选第4次，其余选第3次。四次实测均为 1448×1086（请求 1536×1152，编辑沿用实际尺寸），4×3，每格 362×362。第 1 次 `raw/furniture/office-sheet.png`；第 2 次 `office-sheet-flat.png`；选中 `office-sheet-corrected.png`。完整提示词按顺序如下；第 2 次引用第 1 次，第 3 次引用第 2 次。
 
 ```text
 Create a production pixel-art sprite sheet on solid #FF00FF magenta. 4 columns x 3 rows, perfectly equal cells, requested 1536x1152. Straight-on slightly top-down JRPG office furniture, all axes horizontal vertical, NEVER isometric. Each object centered isolated generous margins. Crisp actual low-resolution pixels, one dark warm brown outline, maximum three flat shades per material, top-left light, NO gradients NO noise NO soft shadows NO text. Consistent target world scale 32px tiles; images will downsample. Row1: 64x68 world-pixel oak desk with monitor facing away from viewer (back of monitor visible, for worker below facing up); same oak desk with low open laptop facing viewer (worker above facing down); 96x60 wooden reception counter with solid front hiding legs; 64x88 oak bookshelf full of simple colored books. Row2: padded dark teal office chair facing DOWN toward viewer; same chair facing UP away from viewer; chair facing LEFT; chair facing RIGHT. Each chair world size32x56, seat back to seated shoulder blade. Row3: leafy plant in terracotta pot world32x60; blank rectangular wood wall name plaque world64x24 completely empty cream center; EMPTY MAGENTA; EMPTY MAGENTA. NO people. Flat natural warm wood, cream, moss green, muted blue, darkest warm brown. Pixel density must match each item and clear simple silhouettes.
@@ -37,7 +37,7 @@ Edit this 4x2 pixel character sheet preserving EXACT six sprites sizes, head wid
 ```js
 // 保存为 apps/office/tools/normalize-local.mjs 执行，执行后删除。
 import { PNG } from "pngjs";
-import { readPng, resize, savePng, paste } from "./furniture.mjs";
+import { readPng, resize, savePng, paste } from "./furniture-image.mjs";
 import { spriteCells } from "./sprite-cells.mjs";
 const names = ["sit/down", "typing/down/0", "typing/down/1", "sit/up",
   "typing/up/0", "typing/up/1"];
@@ -55,3 +55,22 @@ savePng("assets/raw/probe/codex-seated-front.png",result);
 ```
 
 原图站高217、头宽110；选中六帧高191（88.02%），上半身头宽依次107、106、107、109、115、115（差值-3.64%至+4.55%）。原图阶段之外没有单独坐姿缩放；探针采用原 codex 站姿94/217的统一密度，64×96框底边居中，实际坐高83。
+
+## 负责人确认后的制作规则（覆盖上面的第一轮目标尺寸）
+
+按最新 OFFICE.md：34色，桌子3×2格（宽96px），正背椅子3×1格（seat.x48），原图不再生图；用既有第3次原图按新目标尺寸重采样。显示器桌96×112、笔记本桌96×90，二者占地高64px、触地线为64；椅子32×40在96px占地里居中。材质、目标尺寸和每帧选区都在 furniture-manifest.json，不需要手修成品。
+
+材质归属方法：每件家具列出材质名、原图RGB锚点 `source` 和最多3个调色板索引 `colors`。像素先以RGB距离找最近原图锚点，确定材质，然后只在该组的调色板色里取最近色；轮廓独立一组，只有最深暖棕。木、金属、玻璃、青垫、绿叶、纸、红/蓝/黄书脊、陶盆分别列组。成品必须属于该件声明色组的并集，每组最多3色，脚本对二者都断言；不允许抖动。
+
+量化后只做单遍孤立点清理，读清理前快照：不透明点若不是描边色，且上下左右没有一个同色邻居，才从四邻域的不透明非描边色中选最多的一色替换；至少出现两次才替换，平票顺序上/左/右/下。边界与透明度不动。材质原图和量化结果都有保存，不使用模糊、中值滤波、形态膨胀或任意面积删点。由四项测试保护：孤立点替换、有同色邻居保留、描边保留、描边不作填充。
+
+
+## 最后终审：封闭挡板与可见椅背
+
+第4次引用第3次整张家具图，实际1448×1086，文件`raw/furniture/office-sheet-closed.png`，只取desk-laptop的第二格；其他帧仍使用第3次原图。完整提示词：
+
+```text
+Precisely edit ONLY row1 column2 laptop desk in this4x3 magenta sprite sheet. Keep all other sprites unchanged and grid positions exact. Laptop desk worker sits on NORTH side of desk, faces viewer. Therefore SOUTH front of desk facing viewer must be a SINGLE SOLID CLOSED WOODEN MODESTY PANEL all the way down to floor, NO drawers NO leg opening NO gap NO handles on front. A plain warm oak rectangle front with one horizontal decorative wood line is enough. Keep existing wide flat desktop and small low laptop showing BACK of screen lid. Straight horizontal vertical front elevation slight top-down. Flat three shades only per wood material, dark warm brown outline one gamepixel. No texture noise gradients shadows or text. No people. Preserve pure magenta outside silhouette.
+```
+
+朝下椅子目标56×44px、dx20/dy-12，behind椅背到人物肩部，在身体两侧各露约4–6px；其余椅子32×40px不变。最终调色板按负责人终审规则改为数据选色36色，`palette.mjs` 对整套角色帧做加权k-means并选原32色残差最大的四簇中心，前两簇为34色试验、后两簇为获准的36色扩充。误差与方法见PALETTE.md；不再使用人工指定的两个新增色。

@@ -3,8 +3,8 @@
   "items": {
     "desk-monitor": {
       "footprint": {
-        "w": 2,
-        "h": 1
+        "w": 3,
+        "h": 2
       },
       "blocks": true,
       "layer": "object",
@@ -12,20 +12,20 @@
         {
           "frame": "desk-monitor",
           "dx": 0,
-          "dy": -32,
-          "sortY": 32,
+          "dy": -48,
+          "sortY": 64,
           "bias": 0
         }
       ],
       "workSpot": {
-        "x": 32,
-        "y": -4
+        "x": 75,
+        "y": 0
       }
     },
     "desk-laptop": {
       "footprint": {
-        "w": 2,
-        "h": 1
+        "w": 3,
+        "h": 2
       },
       "blocks": true,
       "layer": "object",
@@ -33,14 +33,14 @@
         {
           "frame": "desk-laptop",
           "dx": 0,
-          "dy": -20,
-          "sortY": 32,
+          "dy": -26,
+          "sortY": 64,
           "bias": 0
         }
       ],
       "workSpot": {
-        "x": 32,
-        "y": -4
+        "x": 75,
+        "y": 0
       }
     },
     "counter": {
@@ -79,7 +79,7 @@
     },
     "chair-down": {
       "footprint": {
-        "w": 2,
+        "w": 3,
         "h": 1
       },
       "blocks": false,
@@ -87,28 +87,28 @@
       "parts": [
         {
           "frame": "chair-down-behind",
-          "dx": 16,
-          "dy": -8,
+          "dx": 20,
+          "dy": -12,
           "sortY": 24,
           "bias": 0
         },
         {
           "frame": "chair-down-front",
-          "dx": 16,
-          "dy": -8,
+          "dx": 20,
+          "dy": -12,
           "sortY": 32,
           "bias": 0
         }
       ],
       "seat": {
-        "x": 32,
+        "x": 48,
         "y": 30,
         "facing": "down"
       }
     },
     "chair-up": {
       "footprint": {
-        "w": 2,
+        "w": 3,
         "h": 1
       },
       "blocks": false,
@@ -116,21 +116,21 @@
       "parts": [
         {
           "frame": "chair-up-behind",
-          "dx": 16,
+          "dx": 32,
           "dy": -8,
           "sortY": 24,
           "bias": 0
         },
         {
           "frame": "chair-up-front",
-          "dx": 16,
+          "dx": 32,
           "dy": -8,
           "sortY": 32,
           "bias": 0
         }
       ],
       "seat": {
-        "x": 32,
+        "x": 48,
         "y": 30,
         "facing": "up"
       }

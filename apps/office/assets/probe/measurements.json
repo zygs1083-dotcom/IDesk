@@ -43,6 +43,18 @@
       "h": 83
     }
   },
-  "deskTopHeight": 52,
-  "chairBackHeight": 40
+  "deskTopFrontHeight": {
+    "monitor": 50,
+    "laptop": 48
+  },
+  "deskTopBackHeight": {
+    "monitor": 90,
+    "laptop": 90
+  },
+  "chairBackHeight": {
+    "down": 44,
+    "up": 40
+  },
+  "monitorTopY": 176,
+  "southHeadTopY": 235
 }

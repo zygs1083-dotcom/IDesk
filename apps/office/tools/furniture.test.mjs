@@ -1,22 +1,14 @@
 import { PNG } from "pngjs";
 import { expect, test } from "vitest";
-import {
-  bounds,
-  crop,
-  nearest,
-  palette,
-  quantize,
-  readJson,
-  readPng,
-  verify,
-} from "./furniture.mjs";
+import { cleanIsolated, nearest, palette, quantize, verify } from "./furniture.mjs";
+import { bounds, crop, readJson, readPng } from "./furniture-image.mjs";
 import { assertSorting, objects, people, placements, poses } from "./probe.mjs";
 import { assertSeam, drawTile } from "./tiles.mjs";
 
 const colors = palette();
-test("palette has exactly 32 distinct opaque colors", () => {
-  expect(colors).toHaveLength(32);
-  expect(new Set(colors.map(String)).size).toBe(32);
+test("palette has exactly 36 distinct opaque colors", () => {
+  expect(colors).toHaveLength(36);
+  expect(new Set(colors.map(String)).size).toBe(36);
   const png = readPng("assets/palette.png");
   expect([...png.data].filter((_, i) => i % 4 === 3).every((alpha) => alpha === 255)).toBe(true);
 });
@@ -111,4 +103,75 @@ test("world seated heights are 85–90% standing and head widths stay within 10%
     expect(head.w / standing.w).toBeLessThanOrEqual(1.1);
     expect(box.y + box.h).toBe(96);
   }
+});
+
+test("material classification selects a group's nearest color and enforces three shades", () => {
+  const materials = [
+    { source: [[250, 0, 0]], colors: [2, 4, 5] },
+    { source: [[0, 250, 0]], colors: [20, 21, 22] },
+  ];
+  const png = new PNG({ width: 2, height: 1 });
+  png.data.set([240, 10, 10, 255, 10, 240, 10, 255]);
+  quantize(png, colors, materials);
+  expect([...png.data.subarray(0, 3)]).toEqual(
+    nearest(
+      [240, 10, 10],
+      materials[0].colors.map((i) => colors[i]),
+    ),
+  );
+  expect([...png.data.subarray(4, 7)]).toEqual(
+    nearest(
+      [10, 240, 10],
+      materials[1].colors.map((i) => colors[i]),
+    ),
+  );
+  for (const entry of readJson("assets/furniture-manifest.json").frames)
+    for (const group of entry.materials) expect(group.colors.length).toBeLessThanOrEqual(3);
+});
+
+const isolatedFixture = () => {
+  const png = new PNG({ width: 5, height: 5 });
+  for (let p = 0; p < png.data.length; p += 4) png.data.set([...colors[4], 255], p);
+  return png;
+};
+const pixel = (png, x, y) => [...png.data.subarray((y * 5 + x) * 4, (y * 5 + x) * 4 + 3)];
+const paint = (png, x, y, color) => {
+  png.data.set([...color, 255], (y * 5 + x) * 4);
+};
+
+test("isolated non-outline pixel becomes the four-neighbor majority", () => {
+  const png = isolatedFixture();
+  paint(png, 2, 2, colors[5]);
+  cleanIsolated(png, colors[0]);
+  expect(pixel(png, 2, 2)).toEqual(colors[4]);
+});
+
+test("same-color cardinal neighbor protects one-pixel lines", () => {
+  const png = isolatedFixture();
+  paint(png, 2, 2, colors[5]);
+  paint(png, 3, 2, colors[5]);
+  cleanIsolated(png, colors[0]);
+  expect(pixel(png, 2, 2)).toEqual(colors[5]);
+  expect(pixel(png, 3, 2)).toEqual(colors[5]);
+});
+
+test("outline pixels never change", () => {
+  const png = isolatedFixture();
+  paint(png, 2, 2, colors[0]);
+  cleanIsolated(png, colors[0]);
+  expect(pixel(png, 2, 2)).toEqual(colors[0]);
+});
+
+test("outline cannot fill a different isolated pixel", () => {
+  const png = isolatedFixture();
+  paint(png, 2, 2, colors[5]);
+  for (const [x, y] of [
+    [1, 2],
+    [3, 2],
+    [2, 1],
+    [2, 3],
+  ])
+    paint(png, x, y, colors[0]);
+  cleanIsolated(png, colors[0]);
+  expect(pixel(png, 2, 2)).toEqual(colors[5]);
 });

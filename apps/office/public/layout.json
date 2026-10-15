@@ -34,13 +34,13 @@
       "id": "chair-down-0",
       "item": "chair-down",
       "x": 14,
-      "y": 7
+      "y": 6
     },
     {
       "id": "desk-laptop-0",
       "item": "desk-laptop",
       "x": 14,
-      "y": 8
+      "y": 7
     },
     {
       "id": "desk-monitor-0",
@@ -52,19 +52,19 @@
       "id": "chair-up-0",
       "item": "chair-up",
       "x": 14,
-      "y": 11
+      "y": 12
     },
     {
       "id": "chair-down-1",
       "item": "chair-down",
       "x": 18,
-      "y": 7
+      "y": 6
     },
     {
       "id": "desk-laptop-1",
       "item": "desk-laptop",
       "x": 18,
-      "y": 8
+      "y": 7
     },
     {
       "id": "desk-monitor-1",
@@ -76,7 +76,7 @@
       "id": "chair-up-1",
       "item": "chair-up",
       "x": 18,
-      "y": 11
+      "y": 12
     },
     {
       "id": "plaque-1",

@@ -1,7 +1,8 @@
 import assert from "node:assert/strict";
 import { fileURLToPath } from "node:url";
 import { PNG } from "pngjs";
-import { palette, paste, saveJson, savePng, verify } from "./furniture.mjs";
+import { palette, verify } from "./furniture.mjs";
+import { paste, saveJson, savePng } from "./furniture-image.mjs";
 
 export function drawTile(name, colors) {
   const png = new PNG({ width: 32, height: 32 });
@@ -17,7 +18,7 @@ export function drawTile(name, colors) {
       if (name === "floor/carpet") {
         const px = Math.min(x, 31 - x);
         const py = Math.min(y, 31 - y);
-        color = (px + py) % 4 === 0 ? 12 : (px - py) % 4 === 0 ? 10 : 11;
+        color = (px + py) % 8 === 0 ? 8 : (px - py) % 8 === 0 ? 6 : 7;
       }
       if (name === "floor/tile") color = x === 0 || y === 0 || x === 31 || y === 31 ? 8 : 6;
       if (name === "wall/upper") color = x % 16 === 0 ? 7 : 6;
