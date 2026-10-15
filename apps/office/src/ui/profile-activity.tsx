@@ -1,6 +1,5 @@
 import { labels } from "@idesk/shared/labels";
 import type { eventSchema } from "@idesk/shared/task-schemas";
-
 import { useEffect, useState } from "react";
 import type { z } from "zod";
 import { useLang } from "../i18n/lang.tsx";
