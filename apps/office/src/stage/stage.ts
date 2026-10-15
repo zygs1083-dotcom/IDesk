@@ -4,7 +4,7 @@ export async function createStage(host: HTMLElement) {
   const app = new Application();
   await app.init({ resizeTo: window, background: "#6c5745", antialias: false });
   host.appendChild(app.canvas);
-  const background = await Assets.load<Texture>("/office/background.png");
+  const background = await Assets.load<Texture>("/office/background.webp");
   background.source.scaleMode = "nearest";
   const world = new Container();
   world.addChild(new Sprite(background));
