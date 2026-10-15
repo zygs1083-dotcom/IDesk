@@ -36,7 +36,7 @@ test("MCP publishes with dispatch and reports rejected dispatch in Chinese", asy
   const rejected = await client.callTool({
     name: "idesk_publish_task",
     arguments: {
-      title: "MCP blocked",
+      title: "MCP publish blocked",
       blockedBy: [blocker.id],
       dispatch: { type: "recruit", needed: 2 },
     },
@@ -44,5 +44,5 @@ test("MCP publishes with dispatch and reports rejected dispatch in Chinese", asy
   await client.close();
   expect(rejected.isError).toBe(true);
   expect(rejected.content).toEqual([{ type: "text", text: "被「前置任务」阻塞" }]);
-  expect(listTasks({ q: "MCP blocked" })).toEqual([expect.objectContaining({ status: "open" })]);
+  expect(listTasks({ q: "MCP publish blocked" })).toEqual([expect.objectContaining({ status: "open" })]);
 });
