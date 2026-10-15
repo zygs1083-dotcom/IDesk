@@ -38,8 +38,8 @@ export function eventText(
     return `推送给 ${agentName(String(event.payload.agentId))} 失败：${String(event.payload.error)}`;
   if (event.type === "chat.failed") return `聊天通知失败：${String(event.payload.error)}`;
   if (event.type === "archive.events") return `归档了 ${String(event.payload.count)} 条事件`;
-  const prefix = event.type.split(".")[0] as string;
-  return `${prefix}插件：${event.type.slice(prefix.length + 1)}`;
+  const dot = event.type.indexOf(".");
+  return `${event.type.slice(0, dot)}插件：${event.type.slice(dot + 1)}`;
 }
 
 function recipientText(to: RelayRecipient, agentName: (id: string | null) => string): string {
