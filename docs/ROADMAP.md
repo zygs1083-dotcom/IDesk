@@ -113,8 +113,8 @@
 - **W65 场景引擎**：OFFICE.md §2–§4。新代码放 `apps/office/src/world/`：`layout.json` / `catalog.json` 的 zod schema 与加载、地面纹理、北墙层、物体层按 `sortY` 排序（多部件家具）、座位从椅子取、格子 A*（含拐角平滑）、舞台整数倍缩放。API 增加 `/office/layout.json`（数据目录覆盖优先，不缓存），保留旧的 `/office/scene.json` 直到 W68。素材未到时用占位：按占地画的纯色描边方块（颜色来自调色板）。临时入口 `/office/?world=1` 只渲染新场景加几个按座位摆好的小人；第一版页面不动。单元测试：每个座位的排序断言（§3「检查」）、A* 绕开家具、布局 schema。交付截图：占位全景、2×2 工作区坐满放大图。
 - **用户确认**：负责人把 W64 探针图（W65 合并后也在 `?world=1` 里摆一次）发给用户，用户确认风格后才派 W66、W67。
 - **W66 全套家具与默认布局**：按探针定下的风格出齐目录（会议桌 6 座、玻璃隔断、沙发、咖啡机、打印机、白板任务板、挂钟、窗、文件筐、公告栏、门、地毯、过道站位用的盆栽等），写默认 `layout.json`（§4 默认布局），4 个工作区各 2×2。验收：全景白天/夜间、每个工作区和前台的放大图，`tools/check-office.mjs` 坐满截图。
-- **W67 角色正面坐姿**：五种智能体加礼仪，按探针里 codex 的规格补 `sit/{down,up}`、`typing/{down,up}/{0,1}`；删除四分之三坐姿帧和 `PROMPTS-seated.md` 里对应部分；礼仪 `upright` 帧改名 `down`。比例表 + 其他帧逐像素不变的核对。
-- **W68 切换到新引擎并删除第一版**：Cast、动作、空闲行为、卡片、名牌、昼夜、气泡、礼仪接到 `world/`；去处和座位全部来自布局命名点与椅子。删除 `background.webp`、`raw/background.png`、`scene.json`、`seat-covers.ts`、`zone-sign.ts`（重写为 plaque 文字）、`desk-point.ts`、`scene/path.ts`、第一版 `editor.ts`、`?world=1` 临时入口、API 的 `/office/scene.json`。验收：§6 每个事件的动作截图或 GIF、空闲行为 60 秒 GIF、坐满截图逐个看脚和手。
+- **W67 角色正面坐姿**：五种智能体加礼仪，按探针里 codex 的规格补 `sit/{down,up}`、`typing/{down,up}/{0,1}`；整套角色图集（走路、侧坐、新坐姿）量化到 34 色调色板；四分之三坐姿帧和礼仪 `upright` 帧先保留（第一版页面在 W68 之前仍要用），删除放到 W68。验收：比例表、量化前后对比图、调色板外颜色为 0。
+- **W68 切换到新引擎并删除第一版**：Cast、动作、空闲行为、卡片、名牌、昼夜、气泡、礼仪接到 `world/`；去处和座位全部来自布局命名点与椅子。删除四分之三坐姿帧、礼仪 `upright` 帧和 `PROMPTS-seated.md` 对应部分、`background.webp`、`raw/background.png`、`scene.json`、`seat-covers.ts`、`zone-sign.ts`（重写为 plaque 文字）、`desk-point.ts`、`scene/path.ts`、第一版 `editor.ts`、`?world=1` 临时入口、API 的 `/office/scene.json`。验收：§6 每个事件的动作截图或 GIF、空闲行为 60 秒 GIF、坐满截图逐个看脚和手。
 - **W69 编辑器第二版**：OFFICE.md §10。家具目录面板、放置/拖动/旋转/删除、刷地面、框选生成工作区、导出 JSON、`PUT /api/v1/office/layout`（管理员，schema 校验，写数据目录）。API 测试：非管理员 403、非法布局 400、保存后 `/office/layout.json` 返回新内容。
 
 派发约束：W64 与 W65 并行（W64 只动 `assets/`、`tools/`、`public/` 的新文件，W65 只动 `src/world/`、API 路由）；W66、W67 都改图集，各自用独立图集文件（`furniture.*` 与 `sprites.*`），可以并行；W68 等 W66、W67 都合并；W69 最后。每个 PR 都附 `check-office` 截图。
