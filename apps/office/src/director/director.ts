@@ -1,6 +1,7 @@
 import { publicAgentSchema } from "@idesk/shared/agent-schemas";
 import { eventSchema, taskSchema } from "@idesk/shared/task-schemas";
 import { z } from "zod";
+import type { Translate } from "../i18n/translate.ts";
 import { request } from "../lib/api.ts";
 import { onRealtimeEvent } from "../lib/realtime.ts";
 import type { Scene } from "../scene/scene.ts";
@@ -17,13 +18,13 @@ import { placeSnapshot } from "./snapshot.ts";
 const PRESENCE_MS = 30_000;
 const LEASE_WARNING_MS = 120_000;
 
-export async function direct(stage: Stage, scene: Scene, humanName: string, lines: string[]) {
+export async function direct(stage: Stage, scene: Scene, t: Translate) {
   const initialEvents = z.array(eventSchema).parse(await request("/events"));
-  const initialized = await initialize(stage, scene, humanName);
+  const initialized = await initialize(stage, scene, t);
   if (!initialized) return;
   const { cast, snapshot, actions, daylight, tasks, cards } = initialized;
   placeSnapshot(cast, cards, tasks);
-  const syncIdle = startIdle(cast, snapshot, lines);
+  const syncIdle = startIdle(cast, snapshot, t);
   const warned = new Set<string>();
   const checkLeases = () => {
     const nearExpiry = new Set(
@@ -88,7 +89,7 @@ export async function direct(stage: Stage, scene: Scene, humanName: string, line
   return daylight;
 }
 
-export async function initialize(stage: Stage, scene: Scene, humanName: string) {
+export async function initialize(stage: Stage, scene: Scene, t: Translate) {
   const [atlas, agents, tasks] = await Promise.all([
     sprites,
     request("/agents").then((data) => z.array(publicAgentSchema).parse(data)),
@@ -96,7 +97,7 @@ export async function initialize(stage: Stage, scene: Scene, humanName: string) 
   ]);
   if (stage.world.destroyed) return;
   atlas.textureSource.scaleMode = "nearest";
-  const cast = new Cast(stage, scene, atlas.textures, humanName);
+  const cast = new Cast(stage, scene, atlas.textures, t("common.human"));
   const daylight = createDaylight(stage, cast.characters);
   cast.update(agents, true);
   const cards = new Cards(stage, scene);

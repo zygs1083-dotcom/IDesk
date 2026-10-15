@@ -7,7 +7,7 @@ import { characterPose } from "./pose.ts";
 import type { Stage } from "./stage.ts";
 import type { Agent } from "./textures.ts";
 
-const WALK_SPEED = 140;
+export const WALK_SPEED = 140;
 
 export type CharacterState = "idle" | "walk" | "sit" | "typing" | "talk" | "coffee" | "away";
 
@@ -25,6 +25,9 @@ export class Character extends Container {
   readonly bubble = new Bubble();
   private fallback: Texture;
   private elapsed = 0;
+  private nodTimers = new Map<ReturnType<typeof setTimeout>, () => void>();
+  private nodVersion = 0;
+  private bounce = { x: 1, y: 1 };
 
   constructor(
     private stage: Stage,
@@ -73,6 +76,7 @@ export class Character extends Container {
     stage.app.ticker.add(this.animate, undefined, -1);
     this.on("destroyed", () => {
       stage.app.ticker.remove(this.animate);
+      this.stopNod();
       tint.destroy();
     });
   }
@@ -90,10 +94,10 @@ export class Character extends Container {
     if (!reducedMotion.matches) this.elapsed += this.stage.app.ticker.deltaMS;
     const pose = characterPose(this.state, this.facing, this.elapsed, this.mirrored);
     this.sprite.texture = this.frames[`${this.agent.kind}/${pose.frame}`] ?? this.fallback;
-    this.sprite.scale.x = pose.mirror ? -1 : 1;
+    this.sprite.scale.set((pose.mirror ? -1 : 1) * this.bounce.x, this.bounce.y);
   };
 
-  async walkTo(points: Point[]) {
+  async walkTo(points: Point[], speed = WALK_SPEED) {
     this.setState("walk");
     for (const target of points) {
       const dx = target.x - this.x;
@@ -104,11 +108,45 @@ export class Character extends Container {
         this.stage.app.ticker,
         this.position,
         target,
-        (Math.hypot(dx, dy) / WALK_SPEED) * 1000,
+        (Math.hypot(dx, dy) / speed) * 1000,
         (t) => t,
       );
       if (this.destroyed) return;
     }
     this.setState("idle");
+    if (!reducedMotion.matches) {
+      this.bounce = { x: 1.1, y: 0.9 };
+      await tween(this.stage.app.ticker, this.bounce, { x: 1, y: 1 }, 120);
+    }
+  }
+
+  stopNod() {
+    this.nodVersion++;
+    this.sprite.y = 0;
+    for (const [timer, resolve] of this.nodTimers) {
+      clearTimeout(timer);
+      resolve();
+    }
+    this.nodTimers.clear();
+  }
+
+  async nod(ms = 150, count = 2) {
+    const version = this.nodVersion;
+    const wait = () =>
+      new Promise<void>((resolve) => {
+        const timer = setTimeout(() => {
+          this.nodTimers.delete(timer);
+          resolve();
+        }, ms);
+        this.nodTimers.set(timer, resolve);
+      });
+    for (let index = 0; index < count; index++) {
+      this.sprite.y = -1;
+      await wait();
+      if (this.destroyed || version !== this.nodVersion) return;
+      this.sprite.y = 0;
+      await wait();
+      if (this.destroyed || version !== this.nodVersion) return;
+    }
   }
 }
