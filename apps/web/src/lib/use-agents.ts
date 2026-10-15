@@ -1,8 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
+import { useLang } from "../i18n/lang.tsx";
 import { request } from "./api.ts";
 import type { Agent } from "./types.ts";
 
 export function useAgents() {
+  const { t } = useLang();
   const {
     data: agents = [],
     error,
@@ -13,8 +15,8 @@ export function useAgents() {
   });
   const names = new Map(agents.map((agent) => [agent.id, `${agent.name}@${agent.host}`]));
   function agentName(id: string | null): string {
-    if (id === null || id === "human") return "人";
-    return names.get(id) ?? "已删除的智能体";
+    if (id === null || id === "human") return t("common.human");
+    return names.get(id) ?? t("common.deletedAgent2");
   }
   return { agents, agentName, error, isPending };
 }
