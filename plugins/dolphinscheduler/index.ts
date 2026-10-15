@@ -1,25 +1,11 @@
-import { z } from "zod";
 import type { RUN_STATUSES } from "../../apps/api/src/db/schema.ts";
 import type {
   ConnectorPlugin,
   ExternalJob,
   ExternalRun,
 } from "../../apps/api/src/plugins/types.ts";
+import { type Config, configSchema, dsGet, listProjects, type Page, parseDate } from "./api.ts";
 
-import { type Config, dsGet, listProjects, type Page, parseDate } from "./api.ts";
-
-const configSchema = z.object({
-  baseUrl: z
-    .url()
-    .meta({ title: "地址" })
-    .transform((url) => url.replace(/\/+$/, "")),
-  token: z.string().min(1).meta({ title: "Token" }),
-  projectCode: z
-    .string()
-    .regex(/^\d*$/)
-    .default("")
-    .meta({ title: "项目编码（留空 = Token 可见的全部项目）" }),
-});
 type RunStatus = (typeof RUN_STATUSES)[number];
 type DsState =
   | "SUBMITTED_SUCCESS"

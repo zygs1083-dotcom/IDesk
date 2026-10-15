@@ -1,4 +1,18 @@
-export type Config = { baseUrl: string; token: string; projectCode: string };
+import { z } from "zod";
+
+export const configSchema = z.object({
+  baseUrl: z
+    .url()
+    .meta({ title: "地址" })
+    .transform((url) => url.replace(/\/+$/, "")),
+  token: z.string().min(1).meta({ title: "Token" }),
+  projectCode: z
+    .string()
+    .regex(/^\d*$/)
+    .default("")
+    .meta({ title: "项目编码（留空 = Token 可见的全部项目）" }),
+});
+export type Config = z.output<typeof configSchema>;
 export type Page<T> = { totalList: T[]; currentPage: number; totalPage: number };
 type Project = { code: string | number; name: string };
 
