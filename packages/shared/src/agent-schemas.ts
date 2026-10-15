@@ -23,3 +23,13 @@ export const publicAgentSchema = z
   })
   .meta({ id: "PublicAgent" });
 export const registeredAgentSchema = z.object({ agent: publicAgentSchema, apiKey: z.string() });
+
+export const agentStatsSchema = z
+  .object({
+    completed: z.number(),
+    last7dCompleted: z.number(),
+    handoffs: z.number(),
+    reported: z.number(),
+    avgDurationMs: z.number().nullable(),
+  })
+  .meta({ id: "AgentStats" });
