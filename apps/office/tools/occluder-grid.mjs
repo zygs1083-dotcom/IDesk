@@ -31,4 +31,4 @@ for (const p of [
   rows[Math.floor(p.y / cell)][Math.floor(p.x / cell)] = ".";
 if (!process.argv[2]) throw new Error("Usage: node tools/occluder-grid.mjs OUTPUT.json");
 saveJson(resolve(process.argv[2]), { cell, rows: rows.map((row) => row.join("")) });
-console.log(`Grid draft: ${resolve(process.argv[2])}`);
+process.stdout.write(`Grid draft: ${resolve(process.argv[2])}\n`);

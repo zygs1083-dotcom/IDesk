@@ -83,7 +83,11 @@ export function installDebug(stage: Stage, t: Translate, authorized: () => boole
     URL.revokeObjectURL(url);
   };
   stage.app.stage.eventMode = "static";
-  stage.app.stage.hitArea = new Rectangle(0, 0, stage.app.screen.width, stage.app.screen.height);
+  const resize = () => {
+    stage.app.stage.hitArea = new Rectangle(0, 0, stage.app.screen.width, stage.app.screen.height);
+  };
+  resize();
+  stage.app.renderer.on("resize", resize);
   stage.app.stage.on("globalpointermove", move);
   stage.app.stage.on("pointerup", stop);
   stage.app.stage.on("pointerupoutside", stop);
@@ -93,6 +97,7 @@ export function installDebug(stage: Stage, t: Translate, authorized: () => boole
     stage.app.stage.off("globalpointermove", move);
     stage.app.stage.off("pointerup", stop);
     stage.app.stage.off("pointerupoutside", stop);
+    stage.app.renderer.off("resize", resize);
     button.remove();
   });
 }

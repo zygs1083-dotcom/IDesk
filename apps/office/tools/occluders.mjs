@@ -60,4 +60,4 @@ export function buildOccluders() {
   return pieces.length;
 }
 if (process.argv[1] === fileURLToPath(import.meta.url))
-  console.log(`Occluders: ${buildOccluders()} frames`);
+  process.stdout.write(`Occluders: ${buildOccluders()} frames\n`);

@@ -54,7 +54,7 @@ zone-1 木牌框外沿约 x572–696、y151–194；米白内区取 (579,159,110
 
 ## 分阶段数据契约
 
-`meeting`、`lounge`、`reception`、`spots`、`standing`、`points` 在本阶段可省略；有 `spots` 时仍要求完整八种唯一 id。W73c 补齐后由 W74 改为必填。座位、命名点、spots、站位必须落在背景内且格子可走；workSpot、counter、文字矩形也检查背景边界。zone 成员与 seat.zone 双向一致，hostZones 只引用存在的区域。
+`meeting`、`lounge`、`reception`、`spots`、`standing`、`points`、`drops` 均为必填；`spots` 要求完整八种唯一 id。座位、命名点、spots、站位必须落在背景内且格子可走；workSpot、counter、文字矩形也检查背景边界。zone 成员与 seat.zone 双向一致，hostZones 只引用存在的区域。
 
 ## 合成图的角色锚点
 
@@ -100,3 +100,5 @@ walking 图使用西侧绿植后方的可走点 (104,408)：人脚底 y408 < 绿
 ## 卡片与信封落点（W74）
 
 `points` 是人站的位置，`drops` 是物件落点，不要求位于可走格。原背景最近邻放大后，文件筐上口约 x269–311、y591–619，取中心 (290,605) 为 `drops.doneTray`。白板右侧便签区约 x402–422、y49–102，取中心 (412,76) 为 `drops.bulletin`。卡片、广播信封直接读这两个字段，不用人站点推导。
+
+会议卡放在 6 人坐满时仍可见的桌面空白处：桌面左侧 x1304–1336、y190–218，取中心 (1320,204) 为 `meeting.workSpot`。该点避开中央绿植和南排中座头部；卡仍按会议桌 baseline、bias 1 排序。

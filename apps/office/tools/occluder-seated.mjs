@@ -78,4 +78,4 @@ savePng(
   resolve(output, "seated-overview@3x.png"),
   enlargeCrop(background, { x: 0, y: 0, w: background.width, h: background.height }),
 );
-console.log(`Seated preview: ${resolve(output)}`);
+process.stdout.write(`Seated preview: ${resolve(output)}\n`);

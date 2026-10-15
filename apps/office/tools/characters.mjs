@@ -1,7 +1,7 @@
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { PNG } from "pngjs";
-import { bounds, resize } from "./furniture-image.mjs";
+import { bounds, resize } from "./image.mjs";
 import { spriteCells } from "./sprite-cells.mjs";
 
 const kinds = ["claude-code", "codex", "n8n", "script", "custom", "receptionist"];

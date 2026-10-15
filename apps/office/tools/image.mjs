@@ -1,21 +1,20 @@
 import assert from "node:assert/strict";
-import { readFileSync, writeFileSync } from "node:fs";
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { PNG } from "pngjs";
 
 export const root = fileURLToPath(new URL("../", import.meta.url));
-export const readPng = (path) => PNG.sync.read(readFileSync(`${root}${path}`));
-export const savePng = (path, png) => writeFileSync(`${root}${path}`, PNG.sync.write(png));
-export const readJson = (path) => JSON.parse(readFileSync(`${root}${path}`, "utf8"));
-export const saveJson = (path, data) =>
-  writeFileSync(
-    `${root}${path}`,
-    `${JSON.stringify(data, null, 2)
-      .replace(/\[\n\s+(\d+),\n\s+(\d+),\n\s+(\d+)\n\s+\]/g, "[$1, $2, $3]")
-      .replace(/\[\n(?:\s*\[[\d, ]+\],?\n)+\s*\]/g, (array) =>
-        JSON.stringify(JSON.parse(array)).replaceAll(",", ", "),
-      )}\n`,
-  );
+export const readJson = (path) => JSON.parse(readFileSync(path, "utf8"));
+export const readPng = (path) => PNG.sync.read(readFileSync(path));
+export function savePng(path, png) {
+  mkdirSync(dirname(path), { recursive: true });
+  writeFileSync(path, PNG.sync.write(png));
+}
+export function saveJson(path, value) {
+  mkdirSync(dirname(path), { recursive: true });
+  writeFileSync(path, `${JSON.stringify(value, null, 2)}\n`);
+}
 export function crop(png, { x, y, w, h }) {
   const result = new PNG({ width: w, height: h });
   PNG.bitblt(png, result, x, y, w, h, 0, 0);
@@ -55,16 +54,19 @@ export function resize(png, w, h) {
 }
 
 export function paste(canvas, png, left, top) {
-  for (let y = 0; y < png.height; y++) {
+  for (let y = 0; y < png.height; y++)
     for (let x = 0; x < png.width; x++) {
-      if (x + left < 0 || y + top < 0 || x + left >= canvas.width || y + top >= canvas.height)
-        continue;
       const from = (y * png.width + x) * 4;
       if (png.data[from + 3])
-        canvas.data.set(
-          png.data.subarray(from, from + 4),
-          ((y + top) * canvas.width + x + left) * 4,
-        );
+        pixel(canvas, x + left, y + top, [...png.data.subarray(from, from + 4)]);
     }
-  }
+}
+
+export function pixel(png, x, y, color) {
+  if (x < 0 || y < 0 || x >= png.width || y >= png.height) return;
+  const p = (y * png.width + x) * 4;
+  const alpha = color[3] / 255;
+  for (let c = 0; c < 3; c++)
+    png.data[p + c] = Math.round(color[c] * alpha + png.data[p + c] * (1 - alpha));
+  png.data[p + 3] = 255;
 }

@@ -29,10 +29,7 @@ export function relayAction(cast: Cast) {
             void cast.enqueue(id, async () => {
               const character = characters.get(id);
               if (!character) return;
-              const facing = character.facing;
-              character.facing = "down";
-              await new Promise((resolve) => setTimeout(resolve, 1000));
-              character.facing = facing;
+              await character.nod(150, 1);
             });
           }),
         );

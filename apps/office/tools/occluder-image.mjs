@@ -1,23 +1,10 @@
 import { contains } from "@idesk/shared/office-geometry";
+import { PNG } from "pngjs";
+import { pixel } from "./image.mjs";
 
 export { contains } from "@idesk/shared/office-geometry";
+export { paste, pixel, readJson, readPng, root, saveJson, savePng } from "./image.mjs";
 
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { dirname } from "node:path";
-import { fileURLToPath } from "node:url";
-import { PNG } from "pngjs";
-
-export const root = fileURLToPath(new URL("../", import.meta.url));
-export const readJson = (path) => JSON.parse(readFileSync(path, "utf8"));
-export const readPng = (path) => PNG.sync.read(readFileSync(path));
-export function savePng(path, png) {
-  mkdirSync(dirname(path), { recursive: true });
-  writeFileSync(path, PNG.sync.write(png));
-}
-export function saveJson(path, value) {
-  mkdirSync(dirname(path), { recursive: true });
-  writeFileSync(path, `${JSON.stringify(value, null, 2)}\n`);
-}
 export function polygonBounds(polygon) {
   const xs = polygon.map(([x]) => x);
   const ys = polygon.map(([, y]) => y);
@@ -36,14 +23,6 @@ export function cutPolygon(background, polygon) {
       png.data[(y * box.w + x) * 4 + 3] = 255;
     }
   return { png, box };
-}
-export function pixel(png, x, y, color) {
-  if (x < 0 || y < 0 || x >= png.width || y >= png.height) return;
-  const p = (y * png.width + x) * 4;
-  const alpha = color[3] / 255;
-  for (let c = 0; c < 3; c++)
-    png.data[p + c] = Math.round(color[c] * alpha + png.data[p + c] * (1 - alpha));
-  png.data[p + 3] = 255;
 }
 export function line(png, a, b, color) {
   let [x, y] = a.map(Math.round);
@@ -92,12 +71,4 @@ export function enlargeCrop(png, { x, y, w, h }, scale = 3) {
       result.data.set(png.data.subarray(from, from + 4), (py * result.width + px) * 4);
     }
   return result;
-}
-export function paste(canvas, png, left, top) {
-  for (let y = 0; y < png.height; y++)
-    for (let x = 0; x < png.width; x++) {
-      const from = (y * png.width + x) * 4;
-      if (png.data[from + 3])
-        pixel(canvas, x + left, y + top, [...png.data.subarray(from, from + 4)]);
-    }
 }

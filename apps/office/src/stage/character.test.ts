@@ -6,7 +6,7 @@ import type { Stage } from "../world/stage.ts";
 import { Character } from "./character.ts";
 import type { OfficeAgent } from "./textures.ts";
 
-vi.hoisted(() => vi.stubGlobal("matchMedia", () => ({ matches: true })));
+vi.hoisted(() => vi.stubGlobal("matchMedia", () => ({ matches: false })));
 vi.mock("./glyphs.ts", () => ({ setGlyphText: vi.fn() }));
 
 test("each frame copies its atlas anchor and moving people update their depth every tick", () => {
@@ -25,7 +25,7 @@ test("each frame copies its atlas anchor and moving people update their depth ev
     effects: new Container(),
     app: {
       ticker: {
-        deltaMS: 0,
+        deltaMS: 300,
         add: (fn: () => void) => {
           tick = fn;
         },
@@ -44,6 +44,7 @@ test("each frame copies its atlas anchor and moving people update their depth ev
     character.facing = facing;
     for (const state of ["sit", "typing"] as const) {
       character.setState(state);
+      tick();
       expect(sprite.anchor.x).toBe(sprite.texture.defaultAnchor?.x);
       expect(sprite.anchor.y).toBe(sprite.texture.defaultAnchor?.y);
       if (facing === "back") expect(character.y + sprite.height * (1 - sprite.anchor.y)).toBe(360);

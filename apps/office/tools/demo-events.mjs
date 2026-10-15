@@ -76,6 +76,17 @@ export async function demoEvents(
     await step("pause", () => act(task, "pause", 1), 20_000);
     await step("resume", () => act(task, "resume", 1), 20_000);
     await step("complete", () => act(task, "complete", 1, { result: "Verified" }));
+    let assigned;
+    await step("assigned-created", async () => {
+      assigned = await request("tasks", { title: "Office demo: direct assignment" });
+    });
+    await step("assigned", () =>
+      request(`tasks/${assigned.id}/actions/assign`, { agentId: agents[3].agent.id }),
+    );
+    await step("assigned-accept", () => act(assigned, "accept", 3), 35_000);
+    await step("assigned-complete", () =>
+      act(assigned, "complete", 3, { result: "Accepted and verified" }),
+    );
     let released;
     await step("release-created", async () => {
       released = await request("tasks", { title: "Office demo: release to board" });

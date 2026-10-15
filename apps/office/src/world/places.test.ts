@@ -1,7 +1,7 @@
 import { parseOfficeLayout } from "@idesk/shared/office-layout";
 import { expect, test } from "vitest";
 import rawLayout from "../../public/layout.json";
-import { assignSeats, assignStanding, workSpot } from "./places.ts";
+import { assignSeats, assignStanding, chatSeats, departure, workSpot } from "./places.ts";
 
 const layout = parseOfficeLayout(rawLayout);
 const available = layout.seats;
@@ -56,4 +56,22 @@ test("cards sort with the silhouette containing their workSpot, with seat fallba
   if (!front) throw new Error("Missing front seat");
   expect(workSpot(front.workSpot, front.y, layout).sortY).toBe(360);
   expect(workSpot({ x: 800, y: 800 }, 544, layout).sortY).toBe(544);
+});
+
+test.each([
+  ["front", false, { x: 1, y: 1 }],
+  ["front", true, { x: 3, y: 1 }],
+  ["back", false, { x: 1, y: 3 }],
+  ["back", true, { x: 3, y: 3 }],
+  ["down", false, { x: 2, y: 1 }],
+  ["left", false, { x: 3, y: 2 }],
+  ["right", false, { x: 1, y: 2 }],
+] as const)("departure follows the reverse of %s with mirror=%s", (facing, mirror, expected) => {
+  const open = { ...layout, grid: { cell: 16 as const, rows: Array(5).fill(".....") } };
+  expect(departure({ x: 40, y: 40, facing, mirror }, open)).toEqual(expected);
+});
+
+test("a blocked departure cancels chat rather than placing people in furniture", () => {
+  const blocked = { ...layout, grid: { cell: 16 as const, rows: Array(5).fill("#####") } };
+  expect(chatSeats({ x: 40, y: 40, facing: "front" }, blocked)).toBeUndefined();
 });

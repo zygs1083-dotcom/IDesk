@@ -93,9 +93,14 @@ export function WorldCheck() {
         );
         stage.objects.addChild(character);
         characters.set(seat.id, character);
-        const desk = "workSpot" in seat ? workSpot(seat.workSpot, seat.y, layout) : undefined;
+        const desk =
+          seat.zone && "workSpot" in seat ? workSpot(seat.workSpot, seat.y, layout) : undefined;
         if (desk) cards.place(task(seat.id), desk);
       }
+      cards.place(
+        task("meeting"),
+        workSpot(layout.meeting.workSpot, layout.meeting.workSpot.y, layout),
+      );
       for (let index = 0; index < 20; index++) cards.pin(task(`board-${index}`));
       layout.zones.forEach((zone, index) => {
         new Plaque(stage, zone.plaque).setText(

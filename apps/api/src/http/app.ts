@@ -51,7 +51,8 @@ const cached = (value: string) =>
 for (const path of ["/assets/*", "/office/assets/*"])
   app.use(path, cached("public, max-age=31536000, immutable"), compress());
 app.use("/office/:file{.+\\.(png|webp|woff2)}", cached("public, max-age=86400"));
-app.use("/office/sprites.json", cached("public, max-age=86400"), compress());
+for (const path of ["/office/characters.json", "/office/occluders.json"])
+  app.use(path, cached("public, max-age=86400"), compress());
 
 // 办公室页常年开着，部署后靠 build 变化让它自己刷新；index.html 里的 bundle 名每次构建都不同。
 const officeBuild =
