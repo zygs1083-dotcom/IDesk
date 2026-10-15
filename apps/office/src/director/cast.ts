@@ -3,6 +3,7 @@ import { findPath } from "../scene/path.ts";
 import type { Point, Scene, Seat } from "../scene/scene.ts";
 import { assignSeats, assignStanding } from "../scene/seats.ts";
 import { Character, type CharacterState } from "../stage/character.ts";
+import { createSeatCovers } from "../stage/seat-covers.ts";
 import type { Stage } from "../stage/stage.ts";
 import type { Agent } from "../stage/textures.ts";
 import { ZoneSign } from "../stage/zone-sign.ts";
@@ -24,6 +25,7 @@ export class Cast {
     private frames: Record<string, Texture>,
     humanName: string,
   ) {
+    createSeatCovers(stage, scene);
     this.labels = scene.zones.map((zone) => new ZoneSign(stage, zone.name));
     const human: Agent = {
       id: "human",

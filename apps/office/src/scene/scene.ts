@@ -1,7 +1,17 @@
 import { z } from "zod";
 
 const point = z.object({ x: z.number(), y: z.number() });
-const spot = point.extend({ via: z.string(), facing: z.enum(["down", "left", "right", "up"]) });
+const cover = z.object({
+  x: z.number().positive(),
+  y: z.number().positive(),
+  width: z.number().positive(),
+  height: z.number().positive(),
+});
+const spot = point.extend({
+  via: z.string(),
+  facing: z.enum(["down", "left", "right", "up"]),
+  cover: cover.optional(),
+});
 export const sceneSchema = z.object({
   hostZones: z.record(z.string(), z.number().int().min(1).max(4)).optional(),
   title: z.string().optional(),

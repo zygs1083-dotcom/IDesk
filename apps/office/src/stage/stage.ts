@@ -30,7 +30,7 @@ export async function createStage(host: HTMLElement) {
   };
   app.renderer.on("resize", resize);
   resize();
-  return { app, world, characters };
+  return { app, world, characters, background };
 }
 
 export type Stage = Awaited<ReturnType<typeof createStage>>;
