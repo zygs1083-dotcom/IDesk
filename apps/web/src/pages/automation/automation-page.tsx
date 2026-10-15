@@ -170,9 +170,7 @@ export function AutomationPage() {
                     <RunCard key={run.id} run={run} now={now} />
                   ))}
                   {column.id === "waiting" &&
-                    upcoming.map(({ job, next }) => (
-                      <JobCard key={job.id} job={job} next={next} now={now} />
-                    ))}
+                    upcoming.map((item) => <JobCard key={item.job.id} {...item} now={now} />)}
                 </RunColumn>
               );
             })}

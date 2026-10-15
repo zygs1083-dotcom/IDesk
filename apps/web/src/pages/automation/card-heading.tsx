@@ -26,7 +26,7 @@ export function CardHeading({
             href={url}
             target="_blank"
             rel="noreferrer"
-            aria-label={t("automation.openRun", { name: name })}
+            aria-label={t("automation.openRun", { name })}
             className="shrink-0 rounded-control text-text-2 hover:text-text focus-visible:outline-2 focus-visible:outline-accent"
           >
             <ExternalLink size={16} strokeWidth={1.5} />

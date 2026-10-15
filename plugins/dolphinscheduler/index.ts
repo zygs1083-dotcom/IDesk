@@ -6,7 +6,6 @@ import type {
   Progress,
 } from "../../apps/api/src/plugins/types.ts";
 import { type Config, configSchema, dsGet, listProjects, type Page, parseDate } from "./api.ts";
-
 import { listSchedules } from "./schedules.ts";
 
 type RunStatus = (typeof RUN_STATUSES)[number];
@@ -110,7 +109,8 @@ export default {
       if (projectJobs.length > 0) {
         const schedules = await listSchedules(settings, project.code);
         for (const job of projectJobs) {
-          job.schedule = schedules.get(job.externalId.split("/")[1] as string) ?? null;
+          job.schedule =
+            schedules.get(job.externalId.slice(job.externalId.indexOf("/") + 1)) ?? null;
         }
         jobs.push(...projectJobs);
       }
