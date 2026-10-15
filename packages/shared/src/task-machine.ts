@@ -1,4 +1,5 @@
-import { TASK_STATUS_LABEL, type TaskStatus } from "./task-status.ts";
+import { labels } from "./labels.ts";
+import type { TaskStatus } from "./task-status.ts";
 
 export interface TaskRecruit {
   needed: number;
@@ -37,24 +38,6 @@ export type TaskAction =
   | { type: "reopen" };
 
 export const LEASE_MS = 10 * 60 * 1000;
-export const ACTION_LABEL: Record<TaskAction["type"], string> = {
-  claim: "领取",
-  assign: "指定",
-  recruit: "招募",
-  cancel: "取消",
-  accept: "接受",
-  decline: "拒绝",
-  join: "加入",
-  cancel_recruit: "取消招募",
-  heartbeat: "续租",
-  complete: "完成",
-  pause: "暂停",
-  handoff: "交接",
-  release: "放回",
-  lease_expired: "租约到期",
-  resume: "恢复",
-  reopen: "重开",
-};
 export class TransitionError extends Error {
   constructor(
     readonly status: TaskStatus,
@@ -170,7 +153,7 @@ export function transition<T extends TaskState>(
 ): T | TransitionError {
   const apply = transitions[task.status][action.type];
   if (!apply) {
-    const message = `${TASK_STATUS_LABEL[task.status]}的任务不能${ACTION_LABEL[action.type]}`;
+    const message = `${labels("zh").status[task.status]}的任务不能${labels("zh").action[action.type]}`;
     return new TransitionError(task.status, action.type, message);
   }
   // 同一个动作键下的处理函数与 action 类型一致。

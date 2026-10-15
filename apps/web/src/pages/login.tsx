@@ -3,9 +3,11 @@ import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 import { Button } from "../components/button.tsx";
 import { Field } from "../components/field.tsx";
+import { useLang } from "../i18n/lang.tsx";
 import { request } from "../lib/api.ts";
 
 export function Login() {
+  const { t } = useLang();
   const [password, setPassword] = useState("");
   const [params] = useSearchParams();
   const navigate = useNavigate();
@@ -33,7 +35,7 @@ export function Login() {
       >
         <h1 className="text-title">IDesk</h1>
         <Field
-          label="密码"
+          label={t("login.password")}
           type="password"
           autoComplete="current-password"
           autoFocus
@@ -47,7 +49,7 @@ export function Login() {
           className="w-full"
           disabled={!password || mutation.isPending}
         >
-          登录
+          {t("login.submit")}
         </Button>
       </form>
     </main>

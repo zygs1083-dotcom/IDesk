@@ -4,6 +4,7 @@ import { Button } from "../../components/button.tsx";
 import { Dialog } from "../../components/dialog.tsx";
 import { Field } from "../../components/field.tsx";
 import { Segmented } from "../../components/segmented.tsx";
+import { useLang } from "../../i18n/lang.tsx";
 import { request } from "../../lib/api.ts";
 import { configFields } from "./config-fields.ts";
 import { ConfigInputs, useConfigInputs } from "./config-inputs.tsx";
@@ -18,6 +19,7 @@ export function ConnectorDialog({
   connector?: Connector;
   onClose: () => void;
 }) {
+  const { t } = useLang();
   const client = useQueryClient();
   const [pluginId, setPluginId] = useState(connector?.pluginId ?? plugins[0]?.id ?? "");
   const [name, setName] = useState(connector?.name ?? "");
@@ -54,7 +56,11 @@ export function ConnectorDialog({
     create.reset();
   }
   return (
-    <Dialog open title={connector ? "编辑连接器" : "添加连接器"} onClose={onClose}>
+    <Dialog
+      open
+      title={connector ? t("settings.editConnector") : t("settings.addConnector")}
+      onClose={onClose}
+    >
       <form
         noValidate
         className="space-y-4"
@@ -64,10 +70,12 @@ export function ConnectorDialog({
         }}
       >
         {connector ? (
-          <p className="text-secondary text-text-2">插件 · {plugin?.name ?? connector.pluginId}</p>
+          <p className="text-secondary text-text-2">
+            {t("settings.pluginLabel", { name: plugin?.name ?? connector.pluginId })}
+          </p>
         ) : plugins.length > 0 ? (
           <Segmented
-            label="插件"
+            label={t("common.plugins")}
             value={pluginId}
             options={plugins.map((entry) => ({ value: entry.id, label: entry.name }))}
             onChange={(id) => {
@@ -78,10 +86,10 @@ export function ConnectorDialog({
             }}
           />
         ) : (
-          <p className="text-secondary text-text-2">没有已启用的连接器插件</p>
+          <p className="text-secondary text-text-2">{t("settings.noConnectorPlugins")}</p>
         )}
         <Field
-          label="名称"
+          label={t("common.name")}
           required
           value={name}
           onChange={(event) => setName(event.target.value)}
@@ -97,13 +105,13 @@ export function ConnectorDialog({
             disabled={!ready || test.isPending || create.isPending}
             onClick={() => test.mutate()}
           >
-            {test.isPending ? "测试中…" : "测试连接"}
+            {test.isPending ? t("settings.testing") : t("settings.testConnection")}
           </Button>
           <div role="status" className="min-w-0 flex-1 text-secondary">
             {test.data?.success && (
               <span className="flex items-center gap-2">
                 <span className="size-2 rounded-full bg-status-done" />
-                连接正常
+                {t("settings.connectionOk")}
               </span>
             )}
             {(test.error || test.data?.success === false) && (
@@ -115,7 +123,7 @@ export function ConnectorDialog({
             variant="primary"
             disabled={!ready || create.isPending || test.isPending}
           >
-            {create.isPending ? "保存中…" : connector ? "保存" : "添加"}
+            {create.isPending ? t("common.saving") : connector ? t("common.save") : t("common.add")}
           </Button>
         </div>
       </form>

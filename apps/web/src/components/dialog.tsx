@@ -1,6 +1,7 @@
 import { X } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { type ReactNode, useCallback, useId } from "react";
+import { useLang } from "../i18n/lang.tsx";
 import { Button } from "./button.tsx";
 
 export function Dialog({
@@ -16,6 +17,7 @@ export function Dialog({
   children: ReactNode;
   actions?: ReactNode;
 }) {
+  const { t } = useLang();
   const id = useId();
   const reduced = useReducedMotion();
   const modalRef = useCallback((node: HTMLDialogElement | null) => {
@@ -49,7 +51,7 @@ export function Dialog({
                 {title}
               </h2>
               {actions && <div className="ml-auto">{actions}</div>}
-              <Button aria-label="关闭" onClick={onClose} className="border-0 p-2">
+              <Button aria-label={t("common.close")} onClick={onClose} className="border-0 p-2">
                 <X size={18} strokeWidth={1.5} />
               </Button>
             </header>

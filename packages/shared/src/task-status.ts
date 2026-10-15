@@ -10,16 +10,6 @@ export const TASK_STATUSES = [
 
 export type TaskStatus = (typeof TASK_STATUSES)[number];
 
-export const TASK_STATUS_LABEL: Record<TaskStatus, string> = {
-  open: "待领取",
-  recruiting: "招募中",
-  assigned: "已指定",
-  in_progress: "进行中",
-  paused: "已暂停",
-  done: "已完成",
-  cancelled: "已取消",
-};
-
 /** 看板列顺序；cancelled 不作为列显示。 */
 export const BOARD_COLUMNS: readonly TaskStatus[] = [
   "open",
@@ -32,10 +22,3 @@ export const BOARD_COLUMNS: readonly TaskStatus[] = [
 
 export const TASK_PRIORITIES = ["low", "normal", "high", "urgent"] as const;
 export type TaskPriority = (typeof TASK_PRIORITIES)[number];
-
-export const TASK_PRIORITY_LABEL: Record<TaskPriority, string> = {
-  low: "低",
-  normal: "普通",
-  high: "高",
-  urgent: "紧急",
-};

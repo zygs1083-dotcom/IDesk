@@ -3,14 +3,19 @@ import { useState } from "react";
 import { Button } from "../../components/button.tsx";
 import { Switch } from "../../components/switch.tsx";
 import { Toast } from "../../components/toast.tsx";
+import { useLang } from "../../i18n/lang.tsx";
 import { request } from "../../lib/api.ts";
 import { configFields } from "./config-fields.ts";
 import { PluginConfig } from "./plugin-config.tsx";
 import type { Plugin } from "./types.ts";
 
-const kinds = { connector: "连接器", notifier: "通知", action: "动作" };
-
 export function PluginsPage() {
+  const { t } = useLang();
+  const kinds = {
+    connector: t("common.connectors"),
+    notifier: t("settings.notifications"),
+    action: t("common.action"),
+  };
   const client = useQueryClient();
   const plugins = useQuery({ queryKey: ["plugins"], queryFn: () => request<Plugin[]>("/plugins") });
   const [expanded, setExpanded] = useState<string | null>(null);
@@ -39,22 +44,22 @@ export function PluginsPage() {
     mutationFn: (plugin: Plugin) =>
       request<Plugin>(`/plugins/${plugin.id}/reload`, { method: "POST" }),
     onSuccess: (_result, plugin) => {
-      setMessage(`已重载 ${plugin.name}`);
+      setMessage(t("settings.reloaded", { name: plugin.name }));
       void client.invalidateQueries({ queryKey: ["plugins"] });
     },
     onError: (error) => setMessage(error.message),
   });
   return (
-    <section className="space-y-4" aria-label="插件">
-      <h2 className="text-section">插件</h2>
+    <section className="space-y-4" aria-label={t("common.plugins")}>
+      <h2 className="text-section">{t("common.plugins")}</h2>
       {plugins.error && (
         <p role="alert" className="text-secondary text-status-failed">
           {plugins.error.message}
         </p>
       )}
-      {plugins.isPending && <p className="text-secondary text-text-2">加载中…</p>}
+      {plugins.isPending && <p className="text-secondary text-text-2">{t("common.loading")}</p>}
       {plugins.data?.length === 0 && (
-        <p className="py-16 text-center text-secondary text-text-2">还没有插件</p>
+        <p className="py-16 text-center text-secondary text-text-2">{t("settings.noPlugins")}</p>
       )}
       <div className="rounded-panel border border-line bg-surface">
         {plugins.data?.map((plugin) => (
@@ -64,7 +69,7 @@ export function PluginsPage() {
               <span className="text-secondary tabular-nums text-text-2">{plugin.version}</span>
               <span className="w-12 text-secondary text-text-2">{kinds[plugin.kind]}</span>
               <Switch
-                label={`启用 ${plugin.name}`}
+                label={t("common.enableNamed", { name: plugin.name })}
                 checked={plugin.enabled}
                 disabled={toggle.isPending || reload.isPending}
                 onChange={(enabled) => toggle.mutate({ id: plugin.id, enabled })}
@@ -75,7 +80,7 @@ export function PluginsPage() {
                   aria-expanded={expanded === plugin.id}
                   onClick={() => setExpanded(expanded === plugin.id ? null : plugin.id)}
                 >
-                  配置
+                  {t("settings.configure")}
                 </Button>
               )}
               <Button
@@ -83,7 +88,7 @@ export function PluginsPage() {
                 disabled={reload.isPending || toggle.isPending}
                 onClick={() => reload.mutate(plugin)}
               >
-                重载
+                {t("settings.reload")}
               </Button>
             </div>
             {plugin.error && (

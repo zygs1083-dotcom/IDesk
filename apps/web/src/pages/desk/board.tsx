@@ -11,6 +11,7 @@ import { AnimatePresence, useReducedMotion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "../../components/button.tsx";
 import { Toast } from "../../components/toast.tsx";
+import { useLang } from "../../i18n/lang.tsx";
 import type { Task, TaskEvent } from "../../lib/types.ts";
 import { useAgents } from "../../lib/use-agents.ts";
 import { ActionDialog } from "./action-dialog.tsx";
@@ -41,6 +42,7 @@ export function Board({
   onOpen: (id: string) => void;
   onPublish: () => void;
 }) {
+  const { t } = useLang();
   const seen = useRef(new Set<string>());
   useEffect(() => {
     for (const task of tasks) seen.current.add(task.id);
@@ -112,7 +114,7 @@ export function Board({
       >
         <section
           className="relative flex min-h-0 flex-1 gap-3 overflow-x-auto pb-3"
-          aria-label="任务看板"
+          aria-label={t("desk.board")}
         >
           {BOARD_COLUMNS.map((status) => {
             const columnTasks = visible.filter((task) => task.status === status);
@@ -140,14 +142,14 @@ export function Board({
           {!search && boardTasks.length === 0 && !loading && (
             <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
               <div className="pointer-events-auto space-y-3 text-center">
-                <p className="text-secondary text-text-2">还没有任务</p>
-                <Button onClick={() => onPublish()}>发布一个</Button>
+                <p className="text-secondary text-text-2">{t("desk.empty")}</p>
+                <Button onClick={() => onPublish()}>{t("desk.publishOne")}</Button>
               </div>
             </div>
           )}
           {search && boardTasks.length === 0 && !loading && (
             <p className="absolute inset-x-0 top-20 text-center text-secondary text-text-2">
-              没有匹配的任务
+              {t("desk.noMatches")}
             </p>
           )}
         </section>

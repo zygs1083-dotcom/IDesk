@@ -1,6 +1,7 @@
 import { useId, useState } from "react";
 import { Field } from "../../components/field.tsx";
 import { Switch } from "../../components/switch.tsx";
+import { useLang } from "../../i18n/lang.tsx";
 import type { ConfigField } from "./config-fields.ts";
 
 type Values = Record<string, string | boolean>;
@@ -49,6 +50,7 @@ export function ConfigInputs({
   values: Values;
   onChange: (name: string, value: string | boolean) => void;
 }) {
+  const { t } = useLang();
   const id = useId();
   return fields.map((field) =>
     field.options ? (
@@ -63,7 +65,7 @@ export function ConfigInputs({
           value={typeof values[field.name] === "string" ? (values[field.name] as string) : ""}
           onChange={(event) => onChange(field.name, event.target.value)}
         >
-          {field.default === undefined && <option value="">请选择</option>}
+          {field.default === undefined && <option value="">{t("settings.selectOption")}</option>}
           {field.options.map((option) => (
             <option key={option} value={option}>
               {option}

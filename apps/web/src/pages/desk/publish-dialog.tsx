@@ -1,4 +1,5 @@
-import { TASK_PRIORITIES, TASK_PRIORITY_LABEL, type TaskPriority } from "@idesk/shared/task-status";
+import { labels } from "@idesk/shared/labels";
+import { TASK_PRIORITIES, type TaskPriority } from "@idesk/shared/task-status";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { Button } from "../../components/button.tsx";
@@ -6,10 +7,12 @@ import { Dialog } from "../../components/dialog.tsx";
 import { Field } from "../../components/field.tsx";
 import { Menu } from "../../components/menu.tsx";
 import { Segmented } from "../../components/segmented.tsx";
+import { useLang } from "../../i18n/lang.tsx";
 import { request } from "../../lib/api.ts";
 import type { Schedule } from "../schedules/types.ts";
 
 export function PublishDialog({ onClose }: { onClose: () => void }) {
+  const { lang, t } = useLang();
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [capabilities, setCapabilities] = useState("");
@@ -47,12 +50,12 @@ export function PublishDialog({ onClose }: { onClose: () => void }) {
     <Dialog
       open
       onClose={onClose}
-      title="发布任务"
+      title={t("common.publishTask")}
       actions={
         templates.length > 0 && (
           <Menu
-            label="模板"
-            trigger="模板"
+            label={t("desk.templates")}
+            trigger={t("desk.templates")}
             items={templates.map(({ name, template }) => ({
               label: name,
               onSelect: () => {
@@ -75,7 +78,7 @@ export function PublishDialog({ onClose }: { onClose: () => void }) {
         }}
       >
         <Field
-          label="标题"
+          label={t("common.title")}
           value={title}
           onChange={(event) => setTitle(event.target.value)}
           autoFocus
@@ -83,31 +86,34 @@ export function PublishDialog({ onClose }: { onClose: () => void }) {
         />
         <Field
           multiline
-          label="正文"
+          label={t("common.body")}
           rows={6}
           placeholder="Markdown"
           value={body}
           onChange={(event) => setBody(event.target.value)}
         />
         <Field
-          label="能力"
+          label={t("common.capabilities")}
           placeholder="coding, browser"
           value={capabilities}
           onChange={(event) => setCapabilities(event.target.value)}
         />
         <Field
-          label="标签"
-          placeholder="空格或逗号分隔"
+          label={t("common.tags")}
+          placeholder={t("common.listSeparator")}
           value={tags}
           onChange={(event) => setTags(event.target.value)}
         />
         <div className="space-y-2">
-          <span className="text-secondary text-text-2">优先级</span>
+          <span className="text-secondary text-text-2">{t("common.priority")}</span>
           <Segmented
-            label="优先级"
+            label={t("common.priority")}
             value={priority}
             onChange={setPriority}
-            options={TASK_PRIORITIES.map((value) => ({ value, label: TASK_PRIORITY_LABEL[value] }))}
+            options={TASK_PRIORITIES.map((value) => ({
+              value,
+              label: labels(lang).priority[value],
+            }))}
           />
         </div>
         {mutation.error && (
@@ -117,7 +123,7 @@ export function PublishDialog({ onClose }: { onClose: () => void }) {
         )}
         <div className="flex justify-end">
           <Button type="submit" variant="primary" disabled={!title.trim() || mutation.isPending}>
-            发布
+            {t("common.publish")}
           </Button>
         </div>
       </form>

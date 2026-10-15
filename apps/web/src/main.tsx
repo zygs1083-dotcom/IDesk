@@ -3,6 +3,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router";
 import { App } from "./app.tsx";
+import { LangProvider } from "./i18n/lang.tsx";
 import "./styles/index.css";
 
 function redirectUnauthorized(error: Error) {
@@ -22,7 +23,9 @@ createRoot(document.getElementById("root") as HTMLElement).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <App />
+        <LangProvider>
+          <App />
+        </LangProvider>
       </BrowserRouter>
     </QueryClientProvider>
   </StrictMode>,

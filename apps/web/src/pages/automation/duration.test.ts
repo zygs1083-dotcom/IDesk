@@ -8,9 +8,17 @@ test.each([
   [80, "1 分 20 秒"],
   [7380, "2 小时 3 分"],
 ])("formats %i seconds", (seconds, expected) => {
-  expect(duration(start, new Date(now + seconds * 1000).toISOString(), now)).toBe(expected);
-  expect(duration(start, null, now + seconds * 1000)).toBe(expected);
+  expect(duration(start, new Date(now + seconds * 1000).toISOString(), now, "zh")).toBe(expected);
+  expect(duration(start, null, now + seconds * 1000, "zh")).toBe(expected);
 });
 test("missing start has no duration", () => {
-  expect(duration(null, null, now)).toBe("—");
+  expect(duration(null, null, now, "zh")).toBe("—");
+});
+
+test.each([
+  [5, "5 s"],
+  [339, "5 min 39 s"],
+  [3780, "1 h 3 min"],
+])("English duration %i", (seconds, expected) => {
+  expect(duration(start, null, now + Number(seconds) * 1000, "en")).toBe(expected);
 });

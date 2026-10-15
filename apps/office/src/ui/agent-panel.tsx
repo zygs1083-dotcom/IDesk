@@ -1,5 +1,6 @@
+import { labels } from "@idesk/shared/labels";
 import type { eventSchema } from "@idesk/shared/task-schemas";
-import { TASK_STATUS_LABEL } from "@idesk/shared/task-status";
+
 import { useEffect, useState } from "react";
 import type { z } from "zod";
 import { request } from "../lib/api.ts";
@@ -68,7 +69,7 @@ export function AgentPanel({
         current.map((task) => (
           <p key={task.id}>
             {task.title}
-            <span className="task-status">{TASK_STATUS_LABEL[task.status]}</span>
+            <span className="task-status">{labels("zh").status[task.status]}</span>
           </p>
         ))
       ) : (

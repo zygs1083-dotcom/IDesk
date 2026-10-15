@@ -1,5 +1,7 @@
 import { readFile } from "node:fs/promises";
-import { TASK_PRIORITY_LABEL, TASK_STATUS_LABEL } from "@idesk/shared/task-status";
+import { labels } from "@idesk/shared/labels";
+import type { TaskPriority, TaskStatus } from "@idesk/shared/task-status";
+
 import type { Command } from "commander";
 import { api } from "../client.js";
 import { formatAgentName } from "../labels.js";
@@ -8,8 +10,8 @@ import { output } from "../output.js";
 type Task = {
   id: string;
   title: string;
-  status: keyof typeof TASK_STATUS_LABEL;
-  priority: keyof typeof TASK_PRIORITY_LABEL;
+  status: TaskStatus;
+  priority: TaskPriority;
   capabilities: string[];
   assigneeId: string | null;
 };
@@ -35,8 +37,8 @@ export function taskCommands(program: Command): void {
         ["id", "状态", "优先级", "能力", "负责人", "标题"],
         ...tasks.map((task) => [
           task.id,
-          TASK_STATUS_LABEL[task.status],
-          TASK_PRIORITY_LABEL[task.priority],
+          labels("zh").status[task.status],
+          labels("zh").priority[task.priority],
           task.capabilities.join(","),
           formatAgentName(task.assigneeId, agents),
           task.title,

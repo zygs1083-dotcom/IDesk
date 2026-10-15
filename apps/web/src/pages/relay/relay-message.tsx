@@ -1,8 +1,9 @@
-import { RELAY_KIND_LABEL } from "@idesk/shared/relay";
+import { labels } from "@idesk/shared/labels";
 import type { relayMessageSchema } from "@idesk/shared/relay-schemas";
 import type { z } from "zod";
 import { Button } from "../../components/button.tsx";
 import { Markdown } from "../../components/markdown.tsx";
+import { useLang } from "../../i18n/lang.tsx";
 import { relativeTime } from "../../lib/format.ts";
 import { useAgents } from "../../lib/use-agents.ts";
 import { recipientLabel } from "./labels.ts";
@@ -20,6 +21,7 @@ export function RelayMessage({
   onTask: (id: string) => void;
   onReply: (message: Message) => void;
 }) {
+  const { lang, t } = useLang();
   const { agentName } = useAgents();
   const taskId = message.taskId;
   return (
@@ -27,11 +29,12 @@ export function RelayMessage({
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0 space-y-2">
           <p className="text-label text-text-2">
-            {RELAY_KIND_LABEL[message.kind]} · {relativeTime(new Date(message.createdAt))}
+            {labels(lang).relayKind[message.kind]} ·{" "}
+            {relativeTime(new Date(message.createdAt), lang)}
           </p>
           <h2 className="break-words text-section">{message.subject}</h2>
           <p className="break-words text-secondary text-text-2">
-            {agentName(message.fromAgentId)} → {recipientLabel(message.to, agentName)}
+            {agentName(message.fromAgentId)} → {recipientLabel(message.to, agentName, lang)}
           </p>
         </div>
         {message.fromAgentId !== "human" && (
@@ -40,13 +43,13 @@ export function RelayMessage({
             className="shrink-0 text-secondary text-accent"
             onClick={() => onReply(message)}
           >
-            回复
+            {t("common.reply")}
           </button>
         )}
       </div>
       {taskId && (
         <div className="flex items-center gap-2 text-secondary">
-          <span className="shrink-0 text-text-2">关联任务</span>
+          <span className="shrink-0 text-text-2">{t("relay.relatedTask")}</span>
           <Button
             className="min-w-0 justify-start border-0 p-0 text-secondary text-accent"
             onClick={() => onTask(taskId)}
@@ -58,8 +61,8 @@ export function RelayMessage({
       <Markdown>{message.body}</Markdown>
       <p className="text-label text-text-2">
         {message.readBy.length > 0
-          ? `已读：${message.readBy.map(agentName).join(" · ")}`
-          : "尚未读"}
+          ? t("relay.readBy", { agents: message.readBy.map(agentName).join(" · ") })
+          : t("relay.unread")}
       </p>
     </article>
   );

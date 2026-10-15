@@ -9,10 +9,12 @@ import type { z } from "zod";
 import { Button } from "../../components/button.tsx";
 import { Dialog } from "../../components/dialog.tsx";
 import { Field } from "../../components/field.tsx";
+import { useLang } from "../../i18n/lang.tsx";
 import { request } from "../../lib/api.ts";
 import type { Agent } from "../../lib/types.ts";
 
 export function CreateAgent({ agent, onClose }: { agent?: Agent; onClose: () => void }) {
+  const { t } = useLang();
   const client = useQueryClient();
   const [name, setName] = useState(agent?.name ?? "");
   const [kind, setKind] = useState<z.infer<typeof registerAgentSchema>["kind"]>(
@@ -56,30 +58,30 @@ export function CreateAgent({ agent, onClose }: { agent?: Agent; onClose: () => 
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
-      setCopyError("复制失败，请选中密钥复制");
+      setCopyError(t("agents.copyKeyFailed"));
     }
   }
   return (
     <Dialog
       open
       onClose={onClose}
-      title={agent ? "编辑智能体" : create.data ? "智能体已新建" : "新建智能体"}
+      title={agent ? t("agents.edit") : create.data ? t("agents.created") : t("agents.create")}
     >
       {create.data ? (
         <div className="space-y-4">
           <code className="block break-all rounded-control bg-surface-2 p-3 text-secondary">
             {create.data.apiKey}
           </code>
-          <p className="text-secondary text-text-2">只显示这一次</p>
+          <p className="text-secondary text-text-2">{t("agents.keyOnce")}</p>
           {copyError && (
             <p role="alert" className="text-secondary text-status-failed">
               {copyError}
             </p>
           )}
           <div className="flex justify-end gap-2">
-            <Button onClick={copyKey}>{copied ? "已复制" : "复制"}</Button>
+            <Button onClick={copyKey}>{copied ? t("common.copied") : t("common.copy")}</Button>
             <Button variant="primary" onClick={onClose}>
-              完成
+              {t("common.complete")}
             </Button>
           </div>
         </div>
@@ -101,12 +103,16 @@ export function CreateAgent({ agent, onClose }: { agent?: Agent; onClose: () => 
             });
           }}
         >
-          <Field label="名称" value={name} onChange={(event) => setName(event.target.value)} />
+          <Field
+            label={t("common.name")}
+            value={name}
+            onChange={(event) => setName(event.target.value)}
+          />
           {agent ? (
-            <Field label="类型" value={kind} readOnly />
+            <Field label={t("common.type")} value={kind} readOnly />
           ) : (
             <label className="block space-y-2 text-secondary text-text-2">
-              类型
+              {t("common.type")}
               <select
                 className="block w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body text-text focus:border-accent"
                 value={kind}
@@ -118,10 +124,14 @@ export function CreateAgent({ agent, onClose }: { agent?: Agent; onClose: () => 
               </select>
             </label>
           )}
-          <Field label="主机" value={host} onChange={(event) => setHost(event.target.value)} />
           <Field
-            label="能力"
-            placeholder="空格或逗号分隔"
+            label={t("common.host")}
+            value={host}
+            onChange={(event) => setHost(event.target.value)}
+          />
+          <Field
+            label={t("common.capabilities")}
+            placeholder={t("common.listSeparator")}
             value={capabilities}
             onChange={(event) => setCapabilities(event.target.value)}
           />
@@ -137,13 +147,13 @@ export function CreateAgent({ agent, onClose }: { agent?: Agent; onClose: () => 
             </p>
           )}
           <div className="flex justify-end gap-2">
-            <Button onClick={onClose}>取消</Button>
+            <Button onClick={onClose}>{t("common.cancel")}</Button>
             <Button
               type="submit"
               variant="primary"
               disabled={!name.trim() || create.isPending || update.isPending}
             >
-              确定
+              {t("common.confirm")}
             </Button>
           </div>
         </form>

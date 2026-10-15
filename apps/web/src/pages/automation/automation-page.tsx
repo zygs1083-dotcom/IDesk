@@ -11,6 +11,7 @@ import type { z } from "zod";
 import { Button } from "../../components/button.tsx";
 import { Segmented } from "../../components/segmented.tsx";
 import { Toast } from "../../components/toast.tsx";
+import { useLang } from "../../i18n/lang.tsx";
 import { PageHeader } from "../../layout/page-header.tsx";
 import { request } from "../../lib/api.ts";
 import { relativeTime } from "../../lib/format.ts";
@@ -19,12 +20,8 @@ import { RunCard } from "./run-card.tsx";
 import { RunColumn } from "./run-column.tsx";
 
 type Run = z.infer<typeof automationRunWithJobSchema>;
-const columns = [
-  { id: "waiting", label: "待执行", color: "bg-status-open" },
-  { id: "running", label: "执行中", color: "bg-status-in-progress" },
-  { id: "completed", label: "已完成", color: "bg-status-done" },
-] as const;
-const runColumns: Record<Run["status"], (typeof columns)[number]["id"]> = {
+
+const runColumns: Record<Run["status"], "waiting" | "running" | "completed"> = {
   waiting: "waiting",
   running: "running",
   success: "completed",
@@ -32,6 +29,12 @@ const runColumns: Record<Run["status"], (typeof columns)[number]["id"]> = {
   canceled: "completed",
 };
 export function AutomationPage() {
+  const { lang, t } = useLang();
+  const columns = [
+    { id: "waiting", label: t("automation.waiting"), color: "bg-status-open" },
+    { id: "running", label: t("automation.running"), color: "bg-status-in-progress" },
+    { id: "completed", label: t("automation.done"), color: "bg-status-done" },
+  ] as const;
   const client = useQueryClient();
   const [selected, setSelected] = useState<string | null>(null);
   const [search, setSearch] = useState("");
@@ -58,7 +61,7 @@ export function AutomationPage() {
     mutationFn: (id: string) =>
       request<z.infer<typeof pollResultSchema>>(`/connectors/${id}/poll`, { method: "POST" }),
     onSuccess: (result) => {
-      if (!result.refreshed) setMessage("刚刚轮询过，稍后再试");
+      if (!result.refreshed) setMessage(t("automation.pollTooSoon"));
       else void client.invalidateQueries({ queryKey: ["automation"] });
     },
     onError: (error) => setMessage(error.message),
@@ -68,16 +71,18 @@ export function AutomationPage() {
   const now = Date.now();
   return (
     <div className="flex h-full min-h-0 flex-col gap-6">
-      <PageHeader title="自动化">
+      <PageHeader title={t("nav.automation")}>
         {connector && (
           <>
             <span className="text-secondary text-text-2">
               {connector.lastPolledAt === null
-                ? "尚未轮询"
-                : `上次轮询 ${relativeTime(new Date(connector.lastPolledAt))}`}
+                ? t("automation.notPolled")
+                : t("automation.lastPolled", {
+                    time: relativeTime(new Date(connector.lastPolledAt), lang),
+                  })}
             </span>
             <Button disabled={poll.isPending} onClick={() => poll.mutate(connector.id)}>
-              刷新
+              {t("common.refresh")}
             </Button>
           </>
         )}
@@ -89,12 +94,12 @@ export function AutomationPage() {
       )}
       {connectorsQuery.isSuccess && connectors.length === 0 && (
         <div className="py-16 text-center text-secondary text-text-2">
-          <p>还没有连接器</p>
+          <p>{t("settings.noConnectors")}</p>
           <Link
             to="/settings/connectors"
             className="mt-3 inline-flex rounded-control border border-line bg-surface px-3 py-2 text-body text-text hover:bg-surface-2 focus-visible:outline-2 focus-visible:outline-accent"
           >
-            添加连接器
+            {t("settings.addConnector")}
           </Link>
         </div>
       )}
@@ -103,7 +108,7 @@ export function AutomationPage() {
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div className="flex min-w-0 overflow-x-auto">
               <Segmented
-                label="连接器"
+                label={t("common.connectors")}
                 options={connectors.map((item) => ({ value: item.id, label: item.name }))}
                 value={connector.id}
                 onChange={setSelected}
@@ -112,8 +117,8 @@ export function AutomationPage() {
             <label className="flex min-w-0 flex-1 sidebar:max-w-60 items-center gap-2 rounded-control border border-line bg-surface px-3 py-2 text-text-2">
               <Search size={16} strokeWidth={1.5} />
               <input
-                aria-label="搜索工作流"
-                placeholder="搜索工作流"
+                aria-label={t("automation.search")}
+                placeholder={t("automation.search")}
                 value={search}
                 onChange={(event) => setSearch(event.target.value)}
                 className="min-w-0 w-full bg-transparent text-secondary text-text outline-none placeholder:text-text-3 focus-visible:outline-1 focus-visible:outline-accent"
@@ -127,7 +132,7 @@ export function AutomationPage() {
             </div>
           )}
           <section
-            aria-label="自动化看板"
+            aria-label={t("automation.board")}
             className="flex min-h-0 flex-1 gap-3 overflow-x-auto pb-3"
           >
             {columns.map((column) => {

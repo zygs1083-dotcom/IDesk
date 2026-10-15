@@ -13,3 +13,8 @@ test.each([":" as const, "=" as const])("entries round trip with %s", (separator
   const entries = { token: "a=b:c", empty: "" };
   expect(parseEntries(entriesText(entries, separator), separator)).toEqual(entries);
 });
+
+test("English header and parameter text remains user data", () => {
+  expect(entriesText({ Authorization: "Bearer key" }, ":")).toBe("Authorization: Bearer key");
+  expect(entriesText({ message: "Hello world" }, "=")).toBe("message= Hello world");
+});

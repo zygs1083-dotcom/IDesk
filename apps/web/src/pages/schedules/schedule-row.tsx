@@ -1,5 +1,6 @@
 import { Menu } from "../../components/menu.tsx";
 import { Switch } from "../../components/switch.tsx";
+import { useLang } from "../../i18n/lang.tsx";
 import { cn } from "../../lib/cn.ts";
 import { relativeTime } from "../../lib/format.ts";
 import { cronText } from "./cron-text.ts";
@@ -22,11 +23,12 @@ export function ScheduleRow({
   onEdit: () => void;
   onDelete: () => void;
 }) {
+  const { lang, t } = useLang();
   const action = schedule.action;
   let summary: string;
   switch (action.type) {
     case "publish_task":
-      summary = `发布『${action.template.title}』`;
+      summary = t("schedules.publish", { task: action.template.title });
       break;
     case "http": {
       const url = new URL(action.url);
@@ -34,12 +36,17 @@ export function ScheduleRow({
       break;
     }
     case "connector_trigger":
-      summary = `触发 ${connectors.find((connector) => connector.id === action.connectorId)?.name ?? action.connectorId} / ${action.jobExternalId}`;
+      summary = t("schedules.trigger", {
+        connector:
+          connectors.find((connector) => connector.id === action.connectorId)?.name ??
+          action.connectorId,
+        workflow: action.jobExternalId,
+      });
       break;
   }
   const next = schedule.enabled && schedule.nextRunAt ? new Date(schedule.nextRunAt) : null;
   const nextText = next
-    ? new Intl.DateTimeFormat("zh-CN", {
+    ? new Intl.DateTimeFormat(lang === "zh" ? "zh-CN" : "en", {
         timeZone: schedule.timezone,
         month: "2-digit",
         day: "2-digit",
@@ -61,7 +68,7 @@ export function ScheduleRow({
         className="whitespace-nowrap px-4 py-3 text-text-2"
         title={`${schedule.cron} · ${schedule.timezone}`}
       >
-        {cronText(schedule.cron)}
+        {cronText(schedule.cron, lang)}
       </td>
       <td className="px-4 py-3 text-text-2">
         <span className="block max-w-64 truncate" title={summary}>
@@ -72,14 +79,14 @@ export function ScheduleRow({
         <span className="flex items-center gap-2">
           {schedule.lastStatus && (
             <span
-              title={schedule.lastStatus === "success" ? "成功" : "失败"}
+              title={schedule.lastStatus === "success" ? t("common.success") : t("common.failed")}
               className={cn(
                 "size-2 shrink-0 rounded-full",
                 schedule.lastStatus === "success" ? "bg-status-done" : "bg-status-failed",
               )}
             />
           )}
-          {schedule.lastRunAt ? relativeTime(new Date(schedule.lastRunAt)) : "—"}
+          {schedule.lastRunAt ? relativeTime(new Date(schedule.lastRunAt), lang) : "—"}
         </span>
       </td>
       <td
@@ -90,7 +97,7 @@ export function ScheduleRow({
       </td>
       <td className="px-4 py-3">
         <Switch
-          label={`启用 ${schedule.name}`}
+          label={t("common.enableNamed", { name: schedule.name })}
           checked={schedule.enabled}
           disabled={busy}
           onChange={onToggle}
@@ -98,12 +105,12 @@ export function ScheduleRow({
       </td>
       <td className="px-2 py-2">
         <Menu
-          label={`${schedule.name} 操作`}
+          label={t("common.actionsFor", { name: schedule.name })}
           disabled={busy}
           items={[
-            { label: "立即运行", onSelect: onRun },
-            { label: "编辑", onSelect: onEdit },
-            { label: "删除", onSelect: onDelete, danger: true },
+            { label: t("schedules.runNow"), onSelect: onRun },
+            { label: t("common.edit"), onSelect: onEdit },
+            { label: t("common.delete"), onSelect: onDelete, danger: true },
           ]}
         />
       </td>

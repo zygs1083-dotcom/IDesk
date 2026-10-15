@@ -2,6 +2,7 @@ import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
 import { X } from "lucide-react";
 import { useState } from "react";
 import { useSearchParams } from "react-router";
+import { useLang } from "../../i18n/lang.tsx";
 import { request } from "../../lib/api.ts";
 import type { Task } from "../../lib/types.ts";
 import { useTasks } from "../../lib/use-tasks.ts";
@@ -14,6 +15,7 @@ export function TaskDependencies({
   task: Task;
   onError: (message: string) => void;
 }) {
+  const { t } = useLang();
   const client = useQueryClient();
   const { tasks } = useTasks();
   const [, setParams] = useSearchParams();
@@ -49,7 +51,7 @@ export function TaskDependencies({
     .slice(0, 8);
   return (
     <section className="space-y-3">
-      <h3 className="text-section">依赖</h3>
+      <h3 className="text-section">{t("desk.dependencies")}</h3>
       {queryError && (
         <p role="alert" className="text-secondary text-status-failed">
           {queryError.message}
@@ -76,7 +78,7 @@ export function TaskDependencies({
               </button>
               <button
                 type="button"
-                aria-label="移除依赖"
+                aria-label={t("desk.removeDependency")}
                 disabled={mutation.isPending}
                 className="rounded-control p-1 text-text-3 hover:text-text focus-visible:outline-accent disabled:opacity-50"
                 onClick={() => mutation.mutate(task.blockedBy.filter((item) => item !== id))}
@@ -93,12 +95,12 @@ export function TaskDependencies({
           className="text-accent text-secondary focus-visible:outline-accent"
           onClick={() => setSearch("")}
         >
-          添加依赖
+          {t("desk.addDependency")}
         </button>
       ) : (
         <div className="space-y-2">
           <input
-            aria-label="搜索依赖任务"
+            aria-label={t("desk.searchDependencies")}
             ref={(input) => input?.focus()}
             value={search}
             onChange={(event) => setSearch(event.target.value)}
@@ -109,7 +111,7 @@ export function TaskDependencies({
                 setSearch(null);
               }
             }}
-            placeholder="搜索任务标题"
+            placeholder={t("desk.searchTaskTitles")}
             className="w-full rounded-control border border-line bg-surface px-3 py-2 text-secondary placeholder:text-text-3 focus:outline-2 focus:outline-accent"
           />
           <ul className="space-y-1">

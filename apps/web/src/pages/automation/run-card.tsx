@@ -1,6 +1,7 @@
 import type { automationRunWithJobSchema } from "@idesk/shared/automation-schemas";
 import { ExternalLink } from "lucide-react";
 import type { z } from "zod";
+import { useLang } from "../../i18n/lang.tsx";
 import { cn } from "../../lib/cn.ts";
 import { relativeTime } from "../../lib/format.ts";
 import { duration } from "./duration.ts";
@@ -13,20 +14,22 @@ const statusColors: Record<Run["status"], string> = {
   failed: "bg-status-failed",
   canceled: "bg-status-open",
 };
-const statusLabels: Record<Run["status"], string> = {
-  waiting: "待执行",
-  running: "执行中",
-  success: "成功",
-  failed: "失败",
-  canceled: "已取消",
-};
+
 export function RunCard({ run, now }: { run: Run; now: number }) {
+  const { lang, t } = useLang();
+  const statusLabels: Record<Run["status"], string> = {
+    waiting: t("automation.waiting"),
+    running: t("automation.running"),
+    success: t("common.success"),
+    failed: t("common.failed"),
+    canceled: t("automation.cancelled"),
+  };
   const metadata = [
     run.trigger,
-    run.startedAt === null ? "—" : relativeTime(new Date(run.startedAt), new Date(now)),
+    run.startedAt === null ? "—" : relativeTime(new Date(run.startedAt), lang, new Date(now)),
     run.finishedAt === null && run.status !== "running"
       ? "—"
-      : duration(run.startedAt, run.finishedAt, now),
+      : duration(run.startedAt, run.finishedAt, now, lang),
   ].filter((value) => value !== null);
   return (
     <article className="rounded-card border border-line bg-surface p-3 transition-colors duration-hover ease-hover hover:bg-surface-2">
@@ -41,7 +44,7 @@ export function RunCard({ run, now }: { run: Run; now: number }) {
             href={run.url}
             target="_blank"
             rel="noreferrer"
-            aria-label={`打开 ${run.jobName}`}
+            aria-label={t("automation.openRun", { name: run.jobName })}
             className="shrink-0 rounded-control text-text-2 hover:text-text focus-visible:outline-2 focus-visible:outline-accent"
           >
             <ExternalLink size={16} strokeWidth={1.5} />

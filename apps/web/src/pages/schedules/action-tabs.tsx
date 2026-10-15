@@ -1,5 +1,6 @@
 import type { ScheduleAction } from "@idesk/shared/schedule-schemas";
 import { Segmented } from "../../components/segmented.tsx";
+import { useLang } from "../../i18n/lang.tsx";
 import type { Connector } from "./types.ts";
 
 export function ActionTabs({
@@ -11,15 +12,17 @@ export function ActionTabs({
   onChange: (action: ScheduleAction) => void;
   connectors: Connector[];
 }) {
+  const { t } = useLang();
   const firstTrigger = connectors[0];
   const options: { value: ScheduleAction["type"]; label: string }[] = [
-    { value: "publish_task", label: "发布任务" },
-    { value: "http", label: "HTTP 请求" },
+    { value: "publish_task", label: t("common.publishTask") },
+    { value: "http", label: t("schedules.httpRequest") },
   ];
-  if (firstTrigger) options.push({ value: "connector_trigger", label: "触发连接器" });
+  if (firstTrigger)
+    options.push({ value: "connector_trigger", label: t("schedules.triggerConnector") });
   return (
     <Segmented
-      label="动作"
+      label={t("common.action")}
       options={options}
       value={action.type}
       onChange={(type) => {

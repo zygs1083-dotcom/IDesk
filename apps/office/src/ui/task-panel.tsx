@@ -1,4 +1,5 @@
-import { TASK_PRIORITY_LABEL, TASK_STATUS_LABEL } from "@idesk/shared/task-status";
+import { labels } from "@idesk/shared/labels";
+
 import { PixelButton } from "./pixel-button.tsx";
 import { PixelPanel } from "./pixel-panel.tsx";
 import type { Agent, Task } from "./use-office-data.ts";
@@ -20,9 +21,9 @@ export function TaskPanel({
         <dt>能力</dt>
         <dd>{task.capabilities.join(" · ") || "暂无"}</dd>
         <dt>优先级</dt>
-        <dd>{TASK_PRIORITY_LABEL[task.priority]}</dd>
+        <dd>{labels("zh").priority[task.priority]}</dd>
         <dt>状态</dt>
-        <dd>{TASK_STATUS_LABEL[task.status]}</dd>
+        <dd>{labels("zh").status[task.status]}</dd>
         <dt>负责人</dt>
         <dd>{assignee?.name || "未分配"}</dd>
       </dl>

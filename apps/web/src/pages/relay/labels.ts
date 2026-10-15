@@ -1,15 +1,19 @@
+import type { Lang } from "@idesk/shared/labels";
 import type { RelayRecipient } from "@idesk/shared/relay";
+import { translator } from "../../i18n/translate.ts";
 
 export function recipientLabel(
   to: RelayRecipient,
   agentName: (id: string | null) => string,
+  lang: Lang,
 ): string {
+  const t = translator(lang);
   switch (to.kind) {
     case "agent":
       return agentName(to.id);
     case "capability":
-      return `能力：${to.value}`;
+      return t("relay.capability", { capability: to.value });
     case "broadcast":
-      return "全体";
+      return t("common.everyone");
   }
 }

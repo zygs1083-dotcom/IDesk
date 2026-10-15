@@ -50,6 +50,7 @@ test.each(cases)("$type renders $text", ({ type, payload, text }) => {
     eventText(
       { id: "event", ts: "2026-10-15T00:00:00Z", type, payload, taskId: null, agentId: null },
       agentName,
+      "zh",
     ),
   ).toBe(text);
 });
@@ -66,6 +67,41 @@ test("expired leases do not attribute the action to a human", () => {
         agentId: null,
       },
       agentName,
+      "zh",
     ),
   ).not.toContain("人");
+});
+
+test.each([
+  ["task.created", {}, "Human published"],
+  ["task.claim", {}, "Human claimed"],
+  ["task.reported", { message: "Ready" }, "Human reported: Ready"],
+  ["task.dependencies", {}, "Human updated dependencies"],
+  ["relay.sent", { to: { kind: "broadcast" } }, "Human sent a message to Everyone"],
+  ["connector.polled", { name: "GitHub", changed: 3 }, "Synced GitHub, 3 changes"],
+  ["connector.polled", { changed: 0 }, "Synced a connector, 0 changes"],
+  ["agent.registered", { name: "Codex" }, "Created agent Codex"],
+  ["agent.updated", { name: "Codex" }, "Updated agent Codex"],
+  ["agent.deleted", { name: "Codex" }, "Deleted agent Codex"],
+  ["schedule.fired", { status: "success" }, "Schedule ran"],
+  ["schedule.fired", { name: "Daily", status: "success" }, "Schedule “Daily” ran"],
+  ["schedule.fired", { status: "failed", error: "HTTP 500" }, "Schedule failed: HTTP 500"],
+  [
+    "schedule.fired",
+    { name: "Daily", status: "failed", error: "HTTP 500" },
+    "Schedule “Daily” failed: HTTP 500",
+  ],
+  ["webhook.failed", { agentId: "Codex", error: "HTTP 500" }, "Webhook to Codex failed: HTTP 500"],
+  ["chat.failed", { error: "HTTP 500" }, "Chat notification failed: HTTP 500"],
+  ["archive.events", { count: 12 }, "Archived 12 events"],
+  ["task.lease_expired", {}, "Lease expired, released"],
+  ["metrics.fresh", {}, "metrics plugin: fresh"],
+] satisfies [string, Event["payload"], string][])("English %s", (type, payload, expected) => {
+  expect(
+    eventText(
+      { id: "e", ts: "2026-10-15T00:00:00Z", type, payload, taskId: null, agentId: null },
+      (id) => id ?? "Human",
+      "en",
+    ),
+  ).toBe(expected);
 });
