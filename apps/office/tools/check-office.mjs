@@ -54,6 +54,7 @@ groups.push(
   },
   { id: "entrance", ids: ["entrance", "entrance-mat"] },
   { id: "printer", ids: ["printer"] },
+  { id: "bookshelf", ids: ["bookshelf"] },
   {
     id: "north-wall",
     ids: layout.objects.filter((o) => catalog.items[o.item].layer === "wall").map((o) => o.id),

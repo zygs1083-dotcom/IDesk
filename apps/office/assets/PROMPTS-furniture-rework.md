@@ -44,3 +44,7 @@ Precise edit target: the supplied table sprite. KEEP all legs, horizontal apron,
 | cabinet.png | 1513×1039 |
 | coffee-table.png | 1942×809 |
 | doormat.png | 1448×1086 |
+
+## 书架切框修正
+
+沿用 W64 原图，无新生成：原格 x1086/y0/w362/h362 混入左侧相邻柜台的碎片。将 box 收到书架主体 x1166/y51/w228/h311，按主体比例最近邻输出64×87（228/311≈64/87），dx=0、dy=-55，让主体在64px占地中居中并保留触地线。只改清单，不增加永久清理规则。

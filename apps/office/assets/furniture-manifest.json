@@ -91,13 +91,13 @@
       "name": "bookshelf",
       "source": "assets/raw/furniture/office-sheet-corrected.png",
       "box": {
-        "x": 1086,
-        "y": 0,
-        "w": 362,
-        "h": 362
+        "x": 1166,
+        "y": 51,
+        "w": 228,
+        "h": 311
       },
       "w": 64,
-      "h": 88,
+      "h": 87,
       "materials": [
         {
           "name": "outline",
@@ -894,7 +894,7 @@
         {
           "frame": "bookshelf",
           "dx": 0,
-          "dy": -56,
+          "dy": -55,
           "sortY": 32,
           "bias": 0
         }
