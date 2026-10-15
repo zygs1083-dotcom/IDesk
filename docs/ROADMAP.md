@@ -117,4 +117,7 @@
 - **W68 切换到新引擎并删除第一版**：Cast、动作、空闲行为、卡片、名牌、昼夜、气泡、礼仪接到 `world/`；去处和座位全部来自布局命名点与椅子。删除四分之三坐姿帧、礼仪 `upright` 帧和 `PROMPTS-seated.md` 对应部分、`background.webp`、`raw/background.png`、`scene.json`、`seat-covers.ts`、`zone-sign.ts`（重写为 plaque 文字）、`desk-point.ts`、`scene/path.ts`、第一版 `editor.ts`、`?world=1` 临时入口、API 的 `/office/scene.json`。验收：§6 每个事件的动作截图或 GIF、空闲行为 60 秒 GIF、坐满截图逐个看脚和手。
 - **W69 编辑器第二版**：OFFICE.md §10。家具目录面板、放置/拖动/旋转/删除、刷地面、框选生成工作区、导出 JSON、`PUT /api/v1/office/layout`（管理员，schema 校验，写数据目录）。API 测试：非管理员 403、非法布局 400、保存后 `/office/layout.json` 返回新内容。
 
+- **W70 首屏体积**：tiles、furniture、sprites 三张图改写为 8 位索引色 PNG（调色板 + 透明索引），三个出图脚本共用一个写 PNG 的函数；解码后 RGBA 与旧图逐像素相同；PR 列出前后字节数和首屏总传输量（gzip 后）。不动运行时代码。
+- 并行：W68 合并后，W69a（layout/catalog schema 搬到 packages/shared）先合；W69b（PUT 接口）、W69c（编辑器 UI）、W70 同时跑。全量测试一律 `flock /tmp/idesk-test.lock pnpm test`，独立 Chromium 一律 `flock /tmp/idesk-browser.lock`。
+
 派发约束：W64 与 W65 并行（W64 只动 `assets/`、`tools/`、`public/` 的新文件，W65 只动 `src/world/`、API 路由）；W66、W67 都改图集，各自用独立图集文件（`furniture.*` 与 `sprites.*`），可以并行；W68 等 W66、W67 都合并；W69 最后。每个 PR 都附 `check-office` 截图。
