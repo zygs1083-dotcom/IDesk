@@ -14,7 +14,7 @@ export function useAgents() {
   const names = new Map(agents.map((agent) => [agent.id, `${agent.name}@${agent.host}`]));
   function agentName(id: string | null): string {
     if (id === null || id === "human") return "人";
-    return names.get(id) ?? id.slice(0, 8);
+    return names.get(id) ?? "已删除的智能体";
   }
   return { agents, agentName, error, isPending };
 }

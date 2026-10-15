@@ -35,13 +35,7 @@ export default {
     const name = (id: string): string =>
       id === "human"
         ? "human"
-        : (
-            ctx.db
-              .select()
-              .from(agents)
-              .where(eq(agents.id, id))
-              .get() as typeof agents.$inferSelect
-          ).name;
+        : (ctx.db.select().from(agents).where(eq(agents.id, id)).get()?.name ?? id);
     ctx.events.on("task.complete", (event) => {
       const task = ctx.db
         .select()

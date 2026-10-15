@@ -2,7 +2,7 @@ import { createServer, type IncomingHttpHeaders } from "node:http";
 import { setTimeout as wait } from "node:timers/promises";
 import { eq } from "drizzle-orm";
 import { afterAll, afterEach, beforeEach, expect, test, vi } from "vitest";
-import { registerAgent } from "../core/agents/agents.ts";
+import { deleteAgent, registerAgent } from "../core/agents/agents.ts";
 import { emitEvent } from "../core/events/bus.ts";
 import { createTask } from "../core/tasks/store.ts";
 import { actOnTask } from "../core/tasks/transition.ts";
@@ -150,7 +150,6 @@ test("HTTP failure emits chat.failed once without retry or recursive notificatio
   await wait(100);
   expect(requests).toHaveLength(1);
 });
-
 test("network errors become chat.failed", async () => {
   await configure({ events: "network.test" });
   server.closeAllConnections();
@@ -183,4 +182,19 @@ test("fresh database defaults off and missing URL is an error recoverable by con
   );
   createTask({ title: "恢复" }, "human");
   await received(1);
+});
+test("completion event uses deleted assignee id", async () => {
+  await configure({ events: "task.complete" });
+  const { agent } = registerAgent({ name: "Gone", kind: "codex", host: "test", capabilities: [] });
+  const task = createTask({ title: "保留任务" }, agent.id);
+  const actor = { kind: "agent" as const, id: agent.id, capabilities: [] };
+  actOnTask(task.id, { type: "claim" }, actor);
+  deleteAgent(agent.id);
+  expect(actOnTask(task.id, { type: "complete", result: "done" }, actor)).toMatchObject({
+    status: "done",
+  });
+  await received(1);
+  expect(requests[0]?.body).toEqual({
+    text: `${agent.id} 完成了 保留任务\nhttps://desk.example/desk?task=${task.id}`,
+  });
 });

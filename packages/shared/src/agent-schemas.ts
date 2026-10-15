@@ -8,6 +8,12 @@ export const registerAgentSchema = z.object({
   capabilities: z.array(z.string()),
   webhookUrl: z.url().exactOptional(),
 });
+export const patchAgentSchema = z.object({
+  name: registerAgentSchema.shape.name.exactOptional(),
+  host: registerAgentSchema.shape.host.exactOptional(),
+  capabilities: registerAgentSchema.shape.capabilities.exactOptional(),
+  webhookUrl: z.url().nullable().exactOptional(),
+});
 export const loginSchema = z.object({ password: z.string() });
 export const authMeSchema = z.object({ role: z.enum(["admin", "viewer"]) });
 export const publicAgentSchema = z
