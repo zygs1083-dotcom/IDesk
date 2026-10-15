@@ -3,6 +3,7 @@ import rawCatalog from "../../public/catalog.json";
 import rawLayout from "../../public/layout.json";
 import { catalogSchema, type Furniture } from "./catalog.ts";
 import { parseLayout } from "./layout.ts";
+import { findPath } from "./path.ts";
 
 const catalog = catalogSchema.parse(rawCatalog);
 const layout = parseLayout(rawLayout, catalog);
@@ -44,4 +45,33 @@ test.each(["printer", "coffee-machine"])("%s is drawn above its cabinet", (id) =
   expect(appliance?.dy).toBeLessThan(cabinet?.dy as number);
   expect(appliance?.sortY).toBe(cabinet?.sortY);
   expect(appliance?.bias).toBeGreaterThan(cabinet?.bias as number);
+});
+
+test("wall furniture footprints never overlap", () => {
+  const wall = layout.objects.filter((object) => catalog.items[object.item]?.layer === "wall");
+  for (const [i, object] of wall.entries()) {
+    const a = (catalog.items[object.item] as Furniture).footprint;
+    for (const other of wall.slice(i + 1)) {
+      const b = (catalog.items[other.item] as Furniture).footprint;
+      expect(
+        object.x >= other.x + b.w ||
+          other.x >= object.x + a.w ||
+          object.y >= other.y + b.h ||
+          other.y >= object.y + a.h,
+        `${object.id} / ${other.id}`,
+      ).toBe(true);
+    }
+  }
+});
+test("arrival route to the counter stays outside all carpets", () => {
+  const counter = rawLayout.objects.find((object) => object.item === "counter");
+  expect(counter).toBeDefined();
+  if (!counter) return;
+  const path = findPath(layout, catalog, rawLayout.points.door, {
+    x: counter.x + 1,
+    y: counter.y + 1,
+  });
+  expect(path.length).toBeGreaterThan(0);
+  for (const point of path)
+    expect(layout.ground[Math.floor(point.y / 32)]?.[Math.floor(point.x / 32)]).not.toBe("c");
 });

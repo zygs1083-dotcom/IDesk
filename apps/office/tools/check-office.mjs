@@ -54,6 +54,10 @@ groups.push(
   },
   { id: "entrance", ids: ["entrance", "entrance-mat"] },
   { id: "printer", ids: ["printer"] },
+  {
+    id: "north-wall",
+    ids: layout.objects.filter((o) => catalog.items[o.item].layer === "wall").map((o) => o.id),
+  },
 );
 for (const group of groups) {
   const objects = layout.objects.filter((object) => group.ids.includes(object.id));
