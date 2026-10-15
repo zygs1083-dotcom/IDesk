@@ -1,0 +1,91 @@
+$ pnpm -r --workspace-concurrency=1 test
+Scope: 14 of 15 workspace projects
+$ vitest run --passWithNoTests
+
+ RUN  v5.0.4 /data/browser-home/orca/workspaces/IDesk/wi-71-office-font-slices/packages/shared
+
+
+ Test Files  5 passed (5)
+      Tests  161 passed (161)
+   Start at  00:07:34
+   Duration  834ms (transform 57%, import 30%, tests 9%, worker 4%)
+
+$ vitest run
+
+ RUN  v5.0.4 /data/browser-home/orca/workspaces/IDesk/wi-71-office-font-slices/plugins/dolphinscheduler
+
+
+ Test Files  5 passed (5)
+      Tests  48 passed (48)
+   Start at  00:07:36
+   Duration  714ms (import 45%, transform 31%, tests 22%, worker 3%)
+
+$ vitest run
+
+ RUN  v5.0.4 /data/browser-home/orca/workspaces/IDesk/wi-71-office-font-slices/plugins/github-actions
+
+
+ Test Files  1 passed (1)
+      Tests  30 passed (30)
+   Start at  00:07:37
+   Duration  539ms (import 45%, transform 26%, tests 26%, worker 4%)
+
+$ vitest run
+
+ RUN  v5.0.4 /data/browser-home/orca/workspaces/IDesk/wi-71-office-font-slices/plugins/n8n
+
+
+ Test Files  1 passed (1)
+      Tests  13 passed (13)
+   Start at  00:07:39
+   Duration  515ms (import 45%, transform 27%, tests 26%, worker 3%)
+
+$ vitest run --passWithNoTests
+
+ RUN  v5.0.4 /data/browser-home/orca/workspaces/IDesk/wi-71-office-font-slices/apps/api
+
+
+ Test Files  38 passed (38)
+      Tests  133 passed (133)
+   Start at  00:07:40
+   Duration  92.74s (import 73%, tests 23%, transform 3%, worker 1%)
+
+     Import  132 modules were evaluated 617 times · 59.66s total, 73% of tracked time
+             ~46.90s faster with isolate: false — shared modules are evaluated once per worker instead of once per file
+             learn more: https://vitest.dev/guide/improving-performance#test-isolation
+
+$ vitest run
+
+ RUN  v5.0.4 /data/browser-home/orca/workspaces/IDesk/wi-71-office-font-slices/apps/office
+
+
+ Test Files  35 passed (35)
+      Tests  395 passed (395)
+   Start at  00:09:13
+   Duration  7.30s (import 41%, tests 39%, transform 19%, worker 2%)
+
+    Isolate  35 workers spawned · ~460ms startup each (spawn + environment, per file)
+             at least ~1.84s faster with isolate: false — reuses workers across files instead of one per file
+
+$ vitest run --passWithNoTests
+
+ RUN  v5.0.4 /data/browser-home/orca/workspaces/IDesk/wi-71-office-font-slices/apps/web
+
+
+ Test Files  15 passed (15)
+      Tests  179 passed (179)
+   Start at  00:09:22
+   Duration  1.63s (transform 63%, import 17%, tests 14%, worker 6%)
+
+    Isolate  15 workers spawned · ~383ms startup each (spawn + environment, per file)
+             at least ~437ms faster with isolate: false — reuses workers across files instead of one per file
+
+$ vitest run --passWithNoTests
+
+ RUN  v5.0.4 /data/browser-home/orca/workspaces/IDesk/wi-71-office-font-slices/packages/cli
+
+No test files found, exiting with code 0
+
+include: **/*.{test,spec}.?(c|m)[jt]s?(x)
+exclude:  **/node_modules/**, **/.git/**
+

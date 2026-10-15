@@ -1,0 +1,378 @@
+[
+  {
+    "check": false,
+    "resources": [
+      {
+        "url": "http://127.0.0.1:3373/office/",
+        "encoded": 691,
+        "decoded": 691,
+        "transfer": 991,
+        "raw": 691,
+        "gzip": 367,
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:3373/office/assets/index-DD0r5dhT.js",
+        "encoded": 120137,
+        "decoded": 414318,
+        "transfer": 120437,
+        "raw": 414318,
+        "gzip": 120137,
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:3373/office/assets/rolldown-runtime-hePW80VL.js",
+        "encoded": 716,
+        "decoded": 716,
+        "transfer": 1016,
+        "raw": 716,
+        "gzip": 428,
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:3373/office/assets/pixi-C9L3k2hE.js",
+        "encoded": 120815,
+        "decoded": 402279,
+        "transfer": 121115,
+        "raw": 402279,
+        "gzip": 120815,
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:3373/office/assets/pixi-rendering-BEYyjlnX.js",
+        "encoded": 48885,
+        "decoded": 183370,
+        "transfer": 49185,
+        "raw": 183370,
+        "gzip": 48885,
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:3373/office/assets/index-BJjeBaro.css",
+        "encoded": 23592,
+        "decoded": 76841,
+        "transfer": 23892,
+        "raw": 76841,
+        "gzip": 23592,
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:3373/office/sprites.png?v=mv9qjr2y",
+        "encoded": 459751,
+        "decoded": 459751,
+        "transfer": 460051,
+        "raw": 459751,
+        "gzip": 398173,
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:3373/office/fonts/fusion-pixel-ascii.woff2?v=5b8bf6c23349",
+        "encoded": 3784,
+        "decoded": 3784,
+        "transfer": 4084,
+        "raw": 3784,
+        "gzip": 3786,
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:3373/office/fonts/fusion-pixel-dictionary.woff2?v=f2cde8cd3f5d",
+        "encoded": 8840,
+        "decoded": 8840,
+        "transfer": 9140,
+        "raw": 8840,
+        "gzip": 8863,
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:3373/api/v1/auth/me",
+        "encoded": 36,
+        "decoded": 16,
+        "transfer": 336,
+        "raw": 16,
+        "gzip": 36,
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:3373/api/v1/agents",
+        "encoded": 22,
+        "decoded": 2,
+        "transfer": 322,
+        "raw": 2,
+        "gzip": 22,
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:3373/api/v1/tasks",
+        "encoded": 22,
+        "decoded": 2,
+        "transfer": 322,
+        "raw": 2,
+        "gzip": 22,
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:3373/office/catalog.json",
+        "encoded": 9621,
+        "decoded": 9621,
+        "transfer": 9921,
+        "raw": 9621,
+        "gzip": 891,
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:3373/office/layout.json",
+        "encoded": 12196,
+        "decoded": 12196,
+        "transfer": 12496,
+        "raw": 12196,
+        "gzip": 1506,
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:3373/api/meta",
+        "encoded": 34,
+        "decoded": 34,
+        "transfer": 334,
+        "raw": 34,
+        "gzip": 54,
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:3373/office/tiles.json?v=mv9qjr2y",
+        "encoded": 832,
+        "decoded": 832,
+        "transfer": 1132,
+        "raw": 832,
+        "gzip": 221,
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:3373/office/furniture.json?v=mv9qjr2y",
+        "encoded": 3958,
+        "decoded": 3958,
+        "transfer": 4258,
+        "raw": 3958,
+        "gzip": 573,
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:3373/office/sprites.json?v=mv9qjr2y",
+        "encoded": 2002,
+        "decoded": 56605,
+        "transfer": 2302,
+        "raw": 56605,
+        "gzip": 2002,
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:3373/office/tiles.png?v=mv9qjr2y",
+        "encoded": 1681,
+        "decoded": 1681,
+        "transfer": 1981,
+        "raw": 1681,
+        "gzip": 1273,
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:3373/office/furniture.png?v=mv9qjr2y",
+        "encoded": 21317,
+        "decoded": 21317,
+        "transfer": 21617,
+        "raw": 21317,
+        "gzip": 18448,
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:3373/api/v1/events",
+        "encoded": 22,
+        "decoded": 2,
+        "transfer": 322,
+        "raw": 2,
+        "gzip": 22,
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:3373/api/v1/agents",
+        "encoded": 22,
+        "decoded": 2,
+        "transfer": 322,
+        "raw": 2,
+        "gzip": 22,
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:3373/api/v1/tasks",
+        "encoded": 22,
+        "decoded": 2,
+        "transfer": 322,
+        "raw": 2,
+        "gzip": 22,
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:3373/api/v1/events?since=",
+        "encoded": 22,
+        "decoded": 2,
+        "transfer": 322,
+        "raw": 2,
+        "gzip": 22,
+        "status": 200
+      }
+    ],
+    "raw": 1656862,
+    "gzip": 750182,
+    "encoded": 839020
+  },
+  {
+    "check": true,
+    "resources": [
+      {
+        "url": "http://127.0.0.1:3373/office/?check=1",
+        "encoded": 691,
+        "decoded": 691,
+        "transfer": 991,
+        "raw": 691,
+        "gzip": 367,
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:3373/office/assets/index-DD0r5dhT.js",
+        "encoded": 120137,
+        "decoded": 414318,
+        "transfer": 120437,
+        "raw": 414318,
+        "gzip": 120137,
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:3373/office/assets/rolldown-runtime-hePW80VL.js",
+        "encoded": 716,
+        "decoded": 716,
+        "transfer": 1016,
+        "raw": 716,
+        "gzip": 428,
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:3373/office/assets/pixi-rendering-BEYyjlnX.js",
+        "encoded": 48885,
+        "decoded": 183370,
+        "transfer": 49185,
+        "raw": 183370,
+        "gzip": 48885,
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:3373/office/assets/pixi-C9L3k2hE.js",
+        "encoded": 120815,
+        "decoded": 402279,
+        "transfer": 121115,
+        "raw": 402279,
+        "gzip": 120815,
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:3373/office/assets/index-BJjeBaro.css",
+        "encoded": 23592,
+        "decoded": 76841,
+        "transfer": 23892,
+        "raw": 76841,
+        "gzip": 23592,
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:3373/office/sprites.png?v=mv9qjr2y",
+        "encoded": 459751,
+        "decoded": 459751,
+        "transfer": 460051,
+        "raw": 459751,
+        "gzip": 398173,
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:3373/office/catalog.json",
+        "encoded": 9621,
+        "decoded": 9621,
+        "transfer": 9921,
+        "raw": 9621,
+        "gzip": 891,
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:3373/office/layout.json",
+        "encoded": 12196,
+        "decoded": 12196,
+        "transfer": 12496,
+        "raw": 12196,
+        "gzip": 1506,
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:3373/office/tiles.json?v=mv9qjr2y",
+        "encoded": 832,
+        "decoded": 832,
+        "transfer": 1132,
+        "raw": 832,
+        "gzip": 221,
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:3373/office/furniture.json?v=mv9qjr2y",
+        "encoded": 3958,
+        "decoded": 3958,
+        "transfer": 4258,
+        "raw": 3958,
+        "gzip": 573,
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:3373/office/sprites.json?v=mv9qjr2y",
+        "encoded": 2002,
+        "decoded": 56605,
+        "transfer": 2302,
+        "raw": 56605,
+        "gzip": 2002,
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:3373/office/tiles.png?v=mv9qjr2y",
+        "encoded": 1681,
+        "decoded": 1681,
+        "transfer": 1981,
+        "raw": 1681,
+        "gzip": 1273,
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:3373/office/furniture.png?v=mv9qjr2y",
+        "encoded": 21317,
+        "decoded": 21317,
+        "transfer": 21617,
+        "raw": 21317,
+        "gzip": 18448,
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:3373/office/fonts/fusion-pixel-ascii.woff2?v=5b8bf6c23349",
+        "encoded": 3784,
+        "decoded": 3784,
+        "transfer": 4084,
+        "raw": 3784,
+        "gzip": 3786,
+        "status": 200
+      },
+      {
+        "url": "http://127.0.0.1:3373/office/fonts/fusion-pixel-dictionary.woff2?v=f2cde8cd3f5d",
+        "encoded": 8840,
+        "decoded": 8840,
+        "transfer": 9140,
+        "raw": 8840,
+        "gzip": 8863,
+        "status": 200
+      }
+    ],
+    "raw": 1656800,
+    "gzip": 749960,
+    "encoded": 838818
+  }
+]
