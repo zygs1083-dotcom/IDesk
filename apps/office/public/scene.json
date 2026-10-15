@@ -7,9 +7,15 @@
   "frontDesk": {
     "human": {
       "x": 165,
-      "y": 611,
+      "y": 630,
       "via": "reception",
-      "facing": "right"
+      "facing": "down",
+      "cover": {
+        "x": 130,
+        "y": 622,
+        "width": 72,
+        "height": 22
+      }
     }
   },
   "taskBoard": {
@@ -32,9 +38,9 @@
           "facing": "down",
           "cover": {
             "x": 509,
-            "y": 265,
+            "y": 275,
             "width": 68,
-            "height": 44
+            "height": 22
           }
         },
         {
@@ -44,10 +50,11 @@
           "facing": "down",
           "cover": {
             "x": 690,
-            "y": 265,
+            "y": 275,
             "width": 68,
-            "height": 44
-          }
+            "height": 22
+          },
+          "mirror": true
         },
         {
           "x": 561,
@@ -56,9 +63,9 @@
           "facing": "up",
           "cover": {
             "x": 536,
-            "y": 353,
+            "y": 359,
             "width": 50,
-            "height": 34
+            "height": 20
           }
         },
         {
@@ -68,10 +75,11 @@
           "facing": "up",
           "cover": {
             "x": 670,
-            "y": 353,
+            "y": 359,
             "width": 50,
-            "height": 34
-          }
+            "height": 20
+          },
+          "mirror": true
         }
       ]
     },
@@ -88,9 +96,9 @@
           "facing": "down",
           "cover": {
             "x": 875,
-            "y": 265,
+            "y": 275,
             "width": 68,
-            "height": 44
+            "height": 22
           }
         },
         {
@@ -100,10 +108,11 @@
           "facing": "down",
           "cover": {
             "x": 1055,
-            "y": 265,
+            "y": 275,
             "width": 68,
-            "height": 44
-          }
+            "height": 22
+          },
+          "mirror": true
         },
         {
           "x": 925,
@@ -112,9 +121,9 @@
           "facing": "up",
           "cover": {
             "x": 900,
-            "y": 353,
+            "y": 359,
             "width": 50,
-            "height": 34
+            "height": 20
           }
         },
         {
@@ -124,10 +133,11 @@
           "facing": "up",
           "cover": {
             "x": 1034,
-            "y": 353,
+            "y": 359,
             "width": 50,
-            "height": 34
-          }
+            "height": 20
+          },
+          "mirror": true
         }
       ]
     },
@@ -144,9 +154,9 @@
           "facing": "down",
           "cover": {
             "x": 494,
-            "y": 575,
+            "y": 585,
             "width": 68,
-            "height": 44
+            "height": 22
           }
         },
         {
@@ -156,10 +166,11 @@
           "facing": "down",
           "cover": {
             "x": 682,
-            "y": 575,
+            "y": 585,
             "width": 68,
-            "height": 44
-          }
+            "height": 22
+          },
+          "mirror": true
         },
         {
           "x": 548,
@@ -168,9 +179,9 @@
           "facing": "up",
           "cover": {
             "x": 523,
-            "y": 666,
+            "y": 672,
             "width": 50,
-            "height": 34
+            "height": 20
           }
         },
         {
@@ -180,10 +191,11 @@
           "facing": "up",
           "cover": {
             "x": 659,
-            "y": 666,
+            "y": 672,
             "width": 50,
-            "height": 34
-          }
+            "height": 20
+          },
+          "mirror": true
         }
       ]
     },
@@ -200,9 +212,9 @@
           "facing": "down",
           "cover": {
             "x": 865,
-            "y": 575,
+            "y": 585,
             "width": 68,
-            "height": 44
+            "height": 22
           }
         },
         {
@@ -212,10 +224,11 @@
           "facing": "down",
           "cover": {
             "x": 1053,
-            "y": 575,
+            "y": 585,
             "width": 68,
-            "height": 44
-          }
+            "height": 22
+          },
+          "mirror": true
         },
         {
           "x": 918,
@@ -224,9 +237,9 @@
           "facing": "up",
           "cover": {
             "x": 893,
-            "y": 666,
+            "y": 672,
             "width": 50,
-            "height": 34
+            "height": 20
           }
         },
         {
@@ -236,10 +249,11 @@
           "facing": "up",
           "cover": {
             "x": 1029,
-            "y": 666,
+            "y": 672,
             "width": 50,
-            "height": 34
-          }
+            "height": 20
+          },
+          "mirror": true
         }
       ]
     }
