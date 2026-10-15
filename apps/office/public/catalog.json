@@ -71,7 +71,7 @@
         {
           "frame": "bookshelf",
           "dx": 0,
-          "dy": -56,
+          "dy": -55,
           "sortY": 32,
           "bias": 0
         }
@@ -146,21 +146,21 @@
         {
           "frame": "chair-left-behind",
           "dx": 0,
-          "dy": -8,
-          "sortY": 24,
+          "dy": -18,
+          "sortY": 20,
           "bias": 0
         },
         {
           "frame": "chair-left-front",
           "dx": 0,
-          "dy": -8,
-          "sortY": 32,
+          "dy": -18,
+          "sortY": 28,
           "bias": 0
         }
       ],
       "seat": {
-        "x": 16,
-        "y": 30,
+        "x": 10,
+        "y": 26,
         "facing": "left"
       }
     },
@@ -175,21 +175,21 @@
         {
           "frame": "chair-right-behind",
           "dx": 0,
-          "dy": -8,
-          "sortY": 24,
+          "dy": -18,
+          "sortY": 20,
           "bias": 0
         },
         {
           "frame": "chair-right-front",
           "dx": 0,
-          "dy": -8,
-          "sortY": 32,
+          "dy": -18,
+          "sortY": 28,
           "bias": 0
         }
       ],
       "seat": {
-        "x": 16,
-        "y": 30,
+        "x": 22,
+        "y": 26,
         "facing": "right"
       }
     },
@@ -232,6 +232,320 @@
         "w": 50,
         "h": 12
       }
+    },
+    "meeting-table": {
+      "footprint": {
+        "w": 6,
+        "h": 2
+      },
+      "blocks": true,
+      "layer": "object",
+      "parts": [
+        {
+          "frame": "meeting-table",
+          "dx": 0,
+          "dy": -34,
+          "sortY": 64,
+          "bias": 0
+        }
+      ],
+      "workSpot": {
+        "x": 96,
+        "y": 0
+      }
+    },
+    "glass-wall": {
+      "footprint": {
+        "w": 1,
+        "h": 1
+      },
+      "blocks": true,
+      "layer": "object",
+      "parts": [
+        {
+          "frame": "glass-wall",
+          "dx": 0,
+          "dy": -32,
+          "sortY": 32,
+          "bias": 0
+        }
+      ]
+    },
+    "glass-wall-v": {
+      "footprint": {
+        "w": 1,
+        "h": 1
+      },
+      "blocks": true,
+      "layer": "object",
+      "parts": [
+        {
+          "frame": "glass-wall-v",
+          "dx": 0,
+          "dy": -32,
+          "sortY": 32,
+          "bias": 0
+        }
+      ]
+    },
+    "sofa": {
+      "footprint": {
+        "w": 3,
+        "h": 1
+      },
+      "blocks": true,
+      "layer": "object",
+      "parts": [
+        {
+          "frame": "sofa-behind",
+          "dx": 0,
+          "dy": -24,
+          "sortY": 24,
+          "bias": 0
+        },
+        {
+          "frame": "sofa-front",
+          "dx": 0,
+          "dy": -24,
+          "sortY": 32,
+          "bias": 0
+        }
+      ],
+      "seat": {
+        "x": 48,
+        "y": 30,
+        "facing": "down"
+      }
+    },
+    "coffee-machine": {
+      "footprint": {
+        "w": 2,
+        "h": 1
+      },
+      "blocks": true,
+      "layer": "object",
+      "parts": [
+        {
+          "frame": "cabinet",
+          "dx": 0,
+          "dy": -12,
+          "sortY": 32,
+          "bias": 0
+        },
+        {
+          "frame": "coffee-machine",
+          "dx": 16,
+          "dy": -49,
+          "sortY": 32,
+          "bias": 1
+        }
+      ]
+    },
+    "printer": {
+      "footprint": {
+        "w": 2,
+        "h": 1
+      },
+      "blocks": true,
+      "layer": "object",
+      "parts": [
+        {
+          "frame": "cabinet",
+          "dx": 0,
+          "dy": -12,
+          "sortY": 32,
+          "bias": 0
+        },
+        {
+          "frame": "printer",
+          "dx": 0,
+          "dy": -49,
+          "sortY": 32,
+          "bias": 1
+        }
+      ]
+    },
+    "plant-tall": {
+      "footprint": {
+        "w": 1,
+        "h": 1
+      },
+      "blocks": true,
+      "layer": "object",
+      "parts": [
+        {
+          "frame": "plant-tall",
+          "dx": 0,
+          "dy": -48,
+          "sortY": 32,
+          "bias": 0
+        }
+      ]
+    },
+    "whiteboard": {
+      "footprint": {
+        "w": 4,
+        "h": 2
+      },
+      "blocks": false,
+      "layer": "wall",
+      "parts": [
+        {
+          "frame": "whiteboard",
+          "dx": 0,
+          "dy": 0,
+          "sortY": 64,
+          "bias": 0
+        }
+      ],
+      "textArea": {
+        "x": 8,
+        "y": 6,
+        "w": 112,
+        "h": 48
+      }
+    },
+    "clock": {
+      "footprint": {
+        "w": 1,
+        "h": 1
+      },
+      "blocks": false,
+      "layer": "wall",
+      "parts": [
+        {
+          "frame": "clock",
+          "dx": 0,
+          "dy": 0,
+          "sortY": 32,
+          "bias": 0
+        }
+      ]
+    },
+    "bulletin": {
+      "footprint": {
+        "w": 2,
+        "h": 2
+      },
+      "blocks": false,
+      "layer": "wall",
+      "parts": [
+        {
+          "frame": "bulletin",
+          "dx": 0,
+          "dy": 0,
+          "sortY": 64,
+          "bias": 0
+        }
+      ]
+    },
+    "file-tray": {
+      "footprint": {
+        "w": 1,
+        "h": 1
+      },
+      "blocks": false,
+      "layer": "object",
+      "parts": [
+        {
+          "frame": "file-tray",
+          "dx": 0,
+          "dy": -10,
+          "sortY": 33,
+          "bias": 0
+        }
+      ]
+    },
+    "bell": {
+      "footprint": {
+        "w": 1,
+        "h": 1
+      },
+      "blocks": false,
+      "layer": "object",
+      "parts": [
+        {
+          "frame": "bell",
+          "dx": 6,
+          "dy": -34,
+          "sortY": 33,
+          "bias": 0
+        }
+      ]
+    },
+    "door": {
+      "footprint": {
+        "w": 2,
+        "h": 2
+      },
+      "blocks": false,
+      "layer": "wall",
+      "parts": [
+        {
+          "frame": "door",
+          "dx": 0,
+          "dy": 0,
+          "sortY": 32,
+          "bias": 0
+        }
+      ]
+    },
+    "plaque-stand": {
+      "footprint": {
+        "w": 2,
+        "h": 1
+      },
+      "blocks": true,
+      "layer": "object",
+      "parts": [
+        {
+          "frame": "plaque-stand",
+          "dx": 0,
+          "dy": -12,
+          "sortY": 32,
+          "bias": 0
+        }
+      ],
+      "textArea": {
+        "x": 7,
+        "y": 7,
+        "w": 50,
+        "h": 15
+      }
+    },
+    "coffee-table": {
+      "footprint": {
+        "w": 3,
+        "h": 1
+      },
+      "blocks": true,
+      "layer": "object",
+      "parts": [
+        {
+          "frame": "coffee-table",
+          "dx": 0,
+          "dy": -8,
+          "sortY": 32,
+          "bias": 0
+        }
+      ]
+    },
+    "doormat": {
+      "footprint": {
+        "w": 2,
+        "h": 1
+      },
+      "blocks": false,
+      "layer": "object",
+      "parts": [
+        {
+          "frame": "doormat",
+          "dx": 0,
+          "dy": 8,
+          "sortY": 32,
+          "bias": 0
+        }
+      ]
     }
   }
 }

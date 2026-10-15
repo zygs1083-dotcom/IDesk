@@ -74,3 +74,5 @@ Precisely edit ONLY row1 column2 laptop desk in this4x3 magenta sprite sheet. Ke
 ```
 
 朝下椅子目标56×44px、dx20/dy-12，behind椅背到人物肩部，在身体两侧各露约4–6px；其余椅子32×40px不变。最终调色板按负责人终审规则改为数据选色36色，`palette.mjs` 对整套角色帧做加权k-means并选原32色残差最大的四簇中心，前两簇为34色试验、后两簇为获准的36色扩充。误差与方法见PALETTE.md；不再使用人工指定的两个新增色。
+
+W66 扩展家具与侧椅重做记录见 [PROMPTS-furniture-v2.md](PROMPTS-furniture-v2.md)。

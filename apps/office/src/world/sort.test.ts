@@ -37,15 +37,22 @@ for (const seat of seats(layout, catalog)) {
       ordered.indexOf("person"),
     );
     expect(seat.x).toBe(object.x * TILE + (chair.seat?.x ?? 0));
+    if (object.item === "sofa") return;
     const desk = layout.objects.find((candidate) => {
       const item = catalog.items[candidate.item] as Furniture;
       return (
         (item.workSpot || candidate.item === "counter") &&
-        (seat.facing === "down"
-          ? candidate.y === object.y + chair.footprint.h
-          : candidate.y + item.footprint.h === object.y) &&
-        Math.floor(seat.x / TILE) >= candidate.x &&
-        Math.floor(seat.x / TILE) < candidate.x + item.footprint.w
+        (seat.facing === "left" || seat.facing === "right"
+          ? (seat.facing === "left"
+              ? candidate.x + item.footprint.w === object.x
+              : object.x + chair.footprint.w === candidate.x) &&
+            object.y >= candidate.y &&
+            object.y < candidate.y + item.footprint.h
+          : (seat.facing === "down"
+              ? candidate.y === object.y + chair.footprint.h
+              : candidate.y + item.footprint.h === object.y) &&
+            Math.floor(seat.x / TILE) >= candidate.x &&
+            Math.floor(seat.x / TILE) < candidate.x + item.footprint.w)
       );
     });
     expect(desk).toBeDefined();
@@ -53,7 +60,7 @@ for (const seat of seats(layout, catalog)) {
     const item = catalog.items[desk.item] as Furniture;
     for (const part of item.parts) {
       const deskY = desk.y * TILE + part.sortY;
-      if (seat.facing === "down") expect(deskY).toBeGreaterThan(person.sortY);
+      if (seat.facing !== "up") expect(deskY).toBeGreaterThan(person.sortY);
       else expect(deskY).toBeLessThan(person.sortY);
     }
   });
