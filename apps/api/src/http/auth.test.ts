@@ -31,7 +31,9 @@ async function login(password: string) {
 async function cookie(password: string) {
   const response = await login(password);
   expect(response.status).toBe(200);
-  expect(response.headers.get("Set-Cookie")).toContain("HttpOnly; Max-Age=2592000; SameSite=Lax");
+  for (const attribute of ["HttpOnly", "Max-Age=2592000", "SameSite=Lax", "Path=/"]) {
+    expect(response.headers.get("Set-Cookie")).toContain(attribute);
+  }
   return (response.headers.get("Set-Cookie") as string).split(";")[0] as string;
 }
 function read(path: string, session: string) {

@@ -44,7 +44,7 @@ export function Sidebar() {
       <div className="hidden px-5 pt-5 pb-4 text-section sidebar:block">IDesk</div>
       <nav
         aria-label="主导航"
-        className="flex gap-0 p-2 sidebar:flex-col sidebar:gap-1 sidebar:py-0"
+        className="flex gap-0 p-2 sidebar:flex-col sidebar:gap-1 sidebar:px-3 sidebar:py-0"
       >
         {items.map(({ to, label, icon: Icon }) => (
           <NavLink
@@ -54,7 +54,7 @@ export function Sidebar() {
             title={label}
             className={({ isActive }) =>
               cn(
-                "flex items-center gap-2 rounded-control p-3 text-body transition-colors duration-hover ease-hover sidebar:px-3 sidebar:py-2",
+                "flex items-center gap-2 rounded-control p-2.5 text-body transition-colors duration-hover ease-hover sidebar:px-3 sidebar:py-2",
                 isActive ? "bg-line text-text" : "text-text-2 hover:text-text",
               )
             }
@@ -68,7 +68,7 @@ export function Sidebar() {
             href="/office/"
             aria-label="像素办公室"
             title="像素办公室"
-            className="flex items-center gap-2 rounded-control p-3 text-body text-text-2 transition-colors duration-hover ease-hover hover:text-text sidebar:px-3 sidebar:py-2"
+            className="flex items-center gap-2 rounded-control p-2.5 text-body text-text-2 transition-colors duration-hover ease-hover hover:text-text sidebar:px-3 sidebar:py-2"
           >
             <Building2 aria-hidden="true" size={16} strokeWidth={1.5} />
             <span className="hidden sidebar:inline">像素办公室</span>
