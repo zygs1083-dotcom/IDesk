@@ -133,3 +133,8 @@
 - **W74 切换并删除第二版**：渲染背景 + 遮挡件 + 人（zIndexOf 唯一），座位与命名点来自第三版布局，四分之三坐姿 + mirror、礼仪正面坐姿、侧坐；名牌、白板卡片、昼夜暖光、检查页、demo-events 接到新布局；`e` 调试模式（轮廓、脚底点、栅格、拖座位导出 JSON）。删除第二版的瓦片、家具图集、目录、调色板、探针、正面工位坐姿和对应工具。验收：坐满全景（白天/黄昏/夜间）、每区放大图逐个看脚手臀肩头、轮廓叠加图、§6 事件 GIF、空闲 60 秒 GIF、「用户第一眼」全景结论。
 
 派发约束：W72 与 W73 并行（W72 只动 assets/raw、tools/sprites*、public/sprites.*、public/background.webp；W73 动 shared schema、tools/occluders*、public/layout.json、public/occluders.*）。W73b、W73c 在 W73 合并后并行，各自只写布局里自己区域的条目（放在 layout.json 的不同数组位置，合并时按 id 排序避免冲突）。全量测试一律 `flock /tmp/idesk-test.lock pnpm test`，独立 Chromium 一律 `flock /tmp/idesk-browser.lock`。
+
+## M12 零散改进
+
+- **W79 能力选择与可领人数**：DESIGN §12.24。shared 的 capabilitySchema 与预设列表；一个能力选择器组件用在发布任务、定时模板、智能体新建/编辑、传递区按能力发送；发布与传递区的可领/可收人数提示；指定时的能力缺失警告；两行说明文字。验收：四处的浅色/深色截图，三种提示状态（有在线、都离线、无人具备）各一张，新增自定义能力的截图；API 测试覆盖能力值规范（大小写、空白、长度、逗号）。
+
