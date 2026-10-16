@@ -4,6 +4,7 @@ import { createRequire } from "node:module";
 import { resolve } from "node:path";
 import { PNG } from "pngjs";
 import { crop, resize } from "./image.mjs";
+import { screenshot } from "./screenshot.mjs";
 
 process.env.PLAYWRIGHT_BROWSERS_PATH ??= "/data/cache/ms-playwright";
 const { chromium } = createRequire("/data/tools/playwright/package.json")("playwright");
@@ -87,7 +88,7 @@ for (const [width, height, deviceScaleFactor] of [
     }
     samples.push({ viewport: prefix, name, people: sample });
     const png = PNG.sync.read(
-      await page.screenshot({ path: `${output}/${prefix}-${name}${suffix}.png` }),
+      await screenshot(page, { path: `${output}/${prefix}-${name}${suffix}.png` }),
     );
     const bounds = visible.flatMap((p) => [p.bounds, p.tailBounds]);
     const x = Math.max(0, Math.floor(Math.min(...bounds.map((b) => b.minX)) - 15));
@@ -136,7 +137,7 @@ for (const [width, height, deviceScaleFactor] of [
     "靠近顶边仍然可读。",
   ]);
   await page.emulateMedia({ colorScheme: "dark" });
-  await page.screenshot({ path: `${output}/${prefix}-edges-dark${suffix}.png` });
+  await screenshot(page, { path: `${output}/${prefix}-edges-dark${suffix}.png` });
   if (width === 1440) {
     await page.setViewportSize({ width: 160, height: 70 });
     await page.waitForFunction(() => window.scene.stage.app.screen.width === 160);
