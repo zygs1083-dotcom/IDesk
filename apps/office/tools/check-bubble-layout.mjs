@@ -35,6 +35,7 @@ for (const [width, height, deviceScaleFactor] of [
   });
   await page.mouse.move(width - 1, height - 1);
   const prefix = `${width}x${height}-dpr${deviceScaleFactor}`;
+  const suffix = "-tails";
   const scenario = async (name, points, messages) => {
     await page.evaluate(
       ({ points, messages }) => {
@@ -68,9 +69,27 @@ for (const [width, height, deviceScaleFactor] of [
         );
       }
     }
+    for (const item of visible) {
+      for (const other of visible.filter((other) => other !== item)) {
+        for (let index = 1; index < item.tail.length; index++) {
+          const a = item.tail[index - 1],
+            b = item.tail[index],
+            r = other.rect;
+          for (let step = 0; step <= 1000; step++) {
+            const x = a.x + ((b.x - a.x) * step) / 1000;
+            const y = a.y + ((b.y - a.y) * step) / 1000;
+            assert.ok(
+              x < r.x - 1 || x > r.x + r.width + 1 || y < r.y - 1 || y > r.y + r.height + 1,
+            );
+          }
+        }
+      }
+    }
     samples.push({ viewport: prefix, name, people: sample });
-    const png = PNG.sync.read(await page.screenshot({ path: `${output}/${prefix}-${name}.png` }));
-    const bounds = visible.map((p) => p.bounds);
+    const png = PNG.sync.read(
+      await page.screenshot({ path: `${output}/${prefix}-${name}${suffix}.png` }),
+    );
+    const bounds = visible.flatMap((p) => [p.bounds, p.tailBounds]);
     const x = Math.max(0, Math.floor(Math.min(...bounds.map((b) => b.minX)) - 15));
     const y = Math.max(0, Math.floor(Math.min(...bounds.map((b) => b.minY)) - 15));
     const w = Math.min(width - x, Math.ceil(Math.max(...bounds.map((b) => b.maxX)) - x + 15));
@@ -82,7 +101,7 @@ for (const [width, height, deviceScaleFactor] of [
       h: h * deviceScaleFactor,
     });
     writeFileSync(
-      `${output}/${prefix}-${name}@3x.png`,
+      `${output}/${prefix}-${name}@3x${suffix}.png`,
       PNG.sync.write(resize(detail, detail.width * 3, detail.height * 3)),
     );
   };
@@ -122,7 +141,7 @@ for (const [width, height, deviceScaleFactor] of [
     [...report, "靠近顶边仍然可读。"],
   );
   await page.emulateMedia({ colorScheme: "dark" });
-  await page.screenshot({ path: `${output}/${prefix}-edges-dark.png` });
+  await page.screenshot({ path: `${output}/${prefix}-edges-dark${suffix}.png` });
   if (width === 1440) {
     await page.setViewportSize({ width: 160, height: 70 });
     await page.waitForFunction(() => window.scene.stage.app.screen.width === 160);
@@ -151,7 +170,7 @@ for (const [width, height, deviceScaleFactor] of [
   await context.close();
 }
 assert.deepEqual(errors, []);
-writeFileSync(`${output}/samples.json`, JSON.stringify(samples, null, 2));
+writeFileSync(`${output}/samples-tails.json`, JSON.stringify(samples, null, 2));
 await browser.close();
 process.stdout.write(
   `W77: ${samples.length} scenes, no intersecting bodies or out-of-canvas bounds, ${errors.length} browser errors; ${output}\n`,

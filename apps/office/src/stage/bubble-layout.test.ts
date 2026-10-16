@@ -6,6 +6,7 @@ import {
   bubblesIntersect,
   layoutBubbles,
 } from "./bubble-layout.ts";
+import { tailIntersectsRect } from "./bubble-tail.ts";
 
 const canvas = { width: 500, height: 300 };
 const bubble = (id: number, x: number, y = 250): BubbleInput => ({
@@ -28,12 +29,22 @@ function check(placements: BubblePlacement[], bounds = canvas) {
       expect(point.x).toBeLessThanOrEqual(bounds.width - 1);
       expect(point.y).toBeLessThanOrEqual(bounds.height - 1);
     }
-    expect(item.tail[1]).toEqual(item.anchor);
+    expect(item.tail.at(-1)).toEqual(item.anchor);
+    const interior = {
+      x: item.rect.x + 3,
+      y: item.rect.y + 3,
+      width: item.rect.width - 6,
+      height: item.rect.height - 6,
+    };
+    expect(tailIntersectsRect(item.tail, interior)).toBe(false);
     expect(
       item.rect.y + item.rect.height <= item.anchor.y ||
         item.rect.x >= item.anchor.x + 1 ||
         item.rect.x + item.rect.width <= item.anchor.x - 1,
     ).toBe(true);
+    for (const other of visible.filter((other) => other.id !== item.id)) {
+      expect(tailIntersectsRect(item.tail, other.rect)).toBe(false);
+    }
     for (const other of visible.slice(index + 1))
       expect(bubblesIntersect(item.rect, other.rect)).toBe(false);
   }
@@ -71,7 +82,7 @@ test("when stacking reaches the top, a later bubble slides sideways", () => {
   check(result);
   assert(result[0] && result[1]);
   expect(result[1].rect.x).toBeGreaterThanOrEqual(result[0].rect.x + result[0].rect.width);
-  expect(result[1].tail[0].x).not.toBe(result[1].tail[1].x);
+  expect(result[1].tail[0].x).not.toBe(result[1].tail.at(-1)?.x);
 });
 
 test("a message that cannot fit is shortened and deferred until space is available", () => {
@@ -100,4 +111,42 @@ test("moving anchors keep tails attached and resolve new collisions", () => {
   assert(moved[0] && first[0]);
   expect(moved[0].rect.x - first[0].rect.x).toBe(100);
   expect(moved.every((item) => !item.deferred)).toBe(true);
+});
+
+test.each([
+  [1000, 700, 1],
+  [1000, 700, 2],
+  [1440, 900, 1],
+  [1440, 900, 2],
+])("all tails stay unobstructed at %s×%s DPR %s", (width, height) => {
+  const bounds = { width, height };
+  for (const anchors of [
+    [
+      { x: width / 2 - 20, y: 330 },
+      { x: width / 2 + 20, y: 330 },
+    ],
+    [-40, 0, 40].map((x) => ({ x: width / 2 + x, y: 330 })),
+    [
+      { x: 2, y: 180 },
+      { x: width - 2, y: 180 },
+      { x: width / 2, y: 2 },
+    ],
+  ]) {
+    const inputs = anchors.map((anchor, index) => ({
+      ...bubble(index, anchor.x, anchor.y),
+      width: 232,
+    }));
+    const placed = layoutBubbles(inputs, bounds);
+    expect(placed.every((item) => !item.deferred)).toBe(true);
+    check(placed, bounds);
+    const again = layoutBubbles(inputs, bounds, placed);
+    expect(again).toEqual(placed);
+  }
+});
+
+test("an upper neighbor bends its tail around the lower bubble instead of hiding it", () => {
+  const result = layoutBubbles([bubble(1, 200), bubble(2, 240)], canvas);
+  assert(result[1]);
+  expect(result[1].tail).toHaveLength(3);
+  check(result);
 });

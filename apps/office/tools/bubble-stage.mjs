@@ -36,6 +36,7 @@ export async function bubbleStage() {
         rect: { x: bubble.x, y: bubble.y, ...bubble.input() },
         bounds: bubble.getBounds(),
         tailBounds: bubble.tail.getBounds(),
+        tail: bubble.tailPath,
       }));
     },
   };

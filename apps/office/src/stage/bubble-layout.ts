@@ -1,11 +1,12 @@
 import type { Point } from "../world/path.ts";
+import { type BubbleTail, bubbleTail, tailIntersectsRect } from "./bubble-tail.ts";
 
 export type BubbleRect = { x: number; y: number; width: number; height: number };
 export type BubblePlacement = {
   id: number;
   anchor: Point;
   rect: BubbleRect;
-  tail: [Point, Point];
+  tail: BubbleTail;
   truncated: boolean;
   deferred: boolean;
 };
@@ -29,7 +30,7 @@ export function layoutBubbles(
   canvas: { width: number; height: number },
   previous: BubblePlacement[] = [],
 ): BubblePlacement[] {
-  const occupied: BubbleRect[] = [];
+  const occupied: BubblePlacement[] = [];
   const old = new Map(previous.map((item) => [item.id, item]));
   const ordered = [...inputs].sort(
     (a, b) =>
@@ -46,12 +47,27 @@ export function layoutBubbles(
       rect.y >= 0 &&
       rect.x + rect.width <= canvas.width &&
       rect.y + rect.height <= canvas.height;
-    const free = (rect: BubbleRect) =>
+    const fits = (rect: BubbleRect) =>
       inside(rect) &&
       (rect.y + rect.height <= anchor.y ||
         rect.x >= anchor.x + 1 ||
         rect.x + rect.width <= anchor.x - 1) &&
-      occupied.every((other) => !bubblesIntersect(rect, other));
+      occupied.every(
+        (other) => !bubblesIntersect(rect, other.rect) && !tailIntersectsRect(other.tail, rect),
+      );
+    let tail: BubbleTail | undefined;
+    const free = (rect: BubbleRect) => {
+      if (!fits(rect)) return false;
+      const route = bubbleTail(
+        rect,
+        anchor,
+        occupied.map((other) => other.rect),
+        canvas,
+      );
+      if (!route) return false;
+      tail = route;
+      return true;
+    };
     const home = {
       x: clamp(Math.round(anchor.x - width / 2), 0, canvas.width - width),
       y: Math.round(anchor.y - height - 8),
@@ -67,7 +83,7 @@ export function layoutBubbles(
       };
       if (free(moved)) rect = moved;
     }
-    const levels = [home.y, ...occupied.map((other) => other.y - height - gap)].sort(
+    const levels = [home.y, ...occupied.map(({ rect }) => rect.y - height - gap)].sort(
       (a, b) => b - a,
     );
     for (const y of levels.filter((value) => value <= home.y)) {
@@ -80,7 +96,7 @@ export function layoutBubbles(
       anchor.x + gap,
       0,
       canvas.width - width,
-      ...occupied.flatMap((other) => [other.x - width - gap, other.x + other.width + gap]),
+      ...occupied.flatMap(({ rect }) => [rect.x - width - gap, rect.x + rect.width + gap]),
     ].sort((a, b) => Math.abs(a - home.x) - Math.abs(b - home.x));
     const ys = [clamp(home.y, 0, canvas.height - height), ...levels.filter((y) => y >= 0)];
     for (const x of xs) {
@@ -96,17 +112,15 @@ export function layoutBubbles(
       anchor.y <= canvas.height - 1;
     const deferred = !rect || !anchorInside;
     const placed = rect ?? home;
-    if (!deferred) occupied.push(placed);
-    return {
+    const placement: BubblePlacement = {
       id: input.id,
       anchor: { ...anchor },
       rect: placed,
-      tail: [
-        { x: clamp(anchor.x, placed.x + 2, placed.x + width - 2), y: placed.y + height - 1 },
-        { x: Math.round(anchor.x), y: Math.round(anchor.y) },
-      ],
+      tail: tail ?? [{ x: placed.x + 2, y: placed.y + height - 1 }, { ...anchor }],
       truncated: truncated || deferred,
       deferred,
     };
+    if (!deferred) occupied.push(placement);
+    return placement;
   });
 }

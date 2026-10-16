@@ -10,6 +10,10 @@ type Message = { id: number; text: string; clock: BubbleClock };
 export class Bubble extends Container {
   readonly tail = new Graphics();
   anchor: Point = { x: 0, y: 0 };
+  tailPath: BubblePlacement["tail"] = [
+    { x: 0, y: 0 },
+    { x: 0, y: 0 },
+  ];
   private background = new Graphics();
   private text = new Text({
     text: "",
@@ -94,12 +98,11 @@ export class Bubble extends Container {
     const { width, height } = placement.rect;
     this.text.text = placement.truncated ? this.compactText : this.fullText;
     this.text.position.set(11, 9);
-    const [start, end] = placement.tail;
-    this.tail
-      .clear()
-      .moveTo(start.x, start.y)
-      .lineTo(end.x, end.y)
-      .stroke({ color: 0x302a2a, width: 2, cap: "butt" });
+    this.tailPath = placement.tail;
+    const [start, ...points] = placement.tail;
+    this.tail.clear().moveTo(start.x, start.y);
+    for (const point of points) this.tail.lineTo(point.x, point.y);
+    this.tail.stroke({ color: 0x302a2a, width: 2, cap: "butt", join: "bevel" });
     this.background
       .clear()
       .rect(1, 1, width - 2, height - 2)
