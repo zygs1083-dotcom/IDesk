@@ -97,7 +97,7 @@ export class Character extends Container {
   private animate = () => {
     this.zIndex = zIndexOf(this.y, 1);
     const head = headPosition(this, (point) => this.stage.world.toGlobal(point));
-    this.bubble.position.copyFrom(head);
+    this.bubble.anchor = head;
     this.nameLabel.position.copyFrom(head);
     if (this.state === "away") this.nameLabel.visible = false;
     if (!reducedMotion.matches) this.elapsed += this.stage.app.ticker.deltaMS;
