@@ -40,3 +40,38 @@ export function claimableAgents(required: string[], agents: CapabilityAgent[]) {
     online,
   } as const;
 }
+
+export function capabilityName(value: string, lang: Lang) {
+  const preset = presetCapabilities.find((entry) => entry.value === value);
+  return { label: preset ? preset.label[lang] : value, detail: preset ? value : null };
+}
+
+export function visibleCapabilities(
+  options: ReturnType<typeof capabilityOptions>,
+  selected: string[],
+  input: string,
+) {
+  const query = input.trim().toLowerCase();
+  return options.filter(
+    (option) =>
+      !selected.includes(option.value) &&
+      `${option.label} ${option.value}`.toLowerCase().includes(query),
+  );
+}
+
+export function availablePresets(selected: string[]) {
+  return presetCapabilities.filter((preset) => !selected.includes(preset.value));
+}
+
+export function addCapability(selected: string[], value: string, mode: "multi" | "single") {
+  return mode === "single" ? [value] : [...new Set([...selected, value])];
+}
+
+export function capabilityCountKey(kind: "recipients" | "online" | "offline", count: number) {
+  const keys = {
+    recipients: "capability.recipients",
+    online: "capability.claim.online",
+    offline: "capability.claim.offline",
+  } as const;
+  return count === 1 ? (`${keys[kind]}.one` as const) : keys[kind];
+}

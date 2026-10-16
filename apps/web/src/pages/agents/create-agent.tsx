@@ -137,7 +137,8 @@ export function CreateAgent({ agent, onClose }: { agent?: Agent; onClose: () => 
             value={capabilities}
             onChange={setCapabilities}
             agents={agents}
-            description={t("capability.description")}
+            description={t("capability.agentDescription")}
+            presetShortcuts
             mode="multi"
           />
           <Field

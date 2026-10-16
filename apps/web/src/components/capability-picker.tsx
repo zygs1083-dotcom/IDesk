@@ -2,10 +2,16 @@ import { capabilitySchema } from "@idesk/shared/capabilities";
 import { X } from "lucide-react";
 import { useEffect, useId, useState } from "react";
 import { useLang } from "../i18n/lang.tsx";
-import { cn } from "../lib/cn.ts";
 import type { Agent } from "../lib/types.ts";
 import { Button } from "./button.tsx";
-import { capabilityOptions } from "./capability-options.ts";
+import { CapabilityList } from "./capability-list.tsx";
+import { CapabilityName } from "./capability-name.tsx";
+import {
+  addCapability,
+  availablePresets,
+  capabilityOptions,
+  visibleCapabilities,
+} from "./capability-options.ts";
 
 export function CapabilityPicker({
   value,
@@ -14,6 +20,7 @@ export function CapabilityPicker({
   mode,
   label,
   description,
+  presetShortcuts = false,
 }: {
   value: string[];
   onChange: (value: string[]) => void;
@@ -21,6 +28,7 @@ export function CapabilityPicker({
   mode: "multi" | "single";
   label: string;
   description?: string;
+  presetShortcuts?: boolean;
 }) {
   const { lang, t } = useLang();
   const id = useId();
@@ -28,11 +36,7 @@ export function CapabilityPicker({
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(-1);
   const [error, setError] = useState(false);
-  const options = capabilityOptions(agents, lang).filter(
-    (option) =>
-      !value.includes(option.value) &&
-      `${option.label} ${option.value}`.toLowerCase().includes(input.trim().toLowerCase()),
-  );
+  const options = visibleCapabilities(capabilityOptions(agents, lang), value, input);
   const parsed = capabilitySchema.safeParse(input);
   const custom =
     input.trim().length > 0 &&
@@ -48,7 +52,7 @@ export function CapabilityPicker({
       setError(true);
       return;
     }
-    onChange(mode === "single" ? [result.data] : [...new Set([...value, result.data])]);
+    onChange(addCapability(value, result.data, mode));
     setInput("");
     setError(false);
     setActive(-1);
@@ -66,13 +70,13 @@ export function CapabilityPicker({
               key={item}
               className="inline-flex max-w-full items-center gap-1 rounded-tag border border-line bg-surface-2 pl-2 text-label"
             >
-              <span className="break-all">{item}</span>
+              <CapabilityName value={item} />
               <Button
                 aria-label={t("capability.remove", { value: item })}
                 className="border-0 bg-transparent p-1"
                 onClick={() => onChange(value.filter((entry) => entry !== item))}
               >
-                <X size={14} strokeWidth={1.5} />
+                <X size={16} strokeWidth={1.5} />
               </Button>
             </span>
           ))}
@@ -92,6 +96,7 @@ export function CapabilityPicker({
         placeholder={t("capability.placeholder")}
         onBlur={() => setOpen(false)}
         onFocus={() => setOpen(true)}
+        onClick={() => setOpen(true)}
         onChange={(event) => {
           setInput(event.target.value);
           setOpen(true);
@@ -123,65 +128,29 @@ export function CapabilityPicker({
         }}
       />
       {open && (
-        <div
-          id={`${id}-options`}
-          role="listbox"
-          aria-label={label}
-          className="max-h-40 overflow-auto rounded-control border border-line bg-surface"
-        >
-          {options.map((option, index) => (
-            <div
-              key={option.value}
-              id={`${id}-option-${index}`}
-              role="option"
-              tabIndex={-1}
-              aria-selected={active === index}
+        <CapabilityList
+          id={id}
+          label={label}
+          options={options}
+          active={active}
+          custom={custom}
+          customValue={parsed.success ? parsed.data : input}
+          input={input}
+          add={add}
+        />
+      )}
+      {presetShortcuts && (
+        <fieldset aria-label={t("capability.presets")} className="flex min-w-0 flex-wrap gap-2">
+          {availablePresets(value).map((preset) => (
+            <Button
+              key={preset.value}
+              className="rounded-tag px-2 py-1 text-label"
+              onClick={() => add(preset.value)}
             >
-              <button
-                type="button"
-                tabIndex={-1}
-                onMouseDown={(event) => event.preventDefault()}
-                onClick={() => add(option.value)}
-                className={cn(
-                  "flex w-full items-center justify-between gap-2 px-3 py-2 text-left text-secondary hover:bg-surface-2",
-                  active === index && "bg-surface-2",
-                )}
-              >
-                <span className="min-w-0 break-words">
-                  {option.label}
-                  <span className="ml-2 text-label text-text-2">{option.value}</span>
-                </span>
-                <span className="shrink-0 text-label tabular-nums text-text-2">
-                  {t("capability.count", { online: option.online, total: option.total })}
-                </span>
-              </button>
-            </div>
+              <CapabilityName value={preset.value} />
+            </Button>
           ))}
-          {custom && (
-            <div
-              id={`${id}-option-${options.length}`}
-              role="option"
-              tabIndex={-1}
-              aria-selected={active === options.length}
-            >
-              <button
-                type="button"
-                tabIndex={-1}
-                onMouseDown={(event) => event.preventDefault()}
-                onClick={() => add(input)}
-                className={cn(
-                  "w-full break-all px-3 py-2 text-left text-secondary text-accent hover:bg-surface-2",
-                  active === options.length && "bg-surface-2",
-                )}
-              >
-                {t("capability.add", { value: parsed.success ? parsed.data : input })}
-              </button>
-            </div>
-          )}
-          {count === 0 && (
-            <p className="px-3 py-2 text-secondary text-text-2">{t("capability.empty")}</p>
-          )}
-        </div>
+        </fieldset>
       )}
       {description && (
         <p id={`${id}-description`} className="text-secondary text-text-2">

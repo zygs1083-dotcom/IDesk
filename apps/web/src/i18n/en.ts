@@ -1,6 +1,13 @@
 import type { Key } from "./zh.ts";
 
 export const en: Record<Key, string> = {
+  "capability.agentDescription": "This agent’s capabilities determine which tasks it can claim",
+  "capability.relayDescription": "All agents with this capability will receive this message",
+  "capability.presets": "Preset capabilities",
+  "capability.recipients.one": "{total} agent will receive this message",
+  "capability.claim.online.one": "{online} online agent can claim now",
+  "capability.claim.offline.one": "The {total} agent with these capabilities is offline",
+
   "capability.remove": "Remove {value}",
   "capability.placeholder": "Search or add a capability",
   "capability.count": "Online {online} / Total {total}",

@@ -1,4 +1,11 @@
 export const zh = {
+  "capability.agentDescription": "这个智能体具备的能力，决定它能领哪些任务",
+  "capability.relayDescription": "具备这个能力的智能体都会收到这条消息",
+  "capability.presets": "预设能力",
+  "capability.recipients.one": "{total} 个智能体会收到",
+  "capability.claim.online.one": "当前有 {online} 个在线智能体能领",
+  "capability.claim.offline.one": "具备这些能力的 {total} 个智能体都不在线",
+
   "capability.remove": "移除 {value}",
   "capability.placeholder": "搜索或新增能力",
   "capability.count": "在线 {online} / 共 {total}",

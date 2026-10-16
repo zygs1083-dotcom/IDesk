@@ -5,6 +5,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import type { z } from "zod";
 import { Button } from "../../components/button.tsx";
+import { capabilityCountKey } from "../../components/capability-options.ts";
 import { CapabilityPicker } from "../../components/capability-picker.tsx";
 import { Dialog } from "../../components/dialog.tsx";
 import { Field } from "../../components/field.tsx";
@@ -109,7 +110,7 @@ export function ComposeRelay({
               value={capability ? [capability] : []}
               onChange={(values) => setCapability(values[0] ?? "")}
               agents={agents}
-              description={t("capability.description")}
+              description={t("capability.relayDescription")}
               mode="single"
             />
             <p
@@ -119,7 +120,7 @@ export function ComposeRelay({
                 receivers === 0 ? "text-status-paused" : "text-text-2",
               )}
             >
-              {t("capability.recipients", { total: receivers })}
+              {t(capabilityCountKey("recipients", receivers), { total: receivers })}
             </p>
           </div>
         )}

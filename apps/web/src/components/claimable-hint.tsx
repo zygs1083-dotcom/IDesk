@@ -1,7 +1,7 @@
 import { useLang } from "../i18n/lang.tsx";
 import { cn } from "../lib/cn.ts";
 import type { Agent } from "../lib/types.ts";
-import { claimableAgents } from "./capability-options.ts";
+import { capabilityCountKey, claimableAgents } from "./capability-options.ts";
 
 export function ClaimableHint({
   capabilities,
@@ -20,7 +20,12 @@ export function ClaimableHint({
         state === "offline" || state === "none" ? "text-status-paused" : "text-text-2",
       )}
     >
-      {t(`capability.claim.${state}`, { total, online })}
+      {t(
+        state === "online" || state === "offline"
+          ? capabilityCountKey(state, state === "online" ? online : total)
+          : `capability.claim.${state}`,
+        { total, online },
+      )}
     </p>
   );
 }
