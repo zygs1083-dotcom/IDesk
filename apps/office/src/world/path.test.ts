@@ -5,7 +5,7 @@ import { cellCenter, cellOf, findPath, smoothCorners } from "./path.ts";
 
 const layout = {
   ...parseOfficeLayout(raw),
-  grid: { cell: 16 as const, rows: [".....", ".###.", "....."] },
+  grid: { cell: 16 as const, clearance: 32, rows: [".....", ".###.", "....."] },
 };
 test("A* routes around blocked 16px cells", () => {
   const path = findPath(layout, { x: 0, y: 1 }, { x: 4, y: 1 });

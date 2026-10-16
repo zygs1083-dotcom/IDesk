@@ -15,6 +15,7 @@
     "./plugin-schemas": "./src/plugin-schemas.ts",
     "./automation-schemas": "./src/automation-schemas.ts",
     "./schedule-schemas": "./src/schedule-schemas.ts",
+    "./office-clearance": "./src/office-clearance.ts",
     "./office-geometry": "./src/office-geometry.ts",
     "./office-layout": "./src/office-layout.ts"
   },
