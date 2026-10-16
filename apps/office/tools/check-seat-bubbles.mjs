@@ -137,21 +137,28 @@ try {
   const samples = [],
     frames = [];
   const started = Date.now();
-  for (let tick = 0; tick <= 240; tick++) {
-    await page.waitForTimeout(Math.max(0, started + tick * 500 - Date.now()));
-    const elapsed = tick * 500;
-    if (elapsed % 15000 === 0) await heartbeat();
-    if (elapsed % 1000 === 0)
-      samples.push({ elapsed, people: await page.evaluate(() => window.acceptance.sample()) });
-    if (elapsed % 10000 === 0)
-      await page.screenshot({
-        path: `${output}/heartbeat-${String(elapsed / 1000).padStart(3, "0")}.png`,
-      });
-    if (elapsed < 60000) {
-      const name = `${String(tick).padStart(3, "0")}.png`;
-      frames.push(`file '${name}'\nduration 0.5\n`);
-      await page.screenshot({ path: `${output}/idle/${name}` });
+  let nextHeartbeat = 0,
+    nextShot = 0;
+  while (true) {
+    const elapsed = Date.now() - started;
+    if (elapsed >= nextHeartbeat) {
+      await heartbeat();
+      nextHeartbeat += 15000;
     }
+    samples.push({ elapsed, people: await page.evaluate(() => window.acceptance.sample()) });
+    if (elapsed >= nextShot) {
+      await page.screenshot({
+        path: `${output}/heartbeat-${String(nextShot / 1000).padStart(3, "0")}.png`,
+      });
+      nextShot += 10000;
+    }
+    if (elapsed < 60000) {
+      const name = `${String(frames.length).padStart(3, "0")}.jpg`;
+      frames.push({ name, at: elapsed });
+      await page.screenshot({ path: `${output}/idle/${name}`, type: "jpeg", quality: 85 });
+    }
+    if (elapsed >= 120000) break;
+    await page.waitForTimeout(500);
   }
   for (const { agent } of agents) {
     const states = samples.map(({ people }) => people.find(({ id }) => id === agent.id));
@@ -166,14 +173,22 @@ try {
       ),
       `${agent.name}: no return to seat observed`,
     );
-    let stopped = 0;
-    for (const person of states) {
-      stopped = person.state === "idle" && !person.seated ? stopped + 1000 : 0;
-      assert.ok(stopped <= 8000, `${agent.name}: stranded away from seat`);
+    let stoppedAt;
+    for (const [index, person] of states.entries()) {
+      if (person.state === "idle" && !person.seated) {
+        stoppedAt ??= samples[index].elapsed;
+        assert.ok(
+          samples[index].elapsed - stoppedAt <= 8000,
+          `${agent.name}: stranded away from seat`,
+        );
+      } else stoppedAt = undefined;
     }
   }
   writeFileSync(`${output}/samples.json`, JSON.stringify(samples, null, 2));
-  writeFileSync(`${output}/idle/frames.ffconcat`, `ffconcat version 1.0\n${frames.join("")}`);
+  writeFileSync(
+    `${output}/idle/frames.ffconcat`,
+    `ffconcat version 1.0\n${frames.map((frame, index) => `file '${frame.name}'\nduration ${((frames[index + 1]?.at ?? 60000) - frame.at) / 1000}\n`).join("")}`,
+  );
   assert.deepEqual(errors, []);
   process.stdout.write(
     `W76: four DPR/viewport combinations, 120s heartbeats, 60s idle frames; ${errors.length} browser errors; ${output}\n`,
