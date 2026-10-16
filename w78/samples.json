@@ -1,0 +1,779 @@
+{
+  "samples": [
+    {
+      "filename": "1000x700-dpr1-reports.png",
+      "deferred": 0,
+      "people": [
+        {
+          "visible": true,
+          "text": "心跳不会打断行程，完成后回座。",
+          "rect": {
+            "x": 364,
+            "y": 221,
+            "id": 1,
+            "anchor": {
+              "x": 480,
+              "y": 330.00000000000006
+            },
+            "width": 232,
+            "height": 37,
+            "compact": {
+              "width": 190,
+              "height": 37
+            }
+          },
+          "bounds": {
+            "minX": 364,
+            "minY": 221,
+            "maxX": 596,
+            "maxY": 258,
+            "matrix": {
+              "array": null,
+              "a": 1,
+              "b": 0,
+              "c": 0,
+              "d": 1,
+              "tx": 439,
+              "ty": 170
+            }
+          },
+          "tailBounds": {
+            "minX": 476,
+            "minY": 254.5,
+            "maxX": 484,
+            "maxY": 332.5,
+            "matrix": {
+              "array": null,
+              "a": 1,
+              "b": 0,
+              "c": 0,
+              "d": 1,
+              "tx": 0,
+              "ty": 0
+            }
+          },
+          "tail": [
+            {
+              "x": 480,
+              "y": 257
+            },
+            {
+              "x": 480,
+              "y": 322
+            },
+            {
+              "x": 480,
+              "y": 330
+            }
+          ]
+        },
+        {
+          "visible": true,
+          "text": "Heartbeat received. Back to my seat!",
+          "rect": {
+            "x": 428,
+            "y": 161,
+            "id": 2,
+            "anchor": {
+              "x": 520,
+              "y": 330.00000000000006
+            },
+            "width": 184,
+            "height": 56,
+            "compact": {
+              "width": 184,
+              "height": 56
+            }
+          },
+          "bounds": {
+            "minX": 428,
+            "minY": 161,
+            "maxX": 612,
+            "maxY": 217,
+            "matrix": {
+              "array": null,
+              "a": 1,
+              "b": 0,
+              "c": 0,
+              "d": 1,
+              "tx": 439,
+              "ty": 170
+            }
+          },
+          "tailBounds": {
+            "minX": 516,
+            "minY": 213.5,
+            "maxX": 612.5,
+            "maxY": 332.5,
+            "matrix": {
+              "array": null,
+              "a": 1,
+              "b": 0,
+              "c": 0,
+              "d": 1,
+              "tx": 0,
+              "ty": 0
+            }
+          },
+          "tail": [
+            {
+              "x": 610,
+              "y": 216
+            },
+            {
+              "x": 610,
+              "y": 318
+            },
+            {
+              "x": 520,
+              "y": 322
+            },
+            {
+              "x": 520,
+              "y": 330
+            }
+          ]
+        },
+        {
+          "visible": false,
+          "text": "",
+          "rect": {
+            "x": 0,
+            "y": 0
+          },
+          "bounds": {
+            "minX": 0,
+            "minY": 0,
+            "maxX": 0,
+            "maxY": 0,
+            "matrix": {
+              "array": null,
+              "a": 1,
+              "b": 0,
+              "c": 0,
+              "d": 1,
+              "tx": 0,
+              "ty": 0
+            }
+          },
+          "tailBounds": {
+            "minX": 0,
+            "minY": 0,
+            "maxX": 0,
+            "maxY": 0,
+            "matrix": {
+              "array": null,
+              "a": 1,
+              "b": 0,
+              "c": 0,
+              "d": 1,
+              "tx": 0,
+              "ty": 0
+            }
+          },
+          "tail": [
+            {
+              "x": 0,
+              "y": 0
+            },
+            {
+              "x": 0,
+              "y": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "filename": "1000x700-dpr1-three.png",
+      "deferred": 0,
+      "people": [
+        {
+          "visible": true,
+          "text": "心跳不会打断行程，完成后回座。",
+          "rect": {
+            "x": 344,
+            "y": 281,
+            "id": 3,
+            "anchor": {
+              "x": 460,
+              "y": 330.00000000000006
+            },
+            "width": 232,
+            "height": 37,
+            "compact": {
+              "width": 190,
+              "height": 37
+            }
+          },
+          "bounds": {
+            "minX": 344,
+            "minY": 281,
+            "maxX": 576,
+            "maxY": 318,
+            "matrix": {
+              "array": null,
+              "a": 1,
+              "b": 0,
+              "c": 0,
+              "d": 1,
+              "tx": 463,
+              "ty": 189
+            }
+          },
+          "tailBounds": {
+            "minX": 456,
+            "minY": 314.5,
+            "maxX": 464,
+            "maxY": 332.5,
+            "matrix": {
+              "array": null,
+              "a": 1,
+              "b": 0,
+              "c": 0,
+              "d": 1,
+              "tx": 0,
+              "ty": 0
+            }
+          },
+          "tail": [
+            {
+              "x": 460,
+              "y": 317
+            },
+            {
+              "x": 460,
+              "y": 322
+            },
+            {
+              "x": 460,
+              "y": 330
+            }
+          ]
+        },
+        {
+          "visible": true,
+          "text": "Heartbeat received. Back to my seat!",
+          "rect": {
+            "x": 408,
+            "y": 221,
+            "id": 4,
+            "anchor": {
+              "x": 500,
+              "y": 330.00000000000006
+            },
+            "width": 184,
+            "height": 56,
+            "compact": {
+              "width": 184,
+              "height": 56
+            }
+          },
+          "bounds": {
+            "minX": 408,
+            "minY": 221,
+            "maxX": 592,
+            "maxY": 277,
+            "matrix": {
+              "array": null,
+              "a": 1,
+              "b": 0,
+              "c": 0,
+              "d": 1,
+              "tx": 463,
+              "ty": 189
+            }
+          },
+          "tailBounds": {
+            "minX": 496,
+            "minY": 273.5,
+            "maxX": 592.5,
+            "maxY": 332.5,
+            "matrix": {
+              "array": null,
+              "a": 1,
+              "b": 0,
+              "c": 0,
+              "d": 1,
+              "tx": 0,
+              "ty": 0
+            }
+          },
+          "tail": [
+            {
+              "x": 590,
+              "y": 276
+            },
+            {
+              "x": 590,
+              "y": 322
+            },
+            {
+              "x": 500,
+              "y": 322
+            },
+            {
+              "x": 500,
+              "y": 330
+            }
+          ]
+        },
+        {
+          "visible": true,
+          "text": "三个同事同时汇报进展。",
+          "rect": {
+            "x": 452,
+            "y": 180,
+            "id": 5,
+            "anchor": {
+              "x": 540,
+              "y": 330.00000000000006
+            },
+            "width": 176,
+            "height": 37,
+            "compact": {
+              "width": 190,
+              "height": 37
+            }
+          },
+          "bounds": {
+            "minX": 452,
+            "minY": 180,
+            "maxX": 628,
+            "maxY": 217,
+            "matrix": {
+              "array": null,
+              "a": 1,
+              "b": 0,
+              "c": 0,
+              "d": 1,
+              "tx": 463,
+              "ty": 189
+            }
+          },
+          "tailBounds": {
+            "minX": 536,
+            "minY": 213.5,
+            "maxX": 628.5,
+            "maxY": 332.5,
+            "matrix": {
+              "array": null,
+              "a": 1,
+              "b": 0,
+              "c": 0,
+              "d": 1,
+              "tx": 0,
+              "ty": 0
+            }
+          },
+          "tail": [
+            {
+              "x": 626,
+              "y": 216
+            },
+            {
+              "x": 626,
+              "y": 318
+            },
+            {
+              "x": 540,
+              "y": 322
+            },
+            {
+              "x": 540,
+              "y": 330
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "filename": "1000x700-dpr2-reports.png",
+      "deferred": 0,
+      "people": [
+        {
+          "visible": true,
+          "text": "心跳不会打断行程，完成后回座。",
+          "rect": {
+            "x": 364,
+            "y": 221,
+            "id": 1,
+            "anchor": {
+              "x": 480,
+              "y": 330.00000000000006
+            },
+            "width": 232,
+            "height": 37,
+            "compact": {
+              "width": 190,
+              "height": 37
+            }
+          },
+          "bounds": {
+            "minX": 364,
+            "minY": 221,
+            "maxX": 596,
+            "maxY": 258,
+            "matrix": {
+              "array": null,
+              "a": 1,
+              "b": 0,
+              "c": 0,
+              "d": 1,
+              "tx": 439,
+              "ty": 170
+            }
+          },
+          "tailBounds": {
+            "minX": 476,
+            "minY": 254.5,
+            "maxX": 484,
+            "maxY": 332.5,
+            "matrix": {
+              "array": null,
+              "a": 1,
+              "b": 0,
+              "c": 0,
+              "d": 1,
+              "tx": 0,
+              "ty": 0
+            }
+          },
+          "tail": [
+            {
+              "x": 480,
+              "y": 257
+            },
+            {
+              "x": 480,
+              "y": 322
+            },
+            {
+              "x": 480,
+              "y": 330
+            }
+          ]
+        },
+        {
+          "visible": true,
+          "text": "Heartbeat received. Back to my seat!",
+          "rect": {
+            "x": 428,
+            "y": 161,
+            "id": 2,
+            "anchor": {
+              "x": 520,
+              "y": 330.00000000000006
+            },
+            "width": 184,
+            "height": 56,
+            "compact": {
+              "width": 184,
+              "height": 56
+            }
+          },
+          "bounds": {
+            "minX": 428,
+            "minY": 161,
+            "maxX": 612,
+            "maxY": 217,
+            "matrix": {
+              "array": null,
+              "a": 1,
+              "b": 0,
+              "c": 0,
+              "d": 1,
+              "tx": 439,
+              "ty": 170
+            }
+          },
+          "tailBounds": {
+            "minX": 516,
+            "minY": 213.5,
+            "maxX": 612.5,
+            "maxY": 332.5,
+            "matrix": {
+              "array": null,
+              "a": 1,
+              "b": 0,
+              "c": 0,
+              "d": 1,
+              "tx": 0,
+              "ty": 0
+            }
+          },
+          "tail": [
+            {
+              "x": 610,
+              "y": 216
+            },
+            {
+              "x": 610,
+              "y": 318
+            },
+            {
+              "x": 520,
+              "y": 322
+            },
+            {
+              "x": 520,
+              "y": 330
+            }
+          ]
+        },
+        {
+          "visible": false,
+          "text": "",
+          "rect": {
+            "x": 0,
+            "y": 0
+          },
+          "bounds": {
+            "minX": 0,
+            "minY": 0,
+            "maxX": 0,
+            "maxY": 0,
+            "matrix": {
+              "array": null,
+              "a": 1,
+              "b": 0,
+              "c": 0,
+              "d": 1,
+              "tx": 0,
+              "ty": 0
+            }
+          },
+          "tailBounds": {
+            "minX": 0,
+            "minY": 0,
+            "maxX": 0,
+            "maxY": 0,
+            "matrix": {
+              "array": null,
+              "a": 1,
+              "b": 0,
+              "c": 0,
+              "d": 1,
+              "tx": 0,
+              "ty": 0
+            }
+          },
+          "tail": [
+            {
+              "x": 0,
+              "y": 0
+            },
+            {
+              "x": 0,
+              "y": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "filename": "1000x700-dpr2-three.png",
+      "deferred": 0,
+      "people": [
+        {
+          "visible": true,
+          "text": "心跳不会打断行程，完成后回座。",
+          "rect": {
+            "x": 344,
+            "y": 281,
+            "id": 3,
+            "anchor": {
+              "x": 460,
+              "y": 330.00000000000006
+            },
+            "width": 232,
+            "height": 37,
+            "compact": {
+              "width": 190,
+              "height": 37
+            }
+          },
+          "bounds": {
+            "minX": 344,
+            "minY": 281,
+            "maxX": 576,
+            "maxY": 318,
+            "matrix": {
+              "array": null,
+              "a": 1,
+              "b": 0,
+              "c": 0,
+              "d": 1,
+              "tx": 463,
+              "ty": 189
+            }
+          },
+          "tailBounds": {
+            "minX": 456,
+            "minY": 314.5,
+            "maxX": 464,
+            "maxY": 332.5,
+            "matrix": {
+              "array": null,
+              "a": 1,
+              "b": 0,
+              "c": 0,
+              "d": 1,
+              "tx": 0,
+              "ty": 0
+            }
+          },
+          "tail": [
+            {
+              "x": 460,
+              "y": 317
+            },
+            {
+              "x": 460,
+              "y": 322
+            },
+            {
+              "x": 460,
+              "y": 330
+            }
+          ]
+        },
+        {
+          "visible": true,
+          "text": "Heartbeat received. Back to my seat!",
+          "rect": {
+            "x": 408,
+            "y": 221,
+            "id": 4,
+            "anchor": {
+              "x": 500,
+              "y": 330.00000000000006
+            },
+            "width": 184,
+            "height": 56,
+            "compact": {
+              "width": 184,
+              "height": 56
+            }
+          },
+          "bounds": {
+            "minX": 408,
+            "minY": 221,
+            "maxX": 592,
+            "maxY": 277,
+            "matrix": {
+              "array": null,
+              "a": 1,
+              "b": 0,
+              "c": 0,
+              "d": 1,
+              "tx": 463,
+              "ty": 189
+            }
+          },
+          "tailBounds": {
+            "minX": 496,
+            "minY": 273.5,
+            "maxX": 592.5,
+            "maxY": 332.5,
+            "matrix": {
+              "array": null,
+              "a": 1,
+              "b": 0,
+              "c": 0,
+              "d": 1,
+              "tx": 0,
+              "ty": 0
+            }
+          },
+          "tail": [
+            {
+              "x": 590,
+              "y": 276
+            },
+            {
+              "x": 590,
+              "y": 322
+            },
+            {
+              "x": 500,
+              "y": 322
+            },
+            {
+              "x": 500,
+              "y": 330
+            }
+          ]
+        },
+        {
+          "visible": true,
+          "text": "三个同事同时汇报进展。",
+          "rect": {
+            "x": 452,
+            "y": 180,
+            "id": 5,
+            "anchor": {
+              "x": 540,
+              "y": 330.00000000000006
+            },
+            "width": 176,
+            "height": 37,
+            "compact": {
+              "width": 190,
+              "height": 37
+            }
+          },
+          "bounds": {
+            "minX": 452,
+            "minY": 180,
+            "maxX": 628,
+            "maxY": 217,
+            "matrix": {
+              "array": null,
+              "a": 1,
+              "b": 0,
+              "c": 0,
+              "d": 1,
+              "tx": 463,
+              "ty": 189
+            }
+          },
+          "tailBounds": {
+            "minX": 536,
+            "minY": 213.5,
+            "maxX": 628.5,
+            "maxY": 332.5,
+            "matrix": {
+              "array": null,
+              "a": 1,
+              "b": 0,
+              "c": 0,
+              "d": 1,
+              "tx": 0,
+              "ty": 0
+            }
+          },
+          "tail": [
+            {
+              "x": 626,
+              "y": 216
+            },
+            {
+              "x": 626,
+              "y": 318
+            },
+            {
+              "x": 540,
+              "y": 322
+            },
+            {
+              "x": 540,
+              "y": 330
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": []
+}
