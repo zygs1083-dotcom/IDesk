@@ -43,7 +43,15 @@ export const scheduleSchema = z
     cron: z.string(),
     timezone: z.string(),
     enabled: z.boolean(),
-    action: scheduleActionSchema,
+    action: z.discriminatedUnion("type", [
+      scheduleActionSchema.options[0].extend({
+        template: createTaskSchema.omit({ dueAt: true, blockedBy: true }).extend({
+          capabilities: z.array(z.string()).exactOptional(),
+        }),
+      }),
+      scheduleActionSchema.options[1],
+      scheduleActionSchema.options[2],
+    ]),
     lastRunAt: z.iso.datetime().nullable(),
     lastStatus: z.enum(["success", "failed"]).nullable(),
     nextRunAt: z.iso.datetime().nullable(),

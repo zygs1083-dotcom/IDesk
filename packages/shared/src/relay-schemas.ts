@@ -1,9 +1,10 @@
 import { z } from "zod";
+import { capabilitySchema } from "./capabilities.ts";
 import { RELAY_KINDS, type RelayRecipient } from "./relay.ts";
 
 export const relayRecipientSchema = z.discriminatedUnion("kind", [
   z.object({ kind: z.literal("agent"), id: z.string() }),
-  z.object({ kind: z.literal("capability"), value: z.string() }),
+  z.object({ kind: z.literal("capability"), value: capabilitySchema }),
   z.object({ kind: z.literal("broadcast") }),
 ]) satisfies z.ZodType<RelayRecipient>;
 export const sendRelaySchema = z.object({
@@ -23,7 +24,11 @@ export const relayMessageSchema = z
     id: z.string(),
     createdAt: z.iso.datetime(),
     fromAgentId: z.string(),
-    to: relayRecipientSchema,
+    to: z.discriminatedUnion("kind", [
+      z.object({ kind: z.literal("agent"), id: z.string() }),
+      z.object({ kind: z.literal("capability"), value: z.string() }),
+      z.object({ kind: z.literal("broadcast") }),
+    ]),
     kind: z.enum(RELAY_KINDS),
     taskId: z.string().nullable(),
     replyTo: z.string().nullable(),

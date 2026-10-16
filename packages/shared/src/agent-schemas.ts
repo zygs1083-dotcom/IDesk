@@ -1,11 +1,12 @@
 import { z } from "zod";
+import { capabilitiesSchema } from "./capabilities.ts";
 
 export const AGENT_KINDS = ["claude-code", "codex", "n8n", "script", "custom"] as const;
 export const registerAgentSchema = z.object({
   name: z.string().min(1),
   kind: z.enum(AGENT_KINDS),
   host: z.string(),
-  capabilities: z.array(z.string()),
+  capabilities: capabilitiesSchema,
   webhookUrl: z.url().exactOptional(),
 });
 export const patchAgentSchema = z.object({
