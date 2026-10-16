@@ -1,5 +1,6 @@
 import type { Point } from "../world/path.ts";
 import type { BubbleRect } from "./bubble-layout.ts";
+import { tailCollisionMargin, tailTerminalLength } from "./bubble-pointer.ts";
 
 export type BubbleTail = [Point, Point, ...Point[]];
 
@@ -9,8 +10,8 @@ export function tailIntersectsRect(tail: BubbleTail, rect: BubbleRect) {
     let low = 0;
     let high = 1;
     for (const [from, to, min, max] of [
-      [start.x, end.x, rect.x - 1, rect.x + rect.width + 1],
-      [start.y, end.y, rect.y - 1, rect.y + rect.height + 1],
+      [start.x, end.x, rect.x - tailCollisionMargin, rect.x + rect.width + tailCollisionMargin],
+      [start.y, end.y, rect.y - tailCollisionMargin, rect.y + rect.height + tailCollisionMargin],
     ] as const) {
       const delta = to - from;
       if (delta === 0) {
@@ -34,7 +35,8 @@ export function bubbleTail(
   obstacles: BubbleRect[],
   canvas: { width: number; height: number },
 ): BubbleTail | undefined {
-  const end = { x: Math.round(anchor.x), y: Math.round(anchor.y) };
+  const tip = { x: Math.round(anchor.x), y: Math.round(anchor.y) };
+  const end = { x: tip.x, y: Math.max(1, tip.y - tailTerminalLength) };
   const side =
     end.x < rect.x ? rect.x : end.x > rect.x + rect.width ? rect.x + rect.width : undefined;
   const xs =
@@ -47,9 +49,9 @@ export function bubbleTail(
       : [side];
   for (const x of xs) {
     const start = { x, y: rect.y + rect.height - (side === undefined ? 1 : 0) };
-    const paths: BubbleTail[] = [[start, end]];
+    const paths: BubbleTail[] = [[start, end, tip]];
     for (const y of [end.y - 4, ...obstacles.map((other) => other.y + other.height + 4)]) {
-      if (y > start.y && y < end.y) paths.push([start, { x, y }, end]);
+      if (y > start.y && y <= end.y) paths.push([start, { x, y }, end, tip]);
     }
     for (const path of paths) {
       if (
