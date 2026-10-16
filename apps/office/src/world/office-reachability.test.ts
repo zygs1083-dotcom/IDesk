@@ -1,4 +1,5 @@
 import { readFileSync } from "node:fs";
+import { inClearance } from "@idesk/shared/office-clearance";
 import { type OfficeLayout, parseOfficeLayout } from "@idesk/shared/office-layout";
 import { describe, expect, it } from "vitest";
 import { findPath } from "./path.ts";
@@ -39,6 +40,14 @@ describe("v3 measured walk grid", () => {
         ).toBe(".");
     });
   }
+
+  it("does not use somebody else's chair entrance as an aisle shortcut", () => {
+    const start = cell({ x: 456, y: 232 });
+    const end = cell({ x: 808, y: 440 });
+    const path = findPath(office, start, end);
+    expect(path.length).toBeGreaterThan(0);
+    expect(path.filter((point) => inClearance(point, office))).toEqual([]);
+  });
 
   it("blocks desk, counter, table and wall footprints", () => {
     for (const point of [

@@ -53,9 +53,9 @@ export function departureStep(
   return { x: seat.mirror ? -step.x : step.x, y: step.y };
 }
 
-export function seatApproaches(layout: OfficeLayout) {
+export function seatApproaches(layout: OfficeLayout, seats = layout.seats) {
   const cells = new Set<string>();
-  for (const seat of layout.seats) {
+  for (const seat of seats) {
     const step = departureStep(seat);
     const x = Math.floor(seat.x / 16),
       y = Math.floor(seat.y / 16);
