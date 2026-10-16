@@ -687,7 +687,8 @@
         [566, 234]
       ],
       "baseline": 301,
-      "floorTop": 260
+      "floorTop": 260,
+      "floorBottom": 341
     },
     {
       "id": "zone-1-desk-back-right",
@@ -708,7 +709,8 @@
         [635, 299]
       ],
       "baseline": 301,
-      "floorTop": 260
+      "floorTop": 260,
+      "floorBottom": 341
     },
     {
       "id": "zone-1-desk-front-left",
@@ -885,7 +887,8 @@
         [925, 238],
         [927, 233]
       ],
-      "floorTop": 260
+      "floorTop": 260,
+      "floorBottom": 341
     },
     {
       "id": "zone-2-desk-back-right",
@@ -904,7 +907,8 @@
         [1106, 300],
         [993, 300]
       ],
-      "floorTop": 260
+      "floorTop": 260,
+      "floorBottom": 341
     },
     {
       "id": "zone-2-desk-front-left",
@@ -1082,7 +1086,8 @@
         [553, 546],
         [554, 533]
       ],
-      "floorTop": 572
+      "floorTop": 572,
+      "floorBottom": 653
     },
     {
       "id": "zone-3-desk-back-right",
@@ -1101,7 +1106,8 @@
         [742, 613],
         [625, 613]
       ],
-      "floorTop": 572
+      "floorTop": 572,
+      "floorBottom": 653
     },
     {
       "id": "zone-3-desk-front-left",
@@ -1278,7 +1284,8 @@
         [925, 545],
         [926, 532]
       ],
-      "floorTop": 572
+      "floorTop": 572,
+      "floorBottom": 653
     },
     {
       "id": "zone-4-desk-back-right",
@@ -1297,7 +1304,8 @@
         [1114, 613],
         [993, 613]
       ],
-      "floorTop": 572
+      "floorTop": 572,
+      "floorBottom": 653
     },
     {
       "id": "zone-4-desk-front-left",
