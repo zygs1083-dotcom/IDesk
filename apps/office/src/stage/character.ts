@@ -7,6 +7,7 @@ import type { Stage } from "../world/stage.ts";
 import { Bubble } from "./bubble.ts";
 import { setGlyphText } from "./glyphs.ts";
 import { characterPose } from "./pose.ts";
+import { headPosition } from "./screen-position.ts";
 import type { OfficeAgent } from "./textures.ts";
 
 export const WALK_SPEED = 140;
@@ -25,6 +26,7 @@ export class Character extends Container {
     .rect(22, -40, 4, 5)
     .stroke({ color: 0x302a2a, width: 2 });
   readonly bubble = new Bubble();
+  private nameLabel: Text;
   private elapsed = 0;
   private walkVersion = 0;
   private nodTimers = new Map<ReturnType<typeof setTimeout>, () => void>();
@@ -42,14 +44,16 @@ export class Character extends Container {
     this.sprite = new Sprite(fallback);
     this.sprite.anchor.copyFrom(fallback.defaultAnchor as Point);
     const label = new Text({
+      resolution: globalThis.devicePixelRatio,
       text: "",
       style: {
         fontFamily: "Fusion Pixel",
-        fontSize: 12,
+        fontSize: 14,
         fill: 0xfff0ce,
         stroke: { color: 0x302a2a, width: 4 },
       },
     });
+    this.nameLabel = label;
     void setGlyphText(label, agent.name);
     label.anchor.set(0.5, 1);
     label.y = -102;
@@ -69,14 +73,15 @@ export class Character extends Container {
     this.on("pointerout", () => {
       label.visible = false;
     });
-    stage.effects.addChild(this.bubble);
+    stage.screen.addChild(this.bubble, label);
     this.cup.visible = false;
-    this.addChild(this.sprite, this.cup, label);
+    this.addChild(this.sprite, this.cup);
     stage.app.ticker.add(this.animate, undefined, -1);
     this.on("destroyed", () => {
       stage.app.ticker.remove(this.animate);
       this.stopNod();
       this.bubble.destroy({ children: true });
+      label.destroy();
     });
   }
 
@@ -91,7 +96,10 @@ export class Character extends Container {
 
   private animate = () => {
     this.zIndex = zIndexOf(this.y, 1);
-    this.bubble.position.set(this.x, this.y - 104);
+    const head = headPosition(this, (point) => this.stage.world.toGlobal(point));
+    this.bubble.position.copyFrom(head);
+    this.nameLabel.position.copyFrom(head);
+    if (this.state === "away") this.nameLabel.visible = false;
     if (!reducedMotion.matches) this.elapsed += this.stage.app.ticker.deltaMS;
     const state =
       this.state === "coffee" &&

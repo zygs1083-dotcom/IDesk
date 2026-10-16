@@ -5,9 +5,10 @@ export class Bubble extends Container {
   private background = new Graphics();
   private text = new Text({
     text: "",
+    resolution: globalThis.devicePixelRatio,
     style: {
       fontFamily: "Fusion Pixel",
-      fontSize: 12,
+      fontSize: 14,
       fill: 0x302a2a,
       wordWrap: true,
       wordWrapWidth: 180,
