@@ -84,8 +84,8 @@ export function idleSpots(
         release(id);
         if (!current()) return;
       }
-      visits.delete(id);
       await home(id);
+      visits.delete(id);
     },
   };
 }

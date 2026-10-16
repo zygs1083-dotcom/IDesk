@@ -31,12 +31,16 @@ export function createActions(cast: Cast, cards: Cards) {
     cast.settle(id, state);
   };
   const flights = new Map<string, Promise<void>>();
-  const taskAction = (task: Task, id: string, action: () => Promise<void>) => {
+  const taskAction = (task: Task, id: string, action: () => Promise<void>, interrupt = true) => {
     const previous = flights.get(task.id);
-    const next = cast.enqueue(id, async () => {
-      await previous;
-      await action();
-    });
+    const next = cast.enqueue(
+      id,
+      async () => {
+        await previous;
+        await action();
+      },
+      interrupt,
+    );
     flights.set(task.id, next);
   };
   const team = (task: Task) => task.recruit?.joined ?? [];
@@ -51,7 +55,7 @@ export function createActions(cast: Cast, cards: Cards) {
       flights.set(task.id, cards.toBoard(task, from, true));
     },
     assigned: (intent) => {
-      void cast.enqueue(intent.agentId, () => alert(intent.agentId));
+      void cast.enqueue(intent.agentId, () => alert(intent.agentId), false);
     },
     claim: (intent) => {
       const { agentId, task } = intent;
@@ -68,8 +72,10 @@ export function createActions(cast: Cast, cards: Cards) {
       });
     },
     report: (intent) => {
-      void cast.enqueue(intent.agentId, () =>
-        characters.get(intent.agentId)?.bubble.show(intent.message, 4000),
+      void cast.enqueue(
+        intent.agentId,
+        () => characters.get(intent.agentId)?.bubble.show(intent.message, 4000),
+        false,
       );
     },
     handoff: (intent) => {
@@ -97,16 +103,24 @@ export function createActions(cast: Cast, cards: Cards) {
     },
     complete: (intent) => {
       const { task, agentId } = intent;
-      taskAction(task, agentId, async () => {
-        const character = characters.get(agentId);
-        if (!character) return;
-        cast.settle(agentId, "sit");
-        character.bubble.show("✓", 4000);
-        playSound("complete");
-        await Promise.all([confetti(stage, character.position), cards.fly(task, places.doneTray)]);
-        cards.remove(task.id);
-        flights.delete(task.id);
-      });
+      taskAction(
+        task,
+        agentId,
+        async () => {
+          const character = characters.get(agentId);
+          if (!character) return;
+          cast.settle(agentId, "sit");
+          character.bubble.show("✓", 4000);
+          playSound("complete");
+          await Promise.all([
+            confetti(stage, character.position),
+            cards.fly(task, places.doneTray),
+          ]);
+          cards.remove(task.id);
+          flights.delete(task.id);
+        },
+        false,
+      );
     },
     pause: (intent) => {
       const { agentId, task } = intent;
@@ -127,11 +141,16 @@ export function createActions(cast: Cast, cards: Cards) {
       });
     },
     return: (intent) => {
-      taskAction(intent.task, intent.agentId, async () => {
-        const card = cards.get(intent.task);
-        await cards.toBoard(intent.task, cards.position(card));
-        cast.settle(intent.agentId, "sit");
-      });
+      taskAction(
+        intent.task,
+        intent.agentId,
+        async () => {
+          const card = cards.get(intent.task);
+          await cards.toBoard(intent.task, cards.position(card));
+          cast.settle(intent.agentId, "sit");
+        },
+        false,
+      );
     },
     meeting: (intent) => {
       const task = intent.task;
