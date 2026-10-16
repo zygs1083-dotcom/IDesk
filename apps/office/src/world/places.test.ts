@@ -69,7 +69,7 @@ test.each([
 ] as const)("departure follows the reverse of %s with mirror=%s", (facing, mirror, expected) => {
   const open = {
     ...layout,
-    grid: { cell: 16 as const, clearance: 32, rows: Array(5).fill(".....") },
+    grid: { ...layout.grid, cell: 16 as const, clearance: 32, rows: Array(5).fill(".....") },
   };
   expect(departure({ x: 40, y: 40, facing, mirror }, open)).toEqual(expected);
 });
@@ -77,7 +77,7 @@ test.each([
 test("a blocked departure cancels chat rather than placing people in furniture", () => {
   const blocked = {
     ...layout,
-    grid: { cell: 16 as const, clearance: 32, rows: Array(5).fill("#####") },
+    grid: { ...layout.grid, cell: 16 as const, clearance: 32, rows: Array(5).fill("#####") },
   };
   expect(chatSeats({ x: 40, y: 40, facing: "front" }, blocked)).toBeUndefined();
 });

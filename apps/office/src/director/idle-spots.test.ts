@@ -34,7 +34,7 @@ function scene(ids: SpotId[], walking = false) {
     small,
     home,
   );
-  return { moves, walk, waits, walks, small, home, layout, bubble, stopWalking };
+  return { moves, walk, waits, walks, small, home, layout, bubble, stopWalking, cast };
 }
 
 const tick = async () => {
@@ -107,4 +107,18 @@ test("real activity interrupts a stay and releases occupancy without waiting for
   expect(walk).toHaveBeenCalledTimes(2);
   waits.at(-1)?.();
   await second;
+});
+
+test("a stopped neighbour blocks a spot whose full body overlaps even beyond two half widths", async () => {
+  const { moves, walk, small, layout, cast } = scene(["coffee"]);
+  const spot = layout.spots[0];
+  const neighbour = cast.characters.get("c");
+  if (!spot || !neighbour) throw new Error("missing scene");
+  const height = layout.grid.silhouette.bottom - layout.grid.silhouette.top;
+  const offset = height - layout.grid.cell;
+  expect(offset).toBeGreaterThan(layout.grid.clearance * 2);
+  Object.assign(neighbour, { x: spot.x, y: spot.y + offset, state: "idle" });
+  await moves.visit("a");
+  expect(walk).not.toHaveBeenCalled();
+  expect(small).toHaveBeenCalledWith("a");
 });

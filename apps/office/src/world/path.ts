@@ -1,4 +1,4 @@
-import { inClearance, seatApproaches } from "@idesk/shared/office-clearance";
+import { seatApproaches } from "@idesk/shared/office-clearance";
 import type { OfficeLayout } from "@idesk/shared/office-layout";
 
 export type Point = { x: number; y: number };
@@ -33,22 +33,16 @@ export function findPath(layout: OfficeLayout, start: Point, end: Point): Point[
   const inside = (p: Point) =>
     p.x >= 0 && p.y >= 0 && p.x < (grid[0] as boolean[]).length && p.y < grid.length;
   if (!inside(start) || !inside(end)) return [];
-  const leavingClearance = inClearance(cellCenter(start), layout);
   const endpointSeats = layout.seats.filter((seat) => {
     const cell = cellOf(seat);
     return (
       key(cell) === key(start) ||
       key(cell) === key(end) ||
-      (leavingClearance && seatApproaches(layout, [seat]).has(key(start)))
+      seatApproaches(layout, [seat]).has(key(start))
     );
   });
   const allowed = seatApproaches(layout, endpointSeats);
-  const reserved = new Set(
-    [...seatApproaches(layout)].filter((cell) => {
-      const [x, y] = cell.split(",").map(Number) as [number, number];
-      return !allowed.has(cell) && inClearance(cellCenter({ x, y }), layout);
-    }),
-  );
+  const reserved = new Set([...seatApproaches(layout)].filter((cell) => !allowed.has(cell)));
   const walkable = (p: Point) =>
     inside(p) &&
     (key(p) === key(start) ||

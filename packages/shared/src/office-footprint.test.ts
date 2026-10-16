@@ -14,3 +14,12 @@ it("requires a floor rear edge and ordered ground edges independent of sorting",
   value.occluders[0].floorBottom = 79;
   expect(() => parseOfficeLayout(value)).toThrow();
 });
+
+it("requires a nonempty measured walking silhouette", () => {
+  const value = fixture();
+  value.grid.silhouette.bottom = value.grid.silhouette.top;
+  expect(() => parseOfficeLayout(value)).toThrow();
+  expect(() =>
+    parseOfficeLayout({ ...value, grid: { ...value.grid, silhouette: undefined } }),
+  ).toThrow();
+});

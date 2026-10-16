@@ -1,6 +1,7 @@
 import type { Translate } from "../i18n/translate.ts";
 import type { Key } from "../i18n/zh.ts";
 import type { SpotId } from "../world/places.ts";
+import { bodiesIntersect, stopAllowed } from "../world/stops.ts";
 import type { Cast } from "./cast.ts";
 import { idleSpeed, idleStay, pickSpots } from "./idle-pick.ts";
 
@@ -48,7 +49,17 @@ export function idleSpots(
       const current = () => !cast.stage.world.destroyed && visits.get(id) === token;
       const available = () =>
         cast.stage.layout.spots.filter(
-          (spot) => !approaching.has(spot.id) && !occupied.has(spot.id),
+          (spot) =>
+            !approaching.has(spot.id) &&
+            !occupied.has(spot.id) &&
+            stopAllowed(spot, cast.stage.layout) &&
+            [...cast.characters].every(
+              ([other, person]) =>
+                other === id ||
+                person.state === "away" ||
+                person.state === "walk" ||
+                !bodiesIntersect(spot, person, cast.stage.layout.grid.silhouette),
+            ),
         );
       const selected = pickSpots(available(), random);
       if (!selected.length) {

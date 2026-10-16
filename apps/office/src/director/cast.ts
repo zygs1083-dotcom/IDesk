@@ -13,6 +13,7 @@ import {
 import { Plaque } from "../world/plaque.ts";
 import type { Stage } from "../world/stage.ts";
 import { ActionQueue } from "./queue.ts";
+import { reserveWalk } from "./walking-space.ts";
 
 export class Cast {
   readonly agents = new Map<string, OfficeAgent>();
@@ -22,6 +23,7 @@ export class Cast {
   readonly lastActive = new Map<string, number>();
   seats = new Map<string, Seat | Standing>();
   readonly present = new Set<string>();
+  readonly stopping = new Map<string, Target>();
   private labels: Plaque[];
   private standing = new Map<string, Standing>();
 
@@ -122,12 +124,15 @@ export class Cast {
   async walk(id: string, target: Target, speed?: number) {
     const character = this.characters.get(id);
     if (!character || character.destroyed) return;
-    const start = cellOf(character.position);
-    const path = findPath(this.stage.layout, start, cellOf(target));
-    if (!path.length) return;
-    await character.walkTo([...path, target], speed);
-    character.facing = target.facing;
-    character.mirror = target.mirror === true;
+    const space = reserveWalk(this, id, target);
+    if (!space) return;
+    const path = findPath(this.stage.layout, cellOf(character.position), cellOf(space.target));
+    if (path.length) {
+      await character.walkTo([...path, space.target], speed, space.canStop);
+      character.facing = space.target.facing;
+      character.mirror = space.target.mirror === true;
+    }
+    space.release();
   }
 
   place(id: string, target: Target, state: CharacterState) {
@@ -141,8 +146,13 @@ export class Cast {
   }
 
   settle(id: string, state: CharacterState) {
-    const standing = this.standing.has(id) && (state === "sit" || state === "typing");
-    this.characters.get(id)?.setState(standing ? "idle" : state);
+    const character = this.characters.get(id);
+    if (!character) return;
+    const seated = this.stage.layout.seats.some(
+      (seat) => seat.x === character.x && seat.y === character.y,
+    );
+    const standing = (this.standing.has(id) || !seated) && (state === "sit" || state === "typing");
+    character.setState(standing ? "idle" : state);
   }
 
   active(id: string) {

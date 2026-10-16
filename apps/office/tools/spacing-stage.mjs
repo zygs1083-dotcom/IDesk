@@ -44,7 +44,7 @@ export async function spacingStage(count = 24) {
     async chat() {
       const seat = cast.seats.get("agent-0");
       const occupied = [...cast.characters]
-        .filter(([id]) => !["agent-0", "agent-1"].includes(id))
+        .filter(([id, person]) => !["agent-0", "agent-1"].includes(id) && person.state !== "away")
         .map(([, person]) => person);
       const targets = chatSeats(seat, layout, occupied);
       if (!targets) throw new Error("No chat space");
@@ -77,24 +77,27 @@ export async function spacingStage(count = 24) {
       startIdle(cast, snapshot, t);
     },
     walkRoute(route) {
-      const targets =
-        route === "desk"
-          ? [
-              { x: 456, y: 312, facing: "down" },
-              { x: 456, y: 408, facing: "down" },
-            ]
-          : [
-              { x: 392, y: 632, facing: "down" },
-              { x: 392, y: 744, facing: "down" },
-            ];
+      const start = route === "desk" ? { x: 456, y: 280 } : { x: 392, y: 552 };
+      const height = layout.grid.silhouette.bottom - layout.grid.silhouette.top;
+      const spacing = (Math.ceil(height / layout.grid.cell) + 1) * layout.grid.cell;
+      const distance = layout.grid.cell * 16;
       for (const [index, id] of ["human", "agent-0"].entries())
-        cast.place(id, { ...targets[0], y: targets[0].y - index * 80 }, "idle");
+        cast.place(id, { ...start, y: start.y - index * spacing, facing: "down" }, "idle");
+      stage.app.stop();
+      this.time = performance.now();
       this.pending = Promise.all(
-        ["human", "agent-0"].map(async (id, index) => {
-          if (index) await wait(600);
-          await cast.walk(id, { ...targets[1], y: targets[1].y - index * 80 }, 120);
-        }),
+        ["human", "agent-0"].map((id, index) =>
+          cast.walk(id, { ...start, y: start.y + distance - index * spacing, facing: "down" }, 120),
+        ),
       );
+    },
+    async step(ms) {
+      for (let elapsed = 0; elapsed < ms; elapsed += 16) {
+        this.time += 16;
+        stage.app.ticker.update(this.time);
+        await Promise.resolve();
+      }
+      stage.app.renderer.render(stage.app.stage);
     },
   };
 }

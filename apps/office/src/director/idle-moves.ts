@@ -86,6 +86,8 @@ export function idleMoves(
         const targets =
           chatSeats(a, cast.stage.layout, occupied) ?? chatSeats(b, cast.stage.layout, occupied);
         if (targets) {
+          cast.characters.get(id)?.setState("walk");
+          cast.characters.get(other)?.setState("walk");
           await Promise.all([
             cast.walk(id, targets[0], idleSpeed(random)),
             cast.walk(other, targets[1], idleSpeed(random)),

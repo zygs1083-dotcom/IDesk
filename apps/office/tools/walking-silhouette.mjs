@@ -2,7 +2,9 @@ import { characterLayer } from "./seated-scene.mjs";
 
 export function walkingBounds(atlas, sprites) {
   let left = 0,
-    right = 0;
+    right = 0,
+    top = 0,
+    bottom = 0;
   for (const key of Object.keys(atlas.frames).filter((key) => key.includes("/walk/"))) {
     const slash = key.indexOf("/");
     const layer = characterLayer(
@@ -17,7 +19,9 @@ export function walkingBounds(atlas, sprites) {
         if (layer.png.data[(y * layer.png.width + x) * 4 + 3]) {
           left = Math.min(left, layer.x + x);
           right = Math.max(right, layer.x + x + 1);
+          top = Math.min(top, layer.y + y);
+          bottom = Math.max(bottom, layer.y + y + 1);
         }
   }
-  return { left, right, clearance: Math.ceil(Math.max(-left, right) / 16) * 16 };
+  return { left, right, top, bottom, clearance: Math.ceil(Math.max(-left, right) / 16) * 16 };
 }

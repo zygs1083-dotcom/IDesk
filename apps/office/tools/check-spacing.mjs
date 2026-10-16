@@ -7,6 +7,7 @@ import { enlargeCrop } from "./occluder-image.mjs";
 
 process.env.PLAYWRIGHT_BROWSERS_PATH ??= "/data/cache/ms-playwright";
 const { chromium } = createRequire("/data/tools/playwright/package.json")("playwright");
+const fix = process.argv.includes("--fix");
 const origin = process.argv[2];
 const output = resolve(process.argv[3]);
 mkdirSync(`${output}/idle`, { recursive: true });
@@ -30,7 +31,7 @@ async function shot(name, box) {
   if (box) writeFileSync(`${output}/${name}@3x.png`, PNG.sync.write(enlargeCrop(png, box)));
 }
 await setup();
-await shot("standing-full", { x: 360, y: 160, w: 1050, h: 660 });
+if (!fix) await shot("standing-full", { x: 360, y: 160, w: 1050, h: 660 });
 await page.evaluate(() => window.spacing.chat());
 await page.waitForFunction(() => {
   const { cast, chatTargets } = window.spacing;
@@ -52,7 +53,7 @@ await shot("chat", {
   w: 280,
   h: 180,
 });
-for (const spot of ["printer", "coffee"]) {
+for (const spot of fix ? [] : ["printer", "coffee"]) {
   await setup();
   await page.evaluate((spot) => window.spacing.visit(spot), spot);
   await page.waitForFunction((spot) => {
@@ -85,17 +86,28 @@ for (const spot of ["printer", "coffee"]) {
     spot === "printer" ? { x: 820, y: 40, w: 400, h: 220 } : { x: 1240, y: 420, w: 430, h: 250 },
   );
 }
-for (const route of ["desk", "counter"]) {
+const samples = [];
+for (const route of fix ? ["counter"] : ["desk", "counter"]) {
   await setup(16);
   await page.evaluate((route) => window.spacing.walkRoute(route), route);
   for (let i = 0; i < 10; i++) {
-    await page.waitForTimeout(150);
+    await page.evaluate(() => window.spacing.step(200));
+    samples.push(
+      await page.evaluate(() =>
+        ["human", "agent-0"].map((id) => {
+          const p = window.spacing.cast.characters.get(id);
+          return { x: p.x, y: p.y, state: p.state };
+        }),
+      ),
+    );
     await shot(
       `${route}-${String(i).padStart(2, "0")}`,
-      route === "desk" ? { x: 380, y: 190, w: 450, h: 270 } : { x: 0, y: 500, w: 470, h: 310 },
+      route === "desk" ? { x: 380, y: 190, w: 450, h: 270 } : { x: 0, y: 360, w: 470, h: 500 },
     );
   }
 }
+assert.ok(new Set(samples.map((pair) => JSON.stringify(pair))).size > 5);
+writeFileSync(`${output}/walking-samples.json`, JSON.stringify(samples, null, 2));
 await setup();
 await page.evaluate(() => window.spacing.idle());
 const started = Date.now();

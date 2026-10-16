@@ -1,7 +1,8 @@
-import { departureStep, inClearance } from "@idesk/shared/office-clearance";
+import { departureStep, inClearance, seatApproaches } from "@idesk/shared/office-clearance";
 import { contains } from "@idesk/shared/office-geometry";
 import type { OfficeLayout } from "@idesk/shared/office-layout";
 import { cellCenter, cellOf, type Point, walkableGrid } from "./path.ts";
+import { bodiesIntersect, stopAllowed } from "./stops.ts";
 
 export type Seat = OfficeLayout["seats"][number];
 export type Direction = Seat["facing"] | "up";
@@ -91,6 +92,7 @@ export function chatSeats(
   const center = departure(seat, layout);
   if (!center) return;
   const grid = walkableGrid(layout);
+  const entrances = seatApproaches(layout);
   const centers = [{ ...center }];
   for (let radius = 1; radius <= 6; radius++)
     for (let dy = -radius; dy <= radius; dy++)
@@ -104,12 +106,12 @@ export function chatSeats(
     if (
       grid[a.y]?.[a.x] &&
       grid[b.y]?.[b.x] &&
-      !inClearance(cellCenter(a), layout) &&
-      !inClearance(cellCenter(b), layout) &&
+      stopAllowed(cellCenter(a), layout, entrances) &&
+      stopAllowed(cellCenter(b), layout, entrances) &&
       occupied.every((person) =>
         [a, b].every((cell) => {
           const target = cellCenter(cell);
-          return Math.hypot(person.x - target.x, person.y - target.y) >= layout.grid.clearance * 2;
+          return !bodiesIntersect(person, target, layout.grid.silhouette);
         }),
       )
     )

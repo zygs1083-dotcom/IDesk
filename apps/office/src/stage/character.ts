@@ -110,7 +110,11 @@ export class Character extends Container {
     this.walkVersion++;
   }
 
-  async walkTo(points: Point[], speed = WALK_SPEED) {
+  async walkTo(
+    points: Point[],
+    speed = WALK_SPEED,
+    canStop: (point: Point) => boolean = () => true,
+  ) {
     const version = ++this.walkVersion;
     this.setState("walk");
     for (const target of points) {
@@ -126,7 +130,7 @@ export class Character extends Container {
         (t) => t,
       );
       if (this.destroyed) return;
-      if (version !== this.walkVersion) {
+      if (version !== this.walkVersion && canStop(this.position)) {
         this.setState("idle");
         return;
       }

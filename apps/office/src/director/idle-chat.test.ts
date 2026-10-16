@@ -26,8 +26,8 @@ test.each([0, 1])("chat with a partner in zone %s uses the initiator's aisle", a
       ["b", partner],
     ]),
     characters: new Map([
-      ["a", { ...initiator, state: "sit", bubble }],
-      ["b", { ...partner, state: "sit", bubble }],
+      ["a", { ...initiator, state: "sit", bubble, setState: vi.fn() }],
+      ["b", { ...partner, state: "sit", bubble, setState: vi.fn() }],
     ]),
     present: new Set(["a", "b"]),
     sleeping: new Set<string>(),

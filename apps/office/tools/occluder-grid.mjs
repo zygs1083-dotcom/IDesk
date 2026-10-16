@@ -5,10 +5,12 @@ import { readJson, readPng, root, saveJson } from "./occluder-image.mjs";
 import { walkingBounds } from "./walking-silhouette.mjs";
 
 const layout = parseOfficeLayout(readJson(`${root}public/layout.json`));
-layout.grid.clearance = walkingBounds(
+const { clearance, ...silhouette } = walkingBounds(
   readJson(`${root}public/characters.json`),
   readPng(`${root}public/characters.png`),
-).clearance;
+);
+layout.grid.clearance = clearance;
+layout.grid.silhouette = silhouette;
 const approaches = seatApproaches(layout);
 const west = [7, 7, 7, 6, 6, 6, 6, 5, 5, 5, 5, 4, 4, 4, 4, 3, 3, 3, 3, 2, 2, 2, 2, 1, 1, 1];
 function wall(x, y) {
@@ -49,5 +51,5 @@ while (narrowed) {
   }
 }
 if (!process.argv[2]) throw new Error("Usage: node tools/occluder-grid.mjs OUTPUT.json");
-saveJson(resolve(process.argv[2]), { cell: 16, clearance: layout.grid.clearance, rows });
+saveJson(resolve(process.argv[2]), { cell: 16, clearance, silhouette, rows });
 process.stdout.write(`Grid: ${resolve(process.argv[2])}\n`);

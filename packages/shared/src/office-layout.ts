@@ -21,6 +21,14 @@ export const officeLayoutSchema = z.object({
   grid: z.object({
     cell: z.literal(16),
     clearance: z.number().positive().multipleOf(16),
+    silhouette: z
+      .object({
+        left: z.number(),
+        right: z.number(),
+        top: z.number(),
+        bottom: z.number(),
+      })
+      .refine((body) => body.left < body.right && body.top < body.bottom),
     rows: z.array(z.string().regex(/^[.#]+$/)),
   }),
   seats: z.array(
