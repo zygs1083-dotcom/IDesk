@@ -84,6 +84,7 @@ export async function direct(stage: Stage, t: Translate) {
     unsubscribe();
   });
   await pull();
+  return cast;
 }
 
 export async function initialize(stage: Stage, t: Translate) {
