@@ -5,11 +5,13 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import type { z } from "zod";
 import { Button } from "../../components/button.tsx";
+import { CapabilityPicker } from "../../components/capability-picker.tsx";
 import { Dialog } from "../../components/dialog.tsx";
 import { Field } from "../../components/field.tsx";
 import { Segmented } from "../../components/segmented.tsx";
 import { useLang } from "../../i18n/lang.tsx";
 import { request } from "../../lib/api.ts";
+import { cn } from "../../lib/cn.ts";
 import { useAgents } from "../../lib/use-agents.ts";
 
 type Input = z.infer<typeof sendRelaySchema>;
@@ -44,6 +46,7 @@ export function ComposeRelay({
       onClose();
     },
   });
+  const receivers = agents.filter((agent) => agent.capabilities.includes(capability)).length;
   const valid =
     subject.trim() &&
     (recipient === "broadcast" || (recipient === "agent" ? agentId : capability.trim()));
@@ -100,11 +103,25 @@ export function ComposeRelay({
           </label>
         )}
         {recipient === "capability" && (
-          <Field
-            label={t("common.capabilities")}
-            value={capability}
-            onChange={(event) => setCapability(event.target.value)}
-          />
+          <div className="space-y-2">
+            <CapabilityPicker
+              label={t("common.capabilities")}
+              value={capability ? [capability] : []}
+              onChange={(values) => setCapability(values[0] ?? "")}
+              agents={agents}
+              description={t("capability.description")}
+              mode="single"
+            />
+            <p
+              aria-live="polite"
+              className={cn(
+                "text-secondary",
+                receivers === 0 ? "text-status-paused" : "text-text-2",
+              )}
+            >
+              {t("capability.recipients", { total: receivers })}
+            </p>
+          </div>
         )}
         <div className="space-y-2">
           <p className="text-secondary text-text-2">{t("relay.kind")}</p>

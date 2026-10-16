@@ -1,11 +1,13 @@
 import { labels } from "@idesk/shared/labels";
 import { useId } from "react";
+import { missingCapabilities } from "../../components/capability-options.ts";
 import { Field } from "../../components/field.tsx";
 import { Segmented } from "../../components/segmented.tsx";
 import { useLang } from "../../i18n/lang.tsx";
 import { useAgents } from "../../lib/use-agents.ts";
 
 export function DispatchFields({
+  capabilities,
   mode,
   onModeChange,
   agentId,
@@ -13,6 +15,7 @@ export function DispatchFields({
   needed,
   onNeededChange,
 }: {
+  capabilities: string[];
   mode: "open" | "assign" | "recruit";
   onModeChange: (mode: "open" | "assign" | "recruit") => void;
   agentId: string;
@@ -23,6 +26,8 @@ export function DispatchFields({
   const { lang, t } = useLang();
   const { agents } = useAgents();
   const selectId = useId();
+  const selected = agents.find((agent) => agent.id === agentId);
+  const missing = selected ? missingCapabilities(capabilities, selected.capabilities) : [];
   return (
     <div className="space-y-2">
       <Segmented
@@ -64,6 +69,11 @@ export function DispatchFields({
               );
             })}
           </select>
+          {missing.length > 0 && (
+            <p aria-live="polite" className="text-secondary text-status-paused">
+              {t("capability.missing", { values: missing.join(lang === "zh" ? "、" : ", ") })}
+            </p>
+          )}
         </div>
       )}
       {mode === "recruit" && (
