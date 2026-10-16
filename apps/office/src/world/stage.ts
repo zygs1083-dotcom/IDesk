@@ -1,5 +1,6 @@
 import type { OfficeLayout } from "@idesk/shared/office-layout";
 import { Application, Container } from "pixi.js";
+import { screenBubbles } from "../stage/screen-bubbles.ts";
 import type { WorldAssets } from "./assets.ts";
 import { renderWorld } from "./render.ts";
 import { worldScale } from "./scale.ts";
@@ -21,6 +22,8 @@ export async function createStage(host: HTMLElement, layout: OfficeLayout, asset
   const effects = world.addChild(new Container());
   const lights = world.addChild(new Container({ eventMode: "none" }));
   const screen = app.stage.addChild(new Container());
+  const bubbles = screenBubbles(screen, app.screen);
+  app.ticker.add((ticker) => bubbles(ticker.deltaMS), undefined, -2);
   renderWorld(layout, assets, world, objects);
   const resize = () => {
     const width = layout.size.w;

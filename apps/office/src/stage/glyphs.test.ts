@@ -68,11 +68,12 @@ test("bubble applies dynamic glyphs only after the matching font load finishes",
   const text = bubble.children[1] as Text;
   expect(text.text).toBe("");
   expect(bubble.visible).toBe(false);
-  expect(fonts.load).toHaveBeenCalledWith('12px "Fusion Pixel"', "龘饕餮");
+  expect(fonts.load).toHaveBeenCalledWith('12px "Fusion Pixel"', "龘饕餮…");
   fonts.release();
   await Promise.resolve();
   expect(text.text).toBe("龘饕餮");
-  expect(bubble.visible).toBe(true);
+  expect(bubble.input()).toMatchObject({ width: 58, height: 30 });
+  expect(bubble.visible).toBe(false);
 });
 
 test("a bubble hidden before its glyphs load stays hidden", async () => {
@@ -83,6 +84,7 @@ test("a bubble hidden before its glyphs load stays hidden", async () => {
   fonts.release();
   await Promise.resolve();
   expect(bubble.visible).toBe(false);
+  expect(bubble.input()).toBeUndefined();
 });
 
 test("plaque refits its full host name after the font is available", async () => {
