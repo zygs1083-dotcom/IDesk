@@ -20,7 +20,11 @@ test("leaving a seated position crosses its cell center, avoids furniture, and e
     walkTo,
   };
   const cast: Cast = Object.create(Cast.prototype);
-  Object.assign(cast, { stage: { layout }, characters: new Map([["agent", character]]) });
+  Object.assign(cast, {
+    stage: { layout },
+    stopping: new Map(),
+    characters: new Map([["agent", character]]),
+  });
   await cast.walk("agent", target, 150);
   const call = walkTo.mock.calls[0];
   if (!call) throw new Error("No walk");

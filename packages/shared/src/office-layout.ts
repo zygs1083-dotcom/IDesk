@@ -14,9 +14,23 @@ export const officeLayoutSchema = z.object({
       id,
       polygon: z.array(z.tuple([coordinate, coordinate])).min(3),
       baseline: coordinate,
+      floorTop: coordinate,
+      floorBottom: coordinate.optional(),
     }),
   ),
-  grid: z.object({ cell: z.literal(16), rows: z.array(z.string().regex(/^[.#]+$/)) }),
+  grid: z.object({
+    cell: z.literal(16),
+    clearance: z.number().positive().multipleOf(16),
+    silhouette: z
+      .object({
+        left: z.number(),
+        right: z.number(),
+        top: z.number(),
+        bottom: z.number(),
+      })
+      .refine((body) => body.left < body.right && body.top < body.bottom),
+    rows: z.array(z.string().regex(/^[.#]+$/)),
+  }),
   seats: z.array(
     position.extend({
       id,
@@ -79,6 +93,9 @@ export function parseOfficeLayout(value: unknown): OfficeLayout {
       const zones = new Map(layout.zones.map((zone) => [zone.id, zone]));
       for (const occluder of layout.occluders) {
         for (const [x, y] of occluder.polygon) checkPoint({ x, y }, occluder.id);
+        const bottom = occluder.floorBottom ?? occluder.baseline;
+        if (occluder.floorTop > bottom || bottom < occluder.baseline || bottom > layout.size.h)
+          issue(`Invalid floor footprint: ${occluder.id}`);
         const ys = occluder.polygon.map((p) => p[1]);
         if (occluder.baseline < Math.min(...ys) || occluder.baseline > layout.size.h)
           issue(`Invalid baseline: ${occluder.id}`);

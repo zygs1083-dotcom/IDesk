@@ -17,9 +17,15 @@ export function fixture(): Sample {
           [100, 80],
         ],
         baseline: 80,
+        floorTop: 40,
       },
     ],
-    grid: { cell: 16, rows: Array.from({ length: 59 }, () => ".".repeat(105)) },
+    grid: {
+      cell: 16,
+      clearance: 32,
+      silhouette: { left: -30, right: 30, top: -96, bottom: 0 },
+      rows: Array.from({ length: 59 }, () => ".".repeat(105)),
+    },
     seats: [
       { id: "seat", x: 32, y: 48, facing: "front", zone: "zone", workSpot: { x: 40, y: 20 } },
     ],
