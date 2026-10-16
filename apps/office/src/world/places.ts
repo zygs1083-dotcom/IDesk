@@ -1,3 +1,4 @@
+import { departureStep, inClearance } from "@idesk/shared/office-clearance";
 import { contains } from "@idesk/shared/office-geometry";
 import type { OfficeLayout } from "@idesk/shared/office-layout";
 import { cellCenter, cellOf, type Point, walkableGrid } from "./path.ts";
@@ -66,17 +67,8 @@ export function coffeeSeats(layout: OfficeLayout): Target[] {
 
 export function departure(seat: Target, layout: OfficeLayout) {
   const cell = cellOf(seat);
-  // front faces lower-right; back faces upper-right. Depart in the opposite diagonal.
-  const steps: Record<Direction, Point> = {
-    front: { x: -1, y: -1 },
-    back: { x: -1, y: 1 },
-    down: { x: 0, y: -1 },
-    up: { x: 0, y: 1 },
-    left: { x: 1, y: 0 },
-    right: { x: -1, y: 0 },
-  };
-  const step = steps[seat.facing];
-  const dx = seat.mirror ? -step.x : step.x;
+  const step = departureStep(seat);
+  const dx = step.x;
   const grid = walkableGrid(layout);
   for (let i = 1; i < Math.max(grid.length, (grid[0] as boolean[]).length); i++) {
     const point = { x: cell.x + dx * i, y: cell.y + step.y * i };
@@ -87,19 +79,40 @@ export function departure(seat: Target, layout: OfficeLayout) {
       point.y >= grid.length
     )
       return;
-    if (grid[point.y]?.[point.x]) return point;
+    if (grid[point.y]?.[point.x] && !inClearance(cellCenter(point), layout)) return point;
   }
 }
 
-export function chatSeats(seat: Target, layout: OfficeLayout): [Target, Target] | undefined {
+export function chatSeats(
+  seat: Target,
+  layout: OfficeLayout,
+  occupied: Point[] = [],
+): [Target, Target] | undefined {
   const center = departure(seat, layout);
   if (!center) return;
   const grid = walkableGrid(layout);
-  for (const [a, b, facingA, facingB] of [
-    [{ x: center.x - 1, y: center.y }, { x: center.x + 1, y: center.y }, "right", "left"],
-    [{ x: center.x, y: center.y - 1 }, { x: center.x, y: center.y + 1 }, "down", "up"],
-  ] as const) {
-    if (grid[a.y]?.[a.x] && grid[b.y]?.[b.x])
-      return [cellCenter({ ...a, facing: facingA }), cellCenter({ ...b, facing: facingB })];
+  const centers = [{ ...center }];
+  for (let radius = 1; radius <= 6; radius++)
+    for (let dy = -radius; dy <= radius; dy++)
+      for (let dx = -radius; dx <= radius; dx++)
+        if (Math.max(Math.abs(dx), Math.abs(dy)) === radius)
+          centers.push({ x: center.x + dx, y: center.y + dy });
+  const offset = layout.grid.clearance / layout.grid.cell;
+  for (const point of centers) {
+    const a = { x: point.x - offset, y: point.y };
+    const b = { x: point.x + offset, y: point.y };
+    if (
+      grid[a.y]?.[a.x] &&
+      grid[b.y]?.[b.x] &&
+      !inClearance(cellCenter(a), layout) &&
+      !inClearance(cellCenter(b), layout) &&
+      occupied.every((person) =>
+        [a, b].every((cell) => {
+          const target = cellCenter(cell);
+          return Math.hypot(person.x - target.x, person.y - target.y) >= layout.grid.clearance * 2;
+        }),
+      )
+    )
+      return [cellCenter({ ...a, facing: "right" }), cellCenter({ ...b, facing: "left" })];
   }
 }

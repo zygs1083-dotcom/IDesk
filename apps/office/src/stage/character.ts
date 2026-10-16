@@ -26,6 +26,7 @@ export class Character extends Container {
     .stroke({ color: 0x302a2a, width: 2 });
   readonly bubble = new Bubble();
   private elapsed = 0;
+  private walkVersion = 0;
   private nodTimers = new Map<ReturnType<typeof setTimeout>, () => void>();
   private nodVersion = 0;
   private bounce = { x: 1, y: 1 };
@@ -105,7 +106,12 @@ export class Character extends Container {
     this.sprite.scale.set((pose.mirror ? -1 : 1) * this.bounce.x, this.bounce.y);
   };
 
+  stopWalking() {
+    this.walkVersion++;
+  }
+
   async walkTo(points: Point[], speed = WALK_SPEED) {
+    const version = ++this.walkVersion;
     this.setState("walk");
     for (const target of points) {
       const dx = target.x - this.x;
@@ -120,6 +126,10 @@ export class Character extends Container {
         (t) => t,
       );
       if (this.destroyed) return;
+      if (version !== this.walkVersion) {
+        this.setState("idle");
+        return;
+      }
     }
     this.setState("idle");
     if (!reducedMotion.matches) {

@@ -67,11 +67,43 @@ test.each([
   ["left", false, { x: 3, y: 2 }],
   ["right", false, { x: 1, y: 2 }],
 ] as const)("departure follows the reverse of %s with mirror=%s", (facing, mirror, expected) => {
-  const open = { ...layout, grid: { cell: 16 as const, rows: Array(5).fill(".....") } };
+  const open = {
+    ...layout,
+    grid: { cell: 16 as const, clearance: 32, rows: Array(5).fill(".....") },
+  };
   expect(departure({ x: 40, y: 40, facing, mirror }, open)).toEqual(expected);
 });
 
 test("a blocked departure cancels chat rather than placing people in furniture", () => {
-  const blocked = { ...layout, grid: { cell: 16 as const, rows: Array(5).fill("#####") } };
+  const blocked = {
+    ...layout,
+    grid: { cell: 16 as const, clearance: 32, rows: Array(5).fill("#####") },
+  };
   expect(chatSeats({ x: 40, y: 40, facing: "front" }, blocked)).toBeUndefined();
+});
+
+test("chat is horizontal, uses the measured personal distance and avoids clearance and bystanders", () => {
+  const seat = available[0];
+  if (!seat) throw new Error("missing seat");
+  const pair = chatSeats(seat, layout);
+  expect(pair).toBeDefined();
+  expect(pair?.[0].y).toBe(pair?.[1].y);
+  expect((pair?.[1].x ?? 0) - (pair?.[0].x ?? 0)).toBe(layout.grid.clearance * 2);
+  expect(pair?.map((p) => p.facing)).toEqual(["right", "left"]);
+  const shifted = chatSeats(seat, layout, pair);
+  expect(shifted).toBeDefined();
+  for (const person of pair ?? [])
+    for (const point of shifted ?? [])
+      expect(Math.hypot(point.x - person.x, point.y - person.y)).toBeGreaterThanOrEqual(
+        layout.grid.clearance * 2,
+      );
+});
+
+test("a vertical-only aisle cannot be used for face-to-face chat", () => {
+  const vertical = {
+    ...layout,
+    occluders: [],
+    grid: { ...layout.grid, rows: Array(8).fill("##.##") },
+  };
+  expect(chatSeats({ x: 40, y: 40, facing: "down" }, vertical)).toBeUndefined();
 });
