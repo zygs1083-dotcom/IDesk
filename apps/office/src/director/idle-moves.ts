@@ -32,6 +32,7 @@ export function idleMoves(
   wait: Wait,
   random: () => number,
 ) {
+  const chats = new Map<string, () => void>();
   const alive = () => !cast.stage.world.destroyed;
   const home = async (id: string) => {
     const seat = cast.seats.get(id);
@@ -59,8 +60,24 @@ export function idleMoves(
   return {
     small,
     spot: spots.visit,
-    cancel: spots.cancel,
+    cancel(id: string) {
+      spots.cancel(id);
+      chats.get(id)?.();
+    },
     async chat(id: string, other: string) {
+      let cancelled = false;
+      let interrupt = () => {};
+      const interrupted = new Promise<void>((resolve) => {
+        interrupt = resolve;
+      });
+      const cancel = () => {
+        cancelled = true;
+        cast.characters.get(id)?.stopWalking();
+        cast.characters.get(other)?.stopWalking();
+        interrupt();
+      };
+      chats.set(id, cancel);
+      chats.set(other, cancel);
       let ready: (eligible: boolean) => void = () => {};
       let release: () => void = () => {};
       const started = new Promise<boolean>((resolve) => {
@@ -93,15 +110,17 @@ export function idleMoves(
             cast.walk(other, targets[1], idleSpeed(random)),
           ]);
           const rounds = 3 + Math.floor(random() * 2);
-          for (let round = 0; round < rounds && alive(); round++) {
+          for (let round = 0; round < rounds && alive() && !cancelled; round++) {
             const key = chatKeys[round % chatKeys.length];
             const duration = CHAT_MIN_MS + random() * CHAT_RANGE_MS;
             if (key) cast.characters.get(round % 2 ? other : id)?.bubble.show(t(key), duration);
-            await wait(duration);
+            await Promise.race([wait(duration), interrupted]);
           }
-          await Promise.all([home(id), home(other)]);
+          if (!cancelled) await Promise.all([home(id), home(other)]);
         }
       }
+      chats.delete(id);
+      chats.delete(other);
       release();
       await partner;
     },

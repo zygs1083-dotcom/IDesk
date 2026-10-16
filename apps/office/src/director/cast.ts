@@ -13,12 +13,13 @@ import {
 import { Plaque } from "../world/plaque.ts";
 import type { Stage } from "../world/stage.ts";
 import { ActionQueue } from "./queue.ts";
+import { returnToSeat } from "./return-to-seat.ts";
 import { reserveWalk } from "./walking-space.ts";
 
 export class Cast {
   readonly agents = new Map<string, OfficeAgent>();
   readonly characters = new Map<string, Character>();
-  readonly queue = new ActionQueue();
+  readonly queue = new ActionQueue((id) => returnToSeat(this, id));
   readonly sleeping = new Set<string>();
   readonly lastActive = new Map<string, number>();
   seats = new Map<string, Seat | Standing>();
@@ -160,8 +161,9 @@ export class Cast {
     this.lastActive.set(id, Date.now());
   }
 
-  enqueue(id: string, action: () => Promise<void> | void) {
+  enqueue(id: string, action: () => Promise<void> | void, interrupt = true) {
     this.active(id);
+    if (interrupt) this.stage.world.emit("office:interrupt", id);
     return this.queue.enqueue(id, () => {
       this.active(id);
       return action();

@@ -6,13 +6,21 @@ import { worldScale } from "./scale.ts";
 
 export async function createStage(host: HTMLElement, layout: OfficeLayout, assets: WorldAssets) {
   const app = new Application();
-  await app.init({ resizeTo: host, background: "#6c5745", antialias: false, preference: "webgl" });
+  await app.init({
+    resizeTo: host,
+    background: "#6c5745",
+    antialias: false,
+    preference: "webgl",
+    resolution: window.devicePixelRatio,
+    autoDensity: true,
+  });
   host.appendChild(app.canvas);
   const world = app.stage.addChild(new Container());
   const board = world.addChild(new Container());
   const objects = world.addChild(new Container({ sortableChildren: true }));
   const effects = world.addChild(new Container());
   const lights = world.addChild(new Container({ eventMode: "none" }));
+  const screen = app.stage.addChild(new Container());
   renderWorld(layout, assets, world, objects);
   const resize = () => {
     const width = layout.size.w;
@@ -26,6 +34,6 @@ export async function createStage(host: HTMLElement, layout: OfficeLayout, asset
   };
   app.renderer.on("resize", resize);
   resize();
-  return { app, world, board, objects, effects, lights, layout, assets };
+  return { app, world, board, objects, effects, lights, screen, layout, assets };
 }
 export type Stage = Awaited<ReturnType<typeof createStage>>;

@@ -39,6 +39,7 @@ export class Cards {
   private board = new Set<string>();
   private overflow = new Text({
     text: "",
+    resolution: globalThis.devicePixelRatio,
     style: { fontFamily: "Fusion Pixel", fontSize: 12, fill: 0x302a2a },
   });
 
@@ -47,6 +48,12 @@ export class Cards {
   constructor(private stage: Stage) {
     this.area = stage.layout.board;
     stage.board.addChild(this.overflow);
+    const resize = () => {
+      this.overflow.style.fontSize = 12 / stage.world.scale.x;
+    };
+    stage.app.renderer.on("resize", resize);
+    stage.world.on("destroyed", () => stage.app.renderer.off("resize", resize));
+    resize();
   }
 
   get(task: Task) {

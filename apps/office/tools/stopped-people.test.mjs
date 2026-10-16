@@ -19,7 +19,7 @@ function corridor(axis = "horizontal") {
   const ticker = { deltaMS: 16, add: (fn) => updates.add(fn), remove: (fn) => updates.delete(fn) };
   const stage = {
     app: { ticker },
-    effects: new Container(),
+    screen: new Container(),
     world: new Container(),
     layout: {
       ...layout,

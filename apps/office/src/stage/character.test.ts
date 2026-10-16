@@ -7,6 +7,7 @@ import { Character } from "./character.ts";
 import type { OfficeAgent } from "./textures.ts";
 
 vi.hoisted(() => vi.stubGlobal("matchMedia", () => ({ matches: false })));
+vi.stubGlobal("window", { devicePixelRatio: 2 });
 vi.mock("./glyphs.ts", () => ({ setGlyphText: vi.fn() }));
 
 test("each frame copies its atlas anchor and moving people update their depth every tick", () => {
@@ -22,7 +23,8 @@ test("each frame copies its atlas anchor and moving people update their depth ev
   let tick = () => {};
   const stage = {
     layout: { seats: [] },
-    effects: new Container(),
+    screen: new Container(),
+    world: new Container(),
     app: {
       ticker: {
         deltaMS: 300,
