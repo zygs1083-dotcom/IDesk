@@ -3,12 +3,15 @@ import { TASK_PRIORITIES, type TaskPriority } from "@idesk/shared/task-status";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { Button } from "../../components/button.tsx";
+import { CapabilityPicker } from "../../components/capability-picker.tsx";
+import { ClaimableHint } from "../../components/claimable-hint.tsx";
 import { Dialog } from "../../components/dialog.tsx";
 import { Field } from "../../components/field.tsx";
 import { Menu } from "../../components/menu.tsx";
 import { Segmented } from "../../components/segmented.tsx";
 import { useLang } from "../../i18n/lang.tsx";
 import { request } from "../../lib/api.ts";
+import { useAgents } from "../../lib/use-agents.ts";
 import type { Schedule } from "../schedules/types.ts";
 import { DispatchFields } from "./dispatch-fields.tsx";
 
@@ -16,7 +19,8 @@ export function PublishDialog({ onClose }: { onClose: () => void }) {
   const { lang, t } = useLang();
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
-  const [capabilities, setCapabilities] = useState("");
+  const [capabilities, setCapabilities] = useState<string[]>([]);
+  const { agents } = useAgents();
   const [tags, setTags] = useState("");
   const { data: schedules } = useQuery({
     queryKey: ["schedules"],
@@ -47,7 +51,7 @@ export function PublishDialog({ onClose }: { onClose: () => void }) {
         body: JSON.stringify({
           title: title.trim(),
           body,
-          capabilities: capabilities.split(/[,，\s]+/).filter(Boolean),
+          capabilities,
           priority,
           ...(dispatch === undefined ? {} : { dispatch }),
           tags: tags.split(/[,，\s]+/).filter(Boolean),
@@ -79,7 +83,7 @@ export function PublishDialog({ onClose }: { onClose: () => void }) {
                 setBody(template.body ?? "");
                 setPriority(template.priority ?? "normal");
                 setTags((template.tags ?? []).join(" "));
-                setCapabilities((template.capabilities ?? []).join(" "));
+                setCapabilities(template.capabilities ?? []);
               },
             }))}
           />
@@ -108,18 +112,22 @@ export function PublishDialog({ onClose }: { onClose: () => void }) {
           value={body}
           onChange={(event) => setBody(event.target.value)}
         />
-        <Field
+        <CapabilityPicker
           label={t("common.capabilities")}
-          placeholder="coding, browser"
           value={capabilities}
-          onChange={(event) => setCapabilities(event.target.value)}
+          onChange={setCapabilities}
+          agents={agents}
+          mode="multi"
+          description={t("capability.description")}
         />
+        <ClaimableHint capabilities={capabilities} agents={agents} />
         <Field
           label={t("common.tags")}
           placeholder={t("common.listSeparator")}
           value={tags}
           onChange={(event) => setTags(event.target.value)}
         />
+        <p className="text-secondary text-text-2">{t("capability.tagsDescription")}</p>
         <div className="space-y-2">
           <span className="text-secondary text-text-2">{t("common.priority")}</span>
           <Segmented
@@ -133,6 +141,7 @@ export function PublishDialog({ onClose }: { onClose: () => void }) {
           />
         </div>
         <DispatchFields
+          capabilities={capabilities}
           mode={mode}
           onModeChange={setMode}
           agentId={agentId}

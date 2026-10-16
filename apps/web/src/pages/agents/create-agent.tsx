@@ -7,21 +7,24 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import type { z } from "zod";
 import { Button } from "../../components/button.tsx";
+import { CapabilityPicker } from "../../components/capability-picker.tsx";
 import { Dialog } from "../../components/dialog.tsx";
 import { Field } from "../../components/field.tsx";
 import { useLang } from "../../i18n/lang.tsx";
 import { request } from "../../lib/api.ts";
 import type { Agent } from "../../lib/types.ts";
+import { useAgents } from "../../lib/use-agents.ts";
 
 export function CreateAgent({ agent, onClose }: { agent?: Agent; onClose: () => void }) {
   const { t } = useLang();
   const client = useQueryClient();
+  const { agents } = useAgents();
   const [name, setName] = useState(agent?.name ?? "");
   const [kind, setKind] = useState<z.infer<typeof registerAgentSchema>["kind"]>(
     agent?.kind ?? "codex",
   );
   const [host, setHost] = useState(agent?.host ?? "");
-  const [capabilities, setCapabilities] = useState(agent?.capabilities.join(" ") ?? "");
+  const [capabilities, setCapabilities] = useState<string[]>(agent?.capabilities ?? []);
   const [webhookUrl, setWebhookUrl] = useState(agent?.webhookUrl ?? "");
   const [copied, setCopied] = useState(false);
   const [copyError, setCopyError] = useState("");
@@ -40,7 +43,7 @@ export function CreateAgent({ agent, onClose }: { agent?: Agent; onClose: () => 
         body: JSON.stringify({
           name: name.trim(),
           host: host.trim(),
-          capabilities: capabilities.split(/[\s,，]+/).filter(Boolean),
+          capabilities,
           webhookUrl: webhookUrl.trim() || null,
         }),
       }),
@@ -99,7 +102,7 @@ export function CreateAgent({ agent, onClose }: { agent?: Agent; onClose: () => 
               kind,
               host: host.trim(),
               ...(webhookUrl.trim() ? { webhookUrl: webhookUrl.trim() } : {}),
-              capabilities: capabilities.split(/[\s,，]+/).filter(Boolean),
+              capabilities,
             });
           }}
         >
@@ -129,11 +132,14 @@ export function CreateAgent({ agent, onClose }: { agent?: Agent; onClose: () => 
             value={host}
             onChange={(event) => setHost(event.target.value)}
           />
-          <Field
+          <CapabilityPicker
             label={t("common.capabilities")}
-            placeholder={t("common.listSeparator")}
             value={capabilities}
-            onChange={(event) => setCapabilities(event.target.value)}
+            onChange={setCapabilities}
+            agents={agents}
+            description={t("capability.agentDescription")}
+            presetShortcuts
+            mode="multi"
           />
           <Field
             label="Webhook"

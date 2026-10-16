@@ -1,9 +1,12 @@
 import { labels } from "@idesk/shared/labels";
 import type { ScheduleAction } from "@idesk/shared/schedule-schemas";
 import { TASK_PRIORITIES } from "@idesk/shared/task-status";
+import { CapabilityPicker } from "../../components/capability-picker.tsx";
+import { ClaimableHint } from "../../components/claimable-hint.tsx";
 import { Field } from "../../components/field.tsx";
 import { Segmented } from "../../components/segmented.tsx";
 import { useLang } from "../../i18n/lang.tsx";
+import { useAgents } from "../../lib/use-agents.ts";
 import type { Connector } from "./types.ts";
 
 export function ActionFields({
@@ -21,8 +24,8 @@ export function ActionFields({
 }: {
   tags: string;
   setTags: (text: string) => void;
-  capabilities: string;
-  setCapabilities: (text: string) => void;
+  capabilities: string[];
+  setCapabilities: (values: string[]) => void;
   action: ScheduleAction;
   onChange: (action: ScheduleAction) => void;
   connectors: Connector[];
@@ -32,6 +35,7 @@ export function ActionFields({
   setParams: (text: string) => void;
 }) {
   const { lang, t } = useLang();
+  const { agents } = useAgents();
   switch (action.type) {
     case "publish_task":
       return (
@@ -54,18 +58,22 @@ export function ActionFields({
               onChange({ ...action, template: { ...action.template, body: event.target.value } })
             }
           />
-          <Field
+          <CapabilityPicker
             label={t("common.capabilities")}
-            placeholder={t("common.listSeparator")}
             value={capabilities}
-            onChange={(event) => setCapabilities(event.target.value)}
+            onChange={setCapabilities}
+            agents={agents}
+            mode="multi"
+            description={t("capability.description")}
           />
+          <ClaimableHint capabilities={capabilities} agents={agents} />
           <Field
             label={t("common.tags")}
             placeholder={t("common.listSeparator")}
             value={tags}
             onChange={(event) => setTags(event.target.value)}
           />
+          <p className="text-secondary text-text-2">{t("capability.tagsDescription")}</p>
           <Segmented
             label={t("common.priority")}
             value={action.template.priority ?? "normal"}

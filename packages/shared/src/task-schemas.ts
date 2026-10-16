@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { capabilitiesSchema } from "./capabilities.ts";
 import type { TaskAction } from "./task-machine.ts";
 import { TASK_PRIORITIES, TASK_STATUSES } from "./task-status.ts";
 
@@ -8,7 +9,7 @@ export const createTaskSchema = z.object({
   priority: z.enum(TASK_PRIORITIES).exactOptional(),
   tags: z.array(z.string()).exactOptional(),
   blockedBy: z.array(z.string()).exactOptional(),
-  capabilities: z.array(z.string()).exactOptional(),
+  capabilities: capabilitiesSchema.exactOptional(),
   dueAt: z.iso.datetime().exactOptional(),
 });
 const assignActionSchema = z.object({ type: z.literal("assign"), agentId: z.string() });

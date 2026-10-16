@@ -40,9 +40,7 @@ export function ScheduleDialog({
       : "",
   );
   const [capabilities, setCapabilities] = useState(
-    schedule?.action.type === "publish_task"
-      ? (schedule.action.template.capabilities ?? []).join(" ")
-      : "",
+    schedule?.action.type === "publish_task" ? (schedule.action.template.capabilities ?? []) : [],
   );
   const [tags, setTags] = useState(
     schedule?.action.type === "publish_task" ? (schedule.action.template.tags ?? []).join(" ") : "",
@@ -78,7 +76,7 @@ export function ScheduleDialog({
           ...action,
           template: {
             ...action.template,
-            capabilities: capabilities.split(/[\s,，]+/).filter(Boolean),
+            capabilities,
             tags: tags.split(/[\s,，]+/).filter(Boolean),
           },
         };

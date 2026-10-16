@@ -97,7 +97,7 @@ export function scheduleRoutes(app: OpenAPIHono<AuthEnv>) {
       required: true,
       content: {
         "application/json": {
-          schema: z.toJSONSchema(updateScheduleSchema),
+          schema: z.toJSONSchema(updateScheduleSchema, { io: "input" }),
         },
       },
     } as NonNullable<RouteConfig["requestBody"]>,

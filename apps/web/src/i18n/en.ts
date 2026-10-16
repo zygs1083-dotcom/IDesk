@@ -1,6 +1,27 @@
 import type { Key } from "./zh.ts";
 
 export const en: Record<Key, string> = {
+  "capability.agentDescription": "This agent’s capabilities determine which tasks it can claim",
+  "capability.relayDescription": "All agents with this capability will receive this message",
+  "capability.presets": "Preset capabilities",
+  "capability.recipients.one": "{total} agent will receive this message",
+  "capability.claim.online.one": "{online} online agent can claim now",
+  "capability.claim.offline.one": "The {total} agent with these capabilities is offline",
+
+  "capability.remove": "Remove {value}",
+  "capability.placeholder": "Search or add a capability",
+  "capability.count": "Online {online} / Total {total}",
+  "capability.add": "Add {value}",
+  "capability.empty": "No other capabilities",
+  "capability.invalid": "Capabilities must be 1–32 characters without commas",
+  "capability.description": "Required capabilities determine who can claim this task",
+  "capability.tagsDescription": "Free-form categories, only used for display and search",
+  "capability.claim.any": "Any agent can claim",
+  "capability.claim.online": "{online} online agents can claim now",
+  "capability.claim.offline": "All {total} agents with these capabilities are offline",
+  "capability.claim.none": "No agents have these capabilities; nobody can claim after publishing",
+  "capability.missing": "Missing capabilities: {values}",
+  "capability.recipients": "{total} agents will receive this message",
   "activity.empty": "No activity yet",
   "agents.averageDuration": "Average duration",
   "agents.completedWeek": "Completed in 7 days",
