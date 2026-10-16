@@ -1,0 +1,92 @@
+[
+  {
+    "scene": "agent-create",
+    "changedPixels": 0,
+    "totalPixels": 1728000,
+    "bounds": null
+  },
+  {
+    "scene": "agent-create-select-open",
+    "changedPixels": 0,
+    "totalPixels": 1900800,
+    "bounds": null
+  },
+  {
+    "scene": "agent-edit",
+    "changedPixels": 0,
+    "totalPixels": 1728000,
+    "bounds": null
+  },
+  {
+    "scene": "desk-publish",
+    "changedPixels": 0,
+    "totalPixels": 1728000,
+    "bounds": null
+  },
+  {
+    "scene": "desk-publish-select-open",
+    "changedPixels": 0,
+    "totalPixels": 1900800,
+    "bounds": null
+  },
+  {
+    "scene": "native-probe",
+    "changedPixels": 0,
+    "totalPixels": 1728000,
+    "bounds": null
+  },
+  {
+    "scene": "native-probe-select-open",
+    "changedPixels": 0,
+    "totalPixels": 1900800,
+    "bounds": null
+  },
+  {
+    "scene": "relay-compose",
+    "changedPixels": 0,
+    "totalPixels": 1728000,
+    "bounds": null
+  },
+  {
+    "scene": "relay-compose-select-open",
+    "changedPixels": 0,
+    "totalPixels": 1900800,
+    "bounds": null
+  },
+  {
+    "scene": "schedule-connector",
+    "changedPixels": 0,
+    "totalPixels": 1728000,
+    "bounds": null
+  },
+  {
+    "scene": "schedule-connector-select-open",
+    "changedPixels": 0,
+    "totalPixels": 1900800,
+    "bounds": null
+  },
+  {
+    "scene": "schedule-create",
+    "changedPixels": 0,
+    "totalPixels": 1728000,
+    "bounds": null
+  },
+  {
+    "scene": "schedules",
+    "changedPixels": 0,
+    "totalPixels": 1728000,
+    "bounds": null
+  },
+  {
+    "scene": "settings-access",
+    "changedPixels": 0,
+    "totalPixels": 1728000,
+    "bounds": null
+  },
+  {
+    "scene": "settings-connector",
+    "changedPixels": 0,
+    "totalPixels": 1728000,
+    "bounds": null
+  }
+]

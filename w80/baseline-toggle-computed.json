@@ -1,0 +1,51 @@
+[
+  {
+    "elapsed": 0.2999999523162842,
+    "bg": "rgb(255, 255, 255)",
+    "color": "rgb(29, 29, 31)",
+    "surface": "#1c1c1e",
+    "transition": "0.12s"
+  },
+  {
+    "elapsed": 106.20000004768372,
+    "bg": "rgb(255, 255, 255)",
+    "color": "rgb(29, 29, 31)",
+    "surface": "#1c1c1e",
+    "transition": "0.12s"
+  },
+  {
+    "elapsed": 156,
+    "bg": "rgb(255, 255, 255)",
+    "color": "rgb(29, 29, 31)",
+    "surface": "#1c1c1e",
+    "transition": "0.12s"
+  },
+  {
+    "elapsed": 168.29999995231628,
+    "bg": "rgb(255, 255, 255)",
+    "color": "rgb(29, 29, 31)",
+    "surface": "#1c1c1e",
+    "transition": "0.12s"
+  },
+  {
+    "elapsed": 206.39999997615814,
+    "bg": "rgb(161, 161, 161)",
+    "color": "rgb(119, 119, 121)",
+    "surface": "#1c1c1e",
+    "transition": "0.12s"
+  },
+  {
+    "elapsed": 225.29999995231628,
+    "bg": "rgb(121, 121, 122)",
+    "color": "rgb(157, 157, 159)",
+    "surface": "#1c1c1e",
+    "transition": "0.12s"
+  },
+  {
+    "elapsed": 351.7999999523163,
+    "bg": "rgb(28, 28, 30)",
+    "color": "rgb(245, 245, 247)",
+    "surface": "#1c1c1e",
+    "transition": "0.12s"
+  }
+]

@@ -1,0 +1,3698 @@
+[
+  {
+    "scene": "desk-publish",
+    "scheme": "light",
+    "styles": [
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "EN / 中",
+        "class": "shrink-0 whitespace-nowrap text-secondary",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(110, 110, 115)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "INPUT",
+        "type": "text",
+        "text": "",
+        "class": "min-w-0 w-full bg-transparent text-secondary text-text outline-none placeholder:text-text-3 focus-visible:outline-1 focus-visible:outline-accent",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "平铺",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent bg-surface text-accent",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(10, 132, 255)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "按主机",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent text-text-2 hover:text-text",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(110, 110, 115)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "发布",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 bg-accent text-white hover:bg-accent/90 order-2 ml-auto shrink-0 sidebar:order-none",
+        "background": "rgb(10, 132, 255)",
+        "color": "rgb(255, 255, 255)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "发布一个",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "模板",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 border-0 text-accent",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(10, 132, 255)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 border-0 p-2",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "INPUT",
+        "type": "text",
+        "text": "",
+        "class": "w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none placeholder:text-text-3 focus:border-accent",
+        "background": "rgb(250, 250, 251)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "TEXTAREA",
+        "type": "textarea",
+        "text": "",
+        "class": "w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none placeholder:text-text-3 focus:border-accent",
+        "background": "rgb(250, 250, 251)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "INPUT",
+        "type": "text",
+        "text": "",
+        "class": "w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none placeholder:text-text-3 focus:border-accent",
+        "background": "rgb(250, 250, 251)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "INPUT",
+        "type": "text",
+        "text": "",
+        "class": "w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none placeholder:text-text-3 focus:border-accent",
+        "background": "rgb(250, 250, 251)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "低",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent text-text-2 hover:text-text",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(110, 110, 115)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "普通",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent bg-surface text-accent",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(10, 132, 255)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "高",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent text-text-2 hover:text-text",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(110, 110, 115)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "紧急",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent text-text-2 hover:text-text",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(110, 110, 115)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "待领取",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent text-text-2 hover:text-text",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(110, 110, 115)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "指定",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent bg-surface text-accent",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(10, 132, 255)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "招募",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent text-text-2 hover:text-text",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(110, 110, 115)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "SELECT",
+        "type": "select-one",
+        "text": "选择 AIbuilder@w80-review",
+        "class": "block w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body text-text focus:outline-accent",
+        "background": "rgb(250, 250, 251)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "OPTION",
+        "text": "选择 AI",
+        "class": "",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "OPTION",
+        "text": "builder@w80-review",
+        "class": "",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "submit",
+        "text": "发布",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 bg-accent text-white hover:bg-accent/90",
+        "background": "rgb(10, 132, 255)",
+        "color": "rgb(255, 255, 255)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      }
+    ]
+  },
+  {
+    "scene": "agent-create",
+    "scheme": "light",
+    "styles": [
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "EN / 中",
+        "class": "shrink-0 whitespace-nowrap text-secondary",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(110, 110, 115)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "新建",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 bg-accent text-white hover:bg-accent/90",
+        "background": "rgb(10, 132, 255)",
+        "color": "rgb(255, 255, 255)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "builder",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 justify-start gap-2 whitespace-nowrap border-0 text-body group-hover:bg-surface-2",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 border-0 p-2",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 border-0 p-2",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "INPUT",
+        "type": "text",
+        "text": "",
+        "class": "w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none placeholder:text-text-3 focus:border-accent",
+        "background": "rgb(250, 250, 251)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "SELECT",
+        "type": "select-one",
+        "text": "claude-codecodexn8nscriptcustom",
+        "class": "block w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body text-text focus:border-accent",
+        "background": "rgb(250, 250, 251)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "OPTION",
+        "text": "claude-code",
+        "class": "",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "OPTION",
+        "text": "codex",
+        "class": "",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "OPTION",
+        "text": "n8n",
+        "class": "",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "OPTION",
+        "text": "script",
+        "class": "",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "OPTION",
+        "text": "custom",
+        "class": "",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "INPUT",
+        "type": "text",
+        "text": "",
+        "class": "w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none placeholder:text-text-3 focus:border-accent",
+        "background": "rgb(250, 250, 251)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "INPUT",
+        "type": "text",
+        "text": "",
+        "class": "w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none placeholder:text-text-3 focus:border-accent",
+        "background": "rgb(250, 250, 251)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "写代码 coding",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 rounded-tag px-2 py-1 text-label",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "代码审查 review",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 rounded-tag px-2 py-1 text-label",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "测试 testing",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 rounded-tag px-2 py-1 text-label",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "浏览器操作 browser",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 rounded-tag px-2 py-1 text-label",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "写文档 docs",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 rounded-tag px-2 py-1 text-label",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "数据处理 data",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 rounded-tag px-2 py-1 text-label",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "设计 design",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 rounded-tag px-2 py-1 text-label",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "部署运维 devops",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 rounded-tag px-2 py-1 text-label",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "运行在 Mac macos",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 rounded-tag px-2 py-1 text-label",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "运行在 Linux linux",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 rounded-tag px-2 py-1 text-label",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "运行在 Windows windows",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 rounded-tag px-2 py-1 text-label",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "有 GPU gpu",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 rounded-tag px-2 py-1 text-label",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "INPUT",
+        "type": "url",
+        "text": "",
+        "class": "w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none placeholder:text-text-3 focus:border-accent",
+        "background": "rgb(250, 250, 251)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "取消",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "submit",
+        "text": "确定",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 bg-accent text-white hover:bg-accent/90",
+        "background": "rgb(10, 132, 255)",
+        "color": "rgb(255, 255, 255)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      }
+    ]
+  },
+  {
+    "scene": "agent-edit",
+    "scheme": "light",
+    "styles": [
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "EN / 中",
+        "class": "shrink-0 whitespace-nowrap text-secondary",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(110, 110, 115)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "新建",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 bg-accent text-white hover:bg-accent/90",
+        "background": "rgb(10, 132, 255)",
+        "color": "rgb(255, 255, 255)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "builder",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 justify-start gap-2 whitespace-nowrap border-0 text-body group-hover:bg-surface-2",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 border-0 p-2",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 border-0 p-2",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "INPUT",
+        "type": "text",
+        "text": "",
+        "class": "w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none placeholder:text-text-3 focus:border-accent",
+        "background": "rgb(250, 250, 251)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "INPUT",
+        "type": "text",
+        "text": "",
+        "class": "w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none placeholder:text-text-3 focus:border-accent",
+        "background": "rgb(250, 250, 251)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "INPUT",
+        "type": "text",
+        "text": "",
+        "class": "w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none placeholder:text-text-3 focus:border-accent",
+        "background": "rgb(250, 250, 251)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 border-0 bg-transparent p-1",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 border-0 bg-transparent p-1",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 border-0 bg-transparent p-1",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "INPUT",
+        "type": "text",
+        "text": "",
+        "class": "w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none placeholder:text-text-3 focus:border-accent",
+        "background": "rgb(250, 250, 251)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "代码审查 review",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 rounded-tag px-2 py-1 text-label",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "测试 testing",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 rounded-tag px-2 py-1 text-label",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "写文档 docs",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 rounded-tag px-2 py-1 text-label",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "数据处理 data",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 rounded-tag px-2 py-1 text-label",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "设计 design",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 rounded-tag px-2 py-1 text-label",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "部署运维 devops",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 rounded-tag px-2 py-1 text-label",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "运行在 Mac macos",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 rounded-tag px-2 py-1 text-label",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "运行在 Linux linux",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 rounded-tag px-2 py-1 text-label",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "运行在 Windows windows",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 rounded-tag px-2 py-1 text-label",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "有 GPU gpu",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 rounded-tag px-2 py-1 text-label",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "INPUT",
+        "type": "url",
+        "text": "",
+        "class": "w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none placeholder:text-text-3 focus:border-accent",
+        "background": "rgb(250, 250, 251)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "取消",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "submit",
+        "text": "确定",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 bg-accent text-white hover:bg-accent/90",
+        "background": "rgb(10, 132, 255)",
+        "color": "rgb(255, 255, 255)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      }
+    ]
+  },
+  {
+    "scene": "relay-compose",
+    "scheme": "light",
+    "styles": [
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "EN / 中",
+        "class": "shrink-0 whitespace-nowrap text-secondary",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(110, 110, 115)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "发消息",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 bg-accent text-white hover:bg-accent/90",
+        "background": "rgb(10, 132, 255)",
+        "color": "rgb(255, 255, 255)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "全部",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent bg-surface text-accent",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(10, 132, 255)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "指定",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent text-text-2 hover:text-text",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(110, 110, 115)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "能力",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent text-text-2 hover:text-text",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(110, 110, 115)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "全体",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent text-text-2 hover:text-text",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(110, 110, 115)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "全部种类",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent bg-surface text-accent",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(10, 132, 255)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "说明",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent text-text-2 hover:text-text",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(110, 110, 115)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "成果",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent text-text-2 hover:text-text",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(110, 110, 115)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "请求",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent text-text-2 hover:text-text",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(110, 110, 115)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "回复",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent text-text-2 hover:text-text",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(110, 110, 115)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "全部任务",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent bg-surface text-accent",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(10, 132, 255)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "有关联",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent text-text-2 hover:text-text",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(110, 110, 115)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "无关联",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent text-text-2 hover:text-text",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(110, 110, 115)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "发一条",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 mt-3",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(110, 110, 115)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 border-0 p-2",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "指定 AI",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent bg-surface text-accent",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(10, 132, 255)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "能力",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent text-text-2 hover:text-text",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(110, 110, 115)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "全体",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent text-text-2 hover:text-text",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(110, 110, 115)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "SELECT",
+        "type": "select-one",
+        "text": "选择智能体builder@w80-review",
+        "class": "block w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body text-text focus:border-accent",
+        "background": "rgb(250, 250, 251)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "OPTION",
+        "text": "选择智能体",
+        "class": "",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "OPTION",
+        "text": "builder@w80-review",
+        "class": "",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "说明",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent bg-surface text-accent",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(10, 132, 255)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "成果",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent text-text-2 hover:text-text",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(110, 110, 115)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "请求",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent text-text-2 hover:text-text",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(110, 110, 115)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "回复",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent text-text-2 hover:text-text",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(110, 110, 115)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "INPUT",
+        "type": "text",
+        "text": "",
+        "class": "w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none placeholder:text-text-3 focus:border-accent",
+        "background": "rgb(250, 250, 251)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "TEXTAREA",
+        "type": "textarea",
+        "text": "",
+        "class": "w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none placeholder:text-text-3 focus:border-accent",
+        "background": "rgb(250, 250, 251)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "INPUT",
+        "type": "text",
+        "text": "",
+        "class": "w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none placeholder:text-text-3 focus:border-accent tabular-nums",
+        "background": "rgb(250, 250, 251)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "取消",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "submit",
+        "text": "发送",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 bg-accent text-white hover:bg-accent/90",
+        "background": "rgb(10, 132, 255)",
+        "color": "rgb(255, 255, 255)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      }
+    ]
+  },
+  {
+    "scene": "settings-access",
+    "scheme": "light",
+    "styles": [
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "EN / 中",
+        "class": "shrink-0 whitespace-nowrap text-secondary",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(110, 110, 115)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "复制",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "复制",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "复制",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      }
+    ]
+  },
+  {
+    "scene": "settings-connector",
+    "scheme": "light",
+    "styles": [
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "EN / 中",
+        "class": "shrink-0 whitespace-nowrap text-secondary",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(110, 110, 115)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "添加连接器",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 bg-accent text-white hover:bg-accent/90",
+        "background": "rgb(10, 132, 255)",
+        "color": "rgb(255, 255, 255)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 border-0 p-2",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 border-0 p-2",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "n8n",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent bg-surface text-accent",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(10, 132, 255)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "GitHub Actions",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent text-text-2 hover:text-text",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(110, 110, 115)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "DolphinScheduler",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent text-text-2 hover:text-text",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(110, 110, 115)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "INPUT",
+        "type": "text",
+        "text": "",
+        "class": "w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none placeholder:text-text-3 focus:border-accent",
+        "background": "rgb(250, 250, 251)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "INPUT",
+        "type": "url",
+        "text": "",
+        "class": "w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none placeholder:text-text-3 focus:border-accent",
+        "background": "rgb(250, 250, 251)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "INPUT",
+        "type": "password",
+        "text": "",
+        "class": "w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none placeholder:text-text-3 focus:border-accent",
+        "background": "rgb(250, 250, 251)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "测试连接",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "submit",
+        "text": "添加",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 bg-accent text-white hover:bg-accent/90",
+        "background": "rgb(10, 132, 255)",
+        "color": "rgb(255, 255, 255)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      }
+    ]
+  },
+  {
+    "scene": "schedules",
+    "scheme": "light",
+    "styles": [
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "EN / 中",
+        "class": "shrink-0 whitespace-nowrap text-secondary",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(110, 110, 115)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "新建",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 bg-accent text-white hover:bg-accent/90",
+        "background": "rgb(10, 132, 255)",
+        "color": "rgb(255, 255, 255)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "",
+        "class": "relative inline-flex h-6 w-10 shrink-0 items-center rounded-full p-1 transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 bg-line",
+        "background": "rgba(0, 0, 0, 0.08)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 border-0 p-2",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      }
+    ]
+  },
+  {
+    "scene": "schedule-create",
+    "scheme": "light",
+    "styles": [
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "EN / 中",
+        "class": "shrink-0 whitespace-nowrap text-secondary",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(110, 110, 115)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "新建",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 bg-accent text-white hover:bg-accent/90",
+        "background": "rgb(10, 132, 255)",
+        "color": "rgb(255, 255, 255)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "",
+        "class": "relative inline-flex h-6 w-10 shrink-0 items-center rounded-full p-1 transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 bg-line",
+        "background": "rgba(0, 0, 0, 0.08)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 border-0 p-2",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 border-0 p-2",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "INPUT",
+        "type": "text",
+        "text": "",
+        "class": "w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none placeholder:text-text-3 focus:border-accent",
+        "background": "rgb(250, 250, 251)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "INPUT",
+        "type": "text",
+        "text": "",
+        "class": "w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none placeholder:text-text-3 focus:border-accent",
+        "background": "rgb(250, 250, 251)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "INPUT",
+        "type": "text",
+        "text": "",
+        "class": "w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none placeholder:text-text-3 focus:border-accent",
+        "background": "rgb(250, 250, 251)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "",
+        "class": "relative inline-flex h-6 w-10 shrink-0 items-center rounded-full p-1 transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 bg-accent",
+        "background": "rgb(10, 132, 255)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "发布任务",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent bg-surface text-accent",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(10, 132, 255)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "HTTP 请求",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent text-text-2 hover:text-text",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(110, 110, 115)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "触发连接器",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent text-text-2 hover:text-text",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(110, 110, 115)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "INPUT",
+        "type": "text",
+        "text": "",
+        "class": "w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none placeholder:text-text-3 focus:border-accent",
+        "background": "rgb(250, 250, 251)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "TEXTAREA",
+        "type": "textarea",
+        "text": "",
+        "class": "w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none placeholder:text-text-3 focus:border-accent",
+        "background": "rgb(250, 250, 251)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "INPUT",
+        "type": "text",
+        "text": "",
+        "class": "w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none placeholder:text-text-3 focus:border-accent",
+        "background": "rgb(250, 250, 251)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "INPUT",
+        "type": "text",
+        "text": "",
+        "class": "w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none placeholder:text-text-3 focus:border-accent",
+        "background": "rgb(250, 250, 251)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "低",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent text-text-2 hover:text-text",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(110, 110, 115)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "普通",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent bg-surface text-accent",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(10, 132, 255)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "高",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent text-text-2 hover:text-text",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(110, 110, 115)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "紧急",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent text-text-2 hover:text-text",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(110, 110, 115)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "取消",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "submit",
+        "text": "新建",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 bg-accent text-white hover:bg-accent/90",
+        "background": "rgb(10, 132, 255)",
+        "color": "rgb(255, 255, 255)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      }
+    ]
+  },
+  {
+    "scene": "schedule-connector",
+    "scheme": "light",
+    "styles": [
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "EN / 中",
+        "class": "shrink-0 whitespace-nowrap text-secondary",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(110, 110, 115)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "新建",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 bg-accent text-white hover:bg-accent/90",
+        "background": "rgb(10, 132, 255)",
+        "color": "rgb(255, 255, 255)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "",
+        "class": "relative inline-flex h-6 w-10 shrink-0 items-center rounded-full p-1 transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 bg-line",
+        "background": "rgba(0, 0, 0, 0.08)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 border-0 p-2",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 border-0 p-2",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "INPUT",
+        "type": "text",
+        "text": "",
+        "class": "w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none placeholder:text-text-3 focus:border-accent",
+        "background": "rgb(250, 250, 251)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "INPUT",
+        "type": "text",
+        "text": "",
+        "class": "w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none placeholder:text-text-3 focus:border-accent",
+        "background": "rgb(250, 250, 251)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "INPUT",
+        "type": "text",
+        "text": "",
+        "class": "w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none placeholder:text-text-3 focus:border-accent",
+        "background": "rgb(250, 250, 251)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "",
+        "class": "relative inline-flex h-6 w-10 shrink-0 items-center rounded-full p-1 transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 bg-accent",
+        "background": "rgb(10, 132, 255)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "发布任务",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent text-text-2 hover:text-text",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(110, 110, 115)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "HTTP 请求",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent text-text-2 hover:text-text",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(110, 110, 115)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "触发连接器",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent bg-surface text-accent",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(10, 132, 255)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "SELECT",
+        "type": "select-one",
+        "text": "Review scheduler",
+        "class": "w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body text-text focus:outline-accent",
+        "background": "rgb(250, 250, 251)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "OPTION",
+        "text": "Review scheduler",
+        "class": "",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "INPUT",
+        "type": "text",
+        "text": "",
+        "class": "w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none placeholder:text-text-3 focus:border-accent",
+        "background": "rgb(250, 250, 251)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "TEXTAREA",
+        "type": "textarea",
+        "text": "",
+        "class": "w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none placeholder:text-text-3 focus:border-accent",
+        "background": "rgb(250, 250, 251)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "取消",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "submit",
+        "text": "新建",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 bg-accent text-white hover:bg-accent/90",
+        "background": "rgb(10, 132, 255)",
+        "color": "rgb(255, 255, 255)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      }
+    ]
+  },
+  {
+    "scene": "native-probe",
+    "scheme": "light",
+    "styles": [
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "EN / 中",
+        "class": "shrink-0 whitespace-nowrap text-secondary",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(110, 110, 115)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "INPUT",
+        "type": "checkbox",
+        "text": "",
+        "class": "",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "INPUT",
+        "type": "date",
+        "text": "",
+        "class": "",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "INPUT",
+        "type": "time",
+        "text": "",
+        "class": "",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "INPUT",
+        "type": "number",
+        "text": "",
+        "class": "",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "SELECT",
+        "type": "select-one",
+        "text": "Native option oneNative option two",
+        "class": "",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "OPTION",
+        "text": "Native option one",
+        "class": "",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "OPTION",
+        "text": "Native option two",
+        "class": "",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "TEXTAREA",
+        "type": "textarea",
+        "text": "Native textarea",
+        "class": "",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "复制",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "复制",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "复制",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(29, 29, 31)",
+        "colorScheme": "normal",
+        "surface": "#fff"
+      }
+    ]
+  },
+  {
+    "scene": "desk-publish",
+    "scheme": "dark",
+    "styles": [
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "EN / 中",
+        "class": "shrink-0 whitespace-nowrap text-secondary",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(161, 161, 166)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "INPUT",
+        "type": "text",
+        "text": "",
+        "class": "min-w-0 w-full bg-transparent text-secondary text-text outline-none placeholder:text-text-3 focus-visible:outline-1 focus-visible:outline-accent",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "平铺",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent bg-surface text-accent",
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(10, 132, 255)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "按主机",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent text-text-2 hover:text-text",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(161, 161, 166)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "发布",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 bg-accent text-white hover:bg-accent/90 order-2 ml-auto shrink-0 sidebar:order-none",
+        "background": "rgb(10, 132, 255)",
+        "color": "rgb(255, 255, 255)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "发布一个",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2",
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "模板",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 border-0 text-accent",
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(10, 132, 255)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 border-0 p-2",
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "INPUT",
+        "type": "text",
+        "text": "",
+        "class": "w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none placeholder:text-text-3 focus:border-accent",
+        "background": "rgb(44, 44, 46)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "TEXTAREA",
+        "type": "textarea",
+        "text": "",
+        "class": "w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none placeholder:text-text-3 focus:border-accent",
+        "background": "rgb(44, 44, 46)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "INPUT",
+        "type": "text",
+        "text": "",
+        "class": "w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none placeholder:text-text-3 focus:border-accent",
+        "background": "rgb(44, 44, 46)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "INPUT",
+        "type": "text",
+        "text": "",
+        "class": "w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none placeholder:text-text-3 focus:border-accent",
+        "background": "rgb(44, 44, 46)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "低",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent text-text-2 hover:text-text",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(161, 161, 166)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "普通",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent bg-surface text-accent",
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(10, 132, 255)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "高",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent text-text-2 hover:text-text",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(161, 161, 166)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "紧急",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent text-text-2 hover:text-text",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(161, 161, 166)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "待领取",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent text-text-2 hover:text-text",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(161, 161, 166)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "指定",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent bg-surface text-accent",
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(10, 132, 255)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "招募",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent text-text-2 hover:text-text",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(161, 161, 166)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "SELECT",
+        "type": "select-one",
+        "text": "选择 AIbuilder@w80-review",
+        "class": "block w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body text-text focus:outline-accent",
+        "background": "rgb(44, 44, 46)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "OPTION",
+        "text": "选择 AI",
+        "class": "",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "OPTION",
+        "text": "builder@w80-review",
+        "class": "",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "submit",
+        "text": "发布",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 bg-accent text-white hover:bg-accent/90",
+        "background": "rgb(10, 132, 255)",
+        "color": "rgb(255, 255, 255)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      }
+    ]
+  },
+  {
+    "scene": "agent-create",
+    "scheme": "dark",
+    "styles": [
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "EN / 中",
+        "class": "shrink-0 whitespace-nowrap text-secondary",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(161, 161, 166)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "新建",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 bg-accent text-white hover:bg-accent/90",
+        "background": "rgb(10, 132, 255)",
+        "color": "rgb(255, 255, 255)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "builder",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 justify-start gap-2 whitespace-nowrap border-0 text-body group-hover:bg-surface-2",
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 border-0 p-2",
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 border-0 p-2",
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "INPUT",
+        "type": "text",
+        "text": "",
+        "class": "w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none placeholder:text-text-3 focus:border-accent",
+        "background": "rgb(44, 44, 46)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "SELECT",
+        "type": "select-one",
+        "text": "claude-codecodexn8nscriptcustom",
+        "class": "block w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body text-text focus:border-accent",
+        "background": "rgb(44, 44, 46)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "OPTION",
+        "text": "claude-code",
+        "class": "",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "OPTION",
+        "text": "codex",
+        "class": "",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "OPTION",
+        "text": "n8n",
+        "class": "",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "OPTION",
+        "text": "script",
+        "class": "",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "OPTION",
+        "text": "custom",
+        "class": "",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "INPUT",
+        "type": "text",
+        "text": "",
+        "class": "w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none placeholder:text-text-3 focus:border-accent",
+        "background": "rgb(44, 44, 46)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "INPUT",
+        "type": "text",
+        "text": "",
+        "class": "w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none placeholder:text-text-3 focus:border-accent",
+        "background": "rgb(44, 44, 46)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "写代码 coding",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 rounded-tag px-2 py-1 text-label",
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "代码审查 review",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 rounded-tag px-2 py-1 text-label",
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "测试 testing",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 rounded-tag px-2 py-1 text-label",
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "浏览器操作 browser",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 rounded-tag px-2 py-1 text-label",
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "写文档 docs",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 rounded-tag px-2 py-1 text-label",
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "数据处理 data",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 rounded-tag px-2 py-1 text-label",
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "设计 design",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 rounded-tag px-2 py-1 text-label",
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "部署运维 devops",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 rounded-tag px-2 py-1 text-label",
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "运行在 Mac macos",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 rounded-tag px-2 py-1 text-label",
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "运行在 Linux linux",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 rounded-tag px-2 py-1 text-label",
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "运行在 Windows windows",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 rounded-tag px-2 py-1 text-label",
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "有 GPU gpu",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 rounded-tag px-2 py-1 text-label",
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "INPUT",
+        "type": "url",
+        "text": "",
+        "class": "w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none placeholder:text-text-3 focus:border-accent",
+        "background": "rgb(44, 44, 46)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "取消",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2",
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "submit",
+        "text": "确定",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 bg-accent text-white hover:bg-accent/90",
+        "background": "rgb(10, 132, 255)",
+        "color": "rgb(255, 255, 255)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      }
+    ]
+  },
+  {
+    "scene": "agent-edit",
+    "scheme": "dark",
+    "styles": [
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "EN / 中",
+        "class": "shrink-0 whitespace-nowrap text-secondary",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(161, 161, 166)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "新建",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 bg-accent text-white hover:bg-accent/90",
+        "background": "rgb(10, 132, 255)",
+        "color": "rgb(255, 255, 255)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "builder",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 justify-start gap-2 whitespace-nowrap border-0 text-body group-hover:bg-surface-2",
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 border-0 p-2",
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 border-0 p-2",
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "INPUT",
+        "type": "text",
+        "text": "",
+        "class": "w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none placeholder:text-text-3 focus:border-accent",
+        "background": "rgb(44, 44, 46)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "INPUT",
+        "type": "text",
+        "text": "",
+        "class": "w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none placeholder:text-text-3 focus:border-accent",
+        "background": "rgb(44, 44, 46)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "INPUT",
+        "type": "text",
+        "text": "",
+        "class": "w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none placeholder:text-text-3 focus:border-accent",
+        "background": "rgb(44, 44, 46)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 border-0 bg-transparent p-1",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 border-0 bg-transparent p-1",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 border-0 bg-transparent p-1",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "INPUT",
+        "type": "text",
+        "text": "",
+        "class": "w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none placeholder:text-text-3 focus:border-accent",
+        "background": "rgb(44, 44, 46)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "代码审查 review",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 rounded-tag px-2 py-1 text-label",
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "测试 testing",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 rounded-tag px-2 py-1 text-label",
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "写文档 docs",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 rounded-tag px-2 py-1 text-label",
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "数据处理 data",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 rounded-tag px-2 py-1 text-label",
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "设计 design",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 rounded-tag px-2 py-1 text-label",
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "部署运维 devops",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 rounded-tag px-2 py-1 text-label",
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "运行在 Mac macos",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 rounded-tag px-2 py-1 text-label",
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "运行在 Linux linux",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 rounded-tag px-2 py-1 text-label",
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "运行在 Windows windows",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 rounded-tag px-2 py-1 text-label",
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "有 GPU gpu",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 rounded-tag px-2 py-1 text-label",
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "INPUT",
+        "type": "url",
+        "text": "",
+        "class": "w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none placeholder:text-text-3 focus:border-accent",
+        "background": "rgb(44, 44, 46)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "取消",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2",
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "submit",
+        "text": "确定",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 bg-accent text-white hover:bg-accent/90",
+        "background": "rgb(10, 132, 255)",
+        "color": "rgb(255, 255, 255)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      }
+    ]
+  },
+  {
+    "scene": "relay-compose",
+    "scheme": "dark",
+    "styles": [
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "EN / 中",
+        "class": "shrink-0 whitespace-nowrap text-secondary",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(161, 161, 166)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "发消息",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 bg-accent text-white hover:bg-accent/90",
+        "background": "rgb(10, 132, 255)",
+        "color": "rgb(255, 255, 255)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "全部",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent bg-surface text-accent",
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(10, 132, 255)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "指定",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent text-text-2 hover:text-text",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(161, 161, 166)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "能力",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent text-text-2 hover:text-text",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(161, 161, 166)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "全体",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent text-text-2 hover:text-text",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(161, 161, 166)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "全部种类",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent bg-surface text-accent",
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(10, 132, 255)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "说明",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent text-text-2 hover:text-text",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(161, 161, 166)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "成果",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent text-text-2 hover:text-text",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(161, 161, 166)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "请求",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent text-text-2 hover:text-text",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(161, 161, 166)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "回复",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent text-text-2 hover:text-text",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(161, 161, 166)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "全部任务",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent bg-surface text-accent",
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(10, 132, 255)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "有关联",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent text-text-2 hover:text-text",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(161, 161, 166)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "无关联",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent text-text-2 hover:text-text",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(161, 161, 166)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "发一条",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 mt-3",
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(161, 161, 166)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 border-0 p-2",
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "指定 AI",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent bg-surface text-accent",
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(10, 132, 255)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "能力",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent text-text-2 hover:text-text",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(161, 161, 166)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "全体",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent text-text-2 hover:text-text",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(161, 161, 166)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "SELECT",
+        "type": "select-one",
+        "text": "选择智能体builder@w80-review",
+        "class": "block w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body text-text focus:border-accent",
+        "background": "rgb(44, 44, 46)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "OPTION",
+        "text": "选择智能体",
+        "class": "",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "OPTION",
+        "text": "builder@w80-review",
+        "class": "",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "说明",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent bg-surface text-accent",
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(10, 132, 255)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "成果",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent text-text-2 hover:text-text",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(161, 161, 166)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "请求",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent text-text-2 hover:text-text",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(161, 161, 166)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "回复",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent text-text-2 hover:text-text",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(161, 161, 166)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "INPUT",
+        "type": "text",
+        "text": "",
+        "class": "w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none placeholder:text-text-3 focus:border-accent",
+        "background": "rgb(44, 44, 46)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "TEXTAREA",
+        "type": "textarea",
+        "text": "",
+        "class": "w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none placeholder:text-text-3 focus:border-accent",
+        "background": "rgb(44, 44, 46)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "INPUT",
+        "type": "text",
+        "text": "",
+        "class": "w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none placeholder:text-text-3 focus:border-accent tabular-nums",
+        "background": "rgb(44, 44, 46)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "取消",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2",
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "submit",
+        "text": "发送",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 bg-accent text-white hover:bg-accent/90",
+        "background": "rgb(10, 132, 255)",
+        "color": "rgb(255, 255, 255)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      }
+    ]
+  },
+  {
+    "scene": "settings-access",
+    "scheme": "dark",
+    "styles": [
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "EN / 中",
+        "class": "shrink-0 whitespace-nowrap text-secondary",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(161, 161, 166)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "复制",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2",
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "复制",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2",
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "复制",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2",
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      }
+    ]
+  },
+  {
+    "scene": "settings-connector",
+    "scheme": "dark",
+    "styles": [
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "EN / 中",
+        "class": "shrink-0 whitespace-nowrap text-secondary",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(161, 161, 166)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "添加连接器",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 bg-accent text-white hover:bg-accent/90",
+        "background": "rgb(10, 132, 255)",
+        "color": "rgb(255, 255, 255)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 border-0 p-2",
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 border-0 p-2",
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "n8n",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent bg-surface text-accent",
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(10, 132, 255)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "GitHub Actions",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent text-text-2 hover:text-text",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(161, 161, 166)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "DolphinScheduler",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent text-text-2 hover:text-text",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(161, 161, 166)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "INPUT",
+        "type": "text",
+        "text": "",
+        "class": "w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none placeholder:text-text-3 focus:border-accent",
+        "background": "rgb(44, 44, 46)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "INPUT",
+        "type": "url",
+        "text": "",
+        "class": "w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none placeholder:text-text-3 focus:border-accent",
+        "background": "rgb(44, 44, 46)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "INPUT",
+        "type": "password",
+        "text": "",
+        "class": "w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none placeholder:text-text-3 focus:border-accent",
+        "background": "rgb(44, 44, 46)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "测试连接",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2",
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "submit",
+        "text": "添加",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 bg-accent text-white hover:bg-accent/90",
+        "background": "rgb(10, 132, 255)",
+        "color": "rgb(255, 255, 255)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      }
+    ]
+  },
+  {
+    "scene": "schedules",
+    "scheme": "dark",
+    "styles": [
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "EN / 中",
+        "class": "shrink-0 whitespace-nowrap text-secondary",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(161, 161, 166)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "新建",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 bg-accent text-white hover:bg-accent/90",
+        "background": "rgb(10, 132, 255)",
+        "color": "rgb(255, 255, 255)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "",
+        "class": "relative inline-flex h-6 w-10 shrink-0 items-center rounded-full p-1 transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 bg-line",
+        "background": "rgba(255, 255, 255, 0.1)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 border-0 p-2",
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      }
+    ]
+  },
+  {
+    "scene": "schedule-create",
+    "scheme": "dark",
+    "styles": [
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "EN / 中",
+        "class": "shrink-0 whitespace-nowrap text-secondary",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(161, 161, 166)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "新建",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 bg-accent text-white hover:bg-accent/90",
+        "background": "rgb(10, 132, 255)",
+        "color": "rgb(255, 255, 255)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "",
+        "class": "relative inline-flex h-6 w-10 shrink-0 items-center rounded-full p-1 transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 bg-line",
+        "background": "rgba(255, 255, 255, 0.1)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 border-0 p-2",
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 border-0 p-2",
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "INPUT",
+        "type": "text",
+        "text": "",
+        "class": "w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none placeholder:text-text-3 focus:border-accent",
+        "background": "rgb(44, 44, 46)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "INPUT",
+        "type": "text",
+        "text": "",
+        "class": "w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none placeholder:text-text-3 focus:border-accent",
+        "background": "rgb(44, 44, 46)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "INPUT",
+        "type": "text",
+        "text": "",
+        "class": "w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none placeholder:text-text-3 focus:border-accent",
+        "background": "rgb(44, 44, 46)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "",
+        "class": "relative inline-flex h-6 w-10 shrink-0 items-center rounded-full p-1 transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 bg-accent",
+        "background": "rgb(10, 132, 255)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "发布任务",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent bg-surface text-accent",
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(10, 132, 255)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "HTTP 请求",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent text-text-2 hover:text-text",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(161, 161, 166)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "触发连接器",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent text-text-2 hover:text-text",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(161, 161, 166)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "INPUT",
+        "type": "text",
+        "text": "",
+        "class": "w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none placeholder:text-text-3 focus:border-accent",
+        "background": "rgb(44, 44, 46)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "TEXTAREA",
+        "type": "textarea",
+        "text": "",
+        "class": "w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none placeholder:text-text-3 focus:border-accent",
+        "background": "rgb(44, 44, 46)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "INPUT",
+        "type": "text",
+        "text": "",
+        "class": "w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none placeholder:text-text-3 focus:border-accent",
+        "background": "rgb(44, 44, 46)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "INPUT",
+        "type": "text",
+        "text": "",
+        "class": "w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none placeholder:text-text-3 focus:border-accent",
+        "background": "rgb(44, 44, 46)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "低",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent text-text-2 hover:text-text",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(161, 161, 166)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "普通",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent bg-surface text-accent",
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(10, 132, 255)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "高",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent text-text-2 hover:text-text",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(161, 161, 166)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "紧急",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent text-text-2 hover:text-text",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(161, 161, 166)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "取消",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2",
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "submit",
+        "text": "新建",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 bg-accent text-white hover:bg-accent/90",
+        "background": "rgb(10, 132, 255)",
+        "color": "rgb(255, 255, 255)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      }
+    ]
+  },
+  {
+    "scene": "schedule-connector",
+    "scheme": "dark",
+    "styles": [
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "EN / 中",
+        "class": "shrink-0 whitespace-nowrap text-secondary",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(161, 161, 166)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "新建",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 bg-accent text-white hover:bg-accent/90",
+        "background": "rgb(10, 132, 255)",
+        "color": "rgb(255, 255, 255)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "",
+        "class": "relative inline-flex h-6 w-10 shrink-0 items-center rounded-full p-1 transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 bg-line",
+        "background": "rgba(255, 255, 255, 0.1)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 border-0 p-2",
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2 border-0 p-2",
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "INPUT",
+        "type": "text",
+        "text": "",
+        "class": "w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none placeholder:text-text-3 focus:border-accent",
+        "background": "rgb(44, 44, 46)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "INPUT",
+        "type": "text",
+        "text": "",
+        "class": "w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none placeholder:text-text-3 focus:border-accent",
+        "background": "rgb(44, 44, 46)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "INPUT",
+        "type": "text",
+        "text": "",
+        "class": "w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none placeholder:text-text-3 focus:border-accent",
+        "background": "rgb(44, 44, 46)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "",
+        "class": "relative inline-flex h-6 w-10 shrink-0 items-center rounded-full p-1 transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 bg-accent",
+        "background": "rgb(10, 132, 255)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "发布任务",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent text-text-2 hover:text-text",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(161, 161, 166)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "HTTP 请求",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent text-text-2 hover:text-text",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(161, 161, 166)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "触发连接器",
+        "class": "flex-1 whitespace-nowrap rounded-control px-3 py-1 text-secondary transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-accent bg-surface text-accent",
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(10, 132, 255)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "SELECT",
+        "type": "select-one",
+        "text": "Review scheduler",
+        "class": "w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body text-text focus:outline-accent",
+        "background": "rgb(44, 44, 46)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "OPTION",
+        "text": "Review scheduler",
+        "class": "",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "INPUT",
+        "type": "text",
+        "text": "",
+        "class": "w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none placeholder:text-text-3 focus:border-accent",
+        "background": "rgb(44, 44, 46)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "TEXTAREA",
+        "type": "textarea",
+        "text": "",
+        "class": "w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none placeholder:text-text-3 focus:border-accent",
+        "background": "rgb(44, 44, 46)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "取消",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2",
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "submit",
+        "text": "新建",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 bg-accent text-white hover:bg-accent/90",
+        "background": "rgb(10, 132, 255)",
+        "color": "rgb(255, 255, 255)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      }
+    ]
+  },
+  {
+    "scene": "native-probe",
+    "scheme": "dark",
+    "styles": [
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "EN / 中",
+        "class": "shrink-0 whitespace-nowrap text-secondary",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(161, 161, 166)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "INPUT",
+        "type": "checkbox",
+        "text": "",
+        "class": "",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "INPUT",
+        "type": "date",
+        "text": "",
+        "class": "",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "INPUT",
+        "type": "time",
+        "text": "",
+        "class": "",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "INPUT",
+        "type": "number",
+        "text": "",
+        "class": "",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "SELECT",
+        "type": "select-one",
+        "text": "Native option oneNative option two",
+        "class": "",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "OPTION",
+        "text": "Native option one",
+        "class": "",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "OPTION",
+        "text": "Native option two",
+        "class": "",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "TEXTAREA",
+        "type": "textarea",
+        "text": "Native textarea",
+        "class": "",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "复制",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2",
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "复制",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2",
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      },
+      {
+        "tag": "BUTTON",
+        "type": "button",
+        "text": "复制",
+        "class": "inline-flex items-center justify-center gap-2 rounded-control px-3 py-2 text-body transition-colors duration-hover ease-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-40 border border-line bg-surface hover:bg-surface-2",
+        "background": "rgb(28, 28, 30)",
+        "color": "rgb(245, 245, 247)",
+        "colorScheme": "normal",
+        "surface": "#1c1c1e"
+      }
+    ]
+  }
+]
