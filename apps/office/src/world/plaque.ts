@@ -29,6 +29,7 @@ export function fitSignText(
 export class Plaque extends Container {
   private title = new Text({
     text: "",
+    resolution: globalThis.devicePixelRatio,
     style: { fontFamily: "Fusion Pixel", fontSize: 12, fill: LETTERING },
   });
   private fullText = "";
