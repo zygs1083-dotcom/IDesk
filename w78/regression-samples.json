@@ -1,0 +1,3368 @@
+[
+  {
+    "viewport": "1000x700-dpr1",
+    "name": "reports",
+    "people": [
+      {
+        "visible": true,
+        "text": "心跳不会打断行程，完成后回座。",
+        "rect": {
+          "x": 364,
+          "y": 221,
+          "id": 1,
+          "anchor": {
+            "x": 480,
+            "y": 330.00000000000006
+          },
+          "width": 232,
+          "height": 37,
+          "compact": {
+            "width": 190,
+            "height": 37
+          }
+        },
+        "bounds": {
+          "minX": 364,
+          "minY": 221,
+          "maxX": 596,
+          "maxY": 258,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 439,
+            "ty": 170
+          }
+        },
+        "tailBounds": {
+          "minX": 476,
+          "minY": 254.5,
+          "maxX": 484,
+          "maxY": 332.5,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tail": [
+          {
+            "x": 480,
+            "y": 257
+          },
+          {
+            "x": 480,
+            "y": 322
+          },
+          {
+            "x": 480,
+            "y": 330
+          }
+        ]
+      },
+      {
+        "visible": true,
+        "text": "Heartbeat received. Back to my seat!",
+        "rect": {
+          "x": 428,
+          "y": 161,
+          "id": 2,
+          "anchor": {
+            "x": 520,
+            "y": 330.00000000000006
+          },
+          "width": 184,
+          "height": 56,
+          "compact": {
+            "width": 184,
+            "height": 56
+          }
+        },
+        "bounds": {
+          "minX": 428,
+          "minY": 161,
+          "maxX": 612,
+          "maxY": 217,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 439,
+            "ty": 170
+          }
+        },
+        "tailBounds": {
+          "minX": 516,
+          "minY": 213.5,
+          "maxX": 612.5,
+          "maxY": 332.5,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tail": [
+          {
+            "x": 610,
+            "y": 216
+          },
+          {
+            "x": 610,
+            "y": 318
+          },
+          {
+            "x": 520,
+            "y": 322
+          },
+          {
+            "x": 520,
+            "y": 330
+          }
+        ]
+      },
+      {
+        "visible": false,
+        "text": "",
+        "rect": {
+          "x": 0,
+          "y": 0
+        },
+        "bounds": {
+          "minX": 0,
+          "minY": 0,
+          "maxX": 0,
+          "maxY": 0,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tailBounds": {
+          "minX": 0,
+          "minY": 0,
+          "maxX": 0,
+          "maxY": 0,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tail": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "viewport": "1000x700-dpr1",
+    "name": "chat-0",
+    "people": [
+      {
+        "visible": true,
+        "text": "…",
+        "rect": {
+          "x": 462,
+          "y": 281,
+          "id": 3,
+          "anchor": {
+            "x": 480,
+            "y": 330.00000000000006
+          },
+          "width": 36,
+          "height": 37,
+          "compact": {
+            "width": 50,
+            "height": 37
+          }
+        },
+        "bounds": {
+          "minX": 462,
+          "minY": 281,
+          "maxX": 498,
+          "maxY": 318,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 513,
+            "ty": 290
+          }
+        },
+        "tailBounds": {
+          "minX": 476,
+          "minY": 314.5,
+          "maxX": 484,
+          "maxY": 332.5,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tail": [
+          {
+            "x": 480,
+            "y": 317
+          },
+          {
+            "x": 480,
+            "y": 322
+          },
+          {
+            "x": 480,
+            "y": 330
+          }
+        ]
+      },
+      {
+        "visible": true,
+        "text": "…",
+        "rect": {
+          "x": 502,
+          "y": 281,
+          "id": 4,
+          "anchor": {
+            "x": 520,
+            "y": 330.00000000000006
+          },
+          "width": 36,
+          "height": 37,
+          "compact": {
+            "width": 50,
+            "height": 37
+          }
+        },
+        "bounds": {
+          "minX": 502,
+          "minY": 281,
+          "maxX": 538,
+          "maxY": 318,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 513,
+            "ty": 290
+          }
+        },
+        "tailBounds": {
+          "minX": 516,
+          "minY": 314.5,
+          "maxX": 524,
+          "maxY": 332.5,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tail": [
+          {
+            "x": 520,
+            "y": 317
+          },
+          {
+            "x": 520,
+            "y": 322
+          },
+          {
+            "x": 520,
+            "y": 330
+          }
+        ]
+      },
+      {
+        "visible": false,
+        "text": "",
+        "rect": {
+          "x": 0,
+          "y": 0
+        },
+        "bounds": {
+          "minX": 0,
+          "minY": 0,
+          "maxX": 0,
+          "maxY": 0,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tailBounds": {
+          "minX": 0,
+          "minY": 0,
+          "maxX": 0,
+          "maxY": 0,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tail": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "viewport": "1000x700-dpr1",
+    "name": "chat-1",
+    "people": [
+      {
+        "visible": true,
+        "text": "…",
+        "rect": {
+          "x": 462,
+          "y": 281,
+          "id": 5,
+          "anchor": {
+            "x": 480,
+            "y": 330.00000000000006
+          },
+          "width": 36,
+          "height": 37,
+          "compact": {
+            "width": 50,
+            "height": 37
+          }
+        },
+        "bounds": {
+          "minX": 462,
+          "minY": 281,
+          "maxX": 498,
+          "maxY": 318,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 506,
+            "ty": 249
+          }
+        },
+        "tailBounds": {
+          "minX": 476,
+          "minY": 314.5,
+          "maxX": 484,
+          "maxY": 332.5,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tail": [
+          {
+            "x": 480,
+            "y": 317
+          },
+          {
+            "x": 480,
+            "y": 322
+          },
+          {
+            "x": 480,
+            "y": 330
+          }
+        ]
+      },
+      {
+        "visible": true,
+        "text": "哈哈",
+        "rect": {
+          "x": 495,
+          "y": 240,
+          "id": 6,
+          "anchor": {
+            "x": 520,
+            "y": 330.00000000000006
+          },
+          "width": 50,
+          "height": 37,
+          "compact": {
+            "width": 64,
+            "height": 37
+          }
+        },
+        "bounds": {
+          "minX": 495,
+          "minY": 240,
+          "maxX": 545,
+          "maxY": 277,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 506,
+            "ty": 249
+          }
+        },
+        "tailBounds": {
+          "minX": 516,
+          "minY": 273.5,
+          "maxX": 524,
+          "maxY": 332.5,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tail": [
+          {
+            "x": 520,
+            "y": 276
+          },
+          {
+            "x": 520,
+            "y": 322
+          },
+          {
+            "x": 520,
+            "y": 330
+          }
+        ]
+      },
+      {
+        "visible": false,
+        "text": "",
+        "rect": {
+          "x": 0,
+          "y": 0
+        },
+        "bounds": {
+          "minX": 0,
+          "minY": 0,
+          "maxX": 0,
+          "maxY": 0,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tailBounds": {
+          "minX": 0,
+          "minY": 0,
+          "maxX": 0,
+          "maxY": 0,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tail": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "viewport": "1000x700-dpr1",
+    "name": "chat-2",
+    "people": [
+      {
+        "visible": true,
+        "text": "嗯嗯",
+        "rect": {
+          "x": 455,
+          "y": 281,
+          "id": 7,
+          "anchor": {
+            "x": 480,
+            "y": 330.00000000000006
+          },
+          "width": 50,
+          "height": 37,
+          "compact": {
+            "width": 64,
+            "height": 37
+          }
+        },
+        "bounds": {
+          "minX": 455,
+          "minY": 281,
+          "maxX": 505,
+          "maxY": 318,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 513,
+            "ty": 249
+          }
+        },
+        "tailBounds": {
+          "minX": 476,
+          "minY": 314.5,
+          "maxX": 484,
+          "maxY": 332.5,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tail": [
+          {
+            "x": 480,
+            "y": 317
+          },
+          {
+            "x": 480,
+            "y": 322
+          },
+          {
+            "x": 480,
+            "y": 330
+          }
+        ]
+      },
+      {
+        "visible": true,
+        "text": "…",
+        "rect": {
+          "x": 502,
+          "y": 240,
+          "id": 8,
+          "anchor": {
+            "x": 520,
+            "y": 330.00000000000006
+          },
+          "width": 36,
+          "height": 37,
+          "compact": {
+            "width": 50,
+            "height": 37
+          }
+        },
+        "bounds": {
+          "minX": 502,
+          "minY": 240,
+          "maxX": 538,
+          "maxY": 277,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 513,
+            "ty": 249
+          }
+        },
+        "tailBounds": {
+          "minX": 516,
+          "minY": 273.5,
+          "maxX": 524,
+          "maxY": 332.5,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tail": [
+          {
+            "x": 520,
+            "y": 276
+          },
+          {
+            "x": 520,
+            "y": 322
+          },
+          {
+            "x": 520,
+            "y": 330
+          }
+        ]
+      },
+      {
+        "visible": false,
+        "text": "",
+        "rect": {
+          "x": 0,
+          "y": 0
+        },
+        "bounds": {
+          "minX": 0,
+          "minY": 0,
+          "maxX": 0,
+          "maxY": 0,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tailBounds": {
+          "minX": 0,
+          "minY": 0,
+          "maxX": 0,
+          "maxY": 0,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tail": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "viewport": "1000x700-dpr1",
+    "name": "three",
+    "people": [
+      {
+        "visible": true,
+        "text": "心跳不会打断行程，完成后回座。",
+        "rect": {
+          "x": 344,
+          "y": 281,
+          "id": 9,
+          "anchor": {
+            "x": 460,
+            "y": 330.00000000000006
+          },
+          "width": 232,
+          "height": 37,
+          "compact": {
+            "width": 190,
+            "height": 37
+          }
+        },
+        "bounds": {
+          "minX": 344,
+          "minY": 281,
+          "maxX": 576,
+          "maxY": 318,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 463,
+            "ty": 189
+          }
+        },
+        "tailBounds": {
+          "minX": 456,
+          "minY": 314.5,
+          "maxX": 464,
+          "maxY": 332.5,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tail": [
+          {
+            "x": 460,
+            "y": 317
+          },
+          {
+            "x": 460,
+            "y": 322
+          },
+          {
+            "x": 460,
+            "y": 330
+          }
+        ]
+      },
+      {
+        "visible": true,
+        "text": "Heartbeat received. Back to my seat!",
+        "rect": {
+          "x": 408,
+          "y": 221,
+          "id": 10,
+          "anchor": {
+            "x": 500,
+            "y": 330.00000000000006
+          },
+          "width": 184,
+          "height": 56,
+          "compact": {
+            "width": 184,
+            "height": 56
+          }
+        },
+        "bounds": {
+          "minX": 408,
+          "minY": 221,
+          "maxX": 592,
+          "maxY": 277,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 463,
+            "ty": 189
+          }
+        },
+        "tailBounds": {
+          "minX": 496,
+          "minY": 273.5,
+          "maxX": 592.5,
+          "maxY": 332.5,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tail": [
+          {
+            "x": 590,
+            "y": 276
+          },
+          {
+            "x": 590,
+            "y": 322
+          },
+          {
+            "x": 500,
+            "y": 322
+          },
+          {
+            "x": 500,
+            "y": 330
+          }
+        ]
+      },
+      {
+        "visible": true,
+        "text": "三个同事同时汇报进展。",
+        "rect": {
+          "x": 452,
+          "y": 180,
+          "id": 11,
+          "anchor": {
+            "x": 540,
+            "y": 330.00000000000006
+          },
+          "width": 176,
+          "height": 37,
+          "compact": {
+            "width": 190,
+            "height": 37
+          }
+        },
+        "bounds": {
+          "minX": 452,
+          "minY": 180,
+          "maxX": 628,
+          "maxY": 217,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 463,
+            "ty": 189
+          }
+        },
+        "tailBounds": {
+          "minX": 536,
+          "minY": 213.5,
+          "maxX": 628.5,
+          "maxY": 332.5,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tail": [
+          {
+            "x": 626,
+            "y": 216
+          },
+          {
+            "x": 626,
+            "y": 318
+          },
+          {
+            "x": 540,
+            "y": 322
+          },
+          {
+            "x": 540,
+            "y": 330
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "viewport": "1000x700-dpr1",
+    "name": "edges",
+    "people": [
+      {
+        "visible": true,
+        "text": "心跳不会打断行程，完成后回座。",
+        "rect": {
+          "x": 0,
+          "y": 268,
+          "id": 12,
+          "anchor": {
+            "x": 23.923444976076556,
+            "y": 316.8038277511962
+          },
+          "width": 232,
+          "height": 37,
+          "compact": {
+            "width": 190,
+            "height": 37
+          }
+        },
+        "bounds": {
+          "minX": 0,
+          "minY": 268,
+          "maxX": 232,
+          "maxY": 305,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 679,
+            "ty": 38
+          }
+        },
+        "tailBounds": {
+          "minX": 19.923444976076556,
+          "minY": 301.5,
+          "maxX": 27.923444976076556,
+          "maxY": 319.5,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tail": [
+          {
+            "x": 24,
+            "y": 304
+          },
+          {
+            "x": 24,
+            "y": 309
+          },
+          {
+            "x": 24,
+            "y": 317
+          }
+        ]
+      },
+      {
+        "visible": true,
+        "text": "Heartbeat received. Back to my seat!",
+        "rect": {
+          "x": 816,
+          "y": 96,
+          "id": 13,
+          "anchor": {
+            "x": 980.8612440191388,
+            "y": 163.6937799043062
+          },
+          "width": 184,
+          "height": 56,
+          "compact": {
+            "width": 184,
+            "height": 56
+          }
+        },
+        "bounds": {
+          "minX": 816,
+          "minY": 96,
+          "maxX": 1000,
+          "maxY": 152,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 679,
+            "ty": 38
+          }
+        },
+        "tailBounds": {
+          "minX": 976.8612440191388,
+          "minY": 148.5,
+          "maxX": 984.8612440191388,
+          "maxY": 166.5,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tail": [
+          {
+            "x": 981,
+            "y": 151
+          },
+          {
+            "x": 981,
+            "y": 156
+          },
+          {
+            "x": 981,
+            "y": 164
+          }
+        ]
+      },
+      {
+        "visible": true,
+        "text": "靠近顶边仍然可读。",
+        "rect": {
+          "x": 668,
+          "y": 29,
+          "id": 14,
+          "anchor": {
+            "x": 741.6267942583733,
+            "y": 77.56937799043064
+          },
+          "width": 148,
+          "height": 37,
+          "compact": {
+            "width": 162,
+            "height": 37
+          }
+        },
+        "bounds": {
+          "minX": 668,
+          "minY": 29,
+          "maxX": 816,
+          "maxY": 66,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 679,
+            "ty": 38
+          }
+        },
+        "tailBounds": {
+          "minX": 737.6267942583733,
+          "minY": 62.5,
+          "maxX": 745.6267942583733,
+          "maxY": 80.5,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tail": [
+          {
+            "x": 742,
+            "y": 65
+          },
+          {
+            "x": 742,
+            "y": 70
+          },
+          {
+            "x": 742,
+            "y": 78
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "viewport": "1000x700-dpr2",
+    "name": "reports",
+    "people": [
+      {
+        "visible": true,
+        "text": "心跳不会打断行程，完成后回座。",
+        "rect": {
+          "x": 364,
+          "y": 221,
+          "id": 1,
+          "anchor": {
+            "x": 480,
+            "y": 330.00000000000006
+          },
+          "width": 232,
+          "height": 37,
+          "compact": {
+            "width": 190,
+            "height": 37
+          }
+        },
+        "bounds": {
+          "minX": 364,
+          "minY": 221,
+          "maxX": 596,
+          "maxY": 258,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 439,
+            "ty": 170
+          }
+        },
+        "tailBounds": {
+          "minX": 476,
+          "minY": 254.5,
+          "maxX": 484,
+          "maxY": 332.5,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tail": [
+          {
+            "x": 480,
+            "y": 257
+          },
+          {
+            "x": 480,
+            "y": 322
+          },
+          {
+            "x": 480,
+            "y": 330
+          }
+        ]
+      },
+      {
+        "visible": true,
+        "text": "Heartbeat received. Back to my seat!",
+        "rect": {
+          "x": 428,
+          "y": 161,
+          "id": 2,
+          "anchor": {
+            "x": 520,
+            "y": 330.00000000000006
+          },
+          "width": 184,
+          "height": 56,
+          "compact": {
+            "width": 184,
+            "height": 56
+          }
+        },
+        "bounds": {
+          "minX": 428,
+          "minY": 161,
+          "maxX": 612,
+          "maxY": 217,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 439,
+            "ty": 170
+          }
+        },
+        "tailBounds": {
+          "minX": 516,
+          "minY": 213.5,
+          "maxX": 612.5,
+          "maxY": 332.5,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tail": [
+          {
+            "x": 610,
+            "y": 216
+          },
+          {
+            "x": 610,
+            "y": 318
+          },
+          {
+            "x": 520,
+            "y": 322
+          },
+          {
+            "x": 520,
+            "y": 330
+          }
+        ]
+      },
+      {
+        "visible": false,
+        "text": "",
+        "rect": {
+          "x": 0,
+          "y": 0
+        },
+        "bounds": {
+          "minX": 0,
+          "minY": 0,
+          "maxX": 0,
+          "maxY": 0,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tailBounds": {
+          "minX": 0,
+          "minY": 0,
+          "maxX": 0,
+          "maxY": 0,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tail": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "viewport": "1000x700-dpr2",
+    "name": "chat-0",
+    "people": [
+      {
+        "visible": true,
+        "text": "…",
+        "rect": {
+          "x": 462,
+          "y": 281,
+          "id": 3,
+          "anchor": {
+            "x": 480,
+            "y": 330.00000000000006
+          },
+          "width": 36,
+          "height": 37,
+          "compact": {
+            "width": 50,
+            "height": 37
+          }
+        },
+        "bounds": {
+          "minX": 462,
+          "minY": 281,
+          "maxX": 498,
+          "maxY": 318,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 513,
+            "ty": 290
+          }
+        },
+        "tailBounds": {
+          "minX": 476,
+          "minY": 314.5,
+          "maxX": 484,
+          "maxY": 332.5,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tail": [
+          {
+            "x": 480,
+            "y": 317
+          },
+          {
+            "x": 480,
+            "y": 322
+          },
+          {
+            "x": 480,
+            "y": 330
+          }
+        ]
+      },
+      {
+        "visible": true,
+        "text": "…",
+        "rect": {
+          "x": 502,
+          "y": 281,
+          "id": 4,
+          "anchor": {
+            "x": 520,
+            "y": 330.00000000000006
+          },
+          "width": 36,
+          "height": 37,
+          "compact": {
+            "width": 50,
+            "height": 37
+          }
+        },
+        "bounds": {
+          "minX": 502,
+          "minY": 281,
+          "maxX": 538,
+          "maxY": 318,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 513,
+            "ty": 290
+          }
+        },
+        "tailBounds": {
+          "minX": 516,
+          "minY": 314.5,
+          "maxX": 524,
+          "maxY": 332.5,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tail": [
+          {
+            "x": 520,
+            "y": 317
+          },
+          {
+            "x": 520,
+            "y": 322
+          },
+          {
+            "x": 520,
+            "y": 330
+          }
+        ]
+      },
+      {
+        "visible": false,
+        "text": "",
+        "rect": {
+          "x": 0,
+          "y": 0
+        },
+        "bounds": {
+          "minX": 0,
+          "minY": 0,
+          "maxX": 0,
+          "maxY": 0,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tailBounds": {
+          "minX": 0,
+          "minY": 0,
+          "maxX": 0,
+          "maxY": 0,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tail": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "viewport": "1000x700-dpr2",
+    "name": "chat-1",
+    "people": [
+      {
+        "visible": true,
+        "text": "…",
+        "rect": {
+          "x": 462,
+          "y": 281,
+          "id": 5,
+          "anchor": {
+            "x": 480,
+            "y": 330.00000000000006
+          },
+          "width": 36,
+          "height": 37,
+          "compact": {
+            "width": 50,
+            "height": 37
+          }
+        },
+        "bounds": {
+          "minX": 462,
+          "minY": 281,
+          "maxX": 498,
+          "maxY": 318,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 506,
+            "ty": 249
+          }
+        },
+        "tailBounds": {
+          "minX": 476,
+          "minY": 314.5,
+          "maxX": 484,
+          "maxY": 332.5,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tail": [
+          {
+            "x": 480,
+            "y": 317
+          },
+          {
+            "x": 480,
+            "y": 322
+          },
+          {
+            "x": 480,
+            "y": 330
+          }
+        ]
+      },
+      {
+        "visible": true,
+        "text": "哈哈",
+        "rect": {
+          "x": 495,
+          "y": 240,
+          "id": 6,
+          "anchor": {
+            "x": 520,
+            "y": 330.00000000000006
+          },
+          "width": 50,
+          "height": 37,
+          "compact": {
+            "width": 64,
+            "height": 37
+          }
+        },
+        "bounds": {
+          "minX": 495,
+          "minY": 240,
+          "maxX": 545,
+          "maxY": 277,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 506,
+            "ty": 249
+          }
+        },
+        "tailBounds": {
+          "minX": 516,
+          "minY": 273.5,
+          "maxX": 524,
+          "maxY": 332.5,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tail": [
+          {
+            "x": 520,
+            "y": 276
+          },
+          {
+            "x": 520,
+            "y": 322
+          },
+          {
+            "x": 520,
+            "y": 330
+          }
+        ]
+      },
+      {
+        "visible": false,
+        "text": "",
+        "rect": {
+          "x": 0,
+          "y": 0
+        },
+        "bounds": {
+          "minX": 0,
+          "minY": 0,
+          "maxX": 0,
+          "maxY": 0,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tailBounds": {
+          "minX": 0,
+          "minY": 0,
+          "maxX": 0,
+          "maxY": 0,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tail": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "viewport": "1000x700-dpr2",
+    "name": "chat-2",
+    "people": [
+      {
+        "visible": true,
+        "text": "嗯嗯",
+        "rect": {
+          "x": 455,
+          "y": 281,
+          "id": 7,
+          "anchor": {
+            "x": 480,
+            "y": 330.00000000000006
+          },
+          "width": 50,
+          "height": 37,
+          "compact": {
+            "width": 64,
+            "height": 37
+          }
+        },
+        "bounds": {
+          "minX": 455,
+          "minY": 281,
+          "maxX": 505,
+          "maxY": 318,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 513,
+            "ty": 249
+          }
+        },
+        "tailBounds": {
+          "minX": 476,
+          "minY": 314.5,
+          "maxX": 484,
+          "maxY": 332.5,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tail": [
+          {
+            "x": 480,
+            "y": 317
+          },
+          {
+            "x": 480,
+            "y": 322
+          },
+          {
+            "x": 480,
+            "y": 330
+          }
+        ]
+      },
+      {
+        "visible": true,
+        "text": "…",
+        "rect": {
+          "x": 502,
+          "y": 240,
+          "id": 8,
+          "anchor": {
+            "x": 520,
+            "y": 330.00000000000006
+          },
+          "width": 36,
+          "height": 37,
+          "compact": {
+            "width": 50,
+            "height": 37
+          }
+        },
+        "bounds": {
+          "minX": 502,
+          "minY": 240,
+          "maxX": 538,
+          "maxY": 277,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 513,
+            "ty": 249
+          }
+        },
+        "tailBounds": {
+          "minX": 516,
+          "minY": 273.5,
+          "maxX": 524,
+          "maxY": 332.5,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tail": [
+          {
+            "x": 520,
+            "y": 276
+          },
+          {
+            "x": 520,
+            "y": 322
+          },
+          {
+            "x": 520,
+            "y": 330
+          }
+        ]
+      },
+      {
+        "visible": false,
+        "text": "",
+        "rect": {
+          "x": 0,
+          "y": 0
+        },
+        "bounds": {
+          "minX": 0,
+          "minY": 0,
+          "maxX": 0,
+          "maxY": 0,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tailBounds": {
+          "minX": 0,
+          "minY": 0,
+          "maxX": 0,
+          "maxY": 0,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tail": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "viewport": "1000x700-dpr2",
+    "name": "three",
+    "people": [
+      {
+        "visible": true,
+        "text": "心跳不会打断行程，完成后回座。",
+        "rect": {
+          "x": 344,
+          "y": 281,
+          "id": 9,
+          "anchor": {
+            "x": 460,
+            "y": 330.00000000000006
+          },
+          "width": 232,
+          "height": 37,
+          "compact": {
+            "width": 190,
+            "height": 37
+          }
+        },
+        "bounds": {
+          "minX": 344,
+          "minY": 281,
+          "maxX": 576,
+          "maxY": 318,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 463,
+            "ty": 189
+          }
+        },
+        "tailBounds": {
+          "minX": 456,
+          "minY": 314.5,
+          "maxX": 464,
+          "maxY": 332.5,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tail": [
+          {
+            "x": 460,
+            "y": 317
+          },
+          {
+            "x": 460,
+            "y": 322
+          },
+          {
+            "x": 460,
+            "y": 330
+          }
+        ]
+      },
+      {
+        "visible": true,
+        "text": "Heartbeat received. Back to my seat!",
+        "rect": {
+          "x": 408,
+          "y": 221,
+          "id": 10,
+          "anchor": {
+            "x": 500,
+            "y": 330.00000000000006
+          },
+          "width": 184,
+          "height": 56,
+          "compact": {
+            "width": 184,
+            "height": 56
+          }
+        },
+        "bounds": {
+          "minX": 408,
+          "minY": 221,
+          "maxX": 592,
+          "maxY": 277,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 463,
+            "ty": 189
+          }
+        },
+        "tailBounds": {
+          "minX": 496,
+          "minY": 273.5,
+          "maxX": 592.5,
+          "maxY": 332.5,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tail": [
+          {
+            "x": 590,
+            "y": 276
+          },
+          {
+            "x": 590,
+            "y": 322
+          },
+          {
+            "x": 500,
+            "y": 322
+          },
+          {
+            "x": 500,
+            "y": 330
+          }
+        ]
+      },
+      {
+        "visible": true,
+        "text": "三个同事同时汇报进展。",
+        "rect": {
+          "x": 452,
+          "y": 180,
+          "id": 11,
+          "anchor": {
+            "x": 540,
+            "y": 330.00000000000006
+          },
+          "width": 176,
+          "height": 37,
+          "compact": {
+            "width": 190,
+            "height": 37
+          }
+        },
+        "bounds": {
+          "minX": 452,
+          "minY": 180,
+          "maxX": 628,
+          "maxY": 217,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 463,
+            "ty": 189
+          }
+        },
+        "tailBounds": {
+          "minX": 536,
+          "minY": 213.5,
+          "maxX": 628.5,
+          "maxY": 332.5,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tail": [
+          {
+            "x": 626,
+            "y": 216
+          },
+          {
+            "x": 626,
+            "y": 318
+          },
+          {
+            "x": 540,
+            "y": 322
+          },
+          {
+            "x": 540,
+            "y": 330
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "viewport": "1000x700-dpr2",
+    "name": "edges",
+    "people": [
+      {
+        "visible": true,
+        "text": "心跳不会打断行程，完成后回座。",
+        "rect": {
+          "x": 0,
+          "y": 268,
+          "id": 12,
+          "anchor": {
+            "x": 23.923444976076556,
+            "y": 316.8038277511962
+          },
+          "width": 232,
+          "height": 37,
+          "compact": {
+            "width": 190,
+            "height": 37
+          }
+        },
+        "bounds": {
+          "minX": 0,
+          "minY": 268,
+          "maxX": 232,
+          "maxY": 305,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 679,
+            "ty": 38
+          }
+        },
+        "tailBounds": {
+          "minX": 19.923444976076556,
+          "minY": 301.5,
+          "maxX": 27.923444976076556,
+          "maxY": 319.5,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tail": [
+          {
+            "x": 24,
+            "y": 304
+          },
+          {
+            "x": 24,
+            "y": 309
+          },
+          {
+            "x": 24,
+            "y": 317
+          }
+        ]
+      },
+      {
+        "visible": true,
+        "text": "Heartbeat received. Back to my seat!",
+        "rect": {
+          "x": 816,
+          "y": 96,
+          "id": 13,
+          "anchor": {
+            "x": 980.8612440191388,
+            "y": 163.6937799043062
+          },
+          "width": 184,
+          "height": 56,
+          "compact": {
+            "width": 184,
+            "height": 56
+          }
+        },
+        "bounds": {
+          "minX": 816,
+          "minY": 96,
+          "maxX": 1000,
+          "maxY": 152,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 679,
+            "ty": 38
+          }
+        },
+        "tailBounds": {
+          "minX": 976.8612440191388,
+          "minY": 148.5,
+          "maxX": 984.8612440191388,
+          "maxY": 166.5,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tail": [
+          {
+            "x": 981,
+            "y": 151
+          },
+          {
+            "x": 981,
+            "y": 156
+          },
+          {
+            "x": 981,
+            "y": 164
+          }
+        ]
+      },
+      {
+        "visible": true,
+        "text": "靠近顶边仍然可读。",
+        "rect": {
+          "x": 668,
+          "y": 29,
+          "id": 14,
+          "anchor": {
+            "x": 741.6267942583733,
+            "y": 77.56937799043064
+          },
+          "width": 148,
+          "height": 37,
+          "compact": {
+            "width": 162,
+            "height": 37
+          }
+        },
+        "bounds": {
+          "minX": 668,
+          "minY": 29,
+          "maxX": 816,
+          "maxY": 66,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 679,
+            "ty": 38
+          }
+        },
+        "tailBounds": {
+          "minX": 737.6267942583733,
+          "minY": 62.5,
+          "maxX": 745.6267942583733,
+          "maxY": 80.5,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tail": [
+          {
+            "x": 742,
+            "y": 65
+          },
+          {
+            "x": 742,
+            "y": 70
+          },
+          {
+            "x": 742,
+            "y": 78
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "viewport": "1440x900-dpr1",
+    "name": "reports",
+    "people": [
+      {
+        "visible": true,
+        "text": "心跳不会打断行程，完成后回座。",
+        "rect": {
+          "x": 584,
+          "y": 221,
+          "id": 1,
+          "anchor": {
+            "x": 700.0000000000001,
+            "y": 330
+          },
+          "width": 232,
+          "height": 37,
+          "compact": {
+            "width": 190,
+            "height": 37
+          }
+        },
+        "bounds": {
+          "minX": 584,
+          "minY": 221,
+          "maxX": 816,
+          "maxY": 258,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 659,
+            "ty": 170
+          }
+        },
+        "tailBounds": {
+          "minX": 696.0000000000001,
+          "minY": 254.5,
+          "maxX": 704.0000000000001,
+          "maxY": 332.5,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tail": [
+          {
+            "x": 700,
+            "y": 257
+          },
+          {
+            "x": 700,
+            "y": 322
+          },
+          {
+            "x": 700,
+            "y": 330
+          }
+        ]
+      },
+      {
+        "visible": true,
+        "text": "Heartbeat received. Back to my seat!",
+        "rect": {
+          "x": 648,
+          "y": 161,
+          "id": 2,
+          "anchor": {
+            "x": 740.0000000000001,
+            "y": 330
+          },
+          "width": 184,
+          "height": 56,
+          "compact": {
+            "width": 184,
+            "height": 56
+          }
+        },
+        "bounds": {
+          "minX": 648,
+          "minY": 161,
+          "maxX": 832,
+          "maxY": 217,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 659,
+            "ty": 170
+          }
+        },
+        "tailBounds": {
+          "minX": 736.0000000000001,
+          "minY": 213.5,
+          "maxX": 832.5,
+          "maxY": 332.5,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tail": [
+          {
+            "x": 830,
+            "y": 216
+          },
+          {
+            "x": 830,
+            "y": 318
+          },
+          {
+            "x": 740,
+            "y": 322
+          },
+          {
+            "x": 740,
+            "y": 330
+          }
+        ]
+      },
+      {
+        "visible": false,
+        "text": "",
+        "rect": {
+          "x": 0,
+          "y": 0
+        },
+        "bounds": {
+          "minX": 0,
+          "minY": 0,
+          "maxX": 0,
+          "maxY": 0,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tailBounds": {
+          "minX": 0,
+          "minY": 0,
+          "maxX": 0,
+          "maxY": 0,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tail": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "viewport": "1440x900-dpr1",
+    "name": "chat-0",
+    "people": [
+      {
+        "visible": true,
+        "text": "…",
+        "rect": {
+          "x": 682,
+          "y": 281,
+          "id": 3,
+          "anchor": {
+            "x": 700.0000000000001,
+            "y": 330
+          },
+          "width": 36,
+          "height": 37,
+          "compact": {
+            "width": 50,
+            "height": 37
+          }
+        },
+        "bounds": {
+          "minX": 682,
+          "minY": 281,
+          "maxX": 718,
+          "maxY": 318,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 733,
+            "ty": 290
+          }
+        },
+        "tailBounds": {
+          "minX": 696.0000000000001,
+          "minY": 314.5,
+          "maxX": 704.0000000000001,
+          "maxY": 332.5,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tail": [
+          {
+            "x": 700,
+            "y": 317
+          },
+          {
+            "x": 700,
+            "y": 322
+          },
+          {
+            "x": 700,
+            "y": 330
+          }
+        ]
+      },
+      {
+        "visible": true,
+        "text": "…",
+        "rect": {
+          "x": 722,
+          "y": 281,
+          "id": 4,
+          "anchor": {
+            "x": 740.0000000000001,
+            "y": 330
+          },
+          "width": 36,
+          "height": 37,
+          "compact": {
+            "width": 50,
+            "height": 37
+          }
+        },
+        "bounds": {
+          "minX": 722,
+          "minY": 281,
+          "maxX": 758,
+          "maxY": 318,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 733,
+            "ty": 290
+          }
+        },
+        "tailBounds": {
+          "minX": 736.0000000000001,
+          "minY": 314.5,
+          "maxX": 744.0000000000001,
+          "maxY": 332.5,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tail": [
+          {
+            "x": 740,
+            "y": 317
+          },
+          {
+            "x": 740,
+            "y": 322
+          },
+          {
+            "x": 740,
+            "y": 330
+          }
+        ]
+      },
+      {
+        "visible": false,
+        "text": "",
+        "rect": {
+          "x": 0,
+          "y": 0
+        },
+        "bounds": {
+          "minX": 0,
+          "minY": 0,
+          "maxX": 0,
+          "maxY": 0,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tailBounds": {
+          "minX": 0,
+          "minY": 0,
+          "maxX": 0,
+          "maxY": 0,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tail": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "viewport": "1440x900-dpr1",
+    "name": "chat-1",
+    "people": [
+      {
+        "visible": true,
+        "text": "…",
+        "rect": {
+          "x": 682,
+          "y": 281,
+          "id": 5,
+          "anchor": {
+            "x": 700.0000000000001,
+            "y": 330
+          },
+          "width": 36,
+          "height": 37,
+          "compact": {
+            "width": 50,
+            "height": 37
+          }
+        },
+        "bounds": {
+          "minX": 682,
+          "minY": 281,
+          "maxX": 718,
+          "maxY": 318,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 726,
+            "ty": 249
+          }
+        },
+        "tailBounds": {
+          "minX": 696.0000000000001,
+          "minY": 314.5,
+          "maxX": 704.0000000000001,
+          "maxY": 332.5,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tail": [
+          {
+            "x": 700,
+            "y": 317
+          },
+          {
+            "x": 700,
+            "y": 322
+          },
+          {
+            "x": 700,
+            "y": 330
+          }
+        ]
+      },
+      {
+        "visible": true,
+        "text": "哈哈",
+        "rect": {
+          "x": 715,
+          "y": 240,
+          "id": 6,
+          "anchor": {
+            "x": 740.0000000000001,
+            "y": 330
+          },
+          "width": 50,
+          "height": 37,
+          "compact": {
+            "width": 64,
+            "height": 37
+          }
+        },
+        "bounds": {
+          "minX": 715,
+          "minY": 240,
+          "maxX": 765,
+          "maxY": 277,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 726,
+            "ty": 249
+          }
+        },
+        "tailBounds": {
+          "minX": 736.0000000000001,
+          "minY": 273.5,
+          "maxX": 744.0000000000001,
+          "maxY": 332.5,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tail": [
+          {
+            "x": 740,
+            "y": 276
+          },
+          {
+            "x": 740,
+            "y": 322
+          },
+          {
+            "x": 740,
+            "y": 330
+          }
+        ]
+      },
+      {
+        "visible": false,
+        "text": "",
+        "rect": {
+          "x": 0,
+          "y": 0
+        },
+        "bounds": {
+          "minX": 0,
+          "minY": 0,
+          "maxX": 0,
+          "maxY": 0,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tailBounds": {
+          "minX": 0,
+          "minY": 0,
+          "maxX": 0,
+          "maxY": 0,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tail": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "viewport": "1440x900-dpr1",
+    "name": "chat-2",
+    "people": [
+      {
+        "visible": true,
+        "text": "嗯嗯",
+        "rect": {
+          "x": 675,
+          "y": 281,
+          "id": 7,
+          "anchor": {
+            "x": 700.0000000000001,
+            "y": 330
+          },
+          "width": 50,
+          "height": 37,
+          "compact": {
+            "width": 64,
+            "height": 37
+          }
+        },
+        "bounds": {
+          "minX": 675,
+          "minY": 281,
+          "maxX": 725,
+          "maxY": 318,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 733,
+            "ty": 249
+          }
+        },
+        "tailBounds": {
+          "minX": 696.0000000000001,
+          "minY": 314.5,
+          "maxX": 704.0000000000001,
+          "maxY": 332.5,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tail": [
+          {
+            "x": 700,
+            "y": 317
+          },
+          {
+            "x": 700,
+            "y": 322
+          },
+          {
+            "x": 700,
+            "y": 330
+          }
+        ]
+      },
+      {
+        "visible": true,
+        "text": "…",
+        "rect": {
+          "x": 722,
+          "y": 240,
+          "id": 8,
+          "anchor": {
+            "x": 740.0000000000001,
+            "y": 330
+          },
+          "width": 36,
+          "height": 37,
+          "compact": {
+            "width": 50,
+            "height": 37
+          }
+        },
+        "bounds": {
+          "minX": 722,
+          "minY": 240,
+          "maxX": 758,
+          "maxY": 277,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 733,
+            "ty": 249
+          }
+        },
+        "tailBounds": {
+          "minX": 736.0000000000001,
+          "minY": 273.5,
+          "maxX": 744.0000000000001,
+          "maxY": 332.5,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tail": [
+          {
+            "x": 740,
+            "y": 276
+          },
+          {
+            "x": 740,
+            "y": 322
+          },
+          {
+            "x": 740,
+            "y": 330
+          }
+        ]
+      },
+      {
+        "visible": false,
+        "text": "",
+        "rect": {
+          "x": 0,
+          "y": 0
+        },
+        "bounds": {
+          "minX": 0,
+          "minY": 0,
+          "maxX": 0,
+          "maxY": 0,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tailBounds": {
+          "minX": 0,
+          "minY": 0,
+          "maxX": 0,
+          "maxY": 0,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tail": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "viewport": "1440x900-dpr1",
+    "name": "three",
+    "people": [
+      {
+        "visible": true,
+        "text": "心跳不会打断行程，完成后回座。",
+        "rect": {
+          "x": 564,
+          "y": 281,
+          "id": 9,
+          "anchor": {
+            "x": 680.0000000000001,
+            "y": 330
+          },
+          "width": 232,
+          "height": 37,
+          "compact": {
+            "width": 190,
+            "height": 37
+          }
+        },
+        "bounds": {
+          "minX": 564,
+          "minY": 281,
+          "maxX": 796,
+          "maxY": 318,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 683,
+            "ty": 189
+          }
+        },
+        "tailBounds": {
+          "minX": 676.0000000000001,
+          "minY": 314.5,
+          "maxX": 684.0000000000001,
+          "maxY": 332.5,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tail": [
+          {
+            "x": 680,
+            "y": 317
+          },
+          {
+            "x": 680,
+            "y": 322
+          },
+          {
+            "x": 680,
+            "y": 330
+          }
+        ]
+      },
+      {
+        "visible": true,
+        "text": "Heartbeat received. Back to my seat!",
+        "rect": {
+          "x": 628,
+          "y": 221,
+          "id": 10,
+          "anchor": {
+            "x": 720.0000000000001,
+            "y": 330
+          },
+          "width": 184,
+          "height": 56,
+          "compact": {
+            "width": 184,
+            "height": 56
+          }
+        },
+        "bounds": {
+          "minX": 628,
+          "minY": 221,
+          "maxX": 812,
+          "maxY": 277,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 683,
+            "ty": 189
+          }
+        },
+        "tailBounds": {
+          "minX": 716.0000000000001,
+          "minY": 273.5,
+          "maxX": 812.5,
+          "maxY": 332.5,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tail": [
+          {
+            "x": 810,
+            "y": 276
+          },
+          {
+            "x": 810,
+            "y": 322
+          },
+          {
+            "x": 720,
+            "y": 322
+          },
+          {
+            "x": 720,
+            "y": 330
+          }
+        ]
+      },
+      {
+        "visible": true,
+        "text": "三个同事同时汇报进展。",
+        "rect": {
+          "x": 672,
+          "y": 180,
+          "id": 11,
+          "anchor": {
+            "x": 760.0000000000001,
+            "y": 330
+          },
+          "width": 176,
+          "height": 37,
+          "compact": {
+            "width": 190,
+            "height": 37
+          }
+        },
+        "bounds": {
+          "minX": 672,
+          "minY": 180,
+          "maxX": 848,
+          "maxY": 217,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 683,
+            "ty": 189
+          }
+        },
+        "tailBounds": {
+          "minX": 756.0000000000001,
+          "minY": 213.5,
+          "maxX": 848.5,
+          "maxY": 332.5,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tail": [
+          {
+            "x": 846,
+            "y": 216
+          },
+          {
+            "x": 846,
+            "y": 318
+          },
+          {
+            "x": 760,
+            "y": 322
+          },
+          {
+            "x": 760,
+            "y": 330
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "viewport": "1440x900-dpr1",
+    "name": "edges",
+    "people": [
+      {
+        "visible": true,
+        "text": "心跳不会打断行程，完成后回座。",
+        "rect": {
+          "x": 0,
+          "y": 353,
+          "id": 12,
+          "anchor": {
+            "x": 34.44976076555024,
+            "y": 402.2775119617225
+          },
+          "width": 232,
+          "height": 37,
+          "compact": {
+            "width": 190,
+            "height": 37
+          }
+        },
+        "bounds": {
+          "minX": 0,
+          "minY": 353,
+          "maxX": 232,
+          "maxY": 390,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 1005,
+            "ty": 18
+          }
+        },
+        "tailBounds": {
+          "minX": 30.449760765550238,
+          "minY": 386.5,
+          "maxX": 38.44976076555024,
+          "maxY": 404.5,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tail": [
+          {
+            "x": 34,
+            "y": 389
+          },
+          {
+            "x": 34,
+            "y": 394
+          },
+          {
+            "x": 34,
+            "y": 402
+          }
+        ]
+      },
+      {
+        "visible": true,
+        "text": "Heartbeat received. Back to my seat!",
+        "rect": {
+          "x": 1256,
+          "y": 114,
+          "id": 13,
+          "anchor": {
+            "x": 1412.4401913875602,
+            "y": 181.79904306220095
+          },
+          "width": 184,
+          "height": 56,
+          "compact": {
+            "width": 184,
+            "height": 56
+          }
+        },
+        "bounds": {
+          "minX": 1256,
+          "minY": 114,
+          "maxX": 1440,
+          "maxY": 170,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 1005,
+            "ty": 18
+          }
+        },
+        "tailBounds": {
+          "minX": 1408.4401913875602,
+          "minY": 166.5,
+          "maxX": 1416.4401913875602,
+          "maxY": 184.5,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tail": [
+          {
+            "x": 1412,
+            "y": 169
+          },
+          {
+            "x": 1412,
+            "y": 174
+          },
+          {
+            "x": 1412,
+            "y": 182
+          }
+        ]
+      },
+      {
+        "visible": true,
+        "text": "靠近顶边仍然可读。",
+        "rect": {
+          "x": 994,
+          "y": 9,
+          "id": 14,
+          "anchor": {
+            "x": 1067.9425837320578,
+            "y": 57.7799043062201
+          },
+          "width": 148,
+          "height": 37,
+          "compact": {
+            "width": 162,
+            "height": 37
+          }
+        },
+        "bounds": {
+          "minX": 994,
+          "minY": 9,
+          "maxX": 1142,
+          "maxY": 46,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 1005,
+            "ty": 18
+          }
+        },
+        "tailBounds": {
+          "minX": 1063.9425837320578,
+          "minY": 42.5,
+          "maxX": 1071.9425837320578,
+          "maxY": 60.5,
+          "matrix": {
+            "array": null,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "tx": 0,
+            "ty": 0
+          }
+        },
+        "tail": [
+          {
+            "x": 1068,
+            "y": 45
+          },
+          {
+            "x": 1068,
+            "y": 50
+          },
+          {
+            "x": 1068,
+            "y": 58
+          }
+        ]
+      }
+    ]
+  }
+]
