@@ -6,6 +6,7 @@ import {
   bubblesIntersect,
   layoutBubbles,
 } from "./bubble-layout.ts";
+import { bubblePointer, tailHeadGap, tailTerminalLength } from "./bubble-pointer.ts";
 import { tailIntersectsRect } from "./bubble-tail.ts";
 
 const canvas = { width: 500, height: 300 };
@@ -30,6 +31,17 @@ function check(placements: BubblePlacement[], bounds = canvas) {
       expect(point.y).toBeLessThanOrEqual(bounds.height - 1);
     }
     expect(item.tail.at(-1)).toEqual(item.anchor);
+    const terminal = item.tail.at(-2);
+    assert(terminal);
+    expect(terminal.x).toBe(item.anchor.x);
+    expect(item.anchor.y - terminal.y).toBe(Math.min(tailTerminalLength, item.anchor.y - 1));
+    if (item.anchor.y >= tailTerminalLength + 1)
+      expect(item.anchor.y - terminal.y).toBeGreaterThanOrEqual(8);
+    const [left, right, tip] = bubblePointer(item.anchor);
+    expect(tip).toEqual(item.anchor);
+    expect((left.x + right.x) / 2).toBe(item.anchor.x);
+    expect(left.y).toBeLessThan(tip.y);
+    expect(right.y).toBe(left.y);
     const interior = {
       x: item.rect.x + 3,
       y: item.rect.y + 3,
@@ -147,6 +159,20 @@ test.each([
 test("an upper neighbor bends its tail around the lower bubble instead of hiding it", () => {
   const result = layoutBubbles([bubble(1, 200), bubble(2, 240)], canvas);
   assert(result[1]);
-  expect(result[1].tail).toHaveLength(3);
+  expect(result[1].tail).toHaveLength(4);
   check(result);
+});
+
+test("a direct tail reserves the terminal and outline clearance above the head", () => {
+  const [placed] = layoutBubbles([bubble(1, 200)], canvas);
+  assert(placed);
+  expect(placed.anchor.y - placed.rect.y - placed.rect.height).toBe(tailHeadGap);
+  check([placed]);
+});
+
+test.each([1, 2, 5, 8])("terminal fits the available space at head y=%s", (y) => {
+  const placed = layoutBubbles([bubble(1, 200, y)], canvas);
+  expect(placed[0]?.deferred).toBe(false);
+  check(placed);
+  for (const point of bubblePointer({ x: 200, y })) expect(point.y).toBeGreaterThanOrEqual(0);
 });

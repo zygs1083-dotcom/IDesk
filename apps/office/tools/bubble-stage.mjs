@@ -2,6 +2,7 @@ import { Character } from "../src/stage/character.ts";
 import { initialGlyphs, loadGlyphs } from "../src/stage/glyphs.ts";
 import { loadWorldAssets } from "../src/world/assets.ts";
 import { loadLayout } from "../src/world/layout.ts";
+import { cellCenter, walkableGrid } from "../src/world/path.ts";
 import { createStage } from "../src/world/stage.ts";
 
 export async function bubbleStage() {
@@ -19,6 +20,29 @@ export async function bubbleStage() {
   return {
     stage,
     people,
+    edgeHeads() {
+      const frame = assets.sprites["codex/walk/down/0"];
+      const headHeight = frame.height * frame.defaultAnchor.y + 8;
+      const heads = walkableGrid(layout).flatMap((row, y) =>
+        row.flatMap((walkable, x) => {
+          if (!walkable) return [];
+          const feet = cellCenter({ x, y });
+          if (
+            feet.x - frame.width * frame.defaultAnchor.x < 0 ||
+            feet.x + frame.width * (1 - frame.defaultAnchor.x) > layout.size.w ||
+            feet.y - frame.height * frame.defaultAnchor.y < 0 ||
+            feet.y + frame.height * (1 - frame.defaultAnchor.y) > layout.size.h
+          )
+            return [];
+          return [stage.world.toGlobal({ x: feet.x, y: feet.y - headHeight })];
+        }),
+      );
+      return [
+        heads.reduce((a, b) => (a.x <= b.x ? a : b)),
+        heads.reduce((a, b) => (a.x >= b.x ? a : b)),
+        heads.reduce((a, b) => (a.y <= b.y ? a : b)),
+      ].map(({ x, y }) => ({ x, y }));
+    },
     place(points) {
       for (const [index, person] of people.entries()) {
         person.bubble.hide();

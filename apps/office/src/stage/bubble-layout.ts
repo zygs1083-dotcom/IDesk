@@ -1,4 +1,5 @@
 import type { Point } from "../world/path.ts";
+import { tailHeadGap } from "./bubble-pointer.ts";
 import { type BubbleTail, bubbleTail, tailIntersectsRect } from "./bubble-tail.ts";
 
 export type BubbleRect = { x: number; y: number; width: number; height: number };
@@ -70,7 +71,7 @@ export function layoutBubbles(
     };
     const home = {
       x: clamp(Math.round(anchor.x - width / 2), 0, canvas.width - width),
-      y: Math.round(anchor.y - height - 8),
+      y: Math.round(anchor.y - height - tailHeadGap),
       width,
       height,
     };

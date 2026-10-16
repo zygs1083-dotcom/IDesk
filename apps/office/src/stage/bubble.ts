@@ -2,6 +2,7 @@ import { CanvasTextMetrics, Container, Graphics, Text } from "pixi.js";
 import type { Point } from "../world/path.ts";
 import { BubbleClock } from "./bubble-clock.ts";
 import type { BubbleInput, BubblePlacement } from "./bubble-layout.ts";
+import { bubblePointer, tailOutline, tailWidth } from "./bubble-pointer.ts";
 import { setGlyphText } from "./glyphs.ts";
 
 let sequence = 0;
@@ -100,9 +101,23 @@ export class Bubble extends Container {
     this.text.position.set(11, 9);
     this.tailPath = placement.tail;
     const [start, ...points] = placement.tail;
-    this.tail.clear().moveTo(start.x, start.y);
-    for (const point of points) this.tail.lineTo(point.x, point.y);
-    this.tail.stroke({ color: 0x302a2a, width: 2, cap: "butt", join: "bevel" });
+    this.tail.clear();
+    for (const [color, width] of [
+      [0xfff0ce, tailWidth + 2 * tailOutline],
+      [0x302a2a, tailWidth],
+    ] as const) {
+      this.tail.moveTo(start.x, start.y);
+      for (const point of points) this.tail.lineTo(point.x, point.y);
+      this.tail.stroke({ color, width, cap: "butt", join: "bevel" });
+    }
+    const [left, right, tip] = bubblePointer(placement.anchor);
+    this.tail
+      .moveTo(left.x, left.y)
+      .lineTo(right.x, right.y)
+      .lineTo(tip.x, tip.y)
+      .closePath()
+      .stroke({ color: 0xfff0ce, width: 2 * tailOutline, join: "bevel" })
+      .fill(0x302a2a);
     this.background
       .clear()
       .rect(1, 1, width - 2, height - 2)

@@ -7,7 +7,7 @@ import { crop, resize } from "./image.mjs";
 
 process.env.PLAYWRIGHT_BROWSERS_PATH ??= "/data/cache/ms-playwright";
 const { chromium } = createRequire("/data/tools/playwright/package.json")("playwright");
-const [base, directory = "/tmp/office-w77"] = process.argv.slice(2);
+const [base, directory = "/tmp/office-w78"] = process.argv.slice(2);
 const output = resolve(directory);
 mkdirSync(output, { recursive: true });
 const browser = await chromium.launch({ headless: true });
@@ -131,15 +131,10 @@ for (const [width, height, deviceScaleFactor] of [
     [center - 40, center, center + 40].map((x) => ({ x, y: 330 })),
     [...report, "三个同事同时汇报进展。"],
   );
-  await scenario(
-    "edges",
-    [
-      { x: 2, y: 180 },
-      { x: width - 2, y: 180 },
-      { x: center, y: 2 },
-    ],
-    [...report, "靠近顶边仍然可读。"],
-  );
+  await scenario("edges", await page.evaluate(() => window.scene.edgeHeads()), [
+    ...report,
+    "靠近顶边仍然可读。",
+  ]);
   await page.emulateMedia({ colorScheme: "dark" });
   await page.screenshot({ path: `${output}/${prefix}-edges-dark${suffix}.png` });
   if (width === 1440) {
@@ -173,5 +168,5 @@ assert.deepEqual(errors, []);
 writeFileSync(`${output}/samples-tails.json`, JSON.stringify(samples, null, 2));
 await browser.close();
 process.stdout.write(
-  `W77: ${samples.length} scenes, no intersecting bodies or out-of-canvas bounds, ${errors.length} browser errors; ${output}\n`,
+  `W78: ${samples.length} scenes, no intersecting bodies or out-of-canvas bounds, ${errors.length} browser errors; ${output}\n`,
 );
