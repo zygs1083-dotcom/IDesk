@@ -7,6 +7,7 @@ test("top-level fields preserve required flags and select input types", () => {
       properties: {
         name: { type: "string" },
         baseUrl: { type: "string", format: "uri" },
+        webhookUrl: { type: "string", format: "uri" },
         apiKey: { type: "string" },
         accessToken: { type: "string" },
         secret: { type: "string" },
@@ -22,6 +23,7 @@ test("top-level fields preserve required flags and select input types", () => {
   ).toEqual([
     { name: "name", label: "name", type: "text", required: false },
     { name: "baseUrl", label: "baseUrl", type: "url", required: true },
+    { name: "webhookUrl", label: "webhookUrl", type: "password", required: false },
     { name: "apiKey", label: "apiKey", type: "password", required: true },
     { name: "accessToken", label: "accessToken", type: "password", required: false },
     { name: "secret", label: "secret", type: "password", required: false },

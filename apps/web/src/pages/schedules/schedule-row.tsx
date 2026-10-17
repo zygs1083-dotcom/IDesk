@@ -30,11 +30,9 @@ export function ScheduleRow({
     case "publish_task":
       summary = t("schedules.publish", { task: action.template.title });
       break;
-    case "http": {
-      const url = new URL(action.url);
-      summary = `${action.method} ${url.host}${url.pathname}`;
+    case "http":
+      summary = `${action.method} · ${t("common.secretConfigured")}`;
       break;
-    }
     case "connector_trigger":
       summary = t("schedules.trigger", {
         connector:

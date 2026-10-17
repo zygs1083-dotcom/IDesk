@@ -68,8 +68,8 @@ async function send(
     await response.body?.cancel();
     if (response.ok) return;
     error = `HTTP ${response.status}`;
-  } catch (failure) {
-    error = failure instanceof Error ? failure.message : String(failure);
+  } catch {
+    error = "HTTP request failed";
   }
   ctx.events.emit({ type: "chat.failed", payload: { type: event.type, error } });
 }

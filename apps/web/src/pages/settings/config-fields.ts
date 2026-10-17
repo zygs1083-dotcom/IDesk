@@ -27,7 +27,7 @@ export function configFields(schema: Plugin["configSchema"]): ConfigField[] {
   return Object.entries(properties).flatMap(([name, property]) => {
     let type: ConfigField["type"];
     if (property.type === "string") {
-      type = /token|key|secret|password/i.test(name)
+      type = /token|key|secret|password|webhookUrl/i.test(name)
         ? "password"
         : property.format === "uri"
           ? "url"

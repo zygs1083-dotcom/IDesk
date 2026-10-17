@@ -1,4 +1,6 @@
 export const zh = {
+  "common.secretConfigured": "已配置（已隐藏）",
+  "common.hiddenValuesHint": "已隐藏的值保持不动即保留，输入新值可替换。",
   "settings.appearance": "外观",
   "appearance.classic": "简洁",
   "appearance.cartoon": "卡通文具",

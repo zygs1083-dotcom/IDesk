@@ -52,47 +52,56 @@ export function ConfigInputs({
 }) {
   const { t } = useLang();
   const id = useId();
-  return fields.map((field) =>
-    field.options ? (
-      <div key={field.name} className="space-y-2">
-        <label htmlFor={`${id}-${field.name}`} className="block text-secondary text-text-2">
-          {field.label}
-        </label>
-        <select
-          id={`${id}-${field.name}`}
-          required={field.required}
-          className="w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none focus:border-accent"
-          value={typeof values[field.name] === "string" ? (values[field.name] as string) : ""}
-          onChange={(event) => onChange(field.name, event.target.value)}
-        >
-          {field.default === undefined && <option value="">{t("settings.selectOption")}</option>}
-          {field.options.map((option) => (
-            <option key={option} value={option}>
-              {option}
-            </option>
-          ))}
-        </select>
-      </div>
-    ) : field.type === "boolean" ? (
-      <div key={field.name} className="flex items-center justify-between">
-        <span className="text-secondary text-text-2">{field.label}</span>
-        <Switch
-          label={field.label}
-          checked={values[field.name] === true}
-          onChange={(value) => onChange(field.name, value)}
-        />
-      </div>
-    ) : (
-      <Field
-        key={field.name}
-        label={field.label}
-        type={field.type}
-        required={field.required}
-        step={field.type === "number" ? "any" : undefined}
-        placeholder={field.type === "url" ? "https://" : undefined}
-        value={typeof values[field.name] === "string" ? (values[field.name] as string) : ""}
-        onChange={(event) => onChange(field.name, event.target.value)}
-      />
-    ),
+  return (
+    <>
+      {fields.some((field) => field.type === "password") && (
+        <p className="text-secondary text-text-2">{t("common.hiddenValuesHint")}</p>
+      )}
+      {fields.map((field) =>
+        field.options ? (
+          <div key={field.name} className="space-y-2">
+            <label htmlFor={`${id}-${field.name}`} className="block text-secondary text-text-2">
+              {field.label}
+            </label>
+            <select
+              id={`${id}-${field.name}`}
+              required={field.required}
+              className="w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body outline-none focus:border-accent"
+              value={typeof values[field.name] === "string" ? (values[field.name] as string) : ""}
+              onChange={(event) => onChange(field.name, event.target.value)}
+            >
+              {field.default === undefined && (
+                <option value="">{t("settings.selectOption")}</option>
+              )}
+              {field.options.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+          </div>
+        ) : field.type === "boolean" ? (
+          <div key={field.name} className="flex items-center justify-between">
+            <span className="text-secondary text-text-2">{field.label}</span>
+            <Switch
+              label={field.label}
+              checked={values[field.name] === true}
+              onChange={(value) => onChange(field.name, value)}
+            />
+          </div>
+        ) : (
+          <Field
+            key={field.name}
+            label={field.label}
+            type={field.type}
+            required={field.required}
+            step={field.type === "number" ? "any" : undefined}
+            placeholder={field.type === "url" ? "https://" : undefined}
+            value={typeof values[field.name] === "string" ? (values[field.name] as string) : ""}
+            onChange={(event) => onChange(field.name, event.target.value)}
+          />
+        ),
+      )}
+    </>
   );
 }

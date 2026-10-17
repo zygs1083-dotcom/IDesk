@@ -1,6 +1,7 @@
 import { createRoute, type OpenAPIHono, type RouteConfig } from "@hono/zod-openapi";
 import {
   createScheduleSchema,
+  patchScheduleSchema,
   scheduleSchema,
   updateScheduleSchema,
 } from "@idesk/shared/schedule-schemas";
@@ -8,6 +9,7 @@ import { idSchema } from "@idesk/shared/task-schemas";
 import { Cron } from "croner";
 import { validator } from "hono/validator";
 import { z } from "zod";
+import { mergeScheduleSecrets, publicSchedule } from "../../core/schedules/public.ts";
 import { runSchedule } from "../../core/schedules/run.ts";
 import {
   createSchedule,
@@ -41,7 +43,7 @@ export function scheduleRoutes(app: OpenAPIHono<AuthEnv>) {
         },
       },
     },
-    (c) => c.json(listSchedules(), 200),
+    (c) => c.json(listSchedules().map(publicSchedule), 200),
   );
   app.openapi(
     {
@@ -58,7 +60,7 @@ export function scheduleRoutes(app: OpenAPIHono<AuthEnv>) {
     (c) => {
       const row = getSchedule(c.req.valid("param").id);
       if (!row) throw new HttpError(404, "schedule.notFound");
-      return c.json(row, 200);
+      return c.json(publicSchedule(row), 200);
     },
   );
   app.openapi(
@@ -86,7 +88,7 @@ export function scheduleRoutes(app: OpenAPIHono<AuthEnv>) {
     (c) => {
       const row = createSchedule(c.req.valid("json"));
       syncSchedule(row);
-      return c.json(row, 201);
+      return c.json(publicSchedule(row), 201);
     },
   );
   const patchRoute = createRoute({
@@ -97,7 +99,7 @@ export function scheduleRoutes(app: OpenAPIHono<AuthEnv>) {
       required: true,
       content: {
         "application/json": {
-          schema: z.toJSONSchema(updateScheduleSchema, { io: "input" }),
+          schema: z.toJSONSchema(patchScheduleSchema, { io: "input" }),
         },
       },
     } as NonNullable<RouteConfig["requestBody"]>,
@@ -106,7 +108,9 @@ export function scheduleRoutes(app: OpenAPIHono<AuthEnv>) {
       validator("json", (body, c) => {
         const row = getSchedule(c.req.param("id") as string);
         if (!row) throw new HttpError(404, "schedule.notFound");
-        const parsed = updateScheduleSchema
+        const parsed = patchScheduleSchema
+          .transform((input) => mergeScheduleSecrets(input, row))
+          .pipe(updateScheduleSchema)
           .refine((input) => validCron({ ...row, ...input }), "cron 表达式无效")
           .safeParse(body);
         if (!parsed.success)
@@ -132,7 +136,7 @@ export function scheduleRoutes(app: OpenAPIHono<AuthEnv>) {
     const row = updateSchedule(c.req.valid("param").id, c.req.valid("json"));
     if (!row) throw new HttpError(404, "schedule.notFound");
     syncSchedule(row);
-    return c.json(row, 200);
+    return c.json(publicSchedule(row), 200);
   });
   app.openapi(
     {
@@ -165,7 +169,7 @@ export function scheduleRoutes(app: OpenAPIHono<AuthEnv>) {
     async (c) => {
       const row = await runSchedule(c.req.valid("param").id);
       if (!row) throw new HttpError(404, "schedule.notFound");
-      return c.json(row, 200);
+      return c.json(publicSchedule(row), 200);
     },
   );
 }

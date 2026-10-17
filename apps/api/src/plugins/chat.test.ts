@@ -34,6 +34,7 @@ beforeEach(async () => {
   url = `http://127.0.0.1:${address.port}`;
 });
 afterEach(async () => {
+  vi.restoreAllMocks();
   await stopPlugins();
   server.closeAllConnections();
   await new Promise<void>((resolve) => server.close(() => resolve()));
@@ -150,14 +151,15 @@ test("HTTP failure emits chat.failed once without retry or recursive notificatio
   await wait(100);
   expect(requests).toHaveLength(1);
 });
-test("network errors become chat.failed", async () => {
+test("network errors with request secrets become safe chat.failed events", async () => {
   await configure({ events: "network.test" });
-  server.closeAllConnections();
-  await new Promise<void>((resolve) => server.close(() => resolve()));
+  vi.spyOn(globalThis, "fetch").mockRejectedValue(
+    new Error(`${url}/fake-secret Authorization: fake-token fake-body`),
+  );
   emitEvent({ type: "network.test" });
   await vi.waitFor(() => {
     expect(db.select().from(events).where(eq(events.type, "chat.failed")).all()).toContainEqual(
-      expect.objectContaining({ payload: { type: "network.test", error: "fetch failed" } }),
+      expect.objectContaining({ payload: { type: "network.test", error: "HTTP request failed" } }),
     );
   });
   expect(requests).toHaveLength(0);

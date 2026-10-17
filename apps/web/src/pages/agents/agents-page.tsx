@@ -95,9 +95,9 @@ export function AgentsPage() {
                       <td className="px-4 py-2 text-text-2">
                         <span
                           className="block max-w-40 truncate"
-                          title={agent.webhookUrl ?? undefined}
+                          title={agent.webhookUrl ? t("common.secretConfigured") : undefined}
                         >
-                          {agent.webhookUrl ? new URL(agent.webhookUrl).hostname : "—"}
+                          {agent.webhookUrl ? t("common.secretConfigured") : "—"}
                         </span>
                       </td>
                       <td

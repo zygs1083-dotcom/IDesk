@@ -7,7 +7,7 @@ import { polling } from "../../plugins/poll.ts";
 import { connectorPlugin } from "../../plugins/registry.ts";
 
 export const MASK = "••••••";
-export const SECRET_KEY = /token|key|secret|password/i;
+export const SECRET_KEY = /token|key|secret|password|webhookUrl/i;
 export function maskConfig(config: Record<string, unknown>): Record<string, unknown> {
   return Object.fromEntries(
     Object.entries(config).map(([key, value]) => [

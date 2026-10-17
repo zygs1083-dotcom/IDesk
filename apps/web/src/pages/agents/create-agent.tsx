@@ -143,10 +143,11 @@ export function CreateAgent({ agent, onClose }: { agent?: Agent; onClose: () => 
           />
           <Field
             label="Webhook"
-            type="url"
+            type="password"
             value={webhookUrl}
             onChange={(event) => setWebhookUrl(event.target.value)}
           />
+          {agent && <p className="text-secondary text-text-2">{t("common.hiddenValuesHint")}</p>}
           {error && (
             <p role="alert" className="text-secondary text-status-failed">
               {error.message}
