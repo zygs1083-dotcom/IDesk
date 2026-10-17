@@ -1,5 +1,14 @@
-:root {
+:root,
+[data-skin="classic"] {
   color-scheme: light;
+  --corner-card: 10px;
+  --corner-panel: 12px;
+  --corner-control: 8px;
+  --corner-pop: 14px;
+  --elevation-rest: none;
+  --ink: var(--line-strong);
+  --on-accent: #ffffff;
+  --danger-fill: var(--status-failed);
   --bg: #f5f5f7;
   --surface: #ffffff;
   --surface-2: #fafafb;
@@ -23,7 +32,8 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root,
+  [data-skin="classic"] {
     color-scheme: dark;
     --bg: #000000;
     --surface: #1c1c1e;
@@ -39,7 +49,53 @@
   }
 }
 
+[data-skin="cartoon"] {
+  --bg: #f4eddf;
+  --surface: #fffdf7;
+  --surface-2: #eee8d9;
+  --line: #d8d2c3;
+  --line-strong: #999e8e;
+  --text: #2e342b;
+  --text-2: #626657;
+  --text-3: #707565;
+  --accent: #256c5b;
+  --danger-fill: #b9342b;
+  --status-failed: #b9342b;
+  --ink: #535e49;
+  --corner-card: 14px;
+  --corner-panel: 18px;
+  --corner-control: 12px;
+  --corner-pop: 18px;
+  --elevation-rest: 2px 2px 0 var(--ink);
+  --elevation-card: 3px 3px 0 var(--ink);
+  --elevation-pop: 5px 5px 0 var(--ink);
+}
+
+@media (prefers-color-scheme: dark) {
+  [data-skin="cartoon"] {
+    --bg: #19251f;
+    --surface: #25332b;
+    --surface-2: #2d3c32;
+    --line: #455447;
+    --line-strong: #7b8c78;
+    --text: #f4eddf;
+    --text-2: #c0c7b3;
+    --text-3: #a6b39c;
+    --accent: #8acbb0;
+    --on-accent: #19251f;
+    --status-failed: #ff8e7e;
+    --ink: #9aaa8d;
+    --elevation-rest: 2px 2px 0 #101b14;
+    --elevation-card: 3px 3px 0 #101b14;
+    --elevation-pop: 5px 5px 0 #101b14;
+  }
+}
+
 @theme inline {
+  --radius-pop: var(--corner-pop);
+  --radius-control: var(--corner-control);
+  --radius-panel: var(--corner-panel);
+  --radius-card: var(--corner-card);
   --color-bg: var(--bg);
   --color-surface: var(--surface);
   --color-surface-2: var(--surface-2);
@@ -49,6 +105,8 @@
   --color-text-2: var(--text-2);
   --color-text-3: var(--text-3);
   --color-accent: var(--accent);
+  --color-on-accent: var(--on-accent);
+  --color-danger-fill: var(--danger-fill);
   --color-status-open: var(--status-open);
   --color-status-recruiting: var(--status-recruiting);
   --color-status-assigned: var(--status-assigned);
@@ -64,11 +122,7 @@
   --font-sans:
     -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Helvetica Neue",
     "Noto Sans SC", sans-serif;
-  --radius-card: 10px;
-  --radius-panel: 12px;
-  --radius-control: 8px;
   --radius-tag: 6px;
-  --radius-pop: 14px;
   --text-title: 22px;
   --text-title--line-height: 28px;
   --text-title--font-weight: 600;

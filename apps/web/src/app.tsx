@@ -8,6 +8,7 @@ import { Login } from "./pages/login.tsx";
 import { RelayPage } from "./pages/relay/relay-page.tsx";
 import { SchedulesPage } from "./pages/schedules/schedules-page.tsx";
 import { AccessPage } from "./pages/settings/access-page.tsx";
+import { AppearancePage } from "./pages/settings/appearance-page.tsx";
 import { ConnectorsPage } from "./pages/settings/connectors-page.tsx";
 import { PluginsPage } from "./pages/settings/plugins-page.tsx";
 import { SettingsPage } from "./pages/settings/settings-page.tsx";
@@ -29,6 +30,7 @@ export function App() {
           <Route path="connectors" element={<ConnectorsPage />} />
           <Route path="plugins" element={<PluginsPage />} />
           <Route path="access" element={<AccessPage />} />
+          <Route path="appearance" element={<AppearancePage />} />
         </Route>
       </Route>
     </Routes>

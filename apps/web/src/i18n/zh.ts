@@ -1,4 +1,11 @@
 export const zh = {
+  "settings.appearance": "外观",
+  "appearance.classic": "简洁",
+  "appearance.cartoon": "卡通文具",
+  "appearance.classicDescription": "清爽的面板与轻量分隔线。",
+  "appearance.cartoonDescription": "暖纸色、圆润轮廓与薄荷绿交互。",
+  "appearance.note":
+    "只影响此浏览器；浅色和深色跟随系统；像素办公室保持原有场景。选择后即时生效，无需保存。",
   "capability.agentDescription": "这个智能体具备的能力，决定它能领哪些任务",
   "capability.relayDescription": "具备这个能力的智能体都会收到这条消息",
   "capability.presets": "预设能力",

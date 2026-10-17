@@ -32,7 +32,10 @@ export function RunCard({ run, now }: { run: Run; now: number }) {
       : duration(run.startedAt, run.finishedAt, now, lang),
   ].filter((value) => value !== null);
   return (
-    <article className="rounded-card border border-line bg-surface p-3 transition-colors duration-hover ease-hover hover:bg-surface-2">
+    <article
+      data-ui="card"
+      className="rounded-card border border-line bg-surface p-3 transition-colors duration-hover ease-hover hover:bg-surface-2"
+    >
       <CardHeading
         name={run.jobName}
         group={run.jobGroup}

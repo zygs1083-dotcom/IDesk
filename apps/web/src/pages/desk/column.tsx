@@ -28,7 +28,10 @@ export function Column({
         isOver && legal && "outline-1 outline-accent",
       )}
     >
-      <header className={cn("flex items-center gap-2 px-1 py-1", !legal && "text-text-3")}>
+      <header
+        data-ui="column-heading"
+        className={cn("flex items-center gap-2 px-1 py-1", !legal && "text-text-3")}
+      >
         <StatusDot status={status} muted={!legal} />
         <h2 className="text-section">{labels(lang).status[status]}</h2>
         <span

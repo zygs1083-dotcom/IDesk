@@ -1,4 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
+import { PencilRuler } from "lucide-react";
 import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 import { Button } from "../components/button.tsx";
@@ -27,13 +28,17 @@ export function Login() {
   return (
     <main className="flex h-full items-center justify-center p-6">
       <form
+        data-ui="panel"
         onSubmit={(event) => {
           event.preventDefault();
           mutation.mutate();
         }}
         className="w-90 max-w-full space-y-4 rounded-panel border border-line bg-surface p-4"
       >
-        <h1 className="text-title">IDesk</h1>
+        <h1 className="text-title">
+          <PencilRuler className="skin-mark" size={24} strokeWidth={1.5} aria-hidden="true" />
+          IDesk
+        </h1>
         <Field
           label={t("login.password")}
           type="password"

@@ -6,6 +6,7 @@ import {
   Building2,
   Clock,
   LayoutGrid,
+  PencilRuler,
   Send,
   Settings,
   Workflow,
@@ -48,8 +49,14 @@ export function Sidebar() {
   });
   const online = agents.filter((agent) => agent.status === "online").length;
   return (
-    <aside className="flex shrink-0 items-center border-b border-line bg-surface sidebar:w-sidebar sidebar:flex-col sidebar:items-stretch sidebar:border-r sidebar:border-b-0">
-      <div className="hidden px-5 pt-5 pb-4 text-section sidebar:block">IDesk</div>
+    <aside
+      data-ui="sidebar"
+      className="flex flex-wrap shrink-0 items-center border-b border-line bg-surface sidebar:w-sidebar sidebar:flex-col sidebar:flex-nowrap sidebar:items-stretch sidebar:border-r sidebar:border-b-0"
+    >
+      <div className="hidden px-5 pt-5 pb-4 text-section sidebar:block">
+        <PencilRuler className="skin-mark" size={20} strokeWidth={1.5} aria-hidden="true" />
+        IDesk
+      </div>
       <nav
         aria-label={t("nav.main")}
         className="flex gap-0 p-2 sidebar:flex-col sidebar:gap-1 sidebar:px-3 sidebar:py-0"

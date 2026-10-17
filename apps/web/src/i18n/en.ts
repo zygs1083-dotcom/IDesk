@@ -1,6 +1,13 @@
 import type { Key } from "./zh.ts";
 
 export const en: Record<Key, string> = {
+  "settings.appearance": "Appearance",
+  "appearance.classic": "Classic",
+  "appearance.cartoon": "Cartoon stationery",
+  "appearance.classicDescription": "Clean panels and subtle dividers.",
+  "appearance.cartoonDescription": "Warm paper, rounded outlines and mint green accents.",
+  "appearance.note":
+    "Only affects this browser. Light and dark follow your system; the pixel office keeps its original scene. Changes apply immediately, with no save needed.",
   "capability.agentDescription": "This agent’s capabilities determine which tasks it can claim",
   "capability.relayDescription": "All agents with this capability will receive this message",
   "capability.presets": "Preset capabilities",

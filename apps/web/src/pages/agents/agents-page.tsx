@@ -41,7 +41,7 @@ export function AgentsPage() {
         </div>
       ) : (
         <div className="-mb-24 overflow-x-auto pb-24">
-          <div className="rounded-panel border border-line bg-surface">
+          <div data-ui="panel" className="rounded-panel border border-line bg-surface">
             <table className="w-full text-left text-secondary">
               <thead className="border-b border-line text-label text-text-2">
                 <tr>

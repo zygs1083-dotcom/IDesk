@@ -8,7 +8,7 @@ export function AccessPage() {
   return (
     <section className="space-y-4" aria-label={t("settings.access")}>
       <h2 className="text-section">{t("settings.access")}</h2>
-      <div className="rounded-panel border border-line bg-surface">
+      <div data-ui="panel" className="rounded-panel border border-line bg-surface">
         <AccessRow title={t("settings.restUrl")} value={`${origin}/api/v1`} />
         <AccessRow
           title={t("settings.mcpUrl")}

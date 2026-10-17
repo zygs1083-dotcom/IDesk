@@ -82,7 +82,7 @@ export function ConnectorsPage() {
         </div>
       )}
       {!!connectors.data?.length && (
-        <div className="rounded-panel border border-line bg-surface">
+        <div data-ui="panel" className="rounded-panel border border-line bg-surface">
           {connectors.data.map((connector) => (
             <ConnectorRow
               key={connector.id}
