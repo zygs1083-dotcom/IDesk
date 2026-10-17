@@ -13,16 +13,20 @@ export function relayThread(
   while (root.replyTo && byId.has(root.replyTo)) {
     root = byId.get(root.replyTo) as Message;
   }
-  const depths = new Map([[root.id, 0]]);
+  const depths = new Map<string, number | null>([[root.id, 0]]);
   function depthOf(message: Message): number | null {
-    const known = depths.get(message.id);
-    if (known !== undefined) return known;
-    const parent = message.replyTo ? byId.get(message.replyTo) : undefined;
-    if (!parent) return null;
-    const parentDepth = depthOf(parent);
-    if (parentDepth === null) return null;
-    depths.set(message.id, parentDepth + 1);
-    return parentDepth + 1;
+    const path: Message[] = [];
+    let current: Message | undefined = message;
+    while (current && !depths.has(current.id)) {
+      path.push(current);
+      current = current.replyTo ? byId.get(current.replyTo) : undefined;
+    }
+    let depth = current ? (depths.get(current.id) as number | null) : null;
+    for (const entry of path.reverse()) {
+      depth = depth === null ? null : depth + 1;
+      depths.set(entry.id, depth);
+    }
+    return depth;
   }
   const descendants: { message: Message; depth: number }[] = [];
   for (const message of messages) {

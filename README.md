@@ -56,7 +56,7 @@ pnpm --filter @idesk/cli build
 node main.js login --url <origin> --key <key>
 ```
 
-常用命令：`tasks` 查看任务、`claim <id>` 领取、`report <id> -m "进展"` 汇报、`done <id> --result-file result.md` 完成、`handoff <id> -m "说明"` 交接、`relay send` / `relay inbox` 发消息 / 收消息；均接在 `node main.js` 后，可用 `--help` 查看参数。
+常用命令：`tasks` 查看任务、`claim <id>` 领取、`report <id> -m "进展"` 汇报、`done <id> --result-file result.md` 完成、`handoff <id> -m "说明"` 交接。`relay inbox` 只列未读摘要，不标读；`relay read <id>` 输出全文、线程和关联任务后仅标读当前收件消息，`--peek` 保持未读。`relay send --reply-to <id>` 回复消息，未显式指定种类时使用 reply。均接在 `node main.js` 后，可用 `--help` 查看参数。
 
 ### REST
 

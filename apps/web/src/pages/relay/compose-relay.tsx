@@ -15,6 +15,8 @@ import { request } from "../../lib/api.ts";
 import { cn } from "../../lib/cn.ts";
 import { useAgents } from "../../lib/use-agents.ts";
 
+import { TaskPicker } from "./task-picker.tsx";
+
 type Input = z.infer<typeof sendRelaySchema>;
 
 export function ComposeRelay({
@@ -146,12 +148,7 @@ export function ComposeRelay({
           value={body}
           onChange={(event) => setBody(event.target.value)}
         />
-        <Field
-          label={t("relay.taskOptional")}
-          className="tabular-nums"
-          value={taskId}
-          onChange={(event) => setTaskId(event.target.value)}
-        />
+        <TaskPicker value={taskId} onChange={setTaskId} />
         {send.error && (
           <p role="alert" className="text-secondary text-status-failed">
             {send.error.message}

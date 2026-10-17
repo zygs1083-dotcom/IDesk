@@ -1,10 +1,14 @@
 import type { RelayKind, RelayRecipient } from "@idesk/shared/relay";
 import type { Actor } from "@idesk/shared/task-machine";
-import { and, desc, eq, ne, or, sql } from "drizzle-orm";
+import { and, eq, or } from "drizzle-orm";
 import { db, type Tx } from "../../db/client.ts";
 import { agents, relayMessages, tasks } from "../../db/schema.ts";
 import { HttpError } from "../../http/errors.ts";
 import { type Event, publishEvent, recordEvent } from "../events/bus.ts";
+
+import { inbox } from "./visibility.ts";
+
+export { listRelay } from "./query.ts";
 
 export type RelayMessage = typeof relayMessages.$inferSelect;
 export type Viewer = Exclude<Actor, { kind: "system" }>;
@@ -16,25 +20,6 @@ export type RelayInput = {
   taskId?: string;
   replyTo?: string;
 };
-
-function inbox(viewer: Extract<Viewer, { kind: "agent" }>) {
-  return and(
-    ne(relayMessages.fromAgentId, viewer.id),
-    or(
-      and(
-        sql`json_extract(${relayMessages.to}, '$.kind') = 'agent'`,
-        sql`json_extract(${relayMessages.to}, '$.id') = ${viewer.id}`,
-      ),
-      and(
-        sql`json_extract(${relayMessages.to}, '$.kind') = 'capability'`,
-        sql`json_extract(${relayMessages.to}, '$.value') in (
-          select value from json_each(${JSON.stringify(viewer.capabilities)})
-        )`,
-      ),
-      sql`json_extract(${relayMessages.to}, '$.kind') = 'broadcast'`,
-    ),
-  );
-}
 
 export function writeRelay(
   tx: Tx,
@@ -91,27 +76,6 @@ export function sendRelay(input: RelayInput, fromAgentId: string): RelayMessage 
   const { message, event } = db.transaction((tx) => writeRelay(tx, input, fromAgentId));
   publishEvent(event);
   return message;
-}
-
-export function listRelay(
-  viewer: Viewer,
-  box: "inbox" | "sent" | "all",
-  taskId?: string,
-): RelayMessage[] {
-  const visibility =
-    viewer.kind === "human"
-      ? undefined
-      : {
-          inbox: inbox(viewer),
-          sent: eq(relayMessages.fromAgentId, viewer.id),
-          all: or(inbox(viewer), eq(relayMessages.fromAgentId, viewer.id)),
-        }[box];
-  return db
-    .select()
-    .from(relayMessages)
-    .where(and(visibility, taskId === undefined ? undefined : eq(relayMessages.taskId, taskId)))
-    .orderBy(desc(relayMessages.createdAt))
-    .all();
 }
 
 export function markRelayRead(
