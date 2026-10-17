@@ -66,6 +66,10 @@ export function eventText(
       ? t("event.connectorSyncedUnnamed", { changed })
       : t("event.connectorSynced", { name: String(event.payload.name), changed });
   }
+  if (event.type === "schedule.started")
+    return event.payload.name === undefined
+      ? t("event.scheduleStartedUnnamed")
+      : t("event.scheduleStarted", { name: String(event.payload.name) });
   if (event.type === "schedule.fired") {
     const { name, status, error } = event.payload;
     if (status === "success")

@@ -70,6 +70,7 @@ export const scheduleSchema = z
       scheduleActionSchema.options[1],
       publicHttpActionSchema,
     ]),
+    running: z.boolean(),
     lastRunAt: z.iso.datetime().nullable(),
     lastStatus: z.enum(["success", "failed"]).nullable(),
     nextRunAt: z.iso.datetime().nullable(),

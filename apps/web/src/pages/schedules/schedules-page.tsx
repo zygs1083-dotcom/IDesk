@@ -6,13 +6,17 @@ import { Toast } from "../../components/toast.tsx";
 import { useLang } from "../../i18n/lang.tsx";
 import { PageHeader } from "../../layout/page-header.tsx";
 import { request } from "../../lib/api.ts";
+import { useSession } from "../../lib/use-session.ts";
 import { useShortcut } from "../../lib/use-shortcut.ts";
 import { ScheduleDialog } from "./schedule-dialog.tsx";
+import { ScheduleHistory } from "./schedule-history.tsx";
 import { ScheduleRow } from "./schedule-row.tsx";
 import type { Connector, Schedule } from "./types.ts";
 
 export function SchedulesPage() {
   const { t } = useLang();
+  const { isAdmin: canEdit } = useSession();
+  const [history, setHistory] = useState<Schedule | null>(null);
   const client = useQueryClient();
   const schedules = useQuery({
     queryKey: ["schedules"],
@@ -25,6 +29,7 @@ export function SchedulesPage() {
   const [creating, setCreating] = useState(false);
   const [editing, setEditing] = useState<Schedule | null>(null);
   const [deleting, setDeleting] = useState<Schedule | null>(null);
+  const [pendingRuns, setPendingRuns] = useState<string[]>([]);
   const [message, setMessage] = useState<string | null>(null);
   const toggle = useMutation({
     mutationFn: ({ id, enabled }: { id: string; enabled: boolean }) =>
@@ -45,11 +50,15 @@ export function SchedulesPage() {
   });
   const run = useMutation({
     mutationFn: (id: string) => request<Schedule>(`/schedules/${id}/run`, { method: "POST" }),
+    onMutate: (id) => setPendingRuns((ids) => [...ids, id]),
+    onSettled: (_data, _error, id) => {
+      setPendingRuns((ids) => ids.filter((pending) => pending !== id));
+      void client.invalidateQueries({ queryKey: ["schedules"] });
+    },
     onSuccess: (result) => {
       setMessage(
         result.lastStatus === "success" ? t("schedules.runSucceeded") : t("schedules.runFailed"),
       );
-      void client.invalidateQueries({ queryKey: ["schedules"] });
     },
     onError: (error) => setMessage(error.message),
   });
@@ -62,15 +71,17 @@ export function SchedulesPage() {
     onError: (error) => setMessage(error.message),
   });
   useShortcut("n", () => {
-    if (connectors.data) setCreating(true);
+    if (canEdit && connectors.data) setCreating(true);
   });
   const error = schedules.error ?? connectors.error;
   return (
     <div className="space-y-6">
       <PageHeader title={t("nav.schedules")}>
-        <Button variant="primary" disabled={!connectors.data} onClick={() => setCreating(true)}>
-          {t("common.create")}
-        </Button>
+        {canEdit && (
+          <Button variant="primary" disabled={!connectors.data} onClick={() => setCreating(true)}>
+            {t("common.create")}
+          </Button>
+        )}
       </PageHeader>
       {error && (
         <p role="alert" className="text-secondary text-status-failed">
@@ -81,13 +92,18 @@ export function SchedulesPage() {
       {!error && schedules.data?.length === 0 && (
         <div className="py-16 text-center text-secondary text-text-2">
           <p>{t("schedules.empty")}</p>
-          <Button className="mt-3" disabled={!connectors.data} onClick={() => setCreating(true)}>
-            {t("common.createOne")}
-          </Button>
+          {canEdit && (
+            <Button className="mt-3" disabled={!connectors.data} onClick={() => setCreating(true)}>
+              {t("common.createOne")}
+            </Button>
+          )}
         </div>
       )}
       {!!schedules.data?.length && (
-        <div data-ui="panel" className="rounded-panel border border-line bg-surface">
+        <div
+          data-ui="panel"
+          className="overflow-x-auto rounded-panel border border-line bg-surface"
+        >
           <table className="w-full text-left text-secondary">
             <thead className="border-b border-line text-label text-text-2">
               <tr>
@@ -112,7 +128,10 @@ export function SchedulesPage() {
                   key={schedule.id}
                   schedule={schedule}
                   connectors={connectors.data ?? []}
-                  busy={toggle.isPending || run.isPending || remove.isPending}
+                  busy={toggle.isPending || remove.isPending}
+                  running={schedule.running || pendingRuns.includes(schedule.id)}
+                  canEdit={canEdit}
+                  onHistory={() => setHistory(schedule)}
                   onToggle={(enabled) => toggle.mutate({ id: schedule.id, enabled })}
                   onRun={() => run.mutate(schedule.id)}
                   onEdit={() => setEditing(schedule)}
@@ -151,6 +170,7 @@ export function SchedulesPage() {
           </Button>
         </div>
       </Dialog>
+      {history && <ScheduleHistory schedule={history} onClose={() => setHistory(null)} />}
       <Toast message={message} onClose={() => setMessage(null)} />
     </div>
   );

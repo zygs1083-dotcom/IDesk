@@ -105,3 +105,16 @@ test.each([
     ),
   ).toBe(expected);
 });
+
+test("schedule starts have localized text", () => {
+  const event = {
+    id: "started",
+    ts: "2026-01-01T00:00:00Z",
+    type: "schedule.started",
+    taskId: null,
+    agentId: null,
+    payload: { name: "Daily" },
+  };
+  expect(eventText(event, () => "", "en")).toBe("Schedule “Daily” started");
+  expect(eventText(event, () => "", "zh")).toBe("定时任务「Daily」开始执行");
+});

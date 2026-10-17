@@ -30,6 +30,7 @@ export const zh = {
   "agent.notFound": () => "智能体不存在",
 
   "schedule.notFound": () => "定时任务不存在",
+  "schedule.running": () => "定时任务正在执行",
 
   "connector.configOnInstance": () => "连接器的配置在连接器实例上",
   "connector.notFound": () => "连接器不存在",
@@ -85,6 +86,7 @@ export const en: { [K in MessageKey]: (typeof zh)[K] } = {
   "agent.notFound": () => "Agent not found",
 
   "schedule.notFound": () => "Schedule not found",
+  "schedule.running": () => "Schedule is already running",
 
   "connector.configOnInstance": () => "Configure the connector on its instance",
   "connector.notFound": () => "Connector not found",

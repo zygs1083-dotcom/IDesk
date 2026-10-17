@@ -104,7 +104,8 @@ index.ts                                         启动
 | `relay.read` | `{ messageId }`，agentId 为阅读者 | 收件智能体首次标读，与 readBy 同事务；重复标读不发事件 |
 | `agent.registered` | `{ name, kind }` | 新建智能体 |
 | `connector.polled` | `{ connectorId, name, changed }` | 每轮采集成功或失败后；changed 可为 0 |
-| `schedule.fired` | `{ scheduleId, status }` | 定时任务执行 |
+| `schedule.started` | `{ scheduleId, name, runId, startedAt }` | 定时执行开始 |
+| `schedule.fired` | 开始字段及 `{ status, error?, finishedAt, durationMs }` | 定时执行结束 |
 
 ### 4.4 Schedule（定时任务）
 
@@ -114,7 +115,9 @@ action 是可辨识联合：
 
 - `{ type: "publish_task", template: Partial<Task> }` 定时把任务放到待领取。
 - `{ type: "connector_trigger", connectorId, jobExternalId, params }` 定时触发外部工作流：调插件的 `trigger()`，插件没有实现则这次执行记为 failed，错误「该连接器不支持触发」。前端新建时只列出其插件实现了 `trigger` 的连接器（内置的 n8n、DolphinScheduler 都没有，因为公共 API 未验证）。
-- `{ type: "http", url, method, headers, body }` 通用 HTTP 调用。
+- `{ type: "http", url, method, headers, body }` 通用 HTTP 调用，固定 30 秒超时；网络错误使用安全固定文案，非 2xx 保留状态码。
+
+同一定时的手动和 cron 调用共享进程内执行锁。手动重复返回 409，cron 重叠跳过，不排队或重试；cron 保留并处理执行 Promise。公共响应附 `running`，进程重启后清空。开始/结束使用同一 runId 写事件，删除运行中的定时不会被结束回写重新创建。`GET /schedules/:id/events` 返回该项最近最多 50 条开始/结束事件，不包含动作配置。
 
 ### 4.5 Connector / AutomationJob / AutomationRun
 
