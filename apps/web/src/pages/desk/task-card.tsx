@@ -55,7 +55,8 @@ export function TaskCard({
         layout: { type: "spring", stiffness: 500, damping: 35 },
       }}
       className={cn(
-        "w-full touch-none rounded-card border border-line bg-surface p-3 text-left transition-colors duration-hover ease-hover hover:bg-surface-2 focus-visible:outline-2 focus-visible:outline-accent",
+        "w-full rounded-card border border-line bg-surface p-3 text-left transition-colors duration-hover ease-hover hover:bg-surface-2 focus-visible:outline-2 focus-visible:outline-accent",
+        drag && "touch-none",
         drag?.isDragging && "opacity-0",
         overlay && "shadow-card",
       )}

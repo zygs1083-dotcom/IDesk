@@ -5,6 +5,7 @@ import { useSearchParams } from "react-router";
 import { useLang } from "../../i18n/lang.tsx";
 import { request } from "../../lib/api.ts";
 import type { Task } from "../../lib/types.ts";
+import { useSession } from "../../lib/use-session.ts";
 import { useTasks } from "../../lib/use-tasks.ts";
 import { StatusDot } from "./status-dot.tsx";
 
@@ -15,6 +16,7 @@ export function TaskDependencies({
   task: Task;
   onError: (message: string) => void;
 }) {
+  const { isAdmin } = useSession();
   const { t } = useLang();
   const client = useQueryClient();
   const { tasks } = useTasks();
@@ -79,7 +81,7 @@ export function TaskDependencies({
               <button
                 type="button"
                 aria-label={t("desk.removeDependency")}
-                disabled={mutation.isPending}
+                disabled={!isAdmin || mutation.isPending}
                 className="rounded-control p-1 text-text-3 hover:text-text focus-visible:outline-accent disabled:opacity-50"
                 onClick={() => mutation.mutate(task.blockedBy.filter((item) => item !== id))}
               >
@@ -89,7 +91,7 @@ export function TaskDependencies({
           )
         );
       })}
-      {search === null ? (
+      {!isAdmin ? null : search === null ? (
         <button
           type="button"
           className="text-accent text-secondary focus-visible:outline-accent"
@@ -119,7 +121,7 @@ export function TaskDependencies({
               <li key={item.id}>
                 <button
                   type="button"
-                  disabled={mutation.isPending}
+                  disabled={!isAdmin || mutation.isPending}
                   className="w-full truncate rounded-control px-3 py-2 text-left text-secondary hover:bg-surface-2 focus-visible:outline-accent disabled:opacity-50"
                   onClick={() => mutation.mutate([...task.blockedBy, item.id])}
                 >

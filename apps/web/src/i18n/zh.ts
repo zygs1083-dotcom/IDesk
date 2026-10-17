@@ -1,4 +1,12 @@
 export const zh = {
+  "desk.history": "历史",
+  "desk.loadMore": "加载更多",
+  "desk.jumpColumn": "跳转到列",
+  "desk.dueAt": "截止时间",
+  "desk.dueAtOptional": "截止时间（可选）",
+  "desk.overdue": "已过期",
+  "desk.result": "成果 / 说明（可空）",
+  "event.taskUpdated": "{agent} 更新了任务信息",
   "common.secretConfigured": "已配置（已隐藏）",
   "common.hiddenValuesHint": "已隐藏的值保持不动即保留，输入新值可替换。",
   "settings.appearance": "外观",

@@ -44,6 +44,8 @@ export function eventText(
       recipient: recipientText(to, agentName, lang),
     });
   }
+  if (event.type === "task.updated")
+    return t("event.taskUpdated", { agent: agentName(event.agentId) });
   if (event.type === "task.dependencies")
     return t("event.dependenciesChanged", { agent: agentName(event.agentId) });
   if (event.type === "task.created")

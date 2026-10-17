@@ -76,6 +76,8 @@ index.ts                                         启动
 | blockedBy | task id[] | 依赖；其中任何一个不是 done/cancelled 时，本任务不能离开 open（见 §12.8） |
 | createdAt / updatedAt / completedAt | datetime | |
 
+管理员或原发布者可在任意状态编辑 title/body/priority/tags/capabilities/dueAt/blockedBy，至少提供一项，dueAt 为 null 时清除。字段和依赖校验在同一事务内完成，保持状态、负责人、招募成员、租约、结果及完成时间；修改能力不重新分派。`task.updated` 只记录字段名，依赖修改同时保留原 `task.dependencies` 事件。
+
 ### 4.2 Agent
 
 | 字段 | 说明 |
@@ -215,10 +217,10 @@ done        --reopen-->                  open          仅人；清空 result、
 主要端点：
 
 ```
-GET    /tasks?status=&capability=&assignee=&q=  列表。q 在 title/body/result 上做子串匹配（LIKE，§12.13）。不带 status 时，done/cancelled 只返回最近 7 天（按 updatedAt）更新过的；要看更早的历史必须带 status
+GET    /tasks?status=&capability=&assignee=&q=&limit=&cursor=  q 匹配 title/body/result。无 limit 时保持数组；带 limit（1–100）要求 status，返回 {items,nextCursor}，按 updatedAt/id 倒序复合游标分页。无 status 时终态仍只返回最近 7 天更新过的；显式 status 包括全部历史，分页期间编辑会移动该任务的排序位置
 POST   /tasks                                   发布
 GET    /tasks/:id
-PATCH  /tasks/:id { blockedBy }                  改依赖；人或发布者（§12.8）
+PATCH  /tasks/:id { title?, body?, priority?, tags?, capabilities?, dueAt?, blockedBy? }  编辑详情；管理员或原发布者，至少一项；dueAt:null 清除（§4.1、§12.8）
 POST   /tasks/:id/actions/:action               状态机动作，body 按动作定义；:action 不接受 lease_expired
 POST   /tasks/:id/report { message }            汇报进展（内部续租，写 task.reported）
 GET    /tasks/:id/events                        该任务全部事件，正序

@@ -3,6 +3,7 @@ import { Menu } from "../../components/menu.tsx";
 import { useLang } from "../../i18n/lang.tsx";
 import { cn } from "../../lib/cn.ts";
 import { relativeTime } from "../../lib/format.ts";
+import { useSession } from "../../lib/use-session.ts";
 import type { Connector } from "./types.ts";
 
 export function ConnectorRow({
@@ -20,6 +21,7 @@ export function ConnectorRow({
   onDelete: () => void;
   onEdit: () => void;
 }) {
+  const { isAdmin } = useSession();
   const { lang, t } = useLang();
   const { progress } = connector;
   const status = !connector.enabled
@@ -85,7 +87,7 @@ export function ConnectorRow({
       </span>
       <Menu
         label={t("settings.connectorActions", { name: connector.name })}
-        disabled={busy}
+        disabled={!isAdmin || busy}
         items={[
           { label: t("common.test"), onSelect: onTest },
           { label: t("common.edit"), onSelect: onEdit },

@@ -41,14 +41,35 @@ export const taskActionSchema = z.discriminatedUnion("type", [
   z.object({ type: z.literal("resume") }),
   z.object({ type: z.literal("reopen") }),
 ]) satisfies z.ZodType<TaskAction>;
+export const updateTaskSchema = createTaskSchema
+  .partial()
+  .extend({
+    title: z.string().trim().min(1).exactOptional(),
+    dueAt: z.iso.datetime().nullable().exactOptional(),
+  })
+  .refine((input) => Object.keys(input).length > 0, "Provide at least one field");
 export const taskDependenciesSchema = z.object({ blockedBy: z.array(z.string()) });
 export const reportSchema = z.object({ message: z.string() });
-export const taskQuerySchema = z.object({
-  q: z.string().min(1).exactOptional(),
-  status: z.enum(TASK_STATUSES).exactOptional(),
-  capability: z.string().exactOptional(),
-  assignee: z.string().exactOptional(),
-});
+export const taskQuerySchema = z
+  .object({
+    q: z.string().min(1).exactOptional(),
+    status: z.enum(TASK_STATUSES).exactOptional(),
+    capability: z.string().exactOptional(),
+    assignee: z.string().exactOptional(),
+    limit: z.coerce.number().int().min(1).max(100).exactOptional(),
+    cursor: z
+      .string()
+      .regex(/^\d{1,13}\|[^|]+$/)
+      .exactOptional(),
+  })
+  .refine(
+    (input) => input.cursor === undefined || input.limit !== undefined,
+    "Cursor requires limit",
+  )
+  .refine(
+    (input) => input.limit === undefined || input.status !== undefined,
+    "Pagination requires status",
+  );
 export const idSchema = z.object({ id: z.string() });
 export const eventQuerySchema = z
   .object({

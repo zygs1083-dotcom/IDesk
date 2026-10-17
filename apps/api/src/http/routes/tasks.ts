@@ -6,12 +6,12 @@ import {
   publishTaskSchema,
   reportSchema,
   taskActionSchema,
-  taskDependenciesSchema,
   taskSchema,
+  updateTaskSchema,
 } from "@idesk/shared/task-schemas";
 import { validator } from "hono/validator";
 import { z } from "zod";
-import { updateDependencies } from "../../core/tasks/dependencies.ts";
+import { updateTask } from "../../core/tasks/edit.ts";
 import { publishTask } from "../../core/tasks/publish.ts";
 import { actOnTask, reportProgress } from "../../core/tasks/transition.ts";
 import { HttpError } from "../errors.ts";
@@ -51,24 +51,22 @@ export function taskRoutes(app: OpenAPIHono<AuthEnv>) {
   );
   app.openapi(
     {
+      description:
+        "Edit task details as a human or original publisher in any state. Supply at least one field; dueAt: null clears the deadline. Assignment, lease, status and result are unchanged.",
       method: "patch",
       path: "/api/v1/tasks/{id}",
       request: {
         params: idSchema,
         body: {
           required: true,
-          content: { "application/json": { schema: taskDependenciesSchema } },
+          content: { "application/json": { schema: updateTaskSchema } },
         },
       },
       responses: {
         200: { description: "Updated", content: { "application/json": { schema: taskSchema } } },
       },
     },
-    (c) =>
-      c.json(
-        updateDependencies(c.req.valid("param").id, c.req.valid("json").blockedBy, c.get("actor")),
-        200,
-      ),
+    (c) => c.json(updateTask(c.req.valid("param").id, c.req.valid("json"), c.get("actor")), 200),
   );
   const actionRoute = createRoute({
     method: "post",

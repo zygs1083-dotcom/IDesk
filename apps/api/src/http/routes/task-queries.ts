@@ -9,20 +9,44 @@ import type { AuthEnv } from "../middleware/auth.ts";
 export function taskQueryRoutes(app: OpenAPIHono<AuthEnv>) {
   app.openapi(
     {
+      description:
+        "Without limit, returns the legacy task array. With limit (1–100), status is required and returns {items, nextCursor}; pass nextCursor as cursor for the next page ordered by updatedAt and id descending. Explicit status includes all history; default listing retains only seven days of terminal tasks.",
       method: "get",
       path: "/api/v1/tasks",
       request: { query: taskQuerySchema },
       responses: {
         200: {
           description: "Tasks",
-          content: { "application/json": { schema: z.array(taskSchema) } },
+          content: {
+            "application/json": {
+              schema: z.union([
+                z.array(taskSchema),
+                z.object({
+                  items: z.array(taskSchema),
+                  nextCursor: z.string().nullable(),
+                }),
+              ]),
+            },
+          },
         },
       },
     },
     (c) => {
       const { assignee, ...filter } = c.req.valid("query");
+      const items = listTasks({
+        ...filter,
+        ...(filter.limit === undefined ? {} : { limit: filter.limit + 1 }),
+        ...(assignee === undefined ? {} : { assigneeId: assignee }),
+      });
+      if (filter.limit === undefined) return c.json(items, 200);
+      const hasMore = items.length > filter.limit;
+      const page = items.slice(0, filter.limit);
+      const last = page.at(-1);
       return c.json(
-        listTasks({ ...filter, ...(assignee === undefined ? {} : { assigneeId: assignee }) }),
+        {
+          items: page,
+          nextCursor: hasMore && last ? `${last.updatedAt.getTime()}|${last.id}` : null,
+        },
         200,
       );
     },

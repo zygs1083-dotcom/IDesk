@@ -2,19 +2,21 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { Search } from "lucide-react";
 import { AnimatePresence } from "motion/react";
 import { useEffect, useRef, useState } from "react";
-import { useSearchParams } from "react-router";
+import { Link, useSearchParams } from "react-router";
 import { Button } from "../../components/button.tsx";
 import { Segmented } from "../../components/segmented.tsx";
 import { useLang } from "../../i18n/lang.tsx";
 import { PageHeader } from "../../layout/page-header.tsx";
 import { request } from "../../lib/api.ts";
 import type { Task, TaskEvent } from "../../lib/types.ts";
+import { useSession } from "../../lib/use-session.ts";
 import { useShortcut } from "../../lib/use-shortcut.ts";
 import { useTasks } from "../../lib/use-tasks.ts";
 import { Board } from "./board.tsx";
 import { PublishDialog } from "./publish-dialog.tsx";
 import { TaskDrawer } from "./task-drawer.tsx";
 export function Desk() {
+  const { isAdmin } = useSession();
   const { t } = useLang();
   const { tasks, error: queryError, isPending } = useTasks();
   const { data: handoffs = [] } = useQuery({
@@ -51,7 +53,9 @@ export function Desk() {
       { replace: true },
     );
   };
-  useShortcut("n", () => setPublish(true));
+  useShortcut("n", () => {
+    if (isAdmin) setPublish(true);
+  });
   useShortcut("/", () => searchInput.current?.focus());
   return (
     <div className="flex h-full min-h-0 flex-col gap-6">
@@ -82,13 +86,14 @@ export function Desk() {
             }}
           />
         </div>
-        <Button
-          variant="primary"
-          className="order-2 ml-auto shrink-0 sidebar:order-none"
-          onClick={() => setPublish(true)}
-        >
-          {t("common.publish")}
-        </Button>
+        <div className="order-2 ml-auto flex shrink-0 items-center gap-3 sidebar:order-none">
+          <Link to="/desk/history" className="text-secondary text-accent">
+            {t("desk.history")}
+          </Link>
+          <Button disabled={!isAdmin} variant="primary" onClick={() => setPublish(true)}>
+            {t("common.publish")}
+          </Button>
+        </div>
       </div>
       {error && (
         <p role="alert" className="text-secondary text-status-failed">
@@ -106,7 +111,7 @@ export function Desk() {
         onPublish={() => setPublish(true)}
       />
       <AnimatePresence>
-        {publish && <PublishDialog key="publish" onClose={() => setPublish(false)} />}
+        {isAdmin && publish && <PublishDialog key="publish" onClose={() => setPublish(false)} />}
         {selected && (
           <TaskDrawer key={selected} taskId={selected} onClose={() => setSelected(null)} />
         )}

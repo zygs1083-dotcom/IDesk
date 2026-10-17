@@ -13,13 +13,16 @@ import { eventText } from "../../lib/event-text.ts";
 import { relativeTime } from "../../lib/format.ts";
 import type { Task, TaskEvent } from "../../lib/types.ts";
 import { useAgents } from "../../lib/use-agents.ts";
+import { useSession } from "../../lib/use-session.ts";
 import { ActionDialog } from "./action-dialog.tsx";
 import { actionSamples, type HumanAction, previewAction } from "./drop-action.ts";
+import { EditTaskDialog } from "./edit-task-dialog.tsx";
 import { StatusDot } from "./status-dot.tsx";
 import { TaskDependencies } from "./task-dependencies.tsx";
 import { useTaskAction } from "./use-task-action.ts";
 
 export function TaskDrawer({ taskId, onClose }: { taskId: string; onClose: () => void }) {
+  const { isAdmin } = useSession();
   const { lang, t } = useLang();
   const { data: task, error: taskError } = useQuery({
     queryKey: ["task", taskId],
@@ -30,27 +33,36 @@ export function TaskDrawer({ taskId, onClose }: { taskId: string; onClose: () =>
     queryFn: () => request<TaskEvent[]>(`/tasks/${taskId}/events`),
   });
   const { agents, agentName } = useAgents();
-  const [parameter, setParameter] = useState<"assign" | "handoff" | "recruit" | null>(null);
+  const [editing, setEditing] = useState(false);
+  const [parameter, setParameter] = useState<"assign" | "handoff" | "recruit" | "complete" | null>(
+    null,
+  );
   const { mutation, error, setError } = useTaskAction(() => setParameter(null));
-  const actions = task
-    ? (
-        [
-          "complete",
-          "pause",
-          "resume",
-          "handoff",
-          "assign",
-          "recruit",
-          "release",
-          "cancel_recruit",
-          "reopen",
-          "cancel",
-        ] satisfies HumanAction[]
-      ).filter(
-        (action) =>
-          !(previewAction(task, actionSamples[action], new Date()) instanceof TransitionError),
-      )
-    : [];
+  const overdue =
+    task?.dueAt &&
+    new Date(task.dueAt).getTime() < Date.now() &&
+    task.status !== "done" &&
+    task.status !== "cancelled";
+  const actions =
+    task && isAdmin
+      ? (
+          [
+            "complete",
+            "pause",
+            "resume",
+            "handoff",
+            "assign",
+            "recruit",
+            "release",
+            "cancel_recruit",
+            "reopen",
+            "cancel",
+          ] satisfies HumanAction[]
+        ).filter(
+          (action) =>
+            !(previewAction(task, actionSamples[action], new Date()) instanceof TransitionError),
+        )
+      : [];
   return (
     <>
       <Drawer open onClose={onClose} title={task?.title ?? ""}>
@@ -66,6 +78,7 @@ export function TaskDrawer({ taskId, onClose }: { taskId: string; onClose: () =>
               {labels(lang).status[task.status]}
             </div>
             <div className="flex flex-wrap gap-2">
+              {isAdmin && <Button onClick={() => setEditing(true)}>{t("common.edit")}</Button>}
               {actions.map((action, index) => (
                 <Button
                   key={action}
@@ -73,7 +86,12 @@ export function TaskDrawer({ taskId, onClose }: { taskId: string; onClose: () =>
                   disabled={mutation.isPending}
                   onClick={() => {
                     setError(null);
-                    if (action === "assign" || action === "handoff" || action === "recruit")
+                    if (
+                      action === "assign" ||
+                      action === "handoff" ||
+                      action === "recruit" ||
+                      action === "complete"
+                    )
                       setParameter(action);
                     else mutation.mutate({ task, action: actionSamples[action] });
                   }}
@@ -108,6 +126,16 @@ export function TaskDrawer({ taskId, onClose }: { taskId: string; onClose: () =>
                 </dd>
               </div>
             </dl>
+            {task.dueAt && (
+              <p
+                className={
+                  overdue ? "text-secondary text-status-paused" : "text-secondary text-text-2"
+                }
+              >
+                {t("desk.dueAt")}: {new Date(task.dueAt).toLocaleString(lang)}
+                {overdue && ` · ${t("desk.overdue")}`}
+              </p>
+            )}
             <TaskDependencies task={task} onError={setError} />
             <section>
               <h3 className="mb-4 text-section">{t("desk.timeline")}</h3>
@@ -129,7 +157,10 @@ export function TaskDrawer({ taskId, onClose }: { taskId: string; onClose: () =>
         {!parameter && <Toast message={error} onClose={() => setError(null)} />}
       </Drawer>
       <AnimatePresence>
-        {parameter && task && (
+        {isAdmin && editing && task && (
+          <EditTaskDialog key="edit" task={task} onClose={() => setEditing(false)} />
+        )}
+        {isAdmin && parameter && task && (
           <ActionDialog
             key={parameter}
             action={parameter}

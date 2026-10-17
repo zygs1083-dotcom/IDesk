@@ -6,14 +6,17 @@ import {
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
+import { labels } from "@idesk/shared/labels";
 import { BOARD_COLUMNS, type TaskStatus } from "@idesk/shared/task-status";
 import { AnimatePresence, useReducedMotion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "../../components/button.tsx";
+import { ColumnJump } from "../../components/column-jump.tsx";
 import { Toast } from "../../components/toast.tsx";
 import { useLang } from "../../i18n/lang.tsx";
 import type { Task, TaskEvent } from "../../lib/types.ts";
 import { useAgents } from "../../lib/use-agents.ts";
+import { useSession } from "../../lib/use-session.ts";
 import { ActionDialog } from "./action-dialog.tsx";
 import { Column } from "./column.tsx";
 import { ColumnContent } from "./column-content.tsx";
@@ -42,7 +45,8 @@ export function Board({
   onOpen: (id: string) => void;
   onPublish: () => void;
 }) {
-  const { t } = useLang();
+  const { isAdmin } = useSession();
+  const { lang, t } = useLang();
   const seen = useRef(new Set<string>());
   useEffect(() => {
     for (const task of tasks) seen.current.add(task.id);
@@ -53,7 +57,7 @@ export function Board({
   const [shake, setShake] = useState<string | null>(null);
   const [parameter, setParameter] = useState<{
     task: Task;
-    action: "assign" | "handoff" | "recruit";
+    action: "assign" | "handoff" | "recruit" | "complete";
   } | null>(null);
   const { mutation, error, setError } = useTaskAction(
     () => setParameter(null),
@@ -77,11 +81,17 @@ export function Board({
   }
   return (
     <>
+      <ColumnJump
+        options={BOARD_COLUMNS.map((status) => ({
+          id: `task-column-${status}`,
+          label: labels(lang).status[status],
+        }))}
+      />
       <DndContext
         sensors={sensors}
         onDragStart={({ active }) => {
           const task = tasks.find((task) => task.id === active.id);
-          if (!task) return;
+          if (!isAdmin || !task) return;
           setShake(null);
           setDragged(task);
           setLegal(
@@ -100,14 +110,19 @@ export function Board({
         onDragEnd={({ over }) => {
           setDragged(null);
           setLegal({});
-          if (!dragged || !over) return;
+          if (!isAdmin || !dragged || !over) return;
           const action = dropAction(dragged, over.id as TaskStatus, new Date());
           if (!action) {
             setShake(dragged.id);
             return;
           }
           setError(null);
-          if (action === "assign" || action === "handoff" || action === "recruit")
+          if (
+            action === "assign" ||
+            action === "handoff" ||
+            action === "recruit" ||
+            action === "complete"
+          )
             setParameter({ task: dragged, action });
           else mutation.mutate({ task: dragged, action: actionSamples[action] });
         }}
@@ -143,7 +158,9 @@ export function Board({
             <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
               <div className="pointer-events-auto space-y-3 text-center">
                 <p className="text-secondary text-text-2">{t("desk.empty")}</p>
-                <Button onClick={() => onPublish()}>{t("desk.publishOne")}</Button>
+                <Button disabled={!isAdmin} onClick={() => onPublish()}>
+                  {t("desk.publishOne")}
+                </Button>
               </div>
             </div>
           )}
@@ -166,7 +183,7 @@ export function Board({
         </DragOverlay>
       </DndContext>
       <AnimatePresence>
-        {parameter && (
+        {isAdmin && parameter && (
           <ActionDialog
             key={`${parameter.task.id}-${parameter.action}`}
             action={parameter.action}

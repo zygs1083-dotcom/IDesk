@@ -5,11 +5,13 @@ import { Switch } from "../../components/switch.tsx";
 import { Toast } from "../../components/toast.tsx";
 import { useLang } from "../../i18n/lang.tsx";
 import { request } from "../../lib/api.ts";
+import { useSession } from "../../lib/use-session.ts";
 import { configFields } from "./config-fields.ts";
 import { PluginConfig } from "./plugin-config.tsx";
 import type { Plugin } from "./types.ts";
 
 export function PluginsPage() {
+  const { isAdmin } = useSession();
   const { t } = useLang();
   const kinds = {
     connector: t("common.connectors"),
@@ -71,21 +73,23 @@ export function PluginsPage() {
               <Switch
                 label={t("common.enableNamed", { name: plugin.name })}
                 checked={plugin.enabled}
-                disabled={toggle.isPending || reload.isPending}
+                disabled={!isAdmin || toggle.isPending || reload.isPending}
                 onChange={(enabled) => toggle.mutate({ id: plugin.id, enabled })}
               />
-              {plugin.kind !== "connector" && configFields(plugin.configSchema).length > 0 && (
-                <Button
-                  className="border-0 text-accent"
-                  aria-expanded={expanded === plugin.id}
-                  onClick={() => setExpanded(expanded === plugin.id ? null : plugin.id)}
-                >
-                  {t("settings.configure")}
-                </Button>
-              )}
+              {isAdmin &&
+                plugin.kind !== "connector" &&
+                configFields(plugin.configSchema).length > 0 && (
+                  <Button
+                    className="border-0 text-accent"
+                    aria-expanded={expanded === plugin.id}
+                    onClick={() => setExpanded(expanded === plugin.id ? null : plugin.id)}
+                  >
+                    {t("settings.configure")}
+                  </Button>
+                )}
               <Button
                 className="border-0 text-accent"
-                disabled={reload.isPending || toggle.isPending}
+                disabled={!isAdmin || reload.isPending || toggle.isPending}
                 onClick={() => reload.mutate(plugin)}
               >
                 {t("settings.reload")}
@@ -96,7 +100,7 @@ export function PluginsPage() {
                 {plugin.error}
               </p>
             )}
-            {expanded === plugin.id && (
+            {isAdmin && expanded === plugin.id && (
               <PluginConfig plugin={plugin} onClose={() => setExpanded(null)} />
             )}
           </div>

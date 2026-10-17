@@ -1,6 +1,14 @@
 import type { Key } from "./zh.ts";
 
 export const en: Record<Key, string> = {
+  "desk.history": "History",
+  "desk.loadMore": "Load more",
+  "desk.jumpColumn": "Jump to column",
+  "desk.dueAt": "Due date",
+  "desk.dueAtOptional": "Due date (optional)",
+  "desk.overdue": "Overdue",
+  "desk.result": "Result / notes (optional)",
+  "event.taskUpdated": "{agent} updated task details",
   "common.secretConfigured": "Configured (hidden)",
   "common.hiddenValuesHint":
     "Leave hidden values unchanged to keep them, or enter new values to replace them.",

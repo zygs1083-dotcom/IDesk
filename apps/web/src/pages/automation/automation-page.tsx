@@ -10,12 +10,14 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import type { z } from "zod";
 import { Button } from "../../components/button.tsx";
+import { ColumnJump } from "../../components/column-jump.tsx";
 import { Segmented } from "../../components/segmented.tsx";
 import { Toast } from "../../components/toast.tsx";
 import { useLang } from "../../i18n/lang.tsx";
 import { PageHeader } from "../../layout/page-header.tsx";
 import { request } from "../../lib/api.ts";
 import { relativeTime } from "../../lib/format.ts";
+import { useSession } from "../../lib/use-session.ts";
 import { filterRuns, matches } from "./filter-runs.ts";
 import { JobCard } from "./job-card.tsx";
 import { nextRuns } from "./next-runs.ts";
@@ -32,6 +34,7 @@ const runColumns: Record<Run["status"], "waiting" | "running" | "completed" | "f
   canceled: "completed",
 };
 export function AutomationPage() {
+  const { isAdmin } = useSession();
   const { lang, t } = useLang();
   const columns = [
     { id: "waiting", label: t("automation.waiting"), color: "bg-status-open" },
@@ -103,7 +106,7 @@ export function AutomationPage() {
                     time: relativeTime(new Date(connector.lastPolledAt), lang),
                   })}
             </span>
-            <Button disabled={poll.isPending} onClick={() => poll.mutate(connector.id)}>
+            <Button disabled={!isAdmin || poll.isPending} onClick={() => poll.mutate(connector.id)}>
               {t("common.refresh")}
             </Button>
           </>
@@ -117,12 +120,14 @@ export function AutomationPage() {
       {connectorsQuery.isSuccess && connectors.length === 0 && (
         <div className="py-16 text-center text-secondary text-text-2">
           <p>{t("settings.noConnectors")}</p>
-          <Link
-            to="/settings/connectors"
-            className="mt-3 inline-flex rounded-control border border-line bg-surface px-3 py-2 text-body text-text hover:bg-surface-2 focus-visible:outline-2 focus-visible:outline-accent"
-          >
-            {t("settings.addConnector")}
-          </Link>
+          {isAdmin && (
+            <Link
+              to="/settings/connectors"
+              className="mt-3 inline-flex rounded-control border border-line bg-surface px-3 py-2 text-body text-text hover:bg-surface-2 focus-visible:outline-2 focus-visible:outline-accent"
+            >
+              {t("settings.addConnector")}
+            </Link>
+          )}
         </div>
       )}
       {connector && (
@@ -153,6 +158,12 @@ export function AutomationPage() {
               <p className="pt-2 text-secondary text-status-failed">{connector.lastError}</p>
             </div>
           )}
+          <ColumnJump
+            options={columns.map((column) => ({
+              id: `automation-column-${column.id}`,
+              label: column.label,
+            }))}
+          />
           <section
             aria-label={t("automation.board")}
             className="flex min-h-0 flex-1 gap-3 overflow-x-auto pb-3"
@@ -162,6 +173,7 @@ export function AutomationPage() {
               return (
                 <RunColumn
                   key={column.id}
+                  id={`automation-column-${column.id}`}
                   label={column.label}
                   count={items.length + (column.id === "waiting" ? upcoming.length : 0)}
                   color={column.color}
