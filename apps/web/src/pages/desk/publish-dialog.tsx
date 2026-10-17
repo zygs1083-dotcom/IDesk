@@ -17,6 +17,7 @@ import { DispatchFields } from "./dispatch-fields.tsx";
 
 export function PublishDialog({ onClose }: { onClose: () => void }) {
   const { lang, t } = useLang();
+  const [dueAt, setDueAt] = useState("");
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [capabilities, setCapabilities] = useState<string[]>([]);
@@ -52,6 +53,7 @@ export function PublishDialog({ onClose }: { onClose: () => void }) {
           title: title.trim(),
           body,
           capabilities,
+          ...(dueAt ? { dueAt: new Date(dueAt).toISOString() } : {}),
           priority,
           ...(dispatch === undefined ? {} : { dispatch }),
           tags: tags.split(/[,，\s]+/).filter(Boolean),
@@ -140,6 +142,12 @@ export function PublishDialog({ onClose }: { onClose: () => void }) {
             }))}
           />
         </div>
+        <Field
+          type="datetime-local"
+          label={t("desk.dueAtOptional")}
+          value={dueAt}
+          onChange={(event) => setDueAt(event.target.value)}
+        />
         <DispatchFields
           capabilities={capabilities}
           mode={mode}

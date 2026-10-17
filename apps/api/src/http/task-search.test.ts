@@ -42,7 +42,7 @@ test("task search matches title, body and result and ANDs filters and the histor
   }
   const q = `q=${encodeURIComponent("部署")}`;
   expect(await search(q)).toEqual([title.id, body.id, result.id].sort());
-  expect(await search("q=missing")).toEqual([]);
+  expect(await search(`q=absent-${agent.id}`)).toEqual([]);
   expect(await search(`${q}&status=done&capability=coding&assignee=${agent.id}`)).toEqual([
     result.id,
   ]);

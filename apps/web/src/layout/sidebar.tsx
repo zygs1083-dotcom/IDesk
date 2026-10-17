@@ -13,9 +13,9 @@ import {
 } from "lucide-react";
 import { NavLink } from "react-router";
 import { useLang } from "../i18n/lang.tsx";
-import { request } from "../lib/api.ts";
 import { cn } from "../lib/cn.ts";
 import { useAgents } from "../lib/use-agents.ts";
+import { useSession } from "../lib/use-session.ts";
 
 const otherLang: Record<Lang, Lang> = { zh: "en", en: "zh" };
 const languageClasses = {
@@ -35,10 +35,7 @@ export function Sidebar() {
     { to: "/settings", label: t("nav.settings"), icon: Settings },
   ];
   const { agents } = useAgents();
-  const { data: session } = useQuery({
-    queryKey: ["auth", "me"],
-    queryFn: () => request<{ role: "admin" | "viewer" }>("/auth/me"),
-  });
+  const { data: session } = useSession();
   const { data: meta } = useQuery<{ office: boolean }>({
     queryKey: ["meta"],
     queryFn: async () => {

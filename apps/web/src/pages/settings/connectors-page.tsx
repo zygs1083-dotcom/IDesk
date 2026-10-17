@@ -5,12 +5,14 @@ import { Dialog } from "../../components/dialog.tsx";
 import { Toast } from "../../components/toast.tsx";
 import { useLang } from "../../i18n/lang.tsx";
 import { request } from "../../lib/api.ts";
+import { useSession } from "../../lib/use-session.ts";
 import { useShortcut } from "../../lib/use-shortcut.ts";
 import { ConnectorDialog } from "./connector-dialog.tsx";
 import { ConnectorRow } from "./connector-row.tsx";
 import type { ConnectionResult, Connector, Plugin } from "./types.ts";
 
 export function ConnectorsPage() {
+  const { isAdmin } = useSession();
   const { t } = useLang();
   const client = useQueryClient();
   const connectors = useQuery({
@@ -56,14 +58,18 @@ export function ConnectorsPage() {
     onError: (error) => setMessage(error.message),
   });
   useShortcut("n", () => {
-    if (plugins.data) setCreating(true);
+    if (isAdmin && plugins.data) setCreating(true);
   });
   const error = connectors.error ?? plugins.error;
   return (
     <section className="space-y-4" aria-label={t("common.connectors")}>
       <header className="flex items-center justify-between gap-2">
         <h2 className="text-section">{t("common.connectors")}</h2>
-        <Button variant="primary" disabled={!plugins.data} onClick={() => setCreating(true)}>
+        <Button
+          variant="primary"
+          disabled={!isAdmin || !plugins.data}
+          onClick={() => setCreating(true)}
+        >
           {t("settings.addConnector")}
         </Button>
       </header>
@@ -76,7 +82,11 @@ export function ConnectorsPage() {
       {!error && connectors.data?.length === 0 && (
         <div className="py-16 text-center text-secondary text-text-2">
           <p>{t("settings.noConnectors")}</p>
-          <Button className="mt-3" disabled={!plugins.data} onClick={() => setCreating(true)}>
+          <Button
+            className="mt-3"
+            disabled={!isAdmin || !plugins.data}
+            onClick={() => setCreating(true)}
+          >
             {t("settings.addConnector")}
           </Button>
         </div>
@@ -96,13 +106,13 @@ export function ConnectorsPage() {
           ))}
         </div>
       )}
-      {creating && plugins.data && (
+      {isAdmin && creating && plugins.data && (
         <ConnectorDialog
           plugins={plugins.data.filter((plugin) => plugin.kind === "connector" && plugin.enabled)}
           onClose={() => setCreating(false)}
         />
       )}
-      {editing && plugins.data && (
+      {isAdmin && editing && plugins.data && (
         <ConnectorDialog
           connector={editing}
           plugins={plugins.data}
@@ -110,7 +120,7 @@ export function ConnectorsPage() {
         />
       )}
       <Dialog
-        open={!!deleting}
+        open={isAdmin && !!deleting}
         title={t("settings.deleteConnector", { name: deleting?.name ?? "" })}
         onClose={() => setDeleting(null)}
       >

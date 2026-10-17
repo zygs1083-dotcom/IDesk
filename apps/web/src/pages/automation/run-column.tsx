@@ -2,11 +2,13 @@ import type { ReactNode } from "react";
 import { cn } from "../../lib/cn.ts";
 
 export function RunColumn({
+  id,
   label,
   count,
   color,
   children,
 }: {
+  id: string;
   label: string;
   count: number;
   color: string;
@@ -14,6 +16,7 @@ export function RunColumn({
 }) {
   return (
     <section
+      id={id}
       aria-label={label}
       className="flex min-w-column flex-1 flex-col gap-3 rounded-panel bg-surface-2 p-3"
     >

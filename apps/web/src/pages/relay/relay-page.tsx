@@ -10,6 +10,7 @@ import { request } from "../../lib/api.ts";
 import { cn } from "../../lib/cn.ts";
 import { relativeTime } from "../../lib/format.ts";
 import { useAgents } from "../../lib/use-agents.ts";
+import { useSession } from "../../lib/use-session.ts";
 import { useShortcut } from "../../lib/use-shortcut.ts";
 import { ComposeRelay } from "./compose-relay.tsx";
 import { recipientLabel } from "./labels.ts";
@@ -19,6 +20,7 @@ import { RelayFilters } from "./relay-filters.tsx";
 type Message = z.infer<typeof relayMessageSchema>;
 
 export function RelayPage() {
+  const { isAdmin } = useSession();
   const { lang, t } = useLang();
   const {
     data: messages = [],
@@ -31,7 +33,9 @@ export function RelayPage() {
   const [task, setTask] = useState("all");
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [compose, setCompose] = useState<{ reply?: Message } | null>(null);
-  useShortcut("n", () => setCompose({}));
+  useShortcut("n", () => {
+    if (isAdmin) setCompose({});
+  });
   const filtered = messages.filter(
     (message) =>
       (recipient === "all" || message.to.kind === recipient) &&
@@ -42,7 +46,7 @@ export function RelayPage() {
   return (
     <div className="flex h-full flex-col gap-6">
       <PageHeader title={t("nav.relay")}>
-        <Button variant="primary" onClick={() => setCompose({})}>
+        <Button disabled={!isAdmin} variant="primary" onClick={() => setCompose({})}>
           {t("relay.sendMessage")}
         </Button>
       </PageHeader>
@@ -62,7 +66,7 @@ export function RelayPage() {
       {!isPending && !error && messages.length === 0 ? (
         <div className="py-16 text-center text-secondary text-text-2">
           <p>{t("relay.empty")}</p>
-          <Button className="mt-3" onClick={() => setCompose({})}>
+          <Button disabled={!isAdmin} className="mt-3" onClick={() => setCompose({})}>
             {t("relay.sendOne")}
           </Button>
         </div>
@@ -120,7 +124,9 @@ export function RelayPage() {
           </div>
         </div>
       )}
-      {compose && <ComposeRelay reply={compose.reply} onClose={() => setCompose(null)} />}
+      {isAdmin && compose && (
+        <ComposeRelay reply={compose.reply} onClose={() => setCompose(null)} />
+      )}
     </div>
   );
 }

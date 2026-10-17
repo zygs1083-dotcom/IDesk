@@ -9,7 +9,7 @@ import { useLang } from "../../i18n/lang.tsx";
 import type { Agent } from "../../lib/types.ts";
 import type { HumanAction } from "./drop-action.ts";
 
-type ParameterAction = Extract<HumanAction, "assign" | "handoff" | "recruit">;
+type ParameterAction = Extract<HumanAction, "assign" | "handoff" | "recruit" | "complete">;
 export function ActionDialog({
   action,
   agents,
@@ -33,7 +33,13 @@ export function ActionDialog({
   const [note, setNote] = useState("");
   const [needed, setNeeded] = useState(2);
   const enabled =
-    action === "assign" ? !!agentId : action === "handoff" ? !!note.trim() : needed >= 2;
+    action === "complete"
+      ? true
+      : action === "assign"
+        ? !!agentId
+        : action === "handoff"
+          ? !!note.trim()
+          : needed >= 2;
   return (
     <Dialog open onClose={onClose} title={labels(lang).action[action]}>
       <form
@@ -41,15 +47,25 @@ export function ActionDialog({
         onSubmit={(event) => {
           event.preventDefault();
           onSubmit(
-            action === "assign"
-              ? { type: action, agentId }
-              : action === "handoff"
-                ? { type: action, to: agentId || null, note }
-                : { type: action, needed },
+            action === "complete"
+              ? { type: action, result: note }
+              : action === "assign"
+                ? { type: action, agentId }
+                : action === "handoff"
+                  ? { type: action, to: agentId || null, note }
+                  : { type: action, needed },
           );
         }}
       >
-        {action === "recruit" ? (
+        {action === "complete" ? (
+          <Field
+            multiline
+            label={t("desk.result")}
+            rows={6}
+            value={note}
+            onChange={(event) => setNote(event.target.value)}
+          />
+        ) : action === "recruit" ? (
           <Field
             label={t("desk.agentCount")}
             type="number"

@@ -21,7 +21,7 @@ export function useTaskAction(onSuccess: () => void, onError?: (error: Error, ta
       const previous = client.getQueryData<Task[]>(["tasks"]);
       const detail = client.getQueryData<Task>(["task", task.id]);
       const next = previewAction(task, action, new Date());
-      if (!(next instanceof TransitionError)) {
+      if (action.type !== "complete" && !(next instanceof TransitionError)) {
         client.setQueryData<Task[]>(["tasks"], (tasks) =>
           tasks?.map((item) => (item.id === task.id ? next : item)),
         );

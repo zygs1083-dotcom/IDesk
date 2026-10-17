@@ -7,23 +7,27 @@ import { cn } from "../../lib/cn.ts";
 import { relativeTime } from "../../lib/format.ts";
 import type { Agent } from "../../lib/types.ts";
 import { useAgents } from "../../lib/use-agents.ts";
+import { useSession } from "../../lib/use-session.ts";
 import { useShortcut } from "../../lib/use-shortcut.ts";
 import { AgentDetails } from "./agent-details.tsx";
 import { CreateAgent } from "./create-agent.tsx";
 import { DeleteAgent } from "./delete-agent.tsx";
 
 export function AgentsPage() {
+  const { isAdmin } = useSession();
   const { lang, t } = useLang();
   const { agents, error, isPending } = useAgents();
   const [expanded, setExpanded] = useState<string | null>(null);
   const [editing, setEditing] = useState<Agent | null>(null);
   const [deleting, setDeleting] = useState<Agent | null>(null);
   const [creating, setCreating] = useState(false);
-  useShortcut("n", () => setCreating(true));
+  useShortcut("n", () => {
+    if (isAdmin) setCreating(true);
+  });
   return (
     <div className="space-y-6">
       <PageHeader title={t("nav.agents")}>
-        <Button variant="primary" onClick={() => setCreating(true)}>
+        <Button disabled={!isAdmin} variant="primary" onClick={() => setCreating(true)}>
           {t("common.create")}
         </Button>
       </PageHeader>
@@ -35,7 +39,7 @@ export function AgentsPage() {
       {!isPending && !error && agents.length === 0 ? (
         <div className="py-16 text-center text-secondary text-text-2">
           <p>{t("agents.empty")}</p>
-          <Button className="mt-3" onClick={() => setCreating(true)}>
+          <Button disabled={!isAdmin} className="mt-3" onClick={() => setCreating(true)}>
             {t("common.createOne")}
           </Button>
         </div>
@@ -106,6 +110,7 @@ export function AgentsPage() {
                         onKeyDown={(event) => event.stopPropagation()}
                       >
                         <Menu
+                          disabled={!isAdmin}
                           label={t("common.actionsFor", { name: agent.name })}
                           items={[
                             { label: t("common.edit"), onSelect: () => setEditing(agent) },
@@ -132,9 +137,9 @@ export function AgentsPage() {
           </div>
         </div>
       )}
-      {editing && <CreateAgent agent={editing} onClose={() => setEditing(null)} />}
-      {deleting && <DeleteAgent agent={deleting} onClose={() => setDeleting(null)} />}
-      {creating && <CreateAgent onClose={() => setCreating(false)} />}
+      {isAdmin && editing && <CreateAgent agent={editing} onClose={() => setEditing(null)} />}
+      {isAdmin && deleting && <DeleteAgent agent={deleting} onClose={() => setDeleting(null)} />}
+      {isAdmin && creating && <CreateAgent onClose={() => setCreating(false)} />}
     </div>
   );
 }

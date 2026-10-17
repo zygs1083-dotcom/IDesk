@@ -4,6 +4,7 @@ import { ActivityPage } from "./pages/activity/activity-page.tsx";
 import { AgentsPage } from "./pages/agents/agents-page.tsx";
 import { AutomationPage } from "./pages/automation/automation-page.tsx";
 import { Desk } from "./pages/desk/desk.tsx";
+import { TaskHistory } from "./pages/desk/history.tsx";
 import { Login } from "./pages/login.tsx";
 import { RelayPage } from "./pages/relay/relay-page.tsx";
 import { SchedulesPage } from "./pages/schedules/schedules-page.tsx";
@@ -20,6 +21,7 @@ export function App() {
       <Route element={<Shell />}>
         <Route index element={<Navigate to="/desk" replace />} />
         <Route path="/desk" element={<Desk />} />
+        <Route path="/desk/history" element={<TaskHistory />} />
         <Route path="/relay" element={<RelayPage />} />
         <Route path="/automation" element={<AutomationPage />} />
         <Route path="/agents" element={<AgentsPage />} />

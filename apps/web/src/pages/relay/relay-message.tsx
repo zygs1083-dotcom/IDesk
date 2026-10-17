@@ -6,6 +6,7 @@ import { Markdown } from "../../components/markdown.tsx";
 import { useLang } from "../../i18n/lang.tsx";
 import { relativeTime } from "../../lib/format.ts";
 import { useAgents } from "../../lib/use-agents.ts";
+import { useSession } from "../../lib/use-session.ts";
 import { recipientLabel } from "./labels.ts";
 
 type Message = z.infer<typeof relayMessageSchema>;
@@ -21,6 +22,7 @@ export function RelayMessage({
   onTask: (id: string) => void;
   onReply: (message: Message) => void;
 }) {
+  const { isAdmin } = useSession();
   const { lang, t } = useLang();
   const { agentName } = useAgents();
   const taskId = message.taskId;
@@ -37,7 +39,7 @@ export function RelayMessage({
             {agentName(message.fromAgentId)} → {recipientLabel(message.to, agentName, lang)}
           </p>
         </div>
-        {message.fromAgentId !== "human" && (
+        {isAdmin && message.fromAgentId !== "human" && (
           <button
             type="button"
             className="shrink-0 text-secondary text-accent"

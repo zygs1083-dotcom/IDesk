@@ -1,5 +1,5 @@
 import type { TaskPriority, TaskStatus } from "@idesk/shared/task-status";
-import { and, desc, eq, gt, notInArray, or, sql } from "drizzle-orm";
+import { and, desc, eq, gt, lt, notInArray, or, sql } from "drizzle-orm";
 import { db } from "../../db/client.ts";
 import { tasks } from "../../db/schema.ts";
 import { publishEvent, recordEvent } from "../events/bus.ts";
@@ -50,13 +50,22 @@ export function listTasks(filter: {
   status?: TaskStatus;
   capability?: string;
   assigneeId?: string;
+  limit?: number;
+  cursor?: string;
 }): Task[] {
+  const [cursorTime, cursorId] = filter.cursor?.split("|") ?? [];
   const pattern = filter.q === undefined ? undefined : `%${escapeLike(filter.q)}%`;
   return db
     .select()
     .from(tasks)
     .where(
       and(
+        cursorTime === undefined || cursorId === undefined
+          ? undefined
+          : or(
+              lt(tasks.updatedAt, new Date(Number(cursorTime))),
+              and(eq(tasks.updatedAt, new Date(Number(cursorTime))), lt(tasks.id, cursorId)),
+            ),
         pattern === undefined
           ? undefined
           : sql`(${tasks.title} LIKE ${pattern} ESCAPE '\\'
@@ -76,7 +85,8 @@ export function listTasks(filter: {
     )`,
       ),
     )
-    .orderBy(desc(tasks.updatedAt))
+    .orderBy(desc(tasks.updatedAt), desc(tasks.id))
+    .limit(filter.limit ?? -1)
     .all();
 }
 

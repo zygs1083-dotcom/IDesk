@@ -21,6 +21,7 @@ export function Column({
   const { setNodeRef, isOver } = useDroppable({ id: status });
   return (
     <section
+      id={`task-column-${status}`}
       ref={setNodeRef}
       aria-label={labels(lang).status[status]}
       className={cn(

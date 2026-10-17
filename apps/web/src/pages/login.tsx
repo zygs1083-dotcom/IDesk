@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { PencilRuler } from "lucide-react";
 import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router";
@@ -9,6 +9,7 @@ import { request } from "../lib/api.ts";
 
 export function Login() {
   const { t } = useLang();
+  const client = useQueryClient();
   const [password, setPassword] = useState("");
   const [params] = useSearchParams();
   const navigate = useNavigate();
@@ -17,6 +18,7 @@ export function Login() {
     mutationFn: () =>
       request("/auth/login", { method: "POST", body: JSON.stringify({ password }) }),
     onSuccess: () => {
+      client.removeQueries({ queryKey: ["auth", "me"], exact: true });
       const from = params.get("from");
       if (from?.startsWith("/office")) {
         window.location.assign(from);
