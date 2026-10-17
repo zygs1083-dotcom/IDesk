@@ -1,6 +1,7 @@
 import { Cron } from "croner";
 import { runSchedule } from "../core/schedules/run.ts";
 import { listSchedules, type Schedule } from "../core/schedules/schedules.ts";
+import { HttpError } from "../http/errors.ts";
 
 const crons = new Map<string, Cron>();
 
@@ -14,7 +15,19 @@ export function syncSchedule(row: Schedule): void {
   if (row.enabled) {
     crons.set(
       row.id,
-      new Cron(row.cron, { timezone: row.timezone }, () => void runSchedule(row.id)),
+      new Cron(
+        row.cron,
+        {
+          timezone: row.timezone,
+          catch: (error) => {
+            if (error instanceof HttpError && error.key === "schedule.running") return;
+            console.error("Schedule execution failed", error);
+          },
+        },
+        async () => {
+          await runSchedule(row.id);
+        },
+      ),
     );
   }
 }

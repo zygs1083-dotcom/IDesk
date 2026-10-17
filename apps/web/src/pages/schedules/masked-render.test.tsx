@@ -43,6 +43,7 @@ test("masked HTTP schedules and agent webhook values render without URL parsing"
             cron: "* * * * *",
             timezone: "UTC",
             enabled: false,
+            running: false,
             action: { type: "http", method: "POST", url: "••••••", headers: {}, body: "••••••" },
             lastRunAt: null,
             lastStatus: null,
@@ -50,6 +51,9 @@ test("masked HTTP schedules and agent webhook values render without URL parsing"
           }}
           connectors={[]}
           busy={false}
+          running={false}
+          canEdit={true}
+          onHistory={() => {}}
           onToggle={() => {}}
           onRun={() => {}}
           onEdit={() => {}}

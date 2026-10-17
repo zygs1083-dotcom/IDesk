@@ -17,6 +17,7 @@ test("masked schedule responses round-trip as PATCH input without weakening crea
     cron: "* * * * *",
     timezone: "UTC",
     enabled: false,
+    running: false,
     action: http,
     lastRunAt: null,
     lastStatus: null,

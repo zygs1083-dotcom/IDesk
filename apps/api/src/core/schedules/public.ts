@@ -1,12 +1,15 @@
 import type { patchScheduleSchema, updateScheduleSchema } from "@idesk/shared/schedule-schemas";
 import type { z } from "zod";
 import { MASK } from "../connectors/connectors.ts";
+import { runningSchedules } from "./run.ts";
 import type { Schedule } from "./schedules.ts";
 
-export function publicSchedule(row: Schedule): Schedule {
-  if (row.action.type !== "http") return row;
+export function publicSchedule(row: Schedule): Schedule & { running: boolean } {
+  const running = runningSchedules.has(row.id);
+  if (row.action.type !== "http") return { ...row, running };
   return {
     ...row,
+    running,
     action: {
       ...row.action,
       url: MASK,

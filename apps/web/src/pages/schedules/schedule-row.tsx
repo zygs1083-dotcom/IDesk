@@ -1,8 +1,10 @@
+import { Button } from "../../components/button.tsx";
 import { Menu } from "../../components/menu.tsx";
 import { Switch } from "../../components/switch.tsx";
 import { useLang } from "../../i18n/lang.tsx";
 import { cn } from "../../lib/cn.ts";
 import { relativeTime } from "../../lib/format.ts";
+import { StatusDot } from "../desk/status-dot.tsx";
 import { cronText } from "./cron-text.ts";
 import type { Connector, Schedule } from "./types.ts";
 
@@ -10,6 +12,9 @@ export function ScheduleRow({
   schedule,
   connectors,
   busy,
+  running,
+  canEdit,
+  onHistory,
   onToggle,
   onRun,
   onEdit,
@@ -18,6 +23,9 @@ export function ScheduleRow({
   schedule: Schedule;
   connectors: Connector[];
   busy: boolean;
+  running: boolean;
+  canEdit: boolean;
+  onHistory: () => void;
   onToggle: (enabled: boolean) => void;
   onRun: () => void;
   onEdit: () => void;
@@ -75,7 +83,13 @@ export function ScheduleRow({
       </td>
       <td className="whitespace-nowrap px-4 py-3 tabular-nums text-text-2">
         <span className="flex items-center gap-2">
-          {schedule.lastStatus && (
+          {running && (
+            <>
+              <StatusDot status="in_progress" />
+              {t("schedules.running")}
+            </>
+          )}
+          {!running && schedule.lastStatus && (
             <span
               title={schedule.lastStatus === "success" ? t("common.success") : t("common.failed")}
               className={cn(
@@ -84,7 +98,8 @@ export function ScheduleRow({
               )}
             />
           )}
-          {schedule.lastRunAt ? relativeTime(new Date(schedule.lastRunAt), lang) : "—"}
+          {!running &&
+            (schedule.lastRunAt ? relativeTime(new Date(schedule.lastRunAt), lang) : "—")}
         </span>
       </td>
       <td
@@ -94,23 +109,38 @@ export function ScheduleRow({
         {nextText}
       </td>
       <td className="px-4 py-3">
-        <Switch
-          label={t("common.enableNamed", { name: schedule.name })}
-          checked={schedule.enabled}
-          disabled={busy}
-          onChange={onToggle}
-        />
+        {canEdit ? (
+          <Switch
+            label={t("common.enableNamed", { name: schedule.name })}
+            checked={schedule.enabled}
+            disabled={busy}
+            onChange={onToggle}
+          />
+        ) : (
+          <span className="text-text-2">
+            {t(schedule.enabled ? "schedules.enabled" : "schedules.disabled")}
+          </span>
+        )}
       </td>
       <td className="px-2 py-2">
-        <Menu
-          label={t("common.actionsFor", { name: schedule.name })}
-          disabled={busy}
-          items={[
-            { label: t("schedules.runNow"), onSelect: onRun },
-            { label: t("common.edit"), onSelect: onEdit },
-            { label: t("common.delete"), onSelect: onDelete, danger: true },
-          ]}
-        />
+        <div className="flex items-center gap-1">
+          <Button onClick={onHistory}>{t("schedules.history")}</Button>
+          {canEdit && (
+            <Button disabled={busy || running} onClick={onRun}>
+              {t("schedules.runNow")}
+            </Button>
+          )}
+          {canEdit && (
+            <Menu
+              label={t("common.actionsFor", { name: schedule.name })}
+              disabled={busy}
+              items={[
+                { label: t("common.edit"), onSelect: onEdit },
+                { label: t("common.delete"), onSelect: onDelete, danger: true },
+              ]}
+            />
+          )}
+        </div>
       </td>
     </tr>
   );

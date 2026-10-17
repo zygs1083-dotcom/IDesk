@@ -5,10 +5,11 @@ import {
   scheduleSchema,
   updateScheduleSchema,
 } from "@idesk/shared/schedule-schemas";
-import { idSchema } from "@idesk/shared/task-schemas";
+import { eventSchema, idSchema } from "@idesk/shared/task-schemas";
 import { Cron } from "croner";
 import { validator } from "hono/validator";
 import { z } from "zod";
+import { scheduleEvents } from "../../core/schedules/events.ts";
 import { mergeScheduleSecrets, publicSchedule } from "../../core/schedules/public.ts";
 import { runSchedule } from "../../core/schedules/run.ts";
 import {
@@ -32,6 +33,24 @@ function validCron(row: { cron: string; timezone: string }): boolean {
 }
 
 export function scheduleRoutes(app: OpenAPIHono<AuthEnv>) {
+  app.openapi(
+    {
+      method: "get",
+      path: "/api/v1/schedules/{id}/events",
+      request: { params: idSchema },
+      responses: {
+        200: {
+          description: "Recent schedule executions",
+          content: { "application/json": { schema: z.array(eventSchema) } },
+        },
+      },
+    },
+    (c) => {
+      const id = c.req.valid("param").id;
+      if (!getSchedule(id)) throw new HttpError(404, "schedule.notFound");
+      return c.json(scheduleEvents(id), 200);
+    },
+  );
   app.openapi(
     {
       method: "get",
@@ -160,6 +179,10 @@ export function scheduleRoutes(app: OpenAPIHono<AuthEnv>) {
       middleware: requireHuman,
       request: { params: idSchema },
       responses: {
+        409: {
+          description: "Schedule is already running",
+          content: { "application/json": { schema: z.object({ error: z.string() }) } },
+        },
         200: {
           description: "Executed",
           content: { "application/json": { schema: scheduleSchema } },
