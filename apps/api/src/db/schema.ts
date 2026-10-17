@@ -97,6 +97,7 @@ export const connectors = sqliteTable("connectors", {
   config: text({ mode: "json" }).$type<Record<string, unknown>>().notNull(),
   enabled: integer({ mode: "boolean" }).notNull().default(true),
   pollIntervalSec: integer("poll_interval_sec").notNull().default(60),
+  lastSucceededAt: integer("last_succeeded_at", { mode: "timestamp_ms" }),
   lastPolledAt: integer("last_polled_at", { mode: "timestamp_ms" }),
   lastError: text("last_error"),
 });

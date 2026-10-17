@@ -102,7 +102,7 @@ index.ts                                         启动
 | `task.reported` | `{ message }` | AI 汇报进展（内部同时续租） |
 | `relay.sent` | `{ messageId, to }` | 传递区发消息 |
 | `agent.registered` | `{ name, kind }` | 新建智能体 |
-| `connector.polled` | `{ connectorId, changed }` | 连接器轮询有变化 |
+| `connector.polled` | `{ connectorId, name, changed }` | 每轮采集成功或失败后；changed 可为 0 |
 | `schedule.fired` | `{ scheduleId, status }` | 定时任务执行 |
 
 ### 4.4 Schedule（定时任务）
@@ -117,10 +117,10 @@ action 是可辨识联合：
 
 ### 4.5 Connector / AutomationJob / AutomationRun
 
-连接器是连接器插件的一个实例：`{ id, pluginId, name, config(json), enabled, pollIntervalSec, lastPolledAt, lastError }`。config 里的密钥明文存库（单机内网），出 API 时掩码。
+连接器是连接器插件的一个实例：`{ id, pluginId, name, config(json), enabled, pollIntervalSec, lastPolledAt, lastSucceededAt, lastError }`。config 里的密钥明文存库（单机内网），出 API 时掩码。`lastPolledAt` 记录尝试时间并控制轮询间隔；`lastSucceededAt` 是完整采集成功的轮次开始时间，失败不推进。迁移 0006 增加可空成功游标，不从历史尝试时间回填。
 
 AutomationJob 镜像外部的工作流定义：`{ id, connectorId, externalId, name, enabled, url, lastRunStatus, lastRunAt }`。
-AutomationRun 镜像执行实例：`{ id, jobId, externalId, status, trigger, startedAt, finishedAt, url, error }`，status 统一为 `waiting` `running` `success` `failed` `canceled`；`trigger` 是外部系统给的触发方式原文（n8n 的 mode，DolphinScheduler 的 commandType），可空。每个 job 只保留最近 50 条 run。轮询的 since 取该连接器下仍在 waiting/running 的 run 里最早的 startedAt，没有则用 lastPolledAt，这样未结束的 run 会被重新拉取并更新。n8n 公共 API 没有立即运行端点，n8n 连接器不实现 trigger()。
+AutomationRun 镜像执行实例：`{ id, jobId, externalId, status, trigger, startedAt, finishedAt, url, error }`，status 统一为 `waiting` `running` `success` `failed` `canceled`；`trigger` 是外部系统给的触发方式原文（n8n 的 mode，DolphinScheduler 的 commandType），可空。每个 job 保留全部 waiting/running 和最近 50 条终态 run。轮询的 since 从 lastSucceededAt 开始（尚无成功游标则最近七天），有更早的活动 run 时拉回到其 startedAt；另传 activeRuns 的外部 id，对窗口中缺少的活动项按详情接口补取，包括没有 startedAt 的项。n8n 公共 API 没有立即运行端点，n8n 连接器不实现 trigger()。
 
 外部 API 的已验证事实（n8n 2.32、DolphinScheduler 3.2.2）见 `/data/browser-home/pro/kaneo-design/scheduled-jobs-design.md` §1，实现连接器时以它为准。
 
@@ -323,7 +323,9 @@ export interface ConnectorPlugin extends Plugin {
 
 - 启动时扫描 `plugins/*/index.ts`（内置）和 `IDESK_PLUGIN_DIR/*/index.js`（外置）。
 - 每个插件的启用状态和插件级配置存 `plugin_state` 表（`enabled`、`config` JSON）；没有记录的按 `enabledByDefault` 决定。`PATCH /plugins/:id { config }` 按 configSchema 校验后写库，插件已启用时 teardown 再 setup 让新配置生效。`enable` 动态 `import()` 并 `setup`；`disable` 调 `teardown` 并撤销它注册的所有订阅、cron、路由。`reload` = disable + 清 import cache（带 `?t=` query）+ enable。
-- 连接器轮询由宿主统一驱动：每分钟扫 `enabled` 的连接器，按各自 `pollIntervalSec` 决定是否轮询，顺序执行，upsert job 和 run，每个 job 只留最近 50 条 run，单个失败只写 `lastError` 不影响其他，有变化时 emit `connector.polled { connectorId, changed }`。`listJobs` 成功返回后，该连接器下不在返回列表里的 job 连同它的 run 一起删除（看板是外部系统的镜像，那边删了作业或项目，这边也消失；删除计入 changed）。
+- 连接器轮询由宿主统一驱动：每分钟扫 `enabled` 的连接器，按各自 `pollIntervalSec` 决定是否轮询，顺序执行。首次、手动和定时调用共享同一连接器的 in-flight Promise；独立的每分钟 Cron 扫租约，不受慢采集阻塞。
+- `listJobs` 与 `listRuns` 全部成功后，单一事务 upsert 镜像、删除消失的 job 及其 run、保留每 job 全部活动项和最近 50 条终态，并更新成功游标。任何分页失败只写 `lastError` 与尝试时间，不提交部分镜像或删除。等待外部响应期间连接器被删除、停用或配置改变时丢弃旧结果；较旧的轮次时间不能覆盖新轮次。
+- 每轮结束 emit 一次 `connector.polled { connectorId, name, changed }`，成功、失败和无内容变化均通知，字段更新及删除计入 changed，以便前端同时刷新健康状态与镜像。
 - 连接器插件对外部系统的每个请求 30 秒超时（`AbortSignal.timeout`），超时和网络错误一样记进 `lastError`，下一轮再试；轮询不能无限期挂住。`POST /connectors` 建好实例立刻返回，首次轮询在后台跑，看板靠 `connector.polled` 事件刷新。轮询进度放内存：`listJobs` / `listRuns` 的 opts 里有 `progress(done, total)`（`listRuns` 还收到本次的 `jobs`），插件在逐项目之类的长循环里汇报，`GET /connectors` 每项带 `progress: { done, total } | null`，轮询结束清空。
 - 连接器和插件 config 出 API 时按键名掩码：键名匹配 `/token|key|secret|password|webhookUrl/i` 的字符串值替换成 `••••••`；PATCH 时收到 `••••••` 就保留原值。所有读取角色都用相同的公共响应。
 - 核心代码不出现任何插件 id。
@@ -407,7 +409,7 @@ IDESK_VIEWER_PASSWORD=...       # 可选；只读访客密码（§12.12）
 
 - `testConnection`：`GET /repos/{repo}` 200。
 - `listJobs`：`GET /repos/{repo}/actions/workflows` → `externalId = String(id)`，`name`，`enabled = state === "active"`，`url = html_url`。
-- `listRuns`：`GET /repos/{repo}/actions/runs?per_page=<limit>` 加 `&created=>=<since ISO>`（since 为 null 时不加）→ `externalId = String(id)`，`jobExternalId = String(workflow_id)`，`startedAt = run_started_at ?? created_at`，`finishedAt = status === "completed" ? updated_at : null`，`trigger = event`，`url = html_url`，`error = null`。
+- `listRuns`：`GET /repos/{repo}/actions/runs?per_page=<limit>&created=<from>..<to>`，按整秒窗口分页；初次最近七天，超过 GitHub 1000 条查询上限则二分时间窗，合并按 id 去重。不可拆的单秒超限或分页唯一条数不足 total_count 时明确失败，不推进游标；窗口中缺少的活动项按 run id 补取。映射 → `externalId = String(id)`，`jobExternalId = String(workflow_id)`，`startedAt = run_started_at ?? created_at`，`finishedAt = status === "completed" ? updated_at : null`，`trigger = event`，`url = html_url`，`error = null`。
 - 状态映射：`status` 为 `queued | waiting | pending | requested` → waiting；`in_progress` → running；`completed` 看 `conclusion`：`success` → success；`failure | timed_out | startup_failure | action_required` → failed；`cancelled | skipped | neutral | stale` 及其他 → canceled。
 - `trigger`：`POST /repos/{repo}/actions/workflows/{id}/dispatches { ref }`，204 即成功，返回 `{}`（GitHub 不返回 run id）。
 
@@ -513,7 +515,7 @@ completedAt: <ISO>
 - 项目列表：留空时每次 `listJobs` / `listRuns` 先 `GET /projects?pageNo=<n>&pageSize=100` 翻页拿全部 `{ code, name }`（DolphinScheduler 3.2 的项目分页接口，实现前对照 `/dolphinscheduler/swagger-ui` 确认路径和字段名）；填了就只有这一个项目，不调项目接口。海豚那边新建的项目在下一次轮询或点自动化页的「刷新」（`POST /connectors/:id/poll`）时自动进来，不另做更新机制。
 - `externalId` 统一为 `<projectCode>/<definitionCode>`，run 的 `jobExternalId` 同样；两种模式都如此，不再有裸的 definitionCode。url 用该作业所属项目的 code 拼。
 - 作业名只写工作流名，项目名放 `group`（§12.19）。
-- `listRuns`：逐个项目用同一个 `since` 分页拉取，合并后按 `startedAt` 倒序取 `limit` 条。`since` 为 null（首次轮询）时 `startDate` 取 7 天前，不带日期时海豚要对整张实例表分页，大库上会卡很久。宿主把本次 `listJobs` 的结果作为 `opts.jobs` 传给 `listRuns`，DolphinScheduler 只查其中出现过的项目，空项目不查实例；实测 860 个项目里多数是空的。
+- `listRuns`：逐个项目用同一个 `since` 分页拉取，合并后按 `startedAt` 倒序返回全部结果；`limit` 是页大小，不截断总结果。`since` 为 null（首次轮询）时 `startDate` 取 7 天前，不带日期时海豚要对整张实例表分页，大库上会卡很久。宿主把本次 `listJobs` 的结果作为 `opts.jobs` 传给 `listRuns`，DolphinScheduler 只查其中出现过的项目，空项目不查实例；实测 860 个项目里多数是空的。
 - `testConnection`：留空时 `GET /projects?pageNo=1&pageSize=1`，填了照旧。
 - 项目被删或 Token 失去权限：该项目的作业不再出现在 `listJobs` 里，按 §7 的宿主规则连同 run 一起删除。
 

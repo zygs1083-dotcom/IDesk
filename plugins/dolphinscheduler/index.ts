@@ -54,6 +54,19 @@ const connectionErrors: Record<number, string> = {
   10190: "项目不存在",
 };
 
+function toRun(settings: Config, projectCode: string, instance: Instance): ExternalRun {
+  return {
+    externalId: String(instance.id),
+    jobExternalId: `${projectCode}/${instance.processDefinitionCode}`,
+    status: statuses[instance.state],
+    trigger: instance.commandType,
+    startedAt: parseDate(instance.startTime),
+    finishedAt: parseDate(instance.endTime),
+    url: `${settings.baseUrl}/ui/projects/${projectCode}/workflow/instances/${instance.id}`,
+    error: instance.state === "FAILURE" ? "DolphinScheduler 执行失败" : null,
+  };
+}
+
 export default {
   id: "dolphinscheduler",
   name: "DolphinScheduler",
@@ -117,7 +130,7 @@ export default {
     }
     return jobs;
   },
-  async listRuns(config, { since, limit, progress, jobs }) {
+  async listRuns(config, { since, limit, progress, jobs, activeRuns = [] }) {
     const settings = config as Config;
     const runs: ExternalRun[] = [];
     // 全部项目模式下多数项目一个工作流都没有，只查本次 listJobs 见到工作流的项目
@@ -127,9 +140,11 @@ export default {
     );
     for (const [index, project] of projects.entries()) {
       progress?.(index, projects.length);
-      let projectRunCount = 0;
-      for (let pageNo = 1; projectRunCount < limit; pageNo++) {
-        const query = new URLSearchParams({ pageNo: String(pageNo), pageSize: "100" });
+      for (let pageNo = 1; ; pageNo++) {
+        const query = new URLSearchParams({
+          pageNo: String(pageNo),
+          pageSize: String(Math.min(100, limit)),
+        });
         // 首次轮询（since 为 null）只看最近 7 天：不带 startDate 时海豚要对整张实例表分页，大库上会等很久
         const from = since ?? new Date(Date.now() - 7 * 86_400_000);
         query.set("startDate", from.toISOString().slice(0, 19).replace("T", " "));
@@ -138,23 +153,27 @@ export default {
           `/projects/${project.code}/process-instances?${query}`,
         );
         runs.push(
-          ...page.totalList.map((instance) => ({
-            externalId: String(instance.id),
-            jobExternalId: `${project.code}/${instance.processDefinitionCode}`,
-            status: statuses[instance.state],
-            trigger: instance.commandType,
-            startedAt: parseDate(instance.startTime),
-            finishedAt: parseDate(instance.endTime),
-            url: `${settings.baseUrl}/ui/projects/${project.code}/workflow/instances/${instance.id}`,
-            error: instance.state === "FAILURE" ? "DolphinScheduler 执行失败" : null,
-          })),
+          ...page.totalList.map((instance) => toRun(settings, String(project.code), instance)),
         );
-        projectRunCount += page.totalList.length;
         if (page.currentPage >= page.totalPage) break;
       }
     }
-    return runs
-      .sort((a, b) => (b.startedAt?.getTime() ?? 0) - (a.startedAt?.getTime() ?? 0))
-      .slice(0, limit);
+    for (const active of activeRuns) {
+      if (
+        runs.some(
+          (run) =>
+            run.externalId === active.externalId && run.jobExternalId === active.jobExternalId,
+        )
+      )
+        continue;
+      const projectCode = active.jobExternalId.split("/")[0] as string;
+      if (withJobs && !withJobs.has(projectCode)) continue;
+      const instance = await dsGet<Instance>(
+        settings,
+        `/projects/${projectCode}/process-instances/${encodeURIComponent(active.externalId)}`,
+      );
+      runs.push(toRun(settings, projectCode, instance));
+    }
+    return runs.sort((a, b) => (b.startedAt?.getTime() ?? 0) - (a.startedAt?.getTime() ?? 0));
   },
 } satisfies ConnectorPlugin;

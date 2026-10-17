@@ -24,6 +24,7 @@ export const connectorSchema = z
     enabled: z.boolean(),
     pollIntervalSec: z.number().int(),
     canTrigger: z.boolean(),
+    lastSucceededAt: z.iso.datetime().nullable(),
     lastPolledAt: z.iso.datetime().nullable(),
     lastError: z.string().nullable(),
     progress: z.object({ done: z.number().int(), total: z.number().int() }).nullable(),

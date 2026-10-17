@@ -79,6 +79,19 @@ async function n8nGet<T>(config: Config, path: string): Promise<T> {
   return response.json() as Promise<T>;
 }
 
+function toRun(settings: Config, execution: Execution): ExternalRun {
+  return {
+    externalId: String(execution.id),
+    jobExternalId: execution.workflowId,
+    status: statuses[execution.status],
+    trigger: execution.mode,
+    startedAt: execution.startedAt === null ? null : new Date(execution.startedAt),
+    finishedAt: execution.stoppedAt === null ? null : new Date(execution.stoppedAt),
+    url: `${settings.baseUrl}/workflow/${execution.workflowId}/executions/${execution.id}`,
+    error: executionErrors[execution.status] ?? null,
+  };
+}
+
 export default {
   id: "n8n",
   name: "n8n",
@@ -126,13 +139,13 @@ export default {
     } while (cursor);
     return jobs;
   },
-  async listRuns(config, { since, limit }) {
+  async listRuns(config, { since, limit, activeRuns = [] }) {
     const settings = config as Config;
     const runs: ExternalRun[] = [];
     let cursor: string | undefined;
-    while (runs.length < limit) {
+    while (true) {
       const query = new URLSearchParams({
-        limit: String(Math.min(250, limit - runs.length)),
+        limit: String(Math.min(250, limit)),
         includeData: "false",
       });
       if (cursor) query.set("cursor", cursor);
@@ -140,21 +153,26 @@ export default {
       for (const execution of page.data) {
         const startedAt = execution.startedAt === null ? null : new Date(execution.startedAt);
         // n8n 2.32.6 的 startedAfter 不生效，因此在客户端截断倒序列表。
-        if (since !== null && startedAt !== null && startedAt < since) return runs;
-        runs.push({
-          externalId: String(execution.id),
-          jobExternalId: execution.workflowId,
-          status: statuses[execution.status],
-          trigger: execution.mode,
-          startedAt,
-          finishedAt: execution.stoppedAt === null ? null : new Date(execution.stoppedAt),
-          url: `${settings.baseUrl}/workflow/${execution.workflowId}/executions/${execution.id}`,
-          error: executionErrors[execution.status] ?? null,
-        });
-        if (runs.length === limit) return runs;
+        if (since !== null && startedAt !== null && startedAt < since) continue;
+        runs.push(toRun(settings, execution));
       }
       cursor = page.nextCursor;
-      if (!cursor) break;
+      if (
+        !cursor ||
+        page.data.some(
+          (execution) =>
+            execution.startedAt !== null && since !== null && new Date(execution.startedAt) < since,
+        )
+      )
+        break;
+    }
+    for (const active of activeRuns) {
+      if (runs.some((run) => run.externalId === active.externalId)) continue;
+      const execution = await n8nGet<Execution>(
+        settings,
+        `/executions/${encodeURIComponent(active.externalId)}?includeData=false`,
+      );
+      runs.push(toRun(settings, execution));
     }
     return runs;
   },
