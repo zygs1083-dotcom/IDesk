@@ -1,6 +1,6 @@
 # IDesk 运维
 
-所有 `<...>` 都是需要替换的占位符，不能原样执行。先确认 Docker context 和目标容器；本文不要求修改网络或云账号。正式实例只按维护窗口操作，恢复演练只用新隔离卷和临时本地端口。API 及维护容器沿用镜像的非 root `node` 用户，不用 `--user root` 修复权限。
+所有 `<...>` 都是需要替换的占位符，不能原样执行。先确认 Docker context 和目标容器；本文不要求修改网络或云账号。正式实例只按维护窗口操作，恢复演练只用新隔离卷，通过容器内 loopback 验证服务。API 及维护容器沿用镜像的非 root `node` 用户，不用 `--user root` 修复权限。
 
 ## 保存什么
 
@@ -44,7 +44,7 @@ SQLite 快照是一致的，但它和文件归档不是跨文件事务。归档�
 
 ## 隔离恢复演练
 
-以下命令只用于演练。新卷名强制带 `idesk-restore-drill-` 前缀，且拒绝已有卷；示例卷绝不能替换为生产卷。选空闲高端口，仅绑定 loopback，不挂载生产卷、不连接生产网络、不复用生产容器。准备不含真实凭据的 `<drill-env-file>`（权限 600），至少包含虚构 `IDESK_ADMIN_PASSWORD` 和长度不少于 16 的 `IDESK_SESSION_SECRET`，可另设虚构 viewer 密码。
+以下命令只用于演练。新卷名强制带 `idesk-restore-drill-` 前缀，且拒绝已有卷；示例卷绝不能替换为生产卷。不发布宿主端口、不挂载生产卷、不连接生产网络、不复用生产容器。准备不含真实凭据的 `<drill-env-file>`（权限 600），至少包含虚构 `IDESK_ADMIN_PASSWORD` 和长度不少于 16 的 `IDESK_SESSION_SECRET`，可另设虚构 viewer 密码。
 
 ```sh
 set -eu
@@ -53,7 +53,6 @@ backup_dir='<absolute-backup-directory>'
 image='<verified-image:tag>'
 drill_volume='idesk-restore-drill-<unique-suffix>'
 drill_container='idesk-restore-drill-<unique-suffix>'
-drill_port='<unused-local-port>'
 drill_env='<absolute-drill-env-file>'
 case "$drill_volume" in idesk-restore-drill-*) ;; *) exit 1 ;; esac
 if docker volume inspect "$drill_volume" >/dev/null 2>&1; then
@@ -83,19 +82,21 @@ docker run --rm --network none --env-file "$drill_env" -v "$drill_volume:/data" 
 
 上面的内置插件 ID 对应当前版本；演练其他版本前核对其插件清单，新增插件也必须停用。
 
-隔离网络用 Docker `--internal` 禁止外网出口，随后只发布临时本地 API 端口。镜像启动迁移作用于演练卷：
+隔离网络用 Docker `--internal` 禁止外网出口。部分 Docker 版本不会为内部网络建立宿主端口映射，因此不依赖 `-p`，通过 `docker exec` 在容器内访问 loopback。镜像启动迁移作用于演练卷：
 
 ```sh
 drill_network='idesk-restore-drill-<unique-suffix>'
 docker network create --internal "$drill_network"
 docker run -d --name "$drill_container" --network "$drill_network" \
   --env-file "$drill_env" -e IDESK_PORT=3300 -e IDESK_DATA_DIR=/data -e IDESK_PLUGIN_DIR=/data/drill-no-plugins \
-  -p "127.0.0.1:$drill_port:3300" -v "$drill_volume:/data" "$image"
+  -v "$drill_volume:/data" "$image"
 docker logs "$drill_container"
-curl --fail --show-error "http://127.0.0.1:$drill_port/api/health"
+# 等日志确认 API 已启动，再执行；连接或响应失败会返回非零退出码。
+docker exec "$drill_container" node --input-type=module -e \
+  'const r = await fetch("http://127.0.0.1:3300/api/health"); if (!r.ok || !(await r.json()).ok) process.exit(1); console.log("health: ok");'
 ```
 
-确认迁移成功、数据与事件数量符合快照，测试登录/退出及虚构智能体轮换（旧 key 401，新 key 可用），检查办公室覆盖与归档文件。需验证插件时仅替换为隔离虚构配置后启用。记录镜像、备份时间、检查结果及耗时；不要把真实敏感内容写入报告。完成后精确清理本次演练容器、新卷和网络：
+其余 API 检查同样通过容器内 `fetch` 访问 `http://127.0.0.1:3300/api/v1`，脚本从容器环境读取虚构密码；不要输出密码、cookie 或 key。确认迁移成功、数据与事件数量符合快照，测试登录/退出及虚构智能体轮换（旧 key 401，新 key 可用），检查办公室覆盖与归档文件。需验证插件时仅替换为隔离虚构配置后启用。记录镜像、备份时间、检查结果及耗时；不要把真实敏感内容写入报告。完成后精确清理本次演练容器、新卷和网络：
 
 ```sh
 docker rm -f "$drill_container"
