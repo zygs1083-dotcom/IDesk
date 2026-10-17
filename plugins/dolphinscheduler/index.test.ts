@@ -60,11 +60,11 @@ describe("listRuns", () => {
       },
     ]);
   });
-  it("formats since in UTC, pages, sorts and limits unsorted instances", async () => {
+  it("formats since in UTC, pages and sorts all unsorted instances", async () => {
     const fetch = vi
       .fn()
       .mockResolvedValueOnce(project())
-      .mockResolvedValueOnce(page([{ ...instance, id: 1, startTime: null, endTime: "" }], 1, 3))
+      .mockResolvedValueOnce(page([{ ...instance, id: 1, startTime: null, endTime: "" }], 1, 2))
       .mockResolvedValueOnce(
         page(
           [
@@ -72,7 +72,7 @@ describe("listRuns", () => {
             { ...instance, id: 3, startTime: "2026-10-14 02:00:00" },
           ],
           2,
-          3,
+          2,
         ),
       );
     vi.stubGlobal("fetch", fetch);
@@ -80,14 +80,14 @@ describe("listRuns", () => {
       since: new Date("2026-10-14T08:00:00+08:00"),
       limit: 2,
     });
-    expect(runs.map((run) => run.externalId)).toEqual(["2", "3"]);
+    expect(runs.map((run) => run.externalId)).toEqual(["2", "3", "1"]);
     expect(runs[0]?.startedAt).toEqual(new Date("2026-10-14T03:00:00Z"));
     expect(fetch).toHaveBeenCalledTimes(3);
     for (const [index, call] of fetch.mock.calls.slice(1).entries()) {
       const url = new URL(call[0]);
       expect(url.pathname).toBe("/dolphinscheduler/projects/9876543210987654321/process-instances");
       expect(url.searchParams.get("pageNo")).toBe(String(index + 1));
-      expect(url.searchParams.get("pageSize")).toBe("100");
+      expect(url.searchParams.get("pageSize")).toBe("2");
       expect(url.searchParams.get("startDate")).toBe("2026-10-14 00:00:00");
     }
   });

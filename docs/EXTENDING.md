@@ -56,8 +56,9 @@ export default {
 连接器约定（细节见 `docs/DESIGN.md` §4.5、§7）：
 
 - `configSchema` 只用顶层 `string/number/boolean`，前端据它生成表单。键名含 `token/key/secret/password/webhookUrl` 的字符串值出 API 时会掩码；编辑提交 `••••••` 保留原值。插件内部仍使用真实配置，错误事件不得包含请求地址、凭据或正文。
-- `listRuns(config, { since, limit })`：返回 `since` 之后的执行记录，最多 `limit` 条。宿主传入的 `since` 是最早一条还在跑的 run 的开始时间，没有就是上次轮询时间，所以未完成的 run 一定会被再拉一次。
-- 每个作业只保留最近 50 条 run；状态只有 `waiting/running/success/failed/canceled`，外部系统的状态在插件里映射好。
+- `listRuns(config, { since, limit, jobs, activeRuns, progress })`：完整返回 `since` 窗口中的执行记录，`limit` 仅是建议页大小。`since` 取上次成功采集的轮次开始时间，无成功游标则最近七天，有更早活动项时扩展；失败不推进。
+- `activeRuns` 为 `{ externalId, jobExternalId }[]`。窗口未返回的已知活动项需按详情补取，包含开始时间为空的项。只在所有页及详情完成后返回，出错必须抛出，不能返回部分结果；`jobs` 是本次完整作业列表，`progress` 可选。
+- 每个作业保留全部 waiting/running 及最近 50 条终态 run；状态只有 `waiting/running/success/failed/canceled`，外部系统的状态在插件里映射好。宿主在完整采集后同一事务提交镜像及成功游标，失败保留旧镜像。内置插件遇到活动详情 404 会明确失败并保留该项；永久删除的活动项可能持续阻塞该轮采集。n8n 的有界窗口依赖其执行列表倒序约定，GitHub 单秒超过 1000 条仍会明确失败。
 - 实现了 `trigger` 的连接器可以被定时任务的 `connector_trigger` 动作调用。
 
 验证：`GET /api/v1/plugins` 能看到你的插件和它的 JSON Schema；`pnpm --filter api test` 里 `plugins/host.test.ts` 展示了宿主的行为。

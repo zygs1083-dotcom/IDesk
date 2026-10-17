@@ -88,7 +88,7 @@ it("keeps single-project names and never requests the project list", async () =>
   expect(fetch.mock.calls.every(([url]) => !url.includes("/projects?"))).toBe(true);
 });
 
-it("pages each project's runs with the same since before sorting and applying the global limit", async () => {
+it("pages each project's runs with the same since without a global limit", async () => {
   const fetch = vi
     .fn()
     .mockResolvedValueOnce(
@@ -106,6 +106,7 @@ it("pages each project's runs with the same since before sorting and applying th
   expect(runs.map(({ externalId, jobExternalId }) => ({ externalId, jobExternalId }))).toEqual([
     { externalId: "3", jobExternalId: "42/7" },
     { externalId: "2", jobExternalId: "41/7" },
+    { externalId: "1", jobExternalId: "41/7" },
   ]);
   expect(runs[0]?.url).toBe(`${baseUrl}/ui/projects/42/workflow/instances/3`);
   const urls = fetch.mock.calls.slice(1).map(([url]) => new URL(url));

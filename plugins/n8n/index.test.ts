@@ -112,19 +112,17 @@ describe("n8n connector", () => {
     });
   });
 
-  it("paginates executions until limit", async () => {
+  it("uses limit as page size and follows all cursors", async () => {
     const fetch = vi
       .fn()
       .mockResolvedValueOnce(
         Response.json({ data: [execution(5), execution(4)], nextCursor: "second" }),
       )
-      .mockResolvedValueOnce(
-        Response.json({ data: [execution(3), execution(2)], nextCursor: "third" }),
-      );
+      .mockResolvedValueOnce(Response.json({ data: [execution(3), execution(2)] }));
     vi.stubGlobal("fetch", fetch);
     expect(
       (await plugin.listRuns(config, { since: null, limit: 3 })).map((run) => run.externalId),
-    ).toEqual(["5", "4", "3"]);
+    ).toEqual(["5", "4", "3", "2"]);
     expect(fetch).toHaveBeenCalledTimes(2);
     expect(fetch).toHaveBeenNthCalledWith(
       1,
@@ -133,7 +131,7 @@ describe("n8n connector", () => {
     );
     expect(fetch).toHaveBeenNthCalledWith(
       2,
-      "https://n8n.test/api/v1/executions?limit=1&includeData=false&cursor=second",
+      "https://n8n.test/api/v1/executions?limit=3&includeData=false&cursor=second",
       requestOptions,
     );
   });

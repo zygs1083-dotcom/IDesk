@@ -130,5 +130,5 @@ test("listJobs errors retain all mirrored jobs and runs", async () => {
   expect(db.select().from(connectors).where(eq(connectors.id, connector.id)).get()?.lastError).toBe(
     "network failed",
   );
-  expect(db.select().from(events).where(eq(events.type, "connector.polled")).all()).toHaveLength(1);
+  expect(db.select().from(events).where(eq(events.type, "connector.polled")).all()).toHaveLength(2);
 });

@@ -1,81 +1,34 @@
-import { z } from "zod";
-import type { RUN_STATUSES } from "../../apps/api/src/db/schema.ts";
 import type {
   ConnectorPlugin,
   ExternalJob,
   ExternalRun,
 } from "../../apps/api/src/plugins/types.ts";
+import {
+  type Config,
+  conclusions,
+  configSchema,
+  connectionErrors,
+  githubFetch,
+  type Run,
+  statuses,
+  type Workflow,
+} from "./api.ts";
+import { listWindow } from "./runs.ts";
 
-const configSchema = z.object({
-  baseUrl: z
-    .url()
-    .default("https://api.github.com")
-    .meta({ title: "地址", titleEn: "Base URL" })
-    .transform((url) => url.replace(/\/+$/, "")),
-  token: z.string().min(1).meta({ title: "Token", titleEn: "Token" }),
-  repo: z
-    .string()
-    .regex(/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/)
-    .meta({ title: "仓库", titleEn: "Repository" }),
-  ref: z.string().min(1).default("main").meta({ title: "分支", titleEn: "Branch" }),
-});
-type Config = z.output<typeof configSchema>;
-type RunStatus = (typeof RUN_STATUSES)[number];
-type Status = "queued" | "waiting" | "pending" | "requested" | "in_progress" | "completed";
-type Workflow = { id: number; name: string; state: string; html_url: string };
-type Run = {
-  id: number;
-  workflow_id: number;
-  status: Status;
-  conclusion: string | null;
-  event: string;
-  run_started_at: string | null;
-  created_at: string;
-  updated_at: string;
-  html_url: string;
-};
-
-const statuses: Record<Exclude<Status, "completed">, RunStatus> = {
-  queued: "waiting",
-  waiting: "waiting",
-  pending: "waiting",
-  requested: "waiting",
-  in_progress: "running",
-};
-const conclusions: Partial<Record<string, RunStatus>> = {
-  success: "success",
-  failure: "failed",
-  timed_out: "failed",
-  startup_failure: "failed",
-  action_required: "failed",
-  cancelled: "canceled",
-  skipped: "canceled",
-  neutral: "canceled",
-  stale: "canceled",
-};
-const connectionErrors: Partial<Record<number, string>> = {
-  401: "Token 无效",
-  403: "Token 无效",
-  404: "仓库不存在或无权访问",
-};
-
-async function githubFetch(config: Config, path: string, options?: RequestInit): Promise<Response> {
-  const response = await fetch(`${config.baseUrl}/repos/${config.repo}${path}`, {
-    ...options,
-    signal: AbortSignal.timeout(30_000),
-    headers: {
-      Authorization: `Bearer ${config.token}`,
-      Accept: "application/vnd.github+json",
-      "X-GitHub-Api-Version": "2022-11-28",
-      ...(options?.body ? { "Content-Type": "application/json" } : {}),
-    },
-  });
-  if (!response.ok) {
-    throw Object.assign(new Error(`GitHub 返回 HTTP ${response.status}`), {
-      status: response.status,
-    });
-  }
-  return response;
+function toRun(run: Run): ExternalRun {
+  return {
+    externalId: String(run.id),
+    jobExternalId: String(run.workflow_id),
+    status:
+      run.status === "completed"
+        ? (conclusions[run.conclusion ?? ""] ?? "canceled")
+        : statuses[run.status],
+    trigger: run.event,
+    startedAt: new Date(run.run_started_at ?? run.created_at),
+    finishedAt: run.status === "completed" ? new Date(run.updated_at) : null,
+    url: run.html_url,
+    error: null,
+  };
 }
 
 export default {
@@ -100,9 +53,26 @@ export default {
     }
   },
   async listJobs(config) {
-    const response = await githubFetch(config as Config, "/actions/workflows?per_page=100");
-    const page = (await response.json()) as { workflows: Workflow[] };
-    return page.workflows.map(
+    const workflows = new Map<number, Workflow>();
+    for (let pageNo = 1; ; pageNo++) {
+      const response = await githubFetch(
+        config as Config,
+        `/actions/workflows?per_page=100${pageNo > 1 ? `&page=${pageNo}` : ""}`,
+      );
+      const page = (await response.json()) as { workflows: Workflow[]; total_count?: number };
+      for (const workflow of page.workflows) workflows.set(workflow.id, workflow);
+      if (!response.headers.get("link")?.includes('rel="next"')) {
+        if (page.total_count !== undefined && workflows.size >= page.total_count) break;
+        if (page.workflows.length < 100) {
+          if (page.total_count !== undefined)
+            throw new Error(
+              "GitHub workflow listing ended before total_count unique results were collected",
+            );
+          break;
+        }
+      }
+    }
+    return [...workflows.values()].map(
       (workflow): ExternalJob => ({
         externalId: String(workflow.id),
         name: workflow.name,
@@ -113,27 +83,21 @@ export default {
       }),
     );
   },
-  async listRuns(config, { since, limit }) {
-    const query = new URLSearchParams({ per_page: String(limit) });
-    if (since !== null) query.set("created", `>=${since.toISOString()}`);
-    const response = await githubFetch(config as Config, `/actions/runs?${query}`);
-    const page = (await response.json()) as { workflow_runs: Run[] };
-    return page.workflow_runs.map(
-      (run): ExternalRun => ({
-        externalId: String(run.id),
-        jobExternalId: String(run.workflow_id),
-        status:
-          run.status === "completed"
-            ? (conclusions[run.conclusion ?? ""] ?? "canceled")
-            : statuses[run.status],
-        trigger: run.event,
-        startedAt: new Date(run.run_started_at ?? run.created_at),
-        finishedAt: run.status === "completed" ? new Date(run.updated_at) : null,
-        url: run.html_url,
-        error: null,
-      }),
-    );
+  async listRuns(config, { since, limit, activeRuns = [] }) {
+    const from = Math.floor((since?.getTime() ?? Date.now() - 7 * 86_400_000) / 1000);
+    const to = Math.max(from, Math.ceil(Date.now() / 1000));
+    const executions = await listWindow(config as Config, from, to, Math.min(100, limit));
+    for (const active of activeRuns) {
+      if (executions.some((run) => String(run.id) === active.externalId)) continue;
+      const response = await githubFetch(
+        config as Config,
+        `/actions/runs/${encodeURIComponent(active.externalId)}`,
+      );
+      executions.push((await response.json()) as Run);
+    }
+    return executions.map(toRun);
   },
+
   async trigger(config, jobExternalId) {
     const settings = config as Config;
     const response = await githubFetch(settings, `/actions/workflows/${jobExternalId}/dispatches`, {

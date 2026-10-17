@@ -83,7 +83,7 @@ function refreshed() {
     .get() as typeof connectors.$inferSelect;
 }
 
-test("polling upserts jobs and runs, derives latest status and emits only changes", async () => {
+test("polling upserts jobs and runs, derives latest status and emits invalidations", async () => {
   runs.push({
     ...(runs[0] as ExternalRun),
     externalId: "older",
@@ -103,13 +103,13 @@ test("polling upserts jobs and runs, derives latest status and emits only change
     name: connector.name,
     changed: 3,
   });
-  expect(calls[0]).toMatchObject({ since: null, limit: 50 });
+  expect(calls[0]).toMatchObject({ since: new Date(now.getTime() - 7 * 86_400_000), limit: 50 });
   await pollConnector(refreshed(), new Date(now.getTime() + 60000));
-  expect(polled()).toHaveLength(1);
+  expect(polled()).toHaveLength(2);
   expect(calls[1]?.since).toEqual(runs[0]?.startedAt);
   runs[0] = { ...(runs[0] as ExternalRun), status: "success", finishedAt: now, trigger: "webhook" };
   await pollConnector(refreshed(), new Date(now.getTime() + 120000));
-  expect(polled()[1]?.payload.changed).toBe(1);
+  expect(polled()[2]?.payload.changed).toBe(1);
   expect(
     db.select().from(automationRuns).where(eq(automationRuns.externalId, "run")).get(),
   ).toMatchObject({ status: "success", finishedAt: now, trigger: "webhook" });
@@ -144,7 +144,7 @@ test("plugin errors persist lastError and a later success clears it", async () =
   failure = true;
   await pollConnector(connector, now);
   expect(refreshed()).toMatchObject({ lastError: "network failed", lastPolledAt: now });
-  expect(polled()).toHaveLength(0);
+  expect(polled()).toHaveLength(1);
   failure = false;
   await pollConnector(refreshed(), now);
   expect(refreshed().lastError).toBeNull();
@@ -190,9 +190,12 @@ test("due scanning skips early, disabled and unavailable plugins and continues a
   ).toBeNull();
 });
 
-test("waiting runs without a start time keep the polling window open", async () => {
+test("waiting runs without a start time use explicit identifiers and a bounded window", async () => {
   runs[0] = { ...(runs[0] as ExternalRun), status: "waiting", startedAt: null };
   await pollConnector(connector, now);
   await pollConnector(refreshed(), new Date(now.getTime() + 60000));
-  expect(calls[1]?.since).toBeNull();
+  expect(calls[1]?.since).toEqual(now);
+  expect(calls[1]).toMatchObject({
+    activeRuns: [{ externalId: "run", jobExternalId: "workflow" }],
+  });
 });

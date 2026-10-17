@@ -74,7 +74,7 @@ describe("github-actions connector", () => {
     expect((await plugin.listRuns(config, { since: null, limit: 50 }))[0]?.status).toBe(expected);
   });
 
-  it("maps run fields and omits created when since is null", async () => {
+  it("maps run fields and bounds initial collection to seven days", async () => {
     const fetch = vi.fn().mockResolvedValue(Response.json({ workflow_runs: [run()] }));
     vi.stubGlobal("fetch", fetch);
     expect(await plugin.listRuns(config, { since: null, limit: 50 })).toEqual([
@@ -89,7 +89,7 @@ describe("github-actions connector", () => {
         error: null,
       },
     ]);
-    expect(fetch.mock.calls[0]?.[0]).toBe(`${repoUrl}/actions/runs?per_page=50`);
+    expect(new URL(fetch.mock.calls[0]?.[0]).searchParams.get("created")).toContain("..");
     expect(fetch).toHaveBeenCalledTimes(1);
   });
 
@@ -100,8 +100,8 @@ describe("github-actions connector", () => {
     expect(await plugin.listRuns(config, { since: new Date(startTime), limit: 50 })).toEqual([
       expect.objectContaining({ startedAt: new Date(execution.created_at), finishedAt: null }),
     ]);
-    expect(fetch.mock.calls[0]?.[0]).toBe(
-      `${repoUrl}/actions/runs?per_page=50&created=%3E%3D2026-10-14T10%3A00%3A00.000Z`,
+    expect(new URL(fetch.mock.calls[0]?.[0]).searchParams.get("created")).toMatch(
+      /^2026-10-14T10:00:00.000Z\.\./,
     );
   });
 

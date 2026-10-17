@@ -1,0 +1,1 @@
+ALTER TABLE `connectors` ADD `last_succeeded_at` integer;

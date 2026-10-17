@@ -42,9 +42,16 @@ export interface ConnectorPlugin extends Plugin {
   kind: "connector";
   testConnection(config: unknown): Promise<ConnectionResult>;
   listJobs(config: unknown, opts?: { progress?: Progress }): Promise<ExternalJob[]>;
+  // limit is the page size; resolve only after the complete since window and active runs are fetched.
   listRuns(
     config: unknown,
-    opts: { since: Date | null; limit: number; progress?: Progress; jobs?: ExternalJob[] },
+    opts: {
+      since: Date | null;
+      limit: number;
+      progress?: Progress;
+      jobs?: ExternalJob[];
+      activeRuns?: Pick<ExternalRun, "externalId" | "jobExternalId">[];
+    },
   ): Promise<ExternalRun[]>;
   trigger?(
     config: unknown,
