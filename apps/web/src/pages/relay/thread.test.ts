@@ -52,3 +52,13 @@ describe("relayThread", () => {
     expect(relayThread([], "absent")).toBeNull();
   });
 });
+
+it("renders deeply nested conversations without recursive stack overflow", () => {
+  const messages = Array.from({ length: 12000 }, (_, index) =>
+    message(String(index), index ? String(index - 1) : null, 0),
+  ).reverse();
+  const thread = relayThread(messages, "11999");
+  expect(thread?.root.id).toBe("0");
+  expect(thread?.descendants).toHaveLength(11999);
+  expect(thread?.descendants.find(({ message }) => message.id === "11999")?.depth).toBe(11999);
+});

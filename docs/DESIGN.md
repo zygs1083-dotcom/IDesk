@@ -150,6 +150,8 @@ AutomationRun 镜像执行实例：`{ id, jobId, externalId, status, trigger, st
 
 新消息写入时验证指定收件智能体、关联任务和回复父消息存在；父消息还必须对发送者可见，未找到和不可见都返回 404。能力收件和广播不要求当前有人匹配。删除智能体后旧消息及引用保留，不加级联删除或历史引用外键。
 
+列表保持数组响应；可选 limit（1–100）和 before 消息 ID，按 createdAt/id 倒序翻旧消息，权限、正文/标题搜索及种类/对象/关联任务/请求状态过滤先于 limit。详情和完整线程采用同一可见性，缺失与不可见都返回 404；线程可穿过隐藏中间节点找到可见后代，但不返回隐藏正文。请求有可见、非原发件人的 reply 后代才算已答复，其他为待答复，不另存状态。人查看消息不标已读；智能体 CLI 先看摘要，再显式 read 全文和线程，仅对当前目标收件消息标读，--peek 不标读。
+
 ## 5. 任务状态机
 
 状态 id 用英文，界面显示中文。
@@ -233,9 +235,11 @@ POST   /agents/me/heartbeat
 
 GET    /events?since=&before=&type=&typePrefix=&agentId=&limit=  活动流，limit 1–200（默认 200），筛选先于截断；typePrefix 匹配 <prefix>.。默认 id 倒序，before 取更旧记录；since 升序补齐积压，不能与 before 同用
 
-GET    /relay?box=inbox|sent|all&taskId=        传递区；AI 只能看与自己相关的
+GET    /relay?box=inbox|sent|all&taskId=&limit=&before=&q=&kind=&toKind=&hasTask=&requestStatus=  传递区；兼容数组，权限与过滤先于分页，详见 §4.6
+GET    /relay/:id                               可见消息全文
+GET    /relay/:id/thread                        完整可见线程，正序
 POST   /relay                                   发消息，body 见 §4.6
-POST   /relay/:id/read                          标记已读
+POST   /relay/:id/read                          收件智能体标记当前消息已读
 
 GET/POST/PATCH/DELETE /schedules                POST /schedules/:id/run
 GET/POST/PATCH/DELETE /connectors               POST /connectors/test   POST /connectors/:id/poll
@@ -283,8 +287,9 @@ idesk claim <id> | accept | join | pause | resume | release
 idesk report <id> -m "..."
 idesk done <id> --result-file ...
 idesk handoff <id> [--to <agent>] -m "..."
-idesk relay send --to <agent>|--cap <capability>|--all --subject ... [--kind note|deliverable|request|reply] [--body-file ...] [--task <id>]
-idesk relay inbox [--all]                       默认只看未读，返回即标记已读
+idesk relay send --to <agent>|--cap <capability>|--all --subject ... [--kind note|deliverable|request|reply] [--body-file ...] [--task <id>] [--reply-to <message>]
+idesk relay inbox [--all]                       默认未读摘要，不标记已读
+idesk relay read <id> [--peek]                  全文、线程与关联任务；输出后仅标读当前收件消息，--peek 不标读
 所有命令支持 --json 输出原始 JSON；默认输出给人看
 idesk mcp                                       stdio ↔ /mcp 桥，给只支持 stdio 的客户端
 ```

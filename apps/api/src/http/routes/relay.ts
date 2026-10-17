@@ -2,11 +2,38 @@ import type { OpenAPIHono } from "@hono/zod-openapi";
 import { relayMessageSchema, relayQuerySchema, sendRelaySchema } from "@idesk/shared/relay-schemas";
 import { idSchema } from "@idesk/shared/task-schemas";
 import { z } from "zod";
+import { getRelay, relayThread } from "../../core/relay/query.ts";
 import { listRelay, markRelayRead, sendRelay } from "../../core/relay/relay.ts";
 import { HttpError } from "../errors.ts";
 import { type AuthEnv, requireAgent } from "../middleware/auth.ts";
 
 export function relayRoutes(app: OpenAPIHono<AuthEnv>) {
+  for (const thread of [false, true]) {
+    app.openapi(
+      {
+        method: "get",
+        path: thread ? "/api/v1/relay/{id}/thread" : "/api/v1/relay/{id}",
+        request: { params: idSchema },
+        responses: {
+          200: {
+            description: "Visible message details",
+            content: {
+              "application/json": {
+                schema: thread ? z.array(relayMessageSchema) : relayMessageSchema,
+              },
+            },
+          },
+        },
+      },
+      (c) =>
+        c.json(
+          thread
+            ? relayThread(c.req.valid("param").id, c.get("actor"))
+            : getRelay(c.req.valid("param").id, c.get("actor")),
+          200,
+        ),
+    );
+  }
   app.openapi(
     {
       method: "get",
@@ -20,8 +47,8 @@ export function relayRoutes(app: OpenAPIHono<AuthEnv>) {
       },
     },
     (c) => {
-      const { box, taskId } = c.req.valid("query");
-      return c.json(listRelay(c.get("actor"), box, taskId), 200);
+      const { box, taskId, ...filters } = c.req.valid("query");
+      return c.json(listRelay(c.get("actor"), box, taskId, filters), 200);
     },
   );
   app.openapi(

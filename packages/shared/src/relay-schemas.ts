@@ -16,6 +16,13 @@ export const sendRelaySchema = z.object({
   replyTo: z.string().exactOptional(),
 });
 export const relayQuerySchema = z.object({
+  limit: z.coerce.number().int().min(1).max(100).exactOptional(),
+  before: z.string().min(1).exactOptional(),
+  q: z.string().exactOptional(),
+  kind: z.enum(RELAY_KINDS).exactOptional(),
+  toKind: z.enum(["agent", "capability", "broadcast"]).exactOptional(),
+  hasTask: z.enum(["true", "false"]).exactOptional(),
+  requestStatus: z.enum(["pending", "answered"]).exactOptional(),
   box: z.enum(["inbox", "sent", "all"]).default("inbox"),
   taskId: z.string().exactOptional(),
 });
