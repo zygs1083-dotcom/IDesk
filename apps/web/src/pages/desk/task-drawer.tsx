@@ -78,7 +78,11 @@ export function TaskDrawer({ taskId, onClose }: { taskId: string; onClose: () =>
                     else mutation.mutate({ task, action: actionSamples[action] });
                   }}
                 >
-                  {labels(lang).action[action]}
+                  {task.status === "assigned" && action === "release"
+                    ? t("desk.releaseToOpen")
+                    : task.status === "assigned" && action === "assign"
+                      ? t("desk.reassign")
+                      : labels(lang).action[action]}
                 </Button>
               ))}
             </div>

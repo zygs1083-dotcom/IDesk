@@ -81,7 +81,17 @@ const transitions: Record<TaskStatus, ActionTable> = {
     assign: (_, action) => ({ status: "assigned", assigneeId: action.agentId }),
     recruit: (_, { needed }) => ({ status: "recruiting", recruit: { needed, joined: [] } }),
   },
-  assigned: { cancel, accept: running, decline: () => ({ status: "open", assigneeId: null }) },
+  assigned: {
+    cancel,
+    accept: running,
+    decline: () => ({ status: "open", assigneeId: null }),
+    release: () => ({ status: "open", assigneeId: null, leaseExpiresAt: null }),
+    assign: (_, action) => ({
+      status: "assigned",
+      assigneeId: action.agentId,
+      leaseExpiresAt: null,
+    }),
+  },
   recruiting: {
     cancel,
     join: (context) => {
@@ -117,6 +127,8 @@ const transitions: Record<TaskStatus, ActionTable> = {
   cancelled: {},
 };
 
+const byHuman = (_: TaskState, actor: Actor): MessageDetail | null =>
+  actor.kind === "human" ? null : { key: "auth.humanOnly", params: undefined };
 const byAssignee = (task: TaskState, actor: Actor): MessageDetail | null =>
   actor.kind === "agent" && actor.id === task.assigneeId
     ? null
@@ -151,9 +163,15 @@ const permitted: {
   complete: byAssigneeOrHuman,
   pause: byAssigneeOrHuman,
   handoff: byAssigneeOrHuman,
-  release: byAssigneeOrHuman,
+  release: (task, actor) =>
+    task.status === "assigned" ? byHuman(task, actor) : byAssigneeOrHuman(task, actor),
   resume: byAssigneeOrHuman,
-  assign: (task, actor) => (actor.kind === "system" ? null : byHumanOrPublisher(task, actor)),
+  assign: (task, actor) =>
+    task.status === "assigned"
+      ? byHuman(task, actor)
+      : actor.kind === "system"
+        ? null
+        : byHumanOrPublisher(task, actor),
   recruit: (task, actor, action) =>
     byHumanOrPublisher(task, actor) ||
     (action.needed < 2 ? { key: "transition.recruitMinimum", params: undefined } : null),

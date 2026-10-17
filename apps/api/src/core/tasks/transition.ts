@@ -6,7 +6,7 @@ import {
 } from "@idesk/shared/task-machine";
 import { eq } from "drizzle-orm";
 import { db } from "../../db/client.ts";
-import { tasks } from "../../db/schema.ts";
+import { agents, tasks } from "../../db/schema.ts";
 import { type Event, publishEvent, recordEvent } from "../events/bus.ts";
 import { writeRelay } from "../relay/relay.ts";
 import { firstBlocker } from "./dependencies.ts";
@@ -32,6 +32,13 @@ function applyAction(
     }
     const next = transition(task, action, actor, now);
     if (next instanceof TransitionError) return next;
+    const target =
+      action.type === "assign" ? action.agentId : action.type === "handoff" ? action.to : null;
+    if (
+      target !== null &&
+      !tx.select({ id: agents.id }).from(agents).where(eq(agents.id, target)).get()
+    )
+      return new TransitionError(task.status, action.type, "agent.notFound");
     const updated = tx
       .update(tasks)
       .set({ ...next, updatedAt: now })

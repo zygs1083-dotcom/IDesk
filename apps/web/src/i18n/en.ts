@@ -126,6 +126,7 @@ export const en: Record<Key, string> = {
   "desk.publisher": "Publisher",
   "desk.recipient": "Recipient AI",
   "desk.recipientOptional": "Recipient AI (optional)",
+  "desk.reassign": "Reassign",
   "desk.releaseToOpen": "Release to open",
   "desk.removeDependency": "Remove dependency",
   "desk.search": "Search tasks",
