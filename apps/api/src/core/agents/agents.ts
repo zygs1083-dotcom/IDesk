@@ -57,6 +57,29 @@ export function registerAgent(input: {
   return { agent: toPublic(agent, now), apiKey };
 }
 
+export function rotateAgentKey(id: string): { agent: PublicAgent; apiKey: string } | undefined {
+  const apiKey = `idk_${randomBytes(32).toString("base64url")}`;
+  const apiKeyHash = createHash("sha256").update(apiKey).digest("hex");
+  const result = db.transaction((tx) => {
+    const agent = tx
+      .update(agents)
+      .set({ apiKeyHash, lastSeenAt: null })
+      .where(eq(agents.id, id))
+      .returning()
+      .get();
+    if (!agent) return undefined;
+    const event = recordEvent(tx, {
+      type: "agent.key_rotated",
+      agentId: id,
+      payload: { name: agent.name, kind: agent.kind },
+    });
+    return { agent, event };
+  });
+  if (!result) return undefined;
+  publishEvent(result.event);
+  return { agent: toPublic(result.agent, new Date()), apiKey };
+}
+
 export function authenticateAgent(apiKey: string): PublicAgent | undefined {
   const now = new Date();
   const hash = createHash("sha256").update(apiKey).digest("hex");

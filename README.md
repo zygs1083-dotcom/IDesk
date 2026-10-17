@@ -6,6 +6,7 @@ Intelligent Dispatching Desk：跨网络的 AI 协作调度台。多台设备上
 - 界面：`docs/UI.md`
 - 路线：`docs/ROADMAP.md`
 - 扩展（写插件、接新客户端、改办公室）：`docs/EXTENDING.md`
+- 运维、备份与恢复演练：`docs/OPERATIONS.md`
 - 想法与技巧：`docs/IDEAS.md`
 - 贡献与代码约定：`CONTRIBUTING.md`
 
@@ -67,13 +68,13 @@ node main.js login --url <origin> --key <key>
 把智能体与任务事件画成会走动、递卡片的像素办公室，登录后打开 `/office/`。
 `deploy/Dockerfile` 的构建参数 `WITH_OFFICE` 默认是 `true`；在 compose 的 `build.args` 中设为 `"false"` 可不打包办公室。
 
-办公室使用正面格子地图；修改 `apps/office/public/layout.json`，或把布局放到 `IDESK_DATA_DIR/office/layout.json` 覆盖构建版本。座位来自椅子，工作区和去处由布局指定。
+办公室使用完整办公室插画背景，角色按布局路径移动，家具多边形遮挡层让角色在桌椅前后正确穿行；修改 `apps/office/public/layout.json`，或把布局放到 `IDESK_DATA_DIR/office/layout.json` 覆盖构建版本。座位、工作区、路径和遮挡多边形由布局指定。覆盖布局必须与当前插画尺寸和遮挡资源匹配。
 
-素材生产记录见 `apps/office/assets/PROMPTS.md`。从仓库根目录重建角色与家具：
+素材生产记录见 `apps/office/assets/PROMPTS.md`。从仓库根目录重建角色图集与插画遮挡图集：
 
 ```sh
-pnpm --filter office sprites
-pnpm --filter office furniture
+pnpm --filter office characters
+pnpm --filter office occluders
 ```
 
 `/office/?check=1` 是不连接 API 的坐满检查页；加 `&hour=7` / `&hour=22` 检查黄昏与夜间。运行 `pnpm --filter office exec node tools/check-office.mjs http://localhost:3300/office/ /tmp/office-check` 输出全景和各区放大图。
@@ -111,11 +112,8 @@ tailscale serve --bg --tcp=8443 tcp://127.0.0.1:3300
 
 随后通过该设备的 Tailscale 地址加端口访问。
 
-### 备份
+### 维护与接入
 
-```sh
-docker compose -f deploy/compose.yml exec idesk ./node_modules/.bin/tsx src/db/backup.ts /data/backup.db
-docker cp deploy-idesk-1:/data/backup.db ./idesk-backup.db
-```
+侧栏「退出」清除当前浏览器登录 cookie，保留语言与外观偏好；它不会撤销其他地方已复制的签名 cookie。管理员可在智能体菜单选择「轮换密钥」，确认后旧 key 立即失效，新 key 只显示一次；更新 CLI/MCP/REST 客户端配置后再接入，智能体 ID、任务历史及 webhook 保留。
 
-用的是 SQLite 在线备份，WAL 里未落盘的事务也包含在内。本地开发用 `pnpm --filter api db:backup [目标路径]`。
+备份、升级、回滚与隔离恢复演练命令见 [运维手册](docs/OPERATIONS.md)。备份使用 SQLite 在线备份 API，包含 WAL 中已提交的数据；不能只复制运行中的 `idesk.db`。

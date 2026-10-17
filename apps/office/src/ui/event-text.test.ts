@@ -6,6 +6,16 @@ import { eventText } from "./event-text.ts";
 
 type Event = z.infer<typeof eventSchema>;
 const cases: [string, Event["payload"], string, string][] = [
+  ["task.updated", {}, "人 更新了任务信息", "Human updated task details"],
+  ["relay.read", {}, "人 已读消息", "Human read a message"],
+  [
+    "agent.key_rotated",
+    { name: "Codex" },
+    "已轮换智能体 Codex 的密钥",
+    "Rotated key for agent Codex",
+  ],
+  ["schedule.started", { name: "Daily" }, "定时任务「Daily」开始执行", "Schedule “Daily” started"],
+  ["schedule.started", {}, "定时任务开始执行", "Schedule started"],
   [
     "connector.polled",
     { name: "GitHub", changed: 3 },

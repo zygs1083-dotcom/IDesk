@@ -1,4 +1,8 @@
 export const zh = {
+  "event.taskUpdated": "{agent} 更新了任务信息",
+  "event.agentKeyRotated": "已轮换智能体 {name} 的密钥",
+  "event.scheduleStarted": "定时任务「{name}」开始执行",
+  "event.scheduleStartedUnnamed": "定时任务开始执行",
   "debug.export": "导出 JSON",
   "common.capabilities": "能力",
   "common.closePanel": "关闭面板",
