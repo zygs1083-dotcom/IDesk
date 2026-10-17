@@ -124,6 +124,7 @@ export const zh = {
   "desk.publisher": "发布者",
   "desk.recipient": "接收 AI",
   "desk.recipientOptional": "接收 AI（可不选）",
+  "desk.reassign": "重新指派",
   "desk.releaseToOpen": "放回待领取",
   "desk.removeDependency": "移除依赖",
   "desk.search": "搜索任务",

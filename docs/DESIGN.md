@@ -142,6 +142,8 @@ AutomationRun 镜像执行实例：`{ id, jobId, externalId, status, trigger, st
 
 任务交接（`handoff` 动作）会自动写一条 `kind: "deliverable"`、带 `taskId` 的消息给接收者。消息只追加，不删除；人在 `/relay` 页能看全部，AI 只能看发给自己、自己能力匹配、广播的，以及自己发出的。
 
+新消息写入时验证指定收件智能体、关联任务和回复父消息存在；父消息还必须对发送者可见，未找到和不可见都返回 404。能力收件和广播不要求当前有人匹配。删除智能体后旧消息及引用保留，不加级联删除或历史引用外键。
+
 ## 5. 任务状态机
 
 状态 id 用英文，界面显示中文。
@@ -164,6 +166,8 @@ open        --assign(agent)-->           assigned
 open        --recruit(needed)-->         recruiting    needed ≥ 2
 assigned    --accept-->                  in_progress
 assigned    --decline-->                 open          assignee=null
+assigned    --release-->                 open          仅人；assignee=null，清租约
+assigned    --assign(agent)-->           assigned      仅人；替换接收者，清租约
 recruiting  --join(agent)-->             recruiting | in_progress   joined 满员即开始，assignee=第一个加入者，recruit 保留记录团队
 recruiting  --cancel_recruit-->          open
 in_progress --heartbeat-->               in_progress   续租
@@ -187,6 +191,9 @@ done        --reopen-->                  open          仅人；清空 result、
 - `complete` `pause` `handoff` `release` `resume`：负责人或人（看板拖拽）。
 - `assign` `recruit` `cancel_recruit` `cancel`：人或发布者。
 - `reopen`：只有人。
+- `assigned` 的 `release` / `assign` 仅人可操作，覆盖上述通用规则；智能体发布者、原接收者和 system 都不能使用此恢复入口。网页访客仍由写操作鉴权拒绝。
+
+`assign` 和定向 `handoff` 在状态与权限检查通过后，于写入事务内验证接收智能体存在。不存在返回 409，不改变任务、不写动作事件或交接成果；发布时直接分派失败仍保留已创建的 open 任务（§12.23）。
 
 租约：`claim`/`accept`/`resume` 以及 `join` 满员时设 `leaseExpiresAt = now + 10min`；`heartbeat` 续期；调度器每分钟扫过期租约执行 `lease_expired`。
 

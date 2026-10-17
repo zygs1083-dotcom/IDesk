@@ -47,7 +47,13 @@ const actions: TaskAction[] = [
 ];
 const allowed: Record<TaskStatus, Partial<Record<TaskAction["type"], TaskStatus>>> = {
   open: { claim: "in_progress", assign: "assigned", recruit: "recruiting", cancel: "cancelled" },
-  assigned: { accept: "in_progress", decline: "open", cancel: "cancelled" },
+  assigned: {
+    accept: "in_progress",
+    decline: "open",
+    cancel: "cancelled",
+    release: "open",
+    assign: "assigned",
+  },
   recruiting: { join: "recruiting", cancel_recruit: "open", cancel: "cancelled" },
   in_progress: {
     heartbeat: "in_progress",
@@ -70,7 +76,12 @@ it.each(TASK_STATUSES.flatMap((status) => actions.map((action) => ({ status, act
   "$status / $action.type",
   ({ status, action }) => {
     const actor =
-      action.type === "lease_expired" ? system : action.type === "reopen" ? human : agent;
+      action.type === "lease_expired"
+        ? system
+        : action.type === "reopen" ||
+            (status === "assigned" && ["assign", "release"].includes(action.type))
+          ? human
+          : agent;
     const result = transition(task(status), action, actor, now);
     const expected = allowed[status][action.type];
     if (expected) expect(ok(result).status).toBe(expected);
