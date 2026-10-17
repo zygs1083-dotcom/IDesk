@@ -1,6 +1,10 @@
 import type { Key } from "./zh.ts";
 
 export const en: Record<Key, string> = {
+  "event.taskUpdated": "{agent} updated task details",
+  "event.agentKeyRotated": "Rotated key for agent {name}",
+  "event.scheduleStarted": "Schedule “{name}” started",
+  "event.scheduleStartedUnnamed": "Schedule started",
   "debug.export": "Export JSON",
   "common.capabilities": "Capabilities",
   "common.closePanel": "Close panel",

@@ -42,6 +42,8 @@ export function eventText(
       recipient: recipientText(to, t, agentName),
     });
   }
+  if (event.type === "task.updated")
+    return t("event.taskUpdated", { agent: agentName(event.agentId) });
   if (event.type === "task.dependencies")
     return t("event.dependenciesChanged", { agent: agentName(event.agentId) });
   if (event.type === "task.created")
@@ -58,12 +60,18 @@ export function eventText(
     return t("event.agentUpdated", { name: String(event.payload.name) });
   if (event.type === "agent.deleted")
     return t("event.agentDeleted", { name: String(event.payload.name) });
+  if (event.type === "agent.key_rotated")
+    return t("event.agentKeyRotated", { name: String(event.payload.name) });
   if (event.type === "connector.polled") {
     const changed = String(event.payload.changed);
     return event.payload.name === undefined
       ? t("event.connectorSyncedUnnamed", { changed })
       : t("event.connectorSynced", { name: String(event.payload.name), changed });
   }
+  if (event.type === "schedule.started")
+    return event.payload.name === undefined
+      ? t("event.scheduleStartedUnnamed")
+      : t("event.scheduleStarted", { name: String(event.payload.name) });
   if (event.type === "schedule.fired") {
     const { name, status, error } = event.payload;
     if (status === "success")

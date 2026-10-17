@@ -1,4 +1,4 @@
-import { useQueryClient } from "@tanstack/react-query";
+import { type QueryClient, useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
 
 type RealtimeEvent = {
@@ -15,6 +15,12 @@ const queryKeys: Record<string, string[]> = {
   connector: ["automation", "connectors"],
   schedule: ["schedules"],
 };
+
+const subscriptions = new Map<QueryClient, () => void>();
+
+export function stopRealtime(client: QueryClient) {
+  subscriptions.get(client)?.();
+}
 
 export function useRealtime() {
   const queryClient = useQueryClient();
@@ -60,13 +66,16 @@ export function useRealtime() {
     }
 
     connect();
-    return () => {
+    const stop = () => {
       disposed = true;
       clearTimeout(reconnectTimer);
       socket.onopen = null;
       socket.onmessage = null;
       socket.onclose = null;
       socket.close();
+      subscriptions.delete(queryClient);
     };
+    subscriptions.set(queryClient, stop);
+    return stop;
   }, [queryClient]);
 }

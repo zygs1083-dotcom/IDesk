@@ -149,3 +149,33 @@ test("viewer websocket receives real events", async () => {
   server.close();
   await once(server, "close");
 });
+
+test("admin and viewer logout expire only the current browser cookie; agents cannot logout", async () => {
+  config.IDESK_VIEWER_PASSWORD = "viewer-test";
+  for (const password of ["test", "viewer-test"]) {
+    const session = await cookie(password);
+    const response = await app.request("/api/v1/auth/logout", {
+      method: "POST",
+      headers: { Cookie: session },
+    });
+    expect(response.status).toBe(204);
+    const expired = response.headers.get("Set-Cookie") as string;
+    for (const attribute of ["HttpOnly", "Max-Age=0", "SameSite=Lax", "Path=/"])
+      expect(expired).toContain(attribute);
+    expect((await read("/auth/me", expired.split(";")[0] as string)).status).toBe(401);
+    expect((await read("/auth/me", "")).status).toBe(401);
+  }
+  const { apiKey } = registerAgent({
+    name: "logout",
+    kind: "codex",
+    host: "test",
+    capabilities: [],
+  });
+  const response = await app.request("/api/v1/auth/logout", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${apiKey}`, Cookie: await cookie("test") },
+  });
+  expect(response.status).toBe(403);
+  expect(response.headers.has("Set-Cookie")).toBe(false);
+  expect((await app.request("/api/v1/auth/logout", { method: "POST" })).status).toBe(401);
+});

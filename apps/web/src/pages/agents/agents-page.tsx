@@ -12,11 +12,13 @@ import { useShortcut } from "../../lib/use-shortcut.ts";
 import { AgentDetails } from "./agent-details.tsx";
 import { CreateAgent } from "./create-agent.tsx";
 import { DeleteAgent } from "./delete-agent.tsx";
+import { RotateAgentKey } from "./rotate-agent-key.tsx";
 
 export function AgentsPage() {
   const { isAdmin } = useSession();
   const { lang, t } = useLang();
   const { agents, error, isPending } = useAgents();
+  const [rotating, setRotating] = useState<Agent | null>(null);
   const [expanded, setExpanded] = useState<string | null>(null);
   const [editing, setEditing] = useState<Agent | null>(null);
   const [deleting, setDeleting] = useState<Agent | null>(null);
@@ -113,6 +115,7 @@ export function AgentsPage() {
                           disabled={!isAdmin}
                           label={t("common.actionsFor", { name: agent.name })}
                           items={[
+                            { label: t("agents.rotateKey"), onSelect: () => setRotating(agent) },
                             { label: t("common.edit"), onSelect: () => setEditing(agent) },
                             {
                               label: t("common.delete"),
@@ -137,6 +140,7 @@ export function AgentsPage() {
           </div>
         </div>
       )}
+      {isAdmin && rotating && <RotateAgentKey agent={rotating} onClose={() => setRotating(null)} />}
       {isAdmin && editing && <CreateAgent agent={editing} onClose={() => setEditing(null)} />}
       {isAdmin && deleting && <DeleteAgent agent={deleting} onClose={() => setDeleting(null)} />}
       {isAdmin && creating && <CreateAgent onClose={() => setCreating(false)} />}

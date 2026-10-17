@@ -105,6 +105,7 @@ index.ts                                         启动
 | `relay.sent` | `{ messageId, to }` | 传递区发消息 |
 | `relay.read` | `{ messageId }`，agentId 为阅读者 | 收件智能体首次标读，与 readBy 同事务；重复标读不发事件 |
 | `agent.registered` | `{ name, kind }` | 新建智能体 |
+| `agent.key_rotated` | `{ name, kind }`，不含 key/hash | 管理员轮换智能体密钥 |
 | `connector.polled` | `{ connectorId, name, changed }` | 每轮采集成功或失败后；changed 可为 0 |
 | `schedule.started` | `{ scheduleId, name, runId, startedAt }` | 定时执行开始 |
 | `schedule.fired` | 开始字段及 `{ status, error?, finishedAt, durationMs }` | 定时执行结束 |
@@ -252,7 +253,9 @@ GET    /openapi.json
 WS     /ws                                      cookie 鉴权；每条事件广播 { type, taskId?, agentId?, ts }
 ```
 
-人登录的 cookie 名 `idesk_session`，HttpOnly、Lax、30 天，用 `IDESK_SESSION_SECRET` 签名；没有登出。请求与响应的 Zod schema 放在 `packages/shared/src/*-schemas.ts`，API、前端、CLI 共用。
+人登录的 cookie 名 `idesk_session`，HttpOnly、Lax、30 天，用 `IDESK_SESSION_SECRET` 签名。admin/viewer 可 POST `/auth/logout` 清除当前浏览器 cookie，前端同步停止实时订阅、清查询缓存并返回登录页；不增加会话撤销表，已复制的签名 cookie 不随之撤销。viewer 写请求仅对此精确退出端点例外，agent bearer 不可退出人类会话。请求与响应的 Zod schema 放在 `packages/shared/src/*-schemas.ts`，API、前端、CLI 共用。
+
+管理员可 POST `/agents/:id/rotate-key`：生成 32 随机字节的新 key，仅存 SHA256，与 `agent.key_rotated` 事件同事务；保留身份、历史和 webhook，清空 lastSeenAt。新 key 只在本次响应返回，响应 no-store，界面仅存当前弹层状态，关闭后不可查回；旧 key 的后续 REST/MCP 请求立即 401，不终止在途请求或远程进程。
 
 ### 6.2 MCP（`/mcp`，Streamable HTTP）
 

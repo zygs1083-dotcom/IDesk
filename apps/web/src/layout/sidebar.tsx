@@ -1,5 +1,5 @@
 import type { Lang } from "@idesk/shared/labels";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   Activity,
   Bot,
@@ -14,6 +14,7 @@ import {
 import { NavLink } from "react-router";
 import { useLang } from "../i18n/lang.tsx";
 import { cn } from "../lib/cn.ts";
+import { logout } from "../lib/logout.ts";
 import { useAgents } from "../lib/use-agents.ts";
 import { useSession } from "../lib/use-session.ts";
 
@@ -36,6 +37,8 @@ export function Sidebar() {
   ];
   const { agents } = useAgents();
   const { data: session } = useSession();
+  const client = useQueryClient();
+  const leave = useMutation({ mutationFn: () => logout(client) });
   const { data: meta } = useQuery<{ office: boolean }>({
     queryKey: ["meta"],
     queryFn: async () => {
@@ -87,7 +90,7 @@ export function Sidebar() {
           </a>
         )}
       </nav>
-      <div className="ml-auto flex shrink-0 items-center gap-2 pr-2 text-secondary text-text-2 sidebar:mt-auto sidebar:ml-0 sidebar:px-5 sidebar:py-4">
+      <div className="ml-auto flex flex-wrap shrink-0 items-center gap-2 pr-2 text-secondary text-text-2 sidebar:mt-auto sidebar:ml-0 sidebar:px-5 sidebar:py-4">
         <span
           className={cn(
             "hidden size-2 rounded-full sidebar:block",
@@ -107,6 +110,19 @@ export function Sidebar() {
           {" / "}
           <span className={languageClasses.zh[lang]}>中</span>
         </button>
+        <button
+          type="button"
+          disabled={leave.isPending}
+          onClick={() => leave.mutate()}
+          className="order-last shrink-0 whitespace-nowrap text-left text-secondary hover:text-text sidebar:w-full sidebar:pt-2"
+        >
+          {t("nav.logout")}
+        </button>
+        {leave.error && (
+          <span role="alert" className="text-status-failed">
+            {leave.error.message}
+          </span>
+        )}
         {session?.role === "viewer" && (
           <span className="rounded-control border border-line px-2 py-1">{t("nav.readOnly")}</span>
         )}

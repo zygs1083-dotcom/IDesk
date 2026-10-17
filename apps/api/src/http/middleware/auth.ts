@@ -31,7 +31,11 @@ export const auth = createMiddleware<AuthEnv>(async (c, next) => {
     c.set("actor", { kind: "human" });
     if (session === "viewer") {
       c.set("readonly", true);
-      if (c.req.method !== "GET") throw new HttpError(403, "auth.readOnly");
+      if (
+        c.req.method !== "GET" &&
+        !(c.req.method === "POST" && c.req.path === "/api/v1/auth/logout")
+      )
+        throw new HttpError(403, "auth.readOnly");
     }
   }
   await next();

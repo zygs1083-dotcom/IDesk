@@ -2,7 +2,7 @@ import { timingSafeEqual } from "node:crypto";
 import type { OpenAPIHono } from "@hono/zod-openapi";
 import { authMeSchema, loginSchema } from "@idesk/shared/agent-schemas";
 import { errorSchema } from "@idesk/shared/task-schemas";
-import { setSignedCookie } from "hono/cookie";
+import { deleteCookie, setSignedCookie } from "hono/cookie";
 import { z } from "zod";
 import { config } from "../../config.ts";
 import { HttpError } from "../errors.ts";
@@ -14,6 +14,18 @@ function matchesPassword(password: Buffer, expected: string) {
 }
 
 export function authRoutes(app: OpenAPIHono<AuthEnv>) {
+  app.openapi(
+    {
+      method: "post",
+      path: "/api/v1/auth/logout",
+      middleware: requireHuman,
+      responses: { 204: { description: "Current browser logged out" } },
+    },
+    (c) => {
+      deleteCookie(c, "idesk_session", { httpOnly: true, sameSite: "Lax", path: "/" });
+      return c.body(null, 204);
+    },
+  );
   app.openapi(
     {
       method: "get",

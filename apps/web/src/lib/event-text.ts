@@ -58,6 +58,8 @@ export function eventText(
   }
   if (event.type === "agent.registered")
     return t("event.agentCreated", { name: String(event.payload.name) });
+  if (event.type === "agent.key_rotated")
+    return t("event.agentKeyRotated", { name: String(event.payload.name) });
   if (event.type === "agent.updated")
     return t("event.agentUpdated", { name: String(event.payload.name) });
   if (event.type === "agent.deleted")

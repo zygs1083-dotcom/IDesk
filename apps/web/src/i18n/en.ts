@@ -9,6 +9,12 @@ export const en: Record<Key, string> = {
   "desk.overdue": "Overdue",
   "desk.result": "Result / notes (optional)",
   "event.taskUpdated": "{agent} updated task details",
+  "nav.logout": "Log out",
+  "agents.rotateKey": "Rotate key",
+  "agents.rotateWarning":
+    "The old key will stop working immediately. Update every client for this agent; identity and history are preserved.",
+  "agents.keyRotated": "Key rotated",
+  "event.agentKeyRotated": "Rotated key for agent {name}",
   "common.secretConfigured": "Configured (hidden)",
   "common.hiddenValuesHint":
     "Leave hidden values unchanged to keep them, or enter new values to replace them.",
