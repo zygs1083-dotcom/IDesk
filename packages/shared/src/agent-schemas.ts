@@ -13,7 +13,10 @@ export const patchAgentSchema = z.object({
   name: registerAgentSchema.shape.name.exactOptional(),
   host: registerAgentSchema.shape.host.exactOptional(),
   capabilities: registerAgentSchema.shape.capabilities.exactOptional(),
-  webhookUrl: z.url().nullable().exactOptional(),
+  webhookUrl: z
+    .union([z.url(), z.literal("••••••")])
+    .nullable()
+    .exactOptional(),
 });
 export const loginSchema = z.object({ password: z.string() });
 export const authMeSchema = z.object({ role: z.enum(["admin", "viewer"]) });

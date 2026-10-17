@@ -52,7 +52,15 @@ export async function runSchedule(id: string): Promise<Schedule | undefined> {
     const execute = executions[row.action.type] as (action: ScheduleAction) => Promise<RunResult>;
     result = await execute(row.action);
   } catch (error) {
-    result = { status: "failed", error: error instanceof Error ? error.message : String(error) };
+    result = {
+      status: "failed",
+      error:
+        row.action.type === "http"
+          ? "HTTP request failed"
+          : error instanceof Error
+            ? error.message
+            : String(error),
+    };
   }
   const updated = db
     .update(schedules)

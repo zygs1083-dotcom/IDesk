@@ -132,6 +132,9 @@ export function ScheduleDialog({
           </div>
         </div>
         <ActionTabs action={action} onChange={setAction} connectors={triggerConnectors} />
+        {schedule && action.type === "http" && (
+          <p className="text-secondary text-text-2">{t("common.hiddenValuesHint")}</p>
+        )}
         <ActionFields
           action={action}
           onChange={setAction}

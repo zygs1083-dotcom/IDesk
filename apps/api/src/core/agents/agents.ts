@@ -5,6 +5,8 @@ import { eq } from "drizzle-orm";
 import type { z } from "zod";
 import { db } from "../../db/client.ts";
 import { agents } from "../../db/schema.ts";
+import { HttpError } from "../../http/errors.ts";
+import { MASK } from "../connectors/connectors.ts";
 import { publishEvent, recordEvent } from "../events/bus.ts";
 
 type Agent = typeof agents.$inferSelect;
@@ -20,6 +22,7 @@ function toPublic(row: Agent, now: Date): PublicAgent {
   const { apiKeyHash, ...agent } = row;
   return {
     ...agent,
+    webhookUrl: agent.webhookUrl === null ? null : MASK,
     status:
       agent.lastSeenAt !== null && now.getTime() - agent.lastSeenAt.getTime() <= 120_000
         ? "online"
@@ -80,6 +83,13 @@ export function updateAgent(
   input: z.infer<typeof patchAgentSchema>,
 ): PublicAgent | undefined {
   const result = db.transaction((tx) => {
+    if (input.webhookUrl === MASK) {
+      const previous = tx.select().from(agents).where(eq(agents.id, id)).get();
+      if (!previous) return undefined;
+      if (!previous.webhookUrl)
+        throw new HttpError(400, "validation", { text: "Hidden value has no original" });
+      input = { ...input, webhookUrl: previous.webhookUrl };
+    }
     const agent = Object.keys(input).length
       ? tx.update(agents).set(input).where(eq(agents.id, id)).returning().get()
       : tx.select().from(agents).where(eq(agents.id, id)).get();

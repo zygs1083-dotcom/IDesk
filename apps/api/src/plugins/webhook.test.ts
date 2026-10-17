@@ -173,3 +173,17 @@ test("hanging deliveries time out after 30s and exhaust all three retries", asyn
     error: "Request timed out",
   });
 });
+
+test("request secrets in fetch errors never reach webhook.failed after retries", async () => {
+  vi.useFakeTimers({ toFake: ["setTimeout"] });
+  const fetch = vi
+    .spyOn(globalThis, "fetch")
+    .mockRejectedValue(new Error(`${url}/fake-secret Authorization: fake-token fake-body`));
+  createTask({ title: "safe failure", capabilities: ["coding"] }, "human");
+  for (const delay of [1000, 5000, 30000]) await vi.advanceTimersByTimeAsync(delay);
+  expect(fetch).toHaveBeenCalledTimes(4);
+  const failure = db.select().from(events).where(eq(events.type, "webhook.failed")).all().at(-1);
+  expect(failure?.payload).toMatchObject({ agentId: a.agent.id, error: "HTTP request failed" });
+  for (const secret of [url, "fake-secret", "fake-token", "fake-body"])
+    expect(JSON.stringify(failure)).not.toContain(secret);
+});

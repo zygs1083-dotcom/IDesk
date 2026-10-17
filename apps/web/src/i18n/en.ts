@@ -1,6 +1,9 @@
 import type { Key } from "./zh.ts";
 
 export const en: Record<Key, string> = {
+  "common.secretConfigured": "Configured (hidden)",
+  "common.hiddenValuesHint":
+    "Leave hidden values unchanged to keep them, or enter new values to replace them.",
   "settings.appearance": "Appearance",
   "appearance.classic": "Classic",
   "appearance.cartoon": "Cartoon stationery",

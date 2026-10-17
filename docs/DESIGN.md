@@ -318,7 +318,7 @@ export interface ConnectorPlugin extends Plugin {
 - 每个插件的启用状态和插件级配置存 `plugin_state` 表（`enabled`、`config` JSON）；没有记录的按 `enabledByDefault` 决定。`PATCH /plugins/:id { config }` 按 configSchema 校验后写库，插件已启用时 teardown 再 setup 让新配置生效。`enable` 动态 `import()` 并 `setup`；`disable` 调 `teardown` 并撤销它注册的所有订阅、cron、路由。`reload` = disable + 清 import cache（带 `?t=` query）+ enable。
 - 连接器轮询由宿主统一驱动：每分钟扫 `enabled` 的连接器，按各自 `pollIntervalSec` 决定是否轮询，顺序执行，upsert job 和 run，每个 job 只留最近 50 条 run，单个失败只写 `lastError` 不影响其他，有变化时 emit `connector.polled { connectorId, changed }`。`listJobs` 成功返回后，该连接器下不在返回列表里的 job 连同它的 run 一起删除（看板是外部系统的镜像，那边删了作业或项目，这边也消失；删除计入 changed）。
 - 连接器插件对外部系统的每个请求 30 秒超时（`AbortSignal.timeout`），超时和网络错误一样记进 `lastError`，下一轮再试；轮询不能无限期挂住。`POST /connectors` 建好实例立刻返回，首次轮询在后台跑，看板靠 `connector.polled` 事件刷新。轮询进度放内存：`listJobs` / `listRuns` 的 opts 里有 `progress(done, total)`（`listRuns` 还收到本次的 `jobs`），插件在逐项目之类的长循环里汇报，`GET /connectors` 每项带 `progress: { done, total } | null`，轮询结束清空。
-- 连接器 config 出 API 时按键名掩码：键名匹配 `/token|key|secret|password/i` 的值替换成 `••••••`；PATCH 时收到 `••••••` 就保留原值。
+- 连接器和插件 config 出 API 时按键名掩码：键名匹配 `/token|key|secret|password|webhookUrl/i` 的字符串值替换成 `••••••`；PATCH 时收到 `••••••` 就保留原值。所有读取角色都用相同的公共响应。
 - 核心代码不出现任何插件 id。
 
 内置插件：`n8n`、`dolphinscheduler`、`github-actions`（连接器）、`webhook-notifier`、`chat-notifier`、`result-archive`（notifier）、`auto-assign`、`event-archive`、`metrics`（action）。各自的规则见 §12。
@@ -582,4 +582,11 @@ completedAt: <ISO>
 - 皮肤与亮暗独立，两套皮肤都继续跟随系统 `prefers-color-scheme`。不新增账户设置、数据库字段或插件协议。
 - 主网页（含登录页、弹层、抽屉）使用同一套设计 token；像素办公室是独立场景，不改变它的素材与渲染。视觉规则见 UI §7。
 - 选项使用原生单选操作，支持键盘与可见焦点；设置说明、选项名称和反馈都有中英文。
+
+### 12.26 配置隐藏与编辑（W81）
+
+- Agent 的非空 `webhookUrl` 在列表、详情、注册、更新与心跳等公共响应中返回 `••••••`，未配置返回 null。更新时该标记保留原值，null 清除；没有原值时不能用标记创建配置。内部投递使用数据库里的真实地址。
+- HTTP 定时动作的 URL 整体、所有 header 的值、非空 body 整体都隐藏。列表、详情、创建、更新和手动运行响应遵循同一规则，管理员也不回读原值。
+- HTTP 定时编辑提交完整 action：标记保留对应旧值，新值替换，移除 header 或省略 body 删除对应内容，空 body 保持为空。新建、切换动作类型或没有对应旧字段时，标记不能充当真实输入。
+- Webhook 列和 HTTP 动作摘要显示「已配置（已隐藏）」，编辑表单解释保留与替换规则。通知及 HTTP 定时的网络异常只记录固定安全错误文字；HTTP 状态码和既有 Webhook 超时、签名、重试规则保留，不把请求地址、header 或 body 拼进失败事件。
 

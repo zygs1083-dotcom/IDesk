@@ -1,6 +1,10 @@
 import { z } from "zod";
 import { createTaskSchema } from "./task-schemas.ts";
 
+const secretValue = z
+  .string()
+  .refine((value) => value !== "••••••", "Hidden value has no original");
+
 export const scheduleActionSchema = z.discriminatedUnion("type", [
   z.object({
     type: z.literal("publish_task"),
@@ -16,8 +20,8 @@ export const scheduleActionSchema = z.discriminatedUnion("type", [
     type: z.literal("http"),
     url: z.url(),
     method: z.enum(["GET", "POST", "PUT", "PATCH", "DELETE"]),
-    headers: z.record(z.string(), z.string()).default({}),
-    body: z.string().exactOptional(),
+    headers: z.record(z.string(), secretValue).default({}),
+    body: secretValue.exactOptional(),
   }),
 ]);
 export type ScheduleAction = z.infer<typeof scheduleActionSchema>;
@@ -36,6 +40,20 @@ export const updateScheduleSchema = z.object({
   enabled: z.boolean().exactOptional(),
   action: scheduleActionSchema.exactOptional(),
 });
+const publicHttpActionSchema = scheduleActionSchema.options[2].extend({
+  url: z.union([z.url(), z.literal("••••••")]),
+  headers: z.record(z.string(), z.string()),
+  body: z.string().exactOptional(),
+});
+export const patchScheduleSchema = updateScheduleSchema.extend({
+  action: z
+    .discriminatedUnion("type", [
+      scheduleActionSchema.options[0],
+      scheduleActionSchema.options[1],
+      publicHttpActionSchema.extend({ headers: z.record(z.string(), z.string()).default({}) }),
+    ])
+    .exactOptional(),
+});
 export const scheduleSchema = z
   .object({
     id: z.string(),
@@ -50,7 +68,7 @@ export const scheduleSchema = z
         }),
       }),
       scheduleActionSchema.options[1],
-      scheduleActionSchema.options[2],
+      publicHttpActionSchema,
     ]),
     lastRunAt: z.iso.datetime().nullable(),
     lastStatus: z.enum(["success", "failed"]).nullable(),

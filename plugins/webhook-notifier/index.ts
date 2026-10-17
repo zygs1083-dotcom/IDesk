@@ -77,7 +77,10 @@ async function deliver(ctx: PluginContext, agent: Agent, event: Event): Promise<
       if (response.ok) return;
       error = `HTTP ${response.status}`;
     } catch (failure) {
-      error = failure instanceof Error ? failure.message : String(failure);
+      error =
+        failure instanceof Error && failure.name === "TimeoutError"
+          ? "Request timed out"
+          : "HTTP request failed";
     }
   }
   ctx.events.emit({

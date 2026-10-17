@@ -55,7 +55,7 @@ export default {
 
 连接器约定（细节见 `docs/DESIGN.md` §4.5、§7）：
 
-- `configSchema` 只用顶层 `string/number/boolean`，前端据它生成表单。键名含 `token/key/secret/password` 的值出 API 时会掩码。
+- `configSchema` 只用顶层 `string/number/boolean`，前端据它生成表单。键名含 `token/key/secret/password/webhookUrl` 的字符串值出 API 时会掩码；编辑提交 `••••••` 保留原值。插件内部仍使用真实配置，错误事件不得包含请求地址、凭据或正文。
 - `listRuns(config, { since, limit })`：返回 `since` 之后的执行记录，最多 `limit` 条。宿主传入的 `since` 是最早一条还在跑的 run 的开始时间，没有就是上次轮询时间，所以未完成的 run 一定会被再拉一次。
 - 每个作业只保留最近 50 条 run；状态只有 `waiting/running/success/failed/canceled`，外部系统的状态在插件里映射好。
 - 实现了 `trigger` 的连接器可以被定时任务的 `connector_trigger` 动作调用。
