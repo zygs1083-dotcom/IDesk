@@ -118,18 +118,26 @@ export function markRelayRead(
   id: string,
   viewer: Extract<Viewer, { kind: "agent" }>,
 ): RelayMessage | undefined {
-  return db.transaction((tx) => {
+  const { message, event } = db.transaction((tx) => {
     const message = tx
       .select()
       .from(relayMessages)
       .where(and(eq(relayMessages.id, id), inbox(viewer)))
       .get();
-    if (!message || message.readBy.includes(viewer.id)) return message;
-    return tx
+    if (!message || message.readBy.includes(viewer.id)) return { message };
+    const updated = tx
       .update(relayMessages)
       .set({ readBy: [...message.readBy, viewer.id] })
       .where(eq(relayMessages.id, id))
       .returning()
       .get();
+    const event = recordEvent(tx, {
+      type: "relay.read",
+      agentId: viewer.id,
+      payload: { messageId: id },
+    });
+    return { message: updated, event };
   });
+  if (event) publishEvent(event);
+  return message;
 }

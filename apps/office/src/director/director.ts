@@ -70,7 +70,10 @@ export async function direct(stage: Stage, t: Translate) {
       checkLeases();
     },
   );
-  const unsubscribe = onRealtimeEvent(() => void pull());
+  const unsubscribe = onRealtimeEvent(
+    () => void pull(),
+    () => void pull(),
+  );
   const timer = setInterval(async () => {
     const agents = z.array(publicAgentSchema).parse(await request("/agents"));
     if (stage.world.destroyed) return;

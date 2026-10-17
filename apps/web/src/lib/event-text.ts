@@ -35,6 +35,8 @@ export function eventText(
       agent: agentName(event.agentId),
       message: String(event.payload.message),
     });
+  if (event.type === "relay.read")
+    return t("event.messageRead", { agent: agentName(event.agentId) });
   if (event.type === "relay.sent") {
     const to = event.payload.to as RelayRecipient;
     return t("event.messageSent", {

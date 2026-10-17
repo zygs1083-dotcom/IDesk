@@ -30,6 +30,10 @@ export const zh = {
   "capability.missing": "它不具备：{values}",
   "capability.recipients": "{total} 个智能体会收到",
 
+  "activity.loadEarlier": "加载更早记录",
+  "activity.loading": "加载中…",
+  "activity.end": "已加载全部记录",
+  "activity.retry": "重试",
   "activity.empty": "还没有活动",
   "agents.averageDuration": "平均耗时",
   "agents.completedWeek": "7 天完成",
@@ -155,6 +159,7 @@ export const zh = {
   "event.join": "{agent} 加入了",
   "event.leaseExpired": "{agent} 租约到期了",
   "event.leaseExpiredReleased": "租约到期，放回了",
+  "event.messageRead": "{agent} 已读消息",
   "event.messageSent": "{agent} 发消息给 {recipient}",
   "event.pause": "{agent} 暂停了",
   "event.plugin": "{plugin}插件：{event}",

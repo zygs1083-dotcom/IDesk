@@ -50,11 +50,18 @@ export const taskQuerySchema = z.object({
   assignee: z.string().exactOptional(),
 });
 export const idSchema = z.object({ id: z.string() });
-export const eventQuerySchema = z.object({
-  since: z.string().exactOptional(),
-  type: z.string().exactOptional(),
-  agentId: z.string().exactOptional(),
-});
+export const eventQuerySchema = z
+  .object({
+    before: z.string().exactOptional(),
+    typePrefix: z.string().min(1).exactOptional(),
+    limit: z.coerce.number().int().min(1).max(200).default(200),
+    since: z.string().exactOptional(),
+    type: z.string().exactOptional(),
+    agentId: z.string().exactOptional(),
+  })
+  .refine((query) => query.since === undefined || query.before === undefined, {
+    message: "since and before cannot be combined",
+  });
 export const taskSchema = z
   .object({
     id: z.string(),

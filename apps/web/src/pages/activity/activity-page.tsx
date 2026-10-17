@@ -1,36 +1,27 @@
-import { useQuery } from "@tanstack/react-query";
 import { Bot, ListTodo, Send } from "lucide-react";
 import { useState } from "react";
+import { Button } from "../../components/button.tsx";
 import { Segmented } from "../../components/segmented.tsx";
 import { useLang } from "../../i18n/lang.tsx";
 import { PageHeader } from "../../layout/page-header.tsx";
-import { request } from "../../lib/api.ts";
 import { eventText } from "../../lib/event-text.ts";
-import type { TaskEvent } from "../../lib/types.ts";
 import { useAgents } from "../../lib/use-agents.ts";
 import { useTasks } from "../../lib/use-tasks.ts";
 import { groupEvents } from "./group-events.ts";
+import { useActivity } from "./use-activity.ts";
 
 export function ActivityPage() {
   const { lang, t } = useLang();
   const [type, setType] = useState("all");
   const [agentId, setAgentId] = useState("");
-  const {
-    data: events = [],
-    error,
-    isPending,
-  } = useQuery({
-    queryKey: ["events", { agentId }],
-    queryFn: () =>
-      request<TaskEvent[]>(`/events${agentId ? `?agentId=${encodeURIComponent(agentId)}` : ""}`),
-  });
+  const { events, error, isPending, hasNextPage, fetchNextPage, isFetching, refetch } = useActivity(
+    type,
+    agentId,
+  );
   const { agents, agentName } = useAgents();
   const { tasks } = useTasks();
   const taskTitles = new Map(tasks.map((task) => [task.id, task.title]));
-  const groups = groupEvents(
-    events.filter((event) => type === "all" || event.type.startsWith(`${type}.`)),
-    lang,
-  );
+  const groups = groupEvents(events, lang);
   return (
     <div className="space-y-6">
       <PageHeader title={t("nav.activity")} />
@@ -66,6 +57,16 @@ export function ActivityPage() {
         <p role="alert" className="text-secondary text-status-failed">
           {error.message}
         </p>
+      )}
+      {isPending && (
+        <p role="status" className="text-secondary text-text-2">
+          {t("activity.loading")}
+        </p>
+      )}
+      {error && (
+        <Button onClick={() => void refetch()} disabled={isFetching}>
+          {t("activity.retry")}
+        </Button>
       )}
       {!isPending && !error && groups.length === 0 && (
         <p className="py-16 text-center text-secondary text-text-2">{t("activity.empty")}</p>
@@ -111,6 +112,14 @@ export function ActivityPage() {
           </section>
         ))}
       </div>
+      {hasNextPage && (
+        <Button onClick={() => void fetchNextPage()} disabled={isFetching}>
+          {t(isFetching ? "activity.loading" : "activity.loadEarlier")}
+        </Button>
+      )}
+      {!isPending && !error && events.length > 0 && !hasNextPage && (
+        <p className="text-center text-secondary text-text-2">{t("activity.end")}</p>
+      )}
     </div>
   );
 }

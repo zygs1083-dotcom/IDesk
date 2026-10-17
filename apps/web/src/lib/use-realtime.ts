@@ -8,12 +8,12 @@ type RealtimeEvent = {
   ts: string;
 };
 
-const queryKeys: Record<string, string> = {
-  task: "tasks",
-  relay: "relay",
-  agent: "agents",
-  connector: "automation",
-  schedule: "schedules",
+const queryKeys: Record<string, string[]> = {
+  task: ["tasks"],
+  relay: ["relay"],
+  agent: ["agents"],
+  connector: ["automation", "connectors"],
+  schedule: ["schedules"],
 };
 
 export function useRealtime() {
@@ -21,30 +21,50 @@ export function useRealtime() {
 
   useEffect(() => {
     let socket: WebSocket;
+    let disposed = false;
     let reconnectTimer: ReturnType<typeof setTimeout> | undefined;
     const url = new URL("/ws", window.location.href);
     url.protocol = url.protocol === "https:" ? "wss:" : "ws:";
 
     function connect() {
+      if (disposed) return;
       socket = new WebSocket(url);
+      socket.onopen = () => {
+        if (disposed) return;
+        for (const key of [
+          "task",
+          "tasks",
+          "relay",
+          "agents",
+          "automation",
+          "connectors",
+          "schedules",
+          "events",
+        ])
+          void queryClient.invalidateQueries({ queryKey: [key] });
+      };
       socket.onmessage = (message) => {
+        if (disposed) return;
         const event: RealtimeEvent = JSON.parse(message.data);
         const prefix = event.type.slice(0, event.type.indexOf("."));
-        const queryKey = queryKeys[prefix];
-        if (queryKey) void queryClient.invalidateQueries({ queryKey: [queryKey] });
+        for (const queryKey of queryKeys[prefix] ?? [])
+          void queryClient.invalidateQueries({ queryKey: [queryKey] });
         if (prefix === "task" && event.taskId) {
           void queryClient.invalidateQueries({ queryKey: ["task", event.taskId] });
         }
         void queryClient.invalidateQueries({ queryKey: ["events"] });
       };
       socket.onclose = () => {
-        reconnectTimer = setTimeout(connect, 3000);
+        if (!disposed) reconnectTimer = setTimeout(connect, 3000);
       };
     }
 
     connect();
     return () => {
+      disposed = true;
       clearTimeout(reconnectTimer);
+      socket.onopen = null;
+      socket.onmessage = null;
       socket.onclose = null;
       socket.close();
     };
