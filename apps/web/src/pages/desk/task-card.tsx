@@ -40,6 +40,7 @@ export function TaskCard({
     new Date(task.leaseExpiresAt).getTime() - Date.now() < 120000;
   return (
     <motion.button
+      data-ui="card"
       ref={drag?.setNodeRef}
       type="button"
       {...drag?.attributes}

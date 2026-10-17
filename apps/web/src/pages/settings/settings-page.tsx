@@ -11,12 +11,13 @@ export function SettingsPage() {
       <div className="flex flex-col gap-6 sidebar:flex-row">
         <nav
           aria-label={t("settings.navigation")}
-          className="flex shrink-0 gap-1 sidebar:w-40 sidebar:flex-col"
+          className="flex shrink-0 flex-wrap gap-1 sidebar:w-40 sidebar:flex-col"
         >
           {[
             ["connectors", t("common.connectors")],
             ["plugins", t("common.plugins")],
             ["access", t("settings.access")],
+            ["appearance", t("settings.appearance")],
           ].map(([path, label]) => (
             <NavLink
               key={path}

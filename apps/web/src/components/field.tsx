@@ -21,6 +21,7 @@ export function Field(props: Props) {
       {multiline ? (
         <textarea
           {...(input as TextareaHTMLAttributes<HTMLTextAreaElement>)}
+          data-ui="field"
           id={id}
           className={classes}
           aria-invalid={!!error}
@@ -29,6 +30,7 @@ export function Field(props: Props) {
       ) : (
         <input
           {...(input as InputHTMLAttributes<HTMLInputElement>)}
+          data-ui="field"
           id={id}
           className={classes}
           aria-invalid={!!error}

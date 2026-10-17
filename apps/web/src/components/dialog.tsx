@@ -45,7 +45,10 @@ export function Dialog({
           exit={{ opacity: 0 }}
           transition={{ duration: reduced ? 0 : 0.2, ease: [0.2, 0.8, 0.2, 1] }}
         >
-          <div className="max-h-full w-120 max-w-full overflow-auto rounded-pop border border-line bg-surface p-4 shadow-pop">
+          <div
+            data-ui="panel"
+            className="max-h-full w-120 max-w-full overflow-auto rounded-pop border border-line bg-surface p-4 shadow-pop"
+          >
             <header className="mb-4 flex items-center justify-between gap-2">
               <h2 id={id} className="text-section">
                 {title}

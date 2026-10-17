@@ -4,6 +4,17 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="color-scheme" content="light dark" />
+    <script>
+      (() => {
+        let skin = "classic";
+        try {
+          if (localStorage.getItem("idesk.skin") === "cartoon") skin = "cartoon";
+        } catch {
+          // Storage can be blocked by browser privacy settings.
+        }
+        document.documentElement.dataset.skin = skin;
+      })();
+    </script>
     <title>IDesk</title>
   </head>
   <body>

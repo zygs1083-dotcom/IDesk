@@ -26,8 +26,8 @@ export function Switch({
     >
       <span
         className={cn(
-          "size-4 rounded-full bg-white transition-transform duration-hover ease-hover",
-          checked ? "translate-x-4" : "translate-x-0",
+          "size-4 rounded-full transition-transform duration-hover ease-hover",
+          checked ? "translate-x-4 bg-on-accent" : "translate-x-0 bg-white",
         )}
       />
     </button>

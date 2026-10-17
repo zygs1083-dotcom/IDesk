@@ -6,7 +6,10 @@ import { nextRunTime } from "./run-times.ts";
 export function JobCard({ job, schedule, next, now }: Upcoming & { now: number }) {
   const { t } = useLang();
   return (
-    <article className="rounded-card border border-line bg-surface p-3 transition-colors duration-hover ease-hover hover:bg-surface-2">
+    <article
+      data-ui="card"
+      className="rounded-card border border-line bg-surface p-3 transition-colors duration-hover ease-hover hover:bg-surface-2"
+    >
       <CardHeading
         name={job.name}
         group={job.group}

@@ -44,6 +44,7 @@ export function Drawer({
           transition={{ duration: reduced ? 0 : 0.2 }}
         >
           <motion.div
+            data-ui="drawer"
             initial={{ x: reduced ? 0 : "100%" }}
             animate={{ x: 0 }}
             exit={{ x: reduced ? 0 : "100%" }}

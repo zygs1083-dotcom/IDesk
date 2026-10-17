@@ -61,7 +61,7 @@ export function PluginsPage() {
       {plugins.data?.length === 0 && (
         <p className="py-16 text-center text-secondary text-text-2">{t("settings.noPlugins")}</p>
       )}
-      <div className="rounded-panel border border-line bg-surface">
+      <div data-ui="panel" className="rounded-panel border border-line bg-surface">
         {plugins.data?.map((plugin) => (
           <div key={plugin.id} className="border-b border-line last:border-b-0">
             <div className="flex flex-wrap items-center gap-4 px-4 py-3">
