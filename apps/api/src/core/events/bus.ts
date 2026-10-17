@@ -1,3 +1,5 @@
+import { desc } from "drizzle-orm";
+import { decodeTime, monotonicFactory } from "ulid";
 import { db, type Tx } from "../../db/client.ts";
 import { events } from "../../db/schema.ts";
 
@@ -11,11 +13,25 @@ export type NewEvent = {
 type Listener = (event: Event) => void;
 const listeners = new Map<string, Set<Listener>>();
 
+let nextId: ReturnType<typeof monotonicFactory> | undefined;
+let minimumTime = 0;
+
 export function recordEvent(tx: Tx, event: NewEvent): Event {
+  if (!nextId) {
+    const latest = tx
+      .select({ id: events.id })
+      .from(events)
+      .orderBy(desc(events.id))
+      .limit(1)
+      .get();
+    // A new process must sort after persisted events even if its clock moved backwards.
+    minimumTime = latest ? decodeTime(latest.id) + 1 : 0;
+    nextId = monotonicFactory();
+  }
   const now = new Date();
   return tx
     .insert(events)
-    .values({ ...event, ts: now })
+    .values({ ...event, id: nextId(Math.max(now.getTime(), minimumTime)), ts: now })
     .returning()
     .get();
 }

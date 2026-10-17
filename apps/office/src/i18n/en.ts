@@ -30,6 +30,7 @@ export const en: Record<Key, string> = {
   "event.join": "{agent} joined",
   "event.leaseExpired": "{agent} expired the lease for",
   "event.leaseExpiredReleased": "Lease expired, released",
+  "event.messageRead": "{agent} read a message",
   "event.messageSent": "{agent} sent a message to {recipient}",
   "event.pause": "{agent} paused",
   "event.plugin": "{plugin} plugin: {event}",

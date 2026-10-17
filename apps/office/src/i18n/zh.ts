@@ -28,6 +28,7 @@ export const zh = {
   "event.join": "{agent} 加入了",
   "event.leaseExpired": "{agent} 租约到期了",
   "event.leaseExpiredReleased": "租约到期，放回了",
+  "event.messageRead": "{agent} 已读消息",
   "event.messageSent": "{agent} 发消息给 {recipient}",
   "event.pause": "{agent} 暂停了",
   "event.plugin": "{plugin}插件：{event}",

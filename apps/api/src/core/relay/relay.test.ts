@@ -2,6 +2,8 @@ import { migrate } from "drizzle-orm/better-sqlite3/migrator";
 import { expect, test } from "vitest";
 import { db } from "../../db/client.ts";
 import { registerAgent } from "../agents/agents.ts";
+import { type Event, onEvent } from "../events/bus.ts";
+import { listEvents } from "../events/query.ts";
 import { createTask } from "../tasks/store.ts";
 import { listRelay, markRelayRead, sendRelay, type Viewer } from "./relay.ts";
 
@@ -60,11 +62,21 @@ test("read receipts require inbox visibility and are only appended once", () => 
     { to: { kind: "capability", value: "coding" }, kind: "note", subject: "已读" },
     sender.id,
   );
+  const published: Event[] = [];
+  const unsubscribe = onEvent("relay.read", (event) => published.push(event));
   expect(markRelayRead(message.id, coder)?.readBy).toEqual([coder.id]);
   expect(markRelayRead(message.id, coder)?.readBy).toEqual([coder.id]);
   expect(markRelayRead(message.id, other)).toBeUndefined();
   expect(markRelayRead(message.id, sender)).toBeUndefined();
   expect(markRelayRead("missing-message", coder)).toBeUndefined();
+  expect(published).toHaveLength(1);
+  expect(published[0]).toMatchObject({
+    type: "relay.read",
+    agentId: coder.id,
+    payload: { messageId: message.id },
+  });
+  expect(listEvents({ type: "relay.read", agentId: coder.id })).toEqual(published);
+  unsubscribe();
   const direct = sendRelay(
     { to: { kind: "agent", id: coder.id }, kind: "note", subject: "指定" },
     sender.id,

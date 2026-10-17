@@ -12,7 +12,7 @@ export function eventRoutes(app: OpenAPIHono<AuthEnv>) {
       request: { query: eventQuerySchema },
       responses: {
         200: {
-          description: "Latest events (up to 200)",
+          description: "Filtered events (up to 200): since ascending, otherwise newest first",
           content: { "application/json": { schema: z.array(eventSchema) } },
         },
       },

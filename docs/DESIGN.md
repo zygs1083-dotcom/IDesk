@@ -91,7 +91,7 @@ index.ts                                         启动
 
 ### 4.3 Event（只追加）
 
-`{ id, ts, type, taskId?, agentId?, payload }`。所有 UI 活动流、WS 推送、Webhook、插件订阅都来自这张表。
+`{ id, ts, type, taskId?, agentId?, payload }`。所有 UI 活动流、WS 推送、Webhook、插件订阅都来自这张表。事件 id 使用单调 ULID，进程启动以库中最大 id 的时间加 1 毫秒为下界，保证同毫秒、重启和时钟回拨后的新事件仍按写入顺序排序；ts 保留实际记录时间。
 
 事件类型：
 
@@ -101,6 +101,7 @@ index.ts                                         启动
 | `task.<action>` | `{ from, to }`，handoff 另带 `handoffFrom`（交接前的负责人）和 `handoffTo` | 每个状态机动作一条，action 名同 §5 |
 | `task.reported` | `{ message }` | AI 汇报进展（内部同时续租） |
 | `relay.sent` | `{ messageId, to }` | 传递区发消息 |
+| `relay.read` | `{ messageId }`，agentId 为阅读者 | 收件智能体首次标读，与 readBy 同事务；重复标读不发事件 |
 | `agent.registered` | `{ name, kind }` | 新建智能体 |
 | `connector.polled` | `{ connectorId, name, changed }` | 每轮采集成功或失败后；changed 可为 0 |
 | `schedule.fired` | `{ scheduleId, status }` | 定时任务执行 |
@@ -225,7 +226,7 @@ GET    /agents/:id/stats                        画像数字，从事件聚合�
 GET    /auth/me                                 { role: "admin" | "viewer" }（§12.12）
 POST   /agents/me/heartbeat
 
-GET    /events?since=&type=&agentId=            活动流，最多 200 条。不带 since 时 id 倒序取最新；带 since 时 id 升序取 since 之后最早的 200 条，调用方连续拉取可补齐积压
+GET    /events?since=&before=&type=&typePrefix=&agentId=&limit=  活动流，limit 1–200（默认 200），筛选先于截断；typePrefix 匹配 <prefix>.。默认 id 倒序，before 取更旧记录；since 升序补齐积压，不能与 before 同用
 
 GET    /relay?box=inbox|sent|all&taskId=        传递区；AI 只能看与自己相关的
 POST   /relay                                   发消息，body 见 §4.6
@@ -336,8 +337,9 @@ export interface ConnectorPlugin extends Plugin {
 
 - 每条事件写库后广播到所有 WS 连接：`{ type, taskId?, agentId?, ts }`，不带完整实体。
 - 前端收到后按 `type` 使相应 TanStack Query 失效并重新拉取；看板列表接口要快（单表查询，不 join 事件）。
-- Query key 约定：`task.*` → `["tasks"]` 和 `["task", id]`；`relay.*` → `["relay"]`；`agent.*` → `["agents"]`；`connector.*` → `["automation"]`；`schedule.*` → `["schedules"]`；所有事件都失效 `["events"]`。
-- WS 断开后每 3 秒重连一次，不退避、不限次数；内网单用户，简单就好。
+- Query key 约定：`task.*` → `["tasks"]` 和 `["task", id]`；`relay.*` → `["relay"]`；`agent.*` → `["agents"]`；`connector.*` → `["automation"]` 和 `["connectors"]`；`schedule.*` → `["schedules"]`；所有事件都失效 `["events"]`。
+- WS 断开后每 3 秒重连一次，不退避、不限次数。每次 open（含首次）都使上述实体与活动查询失效，断线期间有变化而重连后没有新事件时也能恢复。智能体查询每 30 秒刷新，心跳不另写事件。
+- 办公室每次连接就绪调用已有 eventPull，从当前游标补读；构建标识变化仍刷新页面。销毁导演时移除订阅，最后一个订阅退出时关闭连接并清除重连定时器。
 - 拖拽卡片 = 调用对应动作接口；乐观更新，失败回滚并提示状态机给的原因。
 
 ## 9. 配置
