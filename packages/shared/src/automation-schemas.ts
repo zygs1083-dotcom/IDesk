@@ -59,6 +59,7 @@ export const automationRunSchema = z
     trigger: z.string().nullable(),
     startedAt: z.iso.datetime().nullable(),
     finishedAt: z.iso.datetime().nullable(),
+    hiddenAt: z.iso.datetime().nullable(),
     url: z.string().nullable(),
     error: z.string().nullable(),
   })
@@ -68,3 +69,5 @@ export const automationRunWithJobSchema = automationRunSchema.extend({
   jobName: z.string(),
   jobGroup: z.string().nullable(),
 });
+
+export const patchAutomationRunSchema = z.object({ hidden: z.boolean() });

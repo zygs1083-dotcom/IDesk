@@ -63,6 +63,7 @@ test.each([undefined, "viewer", "admin"] as const)(
     client.setQueryData(["automation", "connectors"], [connector]);
     client.setQueryData(["automation", "runs", connector.id], []);
     client.setQueryData(["automation", "jobs", connector.id], []);
+    vi.stubGlobal("localStorage", { getItem: () => null });
     vi.stubGlobal("document", { documentElement: { dataset: { skin: "classic" } } });
     const html = renderToStaticMarkup(
       <QueryClientProvider client={client}>

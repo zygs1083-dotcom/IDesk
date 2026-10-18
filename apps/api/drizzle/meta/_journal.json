@@ -50,6 +50,13 @@
       "when": 1792264569248,
       "tag": "0006_married_nextwave",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "6",
+      "when": 1792315678317,
+      "tag": "0007_hot_red_shift",
+      "breakpoints": true
     }
   ]
 }
