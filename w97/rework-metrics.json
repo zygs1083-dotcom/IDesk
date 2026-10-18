@@ -1,0 +1,140 @@
+[
+  {
+    "name": "relay-light",
+    "route": "/relay",
+    "width": 1440,
+    "height": 900,
+    "lang": "en",
+    "scheme": "light",
+    "boardTop": 208,
+    "boardHeight": 676,
+    "scrollHeight": 900,
+    "innerHeight": 900,
+    "toolbarScrollWidth": 1172,
+    "toolbarWidth": 1172,
+    "searchPlaceholder": "Search subject or body",
+    "searchLabel": "Search subject or body",
+    "links": []
+  },
+  {
+    "name": "relay-dark",
+    "route": "/relay",
+    "width": 1440,
+    "height": 900,
+    "lang": "en",
+    "scheme": "dark",
+    "boardTop": 208,
+    "boardHeight": 676,
+    "scrollHeight": 900,
+    "innerHeight": 900,
+    "toolbarScrollWidth": 1172,
+    "toolbarWidth": 1172,
+    "searchPlaceholder": "Search subject or body",
+    "searchLabel": "Search subject or body",
+    "links": []
+  },
+  {
+    "name": "relay-1000x600",
+    "route": "/relay",
+    "width": 1000,
+    "height": 600,
+    "lang": "en",
+    "scheme": "light",
+    "boardTop": 204,
+    "boardHeight": 380,
+    "scrollHeight": 600,
+    "innerHeight": 600,
+    "toolbarScrollWidth": 732,
+    "toolbarWidth": 732,
+    "searchPlaceholder": "Search subject or body",
+    "searchLabel": "Search subject or body",
+    "links": []
+  },
+  {
+    "name": "desk-light",
+    "route": "/desk",
+    "width": 1440,
+    "height": 900,
+    "lang": "en",
+    "scheme": "light",
+    "boardTop": 98,
+    "boardHeight": 786,
+    "scrollHeight": 900,
+    "innerHeight": 900,
+    "links": [
+      {
+        "text": "History",
+        "background": "rgb(247, 237, 206)",
+        "color": "rgb(54, 93, 67)"
+      }
+    ]
+  },
+  {
+    "name": "desk-dark",
+    "route": "/desk",
+    "width": 1440,
+    "height": 900,
+    "lang": "en",
+    "scheme": "dark",
+    "boardTop": 98,
+    "boardHeight": 786,
+    "scrollHeight": 900,
+    "innerHeight": 900,
+    "links": [
+      {
+        "text": "History",
+        "background": "rgb(52, 49, 44)",
+        "color": "rgb(178, 210, 154)"
+      }
+    ]
+  },
+  {
+    "name": "automation-zh-light",
+    "route": "/automation",
+    "width": 1440,
+    "height": 900,
+    "lang": "zh",
+    "scheme": "light",
+    "boardTop": 152,
+    "boardHeight": 732,
+    "scrollHeight": 900,
+    "innerHeight": 900,
+    "links": []
+  },
+  {
+    "name": "desk-zh-light",
+    "route": "/desk",
+    "width": 1440,
+    "height": 900,
+    "lang": "zh",
+    "scheme": "light",
+    "boardTop": 98,
+    "boardHeight": 786,
+    "scrollHeight": 900,
+    "innerHeight": 900,
+    "links": [
+      {
+        "text": "历史",
+        "background": "rgb(247, 237, 206)",
+        "color": "rgb(54, 93, 67)"
+      }
+    ]
+  },
+  {
+    "name": "desk-history-light",
+    "route": "/desk/history",
+    "width": 1440,
+    "height": 900,
+    "lang": "en",
+    "scheme": "light",
+    "scrollHeight": 900,
+    "innerHeight": 900,
+    "links": [
+      {
+        "text": "Desk",
+        "background": "rgb(247, 237, 206)",
+        "color": "rgb(54, 93, 67)"
+      }
+    ]
+  }
+]
