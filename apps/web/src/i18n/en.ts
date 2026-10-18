@@ -23,6 +23,8 @@ export const en: Record<Key, string> = {
   "appearance.cartoon": "Cartoon stationery",
   "appearance.classicDescription": "Clean panels and subtle dividers.",
   "appearance.cartoonDescription": "Warm paper, rounded outlines and mint green accents.",
+  "appearance.pixel": "Pixel office",
+  "appearance.pixelDescription": "Wooden cabinets, a cork task wall and lamplit paper.",
   "appearance.note":
     "Only affects this browser. Light and dark follow your system; the pixel office keeps its original scene. Changes apply immediately, with no save needed.",
   "capability.agentDescription": "This agent’s capabilities determine which tasks it can claim",

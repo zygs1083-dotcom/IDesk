@@ -55,7 +55,7 @@ export function RelayPage() {
   });
   const selected = messages.find((message) => message.id === selectedId);
   return (
-    <div className="flex h-full flex-col gap-6">
+    <div data-scene="relay" className="flex h-full flex-col gap-6">
       <PageHeader title={t("nav.relay")}>
         {isAdmin && (
           <Button variant="primary" onClick={() => setCompose({})}>
@@ -126,7 +126,10 @@ export function RelayPage() {
           data-ui="panel"
           className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-panel border border-line bg-surface md:flex-row"
         >
-          <div className="max-h-80 shrink-0 overflow-y-auto md:max-h-none border-b border-line md:w-90 md:border-r md:border-b-0">
+          <div
+            data-ui="mail-slots"
+            className="max-h-80 shrink-0 overflow-y-auto md:max-h-none border-b border-line md:w-90 md:border-r md:border-b-0"
+          >
             {messages.map((message) => (
               <button
                 key={message.id}
@@ -166,7 +169,7 @@ export function RelayPage() {
               </Button>
             )}
           </div>
-          <div className="min-w-0 flex-1 overflow-y-auto">
+          <div data-ui="letter-desk" className="min-w-0 flex-1 overflow-y-auto">
             {!selected && (
               <p className="p-6 text-secondary text-text-2">{t("relay.selectMessage")}</p>
             )}

@@ -1,0 +1,66 @@
+html[data-skin="pixel"] {
+  --bg: #e3d5b8;
+  --surface: #f7edce;
+  --surface-2: #ede0bf;
+  --text: #352b23;
+  --text-2: #66503a;
+  --text-3: #6b543a;
+  --line: #c7aa7c;
+  --line-strong: #92704c;
+  --accent: #365d43;
+  --on-accent: #fff4da;
+  --danger-fill: #a63629;
+  --status-open: #776855;
+  --status-recruiting: #875196;
+  --status-assigned: #65568b;
+  --status-in-progress: #286478;
+  --status-paused: #99600e;
+  --status-done: #3c6b42;
+  --status-failed: #a63629;
+  --ink: #3b271c;
+  --wood: #967047;
+  --wood-light: #d0a16a;
+  --wood-edge: #e0ae6e;
+  --wood-text: #352b23;
+  --cork: #c5a275;
+  --console: #45604a;
+  --console-edge: #273e30;
+  --corner-card: 2px;
+  --corner-panel: 3px;
+  --corner-control: 2px;
+  --corner-pop: 3px;
+  --elevation-rest: 2px 3px 0 var(--line-strong);
+  --elevation-card: 3px 4px 0 var(--ink);
+  --elevation-pop: 6px 8px 0 var(--ink);
+  --material-paper: url("/pixel-office/paper.webp");
+  --material-wood: url("/pixel-office/softer-wood.webp");
+}
+
+@media (prefers-color-scheme: dark) {
+  html[data-skin="pixel"] {
+    --bg: #251e18;
+    --surface: #34312c;
+    --surface-2: #3c3831;
+    --text: #fae9c8;
+    --text-2: #d4c09a;
+    --text-3: #baa786;
+    --line: #61513a;
+    --line-strong: #9a8059;
+    --accent: #b2d29a;
+    --on-accent: #20301e;
+    --status-open: #b8aa94;
+    --status-recruiting: #d1a4e0;
+    --status-assigned: #bfb0f1;
+    --status-in-progress: #8cc5d6;
+    --status-paused: #f2bf6c;
+    --status-done: #afd39b;
+    --status-failed: #ffab96;
+    --wood: #402c20;
+    --wood-light: #795536;
+    --wood-edge: #aa8051;
+    --cork: #514536;
+    --wood-text: #fae9c8;
+    --console: #304333;
+    --console-edge: #1d2a21;
+  }
+}

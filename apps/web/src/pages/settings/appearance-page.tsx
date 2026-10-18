@@ -4,31 +4,50 @@ import { applySkin, type Skin } from "../../lib/skin.ts";
 
 export function AppearancePage() {
   const { t } = useLang();
-  const [skin, setSkin] = useState<Skin>(() =>
-    document.documentElement.dataset.skin === "cartoon" ? "cartoon" : "classic",
-  );
+  const [skin, setSkin] = useState<Skin>(() => {
+    const saved = document.documentElement.dataset.skin;
+    return saved === "cartoon" || saved === "pixel" ? saved : "classic";
+  });
   return (
     <section className="max-w-2xl space-y-4">
       <fieldset aria-describedby="appearance-note">
         <legend className="mb-4 text-section">{t("settings.appearance")}</legend>
         <div className="grid gap-4 sm:grid-cols-2">
-          {(["classic", "cartoon"] as const).map((value) => (
+          {(["classic", "cartoon", "pixel"] as const).map((value) => (
             <label
               key={value}
               className="skin-option min-w-0 cursor-pointer rounded-panel border border-line-strong bg-surface p-4"
             >
-              <div data-skin={value} className="skin-preview" aria-hidden="true">
-                <div className="skin-preview-sidebar">
-                  <span />
-                  <span />
-                  <span />
+              {value === "pixel" ? (
+                <div className="pixel-preview" aria-hidden="true">
+                  <div className="pixel-preview-cabinet">
+                    <span />
+                    <span />
+                    <span />
+                  </div>
+                  <div className="pixel-preview-workspace">
+                    <div className="pixel-preview-scene" />
+                    <div className="pixel-preview-papers">
+                      <span />
+                      <span />
+                      <span />
+                    </div>
+                  </div>
                 </div>
-                <div className="skin-preview-sheet">
-                  <span />
-                  <span />
-                  <span />
+              ) : (
+                <div data-skin={value} className="skin-preview" aria-hidden="true">
+                  <div className="skin-preview-sidebar">
+                    <span />
+                    <span />
+                    <span />
+                  </div>
+                  <div className="skin-preview-sheet">
+                    <span />
+                    <span />
+                    <span />
+                  </div>
                 </div>
-              </div>
+              )}
               <span className="mt-4 flex items-center gap-2 text-body">
                 <input
                   type="radio"

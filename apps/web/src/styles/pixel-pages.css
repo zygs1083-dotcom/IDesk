@@ -1,0 +1,197 @@
+html[data-skin="pixel"] {
+  & [data-scene="relay"] {
+    gap: 16px;
+  }
+  & [data-scene="relay"] > [data-ui="panel"] {
+    border: 6px solid var(--wood);
+    padding: 10px;
+    gap: 16px;
+    min-height: 320px;
+    background: var(--wood-light);
+  }
+  & [data-ui="mail-slots"] {
+    border: 0;
+    padding: 2px 6px 8px 2px;
+    background: color-mix(in srgb, var(--wood) 70%, var(--bg));
+  }
+  & [data-ui="message"] {
+    position: relative;
+    margin-bottom: 10px;
+    border: 2px solid var(--line-strong);
+    border-bottom: 7px solid var(--wood-light);
+    background: var(--surface);
+    box-shadow: 0 3px 0 var(--ink);
+  }
+  & [data-ui="message"]:hover {
+    background: var(--surface-2);
+  }
+  & [data-ui="message"][aria-pressed="true"] {
+    border-left: 6px solid var(--accent);
+    background: var(--surface-2);
+  }
+  & [data-ui="letter-desk"] {
+    background: var(--surface-2);
+    border: 1px solid var(--line-strong);
+    box-shadow:
+      inset 5px 0 0 var(--surface),
+      inset 7px 0 0 var(--line);
+  }
+  & [data-ui="letter"] {
+    padding: 20px;
+    border: 1px solid var(--line-strong);
+    border-top: 5px double var(--line-strong);
+    background: var(--surface);
+    box-shadow: 2px 3px 0 var(--line-strong);
+  }
+  & :is([data-scene="agents"], [data-scene="schedules"]) [data-ui="panel"] {
+    border: 3px solid var(--wood);
+    border-left-width: 12px;
+    box-shadow: 3px 4px 0 var(--ink);
+  }
+  & table {
+    background: var(--surface);
+  }
+  & thead {
+    background: var(--surface-2);
+    border-bottom: 3px double var(--line-strong);
+  }
+  & th {
+    padding-top: 16px;
+    padding-bottom: 16px;
+  }
+  & td {
+    border-right: 1px solid var(--line);
+  }
+  & td:last-child {
+    border-right: 0;
+  }
+  & [data-scene="schedules"] tbody tr {
+    border-bottom: 2px solid var(--line);
+  }
+  & [data-scene="schedules"] td:first-child {
+    border-left: 3px double var(--line-strong);
+  }
+  & [data-scene="history"] > ul {
+    border: 4px solid var(--wood);
+    border-left-width: 14px;
+    box-shadow: 3px 4px 0 var(--ink);
+  }
+  & [data-ui="log-page"] {
+    padding: 20px 24px;
+    border: 2px solid var(--line-strong);
+    border-left: 12px solid var(--wood);
+    background: var(--surface);
+    box-shadow: 3px 4px 0 var(--wood);
+  }
+  & [data-ui="log-page"] h2 {
+    border-bottom: 3px double var(--line-strong);
+    padding-bottom: 12px;
+    font:
+      400 16px / 1.5 "IDesk Pixel",
+      var(--font-sans);
+  }
+  & [data-ui="log-page"] li {
+    align-items: start;
+  }
+  & [data-ui="log-page"] li p {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+  & [data-ui="settings-tabs"] {
+    align-self: start;
+    padding: 10px;
+    gap: 10px;
+    background: var(--wood-light);
+    border: 3px solid var(--ink);
+    box-shadow: 2px 3px 0 var(--wood-light);
+  }
+  & [data-ui="settings-tabs"] a {
+    color: var(--wood-text);
+    border: 1px solid var(--wood-edge);
+    min-height: 44px;
+  }
+  & [data-ui="settings-tabs"] [aria-current="page"] {
+    color: var(--text);
+    background: var(--surface);
+    box-shadow: inset 0 -3px 0 var(--line-strong);
+  }
+  & [data-ui="settings-sheet"] {
+    padding: 24px;
+    border: 3px solid var(--wood);
+    border-top-width: 10px;
+    background: var(--surface);
+    box-shadow: 4px 5px 0 var(--ink);
+  }
+  & [data-ui="settings-sheet"] > section > h2,
+  & [data-ui="settings-sheet"] > section > header {
+    border-bottom: 3px double var(--line-strong);
+    padding-bottom: 16px;
+  }
+  & [data-scene="login"] {
+    min-height: 100%;
+    height: auto;
+    padding: 40px 24px;
+    background: var(--wood);
+  }
+  & [data-scene="login"] form {
+    width: 420px;
+    padding: 28px;
+    border: 8px solid var(--wood-light);
+    outline: 3px solid var(--ink);
+    box-shadow:
+      8px 12px 0 var(--ink),
+      inset 0 0 0 2px var(--line-strong);
+  }
+  & [data-scene="login"] form::before {
+    content: "";
+    display: block;
+    height: 160px;
+    margin: -20px -20px 24px;
+    border: 4px solid var(--wood);
+    background: url("/pixel-office/office-vignette.webp") center / cover;
+    image-rendering: pixelated;
+    pointer-events: none;
+  }
+  & [data-scene="login"] h1 {
+    width: fit-content;
+    margin-bottom: 24px;
+  }
+}
+
+@media (max-width: 599px) {
+  html[data-skin="pixel"] {
+    & [data-ui="settings-sheet"] {
+      padding: 16px 12px;
+    }
+    & [data-ui="connector-row"] {
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    & [data-ui="connector-row"] > div:first-of-type {
+      flex-basis: 65%;
+    }
+    & [data-ui="log-page"] {
+      padding: 16px 12px;
+    }
+    & [data-ui="log-page"] li {
+      gap: 8px;
+    }
+    & [data-ui="letter"] {
+      padding: 12px;
+    }
+    & [data-ui="letter-desk"] > div {
+      padding: 12px;
+    }
+    & [data-ui="letter-desk"] .ml-4 {
+      margin-left: 3px;
+      padding-left: 5px;
+    }
+    & [data-scene="login"] form {
+      padding: 20px;
+    }
+    & [data-scene="login"] form::before {
+      margin: -12px -12px 24px;
+      height: 120px;
+    }
+  }
+}

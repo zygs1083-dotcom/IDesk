@@ -1,6 +1,14 @@
 @import "tailwindcss";
 @import "./tokens.css";
+@import "./pixel-tokens.css";
 @import "./skin.css";
+@import "./pixel-fonts.css";
+@import "./pixel-shell.css";
+@import "./pixel-controls.css";
+@import "./pixel-board.css";
+@import "./pixel-pages.css";
+@import "./pixel-decor.css";
+@import "./pixel-preview.css";
 
 @utility duration-hover {
   transition-duration: var(--duration-hover);

@@ -128,6 +128,7 @@ export function Board({
         }}
       >
         <section
+          data-ui="task-wall"
           className="relative flex min-h-0 flex-1 gap-3 overflow-x-auto pb-3"
           aria-label={t("desk.board")}
         >

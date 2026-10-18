@@ -58,8 +58,11 @@ export function Desk() {
   });
   useShortcut("/", () => searchInput.current?.focus());
   return (
-    <div className="flex h-full min-h-0 flex-col gap-6">
-      <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 sidebar:flex sidebar:gap-4">
+    <div data-scene="desk" className="flex h-full min-h-0 flex-col gap-6">
+      <div
+        data-ui="desk-toolbar"
+        className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 sidebar:flex sidebar:gap-4"
+      >
         <PageHeader title={t("nav.desk")} />
         <label className="order-3 flex min-w-0 flex-1 sidebar:order-none sidebar:max-w-60 items-center gap-2 rounded-control border border-line bg-surface px-3 py-2 text-text-2">
           <Search size={16} strokeWidth={1.5} />

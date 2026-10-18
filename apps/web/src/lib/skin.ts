@@ -1,4 +1,4 @@
-export type Skin = "classic" | "cartoon";
+export type Skin = "classic" | "cartoon" | "pixel";
 
 export function applySkin(skin: Skin) {
   document.documentElement.dataset.skin = skin;

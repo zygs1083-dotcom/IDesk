@@ -75,7 +75,7 @@ export function SchedulesPage() {
   });
   const error = schedules.error ?? connectors.error;
   return (
-    <div className="space-y-6">
+    <div data-scene="schedules" className="space-y-6">
       <PageHeader title={t("nav.schedules")}>
         {canEdit && (
           <Button variant="primary" disabled={!connectors.data} onClick={() => setCreating(true)}>

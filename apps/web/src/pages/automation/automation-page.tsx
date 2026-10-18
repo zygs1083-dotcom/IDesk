@@ -95,7 +95,7 @@ export function AutomationPage() {
     now,
   );
   return (
-    <div className="flex h-full min-h-0 flex-col gap-6">
+    <div data-scene="automation" className="flex h-full min-h-0 flex-col gap-6">
       <PageHeader title={t("nav.automation")}>
         {connector && (
           <>
@@ -165,6 +165,7 @@ export function AutomationPage() {
             }))}
           />
           <section
+            data-ui="console"
             aria-label={t("automation.board")}
             className="flex min-h-0 flex-1 gap-3 overflow-x-auto pb-3"
           >
