@@ -114,7 +114,7 @@ it("pages each project's runs with the same since without a global limit", async
     [41, 41, 42, 42].map((code) => `/dolphinscheduler/projects/${code}/process-instances`),
   );
   expect(urls.map((url) => url.searchParams.get("startDate"))).toEqual(
-    Array(4).fill("2026-10-14 00:00:00"),
+    Array(4).fill("2026-10-14 08:00:00"),
   );
   expect(urls.map((url) => url.searchParams.get("pageNo"))).toEqual(["1", "2", "1", "2"]);
 });

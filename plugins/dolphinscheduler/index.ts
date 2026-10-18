@@ -5,7 +5,15 @@ import type {
   ExternalRun,
   Progress,
 } from "../../apps/api/src/plugins/types.ts";
-import { type Config, configSchema, dsGet, listProjects, type Page, parseDate } from "./api.ts";
+import {
+  type Config,
+  configSchema,
+  dsGet,
+  formatDate,
+  listProjects,
+  type Page,
+  parseDate,
+} from "./api.ts";
 import { listSchedules } from "./schedules.ts";
 
 type RunStatus = (typeof RUN_STATUSES)[number];
@@ -60,8 +68,8 @@ function toRun(settings: Config, projectCode: string, instance: Instance): Exter
     jobExternalId: `${projectCode}/${instance.processDefinitionCode}`,
     status: statuses[instance.state],
     trigger: instance.commandType,
-    startedAt: parseDate(instance.startTime),
-    finishedAt: parseDate(instance.endTime),
+    startedAt: parseDate(instance.startTime, settings.timezone),
+    finishedAt: parseDate(instance.endTime, settings.timezone),
     url: `${settings.baseUrl}/ui/projects/${projectCode}/workflow/instances/${instance.id}`,
     error: instance.state === "FAILURE" ? "DolphinScheduler 执行失败" : null,
   };
@@ -147,7 +155,7 @@ export default {
         });
         // 首次轮询（since 为 null）只看最近 7 天：不带 startDate 时海豚要对整张实例表分页，大库上会等很久
         const from = since ?? new Date(Date.now() - 7 * 86_400_000);
-        query.set("startDate", from.toISOString().slice(0, 19).replace("T", " "));
+        query.set("startDate", formatDate(from, settings.timezone));
         const page = await dsGet<Page<Instance>>(
           settings,
           `/projects/${project.code}/process-instances?${query}`,
