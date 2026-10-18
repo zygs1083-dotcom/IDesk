@@ -11,7 +11,9 @@ export function Roster({
   seats,
   standing,
   onSelect,
+  id,
 }: {
+  id: string;
   zones: Layout["zones"];
   agents: Agent[];
   tasks: Task[];
@@ -21,7 +23,7 @@ export function Roster({
 }) {
   const { t } = useLang();
   return (
-    <aside className="pixel-panel roster">
+    <aside className="pixel-panel roster" id={id}>
       <h2>{t("roster.duty")}</h2>
       <div className="roster-groups">
         {zones.map((zone) => {

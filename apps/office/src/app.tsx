@@ -5,7 +5,11 @@ import { type ReplayControls, replay } from "./director/replay.ts";
 import { setTimeScale } from "./engine/tween.ts";
 import { useLang } from "./i18n/lang.tsx";
 import { initialGlyphs, loadGlyphs } from "./stage/glyphs.ts";
+import { BeijingClock } from "./ui/beijing-clock.tsx";
 import { Outfits } from "./ui/outfits.tsx";
+import { PanelHandle } from "./ui/panel-handle.tsx";
+import { isFullscreenKey, type Panels, readPanels, savePanels } from "./ui/panel-state.ts";
+import { PixelButton } from "./ui/pixel-button.tsx";
 import { ProfileModal } from "./ui/profile-modal.tsx";
 import { ReceptionProfile } from "./ui/reception-profile.tsx";
 import { ReplayBar } from "./ui/replay-bar.tsx";
@@ -26,6 +30,64 @@ export function App() {
   stageText.current = t;
   const host = useRef<HTMLDivElement>(null);
   const [error, setError] = useState("");
+  const [panels, setPanels] = useState(() => readPanels(window.localStorage));
+  const panelsRef = useRef(panels);
+  panelsRef.current = panels;
+  const beforeFullscreen = useRef<Panels>(panels);
+  const [fullscreen, setFullscreen] = useState(false);
+  const [showFullscreenControls, setShowFullscreenControls] = useState(false);
+  const togglePanel = (panel: keyof Panels) => {
+    setPanels((current) => {
+      const next = { ...current, [panel]: !current[panel] };
+      savePanels(window.localStorage, next);
+      return next;
+    });
+  };
+  const toggleFullscreen = useCallback(async () => {
+    if (document.fullscreenElement) {
+      await document.exitFullscreen();
+    } else {
+      beforeFullscreen.current = panelsRef.current;
+      await document.documentElement.requestFullscreen();
+    }
+  }, []);
+  useEffect(() => {
+    const change = () => {
+      const active = document.fullscreenElement === document.documentElement;
+      setFullscreen(active);
+      setPanels(active ? { top: false, left: false, right: false } : beforeFullscreen.current);
+    };
+    const keydown = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && document.fullscreenElement === document.documentElement) {
+        void document.exitFullscreen();
+        return;
+      }
+      if (isFullscreenKey(event)) {
+        event.preventDefault();
+        void toggleFullscreen();
+      }
+    };
+    document.addEventListener("fullscreenchange", change);
+    document.addEventListener("keydown", keydown);
+    return () => {
+      document.removeEventListener("fullscreenchange", change);
+      document.removeEventListener("keydown", keydown);
+    };
+  }, [toggleFullscreen]);
+  useEffect(() => {
+    if (!fullscreen) return;
+    let timer: number;
+    const move = () => {
+      setShowFullscreenControls(true);
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => setShowFullscreenControls(false), 3000);
+    };
+    document.addEventListener("mousemove", move);
+    return () => {
+      document.removeEventListener("mousemove", move);
+      window.clearTimeout(timer);
+    };
+  }, [fullscreen]);
   const [mode, setMode] = useState<{ mode: "live" } | { mode: "replay"; at: number }>({
     mode: "live",
   });
@@ -110,46 +172,130 @@ export function App() {
     selection?.type === "task" ? tasks.find((item) => item.id === selection.id) : undefined;
   return (
     <Outfits agents={agents}>
-      <main className="office-frame" aria-label={t("office.label")}>
-        <TopBar
-          title={layout?.title ?? t("office.title")}
-          agents={agents}
-          tasks={tasks}
-          replaying={mode.mode === "replay"}
-          onReplay={enterReplay}
-        />
-        <section className="pixel-panel avatar-strip" aria-label={t("roster.duty")}>
+      <main
+        className={`office-frame${fullscreen ? " is-fullscreen" : ""}`}
+        aria-label={t("office.label")}
+      >
+        <div className={`top-shell${panels.top ? "" : " is-collapsed"}`}>
+          <TopBar
+            title={layout?.title ?? t("office.title")}
+            agents={agents}
+            tasks={tasks}
+            replaying={mode.mode === "replay"}
+            onReplay={enterReplay}
+            onFullscreen={toggleFullscreen}
+          />
+          <PanelHandle
+            expanded={panels.top}
+            controls="office-top-bar"
+            collapseLabel="panels.collapseTop"
+            expandLabel="panels.expandTop"
+            direction="top"
+            onClick={() => togglePanel("top")}
+          />
+        </div>
+        <section
+          className={`pixel-panel avatar-strip${panels.left || panels.right ? "" : " is-collapsed"}`}
+          aria-label={t("roster.duty")}
+        >
           <h2>{t("roster.duty")}</h2>
-          {agents
-            .filter((item) => seats.has(item.id) || standing.has(item.id))
-            .map((item) => (
-              <RosterItem key={item.id} agent={item} tasks={tasks} onSelect={selectAgent} />
-            ))}
+          <PanelHandle
+            expanded={panels.left}
+            controls="avatar-left"
+            collapseLabel="panels.collapseLeft"
+            expandLabel="panels.expandLeft"
+            direction="left"
+            onClick={() => togglePanel("left")}
+          />
+          <span id="avatar-left" className="avatar-group">
+            {agents
+              .filter(
+                (item) =>
+                  panels.left &&
+                  layout?.zones.slice(0, 2).some((zone) => seats.get(item.id)?.zone === zone.id),
+              )
+              .map((item) => (
+                <RosterItem key={item.id} agent={item} tasks={tasks} onSelect={selectAgent} />
+              ))}
+          </span>
+          <PanelHandle
+            expanded={panels.right}
+            controls="avatar-right"
+            collapseLabel="panels.collapseRight"
+            expandLabel="panels.expandRight"
+            direction="right"
+            onClick={() => togglePanel("right")}
+          />
+          <span id="avatar-right" className="avatar-group">
+            {agents
+              .filter(
+                (item) =>
+                  panels.right &&
+                  (standing.has(item.id) ||
+                    (seats.has(item.id) &&
+                      !layout?.zones
+                        .slice(0, 2)
+                        .some((zone) => seats.get(item.id)?.zone === zone.id))),
+              )
+              .map((item) => (
+                <RosterItem key={item.id} agent={item} tasks={tasks} onSelect={selectAgent} />
+              ))}
+          </span>
         </section>
-        <div className={`office-body${task ? " has-detail" : ""}`}>
+        <div
+          className={`office-body${task ? " has-detail" : ""}${panels.left ? "" : " left-collapsed"}${panels.right ? "" : " right-collapsed"}`}
+        >
           {layout && (
-            <Roster
-              zones={layout.zones.slice(0, 2)}
-              agents={agents}
-              tasks={tasks}
-              seats={seats}
-              onSelect={selectAgent}
-            />
+            <div className={`side-shell side-shell-left${panels.left ? "" : " is-collapsed"}`}>
+              <Roster
+                id="office-left-roster"
+                zones={layout.zones.slice(0, 2)}
+                agents={agents}
+                tasks={tasks}
+                seats={seats}
+                onSelect={selectAgent}
+              />
+              <PanelHandle
+                expanded={panels.left}
+                controls="office-left-roster"
+                collapseLabel="panels.collapseLeft"
+                expandLabel="panels.expandLeft"
+                direction="left"
+                onClick={() => togglePanel("left")}
+              />
+            </div>
           )}
           <div className="stage-host" ref={host} />
           {task ? (
             <TaskPanel task={task} agents={agents} onClose={closePanel} />
           ) : layout ? (
-            <Roster
-              standing={standing}
-              zones={layout.zones.slice(2)}
-              agents={agents}
-              tasks={tasks}
-              seats={seats}
-              onSelect={selectAgent}
-            />
+            <div className={`side-shell side-shell-right${panels.right ? "" : " is-collapsed"}`}>
+              <Roster
+                id="office-right-roster"
+                standing={standing}
+                zones={layout.zones.slice(2)}
+                agents={agents}
+                tasks={tasks}
+                seats={seats}
+                onSelect={selectAgent}
+              />
+              <PanelHandle
+                expanded={panels.right}
+                controls="office-right-roster"
+                collapseLabel="panels.collapseRight"
+                expandLabel="panels.expandRight"
+                direction="right"
+                onClick={() => togglePanel("right")}
+              />
+            </div>
           ) : null}
         </div>
+        {fullscreen && (
+          <div className={`fullscreen-controls${showFullscreenControls ? " is-visible" : ""}`}>
+            <BeijingClock compact />
+            <PixelButton onClick={toggleFullscreen}>{t("top.exitFullscreen")}</PixelButton>
+          </div>
+        )}
         {selection?.type === "agent" && selection.id === "human" && (
           <ReceptionProfile onClose={closePanel} />
         )}
