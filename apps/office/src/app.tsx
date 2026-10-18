@@ -72,7 +72,7 @@ export function App() {
     let stage: Awaited<ReturnType<typeof createStage>>;
     const start = async () => {
       const layout = await loadLayout();
-      const assets = await loadWorldAssets();
+      const assets = await loadWorldAssets(mode.mode === "replay" ? mode.at : undefined);
       const element = host.current;
       if (!element || disposed) return;
       setWorld({ layout });

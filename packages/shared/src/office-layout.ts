@@ -9,6 +9,7 @@ const id = z.string().min(1);
 export const officeLayoutSchema = z.object({
   title: z.string().optional(),
   size: z.object({ w: z.literal(1672), h: z.literal(941) }),
+  clock: point.extend({ r: z.number().positive() }),
   occluders: z.array(
     z.object({
       id,
@@ -72,6 +73,13 @@ export function parseOfficeLayout(value: unknown): OfficeLayout {
     .superRefine((layout, ctx) => {
       const issue = (message: string) => ctx.addIssue({ code: "custom", message });
       const inside = ({ x, y }: { x: number; y: number }) => x < layout.size.w && y < layout.size.h;
+      if (
+        layout.clock.x < layout.clock.r ||
+        layout.clock.y < layout.clock.r ||
+        layout.clock.x + layout.clock.r >= layout.size.w ||
+        layout.clock.y + layout.clock.r >= layout.size.h
+      )
+        issue("Clock outside background");
       const checkPoint = (p: { x: number; y: number }, label: string) => {
         if (!inside(p)) issue(`Outside background: ${label}`);
       };

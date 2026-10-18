@@ -8,6 +8,7 @@ type Sample = OfficeLayout & {
 export function fixture(): Sample {
   return {
     size: { w: 1672, h: 941 },
+    clock: { x: 482, y: 36, r: 17 },
     occluders: [
       {
         id: "desk",

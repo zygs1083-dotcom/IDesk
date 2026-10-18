@@ -92,14 +92,14 @@ export async function direct(stage: Stage, t: Translate) {
   return cast;
 }
 
-export async function initialize(stage: Stage, t: Translate) {
+export async function initialize(stage: Stage, t: Translate, clock?: () => Date, replay = false) {
   const [agents, tasks] = await Promise.all([
     request("/agents").then((data) => z.array(publicAgentSchema).parse(data)),
     request("/tasks").then((data) => z.array(taskSchema).parse(data)),
   ]);
   if (stage.world.destroyed) return;
   const cast = new Cast(stage, stage.assets.sprites, t("reception.name"));
-  createDaylight(stage, cast.characters);
+  createDaylight(stage, cast.characters, clock, replay);
   await cast.update(agents, true);
   if (stage.world.destroyed) return;
   const cards = new Cards(stage);
