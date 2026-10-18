@@ -26,13 +26,13 @@ export function Column({
       ref={setNodeRef}
       aria-label={labels(lang).status[status]}
       className={cn(
-        "flex min-w-column flex-1 flex-col gap-3 rounded-panel bg-surface-2 p-3",
+        "flex min-h-0 min-w-column flex-1 flex-col gap-3 rounded-panel bg-surface-2 p-3",
         isOver && legal && "outline-1 outline-accent",
       )}
     >
       <header
         data-ui="column-heading"
-        className={cn("flex items-center gap-2 px-1 py-1", !legal && "text-text-3")}
+        className={cn("flex shrink-0 items-center gap-2 px-1 py-1", !legal && "text-text-3")}
       >
         <StatusDot status={status} muted={!legal} />
         <h2 className="text-section">{labels(lang).status[status]}</h2>
@@ -42,7 +42,9 @@ export function Column({
           {count}
         </span>
       </header>
-      <div className="flex flex-col gap-2">{children}</div>
+      <div className="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto px-1 pb-1 [&>*]:shrink-0">
+        {children}
+      </div>
     </section>
   );
 }

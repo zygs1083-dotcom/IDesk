@@ -4,14 +4,42 @@ import {
   automationQuerySchema,
   automationRunSchema,
   automationRunWithJobSchema,
+  patchAutomationRunSchema,
 } from "@idesk/shared/automation-schemas";
 import { idSchema } from "@idesk/shared/task-schemas";
 import { z } from "zod";
-import { listJobs, listRuns, listRunsForConnector } from "../../core/automation/automation.ts";
+import {
+  listJobs,
+  listRuns,
+  listRunsForConnector,
+  setRunHidden,
+} from "../../core/automation/automation.ts";
 import { HttpError } from "../errors.ts";
-import type { AuthEnv } from "../middleware/auth.ts";
+import { type AuthEnv, requireHuman } from "../middleware/auth.ts";
 
 export function automationRoutes(app: OpenAPIHono<AuthEnv>) {
+  app.openapi(
+    {
+      method: "patch",
+      path: "/api/v1/automation/runs/{id}",
+      middleware: requireHuman,
+      request: {
+        params: idSchema,
+        body: {
+          required: true,
+          content: { "application/json": { schema: patchAutomationRunSchema } },
+        },
+      },
+      responses: {
+        200: {
+          description: "Updated run",
+          content: { "application/json": { schema: automationRunWithJobSchema } },
+        },
+      },
+    },
+    (c) => c.json(setRunHidden(c.req.valid("param").id, c.req.valid("json").hidden), 200),
+  );
+
   app.openapi(
     {
       method: "get",

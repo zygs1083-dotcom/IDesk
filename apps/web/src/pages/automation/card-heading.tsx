@@ -1,4 +1,5 @@
 import { ExternalLink } from "lucide-react";
+import type { ReactNode } from "react";
 import { useLang } from "../../i18n/lang.tsx";
 import { cn } from "../../lib/cn.ts";
 
@@ -8,12 +9,14 @@ export function CardHeading({
   url,
   status,
   color,
+  actions,
 }: {
   name: string;
   group: string | null;
   url: string | null;
   status: string;
   color: string;
+  actions?: ReactNode;
 }) {
   const { t } = useLang();
   return (
@@ -21,6 +24,7 @@ export function CardHeading({
       <div className="mb-2 flex items-start gap-2">
         <span title={status} className={cn("mt-1.5 size-2 shrink-0 rounded-full", color)} />
         <h3 className="min-w-0 flex-1 line-clamp-2 text-body">{name}</h3>
+        {actions}
         {url !== null && (
           <a
             href={url}

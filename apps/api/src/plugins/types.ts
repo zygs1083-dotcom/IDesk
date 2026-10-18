@@ -35,7 +35,7 @@ export type ExternalJob = Omit<
   typeof automationJobs.$inferSelect,
   "id" | "connectorId" | "lastRunStatus" | "lastRunAt"
 >;
-export type ExternalRun = Omit<typeof automationRuns.$inferSelect, "id" | "jobId"> & {
+export type ExternalRun = Omit<typeof automationRuns.$inferSelect, "id" | "jobId" | "hiddenAt"> & {
   jobExternalId: string;
 };
 export interface ConnectorPlugin extends Plugin {

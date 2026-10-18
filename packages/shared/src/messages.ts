@@ -44,6 +44,7 @@ export const zh = {
   "relay.humanInboxOnly": () => "只能标记发给人的消息",
 
   "automation.notFound": () => "任务流不存在",
+  "automation.runNotFinished": () => "只能隐藏已结束的运行",
 
   "internal.error": () => "internal error",
   validation: (p: { text: string }) => p.text,
@@ -102,6 +103,7 @@ export const en: { [K in MessageKey]: (typeof zh)[K] } = {
   "relay.humanInboxOnly": () => "Only messages to the human can be marked",
 
   "automation.notFound": () => "Workflow not found",
+  "automation.runNotFinished": () => "Only finished runs can be hidden",
 
   "internal.error": () => "internal error",
   validation: (p) => p.text,

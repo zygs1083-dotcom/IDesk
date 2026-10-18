@@ -22,7 +22,7 @@ html[data-skin="pixel"] {
     box-shadow: none;
   }
   & [data-ui="task-folder"] > div {
-    min-height: 124px;
+    min-height: 0;
     padding: 10px 8px 16px;
     background: color-mix(in srgb, var(--surface-2) 64%, transparent);
     border-bottom: 3px double var(--line-strong);
@@ -96,6 +96,6 @@ html[data-skin="pixel"] {
   }
   & [data-ui="task-wall"],
   & [data-ui="console"] {
-    min-height: 320px;
+    min-height: 0;
   }
 }

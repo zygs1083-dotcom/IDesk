@@ -12,3 +12,33 @@ export function filterRuns(runs: Run[], q: string): Run[] {
   if (!q.trim()) return runs;
   return runs.filter((run) => matches(q, [run.jobName, run.jobGroup, run.trigger]));
 }
+
+export type RunRange = "today" | "all";
+
+export function isRunToday(run: Pick<Run, "startedAt" | "finishedAt">, now: number): boolean {
+  const timestamp = run.finishedAt ?? run.startedAt;
+  if (timestamp === null) return false;
+  const midnight = new Date(now);
+  midnight.setHours(0, 0, 0, 0);
+  return new Date(timestamp).getTime() >= midnight.getTime();
+}
+
+export function selectRuns(
+  runs: Run[],
+  q: string,
+  range: RunRange,
+  showHidden: boolean,
+  now: number,
+) {
+  const inRange = filterRuns(runs, q).filter(
+    (run) =>
+      range === "all" ||
+      run.status === "waiting" ||
+      run.status === "running" ||
+      isRunToday(run, now),
+  );
+  return {
+    runs: inRange.filter((run) => showHidden || run.hiddenAt === null),
+    hiddenCount: inRange.filter((run) => run.hiddenAt !== null).length,
+  };
+}

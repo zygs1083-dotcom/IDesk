@@ -141,6 +141,7 @@ export const automationRuns = sqliteTable(
     status: text({ enum: RUN_STATUSES }).notNull(),
     startedAt: integer("started_at", { mode: "timestamp_ms" }),
     finishedAt: integer("finished_at", { mode: "timestamp_ms" }),
+    hiddenAt: integer("hidden_at", { mode: "timestamp_ms" }),
     trigger: text(),
     url: text(),
     error: text(),
