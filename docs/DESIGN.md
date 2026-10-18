@@ -83,7 +83,7 @@ index.ts                                         启动
 | 字段 | 说明 |
 | --- | --- |
 | id, name | |
-| kind | `claude-code` `codex` `n8n` `script` `custom` |
+| kind | `claude-code` `codex` `gemini` `opencode` `droid` `cursor` `n8n` `script` `custom`（§12.28） |
 | host | 设备名/服务器名，自由文本 |
 | capabilities | string[]，与 Task.capabilities 匹配 |
 | apiKeyHash | SHA-256；明文只在创建时返回一次 |
@@ -103,7 +103,7 @@ index.ts                                         启动
 | `task.<action>` | `{ from, to }`，handoff 另带 `handoffFrom`（交接前的负责人）和 `handoffTo` | 每个状态机动作一条，action 名同 §5 |
 | `task.reported` | `{ message }` | AI 汇报进展（内部同时续租） |
 | `relay.sent` | `{ messageId, to }` | 传递区发消息 |
-| `relay.read` | `{ messageId }`，agentId 为阅读者 | 收件智能体首次标读，与 readBy 同事务；重复标读不发事件 |
+| `relay.read` | `{ messageId }`，agentId 为阅读者；人标读时 agentId 为空，payload 另带 `reader: "human"` | 收件智能体或管理员首次标读，与 readBy 同事务；重复标读不发事件（§12.27） |
 | `agent.registered` | `{ name, kind }` | 新建智能体 |
 | `agent.key_rotated` | `{ name, kind }`，不含 key/hash | 管理员轮换智能体密钥 |
 | `connector.polled` | `{ connectorId, name, changed }` | 每轮采集成功或失败后；changed 可为 0 |
@@ -139,19 +139,19 @@ AutomationRun 镜像执行实例：`{ id, jobId, externalId, status, trigger, st
 | --- | --- |
 | id, createdAt | |
 | fromAgentId | 发送者；人发的为 `human` |
-| to | `{ kind: "agent", id }` 指定收件人；`{ kind: "capability", value }` 任何具备该能力的 AI；`{ kind: "broadcast" }` 所有 AI |
+| to | `{ kind: "agent", id }` 指定收件人；`{ kind: "capability", value }` 任何具备该能力的 AI；`{ kind: "broadcast" }` 所有 AI；`{ kind: "human" }` 发给人（§12.27） |
 | kind | `note` 说明 · `deliverable` 成果 · `request` 请求 · `reply` 回复 |
 | taskId | 可空；关联某个任务 |
 | replyTo | 可空；回复哪条消息 |
 | subject | 一行标题 |
 | body | markdown，放上下文、链接、结果 |
-| readBy | agentId[]；谁已读 |
+| readBy | agentId[]；谁已读，人读过记为 `human` |
 
-任务交接（`handoff` 动作）会自动写一条 `kind: "deliverable"`、带 `taskId` 的消息给接收者。消息只追加，不删除；人在 `/relay` 页能看全部，AI 只能看发给自己、自己能力匹配、广播的，以及自己发出的。
+任务交接（`handoff` 动作）会自动写一条 `kind: "deliverable"`、带 `taskId` 的消息给接收者。消息只追加，不删除；人在 `/relay` 页能看全部，AI 只能看发给自己、自己能力匹配、广播的，以及自己发出的；发给人的消息只有人和发送它的 AI 能看到。
 
 新消息写入时验证指定收件智能体、关联任务和回复父消息存在；父消息还必须对发送者可见，未找到和不可见都返回 404。能力收件和广播不要求当前有人匹配。删除智能体后旧消息及引用保留，不加级联删除或历史引用外键。
 
-列表保持数组响应；可选 limit（1–100）和 before 消息 ID，按 createdAt/id 倒序翻旧消息，权限、正文/标题搜索及种类/对象/关联任务/请求状态过滤先于 limit。详情和完整线程采用同一可见性，缺失与不可见都返回 404；线程可穿过隐藏中间节点找到可见后代，但不返回隐藏正文。请求有可见、非原发件人的 reply 后代才算已答复，其他为待答复，不另存状态。人查看消息不标已读；智能体 CLI 先看摘要，再显式 read 全文和线程，仅对当前目标收件消息标读，--peek 不标读。
+列表保持数组响应；可选 limit（1–100）和 before 消息 ID，按 createdAt/id 倒序翻旧消息，权限、正文/标题搜索及种类/对象/关联任务/请求状态过滤先于 limit。详情和完整线程采用同一可见性，缺失与不可见都返回 404；线程可穿过隐藏中间节点找到可见后代，但不返回隐藏正文。请求有可见、非原发件人的 reply 后代才算已答复，其他为待答复，不另存状态。人查看消息只对发给人的消息由管理员标读（§12.27）；智能体 CLI 先看摘要，再显式 read 全文和线程，仅对当前目标收件消息标读，--peek 不标读。
 
 ## 5. 任务状态机
 
@@ -240,7 +240,8 @@ GET    /relay?box=inbox|sent|all&taskId=&limit=&before=&q=&kind=&toKind=&hasTask
 GET    /relay/:id                               可见消息全文
 GET    /relay/:id/thread                        完整可见线程，正序
 POST   /relay                                   发消息，body 见 §4.6
-POST   /relay/:id/read                          收件智能体标记当前消息已读
+POST   /relay/:id/read                          收件智能体标记当前消息已读；管理员标记人收件箱里的消息（§12.27）
+GET    /relay/summary                           当前查看者收件箱的 { unread, pendingRequests }（§12.27）
 
 GET/POST/PATCH/DELETE /schedules                POST /schedules/:id/run
 GET/POST/PATCH/DELETE /connectors               POST /connectors/test   POST /connectors/:id/poll
@@ -271,7 +272,7 @@ WS     /ws                                      cookie 鉴权；每条事件广�
 | `idesk_report` | 心跳 + 一段进展说明（写事件） |
 | `idesk_complete_task` | 带 result |
 | `idesk_handoff_task` / `idesk_pause_task` / `idesk_resume_task` / `idesk_release_task` | 交接、暂停、恢复、放回 |
-| `idesk_relay_send` | 向某个 AI / 某种能力 / 全体发一条传递区消息 |
+| `idesk_relay_send` | 向某个 AI / 某种能力 / 全体 / 人发一条传递区消息；回复时可省略收件对象（§12.27） |
 | `idesk_relay_inbox` | 读自己的传递区收件箱，默认只返回未读，返回的同时标记为已读 |
 
 资源：`idesk://tasks/open`、`idesk://task/{id}`、`idesk://relay/inbox`（只读，不标记已读）。传输用 SDK 的 Streamable HTTP 无状态模式，每个请求新建 server，不做 session。
@@ -290,7 +291,7 @@ idesk claim <id> | accept | join | pause | resume | release
 idesk report <id> -m "..."
 idesk done <id> --result-file ...
 idesk handoff <id> [--to <agent>] -m "..."
-idesk relay send --to <agent>|--cap <capability>|--all --subject ... [--kind note|deliverable|request|reply] [--body-file ...] [--task <id>] [--reply-to <message>]
+idesk relay send --to <agent>|--cap <capability>|--all|--human --subject ... [--kind note|deliverable|request|reply] [--body-file ...] [--task <id>] [--reply-to <message>]
 idesk relay inbox [--all]                       默认未读摘要，不标记已读
 idesk relay read <id> [--peek]                  全文、线程与关联任务；输出后仅标读当前收件消息，--peek 不标读
 所有命令支持 --json 输出原始 JSON；默认输出给人看
@@ -615,3 +616,21 @@ completedAt: <ISO>
 - HTTP 定时编辑提交完整 action：标记保留对应旧值，新值替换，移除 header 或省略 body 删除对应内容，空 body 保持为空。新建、切换动作类型或没有对应旧字段时，标记不能充当真实输入。
 - Webhook 列和 HTTP 动作摘要显示「已配置（已隐藏）」，编辑表单解释保留与替换规则。通知及 HTTP 定时的网络异常只记录固定安全错误文字；HTTP 状态码和既有 Webhook 超时、签名、重试规则保留，不把请求地址、header 或 body 拼进失败事件。
 
+### 12.27 人类收件箱（W91）
+
+- 收件对象增加 `{ kind: "human" }`，表示发给人（管理员）。智能体可通过 REST、MCP（`idesk_relay_send`）和 CLI（`--human`）发给人，种类不限：常用的是 `request` 向人请示，以及 `deliverable` 交付成果。人自己不能发给 `human`，返回 400「不能发给自己」。
+- 回复时 `to` 可以省略：服务端默认回给父消息的发送者，父消息来自人时为 `{ kind: "human" }`，来自智能体时为 `{ kind: "agent", id }`。显式给出的 `to` 照常生效。CLI `--reply-to` 不带收件参数时同样处理。
+- 可见性：发给人的消息只对人（admin、viewer）和发送它的智能体可见；它不算广播，也不参与能力匹配。
+- 列表的收件对象过滤 `toKind` 增加 `human`。
+- 人的 `box`：`inbox` 是 `to.kind` 为 `human` 的消息，`sent` 是人发出的消息，`all` 是全部（即原来人看到的范围）。网页默认打开收件箱。智能体的 `box` 含义不变。
+- 已读：管理员在 `/relay` 打开一条消息时，右栏线程里所有发给人且未读的消息，由前端逐条调 `POST /relay/:id/read` 标记。`readBy` 记 `human`，同一事务写 `relay.read`（agentId 为空，payload 带 `reader: "human"`），重复标读不再写事件。viewer 打开消息不标读，前端不调用该接口，服务端对 viewer 仍返回 403。人标记的消息不在人收件箱里时，返回 403「只能标记发给人的消息」。
+- `GET /relay/summary` 返回当前查看者收件箱的 `{ unread, pendingRequests }`。人按人收件箱和 `readBy` 中有没有 `human` 计算；智能体按自己的收件范围（指定、能力匹配、广播）和 `readBy` 计算。`pendingRequests` 是收件箱里 `kind` 为 `request`、按 §4.6 规则仍待答复的条数。只用 SQL 计数，不加表、列或迁移。
+- 实时：`relay.sent`、`relay.read` 两种事件都让 summary 和列表查询失效，复用现有失效机制。
+- 办公室：发给人的信封飞到前台柜台，礼仪短暂抬头（§6 的 relay.sent 行）。
+- 不做：多个人类账户或每人各自的收件箱、邮件或推送提醒、把已读回执告诉 AI。通知类插件的订阅不变。
+
+### 12.28 更多角色（W92）
+
+- 新增 kind：`gemini`、`opencode`、`droid`、`cursor`，显示名分别为 Gemini、OpenCode、Droid、Cursor，中英相同。主网页智能体的新建与编辑、筛选和显示同步支持；已有数据不迁移，kind 仍然不可修改。
+- 每种 kind 有三套外观 `a`、`b`、`c`。`a` 是该 kind 的标准形象，原有五种的 `a` 就是现在的图。`b`、`c` 保留该 kind 的标志服装和主色，只换发型、发色、肤色或一件小配饰，保证同类一眼认得出、彼此又分得清。外观设计见 OFFICE §5 的表。
+- 外观分配：办公室把智能体按 kind 分组，组内按 id（ULID，也就是创建顺序）排序，第 n 个（从 0 起）使用该 kind 可用外观列表里的第 `n % 列表长度` 个。可用外观是素材清单里实际存在的外观，按 a、b、c 排序；某个 kind 还没有任何外观时，借用 `custom` 的列表。删除智能体可能让同类排在后面的人换外观，这一点可以接受。不加数据库字段，不提供让用户选择外观的入口。名单头像、档案弹窗和画布使用同一套外观。
