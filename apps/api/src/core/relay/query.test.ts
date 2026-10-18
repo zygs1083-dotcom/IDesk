@@ -67,7 +67,7 @@ test("stable pages preserve timestamp order and filter visibility/search before 
   expect(seen).toEqual(expected.map((message) => message.id));
   expect(new Set(seen).size).toBe(sent.length);
   expect(listRelay(reader, "inbox", undefined, { q: "50x", limit: 1 })).toEqual([]);
-  expect(listRelay(reader, "inbox", undefined, { hasTask: "false" })).toEqual([]);
+  expect(listRelay(reader, "inbox", undefined, { hasTask: "false", toKind: "agent" })).toEqual([]);
   expect(() => listRelay(other, "all", undefined, { before: sent[0] as string })).toThrow(
     "消息不存在",
   );
