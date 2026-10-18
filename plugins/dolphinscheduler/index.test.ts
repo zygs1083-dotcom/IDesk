@@ -53,14 +53,14 @@ describe("listRuns", () => {
         jobExternalId: "9876543210987654321/1234567890123456789",
         status,
         trigger: "SCHEDULER",
-        startedAt: new Date("2026-10-14T01:00:00Z"),
-        finishedAt: new Date("2026-10-14T02:00:00Z"),
+        startedAt: new Date("2026-10-13T17:00:00Z"),
+        finishedAt: new Date("2026-10-13T18:00:00Z"),
         url: `${baseUrl}/ui/projects/9876543210987654321/workflow/instances/1`,
         error: state === "FAILURE" ? "DolphinScheduler 执行失败" : null,
       },
     ]);
   });
-  it("formats since in UTC, pages and sorts all unsorted instances", async () => {
+  it("formats since in the server time zone, pages and sorts all unsorted instances", async () => {
     const fetch = vi
       .fn()
       .mockResolvedValueOnce(project())
@@ -81,14 +81,14 @@ describe("listRuns", () => {
       limit: 2,
     });
     expect(runs.map((run) => run.externalId)).toEqual(["2", "3", "1"]);
-    expect(runs[0]?.startedAt).toEqual(new Date("2026-10-14T03:00:00Z"));
+    expect(runs[0]?.startedAt).toEqual(new Date("2026-10-13T19:00:00Z"));
     expect(fetch).toHaveBeenCalledTimes(3);
     for (const [index, call] of fetch.mock.calls.slice(1).entries()) {
       const url = new URL(call[0]);
       expect(url.pathname).toBe("/dolphinscheduler/projects/9876543210987654321/process-instances");
       expect(url.searchParams.get("pageNo")).toBe(String(index + 1));
       expect(url.searchParams.get("pageSize")).toBe("2");
-      expect(url.searchParams.get("startDate")).toBe("2026-10-14 00:00:00");
+      expect(url.searchParams.get("startDate")).toBe("2026-10-14 08:00:00");
     }
   });
   it("preserves long processDefinitionCode and nullable dates, bounding the first poll to 7 days", async () => {
@@ -111,7 +111,7 @@ describe("listRuns", () => {
       finishedAt: null,
     });
     expect(new URL(fetch.mock.calls[1]?.[0]).searchParams.get("startDate")).toBe(
-      "2026-10-08 12:00:00",
+      "2026-10-08 20:00:00",
     );
     vi.useRealTimers();
   });
