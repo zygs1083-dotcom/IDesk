@@ -122,8 +122,7 @@ export function WorldCheck() {
             : `host-${index + 1}`,
         );
       });
-      const hour = new URLSearchParams(location.search).get("hour");
-      createDaylight(stage, characters, hour === null ? 12 : Number(hour));
+      createDaylight(stage, characters);
       installDebug(stage, translator("en"), () => true);
       stage.app.renderer.render(stage.app.stage);
       stage.app.canvas.dataset.ready = "true";

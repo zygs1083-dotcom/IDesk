@@ -34,10 +34,8 @@ export function buildOccluders() {
     x += piece.box.w + 2;
     height = Math.max(height, piece.box.h);
   }
-  const atlas = new PNG({ width, height: Math.max(1, y + height) });
   const frames = {};
-  for (const { id, png, box, frame } of pieces) {
-    paste(atlas, png, frame.x, frame.y);
+  for (const { id, box, frame } of pieces) {
     frames[id] = {
       frame,
       rotated: false,
@@ -47,16 +45,24 @@ export function buildOccluders() {
       background: { x: box.x, y: box.y },
     };
   }
-  savePng(`${root}public/occluders.png`, atlas);
-  saveJson(`${root}public/occluders.json`, {
-    frames,
-    meta: {
-      image: "occluders.png",
-      format: "RGBA8888",
-      size: { w: atlas.width, h: atlas.height },
-      scale: "1",
-    },
-  });
+  for (const variant of ["", "-dusk", "-night"]) {
+    const source = variant ? readPng(`${root}assets/raw/background${variant}.png`) : background;
+    assert.equal(source.width, layout.size.w);
+    assert.equal(source.height, layout.size.h);
+    const atlas = new PNG({ width, height: Math.max(1, y + height) });
+    for (const { polygon, frame } of pieces)
+      paste(atlas, cutPolygon(source, polygon).png, frame.x, frame.y);
+    savePng(`${root}public/occluders${variant}.png`, atlas);
+    saveJson(`${root}public/occluders${variant}.json`, {
+      frames,
+      meta: {
+        image: `occluders${variant}.png`,
+        format: "RGBA8888",
+        size: { w: atlas.width, h: atlas.height },
+        scale: "1",
+      },
+    });
+  }
   return pieces.length;
 }
 if (process.argv[1] === fileURLToPath(import.meta.url))

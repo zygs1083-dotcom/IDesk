@@ -17,7 +17,8 @@ export type ReplayControls = {
 };
 
 export async function replay(stage: Stage, at: number, controls: ReplayControls, t: Translate) {
-  const initialized = await initialize(stage, t);
+  let current = at;
+  const initialized = await initialize(stage, t, () => new Date(current), true);
   if (!initialized) return;
   const { cast, cards, snapshot, actions, tasks } = initialized;
   for (const id of cast.present) cast.settle(id, "sit");
@@ -56,7 +57,6 @@ export async function replay(stage: Stage, at: number, controls: ReplayControls,
     if (stage.world.destroyed) return;
   }
   setTimeScale(controls.speed);
-  let current = at;
   controls.update(current, current === controls.end);
   const tick = ({ deltaMS }: { deltaMS: number }) => {
     setTimeScale(controls.speed);

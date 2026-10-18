@@ -24,7 +24,7 @@ export async function createStage(host: HTMLElement, layout: OfficeLayout, asset
   const screen = app.stage.addChild(new Container());
   const bubbles = screenBubbles(screen, app.screen);
   app.ticker.add((ticker) => bubbles(ticker.deltaMS), undefined, -2);
-  renderWorld(layout, assets, world, objects);
+  const scenes = renderWorld(layout, assets, world, objects);
   const resize = () => {
     const width = layout.size.w;
     const height = layout.size.h;
@@ -37,6 +37,6 @@ export async function createStage(host: HTMLElement, layout: OfficeLayout, asset
   };
   app.renderer.on("resize", resize);
   resize();
-  return { app, world, board, objects, effects, lights, screen, layout, assets };
+  return { app, world, board, objects, effects, lights, screen, layout, assets, scenes };
 }
 export type Stage = Awaited<ReturnType<typeof createStage>>;

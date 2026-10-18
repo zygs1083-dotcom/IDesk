@@ -32,7 +32,7 @@ export async function spacingStage(count = 24) {
     })),
     true,
   );
-  createDaylight(stage, cast.characters, 12);
+  createDaylight(stage, cast.characters, () => new Date("2026-10-18T04:00:00Z"));
   const t = translator("en");
   const snapshot = new Map();
   const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
