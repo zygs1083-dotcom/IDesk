@@ -159,33 +159,36 @@ Use case: identity-preserve. Reference image is original custom pixel worker atl
 Uniformly make ALL six custom seated figures smaller by15percent inside same cells. Keep full figures IDENTICAL proportions and poses, just more magenta space. Current opaque height350px at1774wide should be300px, head184px should be157px. Target1122wide figure190px head100px. Preserve burgundy sweater white collar khaki pants brown shoes brown hair pixel art same three-quarter front lower right/back upper right. 4columns2rows final2empty magenta. No props shadows text lines.
 ```
 
-## 第三版帧锚点（W73c）
+## 坐姿帧锚点（W96）
 
 所有帧高 96px，锚点统一为 `anchor.y = (96 + lift) / 96`。lift 有符号：正数上抬，负数下移。精灵世界坐标底边是 `座位 y − lift`；座位落地点与 sortY 不变，PNG 像素不变。
 
 | 适用角色 | 帧 | lift | anchor.x | anchor.y |
 | --- | --- | ---: | ---: | ---: |
-| claude-code、codex、n8n、script、custom | `sit/back`、`typing/back/0`、`typing/back/1` | 32 | 0.5 | 128/96 |
+| 各外观独立 | `sit/back`、`typing/back/0`、`typing/back/1` | 见下表 | 0.5 | (96 + lift)/96 |
 | receptionist | `sit/down`、`typing/down/0`、`typing/down/1` | −7 | 0.5 | 89/96 |
 | 全部角色 | `sit/right`、`typing/right/0`、`typing/right/1` | 0 | 0.5 | 1 |
 | 全部角色 | 其余帧 | 0 | 0.5 | 1 |
 
-back 按肩膀量，不按被椅背挡住的臀量。工作区 1 四人坐满，以 codex back 帧外侧肩膀上沿 local y57 为标记，椅背对应上沿为世界 y325：
+back 按肩膀量，不按被椅背挡住的臀量。生成器在每套外观的 `sit/back` 64×96 帧中统计每行不透明宽度；在 local y40–60 的头颈范围找到最窄行，从该行往下取宽度首次增大的行作为外侧肩膀上沿。该外观的两张 `typing/back` 帧共用这一测量值。工作区 1 前排座位 y392，椅背上沿世界 y325；取 `lift = shoulderY − 24`，肩膀世界 y = `392 − 96 − lift + shoulderY = 320`，露出 5px。`codex-a` 的 local y57 因此对应 lift33。
 
-| lift | 肩膀世界 y（392 − 96 − lift + 57） | 露出椅背 |
-| ---: | ---: | ---: |
-| 20 | 333 | −8px，肩膀被盖住 |
-| 24 | 329 | −4px，肩膀被盖住 |
-| 28 | 325 | 0px，肩线贴住椅背 |
-| 32 | 321 | 4px，符合 4–6px |
-
-负责人审图通过 32px。四档比较图为 `pr-assets/w73c/back-lift{20,24,28,32}@3x.png`：青线是肩膀上沿，紫线是椅背上沿；图中数值均为原背景像素，图片最近邻放大三倍。
+| 外观 | shoulderY | lift | 外观 | shoulderY | lift | 外观 | shoulderY | lift |
+| --- | ---: | ---: | --- | ---: | ---: | --- | ---: | ---: |
+| claude-code-a | 56 | 32 | claude-code-b | 57 | 33 | claude-code-c | 53 | 29 |
+| codex-a | 57 | 33 | codex-b | 56 | 32 | codex-c | 56 | 32 |
+| cursor-a | 50 | 26 | cursor-b | 50 | 26 | cursor-c | 47 | 23 |
+| custom-a | 52 | 28 | custom-b | 50 | 26 | custom-c | 52 | 28 |
+| droid-a | 52 | 28 | droid-b | 50 | 26 | droid-c | 53 | 29 |
+| gemini-a | 50 | 26 | gemini-b | 47 | 23 | gemini-c | 47 | 23 |
+| n8n-a | 53 | 29 | n8n-b | 51 | 27 | n8n-c | 48 | 24 |
+| opencode-a | 50 | 26 | opencode-b | 43 | 19 | opencode-c | 47 | 23 |
+| script-a | 52 | 28 | script-b | 53 | 29 | script-c | 54 | 30 |
 
 礼仪按双手落在台面后沿量。前台座位 (162,637) 不变；原 down 帧手下沿在世界 y615，柜台台面后沿 y623，默认锚点使手悬在台面上方。lift = −7 把手下沿放到 y622，贴住台面后沿；柜台覆盖膝盖和腿，椅背在身后。静坐与两张 typing 帧逐张核对，打字高帧的手仍在后沿上方做小幅动作。负责人审图接受有符号的 −7px，而非移动座位。
 
 侧坐只用于右侧沙发的一个中央座位 (1594,608)，面向左，取 `sit/right` 并水平镜像。可见坐垫中心约 (1594,588)，人物臀/大腿在世界 y588–598，脚底在 y608；不抬升。两张 typing/right 帧同样检查臀/大腿接触坐垫，保留 lift = 0。北侧双人沙发用 front 帧，锚点仍为 1；脚底量在底座前沿 y539 正前方地板 y544，让沙发自然排在人后。大腿接坐垫前缘，膝盖、小腿和鞋在沙发前可见，不再被前沿盖住。会议室按原画前后各三把椅子，分别用 front/back，不造桌端侧座。
 
-`tools/characters.mjs` 是唯一锚点表，生成图集 JSON；`tools/characters.test.mjs` 按真实座位与三个坐姿帧分别断言世界底边 = 座位 y − lift。重跑生成器时 `characters/*.png` 的哈希保持不变。
+`tools/characters.mjs` 生成图集 JSON，`tools/character-shoulder.mjs` 自动量肩膀；`tools/characters.test.mjs` 按真实座位与三个坐姿帧断言世界底边，并覆盖全部外观的椅背露出量。重跑生成器时 `characters/*.png` 的哈希保持不变。
 
 ## W92b 实测尺寸总表
 
