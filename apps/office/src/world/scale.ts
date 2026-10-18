@@ -3,6 +3,7 @@ import type { OfficeLayout } from "@idesk/shared/office-layout";
 export type VisibleBounds = { left: number; top: number; right: number; bottom: number };
 
 export function requiredBounds(layout: OfficeLayout): VisibleBounds {
+  const clockMargin = 6;
   const seatIds = new Set([
     ...layout.zones.flatMap((zone) => zone.seats),
     ...layout.meeting.seats,
@@ -19,6 +20,14 @@ export function requiredBounds(layout: OfficeLayout): VisibleBounds {
     layout.meeting.workSpot,
     layout.reception.counter,
     layout.points.door,
+    {
+      x: layout.clock.x - layout.clock.r - clockMargin,
+      y: layout.clock.y - layout.clock.r - clockMargin,
+    },
+    {
+      x: layout.clock.x + layout.clock.r + clockMargin,
+      y: layout.clock.y + layout.clock.r + clockMargin,
+    },
   ];
   const polygons = layout.occluders
     .filter((item) => /^(zone-|meeting-|lounge-|reception-)/.test(item.id))
@@ -53,7 +62,7 @@ export function worldScale(
     const visible = viewport / scale;
     if (visible >= size) return (viewport - size * scale) / 2;
     const minimum = Math.max(0, Math.max(size * 0.94, far) - visible);
-    const maximum = Math.min(size * 0.06, near);
+    const maximum = Math.min(size - visible, size * 0.06, near);
     const start = Math.max(minimum, Math.min(maximum, (near + far - visible) / 2));
     return -start * scale;
   };
