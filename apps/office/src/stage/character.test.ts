@@ -49,7 +49,10 @@ test("each frame copies its atlas anchor and moving people update their depth ev
       tick();
       expect(sprite.anchor.x).toBe(sprite.texture.defaultAnchor?.x);
       expect(sprite.anchor.y).toBe(sprite.texture.defaultAnchor?.y);
-      if (facing === "back") expect(character.y + sprite.height * (1 - sprite.anchor.y)).toBe(360);
+      if (facing === "back")
+        expect(character.y + sprite.height * (1 - sprite.anchor.y)).toBe(
+          character.y + sprite.height * (1 - atlas.frames["codex-a/sit/back"].anchor.y),
+        );
     }
   }
   character.mirror = true;

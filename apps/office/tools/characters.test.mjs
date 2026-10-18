@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it, test } from "vitest";
-import { atlas, outfitIds } from "./character-atlases.mjs";
+import { atlas, outfitIds, sprites } from "./character-atlases.mjs";
+import { shoulderY } from "./character-shoulder.mjs";
 
 const kinds = outfitIds;
 const directions = ["down", "left", "right", "up"];
@@ -47,7 +48,12 @@ describe("v1 character atlas", () => {
     for (const seat of layout.seats) {
       const kind = seat.id === layout.reception.seat ? "receptionist" : "codex-a";
       const facing = seat.facing === "left" ? "right" : seat.facing;
-      const lift = facing === "back" ? 32 : facing === "down" ? -7 : 0;
+      const lift =
+        facing === "back"
+          ? shoulderY(sprites, atlas.frames[`${kind}/sit/back`].frame) - 24
+          : facing === "down"
+            ? -7
+            : 0;
       for (const pose of [`sit/${facing}`, `typing/${facing}/0`, `typing/${facing}/1`]) {
         const frame = atlas.frames[`${kind}/${pose}`];
         const bottomY = seat.y + (1 - frame.anchor.y) * frame.sourceSize.h;
@@ -55,12 +61,23 @@ describe("v1 character atlas", () => {
       }
     }
     for (const [name, frame] of Object.entries(atlas.frames)) {
-      const lift = name.includes("/back")
-        ? 32
-        : /^receptionist\/(sit\/down|typing\/down\/[01])$/.test(name)
-          ? -7
-          : 0;
+      if (name.includes("/back")) continue;
+      const lift = /^receptionist\/(sit\/down|typing\/down\/[01])$/.test(name) ? -7 : 0;
       expect(frame.anchor, name).toEqual({ x: 0.5, y: (96 + lift) / 96 });
+    }
+  });
+
+  it("shows every outfit's back shoulders 4–6px above the zone 1 chair", () => {
+    for (const kind of kinds.filter((id) => id !== "receptionist")) {
+      const sitting = atlas.frames[`${kind}/sit/back`];
+      const shoulder = shoulderY(sprites, sitting.frame);
+      if (kind === "codex-a") expect(shoulder).toBe(57);
+      const lift = sitting.sourceSize.h * (sitting.anchor.y - 1);
+      const exposed = 325 - (392 - sitting.sourceSize.h - lift + shoulder);
+      expect(exposed, kind).toBeGreaterThanOrEqual(4);
+      expect(exposed, kind).toBeLessThanOrEqual(6);
+      for (const pose of [`typing/back/0`, `typing/back/1`])
+        expect(atlas.frames[`${kind}/${pose}`].anchor, `${kind}/${pose}`).toEqual(sitting.anchor);
     }
   });
 

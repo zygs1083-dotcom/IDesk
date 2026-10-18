@@ -1508,8 +1508,8 @@
       "y": 170,
       "facing": "front",
       "workSpot": {
-        "x": 1346,
-        "y": 166
+        "x": 1324,
+        "y": 167
       }
     },
     {
@@ -1518,8 +1518,8 @@
       "y": 170,
       "facing": "front",
       "workSpot": {
-        "x": 1416,
-        "y": 166
+        "x": 1394,
+        "y": 167
       }
     },
     {
@@ -1528,8 +1528,8 @@
       "y": 170,
       "facing": "front",
       "workSpot": {
-        "x": 1486,
-        "y": 166
+        "x": 1507,
+        "y": 167
       },
       "mirror": true
     },
@@ -1539,7 +1539,7 @@
       "y": 300,
       "facing": "back",
       "workSpot": {
-        "x": 1308,
+        "x": 1307,
         "y": 175
       }
     },
@@ -1549,7 +1549,7 @@
       "y": 300,
       "facing": "back",
       "workSpot": {
-        "x": 1380,
+        "x": 1377,
         "y": 175
       }
     },
@@ -1604,7 +1604,7 @@
       "facing": "back",
       "zone": "zone-1",
       "workSpot": {
-        "x": 515,
+        "x": 512,
         "y": 321
       }
     },
@@ -1616,7 +1616,7 @@
       "mirror": true,
       "zone": "zone-1",
       "workSpot": {
-        "x": 741,
+        "x": 747,
         "y": 321
       }
     },
@@ -1627,7 +1627,7 @@
       "facing": "front",
       "zone": "zone-2",
       "workSpot": {
-        "x": 942,
+        "x": 944,
         "y": 232
       }
     },
@@ -1650,7 +1650,7 @@
       "facing": "back",
       "zone": "zone-2",
       "workSpot": {
-        "x": 873,
+        "x": 869,
         "y": 322
       }
     },
@@ -1661,7 +1661,7 @@
       "facing": "back",
       "zone": "zone-2",
       "workSpot": {
-        "x": 1094,
+        "x": 1097,
         "y": 321
       },
       "mirror": true
@@ -1696,7 +1696,7 @@
       "facing": "back",
       "zone": "zone-3",
       "workSpot": {
-        "x": 501,
+        "x": 500,
         "y": 631
       }
     },
@@ -1707,7 +1707,7 @@
       "facing": "back",
       "zone": "zone-3",
       "workSpot": {
-        "x": 734,
+        "x": 736,
         "y": 631
       },
       "mirror": true
@@ -1719,7 +1719,7 @@
       "facing": "front",
       "zone": "zone-4",
       "workSpot": {
-        "x": 941,
+        "x": 942,
         "y": 541
       }
     },
@@ -1742,7 +1742,7 @@
       "facing": "back",
       "zone": "zone-4",
       "workSpot": {
-        "x": 873,
+        "x": 871,
         "y": 631
       }
     },
@@ -1753,7 +1753,7 @@
       "facing": "back",
       "zone": "zone-4",
       "workSpot": {
-        "x": 1100,
+        "x": 1102,
         "y": 631
       },
       "mirror": true
@@ -1825,7 +1825,7 @@
       "meeting-front-right"
     ],
     "workSpot": {
-      "x": 1308,
+      "x": 1307,
       "y": 175
     }
   },

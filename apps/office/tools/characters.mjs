@@ -1,6 +1,7 @@
 import { mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { PNG } from "pngjs";
+import { shoulderY } from "./character-shoulder.mjs";
 import { bounds, resize } from "./image.mjs";
 import { spriteCells } from "./sprite-cells.mjs";
 
@@ -25,9 +26,6 @@ writeFileSync(
 );
 const anchors = {
   default: { x: 0.5, y: 1 },
-  "sit/back": { x: 0.5, y: (96 + 32) / 96 },
-  "typing/back/0": { x: 0.5, y: (96 + 32) / 96 },
-  "typing/back/1": { x: 0.5, y: (96 + 32) / 96 },
   "sit/down": { x: 0.5, y: (96 - 7) / 96 },
   "typing/down/0": { x: 0.5, y: (96 - 7) / 96 },
   "typing/down/1": { x: 0.5, y: (96 - 7) / 96 },
@@ -107,6 +105,11 @@ for (const kind of [...kinds, "receptionist"]) {
   for (const direction of directions) {
     const name = `${kind}/walk/${direction}`;
     animations[name] = [0, 1, 2, 3].map((frame) => `${name}/${frame}`);
+  }
+  if (kind !== "receptionist") {
+    const shoulder = shoulderY(atlas, frames[`${kind}/sit/back`].frame);
+    const anchor = { x: 0.5, y: (frameHeight + shoulder - 24) / frameHeight };
+    for (const pose of seated("back")) frames[pose].anchor = anchor;
   }
   for (const direction of ["right", ...supplementDirections]) {
     const name = `${kind}/typing/${direction}`;

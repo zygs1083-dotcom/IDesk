@@ -1,12 +1,12 @@
 import { PNG } from "pngjs";
 import { expect, test } from "vitest";
-import { atlas, sprites } from "./character-atlases.mjs";
+import { atlas, outfitIds, sprites } from "./character-atlases.mjs";
 import { readJson, readPng, root } from "./image.mjs";
 import { characterLayer, composite, occluderLayers } from "./seated-scene.mjs";
 
 const layout = readJson(`${root}public/layout.json`);
 const background = readPng(`${root}assets/raw/background.png`);
-const kinds = ["claude-code-a", "codex-a", "n8n-a", "script-a", "custom-a"];
+const kinds = outfitIds.filter((id) => id !== "receptionist");
 const visible = new Uint8Array(background.width * background.height);
 
 function silhouette(layer, value) {
