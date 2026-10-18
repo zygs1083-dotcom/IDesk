@@ -34,7 +34,9 @@ export function eventText(
       message: String(event.payload.message),
     });
   if (event.type === "relay.read")
-    return t("event.messageRead", { agent: agentName(event.agentId) });
+    return t("event.messageRead", {
+      agent: agentName(event.payload.reader === "human" ? "human" : event.agentId),
+    });
   if (event.type === "relay.sent") {
     const to = event.payload.to as RelayRecipient;
     return t("event.messageSent", {
@@ -101,6 +103,8 @@ function recipientText(
   agentName: (id: string | null) => string,
 ): string {
   switch (to.kind) {
+    case "human":
+      return agentName("human");
     case "agent":
       return agentName(to.id);
     case "capability":

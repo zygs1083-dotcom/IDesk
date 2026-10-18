@@ -29,8 +29,8 @@ export function ComposeRelay({
   const { lang, t } = useLang();
   const client = useQueryClient();
   const { agents, agentName } = useAgents();
-  const [recipient, setRecipient] = useState<Input["to"]["kind"]>(reply ? "agent" : "broadcast");
-  const [agentId, setAgentId] = useState(reply?.fromAgentId ?? "");
+  const [recipient, setRecipient] = useState<"agent" | "capability" | "broadcast">("broadcast");
+  const [agentId, setAgentId] = useState("");
   const [capability, setCapability] = useState("");
   const [kind, setKind] = useState<Input["kind"]>(reply ? "reply" : "note");
   const [subject, setSubject] = useState(
@@ -52,7 +52,7 @@ export function ComposeRelay({
   const receivers = agents.filter((agent) => agent.capabilities.includes(capability)).length;
   const valid =
     subject.trim() &&
-    (recipient === "broadcast" || (recipient === "agent" ? agentId : capability.trim()));
+    (reply || recipient === "broadcast" || (recipient === "agent" ? agentId : capability.trim()));
   return (
     <Dialog open onClose={onClose} title={reply ? t("relay.replyMessage") : t("relay.sendMessage")}>
       <form
@@ -66,7 +66,7 @@ export function ComposeRelay({
                 ? { kind: "capability", value: capability.trim() }
                 : { kind: "broadcast" };
           send.mutate({
-            to,
+            ...(reply ? {} : { to }),
             kind,
             subject: subject.trim(),
             body,
@@ -75,20 +75,22 @@ export function ComposeRelay({
           });
         }}
       >
-        <div className="space-y-2">
-          <p className="text-secondary text-text-2">{t("relay.recipient")}</p>
-          <Segmented
-            label={t("relay.recipient")}
-            value={recipient}
-            onChange={setRecipient}
-            options={[
-              { value: "agent", label: t("relay.specificAgent") },
-              { value: "capability", label: t("common.capabilities") },
-              { value: "broadcast", label: t("common.everyone") },
-            ]}
-          />
-        </div>
-        {recipient === "agent" && (
+        {!reply && (
+          <div className="space-y-2">
+            <p className="text-secondary text-text-2">{t("relay.recipient")}</p>
+            <Segmented
+              label={t("relay.recipient")}
+              value={recipient}
+              onChange={setRecipient}
+              options={[
+                { value: "agent", label: t("relay.specificAgent") },
+                { value: "capability", label: t("common.capabilities") },
+                { value: "broadcast", label: t("common.everyone") },
+              ]}
+            />
+          </div>
+        )}
+        {!reply && recipient === "agent" && (
           <label className="block space-y-2 text-secondary text-text-2">
             {t("nav.agents")}
             <select
@@ -105,7 +107,7 @@ export function ComposeRelay({
             </select>
           </label>
         )}
-        {recipient === "capability" && (
+        {!reply && recipient === "capability" && (
           <div className="space-y-2">
             <CapabilityPicker
               label={t("common.capabilities")}

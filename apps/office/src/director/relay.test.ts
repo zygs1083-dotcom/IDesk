@@ -19,3 +19,21 @@ test("a seated recipient looks up without switching to an unavailable frontal fr
   await vi.waitFor(() => expect(character.nod).toHaveBeenCalledWith(150, 1));
   expect(character.facing).toBe("back");
 });
+
+test("a human envelope lands at reception and the receptionist nods", async () => {
+  const { envelope } = await import("../stage/effects.ts");
+  const receptionist = { position: { x: 1, y: 2 }, nod: vi.fn(async () => {}) };
+  const cast = {
+    stage: {},
+    characters: new Map([
+      ["human", receptionist],
+      ["sender", { ...receptionist, position: { x: 40, y: 50 } }],
+    ]),
+    reception: { x: 10, y: 20 },
+    desk: () => undefined,
+    enqueue: async (_id: string, action: () => Promise<void>) => action(),
+  } as unknown as Cast;
+  relayAction(cast)({ kind: "relay", agentId: "sender", to: { kind: "human" } });
+  await vi.waitFor(() => expect(receptionist.nod).toHaveBeenCalledWith(150, 1));
+  expect(envelope).toHaveBeenCalledWith(cast.stage, { x: 40, y: 50 }, cast.reception);
+});

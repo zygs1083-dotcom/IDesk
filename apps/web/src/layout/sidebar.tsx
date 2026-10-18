@@ -18,6 +18,8 @@ import { logout } from "../lib/logout.ts";
 import { useAgents } from "../lib/use-agents.ts";
 import { useSession } from "../lib/use-session.ts";
 
+import { RelayBadge } from "../pages/relay/relay-badge.tsx";
+
 const otherLang: Record<Lang, Lang> = { zh: "en", en: "zh" };
 const languageClasses = {
   en: { en: "text-text", zh: "text-text-2" },
@@ -65,7 +67,6 @@ export function Sidebar() {
           <NavLink
             key={to}
             to={to}
-            aria-label={label}
             title={label}
             className={({ isActive }) =>
               cn(
@@ -75,7 +76,8 @@ export function Sidebar() {
             }
           >
             <Icon aria-hidden="true" size={16} strokeWidth={1.5} />
-            <span className="hidden sidebar:inline">{label}</span>
+            <span className="sr-only sidebar:not-sr-only">{label}</span>
+            {to === "/relay" && <RelayBadge />}
           </NavLink>
         ))}
         {meta?.office && (

@@ -11,6 +11,8 @@ type Agent = typeof agents.$inferSelect;
 
 function receives(agent: Agent, to: RelayRecipient): boolean {
   switch (to.kind) {
+    case "human":
+      return false;
     case "agent":
       return agent.id === to.id;
     case "capability":

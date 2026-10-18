@@ -172,3 +172,12 @@ html[data-skin="pixel"] {
     }
   }
 }
+
+html[data-skin="pixel"] [data-ui="relay-unread"],
+html[data-skin="pixel"] [data-ui="relay-pending"] {
+  border-radius: 0;
+  border: 2px solid var(--wood-text);
+  background: var(--wood-edge);
+  color: var(--wood-text);
+  box-shadow: 2px 2px 0 var(--wood);
+}

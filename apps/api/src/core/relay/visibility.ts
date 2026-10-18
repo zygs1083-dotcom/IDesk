@@ -22,7 +22,12 @@ export function inbox(viewer: Extract<Viewer, { kind: "agent" }>) {
 }
 
 export function visibility(viewer: Viewer, box: "inbox" | "sent" | "all" = "all") {
-  if (viewer.kind === "human") return undefined;
+  if (viewer.kind === "human")
+    return {
+      inbox: sql`json_extract(${relayMessages.to}, '$.kind') = 'human'`,
+      sent: eq(relayMessages.fromAgentId, "human"),
+      all: undefined,
+    }[box];
   return {
     inbox: inbox(viewer),
     sent: eq(relayMessages.fromAgentId, viewer.id),

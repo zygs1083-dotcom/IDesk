@@ -132,3 +132,10 @@ html[data-skin="cartoon"] {
     translate: none;
   }
 }
+
+html[data-skin="cartoon"] [data-ui="relay-unread"],
+html[data-skin="cartoon"] [data-ui="relay-pending"] {
+  border-color: var(--ink);
+  box-shadow: 1px 1px 0 var(--ink);
+  background: var(--surface-2);
+}

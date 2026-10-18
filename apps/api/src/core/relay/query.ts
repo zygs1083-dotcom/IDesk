@@ -34,13 +34,7 @@ export function listRelay(
 ) {
   const cursor = filters.before ? getRelay(filters.before, viewer) : undefined;
   const pattern = filters.q === undefined ? undefined : `%${filters.q.replace(/[\\%_]/g, "\\$&")}%`;
-  const answered = sql`exists (
-    with recursive ${visibleNodes(viewer)}, descendants(id, kind, sender) as (
-      select id, kind, from_agent_id from ${messages} descendants_seed where reply_to = ${messages.id}
-      union
-      select v.id, v.kind, v.from_agent_id from ${messages} v join descendants d on v.reply_to = d.id
-    ) select 1 from descendants where kind = 'reply' and sender != ${messages.fromAgentId} and id in (select id from visible)
-  )`;
+  const answered = answeredRequest(viewer);
   return db
     .select()
     .from(messages)
@@ -97,4 +91,26 @@ export function relayThread(id: string, viewer: Viewer) {
   )`)
     .orderBy(asc(messages.createdAt), asc(messages.id))
     .all();
+}
+
+function answeredRequest(viewer: Viewer) {
+  return sql`exists (
+    with recursive ${visibleNodes(viewer)}, descendants(id, kind, sender) as (
+      select id, kind, from_agent_id from ${messages} descendants_seed where reply_to = ${messages.id}
+      union
+      select v.id, v.kind, v.from_agent_id from ${messages} v join descendants d on v.reply_to = d.id
+    ) select 1 from descendants where kind = 'reply' and sender != ${messages.fromAgentId} and id in (select id from visible)
+  )`;
+}
+
+export function relaySummary(viewer: Viewer) {
+  const reader = viewer.kind === "human" ? "human" : viewer.id;
+  return db
+    .select({
+      unread: sql<number>`count(case when not exists (select 1 from json_each(${messages.readBy}) where value = ${reader}) then 1 end)`,
+      pendingRequests: sql<number>`count(case when ${messages.kind} = 'request' and not ${answeredRequest(viewer)} then 1 end)`,
+    })
+    .from(messages)
+    .where(visibility(viewer, "inbox"))
+    .get() as { unread: number; pendingRequests: number };
 }

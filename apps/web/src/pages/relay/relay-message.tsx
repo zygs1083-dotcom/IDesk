@@ -63,7 +63,11 @@ export function RelayMessage({
       <Markdown>{message.body}</Markdown>
       <p className="text-label text-text-2">
         {message.readBy.length > 0
-          ? t("relay.readBy", { agents: message.readBy.map(agentName).join(" · ") })
+          ? t("relay.readBy", {
+              agents: message.readBy
+                .map((id) => (id === "human" ? t("relay.me") : agentName(id)))
+                .join(" · "),
+            })
           : t("relay.unread")}
       </p>
     </article>

@@ -9,6 +9,8 @@ export function recipientLabel(
 ): string {
   const t = translator(lang);
   switch (to.kind) {
+    case "human":
+      return t("relay.me");
     case "agent":
       return agentName(to.id);
     case "capability":

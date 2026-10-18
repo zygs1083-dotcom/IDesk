@@ -1,13 +1,31 @@
 import type { OpenAPIHono } from "@hono/zod-openapi";
-import { relayMessageSchema, relayQuerySchema, sendRelaySchema } from "@idesk/shared/relay-schemas";
+import {
+  relayMessageSchema,
+  relayQuerySchema,
+  relaySummarySchema,
+  sendRelaySchema,
+} from "@idesk/shared/relay-schemas";
 import { idSchema } from "@idesk/shared/task-schemas";
 import { z } from "zod";
-import { getRelay, relayThread } from "../../core/relay/query.ts";
+import { getRelay, relaySummary, relayThread } from "../../core/relay/query.ts";
 import { listRelay, markRelayRead, sendRelay } from "../../core/relay/relay.ts";
 import { HttpError } from "../errors.ts";
-import { type AuthEnv, requireAgent } from "../middleware/auth.ts";
+import type { AuthEnv } from "../middleware/auth.ts";
 
 export function relayRoutes(app: OpenAPIHono<AuthEnv>) {
+  app.openapi(
+    {
+      method: "get",
+      path: "/api/v1/relay/summary",
+      responses: {
+        200: {
+          description: "Inbox counts",
+          content: { "application/json": { schema: relaySummarySchema } },
+        },
+      },
+    },
+    (c) => c.json(relaySummary(c.get("actor")), 200),
+  );
   for (const thread of [false, true]) {
     app.openapi(
       {
@@ -77,7 +95,6 @@ export function relayRoutes(app: OpenAPIHono<AuthEnv>) {
     {
       method: "post",
       path: "/api/v1/relay/{id}/read",
-      middleware: requireAgent,
       request: { params: idSchema },
       responses: {
         200: {
@@ -87,12 +104,7 @@ export function relayRoutes(app: OpenAPIHono<AuthEnv>) {
       },
     },
     (c) => {
-      const agent = c.get("agent");
-      const message = markRelayRead(c.req.valid("param").id, {
-        kind: "agent",
-        id: agent.id,
-        capabilities: agent.capabilities,
-      });
+      const message = markRelayRead(c.req.valid("param").id, c.get("actor"));
       if (!message) throw new HttpError(404, "relay.notFound");
       return c.json(message, 200);
     },

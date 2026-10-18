@@ -9,7 +9,10 @@ export function registerRelayTools(server: McpServer, agent: PublicAgent) {
   const actor = agentActor(agent);
   server.registerTool(
     "idesk_relay_send",
-    { description: "向指定智能体、某种能力或全体发送消息。", inputSchema: sendRelaySchema.shape },
+    {
+      description: "向指定智能体、某种能力、全体或人发送消息，回复时可省略收件对象。",
+      inputSchema: sendRelaySchema,
+    },
     (input) => toolResult(sendRelay(input, agent.id)),
   );
   server.registerTool(

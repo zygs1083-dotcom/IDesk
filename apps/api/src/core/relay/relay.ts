@@ -13,7 +13,7 @@ export { listRelay } from "./query.ts";
 export type RelayMessage = typeof relayMessages.$inferSelect;
 export type Viewer = Exclude<Actor, { kind: "system" }>;
 export type RelayInput = {
-  to: RelayRecipient;
+  to?: RelayRecipient;
   kind: RelayKind;
   subject: string;
   body?: string;
@@ -26,11 +26,7 @@ export function writeRelay(
   input: RelayInput,
   fromAgentId: string,
 ): { message: RelayMessage; event: Event } {
-  if (
-    input.to.kind === "agent" &&
-    !tx.select({ id: agents.id }).from(agents).where(eq(agents.id, input.to.id)).get()
-  )
-    throw new HttpError(404, "agent.notFound");
+  let to = input.to as RelayRecipient;
   if (
     input.taskId !== undefined &&
     !tx.select({ id: tasks.id }).from(tasks).where(eq(tasks.id, input.taskId)).get()
@@ -51,23 +47,34 @@ export function writeRelay(
               : undefined,
           );
     const parent = tx
-      .select({ id: relayMessages.id })
+      .select({ id: relayMessages.id, fromAgentId: relayMessages.fromAgentId })
       .from(relayMessages)
       .where(and(eq(relayMessages.id, input.replyTo), visible))
       .get();
     if (!parent) throw new HttpError(404, "relay.notFound");
+    to ??=
+      parent.fromAgentId === "human"
+        ? { kind: "human" }
+        : { kind: "agent", id: parent.fromAgentId };
   }
+  if (to.kind === "human" && fromAgentId === "human")
+    throw new HttpError(400, "relay.selfRecipient");
+  if (
+    to.kind === "agent" &&
+    !tx.select({ id: agents.id }).from(agents).where(eq(agents.id, to.id)).get()
+  )
+    throw new HttpError(404, "agent.notFound");
   const now = new Date();
   const message = tx
     .insert(relayMessages)
-    .values({ ...input, fromAgentId, createdAt: now })
+    .values({ ...input, to, fromAgentId, createdAt: now })
     .returning()
     .get();
   const event = recordEvent(tx, {
     type: "relay.sent",
     ...(input.taskId === undefined ? {} : { taskId: input.taskId }),
     ...(fromAgentId === "human" ? {} : { agentId: fromAgentId }),
-    payload: { messageId: message.id, to: input.to },
+    payload: { messageId: message.id, to },
   });
   return { message, event };
 }
@@ -78,27 +85,27 @@ export function sendRelay(input: RelayInput, fromAgentId: string): RelayMessage 
   return message;
 }
 
-export function markRelayRead(
-  id: string,
-  viewer: Extract<Viewer, { kind: "agent" }>,
-): RelayMessage | undefined {
+export function markRelayRead(id: string, viewer: Viewer): RelayMessage | undefined {
+  const reader = viewer.kind === "human" ? "human" : viewer.id;
   const { message, event } = db.transaction((tx) => {
     const message = tx
       .select()
       .from(relayMessages)
-      .where(and(eq(relayMessages.id, id), inbox(viewer)))
+      .where(and(eq(relayMessages.id, id), viewer.kind === "human" ? undefined : inbox(viewer)))
       .get();
-    if (!message || message.readBy.includes(viewer.id)) return { message };
+    if (viewer.kind === "human" && message && message.to.kind !== "human")
+      throw new HttpError(403, "relay.humanInboxOnly");
+    if (!message || message.readBy.includes(reader)) return { message };
     const updated = tx
       .update(relayMessages)
-      .set({ readBy: [...message.readBy, viewer.id] })
+      .set({ readBy: [...message.readBy, reader] })
       .where(eq(relayMessages.id, id))
       .returning()
       .get();
     const event = recordEvent(tx, {
       type: "relay.read",
-      agentId: viewer.id,
-      payload: { messageId: id },
+      ...(viewer.kind === "agent" ? { agentId: viewer.id } : {}),
+      payload: { messageId: id, ...(viewer.kind === "human" ? { reader: "human" } : {}) },
     });
     return { message: updated, event };
   });

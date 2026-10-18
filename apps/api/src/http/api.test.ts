@@ -63,7 +63,7 @@ test("login, signed cookies and bearer keys enforce authentication and roles", a
   expect(await forbidden.json()).toEqual({ error: "只有人可以操作" });
   expect((await request("/agents/me", cookie)).status).toBe(403);
   expect((await request("/agents/me/heartbeat", cookie, {})).status).toBe(403);
-  expect((await request("/relay/missing/read", cookie, {})).status).toBe(403);
+  expect((await request("/relay/missing/read", cookie, {})).status).toBe(404);
   const agents = await request("/agents", cookie);
   expect(await agents.text()).not.toContain("apiKeyHash");
 });
