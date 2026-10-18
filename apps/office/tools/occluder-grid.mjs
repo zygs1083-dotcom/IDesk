@@ -1,14 +1,12 @@
 import { resolve } from "node:path";
 import { inClearance, seatApproaches } from "@idesk/shared/office-clearance";
 import { parseOfficeLayout } from "@idesk/shared/office-layout";
-import { readJson, readPng, root, saveJson } from "./occluder-image.mjs";
+import { atlas, sprites } from "./character-atlases.mjs";
+import { readJson, root, saveJson } from "./occluder-image.mjs";
 import { walkingBounds } from "./walking-silhouette.mjs";
 
 const layout = parseOfficeLayout(readJson(`${root}public/layout.json`));
-const { clearance, ...silhouette } = walkingBounds(
-  readJson(`${root}public/characters.json`),
-  readPng(`${root}public/characters.png`),
-);
+const { clearance, ...silhouette } = walkingBounds(atlas, sprites);
 layout.grid.clearance = clearance;
 layout.grid.silhouette = silhouette;
 const approaches = seatApproaches(layout);

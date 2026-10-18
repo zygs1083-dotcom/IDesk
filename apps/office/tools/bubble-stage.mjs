@@ -1,6 +1,7 @@
 import { Character } from "../src/stage/character.ts";
 import { initialGlyphs, loadGlyphs } from "../src/stage/glyphs.ts";
 import { loadWorldAssets } from "../src/world/assets.ts";
+import { loadCharacters } from "../src/world/characters.ts";
 import { loadLayout } from "../src/world/layout.ts";
 import { cellCenter, walkableGrid } from "../src/world/path.ts";
 import { createStage } from "../src/world/stage.ts";
@@ -8,6 +9,7 @@ import { createStage } from "../src/world/stage.ts";
 export async function bubbleStage() {
   const layout = await loadLayout();
   const assets = await loadWorldAssets();
+  await loadCharacters(["codex-a", "claude-code-a", "custom-a"]);
   await loadGlyphs(initialGlyphs);
   document.body.style.cssText = "margin:0;width:100vw;height:100vh;overflow:hidden";
   const stage = await createStage(document.body, layout, assets);
@@ -21,7 +23,7 @@ export async function bubbleStage() {
     stage,
     people,
     edgeHeads() {
-      const frame = assets.sprites["codex/walk/down/0"];
+      const frame = assets.sprites["codex-a/walk/down/0"];
       const headHeight = frame.height * frame.defaultAnchor.y + 8;
       const heads = walkableGrid(layout).flatMap((row, y) =>
         row.flatMap((walkable, x) => {

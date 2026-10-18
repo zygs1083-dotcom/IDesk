@@ -1,3 +1,4 @@
+import { AGENT_KINDS } from "@idesk/shared/agent-schemas";
 import { useEffect, useRef } from "react";
 import type { Task } from "../director/events.ts";
 import { translator } from "../i18n/translate.ts";
@@ -5,8 +6,10 @@ import { Cards } from "../stage/card.ts";
 import { Character } from "../stage/character.ts";
 import { createDaylight } from "../stage/daylight.ts";
 import { initialGlyphs, loadGlyphs } from "../stage/glyphs.ts";
-import type { OfficeAgent, SpriteKind } from "../stage/textures.ts";
+import { assignOutfits } from "../stage/outfits.ts";
+import type { Agent, OfficeAgent } from "../stage/textures.ts";
 import { loadWorldAssets } from "./assets.ts";
+import { loadCharacters, loadOutfitIndex } from "./characters.ts";
 import { installDebug } from "./debug.ts";
 import { loadLayout } from "./layout.ts";
 import { workSpot } from "./places.ts";
@@ -55,7 +58,6 @@ export function WorldCheck() {
       observer.observe(host.current);
       const cards = new Cards(stage);
       const characters = new Map<string, Character>();
-      const kinds: SpriteKind[] = ["claude-code", "codex", "n8n", "script", "custom"];
       const targets = [
         ...layout.seats,
         ...layout.standing.map((point, index) => ({
@@ -64,11 +66,17 @@ export function WorldCheck() {
           zone: undefined,
         })),
       ];
+      const members = targets
+        .filter((seat) => seat.id !== layout.reception.seat)
+        .map((seat, index) => ({
+          id: seat.id,
+          kind: AGENT_KINDS[index % AGENT_KINDS.length] as Agent["kind"],
+        }));
+      const outfits = assignOutfits(members, await loadOutfitIndex());
+      await loadCharacters(outfits.values());
+      if (disposed) return;
       for (const [index, seat] of targets.entries()) {
-        const kind =
-          seat.id === layout.reception.seat
-            ? "receptionist"
-            : (kinds[index % kinds.length] as SpriteKind);
+        const kind = members.find((member) => member.id === seat.id)?.kind ?? "receptionist";
         const agent: OfficeAgent = {
           id: seat.id,
           kind,
@@ -80,7 +88,12 @@ export function WorldCheck() {
           createdAt: "",
           status: "online",
         };
-        const character = new Character(stage, agent, assets.sprites);
+        const character = new Character(
+          stage,
+          agent,
+          assets.sprites,
+          outfits.get(seat.id) ?? "receptionist",
+        );
         character.position.copyFrom(seat);
         character.facing = seat.facing;
         character.mirror = "mirror" in seat && seat.mirror === true;

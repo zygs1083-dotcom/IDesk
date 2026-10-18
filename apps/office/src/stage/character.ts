@@ -35,11 +35,12 @@ export class Character extends Container {
 
   constructor(
     private stage: Stage,
-    private agent: OfficeAgent,
+    agent: OfficeAgent,
     private frames: Record<string, Texture>,
+    public outfit = agent.kind === "receptionist" ? "receptionist" : `${agent.kind}-a`,
   ) {
     super();
-    const fallback = frames[`${agent.kind}/walk/down/0`];
+    const fallback = frames[`${this.outfit}/walk/down/0`];
     if (!fallback) throw new Error(`Missing sprite frames for ${agent.kind}`);
     this.sprite = new Sprite(fallback);
     this.sprite.anchor.copyFrom(fallback.defaultAnchor as Point);
@@ -107,8 +108,8 @@ export class Character extends Container {
         ? "sit"
         : this.state;
     const pose = characterPose(state, this.facing, this.elapsed, this.mirror);
-    const frame = this.frames[`${this.agent.kind}/${pose.frame}`];
-    if (!frame) throw new Error(`Missing frame: ${this.agent.kind}/${pose.frame}`);
+    const frame = this.frames[`${this.outfit}/${pose.frame}`];
+    if (!frame) throw new Error(`Missing frame: ${this.outfit}/${pose.frame}`);
     this.sprite.texture = frame;
     this.sprite.anchor.copyFrom(frame.defaultAnchor as Point);
     this.sprite.scale.set((pose.mirror ? -1 : 1) * this.bounce.x, this.bounce.y);

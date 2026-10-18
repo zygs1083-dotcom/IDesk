@@ -5,6 +5,7 @@ import { type ReplayControls, replay } from "./director/replay.ts";
 import { setTimeScale } from "./engine/tween.ts";
 import { useLang } from "./i18n/lang.tsx";
 import { initialGlyphs, loadGlyphs } from "./stage/glyphs.ts";
+import { Outfits } from "./ui/outfits.tsx";
 import { ProfileModal } from "./ui/profile-modal.tsx";
 import { ReceptionProfile } from "./ui/reception-profile.tsx";
 import { ReplayBar } from "./ui/replay-bar.tsx";
@@ -108,81 +109,83 @@ export function App() {
   const task =
     selection?.type === "task" ? tasks.find((item) => item.id === selection.id) : undefined;
   return (
-    <main className="office-frame" aria-label={t("office.label")}>
-      <TopBar
-        title={layout?.title ?? t("office.title")}
-        agents={agents}
-        tasks={tasks}
-        replaying={mode.mode === "replay"}
-        onReplay={enterReplay}
-      />
-      <section className="pixel-panel avatar-strip" aria-label={t("roster.duty")}>
-        <h2>{t("roster.duty")}</h2>
-        {agents
-          .filter((item) => seats.has(item.id) || standing.has(item.id))
-          .map((item) => (
-            <RosterItem key={item.id} agent={item} tasks={tasks} onSelect={selectAgent} />
-          ))}
-      </section>
-      <div className={`office-body${task ? " has-detail" : ""}`}>
-        {layout && (
-          <Roster
-            zones={layout.zones.slice(0, 2)}
-            agents={agents}
-            tasks={tasks}
-            seats={seats}
-            onSelect={selectAgent}
-          />
-        )}
-        <div className="stage-host" ref={host} />
-        {task ? (
-          <TaskPanel task={task} agents={agents} onClose={closePanel} />
-        ) : layout ? (
-          <Roster
-            standing={standing}
-            zones={layout.zones.slice(2)}
-            agents={agents}
-            tasks={tasks}
-            seats={seats}
-            onSelect={selectAgent}
-          />
-        ) : null}
-      </div>
-      {selection?.type === "agent" && selection.id === "human" && (
-        <ReceptionProfile onClose={closePanel} />
-      )}
-      {agent && (
-        <ProfileModal
-          key={agent.id}
-          agent={agent}
+    <Outfits agents={agents}>
+      <main className="office-frame" aria-label={t("office.label")}>
+        <TopBar
+          title={layout?.title ?? t("office.title")}
           agents={agents}
           tasks={tasks}
-          admin={admin}
-          onClose={closePanel}
+          replaying={mode.mode === "replay"}
+          onReplay={enterReplay}
         />
-      )}
-      {mode.mode === "replay" && (
-        <ReplayBar
-          start={controls.current.start}
-          end={controls.current.end}
-          at={at}
-          playing={playing}
-          speed={speed}
-          onSpeed={setSpeed}
-          onSeek={(at) => setMode({ mode: "replay", at })}
-          onPlay={() => {
-            if (at === controls.current.end)
-              setMode({ mode: "replay", at: controls.current.start });
-            setPlaying(!playing);
-          }}
-          onLive={() => setMode({ mode: "live" })}
-        />
-      )}
-      {(error || dataError) && (
-        <p className="office-error" role="alert">
-          {error || dataError}
-        </p>
-      )}
-    </main>
+        <section className="pixel-panel avatar-strip" aria-label={t("roster.duty")}>
+          <h2>{t("roster.duty")}</h2>
+          {agents
+            .filter((item) => seats.has(item.id) || standing.has(item.id))
+            .map((item) => (
+              <RosterItem key={item.id} agent={item} tasks={tasks} onSelect={selectAgent} />
+            ))}
+        </section>
+        <div className={`office-body${task ? " has-detail" : ""}`}>
+          {layout && (
+            <Roster
+              zones={layout.zones.slice(0, 2)}
+              agents={agents}
+              tasks={tasks}
+              seats={seats}
+              onSelect={selectAgent}
+            />
+          )}
+          <div className="stage-host" ref={host} />
+          {task ? (
+            <TaskPanel task={task} agents={agents} onClose={closePanel} />
+          ) : layout ? (
+            <Roster
+              standing={standing}
+              zones={layout.zones.slice(2)}
+              agents={agents}
+              tasks={tasks}
+              seats={seats}
+              onSelect={selectAgent}
+            />
+          ) : null}
+        </div>
+        {selection?.type === "agent" && selection.id === "human" && (
+          <ReceptionProfile onClose={closePanel} />
+        )}
+        {agent && (
+          <ProfileModal
+            key={agent.id}
+            agent={agent}
+            agents={agents}
+            tasks={tasks}
+            admin={admin}
+            onClose={closePanel}
+          />
+        )}
+        {mode.mode === "replay" && (
+          <ReplayBar
+            start={controls.current.start}
+            end={controls.current.end}
+            at={at}
+            playing={playing}
+            speed={speed}
+            onSpeed={setSpeed}
+            onSeek={(at) => setMode({ mode: "replay", at })}
+            onPlay={() => {
+              if (at === controls.current.end)
+                setMode({ mode: "replay", at: controls.current.start });
+              setPlaying(!playing);
+            }}
+            onLive={() => setMode({ mode: "live" })}
+          />
+        )}
+        {(error || dataError) && (
+          <p className="office-error" role="alert">
+            {error || dataError}
+          </p>
+        )}
+      </main>
+    </Outfits>
   );
 }

@@ -1,17 +1,28 @@
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { PNG } from "pngjs";
 import { bounds, resize } from "./image.mjs";
 import { spriteCells } from "./sprite-cells.mjs";
 
-const kinds = ["claude-code", "codex", "n8n", "script", "custom", "receptionist"];
 const directions = ["down", "left", "right", "up"];
 const root = fileURLToPath(new URL("../", import.meta.url));
 const frameWidth = 64;
 const frameHeight = 96;
-const atlas = new PNG({ width: frameWidth * 25, height: frameHeight * kinds.length });
-const frames = {};
-const animations = {};
+const kinds = readdirSync(`${root}assets/raw`)
+  .filter((name) => /-[abc]\.png$/.test(name))
+  .map((name) => name.slice(0, -4))
+  .sort();
+const index = {};
+for (const id of kinds) {
+  const kind = id.slice(0, -2);
+  index[kind] ??= [];
+  index[kind].push(id.slice(-1));
+}
+mkdirSync(`${root}public/characters`, { recursive: true });
+writeFileSync(
+  `${root}public/characters/index.json`,
+  `${JSON.stringify(index, null, 2).replace(/\[\n[^\]]+\]/g, (array) => JSON.stringify(JSON.parse(array)).replaceAll(",", ", "))}\n`,
+);
 const anchors = {
   default: { x: 0.5, y: 1 },
   "sit/back": { x: 0.5, y: (96 + 32) / 96 },
@@ -25,7 +36,10 @@ const anchors = {
   "typing/right/1": { x: 0.5, y: 1 },
 };
 
-for (const [kindIndex, kind] of kinds.entries()) {
+for (const kind of [...kinds, "receptionist"]) {
+  const atlas = new PNG({ width: frameWidth * 25, height: frameHeight });
+  const frames = {};
+  const animations = {};
   const walking = directions.flatMap((direction) =>
     [0, 1, 2, 3].map((frame) => `${kind}/walk/${direction}/${frame}`),
   );
@@ -66,7 +80,7 @@ for (const [kindIndex, kind] of kinds.entries()) {
       commonHeight - box.height,
     );
     const atlasX = index * frameWidth;
-    const atlasY = kindIndex * frameHeight;
+    const atlasY = 0;
     const offsetX = Math.floor((frameWidth - scaledWidth) / 2);
     const scaled = resize(common, scaledWidth, scaledHeight);
     // 缩小可能漏掉窄脚尖，再固定实际不透明底边，不改变共用缩放比例。
@@ -98,28 +112,27 @@ for (const [kindIndex, kind] of kinds.entries()) {
     const name = `${kind}/typing/${direction}`;
     animations[name] = [0, 1].map((frame) => `${name}/${frame}`);
   }
-}
 
-mkdirSync(`${root}public`, { recursive: true });
-writeFileSync(`${root}public/characters.png`, PNG.sync.write(atlas));
-writeFileSync(
-  `${root}public/characters.json`,
-  `${JSON.stringify(
-    {
-      frames,
-      animations,
-      meta: {
-        image: "characters.png",
-        format: "RGBA8888",
-        size: { w: atlas.width, h: atlas.height },
-        scale: "1",
+  writeFileSync(`${root}public/characters/${kind}.png`, PNG.sync.write(atlas));
+  writeFileSync(
+    `${root}public/characters/${kind}.json`,
+    `${JSON.stringify(
+      {
+        frames,
+        animations,
+        meta: {
+          image: `${kind}.png`,
+          format: "RGBA8888",
+          size: { w: atlas.width, h: atlas.height },
+          scale: "1",
+        },
       },
-    },
-    null,
-    2,
-  ).replace(/\[\n(?:\s*"[^"\n]+",?\n)+\s*\]/g, (array, offset, json) => {
-    const compact = JSON.stringify(JSON.parse(array)).replaceAll(",", ", ");
-    const prefix = json.slice(json.lastIndexOf("\n", offset) + 1, offset);
-    return prefix.length + compact.length + 1 <= 100 ? compact : array;
-  })}\n`,
-);
+      null,
+      2,
+    ).replace(/\[\n(?:\s*"[^"\n]+",?\n)+\s*\]/g, (array, offset, json) => {
+      const compact = JSON.stringify(JSON.parse(array)).replaceAll(",", ", ");
+      const prefix = json.slice(json.lastIndexOf("\n", offset) + 1, offset);
+      return prefix.length + compact.length + 1 <= 100 ? compact : array;
+    })}\n`,
+  );
+}

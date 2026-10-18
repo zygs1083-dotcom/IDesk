@@ -4,15 +4,15 @@ import { expect, test, vi } from "vitest";
 import { Cast } from "../src/director/cast.ts";
 import { Character } from "../src/stage/character.ts";
 import { bodiesIntersect } from "../src/world/stops.ts";
-import { readJson, readPng, root } from "./image.mjs";
+import { atlas, sprites } from "./character-atlases.mjs";
+import { readJson, root } from "./image.mjs";
 import { walkingBounds } from "./walking-silhouette.mjs";
 
 vi.hoisted(() => vi.stubGlobal("matchMedia", () => ({ matches: false })));
 vi.mock("../src/stage/glyphs.ts", () => ({ setGlyphText: async () => {} }));
 
 const layout = parseOfficeLayout(readJson(`${root}public/layout.json`));
-const atlas = readJson(`${root}public/characters.json`);
-const { clearance, ...body } = walkingBounds(atlas, readPng(`${root}public/characters.png`));
+const { clearance, ...body } = walkingBounds(atlas, sprites);
 
 function corridor(axis = "horizontal") {
   const updates = new Set();

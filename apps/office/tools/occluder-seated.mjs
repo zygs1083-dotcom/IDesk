@@ -1,5 +1,6 @@
 import { resolve } from "node:path";
 import { parseOfficeLayout } from "@idesk/shared/office-layout";
+import { atlas as combinedAtlas, sprites as combinedSprites } from "./character-atlases.mjs";
 import { enlargeCrop, readJson, readPng, root, savePng } from "./occluder-image.mjs";
 
 import { characterLayer, composite, occluderLayers } from "./seated-scene.mjs";
@@ -15,12 +16,12 @@ if (!output)
   );
 const layout = parseOfficeLayout(readJson(`${root}public/layout.json`));
 const background = readPng(`${root}assets/raw/background.png`);
-const sprites = readPng(spritesPng ?? `${root}public/characters.png`);
-const atlas = readJson(spritesJson ?? `${root}public/characters.json`);
+const sprites = spritesPng ? readPng(spritesPng) : combinedSprites;
+const atlas = spritesJson ? readJson(spritesJson) : combinedAtlas;
 const layers = occluderLayers(layout, background);
 const actors = walking ? [{ id: "plant-probe", x: 104, y: 408, facing: "down" }] : layout.seats;
 for (const seat of actors) {
-  const kind = seat.id === layout.reception?.seat ? "receptionist" : "codex";
+  const kind = seat.id === layout.reception?.seat ? "receptionist" : "codex-a";
   const facing = seat.facing === "left" ? "right" : seat.facing;
   const pose = walking
     ? "walk/down/0"

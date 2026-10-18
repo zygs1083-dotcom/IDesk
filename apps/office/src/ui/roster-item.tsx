@@ -22,7 +22,7 @@ export function RosterItem({
       aria-label={description}
       title={description}
     >
-      <Avatar kind={agent.kind} />
+      <Avatar id={agent.id} />
       <span className="roster-copy">
         <strong>{agent.name}</strong>
         <span>{status}</span>

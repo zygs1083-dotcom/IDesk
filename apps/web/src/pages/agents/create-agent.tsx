@@ -1,4 +1,5 @@
 import {
+  AGENT_KIND_LABELS,
   AGENT_KINDS,
   type registerAgentSchema,
   type registeredAgentSchema,
@@ -112,7 +113,7 @@ export function CreateAgent({ agent, onClose }: { agent?: Agent; onClose: () => 
             onChange={(event) => setName(event.target.value)}
           />
           {agent ? (
-            <Field label={t("common.type")} value={kind} readOnly />
+            <Field label={t("common.type")} value={AGENT_KIND_LABELS[kind]} readOnly />
           ) : (
             <label className="block space-y-2 text-secondary text-text-2">
               {t("common.type")}
@@ -122,7 +123,9 @@ export function CreateAgent({ agent, onClose }: { agent?: Agent; onClose: () => 
                 onChange={(event) => setKind(event.target.value as typeof kind)}
               >
                 {AGENT_KINDS.map((value) => (
-                  <option key={value}>{value}</option>
+                  <option key={value} value={value}>
+                    {AGENT_KIND_LABELS[value]}
+                  </option>
                 ))}
               </select>
             </label>

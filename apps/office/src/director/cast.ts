@@ -1,6 +1,8 @@
 import type { Texture } from "pixi.js";
 import { Character, type CharacterState } from "../stage/character.ts";
+import { assignOutfits } from "../stage/outfits.ts";
 import type { Agent, OfficeAgent } from "../stage/textures.ts";
+import { loadCharacters, loadOutfitIndex } from "../world/characters.ts";
 import { cellOf, findPath } from "../world/path.ts";
 import {
   assignSeats,
@@ -54,19 +56,30 @@ export class Cast {
     this.present.add(human.id);
   }
 
-  update(agents: Agent[], initial = false) {
+  async update(agents: Agent[], initial = false) {
+    const outfits = assignOutfits(agents, await loadOutfitIndex());
+    await loadCharacters(outfits.values());
+    if (this.stage.world.destroyed) return;
+    for (const id of this.agents.keys()) {
+      if (id === "human" || agents.some((agent) => agent.id === id)) continue;
+      this.characters.get(id)?.destroy({ children: true });
+      this.characters.delete(id);
+      this.agents.delete(id);
+      this.present.delete(id);
+    }
     for (const agent of agents) this.agents.set(agent.id, agent);
-    const members = [...this.agents.values()].filter((agent) => agent.id !== "human");
-    this.seats = assignSeats(members, this.stage.layout);
-    this.standing = assignStanding(members, this.seats, this.stage.layout);
+    this.seats = assignSeats(agents, this.stage.layout);
+    this.standing = assignStanding(agents, this.seats, this.stage.layout);
     this.seats = new Map([...this.seats, ...this.standing]);
     this.seats.set("human", this.reception);
     let arrivals = 0;
     for (const agent of agents) {
       if (!this.seats.has(agent.id)) continue;
-      if (!this.characters.has(agent.id)) this.add(agent);
+      const outfit = outfits.get(agent.id);
+      if (!outfit) continue;
+      const character = this.characters.get(agent.id) ?? this.add(agent, outfit);
+      character.outfit = outfit;
       if (initial) {
-        const character = this.characters.get(agent.id);
         const seat = this.seats.get(agent.id);
         if (character && seat)
           this.place(agent.id, seat, agent.status === "online" ? "sit" : "away");
@@ -101,12 +114,13 @@ export class Cast {
     });
   }
 
-  private add(agent: OfficeAgent) {
-    const character = new Character(this.stage, agent, this.frames);
+  private add(agent: OfficeAgent, outfit?: string) {
+    const character = new Character(this.stage, agent, this.frames, outfit);
     character.position.copyFrom(this.stage.layout.points.door);
     character.setState("away");
     this.characters.set(agent.id, character);
     this.stage.objects.addChild(character);
+    return character;
   }
 
   arrive(id: string, delay = 0) {

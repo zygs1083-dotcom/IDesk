@@ -1,40 +1,35 @@
-import { useEffect, useRef } from "react";
-import atlas from "../../public/characters.json";
+import type { Texture } from "pixi.js";
+import { useContext, useEffect, useRef } from "react";
 import { useLang } from "../i18n/lang.tsx";
-import { officeUrl } from "../office-url.ts";
-import type { SpriteKind } from "../stage/textures.ts";
+import { characterFrames, characterSheets } from "../world/characters.ts";
+import { OutfitContext } from "./outfits.tsx";
 
-const spriteImage = new Image();
-spriteImage.src = officeUrl("characters.png");
-
-export function Avatar({ kind, fullFrame = false }: { kind: SpriteKind; fullFrame?: boolean }) {
+export function Avatar({ id, fullFrame = false }: { id: string; fullFrame?: boolean }) {
+  const kind = useContext(OutfitContext).get(id);
   const { t } = useLang();
   const canvas = useRef<HTMLCanvasElement>(null);
   useEffect(() => {
-    let disposed = false;
-    void spriteImage.decode().then(() => {
-      if (disposed) return;
-      const context = canvas.current?.getContext("2d");
-      if (!context) return;
-      const frame = atlas.frames[`${kind}/walk/down/0`].frame;
-      context.imageSmoothingEnabled = false;
-      context.clearRect(0, 0, fullFrame ? 192 : 128, fullFrame ? 288 : 96);
-      context.drawImage(
-        spriteImage,
-        frame.x,
-        frame.y,
-        frame.w,
-        fullFrame ? frame.h : 48,
-        0,
-        0,
-        fullFrame ? 192 : 128,
-        fullFrame ? 288 : 96,
-      );
-    });
-    return () => {
-      disposed = true;
-    };
+    if (!kind) return;
+    const sheet = characterSheets.get(kind);
+    if (!sheet) return;
+    const context = canvas.current?.getContext("2d");
+    if (!context) return;
+    const frame = (characterFrames[`${kind}/walk/down/0`] as Texture).frame;
+    context.imageSmoothingEnabled = false;
+    context.clearRect(0, 0, fullFrame ? 192 : 128, fullFrame ? 288 : 96);
+    context.drawImage(
+      sheet.textureSource.resource as CanvasImageSource,
+      frame.x,
+      frame.y,
+      frame.width,
+      fullFrame ? frame.height : 48,
+      0,
+      0,
+      fullFrame ? 192 : 128,
+      fullFrame ? 288 : 96,
+    );
   }, [kind, fullFrame]);
+  if (!kind) return null;
   return (
     <canvas
       ref={canvas}

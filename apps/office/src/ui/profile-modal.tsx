@@ -1,3 +1,4 @@
+import { AGENT_KIND_LABELS } from "@idesk/shared/agent-schemas";
 import { useEffect, useRef, useState } from "react";
 import { useLang } from "../i18n/lang.tsx";
 import { Avatar } from "./avatar.tsx";
@@ -64,12 +65,12 @@ export function ProfileModal({
           {notice}
         </p>
         <div className="profile-identity">
-          <Avatar kind={agent.kind} fullFrame />
+          <Avatar id={agent.id} fullFrame />
           <div>
             <h3>{agent.name}</h3>
             <dl>
               <dt>{t("panel.type")}</dt>
-              <dd>{agent.kind}</dd>
+              <dd>{AGENT_KIND_LABELS[agent.kind]}</dd>
               <dt>{t("panel.host")}</dt>
               <dd>{agent.host}</dd>
               <dt>{t("common.capabilities")}</dt>

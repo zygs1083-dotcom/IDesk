@@ -56,7 +56,8 @@ export async function direct(stage: Stage, t: Translate) {
       if (stage.world.destroyed) return;
       if (event.agentId) {
         if (!cast.agents.has(event.agentId))
-          cast.update(z.array(publicAgentSchema).parse(await request("/agents")));
+          await cast.update(z.array(publicAgentSchema).parse(await request("/agents")));
+        if (stage.world.destroyed) return;
         cast.arrive(event.agentId);
         syncIdle();
       }
@@ -77,7 +78,8 @@ export async function direct(stage: Stage, t: Translate) {
   const timer = setInterval(async () => {
     const agents = z.array(publicAgentSchema).parse(await request("/agents"));
     if (stage.world.destroyed) return;
-    cast.update(agents);
+    await cast.update(agents);
+    if (stage.world.destroyed) return;
     syncIdle();
     checkLeases();
   }, PRESENCE_MS);
@@ -98,7 +100,8 @@ export async function initialize(stage: Stage, t: Translate) {
   if (stage.world.destroyed) return;
   const cast = new Cast(stage, stage.assets.sprites, t("reception.name"));
   createDaylight(stage, cast.characters);
-  cast.update(agents, true);
+  await cast.update(agents, true);
+  if (stage.world.destroyed) return;
   const cards = new Cards(stage);
   const snapshot = new Map(tasks.map((task) => [task.id, task]));
   const actions = createActions(cast, cards);

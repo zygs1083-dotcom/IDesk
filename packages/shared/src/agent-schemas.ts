@@ -1,7 +1,28 @@
 import { z } from "zod";
 import { capabilitiesSchema } from "./capabilities.ts";
 
-export const AGENT_KINDS = ["claude-code", "codex", "n8n", "script", "custom"] as const;
+export const AGENT_KINDS = [
+  "claude-code",
+  "codex",
+  "gemini",
+  "opencode",
+  "droid",
+  "cursor",
+  "n8n",
+  "script",
+  "custom",
+] as const;
+export const AGENT_KIND_LABELS: Record<(typeof AGENT_KINDS)[number], string> = {
+  "claude-code": "claude-code",
+  codex: "codex",
+  gemini: "Gemini",
+  opencode: "OpenCode",
+  droid: "Droid",
+  cursor: "Cursor",
+  n8n: "n8n",
+  script: "script",
+  custom: "custom",
+};
 export const registerAgentSchema = z.object({
   name: z.string().min(1),
   kind: z.enum(AGENT_KINDS),
