@@ -247,6 +247,7 @@ GET/POST/PATCH/DELETE /schedules                POST /schedules/:id/run
 GET/POST/PATCH/DELETE /connectors               POST /connectors/test   POST /connectors/:id/poll
 GET    /automation/jobs?connectorId=            GET /automation/jobs/:id/runs
 GET    /automation/runs?connectorId=            该连接器全部 run（一次 join），每条带 jobName，给自动化看板分列用
+PATCH  /automation/runs/:id { hidden }          管理员隐藏或取消隐藏一条已结束的 run（§12.29）
 GET    /plugins                                 每项带 configSchema（z.toJSONSchema 的结果），前端据此生成连接器配置表单；只支持顶层 string/number/boolean
 POST   /plugins/:id/enable|disable|reload
 PATCH  /plugins/:id { config }                  插件级配置（§12.1）；每项的 config 出 API 时按连接器同样的规则掩码
@@ -634,3 +635,11 @@ completedAt: <ISO>
 - 新增 kind：`gemini`、`opencode`、`droid`、`cursor`，显示名分别为 Gemini、OpenCode、Droid、Cursor，中英相同。主网页智能体的新建与编辑、筛选和显示同步支持；已有数据不迁移，kind 仍然不可修改。
 - 每种 kind 有三套外观 `a`、`b`、`c`。`a` 是该 kind 的标准形象，原有五种的 `a` 就是现在的图。`b`、`c` 保留该 kind 的标志服装和主色，只换发型、发色、肤色或一件小配饰，保证同类一眼认得出、彼此又分得清。外观设计见 OFFICE §5 的表。
 - 外观分配：办公室把智能体按 kind 分组，组内按 id（ULID，也就是创建顺序）排序，第 n 个（从 0 起）使用该 kind 可用外观列表里的第 `n % 列表长度` 个。可用外观是素材清单里实际存在的外观，按 a、b、c 排序；某个 kind 还没有任何外观时，借用 `custom` 的列表。删除智能体可能让同类排在后面的人换外观，这一点可以接受。不加数据库字段，不提供让用户选择外观的入口。名单头像、档案弹窗和画布使用同一套外观。
+
+### 12.29 自动化看板只看当天与手动隐藏（W93）
+
+- `automation_runs` 加 `hidden_at` 列（timestamp_ms，可空），迁移 `0007`。`ExternalRun` 不含这个字段，轮询 upsert 的 `set` 不写它，所以重新采集不会把隐藏的 run 放回来；每个工作流保留 50 条的裁剪照旧，被裁掉的隐藏记录随之删除。外部系统重跑产生的新 run 是新记录，照常显示。
+- `GET /automation/runs` 每条多带 `hiddenAt`（ISO 或 null），仍返回全部，筛选在前端做。
+- `PATCH /automation/runs/:id { hidden: boolean }`：只有管理员（viewer 和 Agent key 403）；run 不存在 404；只允许 `success`、`failed`、`canceled` 三种终态，`waiting`、`running` 返回 409 `automation.runNotFinished`。`true` 写当前时间，`false` 清空；重复设置同一个值直接返回 200，不改时间。返回更新后的 run（带 jobName、jobGroup）。不写事件，前端成功后失效 `["automation"]`，其他打开的页面在下一次 `connector.polled` 时刷新。
+- 「当天」按浏览器本地日期：run 的 `finishedAt`，没有就用 `startedAt`，落在今天 0 点之后算当天，两者都没有的不算。页面每 30 秒的时钟跨过 0 点时自动换天。
+- 不做：自动删除数据库里的 run、按工作流整体隐藏、隐藏待执行列的下一次计划、给隐藏写活动记录。
