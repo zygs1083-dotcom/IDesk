@@ -55,3 +55,14 @@ test.each([
     expect(y + sceneHeight).toBeGreaterThanOrEqual(height - 0.001);
   }
 });
+
+test("keeps an oversized scene flush when key areas are off-center", () => {
+  const { scale, x } = worldScale(200, 101, 200, 100, {
+    left: 100,
+    top: 40,
+    right: 180,
+    bottom: 60,
+  });
+  expect(x).toBeLessThanOrEqual(0);
+  expect(x + 200 * scale).toBeGreaterThanOrEqual(200);
+});
