@@ -1,6 +1,6 @@
 import { Container, Rectangle, type Sprite, Texture } from "pixi.js";
 import { expect, test, vi } from "vitest";
-import atlas from "../../public/characters.json";
+import atlas from "../../public/characters/codex-a.json";
 import { zIndexOf } from "../world/sort.ts";
 import type { Stage } from "../world/stage.ts";
 import { Character } from "./character.ts";

@@ -1,8 +1,8 @@
 import { readFileSync } from "node:fs";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, test } from "vitest";
+import { atlas, outfitIds } from "./character-atlases.mjs";
 
-const atlas = JSON.parse(readFileSync(new URL("../public/characters.json", import.meta.url)));
-const kinds = ["claude-code", "codex", "n8n", "script", "custom", "receptionist"];
+const kinds = outfitIds;
 const directions = ["down", "left", "right", "up"];
 
 describe("v1 character atlas", () => {
@@ -45,7 +45,7 @@ describe("v1 character atlas", () => {
   it("draws seated bottoms at the measured lift above their world seat coordinates", () => {
     const layout = JSON.parse(readFileSync(new URL("../public/layout.json", import.meta.url)));
     for (const seat of layout.seats) {
-      const kind = seat.id === layout.reception.seat ? "receptionist" : "codex";
+      const kind = seat.id === layout.reception.seat ? "receptionist" : "codex-a";
       const facing = seat.facing === "left" ? "right" : seat.facing;
       const lift = facing === "back" ? 32 : facing === "down" ? -7 : 0;
       for (const pose of [`sit/${facing}`, `typing/${facing}/0`, `typing/${facing}/1`]) {
@@ -74,4 +74,12 @@ describe("v1 character atlas", () => {
     for (const name of Object.values(atlas.animations).flat())
       expect(atlas.frames).toHaveProperty(name);
   });
+});
+
+test("each outfit PNG fits the transfer budget", () => {
+  for (const id of outfitIds) {
+    expect(
+      readFileSync(new URL(`../public/characters/${id}.png`, import.meta.url)).length,
+    ).toBeLessThanOrEqual(250 * 1024);
+  }
 });

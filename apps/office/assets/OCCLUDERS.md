@@ -58,7 +58,7 @@ zone-1 木牌框外沿约 x572–696、y151–194；米白内区取 (579,159,110
 
 ## 合成图的角色锚点
 
-合成工具直接读取 `characters.json` 每帧的 `anchor`，贴图左上角 = 座位点 − 帧尺寸 × anchor；镜像时同时镜像横向锚点。排序始终使用座位 y。姿势锚点的数值和量法只维护在 [PROMPTS-seated.md](PROMPTS-seated.md)，本文件不再维护一份姿势偏移表。
+合成工具直接读取 `characters/<kind>-<外观>.json` 每帧的 `anchor`，贴图左上角 = 座位点 − 帧尺寸 × anchor；镜像时同时镜像横向锚点。排序始终使用座位 y。姿势锚点的数值和量法只维护在 [PROMPTS-seated.md](PROMPTS-seated.md)，本文件不再维护一份姿势偏移表。
 
 ## W73c：前台、会议室、休息区与通行图
 

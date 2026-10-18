@@ -1,3 +1,4 @@
+import { AGENT_KIND_LABELS, AGENT_KINDS } from "@idesk/shared/agent-schemas";
 import { Fragment, useState } from "react";
 import { Button } from "../../components/button.tsx";
 import { Menu } from "../../components/menu.tsx";
@@ -18,6 +19,7 @@ export function AgentsPage() {
   const { isAdmin } = useSession();
   const { lang, t } = useLang();
   const { agents, error, isPending } = useAgents();
+  const [kind, setKind] = useState("");
   const [rotating, setRotating] = useState<Agent | null>(null);
   const [expanded, setExpanded] = useState<string | null>(null);
   const [editing, setEditing] = useState<Agent | null>(null);
@@ -33,6 +35,21 @@ export function AgentsPage() {
           {t("common.create")}
         </Button>
       </PageHeader>
+      <label className="flex items-center gap-2 text-secondary text-text-2">
+        {t("common.type")}
+        <select
+          className="rounded-control border border-line bg-surface-2 px-3 py-2 text-body text-text"
+          value={kind}
+          onChange={(event) => setKind(event.target.value)}
+        >
+          <option value="">{t("common.all")}</option>
+          {AGENT_KINDS.map((value) => (
+            <option key={value} value={value}>
+              {AGENT_KIND_LABELS[value]}
+            </option>
+          ))}
+        </select>
+      </label>
       {error && (
         <p role="alert" className="text-secondary text-status-failed">
           {error.message}
@@ -67,74 +84,76 @@ export function AgentsPage() {
                 </tr>
               </thead>
               <tbody>
-                {agents.map((agent) => (
-                  <Fragment key={agent.id}>
-                    <tr
-                      className="group h-10 cursor-pointer border-b border-line last:border-b-0 hover:bg-surface-2"
-                      onClick={() => setExpanded(expanded === agent.id ? null : agent.id)}
-                    >
-                      <td className="px-1 py-0">
-                        <Button
-                          aria-expanded={expanded === agent.id}
-                          className="justify-start gap-2 whitespace-nowrap border-0 text-body group-hover:bg-surface-2"
-                        >
-                          <span
-                            title={
-                              agent.status === "online" ? t("common.online") : t("common.offline")
-                            }
-                            className={cn(
-                              "size-2 shrink-0 rounded-full",
-                              agent.status === "online" ? "bg-status-done" : "bg-status-open",
-                            )}
-                          />
-                          {agent.name}
-                        </Button>
-                      </td>
-                      <td className="px-4 py-2 text-text-2">{agent.kind}</td>
-                      <td className="px-4 py-2">{agent.host || "—"}</td>
-                      <td className="px-4 py-2 text-text-2">
-                        {agent.capabilities.join(" · ") || "—"}
-                      </td>
-                      <td className="whitespace-nowrap px-4 py-2 tabular-nums text-text-2">
-                        {agent.lastSeenAt ? relativeTime(new Date(agent.lastSeenAt), lang) : "—"}
-                      </td>
-                      <td className="px-4 py-2 text-text-2">
-                        <span
-                          className="block max-w-40 truncate"
-                          title={agent.webhookUrl ? t("common.secretConfigured") : undefined}
-                        >
-                          {agent.webhookUrl ? t("common.secretConfigured") : "—"}
-                        </span>
-                      </td>
-                      <td
-                        className="px-2 py-0"
-                        onClick={(event) => event.stopPropagation()}
-                        onKeyDown={(event) => event.stopPropagation()}
+                {agents
+                  .filter((agent) => !kind || agent.kind === kind)
+                  .map((agent) => (
+                    <Fragment key={agent.id}>
+                      <tr
+                        className="group h-10 cursor-pointer border-b border-line last:border-b-0 hover:bg-surface-2"
+                        onClick={() => setExpanded(expanded === agent.id ? null : agent.id)}
                       >
-                        <Menu
-                          disabled={!isAdmin}
-                          label={t("common.actionsFor", { name: agent.name })}
-                          items={[
-                            { label: t("agents.rotateKey"), onSelect: () => setRotating(agent) },
-                            { label: t("common.edit"), onSelect: () => setEditing(agent) },
-                            {
-                              label: t("common.delete"),
-                              danger: true,
-                              onSelect: () => setDeleting(agent),
-                            },
-                          ]}
-                        />
-                      </td>
-                    </tr>
-                    {expanded === agent.id && (
-                      <tr className="border-b border-line bg-surface-2">
-                        <td colSpan={7} className="p-4">
-                          <AgentDetails agentId={agent.id} />
+                        <td className="px-1 py-0">
+                          <Button
+                            aria-expanded={expanded === agent.id}
+                            className="justify-start gap-2 whitespace-nowrap border-0 text-body group-hover:bg-surface-2"
+                          >
+                            <span
+                              title={
+                                agent.status === "online" ? t("common.online") : t("common.offline")
+                              }
+                              className={cn(
+                                "size-2 shrink-0 rounded-full",
+                                agent.status === "online" ? "bg-status-done" : "bg-status-open",
+                              )}
+                            />
+                            {agent.name}
+                          </Button>
+                        </td>
+                        <td className="px-4 py-2 text-text-2">{AGENT_KIND_LABELS[agent.kind]}</td>
+                        <td className="px-4 py-2">{agent.host || "—"}</td>
+                        <td className="px-4 py-2 text-text-2">
+                          {agent.capabilities.join(" · ") || "—"}
+                        </td>
+                        <td className="whitespace-nowrap px-4 py-2 tabular-nums text-text-2">
+                          {agent.lastSeenAt ? relativeTime(new Date(agent.lastSeenAt), lang) : "—"}
+                        </td>
+                        <td className="px-4 py-2 text-text-2">
+                          <span
+                            className="block max-w-40 truncate"
+                            title={agent.webhookUrl ? t("common.secretConfigured") : undefined}
+                          >
+                            {agent.webhookUrl ? t("common.secretConfigured") : "—"}
+                          </span>
+                        </td>
+                        <td
+                          className="px-2 py-0"
+                          onClick={(event) => event.stopPropagation()}
+                          onKeyDown={(event) => event.stopPropagation()}
+                        >
+                          <Menu
+                            disabled={!isAdmin}
+                            label={t("common.actionsFor", { name: agent.name })}
+                            items={[
+                              { label: t("agents.rotateKey"), onSelect: () => setRotating(agent) },
+                              { label: t("common.edit"), onSelect: () => setEditing(agent) },
+                              {
+                                label: t("common.delete"),
+                                danger: true,
+                                onSelect: () => setDeleting(agent),
+                              },
+                            ]}
+                          />
                         </td>
                       </tr>
-                    )}
-                  </Fragment>
-                ))}
+                      {expanded === agent.id && (
+                        <tr className="border-b border-line bg-surface-2">
+                          <td colSpan={7} className="p-4">
+                            <AgentDetails agentId={agent.id} />
+                          </td>
+                        </tr>
+                      )}
+                    </Fragment>
+                  ))}
               </tbody>
             </table>
           </div>

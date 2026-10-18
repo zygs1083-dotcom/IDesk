@@ -18,7 +18,7 @@ export async function spacingStage(count = 24) {
   const stage = await createStage(host, layout, assets);
   const cast = new Cast(stage, assets.sprites, "礼仪");
   const kinds = ["claude-code", "codex", "n8n", "script", "custom"];
-  cast.update(
+  await cast.update(
     Array.from({ length: count }, (_, index) => ({
       id: `agent-${index}`,
       kind: kinds[index % kinds.length],

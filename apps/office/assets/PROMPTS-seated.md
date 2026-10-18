@@ -1,7 +1,7 @@
 # 坐姿补充图生成记录
 
 ## 第一版（W51，历史）
-## claude-code-seated.png
+## claude-code-a-seated.png
 用途：新增正面／背面坐姿与打字六帧；原五行不改。生成次数：2；选中第 2 次。实测尺寸：1774×887；最近邻缩放到 1122×561，缩放前后人工检查像素清晰、正背方向正确。
 完整提示词原文（按生成顺序；每次均引用原角色图，定向修改另引用前次结果）：
 ```text
@@ -10,25 +10,25 @@ Use case: identity-preserve. Edit the referenced production pixel-game character
 ```text
 Use case: identity-preserve. Correct ONLY the seated posture of the six figures in image 2. Image 1 original fifth row is the exact identity and scale reference. Image 2 figures currently look standing: make all six visibly SITTING with thighs horizontal, bent knees raised forward, short vertical shins, soles beneath knees. Front figures must have visibly broad horizontal lap and knees protruding sideways in front of hips, torso shortened by sitting, NOT straight standing legs. Back figures must also sit with bent legs, wide seated hips and shortened lower body. Same hair and face and teal hoodie from reference, no change in head size; normalized to requested 1122x561 sheet the head should be 108 px wide and total seated body 200 px tall. Match original fifth row pixel-art exactly. Keep 4 columns x2 rows: top front sit / front typing hands low / front typing hands up / back sit; bottom back typing low / back typing up / EMPTY / EMPTY. Pure #FF00FF background. No chairs, desks, keyboards, shadows, text, lines. Only new two-row sheet, requested 1122x561.
 ```
-## codex-seated.png
+## codex-a-seated.png
 用途：新增正面／背面坐姿与打字六帧；原五行不改。生成次数：1；选中第 1 次。实测尺寸：1774×887；最近邻缩放到 1122×561，缩放前后人工检查像素清晰、正背方向正确。
 完整提示词原文（按生成顺序；每次均引用原角色图，定向修改另引用前次结果）：
 ```text
 Use case: identity-preserve. Using this original sprite atlas as exact identity and pixel-scale reference, output ONLY new TWO ROWS, FOUR columns by TWO rows, requested 1122x561, pure #FF00FF magenta background. Codex worker same black rectangular glasses, short brown hair, ivory button-up shirt, navy trousers, brown shoes. Same face and shading, crisp square pixels, thick dark outlines, NOT enlarged. At 1122x561 each sprite seated height 216px and head width 120px, matching original fifth-row sit. All six figures visibly SITTING: horizontal thighs and raised broad knees in front of hips, bent knees, short vertical shins, wide seated lap, shorter than standing. ROW 1: DOWN front-facing sitting hands on lap; DOWN sitting typing hands forward low; DOWN sitting typing hands a few pixels higher; UP back-view sitting showing back of head and shirt, no face. ROW 2: UP sitting typing low; UP sitting typing hands slightly raised; EMPTY MAGENTA; EMPTY MAGENTA. Same original pixel thickness and body proportions as fifth row. Regular equally spaced 280.5px cells, centered with ample margins and soles at local y=245. No visible chair, desk, keyboard, shadows, letters or grid lines. Do not include original five rows.
 ```
-## n8n-seated.png
+## n8n-a-seated.png
 用途：新增正面／背面坐姿与打字六帧；原五行不改。生成次数：1；选中第 1 次。实测尺寸：1774×887；最近邻缩放到 1122×561，缩放前后人工检查像素清晰、正背方向正确。
 完整提示词原文（按生成顺序；每次均引用原角色图，定向修改另引用前次结果）：
 ```text
 Use case: identity-preserve. Produce ONLY TWO NEW ROWS for referenced pixel atlas, requested 1122x561, exactly FOUR columns x TWO rows regular equal cells. Pure #FF00FF magenta background. Exact same n8n worker identity: orange vest cream short sleeves charcoal trousers brown shoes short dark brown hair peach face, thick dark square pixel outlines, simple 3-tone shading, same original pixel thickness. Original fifth-row sit is size reference: seated total height 200px, head width 104px at target dimensions. Never enlarge. Six figures all visibly SITTING: horizontal thighs, bent knees forward, broad lap and short downward shins; shorter than standing, same torso and head size. ROW 1: DOWN front-view seated hands on lap; DOWN seated typing hands forward low; DOWN seated typing hands slightly up; UP back-view seated showing back of head and vest, no face. ROW 2: UP seated typing hands low; UP seated typing hands slightly raised; EMPTY MAGENTA; EMPTY MAGENTA. Center sprites within 280.5px cells, feet at local y=240, generous clear margins. No chairs desks keyboards shadows text or grid lines. Only new two rows, exclude original five rows, preserve reference appearance.
 ```
-## script-seated.png
+## script-a-seated.png
 用途：新增正面／背面坐姿与打字六帧；原五行不改。生成次数：1；选中第 1 次。实测尺寸：1774×887；最近邻缩放到 1122×561，缩放前后人工检查像素清晰、正背方向正确。
 完整提示词原文（按生成顺序；每次均引用原角色图，定向修改另引用前次结果）：
 ```text
 Use case: identity-preserve. Produce ONLY TWO NEW ROWS for referenced pixel atlas, requested 1122x561, exactly FOUR columns x TWO rows regular equal cells. Pure #FF00FF magenta background. Exact same script worker identity: blue baseball cap, mustard short-sleeve shirt navy trousers brown shoes brown hair peach face, thick dark square pixel outlines, simple 3-tone shading, same original pixel thickness. Original fifth-row sit is size reference: seated total height 197px, head width 114px at target dimensions. Never enlarge. Six figures all visibly SITTING: horizontal thighs and bent knees forward, broad lap, short downward shins; shorter than standing, same torso and head size. ROW 1: DOWN front-view seated hands on lap; DOWN seated typing hands forward low; DOWN seated typing hands slightly up; UP back-view seated showing cap back and shirt back, no face. ROW 2: UP seated typing hands low; UP seated typing hands slightly raised; EMPTY MAGENTA; EMPTY MAGENTA. Center sprites within 280.5px cells, feet at local y=240, generous clear margins. No chairs desks keyboards shadows text or grid lines. Only new two rows, exclude original five rows, preserve reference appearance.
 ```
-## custom-seated.png
+## custom-a-seated.png
 用途：新增正面／背面坐姿与打字六帧；原五行不改。生成次数：1；选中第 1 次。实测尺寸：1774×887；最近邻缩放到 1122×561，缩放前后人工检查像素清晰、正背方向正确。
 完整提示词原文（按生成顺序；每次均引用原角色图，定向修改另引用前次结果）：
 ```text
@@ -58,7 +58,7 @@ for index in range(6):
 result.save('apps/office/assets/raw/'+kind+'-seated.png')
 ```
 命令：`python3 normalize.py <kind> selected.png <factor>`（代码仅供复现；normalize.py 是临时文件）。
-## claude-code-seated.png 坐姿补充图第二版
+## claude-code-a-seated.png 坐姿补充图第二版
 用途：替换第一版正背坐与打字六帧；4 列 × 2 行，末两格空白。生成次数：3；选中第 3 次。实测尺寸：1774×887；先整图最近邻到 1122×561，再六格统一系数 0.90，每格底边居中；最终 1122×561。
 实测（高度比 / 头宽差，前→后处理）：sit/down 0.8660 / +8.57% → 0.7799 / -1.90%；sit/up 0.8421 / +15.24% → 0.7560 / +3.81%。
 完整提示词原文（按生成顺序，行序即次数；引用原图及上次生成图）：
@@ -67,7 +67,7 @@ Create seated supplement ONLY4columns x2rows, output1122x561 pure #ff00ff. Prese
 CORRECTION: first image figures are MUCH TOO LARGE. Regenerate same six seated poses same4x2 magenta sheet with MUCH MORE EMPTY MAGENTA SPACE AROUND EACH FIGURE. At1774x887 output each cell443x443. Each figure must occupy only248px vertical (56% of cell height) and168px head width (38% cell width). Existing first image figures are320px high and200px wide WRONG, reduce whole body size about20%, but head MUST match second image original standing head when scaled sheets both1122px wide. Head target106px at1122px width. Seated height157px. Put feet local y255 and top98 on1122 sheet. Broad lap horizontal thighs bent knees downward short shins. Back seated head hoodie back and rounded buttocks, legs hidden. Keep hands lap in first, typing front next two, back sit fourth, back typing two nextrow, empty final2. Hoodie teal brown spiky hair black pants brown shoes, same crisp pixel art. No furniture. Plenty empty magenta, figures must look smaller than first image. Match original standing head size.
 Increase the size of ALL six existing pixel characters by exactly25 percent (1.25x) within their same respective cells. Keep sheet 4columns x2rows magenta, same six poses and last2empty. Current characters approximately200px high in1774x887 sheet, make250px high with head168px wide. Head must not become giant. Scale whole figures uniformly, retain exact seated proportions; broad bent knees feet forward on front, rounded seated bottom and hidden legs on back. Brown spiky hair teal hoodie charcoal trousers brown shoes. Don't invent new pose or modify colors. Keep pixel edges crisp. Generous magenta margins.
 ```
-## codex-seated.png 坐姿补充图第二版
+## codex-a-seated.png 坐姿补充图第二版
 用途：替换第一版正背坐与打字六帧；4 列 × 2 行，末两格空白。生成次数：4；选中第 2 次。实测尺寸：1774×887；先整图最近邻到 1122×561，再六格统一系数 0.92，每格底边居中；最终 1122×561。
 实测（高度比 / 头宽差，前→后处理）：sit/down 0.8479 / +4.55% → 0.7788 / -3.64%；sit/up 0.8111 / +0.91% → 0.7465 / -7.27%。
 完整提示词原文（按生成顺序，行序即次数；引用原图及上次生成图）：
@@ -77,7 +77,7 @@ Edit second image seated sheet to fix proportions using first standing sheet ide
 Edit this sprite sheet. Current front seated opaque height measured184px at1122x561, target 163px so remove21px height from torso/legs. Current back sit176px target163px remove13px torso height. Keep head completely identical same width115px and height, preserve individual head pixels as far as possible. Place front head top y100 feet263 (163px tall). Existing reference front top81 bottom265 is too tall. Squash shirt torso vertically and make knees bend sharply horizontally out toward viewer, thighs horizontal, short shins feet forward; head unchanged. Back only back of head shoulders and seated rounded buttocks with hidden legs. Back head top100 bottom263. Row2 same. Keep regular4x2 grid, six poses order front sit/front type/front type/back sit, row2 back type/back type/empty/empty. Solid magenta. Preserve brown hair glasses cream shirt navy pants pixel art. Make all six full body bounding height163px at1122px wide, not184. No furniture.
 Draw ONLY six SUPER SQUAT seated codex pixel figures, 4x2 sheet magenta background. Requested1122x561. Preserve brown hair glasses cream shirt dark pants shoes. Standing head110px width, standing total217px. New seated figures only150px tall with head110px wide. Must be nearly square silhouette. Make head exactly same as standing. Body below head only50px tall TOTAL (shirt30px, knees and feet20px). Head100px high. Front HUGE head, compressed shirt, broad lap with knees sharply bent horizontal thighs aimed toward viewer, tiny vertical shins feet in front. Back HUGE same head plus very short shirt and seated buttocks, absolutely no visible legs. Sitting is radically shorter than standing. All six same150px height. Row1 front sit/front typing/front alternate/back sit; row2 back typing/back alternate/empty/empty. Four equal columns two equal rows, centered in each cell. Pixel art crisp square outlines same visual identity. No chairs, no shadows, no text. DO NOT draw a normal full-height torso or straight legs. Head comprises two thirds entire height. At1774x887 size head174px wide and seated total237px high.
 ```
-## n8n-seated.png 坐姿补充图第二版
+## n8n-a-seated.png 坐姿补充图第二版
 用途：替换第一版正背坐与打字六帧；4 列 × 2 行，末两格空白。生成次数：3；选中第 3 次。实测尺寸：1774×887；先整图最近邻到 1122×561，再六格统一系数 0.98，每格底边居中；最终 1122×561。
 实测（高度比 / 头宽差，前→后处理）：sit/down 0.7950 / +5.00% → 0.7800 / +3.00%；sit/up 0.7750 / +3.00% → 0.7600 / +1.00%。
 完整提示词原文（按生成顺序，行序即次数；引用原图及上次生成图）：
@@ -86,14 +86,14 @@ Draw ONLY six SUPER SQUAT seated n8n pixel workers matching reference identity o
 Regenerate same 4x2 seated n8n six poses but reduce all figures15% uniformly and shorten front shins further so knees clearly bent and thighs horizontal pointing toward viewer. Keep head same proportion to torso, broad lap, back only rounded seated buttocks no legs. Maintain orange vest cream short sleeves charcoal pants brown hair shoes. No chairs or shadows. Important output aspect2:1 (1122x561), four equal columns two equal rows, NOT16:9. Empty final2cells. At1122px width new figures total170px high with head108px wide. All six same scale. Plenty solid#ff00ff magenta margins. Pixel art square edges, original identity.
 Edit referenced n8n seated sheet: reduce all six figures in size by exactly8% uniformly, leaving more empty magenta around each figure. Keep original 4x2 layout with6poses and final2empty, output1774x887 (or1122x561). Existing figures approx305px tall; new figures must280px tall (at1774wide), head180px wide. Same brown hair orange vest cream sleeves charcoal trousers shoes, crisp pixel art. Preserve front seated broad horizontal thighs, bent knees and short downward shins feet in front; preserve back shoulders and seated rounded buttocks no visible legs. No furniture. Do not enlarge figures or fill cells. Row1 front sit/front type/front type alternate/back sit; row2 back type/back type alternate/empty/empty. Magenta#ff00ff.
 ```
-## script-seated.png 坐姿补充图第二版
+## script-a-seated.png 坐姿补充图第二版
 用途：替换第一版正背坐与打字六帧；4 列 × 2 行，末两格空白。生成次数：1；选中第 1 次。实测尺寸：1774×887；先整图最近邻到 1122×561，再六格统一系数 0.91，每格底边居中；最终 1122×561。
 实测（高度比 / 头宽差，前→后处理）：sit/down 0.8657 / +2.02% → 0.7861 / -7.07%；sit/up 0.8358 / +0.00% → 0.7612 / -9.09%。
 完整提示词原文（按生成顺序，行序即次数；引用原图及上次生成图）：
 ```text
 Generate ONLY seated supplement4columns x2rows on pure#ff00ff magenta, output1122x561. Identity from reference script worker blue baseball cap mustard short sleeve shirt navy trousers brown shoes. Preserve head100px wide as original standing; standing is202px tall, seated MUST be155px total height. Each figure occupies only55% of each280px cell height, head36% cell width, ample empty magenta. Make very squat seated pose with head95px high, torso35px, legs+feet25px. Front thighs horizontal toward viewer knees bent right angle tiny vertical shins feet in front. Back only back cap shoulders shirt and round seated buttocks on invisible chair, no visible legs. Row1 front sit hands on lap/front typing/front typing alternate/back sit; row2 back typing/back typing alternate/empty/empty. Same six figures scale. Keep pixels crisp, same pixel size as original, no furniture shadows grid text. At1774x887 output total245px figure height and head158px wide. Do not fill cell with oversized figures.
 ```
-## custom-seated.png 坐姿补充图第二版
+## custom-a-seated.png 坐姿补充图第二版
 用途：替换第一版正背坐与打字六帧；4 列 × 2 行，末两格空白。生成次数：3；选中第 3 次。实测尺寸：1774×887；先整图最近邻到 1122×561，再六格统一系数 1.00，每格底边居中；最终 1122×561。
 实测（高度比 / 头宽差，前→后处理）：sit/down 0.7300 / -3.09% → 0.7300 / -3.09%；sit/up 0.7300 / -3.09% → 0.7300 / -3.09%。
 完整提示词原文（按生成顺序，行序即次数；引用原图及上次生成图）：
@@ -107,7 +107,7 @@ Scale all six seated characters uniformly DOWN by15% inside same respective cell
 四分之三视角取代正背朝向；头和上身保持站姿大小，只收腿。协调者批准原图阶段统一最近邻等比系数范围 0.90–1.12；不缩放已量化的 64×96 帧或图集。所有处理先将生成整图最近邻到 1122×561，再对约 280px 原图单元格的六个人物使用同一系数、水平居中、底边对齐。
 头宽取包围盒上方 35% 不透明区域宽度；高度与原图 walk/down/0 比较。选中未处理原图见 `https://raw.githubusercontent.com/zygs1083-dotcom/IDesk/pr-assets/w55/selected-original-<kind>.png`。复现沿用上方「第二版共用处理」代码，factor 改为以下数值；除允许范围含放大外，算法相同。
 
-## claude-code-seated.png 坐姿补充图第三版
+## claude-code-a-seated.png 坐姿补充图第三版
 用途：四分之三 front/back 坐姿与打字六帧，末两格空白；生成次数：4；选中第 4 次。实测尺寸：1774×887；整图最近邻到 1122×561 后，六帧统一等比放大 1.09；最终 1122×561。
 站姿：高 209px，头宽 105px。 sit/front 高/比/头宽/差：170/0.8134/96/-8.57% → 185/0.8852/105/+0.00%。 sit/back 高/比/头宽/差：167/0.7990/96/-8.57% → 182/0.8708/105/+0.00%。
 完整提示词原文（按次数排列；第一张引用原图，后续引用前次对应候选；n8n 第 4 次引用带站姿高度线的参考）：
@@ -118,7 +118,7 @@ Uniformly enlarge all six existing figures by exactly9percent inside same respec
 Make all six existing figures uniformly SMALLER by exactly8percent. Keep exact shape and pose head body legs proportions. No extra shortening, no redesign. Current actual figures at1774wide337px tall with190px head; target310px tall and175px head. They should be195px tall at1122wide. Keep4columns2rows magenta final2empty. Teal hoodie brown spiky hair dark pants brown shoes, same three-quarter seated front/back poses. No furniture shadows text. Shrink slightly, not dramatically.
 ```
 
-## codex-seated.png 坐姿补充图第三版
+## codex-a-seated.png 坐姿补充图第三版
 用途：四分之三 front/back 坐姿与打字六帧，末两格空白；生成次数：3；选中第 3 次。实测尺寸：1774×887；整图最近邻到 1122×561 后，六帧统一等比缩小 0.92；最终 1122×561。
 站姿：高 217px，头宽 110px。 sit/front 高/比/头宽/差：208/0.9585/122/+10.91% → 191/0.8802/112/+1.82%。 sit/back 高/比/头宽/差：208/0.9585/123/+11.82% → 191/0.8802/113/+2.73%。
 完整提示词原文（按次数排列；第一张引用原图，后续引用前次对应候选；n8n 第 4 次引用带站姿高度线的参考）：
@@ -128,7 +128,7 @@ Correct this seated supplement. Keep six 3/4 poses 4columns x2rows magenta last2
 Enlarge ALL six existing codex seated figures uniformly by exactly5percent within their existing cells. Current opaque height286px at1774wide should become300px, head165px should become173px. Keep exact same glasses ivory shirt navy pants brown shoes brown hair identity, same seated bent legs and three-quarter directions. Front face/chest LOWER RIGHT45degrees, back back-of-head and shirt UPPER RIGHT45degrees with little face visible. Same4x2 magenta grid last2empty. Do not change pixel proportions. No furniture shadows labels lines.
 ```
 
-## n8n-seated.png 坐姿补充图第三版
+## n8n-a-seated.png 坐姿补充图第三版
 用途：四分之三 front/back 坐姿与打字六帧，末两格空白；生成次数：6；选中第 6 次。实测尺寸：1774×887；整图最近邻到 1122×561 后，六帧统一等比缩小 0.95；最终 1122×561。
 站姿：高 200px，头宽 100px。 sit/front 高/比/头宽/差：185/0.9250/99/-1.00% → 176/0.8800/94/-6.00%。 sit/back 高/比/头宽/差：185/0.9250/97/-3.00% → 176/0.8800/92/-8.00%。
 完整提示词原文（按次数排列；第一张引用原图，后续引用前次对应候选；n8n 第 4 次引用带站姿高度线的参考）：
@@ -141,7 +141,7 @@ Edit existing n8n seated supplement. Keep head and torso EXACTLY identical uncha
 Uniformly reduce ALL SIX seated figures by exactly10percent within existing cells, keeping same proportions head torso bent thighs tiny shins. Current214px total height at1122wide too tall. Target190px at1122wide, head103px. At1774wide target300px figure height163px head. Same short brown hair orange vest cream sleeves dark pants brown shoes. Crisp pixel art3/4 front lower right/back upper right. Fourcolumns tworows pure magenta lasttwoempty. Do not modify pose or identity, only slightly reduce whole figures leaving more magenta space. No furniture text shadows lines.
 ```
 
-## script-seated.png 坐姿补充图第三版
+## script-a-seated.png 坐姿补充图第三版
 用途：四分之三 front/back 坐姿与打字六帧，末两格空白；生成次数：2；选中第 2 次。实测尺寸：1774×887；整图最近邻到 1122×561 后，六帧统一等比放大 1.025；最终 1122×561。
 站姿：高 201px，头宽 99px。 sit/front 高/比/头宽/差：174/0.8657/103/+4.04% → 178/0.8856/106/+7.07%。 sit/back 高/比/头宽/差：176/0.8756/88/-11.11% → 180/0.8955/91/-8.08%。
 完整提示词原文（按次数排列；第一张引用原图，后续引用前次对应候选；n8n 第 4 次引用带站姿高度线的参考）：
@@ -150,7 +150,7 @@ Use case: identity-preserve. Reference image is original script pixel worker atl
 Correct this six-figure script seated supplement. Uniformly shrink every whole figure by16percent. Further shorten legs slightly, keeping blue cap head and yellow shirt torso proportions. Current figures height360px at1774wide wrong, target300px tall. Head width target169px at1774wide. All six same scale. Front three-quarter toward LOWER RIGHT45degrees, back toward UPPER RIGHT45degrees showing rear cap back shirt shoulder and tiny face sliver. Visible horizontal bent thighs short shins. Navy pants brown shoes. Keep4x2 grid pure#FF00FF final2cells empty. More magenta margins. Pixel art no furniture text lines shadows.
 ```
 
-## custom-seated.png 坐姿补充图第三版
+## custom-a-seated.png 坐姿补充图第三版
 用途：四分之三 front/back 坐姿与打字六帧，末两格空白；生成次数：2；选中第 2 次。实测尺寸：1774×887；整图最近邻到 1122×561 后，六帧统一等比放大 1.1；最终 1122×561。
 站姿：高 200px，头宽 97px。 sit/front 高/比/头宽/差：163/0.8150/84/-13.40% → 179/0.8950/93/-4.12%。 sit/back 高/比/头宽/差：161/0.8050/85/-12.37% → 177/0.8850/94/-3.09%。
 完整提示词原文（按次数排列；第一张引用原图，后续引用前次对应候选；n8n 第 4 次引用带站姿高度线的参考）：
@@ -185,4 +185,4 @@ back 按肩膀量，不按被椅背挡住的臀量。工作区 1 四人坐满，
 
 侧坐只用于右侧沙发的一个中央座位 (1594,608)，面向左，取 `sit/right` 并水平镜像。可见坐垫中心约 (1594,588)，人物臀/大腿在世界 y588–598，脚底在 y608；不抬升。两张 typing/right 帧同样检查臀/大腿接触坐垫，保留 lift = 0。北侧双人沙发用 front 帧，锚点仍为 1；脚底量在底座前沿 y539 正前方地板 y544，让沙发自然排在人后。大腿接坐垫前缘，膝盖、小腿和鞋在沙发前可见，不再被前沿盖住。会议室按原画前后各三把椅子，分别用 front/back，不造桌端侧座。
 
-`tools/characters.mjs` 是唯一锚点表，生成图集 JSON；`tools/characters.test.mjs` 按真实座位与三个坐姿帧分别断言世界底边 = 座位 y − lift。重跑生成器时 `characters.png` 的哈希保持不变。
+`tools/characters.mjs` 是唯一锚点表，生成图集 JSON；`tools/characters.test.mjs` 按真实座位与三个坐姿帧分别断言世界底边 = 座位 y − lift。重跑生成器时 `characters/*.png` 的哈希保持不变。

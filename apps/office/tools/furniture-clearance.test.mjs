@@ -1,11 +1,10 @@
 import { floorBounds, inClearance, seatApproaches } from "@idesk/shared/office-clearance";
 import { expect, test } from "vitest";
-import { readJson, readPng, root } from "./occluder-image.mjs";
+import { atlas, sprites } from "./character-atlases.mjs";
+import { readJson, root } from "./occluder-image.mjs";
 import { walkingBounds } from "./walking-silhouette.mjs";
 
 const layout = readJson(`${root}public/layout.json`);
-const atlas = readJson(`${root}public/characters.json`);
-const sprites = readPng(`${root}public/characters.png`);
 const approaches = seatApproaches(layout);
 const { left, right, clearance } = walkingBounds(atlas, sprites);
 const bounds = layout.occluders.map((item) => ({ id: item.id, ...floorBounds(item) }));
