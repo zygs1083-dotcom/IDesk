@@ -32,7 +32,10 @@ export function ConnectorRow({
         : t("settings.syncing")
       : connector.lastError || t("settings.healthy");
   return (
-    <div className="flex items-center gap-4 border-b border-line px-4 py-3 last:border-b-0">
+    <div
+      data-ui="connector-row"
+      className="flex items-center gap-4 border-b border-line px-4 py-3 last:border-b-0"
+    >
       <Plug aria-hidden="true" size={18} strokeWidth={1.5} className="shrink-0 text-text-2" />
       <div className="min-w-0 flex-1">
         <p className="truncate text-body">{connector.name}</p>

@@ -28,7 +28,7 @@ export function Login() {
     },
   });
   return (
-    <main className="flex h-full items-center justify-center p-6">
+    <main data-scene="login" className="flex h-full items-center justify-center p-6">
       <form
         data-ui="panel"
         onSubmit={(event) => {

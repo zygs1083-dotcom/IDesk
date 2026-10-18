@@ -1,0 +1,95 @@
+.pixel-office-props,
+.pixel-workbench {
+  display: none;
+}
+
+html[data-skin="pixel"] {
+  & [data-ui="workspace"] {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  & [data-ui="workspace"] > [data-scene] {
+    height: auto;
+    flex: 1 0 auto;
+  }
+  & .pixel-workbench {
+    display: block;
+    flex-shrink: 0;
+    height: 120px;
+    background: url("/pixel-office/workbench-banner.webp") center / cover;
+    border-bottom: 3px solid var(--wood);
+    image-rendering: pixelated;
+    pointer-events: none;
+  }
+  & [data-ui="brand"] {
+    display: grid;
+    place-items: center;
+    margin: 14px 10px 20px;
+    padding: 0;
+    min-height: 70px;
+    background: url("/pixel-office/header-frame.webp") center / contain no-repeat;
+    color: var(--ink);
+    image-rendering: pixelated;
+  }
+  & .pixel-office-props {
+    display: block;
+    min-height: 68px;
+    margin: auto 14px 8px;
+    background: url("/pixel-office/desk-props.webp") center bottom / contain no-repeat;
+    image-rendering: pixelated;
+    pointer-events: none;
+  }
+  & [data-ui="sidebar-footer"] {
+    margin-top: 0;
+  }
+  & [data-scene="login"] form::after {
+    content: "";
+    display: block;
+    height: 90px;
+    background: url("/pixel-office/desk-props.webp") center bottom / contain no-repeat;
+    image-rendering: pixelated;
+    pointer-events: none;
+  }
+}
+
+@media (min-width: 900px) {
+  html[data-skin="pixel"]
+    [data-ui="workspace"]
+    > :is([data-scene="desk"], [data-scene="automation"], [data-scene="relay"]) {
+    flex: 1 1 0;
+    min-height: 0;
+  }
+}
+
+@media (max-width: 899px) {
+  html[data-skin="pixel"] {
+    & [data-ui="brand"],
+    & .pixel-office-props {
+      display: none;
+    }
+    & .pixel-workbench {
+      height: 70px;
+    }
+    & [data-ui="workspace"] {
+      gap: 14px;
+    }
+    & [data-ui="workspace"] > [data-scene] {
+      gap: 16px;
+    }
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  html[data-skin="pixel"] {
+    & [data-ui="sidebar"] {
+      background:
+        linear-gradient(#463b30f5, #463b30f5),
+        var(--material-wood) center / 640px;
+    }
+    & .pixel-workbench {
+      background-image:
+        linear-gradient(#171b2840, #171b2840), url("/pixel-office/workbench-banner.webp");
+    }
+  }
+}

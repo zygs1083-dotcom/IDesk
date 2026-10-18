@@ -16,6 +16,7 @@ export function RunColumn({
 }) {
   return (
     <section
+      data-ui="run-rack"
       id={id}
       aria-label={label}
       className="flex min-w-column flex-1 flex-col gap-3 rounded-panel bg-surface-2 p-3"

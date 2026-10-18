@@ -53,7 +53,7 @@ export function Sidebar() {
       data-ui="sidebar"
       className="flex flex-wrap shrink-0 items-center border-b border-line bg-surface sidebar:w-sidebar sidebar:flex-col sidebar:flex-nowrap sidebar:items-stretch sidebar:border-r sidebar:border-b-0"
     >
-      <div className="hidden px-5 pt-5 pb-4 text-section sidebar:block">
+      <div data-ui="brand" className="hidden px-5 pt-5 pb-4 text-section sidebar:block">
         <PencilRuler className="skin-mark" size={20} strokeWidth={1.5} aria-hidden="true" />
         IDesk
       </div>
@@ -90,7 +90,11 @@ export function Sidebar() {
           </a>
         )}
       </nav>
-      <div className="ml-auto flex flex-wrap shrink-0 items-center gap-2 pr-2 text-secondary text-text-2 sidebar:mt-auto sidebar:ml-0 sidebar:px-5 sidebar:py-4">
+      <div className="pixel-office-props" aria-hidden="true" />
+      <div
+        data-ui="sidebar-footer"
+        className="ml-auto flex flex-wrap shrink-0 items-center gap-2 pr-2 text-secondary text-text-2 sidebar:mt-auto sidebar:ml-0 sidebar:px-5 sidebar:py-4"
+      >
         <span
           className={cn(
             "hidden size-2 rounded-full sidebar:block",

@@ -27,7 +27,7 @@ export function AgentsPage() {
     if (isAdmin) setCreating(true);
   });
   return (
-    <div className="space-y-6">
+    <div data-scene="agents" className="space-y-6">
       <PageHeader title={t("nav.agents")}>
         <Button disabled={!isAdmin} variant="primary" onClick={() => setCreating(true)}>
           {t("common.create")}

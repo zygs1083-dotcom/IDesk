@@ -114,7 +114,8 @@ test.each([undefined, "viewer", "admin"] as const)(
     expect(buttons.some((button) => />Complete<\//.test(button))).toBe(role === "admin");
     expect(buttons.some((button) => />Reply<\//.test(button))).toBe(role === "admin");
     const skins = html.match(/<input\b[^>]*type="radio"[^>]*>/g) ?? [];
-    expect(skins).toHaveLength(2);
+    expect(skins).toHaveLength(3);
+    expect(skins.some((input) => input.includes('value="pixel"'))).toBe(true);
     expect(skins.every((input) => !input.includes("disabled"))).toBe(true);
     client.clear();
   },

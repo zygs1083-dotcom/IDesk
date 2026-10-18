@@ -6,10 +6,11 @@ import { cn } from "../../lib/cn.ts";
 export function SettingsPage() {
   const { t } = useLang();
   return (
-    <div className="space-y-6">
+    <div data-scene="settings" className="space-y-6">
       <PageHeader title={t("nav.settings")} />
       <div className="flex flex-col gap-6 sidebar:flex-row">
         <nav
+          data-ui="settings-tabs"
           aria-label={t("settings.navigation")}
           className="flex shrink-0 flex-wrap gap-1 sidebar:w-40 sidebar:flex-col"
         >
@@ -33,7 +34,7 @@ export function SettingsPage() {
             </NavLink>
           ))}
         </nav>
-        <div className="min-w-0 flex-1">
+        <div data-ui="settings-sheet" className="min-w-0 flex-1">
           <Outlet />
         </div>
       </div>

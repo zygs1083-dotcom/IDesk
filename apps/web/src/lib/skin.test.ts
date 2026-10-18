@@ -28,18 +28,19 @@ describe("browser skin preference", () => {
     [null, "classic"],
     ["classic", "classic"],
     ["cartoon", "cartoon"],
+    ["pixel", "pixel"],
     ["unknown", "classic"],
   ])("initializes %s as %s before the app loads", (saved, expected) => {
     expect(boot(storageWith(saved)).documentElement.dataset.skin).toBe(expected);
     expect(html.indexOf("<script>")).toBeLessThan(html.indexOf('<script type="module"'));
   });
 
-  it("applies either skin immediately and restores it on the next page load", () => {
+  it("applies each skin immediately and restores it on the next page load", () => {
     const storage = storageWith(null);
     const document = boot(storage);
     vi.stubGlobal("document", document);
     vi.stubGlobal("localStorage", storage);
-    for (const skin of ["cartoon", "classic"] as const) {
+    for (const skin of ["cartoon", "pixel", "classic"] as const) {
       applySkin(skin);
       expect(document.documentElement.dataset.skin).toBe(skin);
       expect(storage.getItem("idesk.skin")).toBe(skin);
@@ -62,6 +63,8 @@ describe("browser skin preference", () => {
     vi.stubGlobal("localStorage", storage);
     applySkin("cartoon");
     expect(document.documentElement.dataset.skin).toBe("cartoon");
+    applySkin("pixel");
+    expect(document.documentElement.dataset.skin).toBe("pixel");
     applySkin("classic");
     expect(document.documentElement.dataset.skin).toBe("classic");
   });

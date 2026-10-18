@@ -1,0 +1,44 @@
+.pixel-preview {
+  display: flex;
+  height: 128px;
+  gap: 6px;
+  padding: 6px;
+  background: #e3d5b8;
+  border: 1px solid #967047;
+}
+.pixel-preview-cabinet {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  width: 24%;
+  padding: 10px 5px;
+  background: #bd915f;
+  border: 2px solid #967047;
+}
+.pixel-preview-cabinet span {
+  height: 16px;
+  background: #e5c18c;
+  border: 1px solid #805a37;
+  box-shadow: 0 2px 0 #967047;
+}
+.pixel-preview-workspace {
+  flex: 1;
+  min-width: 0;
+}
+.pixel-preview-scene {
+  height: 44px;
+  background: url("/pixel-office/workbench-banner.webp") center / cover;
+}
+.pixel-preview-papers {
+  display: flex;
+  gap: 6px;
+  padding: 12px 4px;
+  background: #c5a275;
+}
+.pixel-preview-papers span {
+  height: 44px;
+  flex: 1;
+  border: 1px solid #92704c;
+  background: #f7edce;
+  box-shadow: 2px 2px 0 #ede0bf;
+}

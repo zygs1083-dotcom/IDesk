@@ -1,0 +1,122 @@
+html[data-skin="pixel"] {
+  & [data-ui="button"] {
+    min-height: 36px;
+    border-width: 2px;
+    border-color: var(--line-strong);
+    box-shadow: 0 2px 0 var(--ink);
+    white-space: normal;
+  }
+  & [data-ui="button"]:active:not(:disabled) {
+    box-shadow: none;
+  }
+  & button:disabled {
+    cursor: not-allowed;
+  }
+  & [data-ui="button"]:disabled {
+    box-shadow: none;
+    opacity: 0.6;
+  }
+  & :is(button, a, input, textarea, select):focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 3px;
+  }
+  & [data-ui="sidebar"] :is(button, a):focus-visible {
+    outline-color: var(--wood-text);
+  }
+  & :is(input, textarea, select) {
+    min-width: 0;
+    max-width: 100%;
+    border-radius: 2px;
+    accent-color: var(--accent);
+  }
+  & [data-ui="field"],
+  & select {
+    border: 1px solid var(--line-strong);
+    border-bottom-width: 2px;
+    background-color: var(--surface-2);
+    color: var(--text);
+  }
+  & [aria-invalid="true"] {
+    border-color: var(--status-failed);
+  }
+  & [data-ui="panel"],
+  & [data-ui="drawer"],
+  & [role="menu"] {
+    border: 2px solid var(--wood-light);
+    background-color: var(--surface);
+
+    box-shadow: 3px 4px 0 var(--ink);
+  }
+  & dialog > [data-ui="panel"][data-ui] {
+    border: 6px solid var(--wood);
+    padding: 20px;
+  }
+  & [data-ui="drawer"] {
+    border-left: 8px solid var(--wood);
+  }
+  & :is([data-ui="drawer"], dialog > [data-ui="panel"]) > header {
+    border-bottom: 3px double var(--line-strong);
+    padding-bottom: 16px;
+    overflow-wrap: anywhere;
+  }
+  & [role="menu"] {
+    padding: 6px;
+  }
+  & [role="menuitem"] {
+    min-height: 40px;
+  }
+  & [role="switch"],
+  & [role="switch"] span {
+    border-radius: 2px;
+  }
+  & fieldset[aria-label] {
+    border-color: var(--line-strong);
+    padding: 4px;
+  }
+  & fieldset[aria-label] button {
+    min-height: 32px;
+  }
+  & fieldset[aria-label] [aria-pressed="true"] {
+    box-shadow: inset 0 -2px 0 var(--accent);
+  }
+  & [role="alert"] {
+    overflow-wrap: anywhere;
+  }
+  & [role="alert"].fixed {
+    max-width: calc(100vw - 48px);
+  }
+  & .py-16.text-center {
+    padding: 48px 24px;
+    margin: 8px 0;
+    border: 2px dashed var(--line-strong);
+    background: var(--surface);
+  }
+  & [data-ui="task-wall"] > .pointer-events-none > div {
+    padding: 24px;
+    border: 2px solid var(--line-strong);
+    background: var(--surface);
+    box-shadow: var(--elevation-card);
+  }
+}
+
+@media (max-width: 599px) {
+  html[data-skin="pixel"] {
+    & [data-ui="button"],
+    & [role="menuitem"] {
+      min-height: 44px;
+    }
+    & dialog {
+      padding: 12px;
+    }
+    & dialog:has([data-ui="drawer"]) {
+      padding: 0;
+    }
+    & [data-ui="drawer"] {
+      padding: 16px;
+    }
+    & dialog > [data-ui="panel"][data-ui] {
+      padding: 16px;
+      border-width: 4px;
+    }
+  }
+}

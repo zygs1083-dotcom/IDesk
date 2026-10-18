@@ -1,0 +1,10 @@
+/* Local short-label subset of Fusion Pixel; license: /fonts/OFL.txt. */
+@font-face {
+  font-family: "IDesk Pixel";
+  src: url("/fonts/idesk-pixel-labels.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  unicode-range:
+    U+20, U+21, U+22, U+23, U+24, U+25, U+26, U+27, U+28, U+29, U+2A, U+2B, U+2C, U+2D, U+2E, U+2F, U+30, U+31, U+32, U+33, U+34, U+35, U+36, U+37, U+38, U+39, U+3A, U+3B, U+3C, U+3D, U+3E, U+3F, U+40, U+41, U+42, U+43, U+44, U+45, U+46, U+47, U+48, U+49, U+4A, U+4B, U+4C, U+4D, U+4E, U+4F, U+50, U+51, U+52, U+53, U+54, U+55, U+56, U+57, U+58, U+59, U+5A, U+5B, U+5C, U+5D, U+5E, U+5F, U+60, U+61, U+62, U+63, U+64, U+65, U+66, U+67, U+68, U+69, U+6A, U+6B, U+6C, U+6D, U+6E, U+6F, U+70, U+71, U+72, U+73, U+74, U+75, U+76, U+77, U+78, U+79, U+7A, U+7B, U+7C, U+7D, U+7E, U+4E00, U+4E09, U+4E0A, U+4E0B, U+4E2D, U+4E3B, U+4E8B, U+4E8C, U+4E94, U+4ECA, U+4EF6, U+4EFB, U+4F20, U+4F53, U+4F5C, U+4FE1, U+505C, U+50CF, U+5165, U+5168, U+516C, U+516D, U+5177, U+518C, U+529B, U+529E, U+529F, U+52A1, U+52A8, U+52DF, U+5316, U+533A, U+5348, U+534F, U+5361, U+5386, U+53D6, U+53F0, U+53F2, U+540D, U+542F, U+5668, U+56DB, U+578B, U+5916, U+5929, U+5931, U+59D3, U+5B8C, U+5B9A, U+5BA4, U+5DF2, U+5E74, U+5EA6, U+5F85, U+5FD7, U+606F, U+6210, U+6240, U+6267, U+62DB, U+6307, U+63A5, U+63D2, U+6587, U+65E5, U+65F6, U+661F, U+6628, U+667A, U+6682, U+6700, U+6708, U+671F, U+672A, U+673A, U+6B21, U+6D01, U+6D3B, U+6D88, U+7387, U+7528, U+79CD, U+79F0, U+7B49, U+7B80, U+7C7B, U+7D20, U+7F6E, U+80FD, U+81EA, U+884C, U+89C2, U+8BBE, U+8BFB, U+8C03, U+8D25, U+8DC3, U+8FD0, U+8FD1, U+8FDB, U+8FDE, U+9012, U+901A, U+90E8, U+9886, U+9891;
+}

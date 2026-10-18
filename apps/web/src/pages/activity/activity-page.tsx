@@ -23,7 +23,7 @@ export function ActivityPage() {
   const taskTitles = new Map(tasks.map((task) => [task.id, task.title]));
   const groups = groupEvents(events, lang);
   return (
-    <div className="space-y-6">
+    <div data-scene="activity" className="space-y-6">
       <PageHeader title={t("nav.activity")} />
       <div className="flex flex-wrap items-center gap-3 whitespace-nowrap text-secondary">
         <Segmented
@@ -73,7 +73,7 @@ export function ActivityPage() {
       )}
       <div className="space-y-6">
         {groups.map((group) => (
-          <section key={group.day} className="space-y-2">
+          <section data-ui="log-page" key={group.day} className="space-y-2">
             <h2 className="text-label text-text-2">{group.label}</h2>
             <ol className="divide-y divide-line">
               {group.events.map((event) => {

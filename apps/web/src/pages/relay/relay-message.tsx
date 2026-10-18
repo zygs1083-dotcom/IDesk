@@ -27,7 +27,7 @@ export function RelayMessage({
   const { agentName } = useAgents();
   const taskId = message.taskId;
   return (
-    <article className="space-y-4">
+    <article data-ui="letter" className="space-y-4">
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0 space-y-2">
           <p className="text-label text-text-2">
