@@ -1,12 +1,9 @@
 import { eq } from "drizzle-orm";
-import { migrate } from "drizzle-orm/better-sqlite3/migrator";
 import { expect, test } from "vitest";
 import { db } from "./client.ts";
 import { automationJobs, automationRuns, connectors, relayMessages, tasks } from "./schema.ts";
 
 test("migrations provide task defaults and cascade connector deletion to jobs and runs", () => {
-  migrate(db, { migrationsFolder: new URL("../../drizzle", import.meta.url).pathname });
-
   const task = db
     .insert(tasks)
     .values({ title: "Schema integration test", publisherId: "human" })

@@ -1,5 +1,4 @@
-import { eq } from "drizzle-orm";
-import { migrate } from "drizzle-orm/better-sqlite3/migrator";
+import { and, eq } from "drizzle-orm";
 import { expect, test } from "vitest";
 import { db } from "../../db/client.ts";
 import { events, tasks } from "../../db/schema.ts";
@@ -7,8 +6,6 @@ import { registerAgent } from "../agents/agents.ts";
 import { expireLeases } from "./lease.ts";
 import { createTask, getTask } from "./store.ts";
 import { actOnTask } from "./transition.ts";
-
-migrate(db, { migrationsFolder: new URL("../../../drizzle", import.meta.url).pathname });
 
 test("expired leases return tasks to open as system while current leases remain", () => {
   const { agent } = registerAgent({ name: "lease", kind: "codex", host: "test", capabilities: [] });
@@ -28,8 +25,12 @@ test("expired leases return tasks to open as system while current leases remain"
     leaseExpiresAt: null,
   });
   expect(getTask(current.id)).toEqual(running);
-  expect(db.select().from(events).where(eq(events.taskId, expired.id)).all()).toContainEqual(
-    expect.objectContaining({ type: "task.lease_expired", agentId: null }),
-  );
+  expect(
+    db
+      .select()
+      .from(events)
+      .where(and(eq(events.taskId, expired.id), eq(events.type, "task.lease_expired")))
+      .all(),
+  ).toEqual([expect.objectContaining({ agentId: null })]);
   expect(expireLeases(new Date())).toEqual([]);
 });

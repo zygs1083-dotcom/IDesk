@@ -2,7 +2,6 @@ import { createHash, createHmac } from "node:crypto";
 import { createServer, type IncomingHttpHeaders } from "node:http";
 import { setTimeout as wait } from "node:timers/promises";
 import { eq } from "drizzle-orm";
-import { migrate } from "drizzle-orm/better-sqlite3/migrator";
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
 import { registerAgent } from "../core/agents/agents.ts";
 import type { Event } from "../core/events/bus.ts";
@@ -14,7 +13,6 @@ import { agents, events } from "../db/schema.ts";
 import { startPlugins } from "./host.ts";
 import { stopPlugins } from "./registry.ts";
 
-migrate(db, { migrationsFolder: new URL("../../drizzle", import.meta.url).pathname });
 const requests: { method: string | undefined; headers: IncomingHttpHeaders; body: string }[] = [];
 let status = 200;
 let hanging = false;

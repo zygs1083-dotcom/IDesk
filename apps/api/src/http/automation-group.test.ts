@@ -1,6 +1,5 @@
 import { automationJobSchema, automationRunWithJobSchema } from "@idesk/shared/automation-schemas";
 import { eq } from "drizzle-orm";
-import { migrate } from "drizzle-orm/better-sqlite3/migrator";
 import { afterEach, expect, test } from "vitest";
 import { z } from "zod";
 import { db } from "../db/client.ts";
@@ -10,7 +9,6 @@ import { registerPlugin, stopPlugins } from "../plugins/registry.ts";
 import type { ConnectorPlugin } from "../plugins/types.ts";
 import { app } from "./app.ts";
 
-migrate(db, { migrationsFolder: new URL("../../drizzle", import.meta.url).pathname });
 afterEach(async () => {
   await stopPlugins();
   db.delete(connectors).run();

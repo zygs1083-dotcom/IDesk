@@ -1,15 +1,12 @@
 import { taskSchema } from "@idesk/shared/task-schemas";
-import { migrate } from "drizzle-orm/better-sqlite3/migrator";
 import { afterEach, expect, test } from "vitest";
 import { config } from "../config.ts";
 import { registerAgent } from "../core/agents/agents.ts";
 import { listEvents } from "../core/events/query.ts";
 import { createTask, getTask } from "../core/tasks/store.ts";
 import { actOnTask } from "../core/tasks/transition.ts";
-import { db } from "../db/client.ts";
 import { app } from "./app.ts";
 
-migrate(db, { migrationsFolder: new URL("../../drizzle", import.meta.url).pathname });
 const originalViewerPassword = config.IDESK_VIEWER_PASSWORD;
 afterEach(() => {
   config.IDESK_VIEWER_PASSWORD = originalViewerPassword;

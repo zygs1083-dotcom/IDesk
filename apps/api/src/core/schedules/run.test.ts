@@ -2,7 +2,6 @@ import { once } from "node:events";
 import { createServer } from "node:http";
 import type { AddressInfo } from "node:net";
 import { eq } from "drizzle-orm";
-import { migrate } from "drizzle-orm/better-sqlite3/migrator";
 import { afterEach, beforeEach, expect, test } from "vitest";
 import { z } from "zod";
 import { db } from "../../db/client.ts";
@@ -12,7 +11,6 @@ import type { ConnectorPlugin } from "../../plugins/types.ts";
 import { runSchedule } from "./run.ts";
 import { createSchedule, type Schedule } from "./schedules.ts";
 
-migrate(db, { migrationsFolder: new URL("../../../drizzle", import.meta.url).pathname });
 beforeEach(() => {
   db.delete(schedules).run();
   db.delete(tasks).run();

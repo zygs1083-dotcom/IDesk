@@ -1,11 +1,8 @@
-import { migrate } from "drizzle-orm/better-sqlite3/migrator";
 import { expect, test } from "vitest";
-import { db } from "../../db/client.ts";
 import { agentActor, registerAgent } from "../agents/agents.ts";
 import { listRelay, relaySummary } from "./query.ts";
 import { markRelayRead, sendRelay } from "./relay.ts";
 
-migrate(db, { migrationsFolder: new URL("../../../drizzle", import.meta.url).pathname });
 test("agent summary counts all inbox recipient modes and reuses visible descendant answers", () => {
   const reader = agentActor(
     registerAgent({ name: "summary reader", kind: "codex", host: "test", capabilities: ["coding"] })

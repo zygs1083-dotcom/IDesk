@@ -1,4 +1,3 @@
-import { migrate } from "drizzle-orm/better-sqlite3/migrator";
 import { afterEach, expect, test } from "vitest";
 import { z } from "zod";
 import { listConnectors } from "../core/connectors/connectors.ts";
@@ -8,7 +7,6 @@ import { pollConnector, polling } from "./poll.ts";
 import { registerPlugin, stopPlugins } from "./registry.ts";
 import type { ConnectorPlugin } from "./types.ts";
 
-migrate(db, { migrationsFolder: new URL("../../drizzle", import.meta.url).pathname });
 const seen: ({ done: number; total: number } | null)[] = [];
 const plugin: ConnectorPlugin = {
   id: "poll-progress-fixture",

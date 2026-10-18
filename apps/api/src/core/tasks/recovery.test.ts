@@ -1,6 +1,5 @@
 import { type Actor, TransitionError } from "@idesk/shared/task-machine";
 import { eq } from "drizzle-orm";
-import { migrate } from "drizzle-orm/better-sqlite3/migrator";
 import { expect, test } from "vitest";
 import { db } from "../../db/client.ts";
 import { events, relayMessages } from "../../db/schema.ts";
@@ -9,7 +8,6 @@ import { onEvent } from "../events/bus.ts";
 import { createTask, getTask } from "./store.ts";
 import { actOnTask } from "./transition.ts";
 
-migrate(db, { migrationsFolder: new URL("../../../drizzle", import.meta.url).pathname });
 const human: Actor = { kind: "human" };
 function agent() {
   return registerAgent({ name: "recovery", kind: "codex", host: "test", capabilities: [] }).agent;

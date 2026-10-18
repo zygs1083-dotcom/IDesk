@@ -1,14 +1,10 @@
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 import type { Transport } from "@modelcontextprotocol/sdk/shared/transport.js";
-import { migrate } from "drizzle-orm/better-sqlite3/migrator";
 import { expect, test } from "vitest";
 import { registerAgent } from "../core/agents/agents.ts";
 import { createTask, listTasks } from "../core/tasks/store.ts";
-import { db } from "../db/client.ts";
 import { app } from "./app.ts";
-
-migrate(db, { migrationsFolder: new URL("../../drizzle", import.meta.url).pathname });
 
 test("MCP publishes with dispatch and reports rejected dispatch in Chinese", async () => {
   const { agent, apiKey } = registerAgent({

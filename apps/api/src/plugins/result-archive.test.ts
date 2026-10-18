@@ -1,7 +1,6 @@
 import { existsSync, mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { migrate } from "drizzle-orm/better-sqlite3/migrator";
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
 import { config } from "../config.ts";
 import { deleteAgent, registerAgent } from "../core/agents/agents.ts";
@@ -13,7 +12,6 @@ import { app } from "../http/app.ts";
 import { startPlugins } from "./host.ts";
 import { enablePlugin, stopPlugins } from "./registry.ts";
 
-migrate(db, { migrationsFolder: new URL("../../drizzle", import.meta.url).pathname });
 const originalDataDir = config.IDESK_DATA_DIR;
 let directory: string;
 let cookie: string;

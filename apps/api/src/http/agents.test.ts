@@ -1,13 +1,11 @@
 import { publicAgentSchema, registeredAgentSchema } from "@idesk/shared/agent-schemas";
 import { taskSchema } from "@idesk/shared/task-schemas";
 import { eq } from "drizzle-orm";
-import { migrate } from "drizzle-orm/better-sqlite3/migrator";
 import { expect, test } from "vitest";
 import { db } from "../db/client.ts";
 import { events } from "../db/schema.ts";
 import { app } from "./app.ts";
 
-migrate(db, { migrationsFolder: new URL("../../drizzle", import.meta.url).pathname });
 function request(path: string, credential: string, method = "GET", body?: object) {
   return app.request(`/api/v1${path}`, {
     method,

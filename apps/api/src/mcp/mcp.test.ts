@@ -1,15 +1,11 @@
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 import type { Transport } from "@modelcontextprotocol/sdk/shared/transport.js";
-import { migrate } from "drizzle-orm/better-sqlite3/migrator";
 import { expect, test } from "vitest";
 import { z } from "zod";
 import { registerAgent } from "../core/agents/agents.ts";
 import { createTask } from "../core/tasks/store.ts";
-import { db } from "../db/client.ts";
 import { app } from "../http/app.ts";
-
-migrate(db, { migrationsFolder: new URL("../../drizzle", import.meta.url).pathname });
 
 async function connect(apiKey: string) {
   const client = new Client({ name: "test", version: "1.0.0" });

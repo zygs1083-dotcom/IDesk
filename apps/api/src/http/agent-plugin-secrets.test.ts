@@ -3,7 +3,6 @@ import { createServer } from "node:http";
 import type { AddressInfo } from "node:net";
 import { registeredAgentSchema } from "@idesk/shared/agent-schemas";
 import { eq } from "drizzle-orm";
-import { migrate } from "drizzle-orm/better-sqlite3/migrator";
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
 import { z } from "zod";
 import notifier from "../../../../plugins/webhook-notifier/index.ts";
@@ -14,7 +13,6 @@ import { agents, events, pluginState, tasks } from "../db/schema.ts";
 import { registerPlugin, stopPlugins } from "../plugins/registry.ts";
 import { app } from "./app.ts";
 
-migrate(db, { migrationsFolder: new URL("../../drizzle", import.meta.url).pathname });
 const originalViewer = config.IDESK_VIEWER_PASSWORD;
 let admin: string;
 let viewer: string;

@@ -1,13 +1,9 @@
 import { eventSchema } from "@idesk/shared/task-schemas";
-import { migrate } from "drizzle-orm/better-sqlite3/migrator";
 import { expect, test } from "vitest";
 import { z } from "zod";
-import { db } from "../../db/client.ts";
 import { app } from "../../http/app.ts";
 import { emitEvent } from "./bus.ts";
 import { listEvents } from "./query.ts";
-
-migrate(db, { migrationsFolder: new URL("../../../drizzle", import.meta.url).pathname });
 
 test("history filters before limiting, paginates without overlap, and keeps full task timelines", async () => {
   const login = await app.request("/api/v1/auth/login", {
@@ -38,7 +34,9 @@ test("history filters before limiting, paginates without overlap, and keeps full
     collected.push(...events.map((event) => event.id));
   }
   expect(collected).toEqual(expected.map((event) => event.id).reverse());
-  expect(listEvents({ taskId: "history-task" })).toHaveLength(205);
+  expect(listEvents({ taskId: "history-task" }).map((event) => event.id)).toEqual(
+    expected.map((event) => event.id),
+  );
   expect(listEvents({ typePrefix: "task%", limit: 1 })).toEqual([]);
   const exact = await app.request(
     "/api/v1/events?type=task.history&agentId=history-agent&limit=1",

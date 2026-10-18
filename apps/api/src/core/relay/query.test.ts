@@ -1,5 +1,4 @@
 import { eq } from "drizzle-orm";
-import { migrate } from "drizzle-orm/better-sqlite3/migrator";
 import { expect, test } from "vitest";
 import { db } from "../../db/client.ts";
 import { relayMessages } from "../../db/schema.ts";
@@ -8,7 +7,6 @@ import { createTask } from "../tasks/store.ts";
 import { getRelay, listRelay, relayThread } from "./query.ts";
 import { sendRelay, type Viewer } from "./relay.ts";
 
-migrate(db, { migrationsFolder: new URL("../../../drizzle", import.meta.url).pathname });
 function agent(): Extract<Viewer, { kind: "agent" }> {
   const { agent } = registerAgent({
     name: "reader",
@@ -110,17 +108,17 @@ test("request status counts visible replies by others, including deeper descenda
     a.id,
   );
   const pending = (viewer: Viewer) =>
-    listRelay(viewer, "all", undefined, { requestStatus: "pending" }).map((m) => m.id);
+    listRelay(viewer, "all", undefined, { requestStatus: "pending", q: "status" }).map((m) => m.id);
   const answered = (viewer: Viewer) =>
     listRelay(viewer, "all", undefined, { requestStatus: "answered", limit: 1, q: "status" }).map(
       (m) => m.id,
     );
-  expect(pending(a)).toContain(root.id);
+  expect(pending(a)).toEqual([root.id]);
   sendRelay(
     { to: { kind: "agent", id: a.id }, kind: "note", subject: "not an answer", replyTo: own.id },
     b.id,
   );
-  expect(pending(a)).toContain(root.id);
+  expect(pending(a)).toEqual([root.id]);
   sendRelay(
     { to: { kind: "agent", id: a.id }, kind: "reply", subject: "answer", replyTo: own.id },
     b.id,
@@ -128,7 +126,7 @@ test("request status counts visible replies by others, including deeper descenda
   expect(answered(a)).toEqual([root.id]);
   expect(answered(b)).toEqual([root.id]);
   expect(answered(c)).toEqual([]);
-  expect(pending(c)).toContain(root.id);
+  expect(pending(c)).toEqual([root.id]);
   expect(answered({ kind: "human" })).toEqual([root.id]);
 });
 

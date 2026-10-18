@@ -1,15 +1,12 @@
 import { registeredAgentSchema } from "@idesk/shared/agent-schemas";
 import { pluginSchema } from "@idesk/shared/plugin-schemas";
 import { taskSchema } from "@idesk/shared/task-schemas";
-import { migrate } from "drizzle-orm/better-sqlite3/migrator";
 import { afterEach, expect, test } from "vitest";
 import { z } from "zod";
 import dolphinScheduler from "../../../../plugins/dolphinscheduler/index.ts";
-import { db } from "../db/client.ts";
 import { registerPlugin, stopPlugins } from "../plugins/registry.ts";
 import { app } from "./app.ts";
 
-migrate(db, { migrationsFolder: new URL("../../drizzle", import.meta.url).pathname });
 afterEach(stopPlugins);
 
 async function login() {

@@ -1,6 +1,5 @@
 import { taskSchema } from "@idesk/shared/task-schemas";
 import { eq } from "drizzle-orm";
-import { migrate } from "drizzle-orm/better-sqlite3/migrator";
 import { expect, test } from "vitest";
 import { z } from "zod";
 import { registerAgent } from "../core/agents/agents.ts";
@@ -9,8 +8,6 @@ import { actOnTask } from "../core/tasks/transition.ts";
 import { db } from "../db/client.ts";
 import { tasks } from "../db/schema.ts";
 import { app } from "./app.ts";
-
-migrate(db, { migrationsFolder: new URL("../../drizzle", import.meta.url).pathname });
 
 test("task search matches title, body and result and ANDs filters and the history window", async () => {
   const { agent, apiKey } = registerAgent({

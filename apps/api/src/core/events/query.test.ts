@@ -1,12 +1,8 @@
 import { eventSchema } from "@idesk/shared/task-schemas";
-import { migrate } from "drizzle-orm/better-sqlite3/migrator";
 import { expect, test } from "vitest";
 import { z } from "zod";
-import { db } from "../../db/client.ts";
 import { app } from "../../http/app.ts";
 import { emitEvent } from "./bus.ts";
-
-migrate(db, { migrationsFolder: new URL("../../../drizzle", import.meta.url).pathname });
 
 test("incremental activity returns the earliest 200 events and drains the remaining backlog", async () => {
   const login = await app.request("/api/v1/auth/login", {

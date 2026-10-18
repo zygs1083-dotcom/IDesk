@@ -3,13 +3,11 @@ import { relayMessageSchema } from "@idesk/shared/relay-schemas";
 import { scheduleSchema } from "@idesk/shared/schedule-schemas";
 import { taskSchema } from "@idesk/shared/task-schemas";
 import { eq } from "drizzle-orm";
-import { migrate } from "drizzle-orm/better-sqlite3/migrator";
 import { beforeAll, expect, test } from "vitest";
 import { db } from "../db/client.ts";
 import { agents, relayMessages, schedules, tasks } from "../db/schema.ts";
 import { app } from "./app.ts";
 
-migrate(db, { migrationsFolder: new URL("../../drizzle", import.meta.url).pathname });
 let cookie: string;
 beforeAll(async () => {
   const response = await app.request("/api/v1/auth/login", {

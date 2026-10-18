@@ -1,4 +1,3 @@
-import { migrate } from "drizzle-orm/better-sqlite3/migrator";
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
 import { db } from "../../db/client.ts";
 import { events, schedules } from "../../db/schema.ts";
@@ -8,7 +7,6 @@ import { publicSchedule } from "./public.ts";
 import { runSchedule } from "./run.ts";
 import { createSchedule, deleteSchedule, getSchedule } from "./schedules.ts";
 
-migrate(db, { migrationsFolder: new URL("../../../drizzle", import.meta.url).pathname });
 beforeEach(() => {
   db.delete(schedules).run();
   db.delete(events).run();

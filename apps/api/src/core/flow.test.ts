@@ -1,6 +1,5 @@
 import { type Actor, TransitionError } from "@idesk/shared/task-machine";
 import { eq, sql } from "drizzle-orm";
-import { migrate } from "drizzle-orm/better-sqlite3/migrator";
 import { expect, test } from "vitest";
 import { db } from "../db/client.ts";
 import { agents, events, tasks } from "../db/schema.ts";
@@ -9,8 +8,6 @@ import { type Event, onEvent } from "./events/bus.ts";
 import { listRelay } from "./relay/relay.ts";
 import { createTask, getTask, listTasks, TERMINAL_WINDOW_MS } from "./tasks/store.ts";
 import { actOnTask, reportProgress } from "./tasks/transition.ts";
-
-migrate(db, { migrationsFolder: new URL("../../drizzle", import.meta.url).pathname });
 
 function register(name: string) {
   return registerAgent({ name, kind: "codex", host: "test", capabilities: ["coding"] });

@@ -1,11 +1,9 @@
-import { migrate } from "drizzle-orm/better-sqlite3/migrator";
 import { decodeTime } from "ulid";
 import { afterEach, expect, test, vi } from "vitest";
 import { db } from "../../db/client.ts";
 import { emitEvent, recordEvent } from "./bus.ts";
 import { listEvents } from "./query.ts";
 
-migrate(db, { migrationsFolder: new URL("../../../drizzle", import.meta.url).pathname });
 afterEach(() => vi.useRealTimers());
 
 test("frozen time emission and transaction order survives since batches and clock rollback", () => {
