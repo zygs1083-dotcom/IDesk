@@ -103,6 +103,7 @@ export function TaskDependencies({
       ) : (
         <div className="space-y-2">
           <input
+            data-ui="field"
             aria-label={t("desk.searchDependencies")}
             ref={(input) => input?.focus()}
             value={search}

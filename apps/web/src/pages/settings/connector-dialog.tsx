@@ -94,6 +94,7 @@ export function ConnectorDialog({
           </p>
         ) : plugins.length > 0 ? (
           <Segmented
+            formField
             label={t("common.plugins")}
             value={pluginId}
             options={plugins.map((entry) => ({ value: entry.id, label: entry.name }))}

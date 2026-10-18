@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Button } from "../../components/button.tsx";
+import { CapabilityPicker } from "../../components/capability-picker.tsx";
 import { Dialog } from "../../components/dialog.tsx";
 import { Drawer } from "../../components/drawer.tsx";
 import { Field } from "../../components/field.tsx";
@@ -16,6 +17,9 @@ export function PixelKit() {
   const [dialog, setDialog] = useState(false);
   const [drawer, setDrawer] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
+  const [formCapabilities, setFormCapabilities] = useState<string[]>(["coding"]);
+  const [formPriority, setFormPriority] = useState("normal");
+  const [formEnabled, setFormEnabled] = useState(true);
   return (
     <main data-ui="pixel-kit">
       <header>
@@ -93,6 +97,45 @@ export function PixelKit() {
             </div>
           ))}
         </div>
+      </section>
+      <section>
+        <h2>完整表单 / Full form</h2>
+        <form className="kit-form" onSubmit={(event) => event.preventDefault()}>
+          <Field label="任务标题" placeholder="输入标题" required />
+          <CapabilityPicker
+            label="能力"
+            value={formCapabilities}
+            onChange={setFormCapabilities}
+            agents={[]}
+            mode="multi"
+            description="选择预设能力，或输入自定义能力。"
+          />
+          <Segmented
+            formField
+            label="优先级"
+            value={formPriority}
+            onChange={setFormPriority}
+            options={[
+              { value: "low", label: "低" },
+              { value: "normal", label: "普通" },
+              { value: "high", label: "高" },
+              { value: "urgent", label: "紧急" },
+            ]}
+          />
+          <div className="kit-form-row">
+            <Field label="截止日期" type="datetime-local" />
+            <div data-ui="form-switch">
+              <span>启用</span>
+              <Switch label="启用" checked={formEnabled} onChange={setFormEnabled} />
+            </div>
+          </div>
+          <div className="kit-form-actions">
+            <Button>取消</Button>
+            <Button type="submit" variant="primary">
+              确认
+            </Button>
+          </div>
+        </form>
       </section>
       <section>
         <h2>内容 / Content</h2>

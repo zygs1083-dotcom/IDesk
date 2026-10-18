@@ -1,4 +1,7 @@
 html[data-skin="pixel"] {
+  & [data-ui="publish-form"] textarea[data-ui="field"] {
+    height: 96px;
+  }
   & dialog {
     padding: 16px;
   }

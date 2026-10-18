@@ -93,7 +93,11 @@ export function ActionDialog({
           />
         ) : (
           <div className="space-y-2">
-            <label htmlFor={selectId} className="block text-secondary text-text-2">
+            <label
+              htmlFor={selectId}
+              data-ui="field-label"
+              className="block text-secondary text-text-2"
+            >
               {action === "handoff" ? t("desk.recipientOptional") : t("desk.recipient")}
             </label>
             <select

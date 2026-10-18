@@ -107,6 +107,7 @@ export function PublishDialog({ onClose }: { onClose: () => void }) {
     >
       <form
         id="publish-task-form"
+        data-ui="publish-form"
         className="space-y-4"
         onSubmit={(event) => {
           event.preventDefault();
@@ -145,8 +146,9 @@ export function PublishDialog({ onClose }: { onClose: () => void }) {
         />
         <p className="text-secondary text-text-2">{t("capability.tagsDescription")}</p>
         <div className="space-y-2">
-          <span className="text-secondary text-text-2">{t("common.priority")}</span>
+          <span className="pixel-legacy text-secondary text-text-2">{t("common.priority")}</span>
           <Segmented
+            formField
             label={t("common.priority")}
             value={priority}
             onChange={setPriority}

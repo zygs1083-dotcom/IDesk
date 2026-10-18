@@ -95,8 +95,9 @@ export function ComposeRelay({
       >
         {!reply && (
           <div className="space-y-2">
-            <p className="text-secondary text-text-2">{t("relay.recipient")}</p>
+            <p className="pixel-legacy text-secondary text-text-2">{t("relay.recipient")}</p>
             <Segmented
+              formField
               label={t("relay.recipient")}
               value={recipient}
               onChange={setRecipient}
@@ -109,7 +110,7 @@ export function ComposeRelay({
           </div>
         )}
         {!reply && recipient === "agent" && (
-          <label className="block space-y-2 text-secondary text-text-2">
+          <label data-ui="form-select-label" className="block space-y-2 text-secondary text-text-2">
             {t("nav.agents")}
             <select
               className="block w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body text-text focus:border-accent"
@@ -147,8 +148,9 @@ export function ComposeRelay({
           </div>
         )}
         <div className="space-y-2">
-          <p className="text-secondary text-text-2">{t("relay.kind")}</p>
+          <p className="pixel-legacy text-secondary text-text-2">{t("relay.kind")}</p>
           <Segmented
+            formField
             label={t("relay.kind")}
             value={kind}
             onChange={setKind}

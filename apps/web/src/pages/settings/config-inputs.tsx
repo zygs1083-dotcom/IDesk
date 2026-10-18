@@ -60,7 +60,11 @@ export function ConfigInputs({
       {fields.map((field) =>
         field.options ? (
           <div key={field.name} className="space-y-2">
-            <label htmlFor={`${id}-${field.name}`} className="block text-secondary text-text-2">
+            <label
+              htmlFor={`${id}-${field.name}`}
+              data-ui="field-label"
+              className="block text-secondary text-text-2"
+            >
               {field.label}
             </label>
             <select
@@ -81,7 +85,7 @@ export function ConfigInputs({
             </select>
           </div>
         ) : field.type === "boolean" ? (
-          <div key={field.name} className="flex items-center justify-between">
+          <div key={field.name} data-ui="form-switch" className="flex items-center justify-between">
             <span className="text-secondary text-text-2">{field.label}</span>
             <Switch
               label={field.label}

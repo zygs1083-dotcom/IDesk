@@ -98,8 +98,9 @@ export function EditTaskDialog({ task, onClose }: { task: Task; onClose: () => v
           onChange={(event) => setTags(event.target.value)}
         />
         <div className="space-y-2">
-          <p className="text-secondary text-text-2">{t("common.priority")}</p>
+          <p className="pixel-legacy text-secondary text-text-2">{t("common.priority")}</p>
           <Segmented
+            formField
             label={t("common.priority")}
             value={priority}
             onChange={setPriority}

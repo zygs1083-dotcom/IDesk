@@ -138,7 +138,10 @@ export function CreateAgent({ agent, onClose }: { agent?: Agent; onClose: () => 
           {agent ? (
             <Field label={t("common.type")} value={AGENT_KIND_LABELS[kind]} readOnly />
           ) : (
-            <label className="block space-y-2 text-secondary text-text-2">
+            <label
+              data-ui="form-select-label"
+              className="block space-y-2 text-secondary text-text-2"
+            >
               {t("common.type")}
               <select
                 className="block w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body text-text focus:border-accent"

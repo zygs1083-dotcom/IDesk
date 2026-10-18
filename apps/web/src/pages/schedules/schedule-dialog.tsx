@@ -144,7 +144,7 @@ export function ScheduleDialog({
               onChange={(event) => setTimezone(event.target.value)}
             />
           </div>
-          <div className="flex items-center gap-2 pb-2">
+          <div data-ui="form-switch" className="flex items-center gap-2 pb-2">
             <span className="text-secondary text-text-2">{t("common.enable")}</span>
             <Switch label={t("common.enable")} checked={enabled} onChange={setEnabled} />
           </div>

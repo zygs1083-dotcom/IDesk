@@ -27,6 +27,7 @@ export function CapabilityList({
   return (
     <div
       id={`${id}-options`}
+      data-ui="capability-options"
       role="listbox"
       aria-label={label}
       className="max-h-40 overflow-auto rounded-control border border-line bg-surface"

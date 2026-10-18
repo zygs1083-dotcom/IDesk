@@ -115,6 +115,7 @@ html[data-skin="pixel"] {
     border-color: var(--status-failed);
   }
   & [data-ui="field-label"] {
+    display: block;
     color: var(--text-2);
     font:
       400 12px / 1.4 "IDesk Pixel",
@@ -122,6 +123,65 @@ html[data-skin="pixel"] {
   }
   & [data-ui="field-label"] [aria-hidden="true"] {
     color: var(--status-failed);
+  }
+  & [data-ui="form-select-label"] {
+    display: grid;
+    color: var(--text-2);
+    font:
+      400 12px / 1.4 "IDesk Pixel",
+      var(--font-sans);
+  }
+  & [data-ui="segmented-field"] {
+    display: grid;
+    min-width: 0;
+    gap: 8px;
+  }
+  & [data-ui="form-switch"] {
+    display: grid;
+    justify-items: start;
+    gap: 8px;
+    padding: 0;
+  }
+  & [data-ui="form-switch"] > span {
+    color: var(--text-2);
+    font:
+      400 12px / 1.4 "IDesk Pixel",
+      var(--font-sans);
+  }
+  & [data-ui="capability-combobox"] {
+    position: relative;
+  }
+  & [data-ui="capability-options"] {
+    position: absolute;
+    z-index: 10;
+    top: calc(100% + 4px);
+    right: 0;
+    left: 0;
+    padding: 4px;
+    border: 2px solid var(--ink);
+    background: var(--surface);
+    box-shadow: var(--elevation-pop);
+  }
+  & [data-ui="capability-chip"] {
+    border-color: var(--line-strong);
+    background: var(--surface);
+    box-shadow: 0 2px 0 var(--line-strong);
+  }
+  & [data-ui="search-field"] {
+    height: 36px;
+    border: 1px solid var(--line-strong);
+    border-top: 2px solid var(--ink);
+    border-left: 2px solid var(--ink);
+    background: var(--surface-2);
+    box-shadow: inset -1px -1px 0 var(--surface);
+  }
+  & [data-ui="search-field"] input {
+    min-height: 0;
+    height: 30px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
   }
   & select {
     appearance: none;
@@ -162,6 +222,8 @@ html[data-skin="pixel"] {
     gap: 0;
     padding: 2px;
     border: 1px solid var(--line-strong);
+    border-top: 2px solid var(--ink);
+    border-left: 2px solid var(--ink);
     border-radius: 0;
     background: var(--surface-2);
     box-shadow: inset 2px 2px 0 var(--line-strong);
@@ -172,6 +234,7 @@ html[data-skin="pixel"] {
     height: 26px;
     min-height: 26px;
     padding: 0 8px;
+    border: 1px solid transparent;
     border-radius: 0;
     color: var(--text-2);
     font:
@@ -180,11 +243,19 @@ html[data-skin="pixel"] {
   }
   & [data-ui="segmented"] [aria-pressed="true"] {
     color: var(--text);
+    border-color: var(--ink);
     background: var(--surface);
     box-shadow:
-      inset 1px 1px 0 var(--surface),
-      inset -1px -1px 0 var(--line-strong),
-      0 1px 0 var(--ink);
+      inset 2px 2px 0 color-mix(in srgb, var(--surface) 70%, white),
+      inset -2px -2px 0 var(--line-strong),
+      0 2px 0 var(--ink);
+  }
+  & [data-ui="segmented-field"] fieldset[data-ui="segmented"] {
+    display: flex;
+    width: 100%;
+  }
+  & [data-ui="segmented-field"] [data-ui="segmented"] button {
+    flex: 1 0 auto;
   }
   & [role="switch"] {
     width: 40px;
