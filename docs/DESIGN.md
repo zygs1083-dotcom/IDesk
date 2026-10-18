@@ -643,3 +643,10 @@ completedAt: <ISO>
 - `PATCH /automation/runs/:id { hidden: boolean }`：只有管理员（viewer 和 Agent key 403）；run 不存在 404；只允许 `success`、`failed`、`canceled` 三种终态，`waiting`、`running` 返回 409 `automation.runNotFinished`。`true` 写当前时间，`false` 清空；重复设置同一个值直接返回 200，不改时间。返回更新后的 run（带 jobName、jobGroup）。不写事件，前端成功后失效 `["automation"]`，其他打开的页面在下一次 `connector.polled` 时刷新。
 - 「当天」按浏览器本地日期：run 的 `finishedAt`，没有就用 `startedAt`，落在今天 0 点之后算当天，两者都没有的不算。页面每 30 秒的时钟跨过 0 点时自动换天。
 - 不做：自动删除数据库里的 run、按工作流整体隐藏、隐藏待执行列的下一次计划、给隐藏写活动记录。
+
+### 12.30 DolphinScheduler 时区（W94）
+
+- 海豚接口的时间是不带时区的本地时间（`yyyy-MM-dd HH:mm:ss`，按海豚服务器时区）。原来按 UTC 解析，部署在北京时间的海豚，run 的开始和结束时间都晚了 8 小时，「今天」筛选在 16 点以后会错。
+- 连接器配置加 `timezone`（IANA 名，默认 `Asia/Shanghai`，与定时的默认时区一致），标题「时区（海豚服务器）」/「Time zone (DolphinScheduler server)」；用 `Intl` 校验，无效返回 400。已有连接器没有这一项时按默认值。
+- `startTime`、`endTime` 按这个时区换算成时间点；`listRuns` 的 `startDate` 参数也按这个时区格式化。用 `Intl.DateTimeFormat` 换算，不加依赖。
+- 迁移 `0008` 一次性把已存 DolphinScheduler 连接器的 run 的 `started_at`、`finished_at` 减 8 小时（按默认时区的固定偏移，中国没有夏令时），只改 `plugin_id = 'dolphinscheduler'` 连接器下的 run；作业的 `last_run_at` 下一轮轮询会重算。迁移在服务启动时、轮询开始前执行，不会和新写入的正确时间叠加。
