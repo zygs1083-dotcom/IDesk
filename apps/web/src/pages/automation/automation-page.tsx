@@ -93,6 +93,9 @@ export function AutomationPage() {
     showHidden,
     now,
   );
+  useEffect(() => {
+    if (hiddenCount === 0) setShowHidden(false);
+  }, [hiddenCount]);
   const upcoming = nextRuns(
     (jobs.data ?? []).filter((job) => matches(q, [job.name, job.group])),
     now,
