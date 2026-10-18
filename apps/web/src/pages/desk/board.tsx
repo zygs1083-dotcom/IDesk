@@ -157,9 +157,9 @@ export function Board({
           })}
           {!search && boardTasks.length === 0 && !loading && (
             <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-              <div className="pointer-events-auto space-y-3 text-center">
+              <div data-ui="board-note" className="pointer-events-auto space-y-3 text-center">
                 <p className="text-secondary text-text-2">{t("desk.empty")}</p>
-                <Button disabled={!isAdmin} onClick={() => onPublish()}>
+                <Button variant="primary" disabled={!isAdmin} onClick={() => onPublish()}>
                   {t("desk.publishOne")}
                 </Button>
               </div>

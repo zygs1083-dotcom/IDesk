@@ -54,8 +54,26 @@ export function ComposeRelay({
     subject.trim() &&
     (reply || recipient === "broadcast" || (recipient === "agent" ? agentId : capability.trim()));
   return (
-    <Dialog open onClose={onClose} title={reply ? t("relay.replyMessage") : t("relay.sendMessage")}>
+    <Dialog
+      open
+      onClose={onClose}
+      title={reply ? t("relay.replyMessage") : t("relay.sendMessage")}
+      footer={
+        <>
+          <Button onClick={onClose}>{t("common.cancel")}</Button>
+          <Button
+            type="submit"
+            form="compose-relay-form"
+            variant="primary"
+            disabled={!valid || send.isPending}
+          >
+            {t("common.send")}
+          </Button>
+        </>
+      }
+    >
       <form
+        id="compose-relay-form"
         className="space-y-4"
         onSubmit={(event) => {
           event.preventDefault();
@@ -156,7 +174,7 @@ export function ComposeRelay({
             {send.error.message}
           </p>
         )}
-        <div className="flex justify-end gap-2">
+        <div className="pixel-legacy flex justify-end gap-2">
           <Button onClick={onClose}>{t("common.cancel")}</Button>
           <Button type="submit" variant="primary" disabled={!valid || send.isPending}>
             {t("common.send")}

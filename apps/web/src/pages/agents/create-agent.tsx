@@ -70,6 +70,28 @@ export function CreateAgent({ agent, onClose }: { agent?: Agent; onClose: () => 
       open
       onClose={onClose}
       title={agent ? t("agents.edit") : create.data ? t("agents.created") : t("agents.create")}
+      footer={
+        create.data ? (
+          <>
+            <Button onClick={copyKey}>{copied ? t("common.copied") : t("common.copy")}</Button>
+            <Button variant="primary" onClick={onClose}>
+              {t("common.complete")}
+            </Button>
+          </>
+        ) : (
+          <>
+            <Button onClick={onClose}>{t("common.cancel")}</Button>
+            <Button
+              type="submit"
+              form="agent-form"
+              variant="primary"
+              disabled={!name.trim() || create.isPending || update.isPending}
+            >
+              {t("common.confirm")}
+            </Button>
+          </>
+        )
+      }
     >
       {create.data ? (
         <div className="space-y-4">
@@ -82,7 +104,7 @@ export function CreateAgent({ agent, onClose }: { agent?: Agent; onClose: () => 
               {copyError}
             </p>
           )}
-          <div className="flex justify-end gap-2">
+          <div className="pixel-legacy flex justify-end gap-2">
             <Button onClick={copyKey}>{copied ? t("common.copied") : t("common.copy")}</Button>
             <Button variant="primary" onClick={onClose}>
               {t("common.complete")}
@@ -91,6 +113,7 @@ export function CreateAgent({ agent, onClose }: { agent?: Agent; onClose: () => 
         </div>
       ) : (
         <form
+          id="agent-form"
           className="space-y-4"
           onSubmit={(event) => {
             event.preventDefault();
@@ -156,7 +179,7 @@ export function CreateAgent({ agent, onClose }: { agent?: Agent; onClose: () => 
               {error.message}
             </p>
           )}
-          <div className="flex justify-end gap-2">
+          <div className="pixel-legacy flex justify-end gap-2">
             <Button onClick={onClose}>{t("common.cancel")}</Button>
             <Button
               type="submit"

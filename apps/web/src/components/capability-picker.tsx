@@ -12,6 +12,7 @@ import {
   capabilityOptions,
   visibleCapabilities,
 } from "./capability-options.ts";
+import { PixelIcon } from "./pixel-icon.tsx";
 
 export function CapabilityPicker({
   value,
@@ -76,7 +77,7 @@ export function CapabilityPicker({
                 className="border-0 bg-transparent p-1"
                 onClick={() => onChange(value.filter((entry) => entry !== item))}
               >
-                <X size={16} strokeWidth={1.5} />
+                <PixelIcon name="close" fallback={<X size={16} strokeWidth={1.5} />} />
               </Button>
             </span>
           ))}

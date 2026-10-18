@@ -45,8 +45,26 @@ export function EditTaskDialog({ task, onClose }: { task: Task; onClose: () => v
     },
   });
   return (
-    <Dialog open onClose={onClose} title={t("common.edit")}>
+    <Dialog
+      open
+      onClose={onClose}
+      title={t("common.edit")}
+      footer={
+        <>
+          <Button onClick={onClose}>{t("common.cancel")}</Button>
+          <Button
+            type="submit"
+            form="edit-task-form"
+            variant="primary"
+            disabled={!isAdmin || !title.trim() || save.isPending}
+          >
+            {t("common.save")}
+          </Button>
+        </>
+      }
+    >
       <form
+        id="edit-task-form"
         className="space-y-4"
         onSubmit={(event) => {
           event.preventDefault();
@@ -103,7 +121,7 @@ export function EditTaskDialog({ task, onClose }: { task: Task; onClose: () => v
             {save.error.message}
           </p>
         )}
-        <div className="flex justify-end gap-2">
+        <div className="pixel-legacy flex justify-end gap-2">
           <Button onClick={onClose}>{t("common.cancel")}</Button>
           <Button
             type="submit"

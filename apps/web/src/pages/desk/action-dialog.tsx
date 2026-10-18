@@ -41,8 +41,26 @@ export function ActionDialog({
           ? !!note.trim()
           : needed >= 2;
   return (
-    <Dialog open onClose={onClose} title={labels(lang).action[action]}>
+    <Dialog
+      open
+      onClose={onClose}
+      title={labels(lang).action[action]}
+      footer={
+        <>
+          <Button onClick={onClose}>{t("common.cancel")}</Button>
+          <Button
+            type="submit"
+            form="task-action-form"
+            variant="primary"
+            disabled={pending || !enabled}
+          >
+            {labels(lang).action[action]}
+          </Button>
+        </>
+      }
+    >
       <form
+        id="task-action-form"
         className="space-y-4"
         onSubmit={(event) => {
           event.preventDefault();
@@ -106,7 +124,7 @@ export function ActionDialog({
           />
         )}
         <Toast message={error} onClose={onDismissError} />
-        <div className="flex justify-end gap-2">
+        <div className="pixel-legacy flex justify-end gap-2">
           <Button onClick={onClose}>{t("common.cancel")}</Button>
           <Button type="submit" variant="primary" disabled={pending || !enabled}>
             {labels(lang).action[action]}

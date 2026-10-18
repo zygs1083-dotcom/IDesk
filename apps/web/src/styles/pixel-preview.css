@@ -1,44 +1,45 @@
 .pixel-preview {
   display: flex;
   height: 128px;
-  gap: 6px;
-  padding: 6px;
-  background: #e3d5b8;
-  border: 1px solid #967047;
+  gap: 0;
+  padding: 5px;
+  background: #8d6840 url("/pixel-office/softer-wood.webp") center / 320px;
+  border: 2px solid #392b20;
+  box-shadow: inset 0 0 0 2px #d8ad72;
 }
 .pixel-preview-cabinet {
   display: grid;
   align-content: start;
   gap: 8px;
   width: 24%;
-  padding: 10px 5px;
-  background: #bd915f;
-  border: 2px solid #967047;
+  padding: 18px 5px;
 }
 .pixel-preview-cabinet span {
-  height: 16px;
-  background: #e5c18c;
-  border: 1px solid #805a37;
-  box-shadow: 0 2px 0 #967047;
+  height: 12px;
+  background: #fff2d8;
+}
+.pixel-preview-cabinet span:first-child {
+  background: #f7efd9;
+  box-shadow: inset 3px 0 0 #365e44;
 }
 .pixel-preview-workspace {
   flex: 1;
   min-width: 0;
+  padding: 8px;
+  background: #f7efd9;
 }
 .pixel-preview-scene {
-  height: 44px;
-  background: url("/pixel-office/workbench-banner.webp") center / cover;
+  height: 24px;
+  border-bottom: 1px dashed #9f8c6b;
 }
 .pixel-preview-papers {
   display: flex;
   gap: 6px;
-  padding: 12px 4px;
-  background: #c5a275;
+  padding: 12px 2px;
 }
 .pixel-preview-papers span {
   height: 44px;
   flex: 1;
-  border: 1px solid #92704c;
-  background: #f7edce;
-  box-shadow: 2px 2px 0 #ede0bf;
+  border: 1px solid #9f8c6b;
+  background: #eee3c9;
 }

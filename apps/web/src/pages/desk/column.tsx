@@ -37,6 +37,7 @@ export function Column({
         <StatusDot status={status} muted={!legal} />
         <h2 className="text-section">{labels(lang).status[status]}</h2>
         <span
+          data-ui="column-count"
           className={cn("ml-auto text-label tabular-nums", legal ? "text-text-2" : "text-text-3")}
         >
           {count}

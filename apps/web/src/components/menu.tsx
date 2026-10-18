@@ -3,6 +3,7 @@ import { motion, useReducedMotion } from "motion/react";
 import { useEffect, useId, useRef, useState } from "react";
 import { cn } from "../lib/cn.ts";
 import { Button } from "./button.tsx";
+import { PixelIcon } from "./pixel-icon.tsx";
 
 export function Menu({
   label,
@@ -43,6 +44,8 @@ export function Menu({
         aria-expanded={open}
         aria-controls={open ? id : undefined}
         disabled={disabled}
+        variant={trigger ? "ghost" : "icon"}
+        title={label}
         className={trigger ? "border-0 text-accent" : "border-0 p-2"}
         onClick={() => setOpen(!open)}
         onKeyDown={(event) => {
@@ -52,7 +55,7 @@ export function Menu({
           }
         }}
       >
-        {trigger ?? <Ellipsis size={18} strokeWidth={1.5} />}
+        {trigger ?? <PixelIcon name="more" fallback={<Ellipsis size={18} strokeWidth={1.5} />} />}
       </Button>
       {open && (
         <motion.div

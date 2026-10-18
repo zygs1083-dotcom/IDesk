@@ -156,8 +156,22 @@ export function SchedulesPage() {
         open={!!deleting}
         title={t("schedules.delete", { name: deleting?.name ?? "" })}
         onClose={() => setDeleting(null)}
+        footer={
+          <>
+            <Button onClick={() => setDeleting(null)}>{t("common.cancel")}</Button>
+            <Button
+              variant="danger"
+              disabled={remove.isPending}
+              onClick={() => {
+                if (deleting) remove.mutate(deleting.id);
+              }}
+            >
+              {t("common.delete")}
+            </Button>
+          </>
+        }
       >
-        <div className="flex justify-end gap-2">
+        <div className="pixel-legacy flex justify-end gap-2">
           <Button onClick={() => setDeleting(null)}>{t("common.cancel")}</Button>
           <Button
             className="text-status-failed"

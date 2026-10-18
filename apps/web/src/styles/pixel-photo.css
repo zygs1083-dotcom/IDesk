@@ -6,16 +6,13 @@
   html[data-skin="pixel"] .agent-photo {
     display: block;
     flex: 0 0 auto;
-    width: 220px;
+    width: calc(100% - 24px);
     height: 150px;
-    margin: auto 6px 12px;
-    padding: 7px;
-    border: 4px solid var(--wood);
-    border-top-color: var(--wood-edge);
+    margin: auto 12px 12px;
+    padding: 4px;
+    border: 1px solid var(--wood-edge);
     background: var(--material-wood) center / 640px;
-    box-shadow:
-      inset 0 0 0 2px var(--wood-edge),
-      2px 3px 0 var(--ink);
+    box-shadow: none;
     pointer-events: none;
   }
   html[data-skin="pixel"] [data-ui="sidebar-footer"] {

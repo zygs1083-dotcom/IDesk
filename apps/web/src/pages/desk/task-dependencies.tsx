@@ -2,6 +2,7 @@ import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
 import { X } from "lucide-react";
 import { useState } from "react";
 import { useSearchParams } from "react-router";
+import { PixelIcon } from "../../components/pixel-icon.tsx";
 import { useLang } from "../../i18n/lang.tsx";
 import { request } from "../../lib/api.ts";
 import type { Task } from "../../lib/types.ts";
@@ -85,7 +86,7 @@ export function TaskDependencies({
                 className="rounded-control p-1 text-text-3 hover:text-text focus-visible:outline-accent disabled:opacity-50"
                 onClick={() => mutation.mutate(task.blockedBy.filter((item) => item !== id))}
               >
-                <X size={16} strokeWidth={1.5} aria-hidden="true" />
+                <PixelIcon name="close" fallback={<X size={16} strokeWidth={1.5} />} />
               </button>
             </div>
           )

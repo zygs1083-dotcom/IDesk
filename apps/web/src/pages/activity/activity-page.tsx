@@ -1,6 +1,7 @@
 import { Bot, ListTodo, Send } from "lucide-react";
 import { useState } from "react";
 import { Button } from "../../components/button.tsx";
+import { PixelIcon } from "../../components/pixel-icon.tsx";
 import { Segmented } from "../../components/segmented.tsx";
 import { useLang } from "../../i18n/lang.tsx";
 import { PageHeader } from "../../layout/page-header.tsx";
@@ -82,6 +83,11 @@ export function ActivityPage() {
                   : event.type.startsWith("agent.")
                     ? Bot
                     : ListTodo;
+                const iconName = event.type.startsWith("relay.")
+                  ? "mail"
+                  : event.type.startsWith("agent.")
+                    ? "agent"
+                    : "desk";
                 return (
                   <li key={event.id} className="flex items-center gap-4 py-3">
                     <time
@@ -94,10 +100,9 @@ export function ActivityPage() {
                         hour12: false,
                       })}
                     </time>
-                    <Icon
-                      size={16}
-                      strokeWidth={1.5}
-                      aria-hidden="true"
+                    <PixelIcon
+                      name={iconName}
+                      fallback={<Icon size={16} strokeWidth={1.5} />}
                       className="shrink-0 text-text-2"
                     />
                     <p className="truncate text-body">

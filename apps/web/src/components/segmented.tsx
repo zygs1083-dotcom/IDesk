@@ -13,6 +13,7 @@ export function Segmented<T extends string>({
 }) {
   return (
     <fieldset
+      data-ui="segmented"
       aria-label={label}
       className="flex max-w-full gap-1 overflow-x-auto rounded-control border border-line bg-surface-2 p-1"
     >

@@ -2,6 +2,7 @@ import type { useDraggable } from "@dnd-kit/core";
 import { labels } from "@idesk/shared/labels";
 import { Lock } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
+import { PixelIcon } from "../../components/pixel-icon.tsx";
 import { useLang } from "../../i18n/lang.tsx";
 import { cn } from "../../lib/cn.ts";
 import { relativeTime } from "../../lib/format.ts";
@@ -41,6 +42,8 @@ export function TaskCard({
   return (
     <motion.button
       data-ui="card"
+      data-dragging={drag?.isDragging ? "true" : undefined}
+      data-status={task.status}
       ref={drag?.setNodeRef}
       type="button"
       {...drag?.attributes}
@@ -61,10 +64,10 @@ export function TaskCard({
         overlay && "shadow-card",
       )}
     >
-      <span className="mb-3 block line-clamp-2 text-body">
+      <span data-ui="card-title" className="mb-3 block line-clamp-2 text-body">
         {blockers > 0 && (
           <span className="mr-2 inline-flex items-center gap-1 text-text-3 tabular-nums">
-            <Lock size={16} strokeWidth={1.5} aria-hidden="true" />
+            <PixelIcon name="lock" fallback={<Lock size={16} strokeWidth={1.5} />} />
             <span aria-hidden="true">{blockers}</span>
             <span className="sr-only">{t("desk.blockers", { count: blockers })}</span>
           </span>

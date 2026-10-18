@@ -7,10 +7,17 @@
 @import "./pixel-header.css";
 @import "./pixel-controls.css";
 @import "./pixel-board.css";
+@import "./pixel-overlay.css";
 @import "./pixel-pages.css";
 @import "./pixel-decor.css";
 @import "./pixel-photo.css";
 @import "./pixel-preview.css";
+
+[data-ui="overlay-footer"],
+.pixel-required,
+.pixel-only {
+  display: none;
+}
 
 @utility duration-hover {
   transition-duration: var(--duration-hover);

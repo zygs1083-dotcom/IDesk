@@ -1,0 +1,124 @@
+[data-ui="pixel-kit"] {
+  min-height: 100%;
+  padding: 32px;
+  background: var(--surface);
+  color: var(--text);
+  font: 14px / 1.5 var(--font-sans);
+}
+[data-ui="pixel-kit"] > header {
+  margin-bottom: 32px;
+}
+[data-ui="pixel-kit"] h1 {
+  font:
+    400 24px / 1.3 "IDesk Pixel",
+    var(--font-sans);
+}
+[data-ui="pixel-kit"] > section {
+  margin: 0 0 32px;
+  padding: 20px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface-2);
+}
+[data-ui="pixel-kit"] > section > h2 {
+  margin-bottom: 16px;
+  font:
+    400 12px / 1.4 "IDesk Pixel",
+    var(--font-sans);
+}
+.kit-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 16px;
+}
+.kit-stack {
+  display: grid;
+  align-items: start;
+  gap: 12px;
+}
+.kit-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.kit-grid select {
+  display: block;
+  width: 100%;
+  margin-top: 8px;
+}
+.kit-icons {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 12px;
+}
+.kit-icons > div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.kit-badge {
+  padding: 2px 6px;
+  color: var(--ink);
+  background: var(--copper-light);
+  border: 1px solid var(--copper);
+}
+.kit-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 6px;
+  color: var(--status-done);
+  border: 1px solid var(--status-done);
+}
+html[data-skin="pixel"] .kit-tray[data-ui="task-folder"] {
+  flex: 0 0 248px;
+  width: 248px;
+  max-width: 100%;
+  min-height: 180px;
+}
+.kit-tray [data-ui="column-heading"] {
+  display: flex;
+  align-items: center;
+}
+.kit-tray [data-ui="column-count"] {
+  margin-left: auto;
+}
+.kit-tray [data-ui="card"] {
+  display: grid;
+  gap: 8px;
+}
+.kit-list {
+  flex: 1;
+  min-width: 240px;
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+}
+.kit-list-head {
+  height: 32px;
+  padding: 8px;
+  font:
+    400 12px / 1 "IDesk Pixel",
+    var(--font-sans);
+  background: var(--surface-2);
+}
+.kit-list-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 48px;
+  gap: 8px;
+  padding: 8px;
+  border-top: 1px dashed var(--line);
+}
+html[data-skin="pixel"] .kit-hover {
+  background: var(--surface-2);
+}
+html[data-skin="pixel"] .kit-pressed {
+  translate: 0 2px;
+  box-shadow: none;
+}
+html[data-skin="pixel"] .kit-focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}

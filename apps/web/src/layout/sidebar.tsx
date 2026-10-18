@@ -5,13 +5,16 @@ import {
   Bot,
   Building2,
   Clock,
+  Languages,
   LayoutGrid,
+  LogOut,
   PencilRuler,
   Send,
   Settings,
   Workflow,
 } from "lucide-react";
 import { NavLink } from "react-router";
+import { PixelIcon } from "../components/pixel-icon.tsx";
 import { useLang } from "../i18n/lang.tsx";
 import { cn } from "../lib/cn.ts";
 import { logout } from "../lib/logout.ts";
@@ -29,13 +32,13 @@ const languageClasses = {
 export function Sidebar() {
   const { lang, setLang, t } = useLang();
   const items = [
-    { to: "/desk", label: t("nav.desk"), icon: LayoutGrid },
-    { to: "/relay", label: t("nav.relay"), icon: Send },
-    { to: "/automation", label: t("nav.automation"), icon: Workflow },
-    { to: "/agents", label: t("nav.agents"), icon: Bot },
-    { to: "/schedules", label: t("nav.schedules"), icon: Clock },
-    { to: "/activity", label: t("nav.activity"), icon: Activity },
-    { to: "/settings", label: t("nav.settings"), icon: Settings },
+    { to: "/desk", label: t("nav.desk"), icon: LayoutGrid, pixel: "desk" },
+    { to: "/relay", label: t("nav.relay"), icon: Send, pixel: "relay" },
+    { to: "/automation", label: t("nav.automation"), icon: Workflow, pixel: "automation" },
+    { to: "/agents", label: t("nav.agents"), icon: Bot, pixel: "agent" },
+    { to: "/schedules", label: t("nav.schedules"), icon: Clock, pixel: "schedule" },
+    { to: "/activity", label: t("nav.activity"), icon: Activity, pixel: "activity" },
+    { to: "/settings", label: t("nav.settings"), icon: Settings, pixel: "settings" },
   ];
   const { agents } = useAgents();
   const { data: session } = useSession();
@@ -63,7 +66,7 @@ export function Sidebar() {
         aria-label={t("nav.main")}
         className="flex gap-0 p-2 sidebar:flex-col sidebar:gap-1 sidebar:px-3 sidebar:py-0"
       >
-        {items.map(({ to, label, icon: Icon }) => (
+        {items.map(({ to, label, icon: Icon, pixel }) => (
           <NavLink
             key={to}
             to={to}
@@ -75,7 +78,19 @@ export function Sidebar() {
               )
             }
           >
-            <Icon aria-hidden="true" size={16} strokeWidth={1.5} />
+            <PixelIcon
+              name={
+                pixel as
+                  | "desk"
+                  | "relay"
+                  | "automation"
+                  | "agent"
+                  | "schedule"
+                  | "activity"
+                  | "settings"
+              }
+              fallback={<Icon aria-hidden="true" size={16} strokeWidth={1.5} />}
+            />
             <span className="sr-only sidebar:not-sr-only">{label}</span>
             {to === "/relay" && <RelayBadge />}
           </NavLink>
@@ -87,7 +102,10 @@ export function Sidebar() {
             title={t("nav.office")}
             className="flex items-center gap-2 rounded-control p-2.5 text-body text-text-2 transition-colors duration-hover ease-hover hover:text-text sidebar:px-3 sidebar:py-2"
           >
-            <Building2 aria-hidden="true" size={16} strokeWidth={1.5} />
+            <PixelIcon
+              name="office"
+              fallback={<Building2 aria-hidden="true" size={16} strokeWidth={1.5} />}
+            />
             <span className="hidden sidebar:inline">{t("nav.office")}</span>
           </a>
         )}
@@ -132,6 +150,31 @@ export function Sidebar() {
         {session?.role === "viewer" && (
           <span className="rounded-control border border-line px-2 py-1">{t("nav.readOnly")}</span>
         )}
+      </div>
+      <div data-ui="pixel-footer" className="hidden">
+        <span data-ui="online-label">
+          <span data-ui="online-dot" className={online > 0 ? "bg-status-done" : "bg-status-open"} />
+          {online} {t("common.online")}
+          {session?.role === "viewer" && <span data-ui="read-only">{t("nav.readOnly")}</span>}
+        </span>
+        <button
+          type="button"
+          title={t("nav.switchLanguage")}
+          aria-label={t("nav.switchLanguage")}
+          onClick={() => setLang(otherLang[lang])}
+        >
+          <PixelIcon name="language" fallback={<Languages size={16} />} />
+          {lang === "zh" ? "中" : "EN"}
+        </button>
+        <button
+          type="button"
+          title={t("nav.logout")}
+          aria-label={t("nav.logout")}
+          disabled={leave.isPending}
+          onClick={() => leave.mutate()}
+        >
+          <PixelIcon name="logout" fallback={<LogOut size={16} />} />
+        </button>
       </div>
     </aside>
   );

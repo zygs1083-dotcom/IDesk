@@ -1,3 +1,4 @@
+import { lazy, Suspense } from "react";
 import { Navigate, Route, Routes } from "react-router";
 import { Shell } from "./layout/shell.tsx";
 import { ActivityPage } from "./pages/activity/activity-page.tsx";
@@ -14,10 +15,24 @@ import { ConnectorsPage } from "./pages/settings/connectors-page.tsx";
 import { PluginsPage } from "./pages/settings/plugins-page.tsx";
 import { SettingsPage } from "./pages/settings/settings-page.tsx";
 
+const PixelKit = import.meta.env.DEV
+  ? lazy(() => import("./pages/dev/pixel-kit.tsx").then((module) => ({ default: module.PixelKit })))
+  : null;
+
 export function App() {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
+      {PixelKit && (
+        <Route
+          path="/dev/pixel-kit"
+          element={
+            <Suspense fallback={null}>
+              <PixelKit />
+            </Suspense>
+          }
+        />
+      )}
       <Route element={<Shell />}>
         <Route index element={<Navigate to="/desk" replace />} />
         <Route path="/desk" element={<Desk />} />

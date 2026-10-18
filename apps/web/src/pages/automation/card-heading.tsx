@@ -1,5 +1,6 @@
 import { ExternalLink } from "lucide-react";
 import type { ReactNode } from "react";
+import { PixelIcon } from "../../components/pixel-icon.tsx";
 import { useLang } from "../../i18n/lang.tsx";
 import { cn } from "../../lib/cn.ts";
 
@@ -33,7 +34,7 @@ export function CardHeading({
             aria-label={t("automation.openRun", { name })}
             className="shrink-0 rounded-control text-text-2 hover:text-text focus-visible:outline-2 focus-visible:outline-accent"
           >
-            <ExternalLink size={16} strokeWidth={1.5} />
+            <PixelIcon name="external" fallback={<ExternalLink size={16} strokeWidth={1.5} />} />
           </a>
         )}
       </div>

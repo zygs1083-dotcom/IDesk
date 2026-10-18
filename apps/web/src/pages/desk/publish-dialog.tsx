@@ -73,6 +73,19 @@ export function PublishDialog({ onClose }: { onClose: () => void }) {
       open
       onClose={onClose}
       title={t("common.publishTask")}
+      footer={
+        <>
+          <Button onClick={onClose}>{t("common.cancel")}</Button>
+          <Button
+            type="submit"
+            form="publish-task-form"
+            variant="primary"
+            disabled={!title.trim() || !enabled || mutation.isPending}
+          >
+            {t("common.publish")}
+          </Button>
+        </>
+      }
       actions={
         templates.length > 0 && (
           <Menu
@@ -93,6 +106,7 @@ export function PublishDialog({ onClose }: { onClose: () => void }) {
       }
     >
       <form
+        id="publish-task-form"
         className="space-y-4"
         onSubmit={(event) => {
           event.preventDefault();
@@ -162,7 +176,7 @@ export function PublishDialog({ onClose }: { onClose: () => void }) {
             {mutation.error.message}
           </p>
         )}
-        <div className="flex justify-end">
+        <div className="pixel-legacy flex justify-end">
           <Button
             type="submit"
             variant="primary"

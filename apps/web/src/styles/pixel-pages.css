@@ -1,208 +1,112 @@
 html[data-skin="pixel"] {
-  & [data-scene="relay"] {
-    gap: 16px;
+  & [data-ui="relay-search"] {
+    position: relative;
+    width: min(240px, 100%);
   }
-  & [data-scene="relay"] > [data-ui="panel"] {
-    border: 6px solid var(--wood);
-    padding: 10px;
-    gap: 16px;
-    min-height: 320px;
-    background: var(--wood-light);
+  & [data-ui="relay-search"] [data-ui="field-label"] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+  }
+  & [data-ui="relay-search"] [data-ui="field"] {
+    padding-left: 36px;
+  }
+  & .relay-search-icon {
+    position: absolute;
+    left: 12px;
+    top: 10px;
+    color: var(--text-2);
+    pointer-events: none;
+  }
+  & [data-scene="relay"] > [data-ui="panel"],
+  & :is([data-scene="agents"], [data-scene="schedules"]) [data-ui="panel"],
+  & [data-scene="history"] > ul,
+  & [data-ui="settings-sheet"],
+  & [data-ui="log-page"],
+  & [data-ui="message"],
+  & [data-ui="letter"] {
+    border: 1px solid var(--line-strong);
+    border-radius: 0;
+    background: var(--surface);
+    box-shadow: 0 2px 0 var(--line-strong);
+  }
+  & [data-ui="settings-tabs"] {
+    border: 1px solid var(--line-strong);
+    background: var(--surface-2);
+    box-shadow: none;
   }
   & [data-ui="mail-slots"] {
     border: 0;
-    padding: 2px 6px 8px 2px;
-    background: color-mix(in srgb, var(--wood) 70%, var(--bg));
-  }
-  & [data-ui="message"] {
-    position: relative;
-    margin-bottom: 10px;
-    border: 2px solid var(--line-strong);
-    border-bottom: 7px solid var(--wood-light);
-    background: var(--surface);
-    box-shadow: 0 3px 0 var(--ink);
-  }
-  & [data-ui="message"]:hover {
-    background: var(--surface-2);
-  }
-  & [data-ui="message"][aria-pressed="true"] {
-    border-left: 6px solid var(--accent);
     background: var(--surface-2);
   }
   & [data-ui="letter-desk"] {
+    border: 1px solid var(--line-strong);
     background: var(--surface-2);
-    border: 1px solid var(--line-strong);
-    box-shadow:
-      inset 5px 0 0 var(--surface),
-      inset 7px 0 0 var(--line);
+    box-shadow: none;
   }
-  & [data-ui="letter"] {
-    padding: 20px;
-    border: 1px solid var(--line-strong);
-    border-top: 5px double var(--line-strong);
-    background: var(--surface);
-    box-shadow: 2px 3px 0 var(--line-strong);
+  & [data-ui="message"][aria-pressed="true"] {
+    border-left: 4px solid var(--accent);
   }
-  & :is([data-scene="agents"], [data-scene="schedules"]) [data-ui="panel"] {
-    border: 3px solid var(--wood);
-    border-left-width: 12px;
-    box-shadow: 3px 4px 0 var(--ink);
+  & [data-ui="run-rack"],
+  & [data-ui="console"] {
+    border: 1px solid var(--line-strong);
+    background: var(--surface-2);
+    box-shadow: none;
   }
   & table {
     background: var(--surface);
   }
   & thead {
     background: var(--surface-2);
-    border-bottom: 3px double var(--line-strong);
+    border-bottom: 1px solid var(--line-strong);
   }
   & th {
-    padding-top: 16px;
-    padding-bottom: 16px;
-  }
-  & td {
-    border-right: 1px solid var(--line);
-  }
-  & td:last-child {
-    border-right: 0;
-  }
-  & [data-scene="schedules"] tbody tr {
-    border-bottom: 2px solid var(--line);
-  }
-  & [data-scene="schedules"] td:first-child {
-    border-left: 3px double var(--line-strong);
-  }
-  & [data-scene="history"] > ul {
-    border: 4px solid var(--wood);
-    border-left-width: 14px;
-    box-shadow: 3px 4px 0 var(--ink);
-  }
-  & [data-ui="log-page"] {
-    padding: 20px 24px;
-    border: 2px solid var(--line-strong);
-    border-left: 12px solid var(--wood);
-    background: var(--surface);
-    box-shadow: 3px 4px 0 var(--wood);
-  }
-  & [data-ui="log-page"] h2 {
-    border-bottom: 3px double var(--line-strong);
-    padding-bottom: 12px;
+    height: 32px;
+    padding-block: 4px;
+    color: var(--text-2);
     font:
-      400 16px / 1.5 "IDesk Pixel",
+      400 12px / 1.4 "IDesk Pixel",
       var(--font-sans);
   }
-  & [data-ui="log-page"] li {
-    align-items: start;
+  & tbody tr {
+    height: 48px;
+    border-bottom: 1px dashed var(--line);
   }
-  & [data-ui="log-page"] li p {
-    white-space: normal;
-    overflow-wrap: anywhere;
+  & tbody tr:hover {
+    background: var(--surface-2);
   }
-  & [data-ui="settings-tabs"] {
-    align-self: start;
-    padding: 10px;
-    gap: 10px;
-    background: var(--wood-light);
-    border: 3px solid var(--ink);
-    box-shadow: 2px 3px 0 var(--wood-light);
+  & td {
+    border: 0;
   }
   & [data-ui="settings-tabs"] a {
-    color: var(--wood-text);
-    border: 1px solid var(--wood-edge);
-    min-height: 44px;
+    min-height: 32px;
+    border: 0;
   }
   & [data-ui="settings-tabs"] [aria-current="page"] {
-    color: var(--text);
     background: var(--surface);
-    box-shadow: inset 0 -3px 0 var(--line-strong);
-  }
-  & [data-ui="settings-sheet"] {
-    padding: 24px;
-    border: 3px solid var(--wood);
-    border-top-width: 10px;
-    background: var(--surface);
-    box-shadow: 4px 5px 0 var(--ink);
-  }
-  & [data-ui="settings-sheet"] > section > h2,
-  & [data-ui="settings-sheet"] > section > header {
-    border-bottom: 3px double var(--line-strong);
-    padding-bottom: 16px;
+    box-shadow: inset 4px 0 0 var(--accent);
   }
   & [data-scene="login"] {
-    min-height: 100%;
-    height: auto;
-    padding: 40px 24px;
-    background: var(--wood);
+    background: var(--bg);
   }
   & [data-scene="login"] form {
-    width: 420px;
-    padding: 28px;
-    border: 8px solid var(--wood-light);
-    outline: 3px solid var(--ink);
-    box-shadow:
-      8px 12px 0 var(--ink),
-      inset 0 0 0 2px var(--line-strong);
-  }
-  & [data-scene="login"] form::before {
-    content: "";
-    display: block;
-    height: 160px;
-    margin: -20px -20px 24px;
-    border: 4px solid var(--wood);
-    background: url("/pixel-office/office-vignette.webp") center / cover;
-    image-rendering: pixelated;
-    pointer-events: none;
+    border: 2px solid var(--ink);
+    outline: 0;
+    background: var(--surface);
+    box-shadow: var(--elevation-pop);
   }
   & [data-scene="login"] h1 {
-    width: fit-content;
-    margin-bottom: 24px;
-    padding: 10px 20px;
-    border: 4px solid var(--wood);
-    border-top-color: var(--wood-edge);
-    outline: 2px solid var(--ink);
-    background: var(--surface);
-    box-shadow:
-      inset 0 0 0 1px var(--line-strong),
-      3px 4px 0 var(--wood-light);
+    padding: 0;
+    border: 0;
+    outline: 0;
+    background: none;
+    box-shadow: none;
     font:
       400 24px / 1.25 "IDesk Pixel",
       var(--font-sans);
-  }
-}
-
-@media (max-width: 599px) {
-  html[data-skin="pixel"] {
-    & [data-ui="settings-sheet"] {
-      padding: 16px 12px;
-    }
-    & [data-ui="connector-row"] {
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-    & [data-ui="connector-row"] > div:first-of-type {
-      flex-basis: 65%;
-    }
-    & [data-ui="log-page"] {
-      padding: 16px 12px;
-    }
-    & [data-ui="log-page"] li {
-      gap: 8px;
-    }
-    & [data-ui="letter"] {
-      padding: 12px;
-    }
-    & [data-ui="letter-desk"] > div {
-      padding: 12px;
-    }
-    & [data-ui="letter-desk"] .ml-4 {
-      margin-left: 3px;
-      padding-left: 5px;
-    }
-    & [data-scene="login"] form {
-      padding: 20px;
-    }
-    & [data-scene="login"] form::before {
-      margin: -12px -12px 24px;
-      height: 120px;
-    }
   }
 }

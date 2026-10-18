@@ -36,7 +36,28 @@ export function RotateAgentKey({ agent, onClose }: { agent: Agent; onClose: () =
     }
   }
   return (
-    <Dialog open onClose={onClose} title={key ? t("agents.keyRotated") : t("agents.rotateKey")}>
+    <Dialog
+      open
+      onClose={onClose}
+      title={key ? t("agents.keyRotated") : t("agents.rotateKey")}
+      footer={
+        key ? (
+          <>
+            <Button onClick={copyKey}>{copied ? t("common.copied") : t("common.copy")}</Button>
+            <Button variant="primary" onClick={onClose}>
+              {t("common.complete")}
+            </Button>
+          </>
+        ) : (
+          <>
+            <Button onClick={onClose}>{t("common.cancel")}</Button>
+            <Button variant="danger" disabled={rotate.isPending} onClick={() => rotate.mutate()}>
+              {t("common.confirm")}
+            </Button>
+          </>
+        )
+      }
+    >
       <div className="space-y-4">
         {key ? (
           <>
@@ -53,7 +74,7 @@ export function RotateAgentKey({ agent, onClose }: { agent: Agent; onClose: () =
             {rotate.error?.message || copyError}
           </p>
         )}
-        <div className="flex justify-end gap-2">
+        <div className="pixel-legacy flex justify-end gap-2">
           {key ? (
             <>
               <Button onClick={copyKey}>{copied ? t("common.copied") : t("common.copy")}</Button>
