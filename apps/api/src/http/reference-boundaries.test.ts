@@ -1,12 +1,9 @@
-import { migrate } from "drizzle-orm/better-sqlite3/migrator";
 import { expect, test } from "vitest";
 import { deleteAgent, registerAgent } from "../core/agents/agents.ts";
 import { sendRelay } from "../core/relay/relay.ts";
 import { createTask, getTask, listTasks } from "../core/tasks/store.ts";
-import { db } from "../db/client.ts";
 import { app } from "./app.ts";
 
-migrate(db, { migrationsFolder: new URL("../../drizzle", import.meta.url).pathname });
 function agent() {
   return registerAgent({ name: "references", kind: "codex", host: "test", capabilities: [] });
 }

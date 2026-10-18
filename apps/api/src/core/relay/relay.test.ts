@@ -1,13 +1,9 @@
-import { migrate } from "drizzle-orm/better-sqlite3/migrator";
 import { expect, test } from "vitest";
-import { db } from "../../db/client.ts";
 import { registerAgent } from "../agents/agents.ts";
 import { type Event, onEvent } from "../events/bus.ts";
 import { listEvents } from "../events/query.ts";
 import { createTask } from "../tasks/store.ts";
 import { listRelay, markRelayRead, sendRelay, type Viewer } from "./relay.ts";
-
-migrate(db, { migrationsFolder: new URL("../../../drizzle", import.meta.url).pathname });
 
 function viewer(name: string, capabilities: string[]): Extract<Viewer, { kind: "agent" }> {
   const { agent } = registerAgent({ name, kind: "codex", host: "test", capabilities });

@@ -5,7 +5,6 @@ import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 import type { Transport } from "@modelcontextprotocol/sdk/shared/transport.js";
 import { eq } from "drizzle-orm";
-import { migrate } from "drizzle-orm/better-sqlite3/migrator";
 import { expect, test } from "vitest";
 import { config } from "../config.ts";
 import { registerAgent } from "../core/agents/agents.ts";
@@ -13,7 +12,6 @@ import { db } from "../db/client.ts";
 import { agents, events } from "../db/schema.ts";
 import { app } from "./app.ts";
 
-migrate(db, { migrationsFolder: new URL("../../drizzle", import.meta.url).pathname });
 async function cookie(password: string) {
   const result = await app.request("/api/v1/auth/login", {
     method: "POST",

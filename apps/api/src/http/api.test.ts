@@ -1,13 +1,9 @@
 import { registeredAgentSchema } from "@idesk/shared/agent-schemas";
 import { relayMessageSchema } from "@idesk/shared/relay-schemas";
 import { eventSchema, taskSchema } from "@idesk/shared/task-schemas";
-import { migrate } from "drizzle-orm/better-sqlite3/migrator";
 import { expect, test } from "vitest";
 import { z } from "zod";
-import { db } from "../db/client.ts";
 import { app } from "./app.ts";
-
-migrate(db, { migrationsFolder: new URL("../../drizzle", import.meta.url).pathname });
 
 function request(path: string, credential = "", body?: object) {
   return app.request(`/api/v1${path}`, {

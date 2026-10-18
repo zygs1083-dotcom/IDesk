@@ -1,5 +1,4 @@
 import { eq } from "drizzle-orm";
-import { migrate } from "drizzle-orm/better-sqlite3/migrator";
 import { expect, test } from "vitest";
 import { registerAgent } from "../core/agents/agents.ts";
 import { createTask } from "../core/tasks/store.ts";
@@ -7,7 +6,6 @@ import { db } from "../db/client.ts";
 import { tasks } from "../db/schema.ts";
 import { app } from "./app.ts";
 
-migrate(db, { migrationsFolder: new URL("../../drizzle", import.meta.url).pathname });
 test("history searches old terminal tasks with stable tied-time pages and preserves old GET shape", async () => {
   const { apiKey } = registerAgent({
     name: "history reader",
@@ -42,16 +40,18 @@ test("history searches old terminal tasks with stable tied-time pages and preser
   expect(legacy.map((task) => task.id)).toEqual([...ids].sort().reverse());
   let cursor: string | null = null;
   const found: string[] = [];
+  const pageSizes: number[] = [];
   do {
     const response = await read(
       `status=done&q=archive%20needle&limit=2${cursor ? `&cursor=${encodeURIComponent(cursor)}` : ""}`,
     );
     expect(response.status).toBe(200);
     const page = (await response.json()) as { items: { id: string }[]; nextCursor: string | null };
-    expect(page.items.length).toBeLessThanOrEqual(2);
+    pageSizes.push(page.items.length);
     found.push(...page.items.map((item) => item.id));
     cursor = page.nextCursor;
   } while (cursor);
+  expect(pageSizes).toEqual([2, 2, 1]);
   expect(found).toEqual([...ids].sort().reverse());
   const page = await (await read("status=cancelled&q=archive%20needle&limit=2")).json();
   expect(page).toMatchObject({ items: [{ id: cancelled.id }], nextCursor: null });

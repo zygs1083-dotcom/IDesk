@@ -1,14 +1,11 @@
 import { relayMessageSchema, relaySummarySchema } from "@idesk/shared/relay-schemas";
-import { migrate } from "drizzle-orm/better-sqlite3/migrator";
 import { expect, test } from "vitest";
 import { z } from "zod";
 import { config } from "../config.ts";
 import { registerAgent } from "../core/agents/agents.ts";
 import { listEvents } from "../core/events/query.ts";
-import { db } from "../db/client.ts";
 import { app } from "./app.ts";
 
-migrate(db, { migrationsFolder: new URL("../../drizzle", import.meta.url).pathname });
 async function session(password: string) {
   const response = await app.request("/api/v1/auth/login", {
     method: "POST",

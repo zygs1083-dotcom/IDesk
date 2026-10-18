@@ -1,6 +1,5 @@
 import { automationRunWithJobSchema } from "@idesk/shared/automation-schemas";
 import { eq } from "drizzle-orm";
-import { migrate } from "drizzle-orm/better-sqlite3/migrator";
 import { afterEach, expect, test } from "vitest";
 import { config } from "../config.ts";
 import { registerAgent } from "../core/agents/agents.ts";
@@ -10,7 +9,6 @@ import { storePoll } from "../plugins/poll-store.ts";
 import type { ExternalJob, ExternalRun } from "../plugins/types.ts";
 import { app } from "./app.ts";
 
-migrate(db, { migrationsFolder: new URL("../../drizzle", import.meta.url).pathname });
 const originalViewerPassword = config.IDESK_VIEWER_PASSWORD;
 afterEach(() => {
   config.IDESK_VIEWER_PASSWORD = originalViewerPassword;

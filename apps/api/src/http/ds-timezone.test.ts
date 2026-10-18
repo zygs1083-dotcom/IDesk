@@ -1,4 +1,3 @@
-import { migrate } from "drizzle-orm/better-sqlite3/migrator";
 import { afterEach, beforeEach, expect, test } from "vitest";
 import plugin from "../../../../plugins/dolphinscheduler/index.ts";
 import { createConnector } from "../core/connectors/connectors.ts";
@@ -7,7 +6,6 @@ import { connectors, pluginState } from "../db/schema.ts";
 import { registerPlugin, stopPlugins } from "../plugins/registry.ts";
 import { app } from "./app.ts";
 
-migrate(db, { migrationsFolder: new URL("../../drizzle", import.meta.url).pathname });
 let cookie: string;
 beforeEach(async () => {
   db.delete(connectors).run();

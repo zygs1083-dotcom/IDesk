@@ -1,11 +1,8 @@
 import { taskSchema } from "@idesk/shared/task-schemas";
-import { migrate } from "drizzle-orm/better-sqlite3/migrator";
 import { afterEach, expect, test, vi } from "vitest";
-import { db } from "../../db/client.ts";
 import { app } from "../../http/app.ts";
 import { registerAgent } from "../agents/agents.ts";
 
-migrate(db, { migrationsFolder: new URL("../../../drizzle", import.meta.url).pathname });
 afterEach(() => vi.useRealTimers());
 
 function request(path: string, credential: string, body: object, method = "POST") {

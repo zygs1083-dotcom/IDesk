@@ -1,6 +1,5 @@
 import { TASK_STATUSES } from "@idesk/shared/task-status";
 import { count } from "drizzle-orm";
-import { migrate } from "drizzle-orm/better-sqlite3/migrator";
 import { afterEach, beforeEach, expect, test } from "vitest";
 import { registerAgent } from "../core/agents/agents.ts";
 import { emitEvent } from "../core/events/bus.ts";
@@ -13,7 +12,6 @@ import { app } from "../http/app.ts";
 import { startPlugins } from "./host.ts";
 import { disablePlugin, stopPlugins } from "./registry.ts";
 
-migrate(db, { migrationsFolder: new URL("../../drizzle", import.meta.url).pathname });
 let headers: { Authorization: string };
 
 beforeEach(async () => {

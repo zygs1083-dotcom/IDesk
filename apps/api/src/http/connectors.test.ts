@@ -7,7 +7,6 @@ import {
   pollResultSchema,
 } from "@idesk/shared/automation-schemas";
 import { eq } from "drizzle-orm";
-import { migrate } from "drizzle-orm/better-sqlite3/migrator";
 import { afterEach, beforeEach, expect, test } from "vitest";
 import { z } from "zod";
 import { db } from "../db/client.ts";
@@ -16,7 +15,6 @@ import { disablePlugin, registerPlugin, stopPlugins } from "../plugins/registry.
 import type { ConnectorPlugin } from "../plugins/types.ts";
 import { app } from "./app.ts";
 
-migrate(db, { migrationsFolder: new URL("../../drizzle", import.meta.url).pathname });
 let calls = 0;
 let cookie: string;
 const config = { url: "https://example.com", apiKey: "valid", label: "raw input" };

@@ -2,15 +2,12 @@ import { relayMessageSchema } from "@idesk/shared/relay-schemas";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 import type { Transport } from "@modelcontextprotocol/sdk/shared/transport.js";
-import { migrate } from "drizzle-orm/better-sqlite3/migrator";
 import { expect, test } from "vitest";
 import { z } from "zod";
 import { registerAgent } from "../core/agents/agents.ts";
 import { sendRelay } from "../core/relay/relay.ts";
-import { db } from "../db/client.ts";
 import { app } from "./app.ts";
 
-migrate(db, { migrationsFolder: new URL("../../drizzle", import.meta.url).pathname });
 test("MCP sends to humans and infers replies while rejecting missing recipients", async () => {
   const { agent, apiKey } = registerAgent({
     name: "human MCP",

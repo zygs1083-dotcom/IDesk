@@ -1,5 +1,4 @@
 import { eq } from "drizzle-orm";
-import { migrate } from "drizzle-orm/better-sqlite3/migrator";
 import { afterEach, beforeEach, expect, test } from "vitest";
 import { z } from "zod";
 import { db } from "../db/client.ts";
@@ -8,7 +7,6 @@ import { pollConnector, pollDueConnectors } from "./poll.ts";
 import { disablePlugin, registerPlugin, stopPlugins } from "./registry.ts";
 import type { ConnectorPlugin, ExternalRun } from "./types.ts";
 
-migrate(db, { migrationsFolder: new URL("../../drizzle", import.meta.url).pathname });
 const now = new Date("2026-10-14T12:00:00Z");
 let runs: ExternalRun[];
 let failure: boolean;

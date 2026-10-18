@@ -1,5 +1,4 @@
 import { scheduleSchema } from "@idesk/shared/schedule-schemas";
-import { migrate } from "drizzle-orm/better-sqlite3/migrator";
 import { afterEach, beforeEach, expect, test } from "vitest";
 import { z } from "zod";
 import { registerAgent } from "../core/agents/agents.ts";
@@ -8,7 +7,6 @@ import { schedules } from "../db/schema.ts";
 import { stopSchedules } from "../scheduler/schedules.ts";
 import { app } from "./app.ts";
 
-migrate(db, { migrationsFolder: new URL("../../drizzle", import.meta.url).pathname });
 let cookie: string;
 beforeEach(async () => {
   db.delete(schedules).run();

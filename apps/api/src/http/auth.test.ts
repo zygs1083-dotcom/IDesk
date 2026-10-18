@@ -3,18 +3,15 @@ import { request as httpRequest } from "node:http";
 import type { AddressInfo } from "node:net";
 import { serve } from "@hono/node-server";
 import { authMeSchema } from "@idesk/shared/agent-schemas";
-import { migrate } from "drizzle-orm/better-sqlite3/migrator";
 import { Hono } from "hono";
 import { afterEach, expect, test } from "vitest";
 import { z } from "zod";
 import { config } from "../config.ts";
 import { registerAgent } from "../core/agents/agents.ts";
 import { emitEvent } from "../core/events/bus.ts";
-import { db } from "../db/client.ts";
 import { registerPlugin, stopPlugins } from "../plugins/registry.ts";
 import { app, injectWebSocket } from "./app.ts";
 
-migrate(db, { migrationsFolder: new URL("../../drizzle", import.meta.url).pathname });
 const viewerPassword = config.IDESK_VIEWER_PASSWORD;
 afterEach(async () => {
   config.IDESK_VIEWER_PASSWORD = viewerPassword;

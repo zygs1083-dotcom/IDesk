@@ -2,7 +2,6 @@ import { once } from "node:events";
 import { createServer } from "node:http";
 import type { AddressInfo } from "node:net";
 import { scheduleSchema } from "@idesk/shared/schedule-schemas";
-import { migrate } from "drizzle-orm/better-sqlite3/migrator";
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
 import { config } from "../config.ts";
 import { registerAgent } from "../core/agents/agents.ts";
@@ -12,7 +11,6 @@ import { agents, events, schedules } from "../db/schema.ts";
 import { stopSchedules } from "../scheduler/schedules.ts";
 import { app } from "./app.ts";
 
-migrate(db, { migrationsFolder: new URL("../../drizzle", import.meta.url).pathname });
 const originalViewer = config.IDESK_VIEWER_PASSWORD;
 let admin: string;
 let viewer: string;
