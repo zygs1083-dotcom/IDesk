@@ -9,7 +9,6 @@ export function Shell() {
     <div data-ui="shell" className="flex h-full flex-col sidebar:flex-row">
       <Sidebar />
       <main data-ui="workspace" className="min-w-0 flex-1 overflow-auto p-6">
-        <div className="pixel-workbench" aria-hidden="true" />
         <Outlet />
       </main>
     </div>

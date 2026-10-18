@@ -1,0 +1,165 @@
+.agent-photo {
+  display: none;
+}
+
+@media (min-width: 900px) and (min-height: 800px) {
+  html[data-skin="pixel"] .agent-photo {
+    display: block;
+    flex: 0 0 auto;
+    width: 220px;
+    height: 150px;
+    margin: auto 6px 12px;
+    padding: 7px;
+    border: 4px solid var(--wood);
+    border-top-color: var(--wood-edge);
+    background: var(--material-wood) center / 640px;
+    box-shadow:
+      inset 0 0 0 2px var(--wood-edge),
+      2px 3px 0 var(--ink);
+    pointer-events: none;
+  }
+  html[data-skin="pixel"] [data-ui="sidebar-footer"] {
+    margin-top: 0;
+  }
+  html[data-skin="pixel"] .agent-photo__scene {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: url("/pixel-office/agent-photo-room.webp") center / cover;
+    image-rendering: pixelated;
+  }
+  html[data-skin="pixel"] .agent-photo__agent {
+    position: absolute;
+    bottom: 1px;
+    left: 0;
+    width: 48px;
+    height: 72px;
+    animation: photo-route var(--duration) linear var(--delay) infinite;
+  }
+  html[data-skin="pixel"] .agent-photo__agent--claude {
+    --start: 4px;
+    --end: 140px;
+    --out-y: -72px;
+    --back-y: 0px;
+    --down-y: -144px;
+    --duration: 9s;
+    --delay: -1s;
+  }
+  html[data-skin="pixel"] .agent-photo__agent--codex {
+    --start: 52px;
+    --end: 115px;
+    --out-y: -288px;
+    --back-y: -216px;
+    --down-y: -360px;
+    --duration: 12s;
+    --delay: -5s;
+  }
+  html[data-skin="pixel"] .agent-photo__agent--gemini {
+    --start: 140px;
+    --end: 8px;
+    --out-y: -432px;
+    --back-y: -504px;
+    --down-y: -576px;
+    --duration: 15s;
+    --delay: -9s;
+  }
+  html[data-skin="pixel"] .agent-photo__walk,
+  html[data-skin="pixel"] .agent-photo__pose {
+    position: absolute;
+    inset: 0;
+    background-image: url("/pixel-office/agent-walk.webp");
+    background-repeat: no-repeat;
+    image-rendering: pixelated;
+  }
+  html[data-skin="pixel"] .agent-photo__walk {
+    animation:
+      photo-steps 0.5s steps(4) infinite,
+      photo-turn var(--duration) steps(1, end) var(--delay) infinite;
+  }
+  html[data-skin="pixel"] .agent-photo__pose {
+    background-position: 0 var(--down-y);
+    animation: photo-pause var(--duration) steps(1, end) var(--delay) infinite;
+  }
+}
+
+@keyframes photo-route {
+  0%,
+  8% {
+    transform: translateX(var(--start));
+  }
+  38%,
+  50% {
+    transform: translateX(var(--end));
+  }
+  88%,
+  100% {
+    transform: translateX(var(--start));
+  }
+}
+
+@keyframes photo-steps {
+  to {
+    background-position-x: -192px;
+  }
+}
+
+@keyframes photo-turn {
+  0%,
+  37% {
+    background-position-y: var(--out-y);
+    opacity: 1;
+  }
+  38%,
+  50% {
+    background-position-y: var(--down-y);
+    opacity: 0;
+  }
+  51%,
+  87% {
+    background-position-y: var(--back-y);
+    opacity: 1;
+  }
+  88%,
+  100% {
+    background-position-y: var(--down-y);
+    opacity: 0;
+  }
+}
+
+@keyframes photo-pause {
+  0%,
+  37% {
+    opacity: 0;
+  }
+  38%,
+  50% {
+    opacity: 1;
+  }
+  51%,
+  87% {
+    opacity: 0;
+  }
+  88%,
+  100% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-skin="pixel"] .agent-photo__walk {
+    display: none;
+  }
+  html[data-skin="pixel"] .agent-photo__pose {
+    opacity: 1;
+  }
+  html[data-skin="pixel"] .agent-photo__agent--claude {
+    transform: translateX(4px);
+  }
+  html[data-skin="pixel"] .agent-photo__agent--codex {
+    transform: translateX(75px);
+  }
+  html[data-skin="pixel"] .agent-photo__agent--gemini {
+    transform: translateX(145px);
+  }
+}

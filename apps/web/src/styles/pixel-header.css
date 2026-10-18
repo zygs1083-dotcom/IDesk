@@ -1,0 +1,95 @@
+html[data-skin="pixel"] {
+  & [data-ui="page-heading"] {
+    min-width: 0;
+    height: 72px;
+    flex-shrink: 0;
+    gap: 10px;
+    padding: 0 14px;
+    overflow: hidden;
+  }
+  & [data-ui="desk-toolbar"] {
+    min-width: 0;
+    height: 72px;
+    flex-shrink: 0;
+    gap: 10px;
+    padding: 0 14px;
+  }
+  & [data-ui="page-heading"] h1 {
+    padding: 6px 16px;
+    border: 4px solid var(--wood);
+    border-top-color: var(--wood-edge);
+    outline: 2px solid var(--ink);
+    background: var(--surface);
+    box-shadow:
+      inset 0 0 0 1px var(--line-strong),
+      3px 4px 0 var(--wood-light);
+    font:
+      400 20px / 1.25 "IDesk Pixel",
+      var(--font-sans);
+    overflow-wrap: anywhere;
+  }
+  & [data-ui="page-heading"] > div {
+    min-width: 0;
+    flex-shrink: 0;
+  }
+  & [data-ui="page-heading"] > div > .text-text-2 {
+    padding: 5px 8px;
+    background: var(--surface);
+    border: 1px solid var(--line-strong);
+  }
+  & [data-ui="desk-toolbar"] {
+    flex-wrap: nowrap;
+  }
+  & :is([data-scene="desk"], [data-scene="automation"], [data-scene="relay"]) {
+    gap: 12px;
+  }
+  & [data-scene="relay"] [data-ui="relay-toolbar"] {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    overflow-x: auto;
+  }
+  & [data-scene="relay"] [data-ui="relay-toolbar"] > * {
+    flex: 0 0 auto;
+  }
+  & [data-scene="relay"] [data-ui="relay-toolbar"] > .space-y-2 {
+    width: 170px;
+  }
+  & [data-scene="relay"] [data-ui="relay-toolbar"] label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  & [data-scene="relay"] [data-ui="relay-toolbar"] > div:last-child {
+    flex-wrap: nowrap;
+  }
+}
+
+@media (max-width: 899px) {
+  html[data-skin="pixel"] {
+    & [data-ui="page-heading"] h1 {
+      padding: 6px 16px;
+      font-size: 20px;
+    }
+    & [data-ui="page-heading"] {
+      height: 56px;
+      padding: 0 8px;
+    }
+    & [data-ui="desk-toolbar"] {
+      height: auto;
+      min-height: 56px;
+      flex-wrap: wrap;
+      padding: 5px 8px;
+    }
+  }
+}
+
+@media (max-width: 599px) {
+  html[data-skin="pixel"] [data-scene="automation"] [data-ui="page-heading"] > div > span {
+    display: none;
+  }
+}
