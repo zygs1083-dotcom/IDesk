@@ -20,7 +20,7 @@ export function RelayFilters({
 }) {
   const { lang, t } = useLang();
   return (
-    <div className="flex flex-wrap items-center gap-4 whitespace-nowrap">
+    <div data-ui="relay-filters" className="flex flex-wrap items-center gap-4 whitespace-nowrap">
       <Segmented
         label={t("relay.recipient")}
         value={recipient}

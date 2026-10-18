@@ -48,7 +48,7 @@ export function TaskHistory() {
   return (
     <div data-scene="history" className="space-y-6">
       <PageHeader title={t("desk.history")}>
-        <Link className="text-secondary text-accent" to="/desk">
+        <Link data-ui="header-link" className="text-secondary text-accent" to="/desk">
           {t("nav.desk")}
         </Link>
       </PageHeader>

@@ -105,7 +105,7 @@ export function AutomationPage() {
       <PageHeader title={t("nav.automation")}>
         {connector && (
           <>
-            <span className="text-secondary text-text-2">
+            <span data-ui="header-note" className="text-secondary text-text-2">
               {connector.lastPolledAt === null
                 ? t("automation.notPolled")
                 : t("automation.lastPolled", {

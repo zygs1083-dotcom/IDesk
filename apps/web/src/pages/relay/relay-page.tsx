@@ -1,5 +1,6 @@
 import type { relayMessageSchema } from "@idesk/shared/relay-schemas";
 import { useInfiniteQuery } from "@tanstack/react-query";
+import { Search } from "lucide-react";
 import { useState } from "react";
 import { useSearchParams } from "react-router";
 import type { z } from "zod";
@@ -83,14 +84,25 @@ export function RelayPage() {
             { value: "all", label: t("relay.all") },
           ]}
         />
-        <Field
-          label={t("relay.search")}
-          value={q}
-          onChange={(event) => {
-            setQ(event.target.value);
-            setSelectedId(null);
-          }}
-        />
+        <div data-ui="relay-search">
+          <Search
+            data-ui="relay-search-icon"
+            className="hidden"
+            aria-hidden="true"
+            size={16}
+            strokeWidth={1.5}
+          />
+          <Field
+            label={t("relay.search")}
+            placeholder={t("relay.search")}
+            className="placeholder:text-transparent"
+            value={q}
+            onChange={(event) => {
+              setQ(event.target.value);
+              setSelectedId(null);
+            }}
+          />
+        </div>
         <Segmented
           label={t("relay.requestStatus")}
           value={status}

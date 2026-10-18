@@ -32,10 +32,17 @@ html[data-skin="pixel"] {
     min-width: 0;
     flex-shrink: 0;
   }
-  & [data-ui="page-heading"] > div > .text-text-2 {
+  & [data-ui="header-note"],
+  & [data-ui="header-link"] {
     padding: 5px 8px;
     background: var(--surface);
     border: 1px solid var(--line-strong);
+  }
+  & [data-ui="header-link"] {
+    display: inline-flex;
+    align-items: center;
+    min-height: 36px;
+    white-space: nowrap;
   }
   & [data-ui="desk-toolbar"] {
     flex-wrap: nowrap;
@@ -45,16 +52,40 @@ html[data-skin="pixel"] {
   }
   & [data-scene="relay"] [data-ui="relay-toolbar"] {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    gap: 8px;
+    gap: 6px 8px;
     min-width: 0;
-    overflow-x: auto;
   }
-  & [data-scene="relay"] [data-ui="relay-toolbar"] > * {
+  & [data-scene="relay"] [data-ui="relay-toolbar"] fieldset {
     flex: 0 0 auto;
+    overflow: visible;
   }
-  & [data-scene="relay"] [data-ui="relay-toolbar"] > .space-y-2 {
-    width: 170px;
+  & [data-scene="relay"] [data-ui="relay-toolbar"] fieldset button {
+    padding-inline: 5px;
+  }
+  & [data-scene="relay"] [data-ui="relay-filters"] {
+    flex: 1 0 100%;
+    gap: 8px;
+  }
+  & [data-scene="relay"] [data-ui="relay-search"] {
+    position: relative;
+    width: 200px;
+    flex: 0 0 200px;
+  }
+  & [data-scene="relay"] [data-ui="relay-search"] input {
+    padding-left: 34px;
+  }
+  & [data-scene="relay"] [data-ui="relay-search"] input::placeholder {
+    color: var(--text-3);
+  }
+  & [data-scene="relay"] [data-ui="relay-search-icon"] {
+    position: absolute;
+    z-index: 1;
+    top: 11px;
+    left: 12px;
+    display: block;
+    color: var(--text-2);
   }
   & [data-scene="relay"] [data-ui="relay-toolbar"] label {
     position: absolute;
@@ -64,8 +95,20 @@ html[data-skin="pixel"] {
     clip-path: inset(50%);
     white-space: nowrap;
   }
-  & [data-scene="relay"] [data-ui="relay-toolbar"] > div:last-child {
-    flex-wrap: nowrap;
+}
+
+@media (min-width: 900px) and (max-width: 1100px) {
+  html[data-skin="pixel"] {
+    & [data-scene="relay"] [data-ui="relay-toolbar"] {
+      row-gap: 2px;
+    }
+    & [data-scene="relay"] [data-ui="relay-toolbar"] fieldset {
+      gap: 1px;
+    }
+    & [data-scene="relay"] [data-ui="relay-toolbar"] fieldset button {
+      padding-inline: 3px;
+      font-size: 11px;
+    }
   }
 }
 
@@ -89,7 +132,7 @@ html[data-skin="pixel"] {
 }
 
 @media (max-width: 599px) {
-  html[data-skin="pixel"] [data-scene="automation"] [data-ui="page-heading"] > div > span {
+  html[data-skin="pixel"] [data-scene="automation"] [data-ui="header-note"] {
     display: none;
   }
 }
