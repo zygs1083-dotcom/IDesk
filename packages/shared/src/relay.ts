@@ -4,4 +4,5 @@ export type RelayKind = (typeof RELAY_KINDS)[number];
 export type RelayRecipient =
   | { kind: "agent"; id: string }
   | { kind: "capability"; value: string }
-  | { kind: "broadcast" };
+  | { kind: "broadcast" }
+  | { kind: "human" };

@@ -1,9 +1,10 @@
 import type { relayMessageSchema } from "@idesk/shared/relay-schemas";
-import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useEffect, useRef, useState } from "react";
 import type { z } from "zod";
 import { useLang } from "../../i18n/lang.tsx";
 import { request } from "../../lib/api.ts";
+import { useSession } from "../../lib/use-session.ts";
 import { useTasks } from "../../lib/use-tasks.ts";
 import { TaskDrawer } from "../desk/task-drawer.tsx";
 import { RelayMessage } from "./relay-message.tsx";
@@ -19,6 +20,9 @@ export function RelayDetail({
   onReply: (message: Message) => void;
 }) {
   const { t } = useLang();
+  const { isAdmin } = useSession();
+  const client = useQueryClient();
+  const attempted = useRef(new Set<string>());
   const [taskId, setTaskId] = useState<string | null>(null);
   const { tasks } = useTasks();
   const titles = new Map(tasks.map((task) => [task.id, task.title]));
@@ -30,6 +34,22 @@ export function RelayDetail({
     queryKey: ["relay", "thread", selected.id],
     queryFn: () => request<Message[]>(`/relay/${encodeURIComponent(selected.id)}/thread`),
   });
+  useEffect(() => {
+    if (!isAdmin) return;
+    for (const message of messages) {
+      if (
+        message.to.kind !== "human" ||
+        message.readBy.includes("human") ||
+        attempted.current.has(message.id)
+      )
+        continue;
+      attempted.current.add(message.id);
+      void request(`/relay/${encodeURIComponent(message.id)}/read`, { method: "POST" }).then(
+        () => client.invalidateQueries({ queryKey: ["relay"] }),
+        () => undefined,
+      );
+    }
+  }, [messages, isAdmin, client]);
   if (error)
     return (
       <p role="alert" className="p-6 text-status-failed">

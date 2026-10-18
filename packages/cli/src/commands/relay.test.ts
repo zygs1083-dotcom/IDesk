@@ -88,3 +88,20 @@ test.each([
     expect.objectContaining({ replyTo: "target", kind }),
   );
 });
+
+test("human recipient and inferred reply recipient", async () => {
+  await run("relay", "send", "--human", "--subject", "Approval");
+  expect(api).toHaveBeenLastCalledWith(
+    "POST",
+    "/relay",
+    expect.objectContaining({ to: { kind: "human" } }),
+  );
+  await run("relay", "send", "--reply-to", "target", "--subject", "Answer");
+  expect(api).toHaveBeenLastCalledWith(
+    "POST",
+    "/relay",
+    expect.objectContaining({ to: undefined, replyTo: "target" }),
+  );
+  await expect(run("relay", "send", "--human", "--all", "--subject", "Invalid")).rejects.toThrow();
+  await expect(run("relay", "send", "--subject", "Invalid")).rejects.toThrow();
+});

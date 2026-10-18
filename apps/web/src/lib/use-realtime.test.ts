@@ -67,3 +67,14 @@ test("each open invalidates all existing entities without needing an event; conn
   expect(Socket.instances).toHaveLength(2);
   expect(Socket.instances[1]?.close).toHaveBeenCalled();
 });
+
+test.each(["relay.sent", "relay.read"])("%s invalidates inbox counts and lists", (type) => {
+  vi.stubGlobal("window", { location: { href: "https://example.test" } });
+  vi.stubGlobal("WebSocket", Socket);
+  client.setQueryData(["relay", "summary"], { unread: 1, pendingRequests: 1 });
+  client.setQueryData(["relay", { box: "inbox" }], []);
+  useRealtime();
+  Socket.instances[0]?.onmessage?.({ data: JSON.stringify({ type }) });
+  expect(client.getQueryState(["relay", "summary"])?.isInvalidated).toBe(true);
+  expect(client.getQueryState(["relay", { box: "inbox" }])?.isInvalidated).toBe(true);
+});

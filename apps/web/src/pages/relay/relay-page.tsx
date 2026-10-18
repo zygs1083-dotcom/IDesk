@@ -1,7 +1,7 @@
-import { labels } from "@idesk/shared/labels";
 import type { relayMessageSchema } from "@idesk/shared/relay-schemas";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useState } from "react";
+import { useSearchParams } from "react-router";
 import type { z } from "zod";
 import { Button } from "../../components/button.tsx";
 import { Field } from "../../components/field.tsx";
@@ -9,22 +9,22 @@ import { Segmented } from "../../components/segmented.tsx";
 import { useLang } from "../../i18n/lang.tsx";
 import { PageHeader } from "../../layout/page-header.tsx";
 import { request } from "../../lib/api.ts";
-import { cn } from "../../lib/cn.ts";
-import { relativeTime } from "../../lib/format.ts";
-import { useAgents } from "../../lib/use-agents.ts";
 import { useSession } from "../../lib/use-session.ts";
 import { useShortcut } from "../../lib/use-shortcut.ts";
 import { ComposeRelay } from "./compose-relay.tsx";
-import { recipientLabel } from "./labels.ts";
 import { RelayDetail } from "./relay-detail.tsx";
 import { RelayFilters } from "./relay-filters.tsx";
+import { RelayRow } from "./relay-row.tsx";
+import { useRelaySummary } from "./use-relay-summary.ts";
 
 type Message = z.infer<typeof relayMessageSchema>;
 
 export function RelayPage() {
   const { isAdmin } = useSession();
-  const { lang, t } = useLang();
-  const { agentName } = useAgents();
+  const { t } = useLang();
+  const [params, setParams] = useSearchParams();
+  const box = params.get("box") === "sent" ? "sent" : params.get("box") === "all" ? "all" : "inbox";
+  const { data: summary } = useRelaySummary();
   const [recipient, setRecipient] = useState("all");
   const [kind, setKind] = useState("all");
   const [task, setTask] = useState("all");
@@ -34,11 +34,11 @@ export function RelayPage() {
   const [status, setStatus] = useState("all");
   const { data, error, isPending, hasNextPage, fetchNextPage, isFetchingNextPage } =
     useInfiniteQuery({
-      queryKey: ["relay", { recipient, kind, task, q, status }],
+      queryKey: ["relay", { box, recipient, kind, task, q, status }],
       initialPageParam: "",
       gcTime: 0,
       queryFn: ({ pageParam }) => {
-        const params = new URLSearchParams({ box: "all", limit: "50" });
+        const params = new URLSearchParams({ box, limit: "50" });
         if (pageParam) params.set("before", pageParam);
         if (q) params.set("q", q);
         if (recipient !== "all") params.set("toKind", recipient);
@@ -63,6 +63,25 @@ export function RelayPage() {
           </Button>
         )}
       </PageHeader>
+      <Segmented
+        label={t("nav.relay")}
+        value={box}
+        onChange={(value) => {
+          setParams((current) => {
+            current.set("box", value);
+            return current;
+          });
+          setSelectedId(null);
+        }}
+        options={[
+          {
+            value: "inbox",
+            label: `${t("relay.inbox")}${summary?.unread ? ` · ${summary.unread}` : ""}`,
+          },
+          { value: "sent", label: t("relay.sent") },
+          { value: "all", label: t("relay.all") },
+        ]}
+      />
       <Field
         label={t("relay.search")}
         value={q}
@@ -131,37 +150,12 @@ export function RelayPage() {
             className="max-h-80 shrink-0 overflow-y-auto md:max-h-none border-b border-line md:w-90 md:border-r md:border-b-0"
           >
             {messages.map((message) => (
-              <button
+              <RelayRow
                 key={message.id}
-                type="button"
-                data-ui="message"
-                aria-pressed={selected?.id === message.id}
-                onClick={() => setSelectedId(message.id)}
-                className={cn(
-                  "block w-full space-y-2 border-b border-line p-4 text-left transition-colors duration-hover ease-hover hover:bg-surface-2",
-                  selected?.id === message.id && "bg-surface-2",
-                )}
-              >
-                <div className="flex items-center justify-between gap-2">
-                  <span className="rounded-tag bg-line px-2 py-0.5 text-label text-text-2">
-                    {labels(lang).relayKind[message.kind]}
-                  </span>
-                  <time className="text-label tabular-nums text-text-2">
-                    {relativeTime(new Date(message.createdAt), lang)}
-                  </time>
-                </div>
-                <p
-                  className={cn(
-                    "truncate text-body",
-                    message.readBy.length === 0 && "font-semibold",
-                  )}
-                >
-                  {message.subject}
-                </p>
-                <p className="truncate text-secondary text-text-2">
-                  {agentName(message.fromAgentId)} → {recipientLabel(message.to, agentName, lang)}
-                </p>
-              </button>
+                message={message}
+                selected={selected?.id === message.id}
+                onSelect={() => setSelectedId(message.id)}
+              />
             ))}
             {hasNextPage && (
               <Button disabled={isFetchingNextPage} onClick={() => void fetchNextPage()}>
@@ -174,7 +168,11 @@ export function RelayPage() {
               <p className="p-6 text-secondary text-text-2">{t("relay.selectMessage")}</p>
             )}
             {selected && (
-              <RelayDetail selected={selected} onReply={(reply) => setCompose({ reply })} />
+              <RelayDetail
+                key={selected.id}
+                selected={selected}
+                onReply={(reply) => setCompose({ reply })}
+              />
             )}
           </div>
         </div>

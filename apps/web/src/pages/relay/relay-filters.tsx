@@ -27,6 +27,7 @@ export function RelayFilters({
         onChange={onRecipient}
         options={[
           { value: "all", label: t("common.all") },
+          { value: "human", label: t("relay.human") },
           { value: "agent", label: t("relay.specific") },
           { value: "capability", label: t("common.capabilities") },
           { value: "broadcast", label: t("common.everyone") },

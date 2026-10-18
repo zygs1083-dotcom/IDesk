@@ -16,6 +16,7 @@ export function relayCommands(program: Command): void {
     .option("--to <agent>")
     .option("--cap <capability>")
     .option("--all")
+    .option("--human")
     .requiredOption("--subject <subject>")
     .option("--body-file <path>")
     .option("--task <id>")
@@ -26,26 +27,31 @@ export function relayCommands(program: Command): void {
         to?: string;
         cap?: string;
         all?: boolean;
+        human?: boolean;
         subject: string;
         bodyFile?: string;
         task?: string;
         kind?: string;
         replyTo?: string;
       }) => {
-        if (
+        const recipients =
           Number(options.to !== undefined) +
-            Number(options.cap !== undefined) +
-            Number(options.all === true) !==
-          1
-        ) {
-          throw new Error("--to、--cap、--all 只能选一个");
+          Number(options.cap !== undefined) +
+          Number(options.all === true) +
+          Number(options.human === true);
+        if (recipients > 1 || (recipients === 0 && !options.replyTo)) {
+          throw new Error("--to、--cap、--all、--human 只能选一个，回复可省略");
         }
         const to =
           options.to !== undefined
             ? { kind: "agent", id: options.to }
             : options.cap !== undefined
               ? { kind: "capability", value: options.cap }
-              : { kind: "broadcast" };
+              : options.human
+                ? { kind: "human" }
+                : options.all
+                  ? { kind: "broadcast" }
+                  : undefined;
         const message = await api<Message>("POST", "/relay", {
           to,
           kind: options.kind ?? (options.replyTo ? "reply" : "note"),
@@ -114,7 +120,7 @@ export function relayCommands(program: Command): void {
           message.to.kind === "broadcast" ||
           (message.to.kind === "agent"
             ? message.to.id === me.id
-            : me.capabilities.includes(message.to.value));
+            : message.to.kind === "capability" && me.capabilities.includes(message.to.value));
         if (message.fromAgentId !== me.id && recipient)
           await api<Message>("POST", `${path}/read`, {});
       }

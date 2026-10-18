@@ -46,9 +46,9 @@ test("relay visibility respects recipients, capabilities, broadcasts, senders an
   expect(ids(sender, "sent")).toHaveLength(3);
   expect(ids(sender, "all")).toEqual(ids(sender, "sent"));
   expect(ids(coder, "all")).toEqual(ids(coder, "inbox"));
-  for (const box of ["inbox", "sent", "all"] as const) {
-    expect(ids({ kind: "human" }, box)).toHaveLength(3);
-  }
+  expect(ids({ kind: "human" }, "all")).toHaveLength(3);
+  expect(ids({ kind: "human" }, "inbox")).toHaveLength(0);
+  expect(ids({ kind: "human" }, "sent")).toHaveLength(0);
   expect(listRelay(other, "inbox").some((message) => message.id === unrelated.id)).toBe(true);
   expect(listRelay(other, "sent").some((message) => message.id === unrelated.id)).toBe(false);
   expect(ids({ kind: "human" }, "all")).not.toContain(unrelated.id);

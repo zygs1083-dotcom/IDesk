@@ -40,6 +40,8 @@ export const zh = {
   "plugin.unavailable": () => "插件不存在或已停用",
 
   "relay.notFound": () => "消息不存在",
+  "relay.selfRecipient": () => "不能发给自己",
+  "relay.humanInboxOnly": () => "只能标记发给人的消息",
 
   "automation.notFound": () => "任务流不存在",
 
@@ -96,6 +98,8 @@ export const en: { [K in MessageKey]: (typeof zh)[K] } = {
   "plugin.unavailable": () => "Plugin not found or disabled",
 
   "relay.notFound": () => "Message not found",
+  "relay.selfRecipient": () => "Cannot send to yourself",
+  "relay.humanInboxOnly": () => "Only messages to the human can be marked",
 
   "automation.notFound": () => "Workflow not found",
 
