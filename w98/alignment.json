@@ -1,0 +1,168 @@
+{
+  "dusk": {
+    "maxOffset": 0,
+    "regions": [
+      {
+        "region": "windowFrame",
+        "dx": 0,
+        "dy": 0,
+        "score": 0.8800702276805534
+      },
+      {
+        "region": "whiteboard",
+        "dx": 0,
+        "dy": 0,
+        "score": 0.9228902376672099
+      },
+      {
+        "region": "wallClock",
+        "dx": 0,
+        "dy": 0,
+        "score": 0.9346108543242988
+      },
+      {
+        "region": "wallCabinets",
+        "dx": 0,
+        "dy": 0,
+        "score": 0.9387849673763032
+      },
+      {
+        "region": "bookshelf",
+        "dx": 0,
+        "dy": 0,
+        "score": 0.9576945958787173
+      },
+      {
+        "region": "meeting",
+        "dx": 0,
+        "dy": 0,
+        "score": 0.8968791367814077
+      },
+      {
+        "region": "reception",
+        "dx": 0,
+        "dy": 0,
+        "score": 0.90665536854094
+      },
+      {
+        "region": "desksNorthWest",
+        "dx": 0,
+        "dy": 0,
+        "score": 0.8994857063402685
+      },
+      {
+        "region": "desksNorthEast",
+        "dx": 0,
+        "dy": 0,
+        "score": 0.9247436863180418
+      },
+      {
+        "region": "desksSouthWest",
+        "dx": 0,
+        "dy": 0,
+        "score": 0.9026174087298167
+      },
+      {
+        "region": "desksSouthEast",
+        "dx": 0,
+        "dy": 0,
+        "score": 0.9378184562193066
+      },
+      {
+        "region": "lounge",
+        "dx": 0,
+        "dy": 0,
+        "score": 0.9526544757737875
+      },
+      {
+        "region": "entrance",
+        "dx": 0,
+        "dy": 0,
+        "score": 0.9507023354973202
+      }
+    ]
+  },
+  "night": {
+    "maxOffset": 1,
+    "regions": [
+      {
+        "region": "windowFrame",
+        "dx": 0,
+        "dy": 1,
+        "score": 0.6712862577103191
+      },
+      {
+        "region": "whiteboard",
+        "dx": 1,
+        "dy": 1,
+        "score": 0.7591934853930985
+      },
+      {
+        "region": "wallClock",
+        "dx": 0,
+        "dy": 1,
+        "score": 0.8331562753107973
+      },
+      {
+        "region": "wallCabinets",
+        "dx": 0,
+        "dy": 0,
+        "score": 0.8099443879659844
+      },
+      {
+        "region": "bookshelf",
+        "dx": 0,
+        "dy": 0,
+        "score": 0.9039907578784285
+      },
+      {
+        "region": "meeting",
+        "dx": 0,
+        "dy": 1,
+        "score": 0.7837905959467782
+      },
+      {
+        "region": "reception",
+        "dx": 1,
+        "dy": 0,
+        "score": 0.8109937541072688
+      },
+      {
+        "region": "desksNorthWest",
+        "dx": 0,
+        "dy": 0,
+        "score": 0.8268785901805756
+      },
+      {
+        "region": "desksNorthEast",
+        "dx": 0,
+        "dy": 0,
+        "score": 0.8436203255902657
+      },
+      {
+        "region": "desksSouthWest",
+        "dx": 0,
+        "dy": 0,
+        "score": 0.8128321047536795
+      },
+      {
+        "region": "desksSouthEast",
+        "dx": 0,
+        "dy": 0,
+        "score": 0.8457714947463604
+      },
+      {
+        "region": "lounge",
+        "dx": 0,
+        "dy": 0,
+        "score": 0.8981767081843177
+      },
+      {
+        "region": "entrance",
+        "dx": 0,
+        "dy": 0,
+        "score": 0.89778173653037
+      }
+    ]
+  }
+}
