@@ -155,6 +155,17 @@ html[data-skin="pixel"] {
   & [data-scene="login"] h1 {
     width: fit-content;
     margin-bottom: 24px;
+    padding: 10px 20px;
+    border: 4px solid var(--wood);
+    border-top-color: var(--wood-edge);
+    outline: 2px solid var(--ink);
+    background: var(--surface);
+    box-shadow:
+      inset 0 0 0 1px var(--line-strong),
+      3px 4px 0 var(--wood-light);
+    font:
+      400 24px / 1.25 "IDesk Pixel",
+      var(--font-sans);
   }
 }
 

@@ -90,7 +90,7 @@ export function Desk() {
           />
         </div>
         <div className="order-2 ml-auto flex shrink-0 items-center gap-3 sidebar:order-none">
-          <Link to="/desk/history" className="text-secondary text-accent">
+          <Link data-ui="header-link" to="/desk/history" className="text-secondary text-accent">
             {t("desk.history")}
           </Link>
           <Button disabled={!isAdmin} variant="primary" onClick={() => setPublish(true)}>

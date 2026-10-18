@@ -1,5 +1,6 @@
 import type { relayMessageSchema } from "@idesk/shared/relay-schemas";
 import { useInfiniteQuery } from "@tanstack/react-query";
+import { Search } from "lucide-react";
 import { useState } from "react";
 import { useSearchParams } from "react-router";
 import type { z } from "zod";
@@ -63,63 +64,76 @@ export function RelayPage() {
           </Button>
         )}
       </PageHeader>
-      <Segmented
-        label={t("nav.relay")}
-        value={box}
-        onChange={(value) => {
-          setParams((current) => {
-            current.set("box", value);
-            return current;
-          });
-          setSelectedId(null);
-        }}
-        options={[
-          {
-            value: "inbox",
-            label: `${t("relay.inbox")}${summary?.unread ? ` · ${summary.unread}` : ""}`,
-          },
-          { value: "sent", label: t("relay.sent") },
-          { value: "all", label: t("relay.all") },
-        ]}
-      />
-      <Field
-        label={t("relay.search")}
-        value={q}
-        onChange={(event) => {
-          setQ(event.target.value);
-          setSelectedId(null);
-        }}
-      />
-      <Segmented
-        label={t("relay.requestStatus")}
-        value={status}
-        onChange={(value) => {
-          setStatus(value);
-          setSelectedId(null);
-        }}
-        options={[
-          { value: "all", label: t("common.all") },
-          { value: "pending", label: t("relay.pending") },
-          { value: "answered", label: t("relay.answered") },
-        ]}
-      />
-      <RelayFilters
-        recipient={recipient}
-        onRecipient={(value) => {
-          setRecipient(value);
-          setSelectedId(null);
-        }}
-        kind={kind}
-        onKind={(value) => {
-          setKind(value);
-          setSelectedId(null);
-        }}
-        task={task}
-        onTask={(value) => {
-          setTask(value);
-          setSelectedId(null);
-        }}
-      />
+      <div data-ui="relay-toolbar" className="contents">
+        <Segmented
+          label={t("nav.relay")}
+          value={box}
+          onChange={(value) => {
+            setParams((current) => {
+              current.set("box", value);
+              return current;
+            });
+            setSelectedId(null);
+          }}
+          options={[
+            {
+              value: "inbox",
+              label: `${t("relay.inbox")}${summary?.unread ? ` · ${summary.unread}` : ""}`,
+            },
+            { value: "sent", label: t("relay.sent") },
+            { value: "all", label: t("relay.all") },
+          ]}
+        />
+        <div data-ui="relay-search">
+          <Search
+            data-ui="relay-search-icon"
+            className="hidden"
+            aria-hidden="true"
+            size={16}
+            strokeWidth={1.5}
+          />
+          <Field
+            label={t("relay.search")}
+            placeholder={t("relay.search")}
+            className="placeholder:text-transparent"
+            value={q}
+            onChange={(event) => {
+              setQ(event.target.value);
+              setSelectedId(null);
+            }}
+          />
+        </div>
+        <Segmented
+          label={t("relay.requestStatus")}
+          value={status}
+          onChange={(value) => {
+            setStatus(value);
+            setSelectedId(null);
+          }}
+          options={[
+            { value: "all", label: t("common.all") },
+            { value: "pending", label: t("relay.pending") },
+            { value: "answered", label: t("relay.answered") },
+          ]}
+        />
+        <RelayFilters
+          recipient={recipient}
+          onRecipient={(value) => {
+            setRecipient(value);
+            setSelectedId(null);
+          }}
+          kind={kind}
+          onKind={(value) => {
+            setKind(value);
+            setSelectedId(null);
+          }}
+          task={task}
+          onTask={(value) => {
+            setTask(value);
+            setSelectedId(null);
+          }}
+        />
+      </div>
       {error && (
         <p role="alert" className="text-secondary text-status-failed">
           {error.message}

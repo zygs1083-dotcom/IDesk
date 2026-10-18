@@ -17,8 +17,8 @@ import { cn } from "../lib/cn.ts";
 import { logout } from "../lib/logout.ts";
 import { useAgents } from "../lib/use-agents.ts";
 import { useSession } from "../lib/use-session.ts";
-
 import { RelayBadge } from "../pages/relay/relay-badge.tsx";
+import { AgentPhoto } from "./agent-photo.tsx";
 
 const otherLang: Record<Lang, Lang> = { zh: "en", en: "zh" };
 const languageClasses = {
@@ -92,7 +92,7 @@ export function Sidebar() {
           </a>
         )}
       </nav>
-      <div className="pixel-office-props" aria-hidden="true" />
+      <AgentPhoto />
       <div
         data-ui="sidebar-footer"
         className="ml-auto flex flex-wrap shrink-0 items-center gap-2 pr-2 text-secondary text-text-2 sidebar:mt-auto sidebar:ml-0 sidebar:px-5 sidebar:py-4"
