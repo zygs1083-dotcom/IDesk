@@ -1,7 +1,11 @@
 {
-  "claude-code": ["a"],
-  "codex": ["a"],
-  "custom": ["a"],
-  "n8n": ["a"],
-  "script": ["a"]
+  "claude-code": ["a", "b", "c"],
+  "codex": ["a", "b", "c"],
+  "cursor": ["a", "b", "c"],
+  "custom": ["a", "b", "c"],
+  "droid": ["a", "b", "c"],
+  "gemini": ["a", "b", "c"],
+  "n8n": ["a", "b", "c"],
+  "opencode": ["a", "b", "c"],
+  "script": ["a", "b", "c"]
 }

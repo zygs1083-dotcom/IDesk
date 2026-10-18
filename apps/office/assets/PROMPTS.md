@@ -98,3 +98,431 @@ Seated sprites are naturally shorter due to bent knees, NEVER enlarged: exactly 
 | n8n-a.png | 4×5 角色精灵（19 帧） | 1 / 1 | 1122×1402 |
 | script-a.png | 4×5 角色精灵（19 帧） | 2 / 2 | 1122×1402 |
 | custom-a.png | 4×5 角色精灵（19 帧） | 1 / 1 | 1122×1402 |
+| claude-code-b.png | 4×5 角色精灵（19 帧） | 2 / 2 | 1122×1402 |
+| claude-code-c.png | 4×5 角色精灵（19 帧） | 2 / 2 | 1122×1402 |
+| codex-b.png | 4×5 角色精灵（19 帧） | 1 / 1 | 1122×1402 |
+| codex-c.png | 4×5 角色精灵（19 帧） | 1 / 1 | 1122×1402 |
+| n8n-b.png | 4×5 角色精灵（19 帧） | 2 / 2 | 1122×1402 |
+| n8n-c.png | 4×5 角色精灵（19 帧） | 1 / 1 | 1122×1402 |
+| script-b.png | 4×5 角色精灵（19 帧） | 2 / 2 | 1122×1402 |
+| script-c.png | 4×5 角色精灵（19 帧） | 1 / 1 | 1122×1402 |
+| custom-b.png | 4×5 角色精灵（19 帧） | 2 / 2 | 1122×1402 |
+| custom-c.png | 4×5 角色精灵（19 帧） | 1 / 1 | 1122×1402 |
+| gemini-a.png | 4×5 角色精灵（19 帧） | 1 / 1 | 1122×1402 |
+| gemini-b.png | 4×5 角色精灵（19 帧） | 1 / 1 | 1122×1402 |
+| gemini-c.png | 4×5 角色精灵（19 帧） | 1 / 1 | 1122×1402 |
+| opencode-a.png | 4×5 角色精灵（19 帧） | 1 / 1 | 1122×1402 |
+| opencode-b.png | 4×5 角色精灵（19 帧） | 1 / 1 | 1122×1402 |
+| opencode-c.png | 4×5 角色精灵（19 帧） | 1 / 1 | 1122×1402 |
+| droid-a.png | 4×5 角色精灵（19 帧） | 3 / 3 | 1122×1402 |
+| droid-b.png | 4×5 角色精灵（19 帧） | 1 / 1 | 1122×1402 |
+| droid-c.png | 4×5 角色精灵（19 帧） | 1 / 1 | 1122×1402 |
+| cursor-a.png | 4×5 角色精灵（19 帧） | 2 / 2 | 1122×1402 |
+| cursor-b.png | 4×5 角色精灵（19 帧） | 1 / 1 | 1122×1402 |
+| cursor-c.png | 4×5 角色精灵（19 帧） | 1 / 1 | 1122×1402 |
+
+## 更多角色外观（W92b）
+
+以下记录均沿用第一版格子模板，已有 kind 的 a 原图仅作参考；新 kind 先选定 a，再以 a 为参考生成 b/c。
+
+参考图文件名按生成时记录；原有五种无后缀的原图已由 W92a 改名加 `-a`。仅保留选中的原图，编辑提示词中的颜色修正由图像模型完成，没有程序转色。
+
+## claude-code-b.png（W92b）
+
+用途：四向走路与侧坐／打字十九帧，4×5，末格空白。生成次数：2；选中第 2 次。实测尺寸：1122×1402。参考图：claude-code.png。
+
+第 1 次（未选）提示词原文：
+
+```text
+Use case: stylized-concept. Production pixel-game character atlas, exactly FOUR columns and FIVE rows in a regular equally spaced rectangular grid (20 equal cells). Uniform pure #FF00FF magenta background. claude-code office worker: teal hoodie with hood down, dark charcoal trousers, brown shoes, black hair in a low ponytail, fair skin. Same face, outfit, pixel scale and two-head-tall chibi proportions in ALL cells, including sitting cells. Crisp thick dark brown square pixel outlines, simple 3-tone shading, upper-left warm light, retro RPG sprites matching the supplied sample's aesthetic. Every character occupies about 65% of its cell height when standing; generous magenta margins and centered horizontally. Feet at identical local baseline in every cell. No shadows, text, grid borders or props.
+ROW 1 DOWN facing viewer: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 2 LEFT profile: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 3 RIGHT profile: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 4 UP back view: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 5: cell 1 RIGHT profile seated on invisible chair, hands on lap; cell 2 same seated pose with hands forward at invisible keyboard height down; cell 3 same seated pose with hands a few pixels up typing; cell 4 completely EMPTY MAGENTA.
+Seated sprites are naturally shorter due to bent knees, NEVER enlarged: exactly same head size, same torso size and same pixel scale as walking sprites. All soles rest at the same relative height in their cells. No visible chair, desk or keyboard. Maintain outfit teal hoodie with hood down, dark charcoal trousers, brown shoes, black hair in a low ponytail, fair skin throughout. Need exactly 19 characters plus one blank cell; never add sixth row.
+```
+
+第 2 次（选中）提示词原文：
+
+```text
+Edit ONLY hair color and skin tone of all 19 figures in this claude-code-b sprite atlas. Hair must be BLACK, neutral charcoal black highlights, NO brown hair or brown highlights anywhere. Keep the existing low ponytail shape. Skin must be FAIR light ivory peach. Preserve all remaining pixels, exact 1122x1402 dimensions, 4 columns x5 rows, row2 left row3 right row4 back row5 seated and empty last cell, all proportions pixel scale poses positions outlines teal hoodie hood down charcoal pants brown shoes and pure magenta background. Only black hair and fair skin change.
+```
+
+## claude-code-c.png（W92b）
+
+用途：四向走路与侧坐／打字十九帧，4×5，末格空白。生成次数：2；选中第 2 次。实测尺寸：1122×1402。参考图：claude-code.png。
+
+第 1 次（未选）提示词原文：
+
+```text
+Use case: stylized-concept. Production pixel-game character atlas, exactly FOUR columns and FIVE rows in a regular equally spaced rectangular grid (20 equal cells). Uniform pure #FF00FF magenta background. claude-code office worker: teal hoodie with hood down, dark charcoal trousers, brown shoes, brown curly hair, dark skin, round-frame glasses. Same face, outfit, pixel scale and two-head-tall chibi proportions in ALL cells, including sitting cells. Crisp thick dark brown square pixel outlines, simple 3-tone shading, upper-left warm light, retro RPG sprites matching the supplied sample's aesthetic. Every character occupies about 65% of its cell height when standing; generous magenta margins and centered horizontally. Feet at identical local baseline in every cell. No shadows, text, grid borders or props.
+ROW 1 DOWN facing viewer: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 2 LEFT profile: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 3 RIGHT profile: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 4 UP back view: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 5: cell 1 RIGHT profile seated on invisible chair, hands on lap; cell 2 same seated pose with hands forward at invisible keyboard height down; cell 3 same seated pose with hands a few pixels up typing; cell 4 completely EMPTY MAGENTA.
+Seated sprites are naturally shorter due to bent knees, NEVER enlarged: exactly same head size, same torso size and same pixel scale as walking sprites. All soles rest at the same relative height in their cells. No visible chair, desk or keyboard. Maintain outfit teal hoodie with hood down, dark charcoal trousers, brown shoes, brown curly hair, dark skin, round-frame glasses throughout. Need exactly 19 characters plus one blank cell; never add sixth row.
+```
+
+第 2 次（选中）提示词原文：
+
+```text
+Edit ONLY hairstyle of all19 figures in referenced claude-code-c atlas. Replace spiky straight brown hair with clearly CURLY brown hair: rounded clusters and small rounded pixel curl tufts, softly rounded curly silhouette instead of pointed spikes. Keep dark skin round glasses teal hoodie charcoal pants brown shoes exact head scale poses directions 4x5 layout magenta and empty bottom-right. Do not change any other detail.
+```
+
+## codex-b.png（W92b）
+
+用途：四向走路与侧坐／打字十九帧，4×5，末格空白。生成次数：1；选中第 1 次。实测尺寸：1122×1402。参考图：codex.png。
+
+第 1 次（选中）提示词原文：
+
+```text
+Use case: stylized-concept. Production pixel-game character atlas, exactly FOUR columns and FIVE rows in a regular equally spaced rectangular grid (20 equal cells). Uniform pure #FF00FF magenta background. codex office worker: ivory button-up shirt, navy trousers, brown shoes, black rectangular glasses, short gray-white hair, fair skin. Same face, outfit, pixel scale and two-head-tall chibi proportions in ALL cells, including sitting cells. Crisp thick dark brown square pixel outlines, simple 3-tone shading, upper-left warm light, retro RPG sprites matching the supplied sample's aesthetic. Every character occupies about 65% of its cell height when standing; generous magenta margins and centered horizontally. Feet at identical local baseline in every cell. No shadows, text, grid borders or props.
+ROW 1 DOWN facing viewer: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 2 LEFT profile: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 3 RIGHT profile: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 4 UP back view: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 5: cell 1 RIGHT profile seated on invisible chair, hands on lap; cell 2 same seated pose with hands forward at invisible keyboard height down; cell 3 same seated pose with hands a few pixels up typing; cell 4 completely EMPTY MAGENTA.
+Seated sprites are naturally shorter due to bent knees, NEVER enlarged: exactly same head size, same torso size and same pixel scale as walking sprites. All soles rest at the same relative height in their cells. No visible chair, desk or keyboard. Maintain outfit ivory button-up shirt, navy trousers, brown shoes, black rectangular glasses, short gray-white hair, fair skin throughout. Need exactly 19 characters plus one blank cell; never add sixth row.
+```
+
+## codex-c.png（W92b）
+
+用途：四向走路与侧坐／打字十九帧，4×5，末格空白。生成次数：1；选中第 1 次。实测尺寸：1122×1402。参考图：codex.png。
+
+第 1 次（选中）提示词原文：
+
+```text
+Use case: stylized-concept. Production pixel-game character atlas, exactly FOUR columns and FIVE rows in a regular equally spaced rectangular grid (20 equal cells). Uniform pure #FF00FF magenta background. codex office worker: ivory button-up shirt, navy trousers, brown shoes, black rectangular glasses, black shoulder-length hair, dark skin. Same face, outfit, pixel scale and two-head-tall chibi proportions in ALL cells, including sitting cells. Crisp thick dark brown square pixel outlines, simple 3-tone shading, upper-left warm light, retro RPG sprites matching the supplied sample's aesthetic. Every character occupies about 65% of its cell height when standing; generous magenta margins and centered horizontally. Feet at identical local baseline in every cell. No shadows, text, grid borders or props.
+ROW 1 DOWN facing viewer: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 2 LEFT profile: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 3 RIGHT profile: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 4 UP back view: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 5: cell 1 RIGHT profile seated on invisible chair, hands on lap; cell 2 same seated pose with hands forward at invisible keyboard height down; cell 3 same seated pose with hands a few pixels up typing; cell 4 completely EMPTY MAGENTA.
+Seated sprites are naturally shorter due to bent knees, NEVER enlarged: exactly same head size, same torso size and same pixel scale as walking sprites. All soles rest at the same relative height in their cells. No visible chair, desk or keyboard. Maintain outfit ivory button-up shirt, navy trousers, brown shoes, black rectangular glasses, black shoulder-length hair, dark skin throughout. Need exactly 19 characters plus one blank cell; never add sixth row.
+```
+
+## n8n-b.png（W92b）
+
+用途：四向走路与侧坐／打字十九帧，4×5，末格空白。生成次数：2；选中第 2 次。实测尺寸：1122×1402。参考图：n8n.png。
+
+第 1 次（未选）提示词原文：
+
+```text
+Use case: stylized-concept. Production pixel-game character atlas, exactly FOUR columns and FIVE rows in a regular equally spaced rectangular grid (20 equal cells). Uniform pure #FF00FF magenta background. n8n office worker: bright orange vest over cream short-sleeved shirt, charcoal trousers, brown shoes, reddish-brown buzz cut, over-ear headphones, warm peach face. Same face, outfit, pixel scale and two-head-tall chibi proportions in ALL cells, including sitting cells. Crisp thick dark brown square pixel outlines, simple 3-tone shading, upper-left warm light, retro RPG sprites matching the supplied sample's aesthetic. Every character occupies about 65% of its cell height when standing; generous magenta margins and centered horizontally. Feet at identical local baseline in every cell. No shadows, text, grid borders or props.
+ROW 1 DOWN facing viewer: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 2 LEFT profile: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 3 RIGHT profile: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 4 UP back view: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 5: cell 1 RIGHT profile seated on invisible chair, hands on lap; cell 2 same seated pose with hands forward at invisible keyboard height down; cell 3 same seated pose with hands a few pixels up typing; cell 4 completely EMPTY MAGENTA.
+Seated sprites are naturally shorter due to bent knees, NEVER enlarged: exactly same head size, same torso size and same pixel scale as walking sprites. All soles rest at the same relative height in their cells. No visible chair, desk or keyboard. Maintain outfit bright orange vest over cream short-sleeved shirt, charcoal trousers, brown shoes, reddish-brown buzz cut, over-ear headphones, warm peach face throughout. Need exactly 19 characters plus one blank cell; never add sixth row.
+```
+
+第 2 次（选中）提示词原文：
+
+```text
+Edit ONLY hair of all19 n8n figures. Required REDDISH-BROWN BUZZ CUT, extremely short close-cropped hair following skull, NO bangs, NO fringe, NO projecting tufts. Expose forehead. Keep headphones, head/face dimensions, peach skin, orange vest cream short sleeves charcoal pants brown shoes, all poses and 4x5 magenta grid lastcell empty exactly unchanged.
+```
+
+## n8n-c.png（W92b）
+
+用途：四向走路与侧坐／打字十九帧，4×5，末格空白。生成次数：1；选中第 1 次。实测尺寸：1122×1402。参考图：n8n.png。
+
+第 1 次（选中）提示词原文：
+
+```text
+Use case: stylized-concept. Production pixel-game character atlas, exactly FOUR columns and FIVE rows in a regular equally spaced rectangular grid (20 equal cells). Uniform pure #FF00FF magenta background. n8n office worker: bright orange vest over cream short-sleeved shirt, charcoal trousers, brown shoes, blonde hair in a bun, fair skin. Same face, outfit, pixel scale and two-head-tall chibi proportions in ALL cells, including sitting cells. Crisp thick dark brown square pixel outlines, simple 3-tone shading, upper-left warm light, retro RPG sprites matching the supplied sample's aesthetic. Every character occupies about 65% of its cell height when standing; generous magenta margins and centered horizontally. Feet at identical local baseline in every cell. No shadows, text, grid borders or props.
+ROW 1 DOWN facing viewer: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 2 LEFT profile: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 3 RIGHT profile: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 4 UP back view: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 5: cell 1 RIGHT profile seated on invisible chair, hands on lap; cell 2 same seated pose with hands forward at invisible keyboard height down; cell 3 same seated pose with hands a few pixels up typing; cell 4 completely EMPTY MAGENTA.
+Seated sprites are naturally shorter due to bent knees, NEVER enlarged: exactly same head size, same torso size and same pixel scale as walking sprites. All soles rest at the same relative height in their cells. No visible chair, desk or keyboard. Maintain outfit bright orange vest over cream short-sleeved shirt, charcoal trousers, brown shoes, blonde hair in a bun, fair skin throughout. Need exactly 19 characters plus one blank cell; never add sixth row.
+```
+
+## script-b.png（W92b）
+
+用途：四向走路与侧坐／打字十九帧，4×5，末格空白。生成次数：2；选中第 2 次。实测尺寸：1122×1402。参考图：script.png。
+
+第 1 次（未选）提示词原文：
+
+```text
+Use case: stylized-concept. Production pixel-game character atlas, exactly FOUR columns and FIVE rows in a regular equally spaced rectangular grid (20 equal cells). Uniform pure #FF00FF magenta background. script office worker: blue baseball cap worn BACKWARDS with brim behind head, mustard short-sleeved shirt, navy trousers, brown shoes, short dark brown hair, dark skin. Same face, outfit, pixel scale and two-head-tall chibi proportions in ALL cells, including sitting cells. Crisp thick dark brown square pixel outlines, simple 3-tone shading, upper-left warm light, retro RPG sprites matching the supplied sample's aesthetic. Every character occupies about 65% of its cell height when standing; generous magenta margins and centered horizontally. Feet at identical local baseline in every cell. No shadows, text, grid borders or props.
+ROW 1 DOWN facing viewer: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 2 LEFT profile: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 3 RIGHT profile: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 4 UP back view: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 5: cell 1 RIGHT profile seated on invisible chair, hands on lap; cell 2 same seated pose with hands forward at invisible keyboard height down; cell 3 same seated pose with hands a few pixels up typing; cell 4 completely EMPTY MAGENTA.
+Seated sprites are naturally shorter due to bent knees, NEVER enlarged: exactly same head size, same torso size and same pixel scale as walking sprites. All soles rest at the same relative height in their cells. No visible chair, desk or keyboard. Maintain outfit blue baseball cap worn BACKWARDS with brim behind head, mustard short-sleeved shirt, navy trousers, brown shoes, short dark brown hair, dark skin throughout. Need exactly 19 characters plus one blank cell; never add sixth row.
+```
+
+第 2 次（选中）提示词原文：
+
+```text
+Correct script-b atlas ONLY skin and cap orientation. ALL19 figures have DARK BROWN SKIN including face ears arms hands, clearly deep brown not peach. ALL19 wear BACKWARDS blue baseball cap. Row1 already shows adjustment opening at forehead; keep that. Row2 left profiles brim points RIGHT behind head; row3 right profiles brim points LEFT behind head. Row4 back views must show broad blue BRIM extending behind head toward viewer and NO adjustment opening on rear. Row5 right seated figures currently wrong: move brim from right/front to LEFT/BACK behind head, exactly as row3. Keep mustard short sleeve navy pants brown shoes brown hair all poses scale grid1122x1402 magenta and blank lastcell unchanged.
+```
+
+## script-c.png（W92b）
+
+用途：四向走路与侧坐／打字十九帧，4×5，末格空白。生成次数：1；选中第 1 次。实测尺寸：1122×1402。参考图：script.png。
+
+第 1 次（选中）提示词原文：
+
+```text
+Use case: stylized-concept. Production pixel-game character atlas, exactly FOUR columns and FIVE rows in a regular equally spaced rectangular grid (20 equal cells). Uniform pure #FF00FF magenta background. script office worker: blue baseball cap worn forwards, mustard short-sleeved shirt, navy trousers, brown shoes, long BLACK hair tied out through back of cap, warm peach face. Same face, outfit, pixel scale and two-head-tall chibi proportions in ALL cells, including sitting cells. Crisp thick dark brown square pixel outlines, simple 3-tone shading, upper-left warm light, retro RPG sprites matching the supplied sample's aesthetic. Every character occupies about 65% of its cell height when standing; generous magenta margins and centered horizontally. Feet at identical local baseline in every cell. No shadows, text, grid borders or props.
+ROW 1 DOWN facing viewer: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 2 LEFT profile: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 3 RIGHT profile: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 4 UP back view: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 5: cell 1 RIGHT profile seated on invisible chair, hands on lap; cell 2 same seated pose with hands forward at invisible keyboard height down; cell 3 same seated pose with hands a few pixels up typing; cell 4 completely EMPTY MAGENTA.
+Seated sprites are naturally shorter due to bent knees, NEVER enlarged: exactly same head size, same torso size and same pixel scale as walking sprites. All soles rest at the same relative height in their cells. No visible chair, desk or keyboard. Maintain outfit blue baseball cap worn forwards, mustard short-sleeved shirt, navy trousers, brown shoes, long BLACK hair tied out through back of cap, warm peach face throughout. Need exactly 19 characters plus one blank cell; never add sixth row.
+```
+
+## custom-b.png（W92b）
+
+用途：四向走路与侧坐／打字十九帧，4×5，末格空白。生成次数：2；选中第 2 次。实测尺寸：1122×1402。参考图：custom.png。
+
+第 1 次（未选）提示词原文：
+
+```text
+Use case: stylized-concept. Production pixel-game character atlas, exactly FOUR columns and FIVE rows in a regular equally spaced rectangular grid (20 equal cells). Uniform pure #FF00FF magenta background. custom office worker: burgundy casual sweater, khaki trousers, brown shoes, short silver-gray hair, thin-frame glasses, warm peach face. Same face, outfit, pixel scale and two-head-tall chibi proportions in ALL cells, including sitting cells. Crisp thick dark brown square pixel outlines, simple 3-tone shading, upper-left warm light, retro RPG sprites matching the supplied sample's aesthetic. Every character occupies about 65% of its cell height when standing; generous magenta margins and centered horizontally. Feet at identical local baseline in every cell. No shadows, text, grid borders or props.
+ROW 1 DOWN facing viewer: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 2 LEFT profile: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 3 RIGHT profile: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 4 UP back view: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 5: cell 1 RIGHT profile seated on invisible chair, hands on lap; cell 2 same seated pose with hands forward at invisible keyboard height down; cell 3 same seated pose with hands a few pixels up typing; cell 4 completely EMPTY MAGENTA.
+Seated sprites are naturally shorter due to bent knees, NEVER enlarged: exactly same head size, same torso size and same pixel scale as walking sprites. All soles rest at the same relative height in their cells. No visible chair, desk or keyboard. Maintain outfit burgundy casual sweater, khaki trousers, brown shoes, short silver-gray hair, thin-frame glasses, warm peach face throughout. Need exactly 19 characters plus one blank cell; never add sixth row.
+```
+
+第 2 次（选中）提示词原文：
+
+```text
+Add visibly identifiable THIN-FRAME EYEGLASSES to every front and profile face in this custom-b sprite atlas, including all three seated figures. Fine gray metal rims around lenses and thin temples over ears; NOT thick black frames. Keep eyes visible. Back-facing row4 unchanged. Keep silver-gray short hair peach skin burgundy sweater khaki trousers brown shoes every pose proportion 4x5 magenta grid and lastcell empty identical. Only add required thin-frame glasses.
+```
+
+## custom-c.png（W92b）
+
+用途：四向走路与侧坐／打字十九帧，4×5，末格空白。生成次数：1；选中第 1 次。实测尺寸：1122×1402。参考图：custom.png。
+
+第 1 次（选中）提示词原文：
+
+```text
+Use case: stylized-concept. Production pixel-game character atlas, exactly FOUR columns and FIVE rows in a regular equally spaced rectangular grid (20 equal cells). Uniform pure #FF00FF magenta background. custom office worker: burgundy casual sweater, khaki trousers, brown shoes, long chestnut wavy hair, fair skin. Same face, outfit, pixel scale and two-head-tall chibi proportions in ALL cells, including sitting cells. Crisp thick dark brown square pixel outlines, simple 3-tone shading, upper-left warm light, retro RPG sprites matching the supplied sample's aesthetic. Every character occupies about 65% of its cell height when standing; generous magenta margins and centered horizontally. Feet at identical local baseline in every cell. No shadows, text, grid borders or props.
+ROW 1 DOWN facing viewer: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 2 LEFT profile: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 3 RIGHT profile: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 4 UP back view: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 5: cell 1 RIGHT profile seated on invisible chair, hands on lap; cell 2 same seated pose with hands forward at invisible keyboard height down; cell 3 same seated pose with hands a few pixels up typing; cell 4 completely EMPTY MAGENTA.
+Seated sprites are naturally shorter due to bent knees, NEVER enlarged: exactly same head size, same torso size and same pixel scale as walking sprites. All soles rest at the same relative height in their cells. No visible chair, desk or keyboard. Maintain outfit burgundy casual sweater, khaki trousers, brown shoes, long chestnut wavy hair, fair skin throughout. Need exactly 19 characters plus one blank cell; never add sixth row.
+```
+
+## gemini-a.png（W92b）
+
+用途：四向走路与侧坐／打字十九帧，4×5，末格空白。生成次数：1；选中第 1 次。实测尺寸：1122×1402。参考图：custom.png（比例、描边参考）。
+
+第 1 次（选中）提示词原文：
+
+```text
+Use case: stylized-concept. Production pixel-game character atlas, exactly FOUR columns and FIVE rows in a regular equally spaced rectangular grid (20 equal cells). Uniform pure #FF00FF magenta background. gemini office worker: light lavender knitted cardigan over white T-shirt, light gray trousers, brown shoes, dark brown bob haircut, warm peach face. Same face, outfit, pixel scale and two-head-tall chibi proportions in ALL cells, including sitting cells. Crisp thick dark brown square pixel outlines, simple 3-tone shading, upper-left warm light, retro RPG sprites matching the supplied sample's aesthetic. Every character occupies about 65% of its cell height when standing; generous magenta margins and centered horizontally. Feet at identical local baseline in every cell. No shadows, text, grid borders or props.
+ROW 1 DOWN facing viewer: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 2 LEFT profile: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 3 RIGHT profile: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 4 UP back view: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 5: cell 1 RIGHT profile seated on invisible chair, hands on lap; cell 2 same seated pose with hands forward at invisible keyboard height down; cell 3 same seated pose with hands a few pixels up typing; cell 4 completely EMPTY MAGENTA.
+Seated sprites are naturally shorter due to bent knees, NEVER enlarged: exactly same head size, same torso size and same pixel scale as walking sprites. All soles rest at the same relative height in their cells. No visible chair, desk or keyboard. Maintain outfit light lavender knitted cardigan over white T-shirt, light gray trousers, brown shoes, dark brown bob haircut, warm peach face throughout. Need exactly 19 characters plus one blank cell; never add sixth row.
+```
+
+## gemini-b.png（W92b）
+
+用途：四向走路与侧坐／打字十九帧，4×5，末格空白。生成次数：1；选中第 1 次。实测尺寸：1122×1402。参考图：gemini-a.png。
+
+第 1 次（选中）提示词原文：
+
+```text
+Use case: stylized-concept. Production pixel-game character atlas, exactly FOUR columns and FIVE rows in a regular equally spaced rectangular grid (20 equal cells). Uniform pure #FF00FF magenta background. gemini office worker: light lavender knitted cardigan over white T-shirt, light gray trousers, brown shoes, short BLACK hair, DARK BROWN skin. Same face, outfit, pixel scale and two-head-tall chibi proportions in ALL cells, including sitting cells. Crisp thick dark brown square pixel outlines, simple 3-tone shading, upper-left warm light, retro RPG sprites matching the supplied sample's aesthetic. Every character occupies about 65% of its cell height when standing; generous magenta margins and centered horizontally. Feet at identical local baseline in every cell. No shadows, text, grid borders or props.
+ROW 1 DOWN facing viewer: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 2 LEFT profile: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 3 RIGHT profile: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 4 UP back view: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 5: cell 1 RIGHT profile seated on invisible chair, hands on lap; cell 2 same seated pose with hands forward at invisible keyboard height down; cell 3 same seated pose with hands a few pixels up typing; cell 4 completely EMPTY MAGENTA.
+Seated sprites are naturally shorter due to bent knees, NEVER enlarged: exactly same head size, same torso size and same pixel scale as walking sprites. All soles rest at the same relative height in their cells. No visible chair, desk or keyboard. Maintain outfit light lavender knitted cardigan over white T-shirt, light gray trousers, brown shoes, short BLACK hair, DARK BROWN skin throughout. Need exactly 19 characters plus one blank cell; never add sixth row.
+```
+
+## gemini-c.png（W92b）
+
+用途：四向走路与侧坐／打字十九帧，4×5，末格空白。生成次数：1；选中第 1 次。实测尺寸：1122×1402。参考图：gemini-a.png。
+
+第 1 次（选中）提示词原文：
+
+```text
+Use case: stylized-concept. Production pixel-game character atlas, exactly FOUR columns and FIVE rows in a regular equally spaced rectangular grid (20 equal cells). Uniform pure #FF00FF magenta background. gemini office worker: light lavender knitted cardigan over white T-shirt, light gray trousers, brown shoes, short hair with PINK highlights, fair skin. Same face, outfit, pixel scale and two-head-tall chibi proportions in ALL cells, including sitting cells. Crisp thick dark brown square pixel outlines, simple 3-tone shading, upper-left warm light, retro RPG sprites matching the supplied sample's aesthetic. Every character occupies about 65% of its cell height when standing; generous magenta margins and centered horizontally. Feet at identical local baseline in every cell. No shadows, text, grid borders or props.
+ROW 1 DOWN facing viewer: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 2 LEFT profile: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 3 RIGHT profile: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 4 UP back view: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 5: cell 1 RIGHT profile seated on invisible chair, hands on lap; cell 2 same seated pose with hands forward at invisible keyboard height down; cell 3 same seated pose with hands a few pixels up typing; cell 4 completely EMPTY MAGENTA.
+Seated sprites are naturally shorter due to bent knees, NEVER enlarged: exactly same head size, same torso size and same pixel scale as walking sprites. All soles rest at the same relative height in their cells. No visible chair, desk or keyboard. Maintain outfit light lavender knitted cardigan over white T-shirt, light gray trousers, brown shoes, short hair with PINK highlights, fair skin throughout. Need exactly 19 characters plus one blank cell; never add sixth row.
+```
+
+## opencode-a.png（W92b）
+
+用途：四向走路与侧坐／打字十九帧，4×5，末格空白。生成次数：1；选中第 1 次。实测尺寸：1122×1402。参考图：claude-code.png（比例、描边参考）。
+
+第 1 次（选中）提示词原文：
+
+```text
+Use case: stylized-concept. Production pixel-game character atlas, exactly FOUR columns and FIVE rows in a regular equally spaced rectangular grid (20 equal cells). Uniform pure #FF00FF magenta background. opencode office worker: black T-shirt, olive green cargo trousers, brown shoes, messy short dark brown hair, warm peach face. Same face, outfit, pixel scale and two-head-tall chibi proportions in ALL cells, including sitting cells. Crisp thick dark brown square pixel outlines, simple 3-tone shading, upper-left warm light, retro RPG sprites matching the supplied sample's aesthetic. Every character occupies about 65% of its cell height when standing; generous magenta margins and centered horizontally. Feet at identical local baseline in every cell. No shadows, text, grid borders or props.
+ROW 1 DOWN facing viewer: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 2 LEFT profile: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 3 RIGHT profile: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 4 UP back view: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 5: cell 1 RIGHT profile seated on invisible chair, hands on lap; cell 2 same seated pose with hands forward at invisible keyboard height down; cell 3 same seated pose with hands a few pixels up typing; cell 4 completely EMPTY MAGENTA.
+Seated sprites are naturally shorter due to bent knees, NEVER enlarged: exactly same head size, same torso size and same pixel scale as walking sprites. All soles rest at the same relative height in their cells. No visible chair, desk or keyboard. Maintain outfit black T-shirt, olive green cargo trousers, brown shoes, messy short dark brown hair, warm peach face throughout. Need exactly 19 characters plus one blank cell; never add sixth row.
+```
+
+## opencode-b.png（W92b）
+
+用途：四向走路与侧坐／打字十九帧，4×5，末格空白。生成次数：1；选中第 1 次。实测尺寸：1122×1402。参考图：opencode-a.png。
+
+第 1 次（选中）提示词原文：
+
+```text
+Use case: stylized-concept. Production pixel-game character atlas, exactly FOUR columns and FIVE rows in a regular equally spaced rectangular grid (20 equal cells). Uniform pure #FF00FF magenta background. opencode office worker: black T-shirt, olive green cargo trousers, brown shoes, BALD head with full beard, DARK BROWN skin. Same face, outfit, pixel scale and two-head-tall chibi proportions in ALL cells, including sitting cells. Crisp thick dark brown square pixel outlines, simple 3-tone shading, upper-left warm light, retro RPG sprites matching the supplied sample's aesthetic. Every character occupies about 65% of its cell height when standing; generous magenta margins and centered horizontally. Feet at identical local baseline in every cell. No shadows, text, grid borders or props.
+ROW 1 DOWN facing viewer: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 2 LEFT profile: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 3 RIGHT profile: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 4 UP back view: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 5: cell 1 RIGHT profile seated on invisible chair, hands on lap; cell 2 same seated pose with hands forward at invisible keyboard height down; cell 3 same seated pose with hands a few pixels up typing; cell 4 completely EMPTY MAGENTA.
+Seated sprites are naturally shorter due to bent knees, NEVER enlarged: exactly same head size, same torso size and same pixel scale as walking sprites. All soles rest at the same relative height in their cells. No visible chair, desk or keyboard. Maintain outfit black T-shirt, olive green cargo trousers, brown shoes, BALD head with full beard, DARK BROWN skin throughout. Need exactly 19 characters plus one blank cell; never add sixth row.
+```
+
+## opencode-c.png（W92b）
+
+用途：四向走路与侧坐／打字十九帧，4×5，末格空白。生成次数：1；选中第 1 次。实测尺寸：1122×1402。参考图：opencode-a.png。
+
+第 1 次（选中）提示词原文：
+
+```text
+Use case: stylized-concept. Production pixel-game character atlas, exactly FOUR columns and FIVE rows in a regular equally spaced rectangular grid (20 equal cells). Uniform pure #FF00FF magenta background. opencode office worker: black T-shirt, olive green cargo trousers, brown shoes, long dark brown hair with a GREEN HEADBAND, warm peach face. Same face, outfit, pixel scale and two-head-tall chibi proportions in ALL cells, including sitting cells. Crisp thick dark brown square pixel outlines, simple 3-tone shading, upper-left warm light, retro RPG sprites matching the supplied sample's aesthetic. Every character occupies about 65% of its cell height when standing; generous magenta margins and centered horizontally. Feet at identical local baseline in every cell. No shadows, text, grid borders or props.
+ROW 1 DOWN facing viewer: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 2 LEFT profile: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 3 RIGHT profile: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 4 UP back view: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 5: cell 1 RIGHT profile seated on invisible chair, hands on lap; cell 2 same seated pose with hands forward at invisible keyboard height down; cell 3 same seated pose with hands a few pixels up typing; cell 4 completely EMPTY MAGENTA.
+Seated sprites are naturally shorter due to bent knees, NEVER enlarged: exactly same head size, same torso size and same pixel scale as walking sprites. All soles rest at the same relative height in their cells. No visible chair, desk or keyboard. Maintain outfit black T-shirt, olive green cargo trousers, brown shoes, long dark brown hair with a GREEN HEADBAND, warm peach face throughout. Need exactly 19 characters plus one blank cell; never add sixth row.
+```
+
+## droid-a.png（W92b）
+
+用途：四向走路与侧坐／打字十九帧，4×5，末格空白。生成次数：3；选中第 3 次。实测尺寸：1122×1402。参考图：claude-code.png（新 kind 比例参考）。
+
+第 1 次（未选）提示词原文：
+
+```text
+Use case: stylized-concept. Production pixel-game character atlas, exactly FOUR columns and FIVE rows in a regular equally spaced rectangular grid (20 equal cells). Uniform pure #FF00FF magenta background. droid office worker: light gray work coveralls with ORANGE collar, brown shoes, short black hair, warm peach face. Same face, outfit, pixel scale and two-head-tall chibi proportions in ALL cells, including sitting cells. Crisp thick dark brown square pixel outlines, simple 3-tone shading, upper-left warm light, retro RPG sprites matching the supplied sample's aesthetic. Every character occupies about 65% of its cell height when standing; generous magenta margins and centered horizontally. Feet at identical local baseline in every cell. No shadows, text, grid borders or props.
+ROW 1 DOWN facing viewer: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 2 LEFT profile: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 3 RIGHT profile: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 4 UP back view: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 5: cell 1 RIGHT profile seated on invisible chair, hands on lap; cell 2 same seated pose with hands forward at invisible keyboard height down; cell 3 same seated pose with hands a few pixels up typing; cell 4 completely EMPTY MAGENTA.
+Seated sprites are naturally shorter due to bent knees, NEVER enlarged: exactly same head size, same torso size and same pixel scale as walking sprites. All soles rest at the same relative height in their cells. No visible chair, desk or keyboard. Maintain outfit light gray work coveralls with ORANGE collar, brown shoes, short black hair, warm peach face throughout. Need exactly 19 characters plus one blank cell; never add sixth row.
+```
+
+第 2 次（未选）提示词原文：
+
+```text
+Edit this exact 4-column by 5-row pixel sprite sheet only: the garment must be light gray industrial one-piece WORK COVERALLS, with an orange stand collar. Remove the HOOD from every pose; NO hood, NO hoodie. Replace the draped gray bulge behind the neck with a plain flat upper back and small orange collar. Keep black short hair, peach skin, all poses, row direction, pixel scale, outlines, exact magenta background and empty bottom-right cell unchanged. No extra accessories.
+```
+
+第 3 次（选中）提示词原文：
+
+```text
+Correct ONLY the four BACK-VIEW sprites in ROW FOUR: erase the gray curved U-shaped hood outline below the orange collar. The entire gray upper back must be plain flat fabric of industrial coveralls, no hood, no curved draped shape, no scarf. A thin straight horizontal shoulder seam is allowed. Preserve orange collar, all colors, all pixels outside those four upper backs, sprite dimensions and positions and magenta background. Output same 4 by 5 sprite sheet.
+```
+
+## droid-b.png（W92b）
+
+用途：四向走路与侧坐／打字十九帧，4×5，末格空白。生成次数：1；选中第 1 次。实测尺寸：1122×1402。参考图：droid-a.png。
+
+第 1 次（选中）提示词原文：
+
+```text
+Use case: stylized-concept. Production pixel-game character atlas, exactly FOUR columns and FIVE rows in a regular equally spaced rectangular grid (20 equal cells). Uniform pure #FF00FF magenta background. droid office worker: light gray industrial one-piece work coveralls with ORANGE collar and plain flat back, brown shoes, short RED hair, FAIR skin. Same face, outfit, pixel scale and two-head-tall chibi proportions in ALL cells, including sitting cells. Crisp thick dark brown square pixel outlines, simple 3-tone shading, upper-left warm light, retro RPG sprites matching the supplied sample's aesthetic. Every character occupies about 65% of its cell height when standing; generous magenta margins and centered horizontally. Feet at identical local baseline in every cell. No shadows, text, grid borders or props.
+ROW 1 DOWN facing viewer: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 2 LEFT profile: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 3 RIGHT profile: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 4 UP back view: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 5: cell 1 RIGHT profile seated on invisible chair, hands on lap; cell 2 same seated pose with hands forward at invisible keyboard height down; cell 3 same seated pose with hands a few pixels up typing; cell 4 completely EMPTY MAGENTA.
+Seated sprites are naturally shorter due to bent knees, NEVER enlarged: exactly same head size, same torso size and same pixel scale as walking sprites. All soles rest at the same relative height in their cells. No visible chair, desk or keyboard. Maintain outfit light gray industrial one-piece work coveralls with ORANGE collar and plain flat back, brown shoes, short RED hair, FAIR skin throughout. Need exactly 19 characters plus one blank cell; never add sixth row.
+```
+
+## droid-c.png（W92b）
+
+用途：四向走路与侧坐／打字十九帧，4×5，末格空白。生成次数：1；选中第 1 次。实测尺寸：1122×1402。参考图：droid-a.png。
+
+第 1 次（选中）提示词原文：
+
+```text
+Use case: stylized-concept. Production pixel-game character atlas, exactly FOUR columns and FIVE rows in a regular equally spaced rectangular grid (20 equal cells). Uniform pure #FF00FF magenta background. droid office worker: light gray industrial one-piece work coveralls with ORANGE collar and plain flat back, brown shoes, short black hair, warm peach face, safety goggles pushed up onto the FOREHEAD above the eyes. Same face, outfit, pixel scale and two-head-tall chibi proportions in ALL cells, including sitting cells. Crisp thick dark brown square pixel outlines, simple 3-tone shading, upper-left warm light, retro RPG sprites matching the supplied sample's aesthetic. Every character occupies about 65% of its cell height when standing; generous magenta margins and centered horizontally. Feet at identical local baseline in every cell. No shadows, text, grid borders or props.
+ROW 1 DOWN facing viewer: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 2 LEFT profile: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 3 RIGHT profile: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 4 UP back view: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 5: cell 1 RIGHT profile seated on invisible chair, hands on lap; cell 2 same seated pose with hands forward at invisible keyboard height down; cell 3 same seated pose with hands a few pixels up typing; cell 4 completely EMPTY MAGENTA.
+Seated sprites are naturally shorter due to bent knees, NEVER enlarged: exactly same head size, same torso size and same pixel scale as walking sprites. All soles rest at the same relative height in their cells. No visible chair, desk or keyboard. Maintain outfit light gray industrial one-piece work coveralls with ORANGE collar and plain flat back, brown shoes, short black hair, warm peach face, safety goggles pushed up onto the FOREHEAD above the eyes throughout. Need exactly 19 characters plus one blank cell; never add sixth row.
+```
+
+## cursor-a.png（W92b）
+
+用途：四向走路与侧坐／打字十九帧，4×5，末格空白。生成次数：2；选中第 2 次。实测尺寸：1122×1402。参考图：custom.png（新 kind 比例参考）。
+
+第 1 次（未选）提示词原文：
+
+```text
+Use case: stylized-concept. Production pixel-game character atlas, exactly FOUR columns and FIVE rows in a regular equally spaced rectangular grid (20 equal cells). Uniform pure #FF00FF magenta background. cursor office worker: black TURTLENECK sweater, dark gray trousers, brown shoes, short black hair, warm peach face. Same face, outfit, pixel scale and two-head-tall chibi proportions in ALL cells, including sitting cells. Crisp thick dark brown square pixel outlines, simple 3-tone shading, upper-left warm light, retro RPG sprites matching the supplied sample's aesthetic. Every character occupies about 65% of its cell height when standing; generous magenta margins and centered horizontally. Feet at identical local baseline in every cell. No shadows, text, grid borders or props.
+ROW 1 DOWN facing viewer: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 2 LEFT profile: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 3 RIGHT profile: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 4 UP back view: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 5: cell 1 RIGHT profile seated on invisible chair, hands on lap; cell 2 same seated pose with hands forward at invisible keyboard height down; cell 3 same seated pose with hands a few pixels up typing; cell 4 completely EMPTY MAGENTA.
+Seated sprites are naturally shorter due to bent knees, NEVER enlarged: exactly same head size, same torso size and same pixel scale as walking sprites. All soles rest at the same relative height in their cells. No visible chair, desk or keyboard. Maintain outfit black TURTLENECK sweater, dark gray trousers, brown shoes, short black hair, warm peach face throughout. Need exactly 19 characters plus one blank cell; never add sixth row.
+```
+
+第 2 次（选中）提示词原文：
+
+```text
+Edit this exact pixel sprite sheet: change ONLY the hair in every one of the 19 poses from brown to BLACK, with neutral charcoal-gray highlights. No brown or chestnut tint in hair. Keep hairstyle, peach skin, black high turtleneck sweater, dark gray trousers, brown shoes, every pose and direction, grid, blank last cell, outlines, scale, and solid magenta background exactly as they are.
+```
+
+## cursor-b.png（W92b）
+
+用途：四向走路与侧坐／打字十九帧，4×5，末格空白。生成次数：1；选中第 1 次。实测尺寸：1122×1402。参考图：cursor-a.png。
+
+第 1 次（选中）提示词原文：
+
+```text
+Use case: stylized-concept. Production pixel-game character atlas, exactly FOUR columns and FIVE rows in a regular equally spaced rectangular grid (20 equal cells). Uniform pure #FF00FF magenta background. cursor office worker: black TURTLENECK sweater, dark gray trousers, brown shoes, short BLOND hair, FAIR skin. Same face, outfit, pixel scale and two-head-tall chibi proportions in ALL cells, including sitting cells. Crisp thick dark brown square pixel outlines, simple 3-tone shading, upper-left warm light, retro RPG sprites matching the supplied sample's aesthetic. Every character occupies about 65% of its cell height when standing; generous magenta margins and centered horizontally. Feet at identical local baseline in every cell. No shadows, text, grid borders or props.
+ROW 1 DOWN facing viewer: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 2 LEFT profile: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 3 RIGHT profile: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 4 UP back view: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 5: cell 1 RIGHT profile seated on invisible chair, hands on lap; cell 2 same seated pose with hands forward at invisible keyboard height down; cell 3 same seated pose with hands a few pixels up typing; cell 4 completely EMPTY MAGENTA.
+Seated sprites are naturally shorter due to bent knees, NEVER enlarged: exactly same head size, same torso size and same pixel scale as walking sprites. All soles rest at the same relative height in their cells. No visible chair, desk or keyboard. Maintain outfit black TURTLENECK sweater, dark gray trousers, brown shoes, short BLOND hair, FAIR skin throughout. Need exactly 19 characters plus one blank cell; never add sixth row.
+```
+
+## cursor-c.png（W92b）
+
+用途：四向走路与侧坐／打字十九帧，4×5，末格空白。生成次数：1；选中第 1 次。实测尺寸：1122×1402。参考图：cursor-a.png。
+
+第 1 次（选中）提示词原文：
+
+```text
+Use case: stylized-concept. Production pixel-game character atlas, exactly FOUR columns and FIVE rows in a regular equally spaced rectangular grid (20 equal cells). Uniform pure #FF00FF magenta background. cursor office worker: black TURTLENECK sweater, dark gray trousers, brown shoes, BLACK BRAIDED hair, DARK BROWN skin. Same face, outfit, pixel scale and two-head-tall chibi proportions in ALL cells, including sitting cells. Crisp thick dark brown square pixel outlines, simple 3-tone shading, upper-left warm light, retro RPG sprites matching the supplied sample's aesthetic. Every character occupies about 65% of its cell height when standing; generous magenta margins and centered horizontally. Feet at identical local baseline in every cell. No shadows, text, grid borders or props.
+ROW 1 DOWN facing viewer: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 2 LEFT profile: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 3 RIGHT profile: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 4 UP back view: neutral standing, left foot forward, neutral standing, right foot forward.
+ROW 5: cell 1 RIGHT profile seated on invisible chair, hands on lap; cell 2 same seated pose with hands forward at invisible keyboard height down; cell 3 same seated pose with hands a few pixels up typing; cell 4 completely EMPTY MAGENTA.
+Seated sprites are naturally shorter due to bent knees, NEVER enlarged: exactly same head size, same torso size and same pixel scale as walking sprites. All soles rest at the same relative height in their cells. No visible chair, desk or keyboard. Maintain outfit black TURTLENECK sweater, dark gray trousers, brown shoes, BLACK BRAIDED hair, DARK BROWN skin throughout. Need exactly 19 characters plus one blank cell; never add sixth row.
+```
