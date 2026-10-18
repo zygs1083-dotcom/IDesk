@@ -1,0 +1,123 @@
+[
+  {
+    "name": "automation-light",
+    "route": "/automation",
+    "boardTop": 152,
+    "boardHeight": 732,
+    "headerHeight": 72,
+    "scrollHeight": 900,
+    "innerHeight": 900,
+    "photoDisplay": "block",
+    "photoPointerEvents": "none"
+  },
+  {
+    "name": "desk-light",
+    "route": "/desk",
+    "boardTop": 98,
+    "boardHeight": 786,
+    "headerHeight": 45,
+    "scrollHeight": 900,
+    "innerHeight": 900,
+    "photoDisplay": "block",
+    "photoPointerEvents": "none"
+  },
+  {
+    "name": "relay-light",
+    "route": "/relay",
+    "boardTop": 160,
+    "boardHeight": 724,
+    "headerHeight": 72,
+    "scrollHeight": 900,
+    "innerHeight": 900,
+    "photoDisplay": "block",
+    "photoPointerEvents": "none"
+  },
+  {
+    "name": "agents-light",
+    "route": "/agents",
+    "boardTop": 173,
+    "boardHeight": 97,
+    "headerHeight": 72,
+    "scrollHeight": 900,
+    "innerHeight": 900,
+    "photoDisplay": "block",
+    "photoPointerEvents": "none"
+  },
+  {
+    "name": "settings-light",
+    "route": "/settings/connectors",
+    "boardTop": 221,
+    "boardHeight": 66,
+    "headerHeight": 72,
+    "scrollHeight": 900,
+    "innerHeight": 900,
+    "photoDisplay": "block",
+    "photoPointerEvents": "none"
+  },
+  {
+    "name": "automation-dark",
+    "route": "/automation",
+    "boardTop": 152,
+    "boardHeight": 732,
+    "headerHeight": 72,
+    "scrollHeight": 900,
+    "innerHeight": 900,
+    "photoDisplay": "block",
+    "photoPointerEvents": "none"
+  },
+  {
+    "name": "automation-1000x600",
+    "route": "/automation",
+    "boardTop": 152,
+    "boardHeight": 432,
+    "headerHeight": 72,
+    "scrollHeight": 600,
+    "innerHeight": 600,
+    "photoDisplay": "none",
+    "photoPointerEvents": "auto"
+  },
+  {
+    "name": "automation-mobile",
+    "route": "/automation",
+    "boardTop": 327,
+    "boardHeight": 501,
+    "headerHeight": 56,
+    "scrollHeight": 844,
+    "innerHeight": 844,
+    "photoDisplay": "none",
+    "photoPointerEvents": "auto"
+  },
+  {
+    "name": "automation-reduced",
+    "route": "/automation",
+    "boardTop": 152,
+    "boardHeight": 732,
+    "headerHeight": 72,
+    "scrollHeight": 900,
+    "innerHeight": 900,
+    "photoDisplay": "block",
+    "photoPointerEvents": "none"
+  },
+  {
+    "name": "automation-classic",
+    "route": "/automation",
+    "boardTop": 146,
+    "boardHeight": 730,
+    "headerHeight": 38,
+    "scrollHeight": 900,
+    "innerHeight": 900,
+    "photoDisplay": "none",
+    "photoPointerEvents": "auto"
+  },
+  {
+    "name": "automation-cartoon",
+    "route": "/automation",
+    "boardTop": 146,
+    "boardHeight": 730,
+    "headerHeight": 38,
+    "scrollHeight": 900,
+    "innerHeight": 900,
+    "photoDisplay": "none",
+    "photoPointerEvents": "auto"
+  }
+]
