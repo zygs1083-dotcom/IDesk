@@ -186,3 +186,314 @@ back 按肩膀量，不按被椅背挡住的臀量。工作区 1 四人坐满，
 侧坐只用于右侧沙发的一个中央座位 (1594,608)，面向左，取 `sit/right` 并水平镜像。可见坐垫中心约 (1594,588)，人物臀/大腿在世界 y588–598，脚底在 y608；不抬升。两张 typing/right 帧同样检查臀/大腿接触坐垫，保留 lift = 0。北侧双人沙发用 front 帧，锚点仍为 1；脚底量在底座前沿 y539 正前方地板 y544，让沙发自然排在人后。大腿接坐垫前缘，膝盖、小腿和鞋在沙发前可见，不再被前沿盖住。会议室按原画前后各三把椅子，分别用 front/back，不造桌端侧座。
 
 `tools/characters.mjs` 是唯一锚点表，生成图集 JSON；`tools/characters.test.mjs` 按真实座位与三个坐姿帧分别断言世界底边 = 座位 y − lift。重跑生成器时 `characters/*.png` 的哈希保持不变。
+
+## W92b 实测尺寸总表
+
+参考图文件名按生成时记录；原有五种的参考图已由 W92a 改名加 `-a`。归一流程经负责人批准：整图最近邻到 1122×561，六帧同系数缩放、水平居中、保持底边；本批均采用 0.90，不量化或转色。
+
+| 原图 | 用途 | 次数 / 选中 | 实测宽×高 / 最终宽×高 |
+| --- | --- | --- | --- |
+| claude-code-b-seated.png | 4×2 坐姿补充（6 帧） | 3 / 3 | 1774×887 → 1122×561 |
+| claude-code-c-seated.png | 4×2 坐姿补充（6 帧） | 1 / 1 | 1774×887 → 1122×561 |
+| codex-b-seated.png | 4×2 坐姿补充（6 帧） | 1 / 1 | 1774×887 → 1122×561 |
+| codex-c-seated.png | 4×2 坐姿补充（6 帧） | 1 / 1 | 1774×887 → 1122×561 |
+| n8n-b-seated.png | 4×2 坐姿补充（6 帧） | 1 / 1 | 1774×887 → 1122×561 |
+| n8n-c-seated.png | 4×2 坐姿补充（6 帧） | 1 / 1 | 1774×887 → 1122×561 |
+| script-b-seated.png | 4×2 坐姿补充（6 帧） | 2 / 2 | 1774×887 → 1122×561 |
+| script-c-seated.png | 4×2 坐姿补充（6 帧） | 1 / 1 | 1774×887 → 1122×561 |
+| custom-b-seated.png | 4×2 坐姿补充（6 帧） | 1 / 1 | 1774×887 → 1122×561 |
+| custom-c-seated.png | 4×2 坐姿补充（6 帧） | 1 / 1 | 1774×887 → 1122×561 |
+| gemini-a-seated.png | 4×2 坐姿补充（6 帧） | 1 / 1 | 1774×887 → 1122×561 |
+| gemini-b-seated.png | 4×2 坐姿补充（6 帧） | 1 / 1 | 1774×887 → 1122×561 |
+| gemini-c-seated.png | 4×2 坐姿补充（6 帧） | 1 / 1 | 1774×887 → 1122×561 |
+| opencode-a-seated.png | 4×2 坐姿补充（6 帧） | 1 / 1 | 1774×887 → 1122×561 |
+| opencode-b-seated.png | 4×2 坐姿补充（6 帧） | 1 / 1 | 1774×887 → 1122×561 |
+| opencode-c-seated.png | 4×2 坐姿补充（6 帧） | 1 / 1 | 1774×887 → 1122×561 |
+| droid-a-seated.png | 4×2 坐姿补充（6 帧） | 1 / 1 | 1774×887 → 1122×561 |
+| droid-b-seated.png | 4×2 坐姿补充（6 帧） | 1 / 1 | 1774×887 → 1122×561 |
+| droid-c-seated.png | 4×2 坐姿补充（6 帧） | 1 / 1 | 1774×887 → 1122×561 |
+| cursor-a-seated.png | 4×2 坐姿补充（6 帧） | 1 / 1 | 1774×887 → 1122×561 |
+| cursor-b-seated.png | 4×2 坐姿补充（6 帧） | 1 / 1 | 1774×887 → 1122×561 |
+| cursor-c-seated.png | 4×2 坐姿补充（6 帧） | 1 / 1 | 1774×887 → 1122×561 |
+
+## claude-code-b-seated.png（W92b）
+
+用途：四分之三 front/back 坐姿与打字六帧，4×2，末两格空白。生成次数：3；选中第 3 次。实测尺寸：1774×887。参考图：claude-code-b.png、claude-code-seated.png。
+
+整图最近邻归一到 1122×561 后，六帧统一系数 0.90 等比缩放，每格水平居中、保持原底边；最终 1122×561。不量化、不转色、不重绘。
+
+第 1 次（未选）提示词原文：
+
+```text
+Use case: identity-preserve. Reference image is original claude-code pixel worker atlas, use first standing row and third right-facing row as exact head/torso scale and identity reference, fifth row as bent-leg reference. Create replacement seated supplement ONLY, exactly FOUR columns x TWO rows, uniform pure #FF00FF background, requested1122x561. Six figures, last two cells empty. Crisp square pixel art same black hair in a low ponytail, fair skin, teal hoodie hood down charcoal pants brown shoes. THREE-QUARTER oblique view, NOT straight front or straight back. Row1: sit/front body turned 45degrees toward viewer's LOWER RIGHT showing face chest one shoulder and horizontal bent thighs; typing/front same direction arms forward at keyboard height; typing/front alternate hands slightly higher; sit/back turned45degrees away toward UPPER RIGHT showing back hair hoodie back and one shoulder. Row2: typing/back same upper-right orientation arms forward; typing/back alternate; EMPTY; EMPTY. No furniture keyboard shadows text lines. At1122x561 each figure opaque height184px (standing209px, ratio0.88), head width105px (standing105px). Preserve FULL standing head and torso size; shorten ONLY legs into visibly bent seated thighs and short shins. Do not shrink whole head or torso, no squat tiny bodies. Figure feet local y250, top66. Same scale all six, ample magenta margins. Exact two-to-one sheet aspect. Only new seated supplement, do not reproduce original five rows.
+```
+
+第 2 次（未选）提示词原文：
+
+```text
+Edit all six seated figures in this claude-code-b supplement: uniformly reduce complete figures by14percent inside their existing cells, preserving identical head torso bent-leg proportions and poses. Target figure height292px at1774wide (185px at1122wide), head width166px at1774wide (105px at1122wide). Keep black low ponytail fair skin teal hoodie hood down charcoal pants brown shoes crisp pixels same4x2 pure magenta sheet last2empty. All six same scale. No other changes.
+```
+
+第 3 次（选中）提示词原文：
+
+```text
+Uniformly enlarge all SIX figures by exactly16percent within their existing cells. Existing opaque height254px needs292px at1774wide. Preserve each entire figure shape pose and proportions, black low ponytail fair skin teal hoodie charcoal pants brown shoes. Four columns two rows pure magenta finaltwoempty. Same pixel art no props. Keep feet at current baseline. Target same185px figure height at1122wide, not160px.
+```
+
+## claude-code-c-seated.png（W92b）
+
+用途：四分之三 front/back 坐姿与打字六帧，4×2，末两格空白。生成次数：1；选中第 1 次。实测尺寸：1774×887。参考图：claude-code-c.png、claude-code-seated.png。
+
+整图最近邻归一到 1122×561 后，六帧统一系数 0.90 等比缩放，每格水平居中、保持原底边；最终 1122×561。不量化、不转色、不重绘。
+
+第 1 次（选中）提示词原文：
+
+```text
+Use case: identity-preserve. Reference image is original claude-code pixel worker atlas, use first standing row and third right-facing row as exact head/torso scale and identity reference, fifth row as bent-leg reference. Create replacement seated supplement ONLY, exactly FOUR columns x TWO rows, uniform pure #FF00FF background, requested1122x561. Six figures, last two cells empty. Crisp square pixel art same brown curly hair, dark skin, round-frame glasses, teal hoodie hood down charcoal pants brown shoes. THREE-QUARTER oblique view, NOT straight front or straight back. Row1: sit/front body turned 45degrees toward viewer's LOWER RIGHT showing face chest one shoulder and horizontal bent thighs; typing/front same direction arms forward at keyboard height; typing/front alternate hands slightly higher; sit/back turned45degrees away toward UPPER RIGHT showing back hair hoodie back and one shoulder. Row2: typing/back same upper-right orientation arms forward; typing/back alternate; EMPTY; EMPTY. No furniture keyboard shadows text lines. At1122x561 each figure opaque height184px (standing209px, ratio0.88), head width105px (standing105px). Preserve FULL standing head and torso size; shorten ONLY legs into visibly bent seated thighs and short shins. Do not shrink whole head or torso, no squat tiny bodies. Figure feet local y250, top66. Same scale all six, ample magenta margins. Exact two-to-one sheet aspect. Only new seated supplement, do not reproduce original five rows.
+```
+
+## codex-b-seated.png（W92b）
+
+用途：四分之三 front/back 坐姿与打字六帧，4×2，末两格空白。生成次数：1；选中第 1 次。实测尺寸：1774×887。参考图：codex-b.png、codex-seated.png。
+
+整图最近邻归一到 1122×561 后，六帧统一系数 0.90 等比缩放，每格水平居中、保持原底边；最终 1122×561。不量化、不转色、不重绘。
+
+第 1 次（选中）提示词原文：
+
+```text
+Use case: identity-preserve. Reference image is original codex pixel worker atlas, use first standing row and third right-facing row as exact head/torso scale and identity reference, fifth row as bent-leg reference. Create replacement seated supplement ONLY, exactly FOUR columns x TWO rows, uniform pure #FF00FF background, requested1122x561. Six figures, last two cells empty. Crisp square pixel art same short gray-white hair, fair skin, black rectangular glasses, ivory button-up shirt navy pants brown shoes. THREE-QUARTER oblique view, NOT straight front or straight back. Row1: sit/front body turned 45degrees toward viewer's LOWER RIGHT showing face chest one shoulder and horizontal bent thighs; typing/front same direction arms forward at keyboard height; typing/front alternate hands slightly higher; sit/back turned45degrees away toward UPPER RIGHT showing back hair shirt back and one shoulder. Row2: typing/back same upper-right orientation arms forward; typing/back alternate; EMPTY; EMPTY. No furniture keyboard shadows text lines. At1122x561 each figure opaque height190px (standing217px, ratio0.88), head width110px (standing110px). Preserve FULL standing head and torso size; shorten ONLY legs into visibly bent seated thighs and short shins. Do not shrink whole head or torso, no squat tiny bodies. Figure feet local y250, top66. Same scale all six, ample magenta margins. Exact two-to-one sheet aspect. Only new seated supplement, do not reproduce original five rows.
+```
+
+## codex-c-seated.png（W92b）
+
+用途：四分之三 front/back 坐姿与打字六帧，4×2，末两格空白。生成次数：1；选中第 1 次。实测尺寸：1774×887。参考图：codex-c.png、codex-seated.png。
+
+整图最近邻归一到 1122×561 后，六帧统一系数 0.90 等比缩放，每格水平居中、保持原底边；最终 1122×561。不量化、不转色、不重绘。
+
+第 1 次（选中）提示词原文：
+
+```text
+Use case: identity-preserve. Reference image is original codex pixel worker atlas, use first standing row and third right-facing row as exact head/torso scale and identity reference, fifth row as bent-leg reference. Create replacement seated supplement ONLY, exactly FOUR columns x TWO rows, uniform pure #FF00FF background, requested1122x561. Six figures, last two cells empty. Crisp square pixel art same black shoulder-length hair, dark skin, black rectangular glasses, ivory button-up shirt navy pants brown shoes. THREE-QUARTER oblique view, NOT straight front or straight back. Row1: sit/front body turned 45degrees toward viewer's LOWER RIGHT showing face chest one shoulder and horizontal bent thighs; typing/front same direction arms forward at keyboard height; typing/front alternate hands slightly higher; sit/back turned45degrees away toward UPPER RIGHT showing back hair shirt back and one shoulder. Row2: typing/back same upper-right orientation arms forward; typing/back alternate; EMPTY; EMPTY. No furniture keyboard shadows text lines. At1122x561 each figure opaque height190px (standing217px, ratio0.88), head width110px (standing110px). Preserve FULL standing head and torso size; shorten ONLY legs into visibly bent seated thighs and short shins. Do not shrink whole head or torso, no squat tiny bodies. Figure feet local y250, top66. Same scale all six, ample magenta margins. Exact two-to-one sheet aspect. Only new seated supplement, do not reproduce original five rows.
+```
+
+## n8n-b-seated.png（W92b）
+
+用途：四分之三 front/back 坐姿与打字六帧，4×2，末两格空白。生成次数：1；选中第 1 次。实测尺寸：1774×887。参考图：n8n-b.png、n8n-seated.png。
+
+整图最近邻归一到 1122×561 后，六帧统一系数 0.90 等比缩放，每格水平居中、保持原底边；最终 1122×561。不量化、不转色、不重绘。
+
+第 1 次（选中）提示词原文：
+
+```text
+Use case: identity-preserve. Reference image is original n8n pixel worker atlas, use first standing row and third right-facing row as exact head/torso scale and identity reference, fifth row as bent-leg reference. Create replacement seated supplement ONLY, exactly FOUR columns x TWO rows, uniform pure #FF00FF background, requested1122x561. Six figures, last two cells empty. Crisp square pixel art same reddish-brown buzz cut, over-ear headphones, warm peach skin, bright orange vest over cream short sleeves charcoal pants brown shoes. THREE-QUARTER oblique view, NOT straight front or straight back. Row1: sit/front body turned 45degrees toward viewer's LOWER RIGHT showing face chest one shoulder and horizontal bent thighs; typing/front same direction arms forward at keyboard height; typing/front alternate hands slightly higher; sit/back turned45degrees away toward UPPER RIGHT showing back hair vest back and one shoulder. Row2: typing/back same upper-right orientation arms forward; typing/back alternate; EMPTY; EMPTY. No furniture keyboard shadows text lines. At1122x561 each figure opaque height176px (standing200px, ratio0.88), head width100px (standing100px). Preserve FULL standing head and torso size; shorten ONLY legs into visibly bent seated thighs and short shins. Do not shrink whole head or torso, no squat tiny bodies. Figure feet local y250, top66. Same scale all six, ample magenta margins. Exact two-to-one sheet aspect. Only new seated supplement, do not reproduce original five rows.
+```
+
+## n8n-c-seated.png（W92b）
+
+用途：四分之三 front/back 坐姿与打字六帧，4×2，末两格空白。生成次数：1；选中第 1 次。实测尺寸：1774×887。参考图：n8n-c.png、n8n-seated.png。
+
+整图最近邻归一到 1122×561 后，六帧统一系数 0.90 等比缩放，每格水平居中、保持原底边；最终 1122×561。不量化、不转色、不重绘。
+
+第 1 次（选中）提示词原文：
+
+```text
+Use case: identity-preserve. Reference image is original n8n pixel worker atlas, use first standing row and third right-facing row as exact head/torso scale and identity reference, fifth row as bent-leg reference. Create replacement seated supplement ONLY, exactly FOUR columns x TWO rows, uniform pure #FF00FF background, requested1122x561. Six figures, last two cells empty. Crisp square pixel art same blonde hair in a bun, fair skin, bright orange vest over cream short sleeves charcoal pants brown shoes. THREE-QUARTER oblique view, NOT straight front or straight back. Row1: sit/front body turned 45degrees toward viewer's LOWER RIGHT showing face chest one shoulder and horizontal bent thighs; typing/front same direction arms forward at keyboard height; typing/front alternate hands slightly higher; sit/back turned45degrees away toward UPPER RIGHT showing back hair vest back and one shoulder. Row2: typing/back same upper-right orientation arms forward; typing/back alternate; EMPTY; EMPTY. No furniture keyboard shadows text lines. At1122x561 each figure opaque height176px (standing200px, ratio0.88), head width100px (standing100px). Preserve FULL standing head and torso size; shorten ONLY legs into visibly bent seated thighs and short shins. Do not shrink whole head or torso, no squat tiny bodies. Figure feet local y250, top66. Same scale all six, ample magenta margins. Exact two-to-one sheet aspect. Only new seated supplement, do not reproduce original five rows.
+```
+
+## script-b-seated.png（W92b）
+
+用途：四分之三 front/back 坐姿与打字六帧，4×2，末两格空白。生成次数：2；选中第 2 次。实测尺寸：1774×887。参考图：script-b.png、script-seated.png。
+
+整图最近邻归一到 1122×561 后，六帧统一系数 0.90 等比缩放，每格水平居中、保持原底边；最终 1122×561。不量化、不转色、不重绘。
+
+第 1 次（未选）提示词原文：
+
+```text
+Use case: identity-preserve. Reference image is original script pixel worker atlas, use first standing row and third right-facing row as exact head/torso scale and identity reference, fifth row as bent-leg reference. Create replacement seated supplement ONLY, exactly FOUR columns x TWO rows, uniform pure #FF00FF background, requested1122x561. Six figures, last two cells empty. Crisp square pixel art same blue baseball cap worn BACKWARDS with brim behind head, dark skin, short dark brown hair, mustard short-sleeved shirt navy pants brown shoes. THREE-QUARTER oblique view, NOT straight front or straight back. Row1: sit/front body turned 45degrees toward viewer's LOWER RIGHT showing face chest one shoulder and horizontal bent thighs; typing/front same direction arms forward at keyboard height; typing/front alternate hands slightly higher; sit/back turned45degrees away toward UPPER RIGHT showing back hair shirt back and one shoulder. Row2: typing/back same upper-right orientation arms forward; typing/back alternate; EMPTY; EMPTY. No furniture keyboard shadows text lines. At1122x561 each figure opaque height176px (standing200px, ratio0.88), head width99px (standing99px). Preserve FULL standing head and torso size; shorten ONLY legs into visibly bent seated thighs and short shins. Do not shrink whole head or torso, no squat tiny bodies. Figure feet local y250, top66. Same scale all six, ample magenta margins. Exact two-to-one sheet aspect. Only new seated supplement, do not reproduce original five rows.
+```
+
+第 2 次（选中）提示词原文：
+
+```text
+Edit ONLY CAPS on three BACK-facing seated figures: row1column4,row2column1,row2column2. These three must wear BACKWARDS baseball caps, so remove adjustment opening from back of cap and draw blue brim extending toward viewer behind head on its lower-left/back side. Front3 already correct backwards caps unchanged. Keep dark skin mustard shirt navy trousers brown shoes poses scale all pixels outside caps unchanged. 4x2 magenta six figures last2empty.
+```
+
+## script-c-seated.png（W92b）
+
+用途：四分之三 front/back 坐姿与打字六帧，4×2，末两格空白。生成次数：1；选中第 1 次。实测尺寸：1774×887。参考图：script-c.png、script-seated.png。
+
+整图最近邻归一到 1122×561 后，六帧统一系数 0.90 等比缩放，每格水平居中、保持原底边；最终 1122×561。不量化、不转色、不重绘。
+
+第 1 次（选中）提示词原文：
+
+```text
+Use case: identity-preserve. Reference image is original script pixel worker atlas, use first standing row and third right-facing row as exact head/torso scale and identity reference, fifth row as bent-leg reference. Create replacement seated supplement ONLY, exactly FOUR columns x TWO rows, uniform pure #FF00FF background, requested1122x561. Six figures, last two cells empty. Crisp square pixel art same blue baseball cap worn forwards, long BLACK hair tied out through back of cap, warm peach skin, mustard short-sleeved shirt navy pants brown shoes. THREE-QUARTER oblique view, NOT straight front or straight back. Row1: sit/front body turned 45degrees toward viewer's LOWER RIGHT showing face chest one shoulder and horizontal bent thighs; typing/front same direction arms forward at keyboard height; typing/front alternate hands slightly higher; sit/back turned45degrees away toward UPPER RIGHT showing back hair shirt back and one shoulder. Row2: typing/back same upper-right orientation arms forward; typing/back alternate; EMPTY; EMPTY. No furniture keyboard shadows text lines. At1122x561 each figure opaque height176px (standing200px, ratio0.88), head width99px (standing99px). Preserve FULL standing head and torso size; shorten ONLY legs into visibly bent seated thighs and short shins. Do not shrink whole head or torso, no squat tiny bodies. Figure feet local y250, top66. Same scale all six, ample magenta margins. Exact two-to-one sheet aspect. Only new seated supplement, do not reproduce original five rows.
+```
+
+## custom-b-seated.png（W92b）
+
+用途：四分之三 front/back 坐姿与打字六帧，4×2，末两格空白。生成次数：1；选中第 1 次。实测尺寸：1774×887。参考图：custom-b.png、custom-seated.png。
+
+整图最近邻归一到 1122×561 后，六帧统一系数 0.90 等比缩放，每格水平居中、保持原底边；最终 1122×561。不量化、不转色、不重绘。
+
+第 1 次（选中）提示词原文：
+
+```text
+Use case: identity-preserve. Reference image is original custom pixel worker atlas, use first standing row and third right-facing row as exact head/torso scale and identity reference, fifth row as bent-leg reference. Create replacement seated supplement ONLY, exactly FOUR columns x TWO rows, uniform pure #FF00FF background, requested1122x561. Six figures, last two cells empty. Crisp square pixel art same short silver-gray hair, thin-frame glasses, warm peach skin, burgundy casual sweater khaki pants brown shoes. THREE-QUARTER oblique view, NOT straight front or straight back. Row1: sit/front body turned 45degrees toward viewer's LOWER RIGHT showing face chest one shoulder and horizontal bent thighs; typing/front same direction arms forward at keyboard height; typing/front alternate hands slightly higher; sit/back turned45degrees away toward UPPER RIGHT showing back hair sweater back and one shoulder. Row2: typing/back same upper-right orientation arms forward; typing/back alternate; EMPTY; EMPTY. No furniture keyboard shadows text lines. At1122x561 each figure opaque height176px (standing200px, ratio0.88), head width97px (standing97px). Preserve FULL standing head and torso size; shorten ONLY legs into visibly bent seated thighs and short shins. Do not shrink whole head or torso, no squat tiny bodies. Figure feet local y250, top66. Same scale all six, ample magenta margins. Exact two-to-one sheet aspect. Only new seated supplement, do not reproduce original five rows.
+```
+
+## custom-c-seated.png（W92b）
+
+用途：四分之三 front/back 坐姿与打字六帧，4×2，末两格空白。生成次数：1；选中第 1 次。实测尺寸：1774×887。参考图：custom-c.png、custom-seated.png。
+
+整图最近邻归一到 1122×561 后，六帧统一系数 0.90 等比缩放，每格水平居中、保持原底边；最终 1122×561。不量化、不转色、不重绘。
+
+第 1 次（选中）提示词原文：
+
+```text
+Use case: identity-preserve. Reference image is original custom pixel worker atlas, use first standing row and third right-facing row as exact head/torso scale and identity reference, fifth row as bent-leg reference. Create replacement seated supplement ONLY, exactly FOUR columns x TWO rows, uniform pure #FF00FF background, requested1122x561. Six figures, last two cells empty. Crisp square pixel art same long chestnut wavy hair, fair skin, burgundy casual sweater khaki pants brown shoes. THREE-QUARTER oblique view, NOT straight front or straight back. Row1: sit/front body turned 45degrees toward viewer's LOWER RIGHT showing face chest one shoulder and horizontal bent thighs; typing/front same direction arms forward at keyboard height; typing/front alternate hands slightly higher; sit/back turned45degrees away toward UPPER RIGHT showing back hair sweater back and one shoulder. Row2: typing/back same upper-right orientation arms forward; typing/back alternate; EMPTY; EMPTY. No furniture keyboard shadows text lines. At1122x561 each figure opaque height176px (standing200px, ratio0.88), head width97px (standing97px). Preserve FULL standing head and torso size; shorten ONLY legs into visibly bent seated thighs and short shins. Do not shrink whole head or torso, no squat tiny bodies. Figure feet local y250, top66. Same scale all six, ample magenta margins. Exact two-to-one sheet aspect. Only new seated supplement, do not reproduce original five rows.
+```
+
+## gemini-a-seated.png（W92b）
+
+用途：四分之三 front/back 坐姿与打字六帧，4×2，末两格空白。生成次数：1；选中第 1 次。实测尺寸：1774×887。参考图：gemini-a.png、custom-seated.png（坐姿比例）。
+
+整图最近邻归一到 1122×561 后，六帧统一系数 0.90 等比缩放，每格水平居中、保持原底边；最终 1122×561。不量化、不转色、不重绘。
+
+第 1 次（选中）提示词原文：
+
+```text
+Use case: identity-preserve. Reference image is original gemini pixel worker atlas, use first standing row and third right-facing row as exact head/torso scale and identity reference, fifth row as bent-leg reference. Create replacement seated supplement ONLY, exactly FOUR columns x TWO rows, uniform pure #FF00FF background, requested1122x561. Six figures, last two cells empty. Crisp square pixel art same dark brown bob haircut, warm peach skin, light lavender knitted cardigan over white T-shirt light gray trousers brown shoes. THREE-QUARTER oblique view, NOT straight front or straight back. Row1: sit/front body turned 45degrees toward viewer's LOWER RIGHT showing face chest one shoulder and horizontal bent thighs; typing/front same direction arms forward at keyboard height; typing/front alternate hands slightly higher; sit/back turned45degrees away toward UPPER RIGHT showing back hair cardigan back and one shoulder. Row2: typing/back same upper-right orientation arms forward; typing/back alternate; EMPTY; EMPTY. No furniture keyboard shadows text lines. At1122x561 each figure opaque height176px (standing200px, ratio0.88), head width100px (standing100px). Preserve FULL standing head and torso size; shorten ONLY legs into visibly bent seated thighs and short shins. Do not shrink whole head or torso, no squat tiny bodies. Figure feet local y250, top66. Same scale all six, ample magenta margins. Exact two-to-one sheet aspect. Only new seated supplement, do not reproduce original five rows.
+```
+
+## gemini-b-seated.png（W92b）
+
+用途：四分之三 front/back 坐姿与打字六帧，4×2，末两格空白。生成次数：1；选中第 1 次。实测尺寸：1774×887。参考图：gemini-b.png、gemini-a.png、gemini-a-seated.png（未归一候选）。
+
+整图最近邻归一到 1122×561 后，六帧统一系数 0.90 等比缩放，每格水平居中、保持原底边；最终 1122×561。不量化、不转色、不重绘。
+
+第 1 次（选中）提示词原文：
+
+```text
+Use case: identity-preserve. Reference image is original gemini pixel worker atlas, use first standing row and third right-facing row as exact head/torso scale and identity reference, fifth row as bent-leg reference. Create replacement seated supplement ONLY, exactly FOUR columns x TWO rows, uniform pure #FF00FF background, requested1122x561. Six figures, last two cells empty. Crisp square pixel art same short BLACK hair, DARK BROWN skin, light lavender knitted cardigan over white T-shirt light gray trousers brown shoes. THREE-QUARTER oblique view, NOT straight front or straight back. Row1: sit/front body turned 45degrees toward viewer's LOWER RIGHT showing face chest one shoulder and horizontal bent thighs; typing/front same direction arms forward at keyboard height; typing/front alternate hands slightly higher; sit/back turned45degrees away toward UPPER RIGHT showing back hair cardigan back and one shoulder. Row2: typing/back same upper-right orientation arms forward; typing/back alternate; EMPTY; EMPTY. No furniture keyboard shadows text lines. At1122x561 each figure opaque height176px (standing200px, ratio0.88), head width100px (standing100px). Preserve FULL standing head and torso size; shorten ONLY legs into visibly bent seated thighs and short shins. Do not shrink whole head or torso, no squat tiny bodies. Figure feet local y250, top66. Same scale all six, ample magenta margins. Exact two-to-one sheet aspect. Only new seated supplement, do not reproduce original five rows.
+```
+
+## gemini-c-seated.png（W92b）
+
+用途：四分之三 front/back 坐姿与打字六帧，4×2，末两格空白。生成次数：1；选中第 1 次。实测尺寸：1774×887。参考图：gemini-c.png、gemini-a.png、gemini-a-seated.png（未归一候选）。
+
+整图最近邻归一到 1122×561 后，六帧统一系数 0.90 等比缩放，每格水平居中、保持原底边；最终 1122×561。不量化、不转色、不重绘。
+
+第 1 次（选中）提示词原文：
+
+```text
+Use case: identity-preserve. Reference image is original gemini pixel worker atlas, use first standing row and third right-facing row as exact head/torso scale and identity reference, fifth row as bent-leg reference. Create replacement seated supplement ONLY, exactly FOUR columns x TWO rows, uniform pure #FF00FF background, requested1122x561. Six figures, last two cells empty. Crisp square pixel art same short hair with PINK highlights, fair skin, light lavender knitted cardigan over white T-shirt light gray trousers brown shoes. THREE-QUARTER oblique view, NOT straight front or straight back. Row1: sit/front body turned 45degrees toward viewer's LOWER RIGHT showing face chest one shoulder and horizontal bent thighs; typing/front same direction arms forward at keyboard height; typing/front alternate hands slightly higher; sit/back turned45degrees away toward UPPER RIGHT showing back hair cardigan back and one shoulder. Row2: typing/back same upper-right orientation arms forward; typing/back alternate; EMPTY; EMPTY. No furniture keyboard shadows text lines. At1122x561 each figure opaque height176px (standing200px, ratio0.88), head width100px (standing100px). Preserve FULL standing head and torso size; shorten ONLY legs into visibly bent seated thighs and short shins. Do not shrink whole head or torso, no squat tiny bodies. Figure feet local y250, top66. Same scale all six, ample magenta margins. Exact two-to-one sheet aspect. Only new seated supplement, do not reproduce original five rows.
+```
+
+## opencode-a-seated.png（W92b）
+
+用途：四分之三 front/back 坐姿与打字六帧，4×2，末两格空白。生成次数：1；选中第 1 次。实测尺寸：1774×887。参考图：opencode-a.png、claude-code-seated.png（坐姿比例）。
+
+整图最近邻归一到 1122×561 后，六帧统一系数 0.90 等比缩放，每格水平居中、保持原底边；最终 1122×561。不量化、不转色、不重绘。
+
+第 1 次（选中）提示词原文：
+
+```text
+Use case: identity-preserve. Reference image is original opencode pixel worker atlas, use first standing row and third right-facing row as exact head/torso scale and identity reference, fifth row as bent-leg reference. Create replacement seated supplement ONLY, exactly FOUR columns x TWO rows, uniform pure #FF00FF background, requested1122x561. Six figures, last two cells empty. Crisp square pixel art same messy short dark brown hair, warm peach skin, black T-shirt olive green cargo trousers brown shoes. THREE-QUARTER oblique view, NOT straight front or straight back. Row1: sit/front body turned 45degrees toward viewer's LOWER RIGHT showing face chest one shoulder and horizontal bent thighs; typing/front same direction arms forward at keyboard height; typing/front alternate hands slightly higher; sit/back turned45degrees away toward UPPER RIGHT showing back hair T-shirt back and one shoulder. Row2: typing/back same upper-right orientation arms forward; typing/back alternate; EMPTY; EMPTY. No furniture keyboard shadows text lines. At1122x561 each figure opaque height184px (standing209px, ratio0.88), head width105px (standing105px). Preserve FULL standing head and torso size; shorten ONLY legs into visibly bent seated thighs and short shins. Do not shrink whole head or torso, no squat tiny bodies. Figure feet local y250, top66. Same scale all six, ample magenta margins. Exact two-to-one sheet aspect. Only new seated supplement, do not reproduce original five rows.
+```
+
+## opencode-b-seated.png（W92b）
+
+用途：四分之三 front/back 坐姿与打字六帧，4×2，末两格空白。生成次数：1；选中第 1 次。实测尺寸：1774×887。参考图：opencode-b.png、opencode-a.png、opencode-a-seated.png。
+
+整图最近邻归一到 1122×561 后，六帧统一系数 0.90 等比缩放，每格水平居中、保持原底边；最终 1122×561。不量化、不转色、不重绘。
+
+第 1 次（选中）提示词原文：
+
+```text
+Use case: identity-preserve. Reference image is original opencode pixel worker atlas, use first standing row and third right-facing row as exact head/torso scale and identity reference, fifth row as bent-leg reference. Create replacement seated supplement ONLY, exactly FOUR columns x TWO rows, uniform pure #FF00FF background, requested1122x561. Six figures, last two cells empty. Crisp square pixel art same BALD head with full beard, DARK BROWN skin, black T-shirt olive green cargo trousers brown shoes. THREE-QUARTER oblique view, NOT straight front or straight back. Row1: sit/front body turned 45degrees toward viewer's LOWER RIGHT showing face chest one shoulder and horizontal bent thighs; typing/front same direction arms forward at keyboard height; typing/front alternate hands slightly higher; sit/back turned45degrees away toward UPPER RIGHT showing back hair T-shirt back and one shoulder. Row2: typing/back same upper-right orientation arms forward; typing/back alternate; EMPTY; EMPTY. No furniture keyboard shadows text lines. At1122x561 each figure opaque height184px (standing209px, ratio0.88), head width105px (standing105px). Preserve FULL standing head and torso size; shorten ONLY legs into visibly bent seated thighs and short shins. Do not shrink whole head or torso, no squat tiny bodies. Figure feet local y250, top66. Same scale all six, ample magenta margins. Exact two-to-one sheet aspect. Only new seated supplement, do not reproduce original five rows.
+```
+
+## opencode-c-seated.png（W92b）
+
+用途：四分之三 front/back 坐姿与打字六帧，4×2，末两格空白。生成次数：1；选中第 1 次。实测尺寸：1774×887。参考图：opencode-c.png、opencode-a.png、opencode-a-seated.png。
+
+整图最近邻归一到 1122×561 后，六帧统一系数 0.90 等比缩放，每格水平居中、保持原底边；最终 1122×561。不量化、不转色、不重绘。
+
+第 1 次（选中）提示词原文：
+
+```text
+Use case: identity-preserve. Reference image is original opencode pixel worker atlas, use first standing row and third right-facing row as exact head/torso scale and identity reference, fifth row as bent-leg reference. Create replacement seated supplement ONLY, exactly FOUR columns x TWO rows, uniform pure #FF00FF background, requested1122x561. Six figures, last two cells empty. Crisp square pixel art same long dark brown hair with a GREEN HEADBAND, warm peach skin, black T-shirt olive green cargo trousers brown shoes. THREE-QUARTER oblique view, NOT straight front or straight back. Row1: sit/front body turned 45degrees toward viewer's LOWER RIGHT showing face chest one shoulder and horizontal bent thighs; typing/front same direction arms forward at keyboard height; typing/front alternate hands slightly higher; sit/back turned45degrees away toward UPPER RIGHT showing back hair T-shirt back and one shoulder. Row2: typing/back same upper-right orientation arms forward; typing/back alternate; EMPTY; EMPTY. No furniture keyboard shadows text lines. At1122x561 each figure opaque height184px (standing209px, ratio0.88), head width105px (standing105px). Preserve FULL standing head and torso size; shorten ONLY legs into visibly bent seated thighs and short shins. Do not shrink whole head or torso, no squat tiny bodies. Figure feet local y250, top66. Same scale all six, ample magenta margins. Exact two-to-one sheet aspect. Only new seated supplement, do not reproduce original five rows.
+```
+
+## droid-a-seated.png（W92b）
+
+用途：四分之三 front/back 坐姿与打字六帧，4×2，末两格空白。生成次数：1；选中第 1 次。实测尺寸：1774×887。参考图：droid-a.png、claude-code-seated.png（坐姿比例）。
+
+整图最近邻归一到 1122×561 后，六帧统一系数 0.90 等比缩放，每格水平居中、保持原底边；最终 1122×561。不量化、不转色、不重绘。
+
+第 1 次（选中）提示词原文：
+
+```text
+Use case: identity-preserve. Reference image is original droid pixel worker atlas, use first standing row and third right-facing row as exact head/torso scale and identity reference, fifth row as bent-leg reference. Create replacement seated supplement ONLY, exactly FOUR columns x TWO rows, uniform pure #FF00FF background, requested1122x561. Six figures, last two cells empty. Crisp square pixel art same short black hair, warm peach skin, light gray industrial one-piece work coveralls with orange collar and plain flat back, brown shoes. THREE-QUARTER oblique view, NOT straight front or straight back. Row1: sit/front body turned 45degrees toward viewer's LOWER RIGHT showing face chest one shoulder and horizontal bent thighs; typing/front same direction arms forward at keyboard height; typing/front alternate hands slightly higher; sit/back turned45degrees away toward UPPER RIGHT showing back hair plain coverall back and one shoulder. Row2: typing/back same upper-right orientation arms forward; typing/back alternate; EMPTY; EMPTY. No furniture keyboard shadows text lines. At1122x561 each figure opaque height184px (standing209px, ratio0.88), head width105px (standing105px). Preserve FULL standing head and torso size; shorten ONLY legs into visibly bent seated thighs and short shins. Do not shrink whole head or torso, no squat tiny bodies. Figure feet local y250, top66. Same scale all six, ample magenta margins. Exact two-to-one sheet aspect. Only new seated supplement, do not reproduce original five rows.
+```
+
+## droid-b-seated.png（W92b）
+
+用途：四分之三 front/back 坐姿与打字六帧，4×2，末两格空白。生成次数：1；选中第 1 次。实测尺寸：1774×887。参考图：droid-b.png、droid-a.png、droid-a-seated.png。
+
+整图最近邻归一到 1122×561 后，六帧统一系数 0.90 等比缩放，每格水平居中、保持原底边；最终 1122×561。不量化、不转色、不重绘。
+
+第 1 次（选中）提示词原文：
+
+```text
+Use case: identity-preserve. Reference image is original droid pixel worker atlas, use first standing row and third right-facing row as exact head/torso scale and identity reference, fifth row as bent-leg reference. Create replacement seated supplement ONLY, exactly FOUR columns x TWO rows, uniform pure #FF00FF background, requested1122x561. Six figures, last two cells empty. Crisp square pixel art same short RED hair, FAIR skin, light gray industrial one-piece work coveralls with orange collar and plain flat back, brown shoes. THREE-QUARTER oblique view, NOT straight front or straight back. Row1: sit/front body turned 45degrees toward viewer's LOWER RIGHT showing face chest one shoulder and horizontal bent thighs; typing/front same direction arms forward at keyboard height; typing/front alternate hands slightly higher; sit/back turned45degrees away toward UPPER RIGHT showing back hair plain coverall back and one shoulder. Row2: typing/back same upper-right orientation arms forward; typing/back alternate; EMPTY; EMPTY. No furniture keyboard shadows text lines. At1122x561 each figure opaque height184px (standing209px, ratio0.88), head width105px (standing105px). Preserve FULL standing head and torso size; shorten ONLY legs into visibly bent seated thighs and short shins. Do not shrink whole head or torso, no squat tiny bodies. Figure feet local y250, top66. Same scale all six, ample magenta margins. Exact two-to-one sheet aspect. Only new seated supplement, do not reproduce original five rows.
+```
+
+## droid-c-seated.png（W92b）
+
+用途：四分之三 front/back 坐姿与打字六帧，4×2，末两格空白。生成次数：1；选中第 1 次。实测尺寸：1774×887。参考图：droid-c.png、droid-a.png、droid-a-seated.png。
+
+整图最近邻归一到 1122×561 后，六帧统一系数 0.90 等比缩放，每格水平居中、保持原底边；最终 1122×561。不量化、不转色、不重绘。
+
+第 1 次（选中）提示词原文：
+
+```text
+Use case: identity-preserve. Reference image is original droid pixel worker atlas, use first standing row and third right-facing row as exact head/torso scale and identity reference, fifth row as bent-leg reference. Create replacement seated supplement ONLY, exactly FOUR columns x TWO rows, uniform pure #FF00FF background, requested1122x561. Six figures, last two cells empty. Crisp square pixel art same short black hair, warm peach skin, safety goggles pushed onto FOREHEAD above eyes, light gray industrial one-piece work coveralls with orange collar and plain flat back, brown shoes. THREE-QUARTER oblique view, NOT straight front or straight back. Row1: sit/front body turned 45degrees toward viewer's LOWER RIGHT showing face chest one shoulder and horizontal bent thighs; typing/front same direction arms forward at keyboard height; typing/front alternate hands slightly higher; sit/back turned45degrees away toward UPPER RIGHT showing back hair plain coverall back and one shoulder. Row2: typing/back same upper-right orientation arms forward; typing/back alternate; EMPTY; EMPTY. No furniture keyboard shadows text lines. At1122x561 each figure opaque height184px (standing209px, ratio0.88), head width105px (standing105px). Preserve FULL standing head and torso size; shorten ONLY legs into visibly bent seated thighs and short shins. Do not shrink whole head or torso, no squat tiny bodies. Figure feet local y250, top66. Same scale all six, ample magenta margins. Exact two-to-one sheet aspect. Only new seated supplement, do not reproduce original five rows.
+```
+
+## cursor-a-seated.png（W92b）
+
+用途：四分之三 front/back 坐姿与打字六帧，4×2，末两格空白。生成次数：1；选中第 1 次。实测尺寸：1774×887。参考图：cursor-a.png、custom-seated.png（坐姿比例）。
+
+整图最近邻归一到 1122×561 后，六帧统一系数 0.90 等比缩放，每格水平居中、保持原底边；最终 1122×561。不量化、不转色、不重绘。
+
+第 1 次（选中）提示词原文：
+
+```text
+Use case: identity-preserve. Reference image is original cursor pixel worker atlas, use first standing row and third right-facing row as exact head/torso scale and identity reference, fifth row as bent-leg reference. Create replacement seated supplement ONLY, exactly FOUR columns x TWO rows, uniform pure #FF00FF background, requested1122x561. Six figures, last two cells empty. Crisp square pixel art same short BLACK hair with charcoal highlights, warm peach skin, black TURTLENECK sweater dark gray trousers brown shoes. THREE-QUARTER oblique view, NOT straight front or straight back. Row1: sit/front body turned 45degrees toward viewer's LOWER RIGHT showing face chest one shoulder and horizontal bent thighs; typing/front same direction arms forward at keyboard height; typing/front alternate hands slightly higher; sit/back turned45degrees away toward UPPER RIGHT showing back hair turtleneck back and one shoulder. Row2: typing/back same upper-right orientation arms forward; typing/back alternate; EMPTY; EMPTY. No furniture keyboard shadows text lines. At1122x561 each figure opaque height176px (standing200px, ratio0.88), head width100px (standing100px). Preserve FULL standing head and torso size; shorten ONLY legs into visibly bent seated thighs and short shins. Do not shrink whole head or torso, no squat tiny bodies. Figure feet local y250, top66. Same scale all six, ample magenta margins. Exact two-to-one sheet aspect. Only new seated supplement, do not reproduce original five rows.
+```
+
+## cursor-b-seated.png（W92b）
+
+用途：四分之三 front/back 坐姿与打字六帧，4×2，末两格空白。生成次数：1；选中第 1 次。实测尺寸：1774×887。参考图：cursor-b.png、cursor-a.png、cursor-a-seated.png。
+
+整图最近邻归一到 1122×561 后，六帧统一系数 0.90 等比缩放，每格水平居中、保持原底边；最终 1122×561。不量化、不转色、不重绘。
+
+第 1 次（选中）提示词原文：
+
+```text
+Use case: identity-preserve. Reference image is original cursor pixel worker atlas, use first standing row and third right-facing row as exact head/torso scale and identity reference, fifth row as bent-leg reference. Create replacement seated supplement ONLY, exactly FOUR columns x TWO rows, uniform pure #FF00FF background, requested1122x561. Six figures, last two cells empty. Crisp square pixel art same short BLOND hair, FAIR skin, black TURTLENECK sweater dark gray trousers brown shoes. THREE-QUARTER oblique view, NOT straight front or straight back. Row1: sit/front body turned 45degrees toward viewer's LOWER RIGHT showing face chest one shoulder and horizontal bent thighs; typing/front same direction arms forward at keyboard height; typing/front alternate hands slightly higher; sit/back turned45degrees away toward UPPER RIGHT showing back hair turtleneck back and one shoulder. Row2: typing/back same upper-right orientation arms forward; typing/back alternate; EMPTY; EMPTY. No furniture keyboard shadows text lines. At1122x561 each figure opaque height176px (standing200px, ratio0.88), head width100px (standing100px). Preserve FULL standing head and torso size; shorten ONLY legs into visibly bent seated thighs and short shins. Do not shrink whole head or torso, no squat tiny bodies. Figure feet local y250, top66. Same scale all six, ample magenta margins. Exact two-to-one sheet aspect. Only new seated supplement, do not reproduce original five rows.
+```
+
+## cursor-c-seated.png（W92b）
+
+用途：四分之三 front/back 坐姿与打字六帧，4×2，末两格空白。生成次数：1；选中第 1 次。实测尺寸：1774×887。参考图：cursor-c.png、cursor-a.png、cursor-a-seated.png。
+
+整图最近邻归一到 1122×561 后，六帧统一系数 0.90 等比缩放，每格水平居中、保持原底边；最终 1122×561。不量化、不转色、不重绘。
+
+第 1 次（选中）提示词原文：
+
+```text
+Use case: identity-preserve. Reference image is original cursor pixel worker atlas, use first standing row and third right-facing row as exact head/torso scale and identity reference, fifth row as bent-leg reference. Create replacement seated supplement ONLY, exactly FOUR columns x TWO rows, uniform pure #FF00FF background, requested1122x561. Six figures, last two cells empty. Crisp square pixel art same BLACK BRAIDED hair, DARK BROWN skin, black TURTLENECK sweater dark gray trousers brown shoes. THREE-QUARTER oblique view, NOT straight front or straight back. Row1: sit/front body turned 45degrees toward viewer's LOWER RIGHT showing face chest one shoulder and horizontal bent thighs; typing/front same direction arms forward at keyboard height; typing/front alternate hands slightly higher; sit/back turned45degrees away toward UPPER RIGHT showing back hair turtleneck back and one shoulder. Row2: typing/back same upper-right orientation arms forward; typing/back alternate; EMPTY; EMPTY. No furniture keyboard shadows text lines. At1122x561 each figure opaque height176px (standing200px, ratio0.88), head width100px (standing100px). Preserve FULL standing head and torso size; shorten ONLY legs into visibly bent seated thighs and short shins. Do not shrink whole head or torso, no squat tiny bodies. Figure feet local y250, top66. Same scale all six, ample magenta margins. Exact two-to-one sheet aspect. Only new seated supplement, do not reproduce original five rows.
+```
