@@ -1,6 +1,7 @@
 import { useSyncExternalStore } from "react";
 import { soundState, toggleSound } from "../engine/sound.ts";
 import { useLang } from "../i18n/lang.tsx";
+import { BeijingClock } from "./beijing-clock.tsx";
 import { PixelButton } from "./pixel-button.tsx";
 import type { Agent, Task } from "./use-office-data.ts";
 
@@ -10,9 +11,11 @@ export function TopBar({
   tasks,
   replaying,
   onReplay,
+  onFullscreen,
 }: {
   replaying: boolean;
   onReplay: () => void;
+  onFullscreen: () => void;
   title: string;
   agents: Agent[];
   tasks: Task[];
@@ -20,7 +23,7 @@ export function TopBar({
   const { lang, setLang, t } = useLang();
   const sound = useSyncExternalStore(soundState.subscribe, soundState.getSnapshot);
   return (
-    <header className="pixel-panel top-bar">
+    <header className="pixel-panel top-bar" id="office-top-bar">
       <div>
         <h1>{title}</h1>
         <p>
@@ -28,9 +31,12 @@ export function TopBar({
             agents: agents.filter((agent) => agent.status === "online").length,
             tasks: tasks.filter((task) => task.status === "in_progress").length,
           })}
+          <span className="top-status-divider"> · </span>
+          <BeijingClock />
         </p>
       </div>
       <div className="top-bar-actions">
+        <PixelButton onClick={onFullscreen}>{t("top.fullscreen")}</PixelButton>
         <PixelButton
           className="language-switch"
           aria-label={t("top.switchLanguage")}

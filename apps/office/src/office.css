@@ -89,6 +89,98 @@ a:focus-visible {
   gap: 16px;
   padding: 12px 20px;
 }
+.top-shell {
+  position: relative;
+  flex-shrink: 0;
+  max-height: 200px;
+  transition: max-height 150ms ease;
+}
+.top-shell.is-collapsed {
+  max-height: 20px;
+  background: var(--office-paper);
+  border: 2px solid var(--office-ink);
+}
+.top-shell.is-collapsed .top-bar {
+  visibility: hidden;
+}
+.panel-handle {
+  position: absolute;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 2px solid var(--office-ink);
+  background: var(--office-paper);
+  color: var(--office-ink);
+  cursor: pointer;
+  line-height: 1;
+}
+.panel-handle:hover {
+  background: var(--office-highlight);
+}
+.panel-handle-top {
+  left: 50%;
+  bottom: -10px;
+  width: 48px;
+  height: 20px;
+  transform: translateX(-50%);
+}
+.top-shell.is-collapsed .panel-handle-top {
+  bottom: -2px;
+}
+.side-shell {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+}
+.side-shell .roster {
+  height: 100%;
+}
+.side-shell.is-collapsed .roster {
+  display: none;
+}
+.side-shell.is-collapsed {
+  background: var(--office-paper);
+  border: 2px solid var(--office-ink);
+}
+.panel-handle-left,
+.panel-handle-right {
+  top: 50%;
+  width: 20px;
+  height: 48px;
+  transform: translateY(-50%);
+}
+.side-shell-left .panel-handle {
+  right: -2px;
+}
+.side-shell-right .panel-handle {
+  left: -2px;
+}
+.clock-colon-off {
+  opacity: 0;
+}
+.beijing-clock {
+  white-space: nowrap;
+}
+.screen-reader-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.top-status-divider {
+  white-space: nowrap;
+}
+@media (prefers-reduced-motion: reduce) {
+  .clock-colon-off {
+    opacity: 1;
+  }
+  .top-shell {
+    transition: none;
+  }
+}
 .top-bar-actions {
   display: flex;
   align-items: stretch;
@@ -113,6 +205,45 @@ a:focus-visible {
   gap: 12px;
   flex: 1;
   min-height: 0;
+  transition: grid-template-columns 150ms ease;
+}
+.office-body.left-collapsed {
+  grid-template-columns: 20px minmax(0, 1fr) 252px;
+}
+.office-body.right-collapsed {
+  grid-template-columns: 252px minmax(0, 1fr) 20px;
+}
+.office-body.left-collapsed.right-collapsed {
+  grid-template-columns: 20px minmax(0, 1fr) 20px;
+}
+.office-body.has-detail {
+  grid-template-columns: 252px minmax(0, 1fr) 252px;
+}
+.office-body.has-detail.left-collapsed {
+  grid-template-columns: 20px minmax(0, 1fr) 252px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .office-body {
+    transition: none;
+  }
+}
+.fullscreen-controls {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px;
+  background: rgb(255 240 206 / 82%);
+  border: 2px solid var(--office-ink);
+  opacity: 0;
+  pointer-events: none;
+}
+.fullscreen-controls.is-visible {
+  opacity: 1;
+  pointer-events: auto;
 }
 .stage-host {
   min-width: 0;
@@ -123,6 +254,24 @@ a:focus-visible {
 }
 .avatar-strip {
   display: none;
+}
+.office-frame.is-fullscreen {
+  padding: 0;
+  gap: 0;
+}
+.is-fullscreen .top-shell,
+.is-fullscreen .side-shell,
+.is-fullscreen .avatar-strip,
+.is-fullscreen .detail-panel {
+  display: none;
+}
+.office-frame.is-fullscreen .office-body,
+.office-frame.is-fullscreen .office-body.has-detail,
+.office-frame.is-fullscreen .office-body.left-collapsed.right-collapsed {
+  grid-template-columns: minmax(0, 1fr);
+}
+.is-fullscreen .stage-host {
+  border: 0;
 }
 .office-error {
   padding: 8px 12px;
@@ -139,10 +288,18 @@ a:focus-visible {
   .office-body {
     grid-template-columns: minmax(0, 1fr);
   }
+  .office-body.left-collapsed,
+  .office-body.right-collapsed,
+  .office-body.left-collapsed.right-collapsed {
+    grid-template-columns: minmax(0, 1fr);
+  }
   .office-body.has-detail {
     grid-template-columns: minmax(0, 1fr) 252px;
   }
   .roster {
+    display: none;
+  }
+  .side-shell {
     display: none;
   }
   .avatar-strip {
@@ -156,6 +313,13 @@ a:focus-visible {
   .avatar-strip h2 {
     flex-shrink: 0;
   }
+  .avatar-strip.is-collapsed {
+    height: 20px;
+    padding: 0 4px;
+  }
+  .avatar-strip.is-collapsed h2 {
+    display: none;
+  }
   .avatar-strip .roster-item {
     width: 112px;
     min-width: 112px;
@@ -163,6 +327,20 @@ a:focus-visible {
     padding: 0;
   }
   .avatar-strip .roster-copy {
+    display: none;
+  }
+  .avatar-strip .panel-handle {
+    position: static;
+    flex: 0 0 20px;
+    width: 20px;
+    height: 20px;
+    transform: none;
+  }
+  .avatar-group {
+    display: flex;
+    align-items: center;
+  }
+  .avatar-group:empty {
     display: none;
   }
 }
