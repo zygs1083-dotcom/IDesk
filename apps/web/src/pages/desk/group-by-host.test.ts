@@ -29,6 +29,7 @@ const agent: Agent = {
   host: "mac-mini",
   capabilities: [],
   webhookUrl: null,
+  client: null,
   lastSeenAt: null,
   createdAt: now,
   status: "offline",

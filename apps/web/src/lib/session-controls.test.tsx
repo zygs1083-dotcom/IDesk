@@ -27,6 +27,7 @@ test.each([undefined, "viewer", "admin"] as const)(
           status: "offline",
           lastSeenAt: null,
           webhookUrl: null,
+          client: null,
         },
       ],
     );

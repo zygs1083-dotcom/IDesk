@@ -43,6 +43,8 @@ RUN pnpm install --frozen-lockfile --prod
 COPY apps/api apps/api
 COPY packages/shared packages/shared
 COPY --from=build /app/packages/cli/dist/probe.mjs /app/packages/cli/dist/probe.mjs
+COPY --from=build /app/packages/cli/dist/main.js /app/packages/cli/dist/main.js
+COPY docs/AGENT-GUIDE.md docs/AGENT-GUIDE.md
 COPY plugins plugins
 COPY --from=build /app/apps/web/dist apps/web/dist
 RUN mkdir /data && chown node:node /data

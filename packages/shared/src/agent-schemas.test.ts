@@ -11,6 +11,7 @@ test.each(["gemini", "opencode", "droid", "cursor"])(
         ...registration,
         id: "01",
         webhookUrl: null,
+        client: null,
         lastSeenAt: null,
         createdAt: "2026-10-18T00:00:00Z",
         status: "online",

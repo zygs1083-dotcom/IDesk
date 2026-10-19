@@ -28,6 +28,7 @@ test.each(["gemini", "opencode", "droid", "cursor"] as const)(
       host: "host",
       capabilities: [],
       webhookUrl: null,
+      client: null,
       lastSeenAt: null,
       createdAt: "2026-10-18T00:00:00Z",
       status: "online",

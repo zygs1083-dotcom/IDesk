@@ -21,6 +21,7 @@ test("masked HTTP schedules and agent webhook values render without URL parsing"
         host: "test",
         capabilities: [],
         webhookUrl: "••••••",
+        client: null,
         status: "offline",
         lastSeenAt: null,
         createdAt: "2026-01-01T00:00:00Z",

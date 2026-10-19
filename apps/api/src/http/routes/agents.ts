@@ -1,6 +1,7 @@
 import type { OpenAPIHono } from "@hono/zod-openapi";
 import {
   agentStatsSchema,
+  heartbeatSchema,
   patchAgentSchema,
   publicAgentSchema,
   registerAgentSchema,
@@ -14,6 +15,7 @@ import {
   registerAgent,
   rotateAgentKey,
   updateAgent,
+  updateAgentClient,
 } from "../../core/agents/agents.ts";
 import { getAgentStats } from "../../core/agents/stats.ts";
 import { HttpError } from "../errors.ts";
@@ -149,6 +151,19 @@ export function agentRoutes(app: OpenAPIHono<AuthEnv>) {
         },
       },
     },
-    (c) => c.json(c.get("agent"), 200),
+    async (c) => {
+      const text = await c.req.text();
+      if (text === "") return c.json(c.get("agent"), 200);
+      const parsed = heartbeatSchema.safeParse(JSON.parse(text));
+      if (!parsed.success)
+        throw new HttpError(400, "validation", {
+          text: parsed.error.issues.map((issue) => issue.message).join("；"),
+        });
+      const client = parsed.data.client;
+      return c.json(
+        client === undefined ? c.get("agent") : updateAgentClient(c.get("agent").id, client),
+        200,
+      );
+    },
   );
 }

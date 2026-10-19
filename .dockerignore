@@ -13,5 +13,6 @@
 screenshots
 pr-assets
 docs
+!docs/AGENT-GUIDE.md
 local
 CONTRIBUTING.md

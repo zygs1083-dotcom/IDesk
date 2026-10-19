@@ -84,6 +84,7 @@ export function WorldCheck() {
           host: "check",
           capabilities: [],
           webhookUrl: null,
+          client: null,
           lastSeenAt: null,
           createdAt: "",
           status: "online",

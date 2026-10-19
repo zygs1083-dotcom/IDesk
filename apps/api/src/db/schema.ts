@@ -53,6 +53,7 @@ export const agents = sqliteTable(
     capabilities: text({ mode: "json" }).$type<string[]>().notNull().default([]),
     apiKeyHash: text("api_key_hash").notNull(),
     webhookUrl: text("webhook_url"),
+    client: text(),
     lastSeenAt: integer("last_seen_at", { mode: "timestamp_ms" }),
     createdAt: integer("created_at", { mode: "timestamp_ms" })
       .notNull()

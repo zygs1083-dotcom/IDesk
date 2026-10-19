@@ -60,6 +60,7 @@ export const publicAgentSchema = z
     host: z.string(),
     capabilities: z.array(z.string()),
     webhookUrl: z.string().nullable(),
+    client: z.string().nullable(),
     lastSeenAt: z.iso.datetime().nullable(),
     createdAt: z.iso.datetime(),
     status: z.enum(["online", "offline"]),
