@@ -40,13 +40,13 @@ export function RelayMessage({
           </p>
         </div>
         {isAdmin && message.fromAgentId !== "human" && (
-          <button
-            type="button"
-            className="shrink-0 text-secondary text-accent"
+          <Button
+            variant="ghost"
+            className="pixel-legacy shrink-0 text-secondary text-accent"
             onClick={() => onReply(message)}
           >
             {t("common.reply")}
-          </button>
+          </Button>
         )}
       </div>
       {taskId && (
@@ -70,6 +70,11 @@ export function RelayMessage({
             })
           : t("relay.unread")}
       </p>
+      {isAdmin && message.fromAgentId !== "human" && (
+        <div data-ui="relay-reply-action" className="pixel-only">
+          <Button onClick={() => onReply(message)}>{t("common.reply")}</Button>
+        </div>
+      )}
     </article>
   );
 }

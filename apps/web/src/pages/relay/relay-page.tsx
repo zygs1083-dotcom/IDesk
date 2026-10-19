@@ -56,8 +56,15 @@ export function RelayPage() {
     if (isAdmin) setCompose({});
   });
   const selected = messages.find((message) => message.id === selectedId);
+  const selectBox = (value: string) => {
+    setParams((current) => {
+      current.set("box", value);
+      return current;
+    });
+    setSelectedId(null);
+  };
   return (
-    <div data-scene="relay" className="flex h-full flex-col gap-6">
+    <div data-scene="relay" className="flex h-full min-h-0 flex-col gap-6">
       <PageHeader title={t("nav.relay")}>
         {isAdmin && (
           <Button variant="primary" onClick={() => setCompose({})}>
@@ -66,25 +73,40 @@ export function RelayPage() {
         )}
       </PageHeader>
       <div data-ui="relay-toolbar" className="contents">
-        <Segmented
-          label={t("nav.relay")}
-          value={box}
-          onChange={(value) => {
-            setParams((current) => {
-              current.set("box", value);
-              return current;
-            });
-            setSelectedId(null);
-          }}
-          options={[
-            {
-              value: "inbox",
-              label: `${t("relay.inbox")}${summary?.unread ? ` · ${summary.unread}` : ""}`,
-            },
-            { value: "sent", label: t("relay.sent") },
-            { value: "all", label: t("relay.all") },
-          ]}
-        />
+        <div data-ui="relay-box-control">
+          <div className="pixel-legacy">
+            <Segmented
+              label={t("nav.relay")}
+              value={box}
+              onChange={selectBox}
+              options={[
+                {
+                  value: "inbox",
+                  label: `${t("relay.inbox")}${summary?.unread ? ` · ${summary.unread}` : ""}`,
+                },
+                { value: "sent", label: t("relay.sent") },
+                { value: "all", label: t("relay.all") },
+              ]}
+            />
+          </div>
+          <div className="pixel-only">
+            <Segmented
+              label={t("nav.relay")}
+              value={box}
+              onChange={selectBox}
+              options={[
+                { value: "inbox", label: t("relay.inbox") },
+                { value: "sent", label: t("relay.sent") },
+                { value: "all", label: t("relay.all") },
+              ]}
+            />
+            {summary?.unread ? (
+              <span data-ui="relay-box-count" aria-hidden="true">
+                {summary.unread > 99 ? "99+" : summary.unread}
+              </span>
+            ) : null}
+          </div>
+        </div>
         <div data-ui="relay-search">
           <PixelIcon
             name="search"
@@ -139,7 +161,7 @@ export function RelayPage() {
         </p>
       )}
       {!isPending && !error && messages.length === 0 ? (
-        <div className="py-16 text-center text-secondary text-text-2">
+        <div data-ui="board-note" className="py-16 text-center text-secondary text-text-2">
           <p>
             {t(
               q || status !== "all" || recipient !== "all" || kind !== "all" || task !== "all"
@@ -178,7 +200,9 @@ export function RelayPage() {
           </div>
           <div data-ui="letter-desk" className="min-w-0 flex-1 overflow-y-auto">
             {!selected && (
-              <p className="p-6 text-secondary text-text-2">{t("relay.selectMessage")}</p>
+              <p data-ui="relay-select-note" className="p-6 text-secondary text-text-2">
+                {t("relay.selectMessage")}
+              </p>
             )}
             {selected && (
               <RelayDetail

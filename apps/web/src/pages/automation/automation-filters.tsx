@@ -1,4 +1,5 @@
 import { Search } from "lucide-react";
+import { Button } from "../../components/button.tsx";
 import { PixelIcon } from "../../components/pixel-icon.tsx";
 import { Segmented } from "../../components/segmented.tsx";
 import { useLang } from "../../i18n/lang.tsx";
@@ -29,8 +30,8 @@ export function AutomationFilters({
 }) {
   const { t } = useLang();
   return (
-    <div className="flex flex-wrap items-center justify-between gap-2">
-      <div className="flex min-w-0 overflow-x-auto">
+    <div data-ui="automation-toolbar" className="flex flex-wrap items-center justify-between gap-2">
+      <div data-ui="automation-connectors" className="flex min-w-0 overflow-x-auto">
         <Segmented
           label={t("common.connectors")}
           options={connectors.map((item) => ({ value: item.id, label: item.name }))}
@@ -38,25 +39,28 @@ export function AutomationFilters({
           onChange={onSelect}
         />
       </div>
-      <div className="flex flex-wrap items-center gap-2">
-        <Segmented
-          label={t("automation.range")}
-          options={[
-            { value: "today", label: t("automation.today") },
-            { value: "all", label: t("automation.all") },
-          ]}
-          value={range}
-          onChange={onRange}
-        />
+      <div data-ui="automation-filter-options" className="flex flex-wrap items-center gap-2">
+        <div data-ui="automation-range">
+          <Segmented
+            label={t("automation.range")}
+            options={[
+              { value: "today", label: t("automation.today") },
+              { value: "all", label: t("automation.all") },
+            ]}
+            value={range}
+            onChange={onRange}
+          />
+        </div>
         {hiddenCount > 0 && (
-          <button
-            type="button"
+          <Button
+            variant="ghost"
+            data-ui="automation-hidden-toggle"
             aria-pressed={showHidden}
             onClick={onShowHidden}
-            className="rounded-control text-secondary text-text-2 hover:text-text focus-visible:outline-2 focus-visible:outline-accent"
+            className="min-h-0 p-0 text-secondary text-text-2 hover:text-text"
           >
             {t("automation.hidden", { count: hiddenCount })}
-          </button>
+          </Button>
         )}
         <label
           data-ui="search-field"

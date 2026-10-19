@@ -1,6 +1,7 @@
 import { labels } from "@idesk/shared/labels";
 import type { relayMessageSchema } from "@idesk/shared/relay-schemas";
 import type { z } from "zod";
+import { PixelIcon } from "../../components/pixel-icon.tsx";
 import { useLang } from "../../i18n/lang.tsx";
 import { cn } from "../../lib/cn.ts";
 import { relativeTime } from "../../lib/format.ts";
@@ -18,10 +19,12 @@ export function RelayRow({
 }) {
   const { lang } = useLang();
   const { agentName } = useAgents();
+  const unread = message.to.kind === "human" && !message.readBy.includes("human");
   return (
     <button
       type="button"
       data-ui="message"
+      data-unread={unread ? "true" : undefined}
       aria-pressed={selected}
       onClick={onSelect}
       className={cn(
@@ -30,22 +33,21 @@ export function RelayRow({
       )}
     >
       <div className="flex items-center justify-between gap-2">
-        <span className="rounded-tag bg-line px-2 py-0.5 text-label text-text-2">
+        <span
+          data-ui="relay-kind"
+          className="rounded-tag bg-line px-2 py-0.5 text-label text-text-2"
+        >
+          <PixelIcon name="mail" className="pixel-only" />
           {labels(lang).relayKind[message.kind]}
         </span>
         <time className="text-label tabular-nums text-text-2">
           {relativeTime(new Date(message.createdAt), lang)}
         </time>
       </div>
-      <p
-        className={cn(
-          "truncate text-body",
-          message.to.kind === "human" && !message.readBy.includes("human") && "font-semibold",
-        )}
-      >
+      <p data-ui="relay-row-title" className={cn("truncate text-body", unread && "font-semibold")}>
         {message.subject}
       </p>
-      <p className="truncate text-secondary text-text-2">
+      <p data-ui="relay-row-route" className="truncate text-secondary text-text-2">
         {agentName(message.fromAgentId)} → {recipientLabel(message.to, agentName, lang)}
       </p>
     </button>
