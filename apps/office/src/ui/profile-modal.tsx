@@ -60,21 +60,23 @@ export function ProfileModal({
           ×
         </PixelButton>
       </header>
-      <div className="profile-content">
-        <p className="profile-notice" role="status">
+      <div className="profile-content" key={agent.id}>
+        <p className="profile-notice" role="status" hidden={!notice}>
           {notice}
         </p>
         <div className="profile-identity">
           <Avatar id={agent.id} fullFrame />
           <div>
-            <h3>{agent.name}</h3>
+            <h3 title={agent.name}>{agent.name}</h3>
             <dl>
               <dt>{t("panel.type")}</dt>
               <dd>{AGENT_KIND_LABELS[agent.kind]}</dd>
               <dt>{t("panel.host")}</dt>
-              <dd>{agent.host}</dd>
+              <dd title={agent.host}>{agent.host}</dd>
               <dt>{t("common.capabilities")}</dt>
-              <dd>{agent.capabilities.join(" · ") || t("common.none")}</dd>
+              <dd title={agent.capabilities.join(" · ")}>
+                {agent.capabilities.join(" · ") || t("common.none")}
+              </dd>
             </dl>
             <p>{statusText(agent, tasks, t)}</p>
           </div>
@@ -83,6 +85,9 @@ export function ProfileModal({
         <ProfileActivity agent={agent} agents={agents} tasks={tasks} />
         {admin && <ProfileActions agentId={agent.id} tasks={tasks} onSuccess={announce} />}
       </div>
+      <footer className="profile-footer">
+        <PixelButton onClick={onClose}>{t("common.closePanel")}</PixelButton>
+      </footer>
     </dialog>
   );
 }
