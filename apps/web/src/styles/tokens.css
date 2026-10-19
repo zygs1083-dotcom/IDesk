@@ -18,6 +18,9 @@
   --text-2: #6e6e73;
   --text-3: #aeaeb2;
   --accent: #0a84ff;
+  --chart-1: #006ac2;
+  --chart-2: #9553be;
+  --chart-3: #a36200;
 
   --status-open: #8e8e93;
   --status-recruiting: #af52de;
@@ -44,6 +47,9 @@
     --text-2: #a1a1a6;
     --text-3: #6e6e73;
     --accent: #0a84ff;
+    --chart-1: #68b5ff;
+    --chart-2: #cf9aff;
+    --chart-3: #ffc27a;
     --elevation-card: 0 1px 2px rgba(0, 0, 0, 0.4);
     --elevation-pop: 0 8px 30px rgba(0, 0, 0, 0.6);
   }
@@ -59,6 +65,9 @@
   --text-2: #626657;
   --text-3: #707565;
   --accent: #256c5b;
+  --chart-1: #236e70;
+  --chart-2: #8a4e91;
+  --chart-3: #98601d;
   --danger-fill: #b9342b;
   --status-failed: #b9342b;
   --ink: #535e49;
@@ -82,6 +91,9 @@
     --text-2: #c0c7b3;
     --text-3: #a6b39c;
     --accent: #8acbb0;
+    --chart-1: #83d5d3;
+    --chart-2: #e0a8e4;
+    --chart-3: #eac080;
     --on-accent: #19251f;
     --status-failed: #ff8e7e;
     --ink: #9aaa8d;
