@@ -35,6 +35,17 @@ export function AgentsPage() {
   useShortcut("n", () => {
     if (isAdmin) setCreating(true);
   });
+  function showDetails(agent: Agent) {
+    if (
+      document.documentElement.dataset.skin === "pixel" ||
+      window.matchMedia("(width < 48rem)").matches
+    ) {
+      setExpanded(null);
+      setSelected(agent);
+    } else {
+      setExpanded(expanded === agent.id ? null : agent.id);
+    }
+  }
   return (
     <div data-scene="agents" className="space-y-6">
       <PageHeader
@@ -119,10 +130,7 @@ export function AgentsPage() {
                   <Fragment key={agent.id}>
                     <tr
                       className="group h-10 cursor-pointer border-b border-line last:border-b-0 hover:bg-surface-2"
-                      onClick={() => {
-                        if (document.documentElement.dataset.skin !== "pixel")
-                          setExpanded(expanded === agent.id ? null : agent.id);
-                      }}
+                      onClick={() => showDetails(agent)}
                     >
                       <td data-ui="agent-status-col" className="px-4 py-2">
                         <span data-ui="list-status" data-status={agent.status}>
@@ -133,10 +141,10 @@ export function AgentsPage() {
                       <td className="px-2 py-0">
                         <Button
                           variant="ghost"
-                          aria-expanded={expanded === agent.id}
-                          onClick={() => {
-                            if (document.documentElement.dataset.skin === "pixel")
-                              setSelected(agent);
+                          aria-expanded={expanded === agent.id || selected?.id === agent.id}
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            showDetails(agent);
                           }}
                           className="max-w-52 justify-start text-left"
                         >
