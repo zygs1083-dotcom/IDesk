@@ -40,17 +40,10 @@ export function RunCard({
     canceled: t("automation.cancelled"),
   };
   const times = runTimes(run.startedAt, run.finishedAt, now);
-  const metadata = [
-    { key: "trigger", text: run.trigger },
-    { key: "times", text: times.text },
-    {
-      key: "duration",
-      text:
-        run.finishedAt === null && run.status !== "running"
-          ? "—"
-          : duration(run.startedAt, run.finishedAt, now, lang),
-    },
-  ].filter((part) => part.text !== null);
+  const elapsed =
+    run.finishedAt === null && run.status !== "running"
+      ? "—"
+      : duration(run.startedAt, run.finishedAt, now, lang);
   return (
     <article
       data-ui="card"
@@ -88,19 +81,12 @@ export function RunCard({
         color={statusColors[run.status]}
       />
       <p
-        title={times.title || undefined}
-        className="pixel-legacy text-label text-text-2 tabular-nums"
-      >
-        {metadata.map((part) => part.text).join(" · ")}
-      </p>
-      <p
         data-ui="run-time"
         title={times.title || undefined}
-        className="pixel-only text-label text-text-2 tabular-nums"
+        className="flex flex-wrap gap-x-2 text-label text-text-2 tabular-nums"
       >
-        {metadata.map((part) => (
-          <span key={part.key}>{part.text}</span>
-        ))}
+        <span>{times.text}</span>
+        <span>{elapsed}</span>
       </p>
       <p data-ui="run-state" className="pixel-only text-label text-text-2">
         {statusLabels[run.status]}

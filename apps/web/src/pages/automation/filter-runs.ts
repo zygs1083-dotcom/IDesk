@@ -30,7 +30,19 @@ export function selectRuns(
   showHidden: boolean,
   now: number,
 ) {
-  const inRange = filterRuns(runs, q).filter(
+  const latestSuccess = new Map<string, number>();
+  for (const run of runs) {
+    if (run.status !== "success" || run.startedAt === null) continue;
+    const startedAt = new Date(run.startedAt).getTime();
+    const latest = latestSuccess.get(run.jobId);
+    if (latest === undefined || startedAt > latest) latestSuccess.set(run.jobId, startedAt);
+  }
+  const unrecovered = runs.filter((run) => {
+    if (run.status !== "failed" || run.startedAt === null) return true;
+    const success = latestSuccess.get(run.jobId);
+    return success === undefined || success <= new Date(run.startedAt).getTime();
+  });
+  const inRange = filterRuns(unrecovered, q).filter(
     (run) =>
       range === "all" ||
       run.status === "waiting" ||

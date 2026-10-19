@@ -28,7 +28,11 @@ export function CardHeading({
           title={status}
           className={cn("mt-1.5 size-2 shrink-0 rounded-full", color)}
         />
-        <h3 data-ui="card-title" title={name} className="min-w-0 flex-1 line-clamp-2 text-body">
+        <h3
+          data-ui="card-title"
+          title={name}
+          className="min-w-0 flex-1 line-clamp-2 wrap-anywhere text-body"
+        >
           {name}
         </h3>
         {actions}
@@ -46,8 +50,12 @@ export function CardHeading({
           </a>
         )}
       </div>
-      {group !== null && (
-        <p title={group} className="mb-2 truncate text-label text-text-2">
+      {group !== null && group !== name && (
+        <p
+          data-ui="card-group"
+          title={group}
+          className="mb-2 line-clamp-2 wrap-anywhere text-label text-text-2"
+        >
           {group}
         </p>
       )}
