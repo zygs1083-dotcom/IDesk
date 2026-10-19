@@ -715,6 +715,7 @@ completedAt: <ISO>
     - 收到消息：`IDesk：你收到传递区消息 <messageId>。按 <origin>/agent-guide.md 第 6 节处理。`
     - 新任务：`IDesk：有一个你能领的新任务 <taskId>。空闲时按 <origin>/agent-guide.md 第 5 节领取。`
     - 未读补漏：`IDesk：你有 <n> 条未读传递区消息。按 <origin>/agent-guide.md 第 6 节处理。`
+    - 指派补漏：`IDesk：任务 <taskId> 已指派给你（补漏）。按 <origin>/agent-guide.md 第 5 节处理。`
   - 在线心跳的 `client` 为 `idesk-receiver/<CLI 版本> (<process.platform>; wake=<codex|command>)`。
   - 日志每行带 ISO 时间，写到 stdout；Windows 另外追加写 `~/.config/idesk/receiver/receiver.log`（Windows 计划任务不收集输出）。
 - `idesk receiver check`：逐项打印 ✓/✗，任一项失败则退出码为 1。顺序如下：
