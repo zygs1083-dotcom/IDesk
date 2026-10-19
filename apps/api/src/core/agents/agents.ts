@@ -101,6 +101,11 @@ export function listAgents(): PublicAgent[] {
     .map((agent) => toPublic(agent, now));
 }
 
+export function updateAgentClient(id: string, client: string): PublicAgent {
+  const agent = db.update(agents).set({ client }).where(eq(agents.id, id)).returning().get();
+  return toPublic(agent, new Date());
+}
+
 export function updateAgent(
   id: string,
   input: z.infer<typeof patchAgentSchema>,

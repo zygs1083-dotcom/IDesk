@@ -1,6 +1,7 @@
 import type { OpenAPIHono } from "@hono/zod-openapi";
 import {
   agentStatsSchema,
+  heartbeatSchema,
   patchAgentSchema,
   publicAgentSchema,
   registerAgentSchema,
@@ -14,6 +15,7 @@ import {
   registerAgent,
   rotateAgentKey,
   updateAgent,
+  updateAgentClient,
 } from "../../core/agents/agents.ts";
 import { getAgentStats } from "../../core/agents/stats.ts";
 import { HttpError } from "../errors.ts";
@@ -142,6 +144,9 @@ export function agentRoutes(app: OpenAPIHono<AuthEnv>) {
       method: "post",
       path: "/api/v1/agents/me/heartbeat",
       middleware: requireAgent,
+      request: {
+        body: { required: false, content: { "application/json": { schema: heartbeatSchema } } },
+      },
       responses: {
         200: {
           description: "Presence refreshed",
@@ -149,6 +154,12 @@ export function agentRoutes(app: OpenAPIHono<AuthEnv>) {
         },
       },
     },
-    (c) => c.json(c.get("agent"), 200),
+    (c) => {
+      const client = c.req.valid("json")?.client;
+      return c.json(
+        client === undefined ? c.get("agent") : updateAgentClient(c.get("agent").id, client),
+        200,
+      );
+    },
   );
 }

@@ -26,6 +26,7 @@ export async function spacingStage(count = 24) {
       host: "spacing",
       capabilities: [],
       webhookUrl: null,
+      client: null,
       lastSeenAt: null,
       createdAt: "",
       status: "online",

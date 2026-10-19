@@ -12,6 +12,8 @@ import { registerWebSocket } from "../realtime/ws.ts";
 import { HttpError } from "./errors.ts";
 import { type AuthEnv, auth } from "./middleware/auth.ts";
 import { requestLang } from "./request-lang.ts";
+import { agentKitRoutes } from "./routes/agent-kit.ts";
+import { agentWebhookRoutes } from "./routes/agent-webhook.ts";
 import { agentRoutes } from "./routes/agents.ts";
 import { authRoutes } from "./routes/auth.ts";
 import { automationRoutes } from "./routes/automation.ts";
@@ -67,10 +69,12 @@ app.get("/api/meta", (c) => c.json({ office: officeBuild !== null, build: office
 
 app.get("/api/health", (c) => c.json({ ok: true }));
 probeRoutes(app);
+agentKitRoutes(app);
 
 app.use("/api/v1/*", auth);
 authRoutes(app);
 taskRoutes(app);
+agentWebhookRoutes(app);
 agentRoutes(app);
 eventRoutes(app);
 relayRoutes(app);

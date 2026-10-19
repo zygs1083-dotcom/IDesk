@@ -14,6 +14,12 @@ const schema = z.object({
   IDESK_PROBE_DIST: z
     .string()
     .default(fileURLToPath(new URL("../../../packages/cli/dist/probe.mjs", import.meta.url))),
+  IDESK_AGENT_GUIDE: z
+    .string()
+    .default(fileURLToPath(new URL("../../../docs/AGENT-GUIDE.md", import.meta.url))),
+  IDESK_CLI_DIST: z
+    .string()
+    .default(fileURLToPath(new URL("../../../packages/cli/dist/main.js", import.meta.url))),
 });
 
 export type Config = z.infer<typeof schema>;

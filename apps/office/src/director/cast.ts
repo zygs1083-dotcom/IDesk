@@ -45,6 +45,7 @@ export class Cast {
       host: "",
       capabilities: [],
       webhookUrl: null,
+      client: null,
       lastSeenAt: null,
       createdAt: "",
       status: "online",
