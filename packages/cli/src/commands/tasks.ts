@@ -1,7 +1,6 @@
 import { readFile } from "node:fs/promises";
 import { labels } from "@idesk/shared/labels";
 import type { TaskPriority, TaskStatus } from "@idesk/shared/task-status";
-
 import type { Command } from "commander";
 import { api } from "../client.js";
 import { formatAgentName, formatTime } from "../labels.js";
@@ -31,7 +30,7 @@ export function taskCommands(program: Command): void {
   program.command("task <id>").action(async (id: string) => {
     const path = `/tasks/${encodeURIComponent(id)}`;
     const task = await api<Task>("GET", path);
-    const events = (await api<Event[]>("GET", `${path}/events`)).slice(0, 10);
+    const events = (await api<Event[]>("GET", `${path}/events`)).slice(-10);
     if (program.opts().json) {
       output(true, { task, events }, "");
       return;

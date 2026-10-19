@@ -2,8 +2,6 @@ import { createHash, createHmac, timingSafeEqual } from "node:crypto";
 import type { IncomingMessage, ServerResponse } from "node:http";
 import type { Event, EventState, Receiver } from "./receiver.js";
 
-const idPattern = /^[A-Za-z0-9_-]+$/;
-
 export function signature(key: string, body: Buffer): string {
   const digest = createHash("sha256").update(key).digest("hex");
   return `sha256=${createHmac("sha256", digest).update(body).digest("hex")}`;
@@ -47,22 +45,6 @@ export async function handleWebhook(
   try {
     event = JSON.parse(body.toString("utf8")) as Event;
   } catch {
-    res.writeHead(400).end();
-    return;
-  }
-  if (
-    !event ||
-    typeof event.id !== "string" ||
-    !idPattern.test(event.id) ||
-    typeof event.type !== "string" ||
-    !idPattern.test(event.type.replaceAll(".", "_")) ||
-    (event.taskId !== null &&
-      (typeof event.taskId !== "string" || !idPattern.test(event.taskId))) ||
-    typeof event.ts !== "string" ||
-    !event.payload ||
-    typeof event.payload !== "object" ||
-    Array.isArray(event.payload)
-  ) {
     res.writeHead(400).end();
     return;
   }

@@ -71,10 +71,7 @@ export async function findWakeCommand(command: string): Promise<boolean> {
   const paths = isAbsolute(command)
     ? [command]
     : (process.env.PATH ?? "").split(delimiter).map((dir) => join(dir, command));
-  const extensions =
-    process.platform === "win32"
-      ? ["", ...(process.env.PATHEXT ?? ".COM;.EXE;.BAT;.CMD").split(";")]
-      : [""];
+  const extensions = process.platform === "win32" ? ["", ".exe", ".com"] : [""];
   for (const path of paths)
     for (const extension of extensions) {
       const candidate = path + extension;
@@ -145,7 +142,11 @@ export async function checkReceiver(
   else if (await findWakeCommand(config.wake[0] as string))
     write(`✓ 唤醒命令可执行：${config.wake[0]}`);
   else {
-    write(`✗ 唤醒命令不可执行：${config.wake[0]}`);
+    const hint =
+      process.platform === "win32"
+        ? '（Windows 上 npm 安装的命令是 .cmd，要写成 ["cmd","/c",...]）'
+        : "";
+    write(`✗ 唤醒命令不可执行：${config.wake[0]}${hint}`);
     ok = false;
   }
   return ok;

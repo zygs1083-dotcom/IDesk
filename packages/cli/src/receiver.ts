@@ -30,7 +30,6 @@ export type EventState = {
 export type ReceiverState = { events: EventState[]; inProgressSince: Record<string, string> };
 type Agent = { id: string; name: string; capabilities: string[] };
 type Task = { id: string; status: string; assigneeId: string | null };
-const idPattern = /^[A-Za-z0-9_-]+$/;
 type Api = <T>(method: string, path: string, body?: object) => Promise<T>;
 type Log = (message: string) => void;
 const statePath = () => join(configDir(), "receiver", "state.json");
@@ -70,7 +69,7 @@ export async function wakeCommand(
     const child = spawn(
       argv[0] as string,
       argv.slice(1).map((arg) => arg.replaceAll("{prompt}", prompt)),
-      { stdio: "pipe" },
+      { stdio: ["ignore", "pipe", "pipe"] },
     );
     child.stdout.on("data", (chunk: Buffer) => log(`唤醒输出 ${chunk.toString().trimEnd()}`));
     child.stderr.on("data", (chunk: Buffer) => log(`唤醒输出 ${chunk.toString().trimEnd()}`));
@@ -82,7 +81,7 @@ export async function wakeCommand(
       log(`唤醒 ${result}`);
       resolve(ok);
     };
-    const timer = setTimeout(() => finish(true, "运行超过 60 秒，视为成功"), timeoutMs);
+    const timer = setTimeout(() => finish(true, "仍在运行，视为成功"), timeoutMs);
     child.on("error", (error) => finish(false, `启动失败 ${error.message}`));
     child.on("exit", (code) => finish(code === 0, `退出码 ${code}`));
   });
@@ -171,11 +170,7 @@ export class Receiver {
       const task = await this.request<Task>("GET", `/tasks/${encodeURIComponent(event.taskId)}`);
       if (task.status === "assigned" && task.assigneeId === this.me.id)
         prompt = `IDesk：任务 ${event.taskId} 已指派给你（${event.type}，事件 ${event.id}）。按 ${origin}/agent-guide.md 第 5 节处理。`;
-    } else if (
-      event.type === "relay.sent" &&
-      typeof event.payload.messageId === "string" &&
-      idPattern.test(event.payload.messageId)
-    ) {
+    } else if (event.type === "relay.sent" && typeof event.payload.messageId === "string") {
       prompt = `IDesk：你收到传递区消息 ${event.payload.messageId}。按 ${origin}/agent-guide.md 第 6 节处理。`;
     } else if (event.type === "task.created" && this.config.wakeOnOpen && event.taskId) {
       const task = await this.request<Task>("GET", `/tasks/${encodeURIComponent(event.taskId)}`);

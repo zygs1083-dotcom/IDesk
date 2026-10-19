@@ -3,7 +3,7 @@ import { chmod, mkdtemp, readFile, rm, stat, writeFile } from "node:fs/promises"
 import { createServer, type Server } from "node:http";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { checkReceiver, initReceiver } from "./commands/receiver.js";
 import { saveConfig } from "./config.js";
 import {
@@ -234,6 +234,24 @@ describe("signed HTTP receiver", () => {
 });
 
 describe("wake and periodic jobs", () => {
+  it("closes child stdin so commands waiting for EOF exit before timeout", async () => {
+    const logs: string[] = [];
+    const started = Date.now();
+    const ok = await wakeCommand(
+      [
+        process.execPath,
+        "-e",
+        "process.stdin.resume();process.stdin.on('end',()=>process.exit(0))",
+        "{prompt}",
+      ],
+      "hello",
+      5000,
+      (line) => logs.push(line),
+    );
+    expect(ok).toBe(true);
+    expect(Date.now() - started).toBeLessThan(2000);
+    expect(logs).toContain("唤醒 退出码 0");
+  });
   it("replaces prompt, reports exit status and leaves long process alive", async () => {
     const path = join(home, "wake.txt");
     const argv = [
@@ -439,5 +457,13 @@ describe("receiver commands", () => {
     expect(lines).toContain("✗ 测试推送：Webhook 推送插件已停用");
     await writeFile(path, JSON.stringify({ ...config, wake: [join(home, "missing"), "{prompt}"] }));
     expect(await checkReceiver(() => {})).toBe(false);
+    const platform = vi.spyOn(process, "platform", "get").mockReturnValue("win32");
+    try {
+      lines.length = 0;
+      expect(await checkReceiver((line) => lines.push(line))).toBe(false);
+      expect(lines.at(-1)).toContain('Windows 上 npm 安装的命令是 .cmd，要写成 ["cmd","/c",...]');
+    } finally {
+      platform.mockRestore();
+    }
   });
 });
