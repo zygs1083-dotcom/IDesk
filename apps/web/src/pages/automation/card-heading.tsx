@@ -28,7 +28,7 @@ export function CardHeading({
           title={status}
           className={cn("mt-1.5 size-2 shrink-0 rounded-full", color)}
         />
-        <h3 data-ui="card-title" className="min-w-0 flex-1 line-clamp-2 text-body">
+        <h3 data-ui="card-title" title={name} className="min-w-0 flex-1 line-clamp-2 text-body">
           {name}
         </h3>
         {actions}
