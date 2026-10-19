@@ -4,23 +4,20 @@ import { useQuery } from "@tanstack/react-query";
 import { AnimatePresence } from "motion/react";
 import { useState } from "react";
 import { Button } from "../../components/button.tsx";
-import { Drawer } from "../../components/drawer.tsx";
-import { Markdown } from "../../components/markdown.tsx";
 import { Menu } from "../../components/menu.tsx";
 import { Toast } from "../../components/toast.tsx";
 import { useLang } from "../../i18n/lang.tsx";
 import { request } from "../../lib/api.ts";
-import { eventText } from "../../lib/event-text.ts";
-import { relativeTime } from "../../lib/format.ts";
 import type { Task, TaskEvent } from "../../lib/types.ts";
 import { useAgents } from "../../lib/use-agents.ts";
 import { useSession } from "../../lib/use-session.ts";
 import { ActionDialog } from "./action-dialog.tsx";
 import { actionSamples, type HumanAction, previewAction } from "./drop-action.ts";
 import { EditTaskDialog } from "./edit-task-dialog.tsx";
-import { StatusDot } from "./status-dot.tsx";
-import { TaskDependencies } from "./task-dependencies.tsx";
+import { TaskDetails } from "./task-details.tsx";
+import { TaskReadingDrawer } from "./task-reading-drawer.tsx";
 import { useTaskAction } from "./use-task-action.ts";
+import "./task-drawer.css";
 
 export function TaskDrawer({ taskId, onClose }: { taskId: string; onClose: () => void }) {
   const { isAdmin } = useSession();
@@ -39,11 +36,6 @@ export function TaskDrawer({ taskId, onClose }: { taskId: string; onClose: () =>
     null,
   );
   const { mutation, error, setError } = useTaskAction(() => setParameter(null));
-  const overdue =
-    task?.dueAt &&
-    new Date(task.dueAt).getTime() < Date.now() &&
-    task.status !== "done" &&
-    task.status !== "cancelled";
   const actions =
     task && isAdmin
       ? (
@@ -85,114 +77,50 @@ export function TaskDrawer({ taskId, onClose }: { taskId: string; onClose: () =>
   const firstAction = actions[0];
   return (
     <>
-      <Drawer
-        open
-        onClose={onClose}
-        title={task?.title ?? ""}
-        footer={
-          isAdmin &&
-          task && (
-            <>
-              <Button onClick={() => setEditing(true)}>{t("common.edit")}</Button>
-              {actions.length > 1 && (
-                <Menu
-                  label={lang === "zh" ? "更多操作" : "More actions"}
-                  trigger={lang === "zh" ? "更多" : "More"}
-                  items={actions.slice(1).map((action) => ({
-                    label: actionLabel(action),
-                    onSelect: () => runAction(action),
-                  }))}
-                />
-              )}
-              {firstAction && (
-                <Button
-                  variant={firstAction === "cancel" ? "secondary" : "primary"}
-                  disabled={mutation.isPending}
-                  onClick={() => runAction(firstAction)}
-                >
-                  {actionLabel(firstAction)}
-                </Button>
-              )}
-            </>
-          )
-        }
-      >
-        {(taskError || eventsError) && (
-          <p role="alert" className="text-secondary text-status-failed">
-            {(taskError ?? eventsError)?.message}
-          </p>
-        )}
-        {task && (
-          <div className="space-y-6">
-            <div className="flex items-center gap-2 text-secondary text-text-2">
-              <StatusDot status={task.status} />
-              {labels(lang).status[task.status]}
-            </div>
-            <div className="pixel-legacy flex flex-wrap gap-2">
-              {isAdmin && <Button onClick={() => setEditing(true)}>{t("common.edit")}</Button>}
-              {actions.map((action, index) => (
-                <Button
-                  key={action}
-                  variant={index === 0 && action !== "cancel" ? "primary" : "secondary"}
-                  disabled={mutation.isPending}
-                  onClick={() => runAction(action)}
-                >
-                  {actionLabel(action)}
-                </Button>
-              ))}
-            </div>
-            <div className="space-y-3">
-              <Markdown>{task.body}</Markdown>
-              {task.result !== null && <Markdown>{task.result}</Markdown>}
-            </div>
-            <dl className="space-y-3 border-y border-line py-4 text-secondary">
-              <div className="flex gap-2">
-                <dt className="w-18 shrink-0 text-text-2">{t("desk.assignee")}</dt>
-                <dd className="min-w-0 flex-1 break-words">
-                  {task.assigneeId === null ? t("desk.noAssignee") : agentName(task.assigneeId)}
-                </dd>
-              </div>
-              <div className="flex gap-2">
-                <dt className="w-18 shrink-0 text-text-2">{t("desk.publisher")}</dt>
-                <dd className="min-w-0 flex-1 break-words">{agentName(task.publisherId)}</dd>
-              </div>
-              <div className="flex gap-2">
-                <dt className="w-18 shrink-0 text-text-2">{t("common.capabilities")}</dt>
-                <dd className="min-w-0 flex-1 break-words text-text-2">
-                  {task.capabilities.join(" · ") || "—"}
-                </dd>
-              </div>
-            </dl>
-            {task.dueAt && (
-              <p
-                className={
-                  overdue ? "text-secondary text-status-paused" : "text-secondary text-text-2"
-                }
-              >
-                {t("desk.dueAt")}: {new Date(task.dueAt).toLocaleString(lang)}
-                {overdue && ` · ${t("desk.overdue")}`}
-              </p>
-            )}
-            <TaskDependencies task={task} onError={setError} />
-            <section>
-              <h3 className="mb-4 text-section">{t("desk.timeline")}</h3>
-              <ol className="space-y-4">
-                {events.map((event) => (
-                  <li key={event.id} className="space-y-1 border-l border-line pl-3">
-                    <time className="text-label text-text-2 tabular-nums">
-                      {relativeTime(new Date(event.ts), lang)}
-                    </time>
-                    <p className="whitespace-pre-wrap break-words text-secondary">
-                      {eventText(event, agentName, lang)}
-                    </p>
-                  </li>
-                ))}
-              </ol>
-            </section>
-          </div>
-        )}
-        {!parameter && <Toast message={error} onClose={() => setError(null)} />}
-      </Drawer>
+      <div className="task-drawer">
+        <TaskReadingDrawer
+          key={taskId}
+          onClose={onClose}
+          title={task?.title ?? ""}
+          footer={
+            isAdmin &&
+            task && (
+              <>
+                <Button onClick={() => setEditing(true)}>{t("common.edit")}</Button>
+                {actions.length > 1 && (
+                  <Menu
+                    label={lang === "zh" ? "更多操作" : "More actions"}
+                    trigger={lang === "zh" ? "更多" : "More"}
+                    items={actions.slice(1).map((action) => ({
+                      label: actionLabel(action),
+                      onSelect: () => runAction(action),
+                    }))}
+                  />
+                )}
+                {firstAction && (
+                  <Button
+                    variant={firstAction === "cancel" ? "secondary" : "primary"}
+                    disabled={mutation.isPending}
+                    onClick={() => runAction(firstAction)}
+                  >
+                    {actionLabel(firstAction)}
+                  </Button>
+                )}
+              </>
+            )
+          }
+        >
+          {(taskError || eventsError) && (
+            <p role="alert" className="text-secondary text-status-failed">
+              {(taskError ?? eventsError)?.message}
+            </p>
+          )}
+          {task && (
+            <TaskDetails task={task} events={events} agentName={agentName} onError={setError} />
+          )}
+          {!parameter && <Toast message={error} onClose={() => setError(null)} />}
+        </TaskReadingDrawer>
+      </div>
       <AnimatePresence>
         {isAdmin && editing && task && (
           <EditTaskDialog key="edit" task={task} onClose={() => setEditing(false)} />

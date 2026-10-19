@@ -92,15 +92,19 @@ export function TaskDependencies({
           )
         );
       })}
-      {!isAdmin ? null : search === null ? (
-        <button
-          type="button"
-          className="text-accent text-secondary focus-visible:outline-accent"
-          onClick={() => setSearch("")}
-        >
-          {t("desk.addDependency")}
-        </button>
-      ) : (
+      <div className="flex flex-wrap items-center justify-between gap-2 text-secondary">
+        {task.blockedBy.length === 0 && <p className="text-text-2">{t("desk.noDependencies")}</p>}
+        {isAdmin && search === null && (
+          <button
+            type="button"
+            className="text-accent focus-visible:outline-accent"
+            onClick={() => setSearch("")}
+          >
+            {t("desk.addDependency")}
+          </button>
+        )}
+      </div>
+      {isAdmin && search !== null && (
         <div className="space-y-2">
           <input
             data-ui="field"

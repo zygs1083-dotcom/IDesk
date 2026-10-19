@@ -1,0 +1,93 @@
+html .task-drawer dialog [data-ui="drawer"] {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+  padding: 0;
+}
+
+html .task-drawer dialog [data-ui="drawer"] > header {
+  align-items: flex-start;
+  flex: none;
+  margin: 0;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--line);
+}
+
+html .task-drawer dialog [data-ui="drawer"] > header h2 {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.task-title-preview {
+  display: block;
+  max-height: 2lh;
+  overflow: hidden;
+}
+
+.task-full-title {
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+html .task-drawer dialog [data-ui="overlay-body"] {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 16px;
+}
+
+html .task-drawer dialog [data-ui="overlay-footer"] {
+  display: flex;
+  flex: none;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 12px 16px;
+  border-top: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.task-drawer [data-ui="overlay-footer"] [role="menu"] {
+  top: auto;
+  bottom: calc(100% + 8px);
+}
+
+.task-excerpt {
+  overflow-wrap: anywhere;
+}
+
+.task-excerpt[data-expanded="false"] {
+  max-height: 6lh;
+  overflow: hidden;
+}
+
+.task-excerpt[data-expanded="false"][data-lines="2"] {
+  max-height: 2lh;
+}
+
+.task-details .task-excerpt :is(p, pre, blockquote, ul, ol) {
+  margin-block: 0;
+}
+
+.task-details .task-excerpt .space-y-3 {
+  > * + * {
+    margin-block-start: 8px;
+  }
+}
+
+.task-details .task-excerpt p {
+  white-space: pre-wrap;
+}
+
+.task-details .task-excerpt pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.task-details .task-excerpt img {
+  max-width: 100%;
+  height: auto;
+}
