@@ -39,6 +39,17 @@ export const patchAgentSchema = z.object({
     .nullable()
     .exactOptional(),
 });
+export const patchMeSchema = z.object({ webhookUrl: z.url().nullable() });
+export const heartbeatSchema = z.object({ client: z.string().min(1).max(120).exactOptional() });
+export const webhookTestResultSchema = z
+  .object({
+    ok: z.boolean(),
+    status: z.number().int().nullable(),
+    durationMs: z.number(),
+    error: z.string().nullable(),
+    notifierEnabled: z.boolean(),
+  })
+  .meta({ id: "WebhookTestResult" });
 export const loginSchema = z.object({ password: z.string() });
 export const authMeSchema = z.object({ role: z.enum(["admin", "viewer"]) });
 export const publicAgentSchema = z
