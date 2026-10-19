@@ -7,12 +7,13 @@ import { Dialog } from "../../components/dialog.tsx";
 import { useLang } from "../../i18n/lang.tsx";
 import { request } from "../../lib/api.ts";
 import type { Agent } from "../../lib/types.ts";
+import { agentOnboardingMessage } from "./create-agent.tsx";
 
 export function RotateAgentKey({ agent, onClose }: { agent: Agent; onClose: () => void }) {
-  const { t } = useLang();
+  const { lang, t } = useLang();
   const client = useQueryClient();
   const [key, setKey] = useState("");
-  const [copied, setCopied] = useState(false);
+  const [copied, setCopied] = useState<"key" | "message" | null>(null);
   const [copyError, setCopyError] = useState("");
   const rotate = useMutation({
     mutationFn: async () => {
@@ -26,13 +27,18 @@ export function RotateAgentKey({ agent, onClose }: { agent: Agent; onClose: () =
       void client.invalidateQueries({ queryKey: ["agents"] });
     },
   });
-  async function copyKey() {
+  async function copy(value: "key" | "message") {
     try {
-      await navigator.clipboard.writeText(key);
-      setCopied(true);
+      await navigator.clipboard.writeText(
+        value === "key"
+          ? key
+          : agentOnboardingMessage(lang, location.origin, agent.name, key, true),
+      );
+      setCopied(value);
       setCopyError("");
     } catch {
-      setCopyError(t("agents.copyKeyFailed"));
+      setCopied(null);
+      setCopyError(t(value === "key" ? "agents.copyKeyFailed" : "agents.copyMessageFailed"));
     }
   }
   return (
@@ -43,9 +49,18 @@ export function RotateAgentKey({ agent, onClose }: { agent: Agent; onClose: () =
       footer={
         key ? (
           <>
-            <Button onClick={copyKey}>{copied ? t("common.copied") : t("common.copy")}</Button>
-            <Button variant="primary" onClick={onClose}>
+            <Button className="whitespace-nowrap px-2 sm:px-3" onClick={() => copy("key")}>
+              {copied === "key" ? t("common.copied") : t("common.copy")}
+            </Button>
+            <Button className="whitespace-nowrap px-2 sm:px-3" onClick={onClose}>
               {t("common.complete")}
+            </Button>
+            <Button
+              variant="primary"
+              className="whitespace-nowrap px-2 sm:px-3"
+              onClick={() => copy("message")}
+            >
+              {copied === "message" ? t("common.copied") : t("agents.copyMessage")}
             </Button>
           </>
         ) : (
@@ -77,9 +92,18 @@ export function RotateAgentKey({ agent, onClose }: { agent: Agent; onClose: () =
         <div className="pixel-legacy flex justify-end gap-2">
           {key ? (
             <>
-              <Button onClick={copyKey}>{copied ? t("common.copied") : t("common.copy")}</Button>
-              <Button variant="primary" onClick={onClose}>
+              <Button className="whitespace-nowrap px-2 sm:px-3" onClick={() => copy("key")}>
+                {copied === "key" ? t("common.copied") : t("common.copy")}
+              </Button>
+              <Button className="whitespace-nowrap px-2 sm:px-3" onClick={onClose}>
                 {t("common.complete")}
+              </Button>
+              <Button
+                variant="primary"
+                className="whitespace-nowrap px-2 sm:px-3"
+                onClick={() => copy("message")}
+              >
+                {copied === "message" ? t("common.copied") : t("agents.copyMessage")}
               </Button>
             </>
           ) : (

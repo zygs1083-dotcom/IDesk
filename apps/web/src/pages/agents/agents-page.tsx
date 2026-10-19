@@ -229,7 +229,7 @@ export function AgentsPage() {
                         className="border-b border-line bg-surface-2"
                       >
                         <td colSpan={8} className="p-4">
-                          <AgentDetails agentId={agent.id} />
+                          <AgentDetails agent={agent} />
                         </td>
                       </tr>
                     )}
@@ -247,7 +247,7 @@ export function AgentsPage() {
           onClose={() => setSelected(null)}
           footer={<Button onClick={() => setSelected(null)}>{t("common.close")}</Button>}
         >
-          <AgentDetails agentId={selected.id} />
+          <AgentDetails agent={selected} />
         </Dialog>
       )}
       {isAdmin && rotating && <RotateAgentKey agent={rotating} onClose={() => setRotating(null)} />}
