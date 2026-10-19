@@ -37,7 +37,7 @@ export async function testAgentWebhook(
     return {
       ok: response.ok,
       status: response.status,
-      durationMs: Math.round(Date.now() - startedAt),
+      durationMs: Date.now() - startedAt,
       error: response.ok ? null : `HTTP ${response.status}`,
       notifierEnabled,
     };
@@ -45,7 +45,7 @@ export async function testAgentWebhook(
     return {
       ok: false,
       status: null,
-      durationMs: Math.round(Date.now() - startedAt),
+      durationMs: Date.now() - startedAt,
       error:
         failure instanceof Error && failure.name === "TimeoutError"
           ? "Request timed out"

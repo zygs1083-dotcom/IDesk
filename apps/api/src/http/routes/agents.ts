@@ -144,9 +144,6 @@ export function agentRoutes(app: OpenAPIHono<AuthEnv>) {
       method: "post",
       path: "/api/v1/agents/me/heartbeat",
       middleware: requireAgent,
-      request: {
-        body: { required: false, content: { "application/json": { schema: heartbeatSchema } } },
-      },
       responses: {
         200: {
           description: "Presence refreshed",
@@ -154,8 +151,15 @@ export function agentRoutes(app: OpenAPIHono<AuthEnv>) {
         },
       },
     },
-    (c) => {
-      const client = c.req.valid("json")?.client;
+    async (c) => {
+      const text = await c.req.text();
+      if (text === "") return c.json(c.get("agent"), 200);
+      const parsed = heartbeatSchema.safeParse(JSON.parse(text));
+      if (!parsed.success)
+        throw new HttpError(400, "validation", {
+          text: parsed.error.issues.map((issue) => issue.message).join("；"),
+        });
+      const client = parsed.data.client;
       return c.json(
         client === undefined ? c.get("agent") : updateAgentClient(c.get("agent").id, client),
         200,

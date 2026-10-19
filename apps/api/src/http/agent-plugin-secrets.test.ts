@@ -20,7 +20,7 @@ function request(path: string, method = "GET", body?: object, credential = admin
   return app.request(`/api/v1${path}`, {
     method,
     headers: {
-      ...(body === undefined ? {} : { "Content-Type": "application/json" }),
+      "Content-Type": "application/json",
       ...(credential?.startsWith("idk_")
         ? { Authorization: `Bearer ${credential}` }
         : { Cookie: credential }),

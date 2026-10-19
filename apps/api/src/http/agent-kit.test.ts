@@ -81,6 +81,15 @@ test("heartbeat reports client without clearing it on empty requests", async () 
     publicAgentSchema.parse(await (await agentRequest("/me/heartbeat", apiKey, "POST")).json())
       .client,
   ).toBe(client);
+  for (const body of [undefined, ""]) {
+    const response = await app.request("/api/v1/agents/me/heartbeat", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
+      ...(body === undefined ? {} : { body }),
+    });
+    expect(response.status).toBe(200);
+    expect(publicAgentSchema.parse(await response.json()).client).toBe(client);
+  }
   expect(
     publicAgentSchema.parse(await (await agentRequest("/me/heartbeat", apiKey, "POST", {})).json())
       .client,
