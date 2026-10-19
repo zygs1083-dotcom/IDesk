@@ -28,6 +28,7 @@ export const zh = {
   "transition.systemLeaseOnly": () => "只有系统可以处理租约到期",
 
   "agent.notFound": () => "智能体不存在",
+  "agent.noWebhook": () => "这个智能体没有配置 Webhook",
 
   "schedule.notFound": () => "定时任务不存在",
   "schedule.running": () => "定时任务正在执行",
@@ -87,6 +88,7 @@ export const en: { [K in MessageKey]: (typeof zh)[K] } = {
   "transition.systemLeaseOnly": () => "Only the system can handle lease expiry",
 
   "agent.notFound": () => "Agent not found",
+  "agent.noWebhook": () => "This agent has no webhook",
 
   "schedule.notFound": () => "Schedule not found",
   "schedule.running": () => "Schedule is already running",
