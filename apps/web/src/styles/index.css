@@ -17,6 +17,7 @@
 @import "./pixel-photo.css";
 @import "./pixel-preview.css";
 @import "./pixel-polish.css";
+@import "./pixel-servers.css";
 
 html:not([data-skin="pixel"]) [data-ui="agent-status-col"],
 html:not([data-skin="pixel"]) [data-ui="kind-avatar"],

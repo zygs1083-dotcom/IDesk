@@ -10,6 +10,9 @@ html[data-skin="pixel"] {
   --line-strong: #9f8c6b;
   --ink: #392b20;
   --accent: #365e44;
+  --chart-1: #225c65;
+  --chart-2: #6b4d87;
+  --chart-3: #935018;
   --on-accent: #fff8e8;
   --danger-fill: #a5362a;
   --status-open: #655945;
@@ -49,6 +52,9 @@ html[data-skin="pixel"] {
     --line-strong: #9e8a6b;
     --ink: #211a16;
     --accent: #b5d79f;
+    --chart-1: #82cfda;
+    --chart-2: #c5a2e2;
+    --chart-3: #e7b078;
     --on-accent: #1c2c20;
     --danger-fill: #ba5749;
     --status-open: #c9b9a0;

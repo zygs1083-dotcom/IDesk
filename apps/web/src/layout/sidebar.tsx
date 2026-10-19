@@ -10,6 +10,7 @@ import {
   LogOut,
   PencilRuler,
   Send,
+  Server,
   Settings,
   Workflow,
 } from "lucide-react";
@@ -37,6 +38,7 @@ export function Sidebar() {
     { to: "/automation", label: t("nav.automation"), icon: Workflow, pixel: "automation" },
     { to: "/agents", label: t("nav.agents"), icon: Bot, pixel: "agent" },
     { to: "/schedules", label: t("nav.schedules"), icon: Clock, pixel: "schedule" },
+    { to: "/servers", label: t("nav.servers"), icon: Server, pixel: "server" },
     { to: "/activity", label: t("nav.activity"), icon: Activity, pixel: "activity" },
     { to: "/settings", label: t("nav.settings"), icon: Settings, pixel: "settings" },
   ];
@@ -86,6 +88,7 @@ export function Sidebar() {
                   | "automation"
                   | "agent"
                   | "schedule"
+                  | "server"
                   | "activity"
                   | "settings"
               }

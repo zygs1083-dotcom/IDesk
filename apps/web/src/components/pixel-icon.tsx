@@ -7,6 +7,7 @@ type IconName =
   | "automation"
   | "agent"
   | "schedule"
+  | "server"
   | "activity"
   | "settings"
   | "office"
@@ -77,6 +78,14 @@ const cells: Record<IconName, readonly Cell[]> = {
     [3, 13, 10, 2],
     [7, 4, 2, 5],
     [8, 8, 4, 2],
+  ],
+  server: [
+    [2, 2, 12, 5],
+    [2, 9, 12, 5],
+    [4, 4, 5, 1],
+    [4, 11, 5, 1],
+    [11, 4, 1, 1],
+    [11, 11, 1, 1],
   ],
   activity: [
     [1, 8, 3, 2],
