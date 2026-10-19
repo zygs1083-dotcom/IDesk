@@ -7,6 +7,7 @@ import { Dialog } from "../../components/dialog.tsx";
 import { Field } from "../../components/field.tsx";
 import { useLang } from "../../i18n/lang.tsx";
 import { request } from "../../lib/api.ts";
+import { copyText } from "../../lib/clipboard.ts";
 import type { Server } from "../../lib/use-servers.ts";
 
 type Action = "create" | "rename" | "rotate" | "delete";
@@ -62,7 +63,7 @@ export function ServerDialog({
   });
   async function copy(command: string, which: "normal" | "local") {
     try {
-      await navigator.clipboard.writeText(command);
+      await copyText(command);
       setCopied(which);
       setCopyError("");
     } catch {

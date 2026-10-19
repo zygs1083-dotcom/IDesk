@@ -4,16 +4,19 @@ import { useState } from "react";
 import type { z } from "zod";
 import { Button } from "../../components/button.tsx";
 import { Dialog } from "../../components/dialog.tsx";
+import { Field } from "../../components/field.tsx";
 import { useLang } from "../../i18n/lang.tsx";
 import { request } from "../../lib/api.ts";
+import { copyText } from "../../lib/clipboard.ts";
 import type { Agent } from "../../lib/types.ts";
+import { agentOnboardingMessage } from "./create-agent.tsx";
 
 export function RotateAgentKey({ agent, onClose }: { agent: Agent; onClose: () => void }) {
-  const { t } = useLang();
+  const { lang, t } = useLang();
   const client = useQueryClient();
   const [key, setKey] = useState("");
-  const [copied, setCopied] = useState(false);
-  const [copyError, setCopyError] = useState("");
+  const [copied, setCopied] = useState<"key" | "message" | null>(null);
+  const [copyError, setCopyError] = useState<"key" | "message" | null>(null);
   const rotate = useMutation({
     mutationFn: async () => {
       const result = await request<z.infer<typeof registeredAgentSchema>>(
@@ -26,13 +29,18 @@ export function RotateAgentKey({ agent, onClose }: { agent: Agent; onClose: () =
       void client.invalidateQueries({ queryKey: ["agents"] });
     },
   });
-  async function copyKey() {
+  async function copy(value: "key" | "message") {
     try {
-      await navigator.clipboard.writeText(key);
-      setCopied(true);
-      setCopyError("");
+      await copyText(
+        value === "key"
+          ? key
+          : agentOnboardingMessage(lang, location.origin, agent.name, key, true),
+      );
+      setCopied(value);
+      setCopyError(null);
     } catch {
-      setCopyError(t("agents.copyKeyFailed"));
+      setCopied(null);
+      setCopyError(value);
     }
   }
   return (
@@ -43,9 +51,18 @@ export function RotateAgentKey({ agent, onClose }: { agent: Agent; onClose: () =
       footer={
         key ? (
           <>
-            <Button onClick={copyKey}>{copied ? t("common.copied") : t("common.copy")}</Button>
-            <Button variant="primary" onClick={onClose}>
+            <Button className="whitespace-nowrap px-2 sm:px-3" onClick={() => copy("key")}>
+              {copied === "key" ? t("common.copied") : t("common.copy")}
+            </Button>
+            <Button className="whitespace-nowrap px-2 sm:px-3" onClick={onClose}>
               {t("common.complete")}
+            </Button>
+            <Button
+              variant="primary"
+              className="whitespace-nowrap px-2 sm:px-3"
+              onClick={() => copy("message")}
+            >
+              {copied === "message" ? t("common.copied") : t("agents.copyMessage")}
             </Button>
           </>
         ) : (
@@ -71,15 +88,34 @@ export function RotateAgentKey({ agent, onClose }: { agent: Agent; onClose: () =
         )}
         {(rotate.error || copyError) && (
           <p role="alert" className="text-secondary text-status-failed">
-            {rotate.error?.message || copyError}
+            {rotate.error?.message ||
+              t(copyError === "key" ? "agents.copyKeyFailed" : "agents.copyMessageFailed")}
           </p>
+        )}
+        {copyError === "message" && (
+          <Field
+            multiline
+            readOnly
+            label={t("agents.copyMessage")}
+            rows={7}
+            value={agentOnboardingMessage(lang, location.origin, agent.name, key, true)}
+          />
         )}
         <div className="pixel-legacy flex justify-end gap-2">
           {key ? (
             <>
-              <Button onClick={copyKey}>{copied ? t("common.copied") : t("common.copy")}</Button>
-              <Button variant="primary" onClick={onClose}>
+              <Button className="whitespace-nowrap px-2 sm:px-3" onClick={() => copy("key")}>
+                {copied === "key" ? t("common.copied") : t("common.copy")}
+              </Button>
+              <Button className="whitespace-nowrap px-2 sm:px-3" onClick={onClose}>
                 {t("common.complete")}
+              </Button>
+              <Button
+                variant="primary"
+                className="whitespace-nowrap px-2 sm:px-3"
+                onClick={() => copy("message")}
+              >
+                {copied === "message" ? t("common.copied") : t("agents.copyMessage")}
               </Button>
             </>
           ) : (

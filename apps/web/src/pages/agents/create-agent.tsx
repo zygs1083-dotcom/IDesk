@@ -4,6 +4,7 @@ import {
   type registerAgentSchema,
   type registeredAgentSchema,
 } from "@idesk/shared/agent-schemas";
+import type { Lang } from "@idesk/shared/labels";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import type { z } from "zod";
@@ -12,12 +13,31 @@ import { CapabilityPicker } from "../../components/capability-picker.tsx";
 import { Dialog } from "../../components/dialog.tsx";
 import { Field } from "../../components/field.tsx";
 import { useLang } from "../../i18n/lang.tsx";
+import { translator } from "../../i18n/translate.ts";
 import { request } from "../../lib/api.ts";
+import { copyText } from "../../lib/clipboard.ts";
 import type { Agent } from "../../lib/types.ts";
 import { useAgents } from "../../lib/use-agents.ts";
 
+export function agentOnboardingMessage(
+  lang: Lang,
+  origin: string,
+  name: string,
+  key: string,
+  rotated: boolean,
+): string {
+  const t = translator(lang);
+  return [
+    t("agents.onboardingGuide", { origin }),
+    t("agents.onboardingName", { name }),
+    key,
+    t("agents.onboardingInstructions"),
+    ...(rotated ? [t("agents.onboardingRotated")] : []),
+  ].join("\n");
+}
+
 export function CreateAgent({ agent, onClose }: { agent?: Agent; onClose: () => void }) {
-  const { t } = useLang();
+  const { lang, t } = useLang();
   const client = useQueryClient();
   const { agents } = useAgents();
   const [name, setName] = useState(agent?.name ?? "");
@@ -27,8 +47,8 @@ export function CreateAgent({ agent, onClose }: { agent?: Agent; onClose: () => 
   const [host, setHost] = useState(agent?.host ?? "");
   const [capabilities, setCapabilities] = useState<string[]>(agent?.capabilities ?? []);
   const [webhookUrl, setWebhookUrl] = useState(agent?.webhookUrl ?? "");
-  const [copied, setCopied] = useState(false);
-  const [copyError, setCopyError] = useState("");
+  const [copied, setCopied] = useState<"key" | "message" | null>(null);
+  const [copyError, setCopyError] = useState<"key" | "message" | null>(null);
   const create = useMutation({
     mutationFn: (input: z.infer<typeof registerAgentSchema>) =>
       request<z.infer<typeof registeredAgentSchema>>("/agents", {
@@ -54,15 +74,25 @@ export function CreateAgent({ agent, onClose }: { agent?: Agent; onClose: () => 
     },
   });
   const error = update.error ?? create.error;
-  async function copyKey() {
+  async function copy(value: "key" | "message") {
     if (!create.data) return;
     try {
-      await navigator.clipboard.writeText(create.data.apiKey);
-      setCopyError("");
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      await copyText(
+        value === "key"
+          ? create.data.apiKey
+          : agentOnboardingMessage(
+              lang,
+              location.origin,
+              create.data.agent.name,
+              create.data.apiKey,
+              false,
+            ),
+      );
+      setCopyError(null);
+      setCopied(value);
     } catch {
-      setCopyError(t("agents.copyKeyFailed"));
+      setCopied(null);
+      setCopyError(value);
     }
   }
   return (
@@ -73,9 +103,18 @@ export function CreateAgent({ agent, onClose }: { agent?: Agent; onClose: () => 
       footer={
         create.data ? (
           <>
-            <Button onClick={copyKey}>{copied ? t("common.copied") : t("common.copy")}</Button>
-            <Button variant="primary" onClick={onClose}>
+            <Button className="whitespace-nowrap px-2 sm:px-3" onClick={() => copy("key")}>
+              {copied === "key" ? t("common.copied") : t("common.copy")}
+            </Button>
+            <Button className="whitespace-nowrap px-2 sm:px-3" onClick={onClose}>
               {t("common.complete")}
+            </Button>
+            <Button
+              variant="primary"
+              className="whitespace-nowrap px-2 sm:px-3"
+              onClick={() => copy("message")}
+            >
+              {copied === "message" ? t("common.copied") : t("agents.copyMessage")}
             </Button>
           </>
         ) : (
@@ -101,13 +140,37 @@ export function CreateAgent({ agent, onClose }: { agent?: Agent; onClose: () => 
           <p className="text-secondary text-text-2">{t("agents.keyOnce")}</p>
           {copyError && (
             <p role="alert" className="text-secondary text-status-failed">
-              {copyError}
+              {t(copyError === "key" ? "agents.copyKeyFailed" : "agents.copyMessageFailed")}
             </p>
           )}
+          {copyError === "message" && (
+            <Field
+              multiline
+              readOnly
+              label={t("agents.copyMessage")}
+              rows={7}
+              value={agentOnboardingMessage(
+                lang,
+                location.origin,
+                create.data.agent.name,
+                create.data.apiKey,
+                false,
+              )}
+            />
+          )}
           <div className="pixel-legacy flex justify-end gap-2">
-            <Button onClick={copyKey}>{copied ? t("common.copied") : t("common.copy")}</Button>
-            <Button variant="primary" onClick={onClose}>
+            <Button className="whitespace-nowrap px-2 sm:px-3" onClick={() => copy("key")}>
+              {copied === "key" ? t("common.copied") : t("common.copy")}
+            </Button>
+            <Button className="whitespace-nowrap px-2 sm:px-3" onClick={onClose}>
               {t("common.complete")}
+            </Button>
+            <Button
+              variant="primary"
+              className="whitespace-nowrap px-2 sm:px-3"
+              onClick={() => copy("message")}
+            >
+              {copied === "message" ? t("common.copied") : t("agents.copyMessage")}
             </Button>
           </div>
         </div>

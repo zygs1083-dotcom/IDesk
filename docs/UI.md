@@ -176,6 +176,8 @@ Lucide，`stroke-width: 1.5`，16px 行内 / 18px 按钮。一个产品一套图
 key 只用于 idesk login，不要写进代码仓库、日志、聊天回复或其他文件。做完第 4 节的自检后，把结果发给我。
 ```
 
+详情打开方式：小于 md 的窄屏，三种皮肤点击智能体名称或行都打开现有详情弹层，接收端、测试推送按钮和结果须完整可见；行尾操作菜单不触发详情。桌面 classic/cartoon 使用展开行，pixel 保留详情弹层。关闭详情后清除本次测试结果。
+
 展开行（M22）：有 Webhook 的智能体在画像数字下面多一行「接收端」：`client` 以 `idesk-receiver/` 开头时写「官方接收器 0.2.0 · codex」（版本和 wake 从字符串里取，wake=command 写「自定义命令」）；其他非空值原样显示；为空写「未上报（不是官方接收器，或版本过旧）」，用 text-secondary。同一行右边是幽灵按钮「测试推送」（仅 admin），点击后按钮显示「推送中…」，结果写在按钮左边一行：成功「接收端响应 200 · 85 ms」（status-done 色），失败「失败：HTTP 401」「失败：超时」「失败：连接不上」（status-failed 色）；`notifierEnabled` 为 false 时无论成败再加一句「Webhook 推送插件已停用，真实事件不会推送」（status-paused 色）。结果只留在当前展开行，收起即清掉。没有 Webhook 的智能体这一行写「未配置 Webhook，被指派时不会被唤醒」，不显示按钮。
 
 ### 定时 `/schedules`

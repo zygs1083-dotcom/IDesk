@@ -2,15 +2,18 @@ import { useEffect, useRef, useState } from "react";
 import { Button, IconButton } from "../../components/button.tsx";
 import { PixelIcon } from "../../components/pixel-icon.tsx";
 import { useLang } from "../../i18n/lang.tsx";
+import { copyText } from "../../lib/clipboard.ts";
 
 export function AccessRow({
   title,
   value,
   description,
+  openUrl,
 }: {
   title: string;
   value: string;
   description?: string;
+  openUrl?: string;
 }) {
   const { t } = useLang();
   const [copied, setCopied] = useState(false);
@@ -19,7 +22,7 @@ export function AccessRow({
   useEffect(() => () => clearTimeout(timer.current), []);
   async function copy() {
     try {
-      await navigator.clipboard.writeText(value);
+      await copyText(value);
       setError("");
       setCopied(true);
       clearTimeout(timer.current);
@@ -40,6 +43,16 @@ export function AccessRow({
           </p>
         )}
       </div>
+      {openUrl && (
+        <a
+          href={openUrl}
+          target="_blank"
+          rel="noreferrer"
+          className="shrink-0 py-2 text-secondary text-accent hover:underline"
+        >
+          {t("settings.open")}
+        </a>
+      )}
       <span className="pixel-legacy">
         <Button aria-label={t("settings.copyNamed", { title })} onClick={copy}>
           {copied ? t("common.copied") : t("common.copy")}
