@@ -1,0 +1,58 @@
+.profile-events {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.profile-event {
+  padding: 6px 0;
+  border-bottom: 1px solid var(--office-shadow);
+}
+.profile-event-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+.profile-event-summary {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.profile-event time {
+  flex-shrink: 0;
+  color: var(--office-floor);
+  white-space: nowrap;
+}
+.profile-event-task {
+  display: flex;
+  gap: 8px;
+  color: var(--office-ink);
+  text-decoration: none;
+}
+.profile-event-task > :first-child {
+  flex-shrink: 0;
+  color: var(--office-floor);
+}
+.profile-event-task:hover .profile-task-title {
+  text-decoration: underline;
+}
+.profile-report-body {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.profile-report-preview {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+.profile-report-toggle {
+  display: block;
+  padding: 3px 0;
+  border: 0;
+  background: transparent;
+  color: var(--office-focus);
+  line-height: 18px;
+  text-decoration: underline;
+  cursor: pointer;
+}

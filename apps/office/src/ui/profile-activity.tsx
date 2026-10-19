@@ -3,11 +3,10 @@ import type { eventSchema } from "@idesk/shared/task-schemas";
 import { useEffect, useState } from "react";
 import type { z } from "zod";
 import { useLang } from "../i18n/lang.tsx";
-import { relativeTime } from "../i18n/relative-time.ts";
 import { request } from "../lib/api.ts";
 import { onRealtimeEvent } from "../lib/realtime.ts";
-import { eventText } from "./event-text.ts";
 import { isCurrentTask } from "./profile-current-task.ts";
+import { ProfileEvent } from "./profile-event.tsx";
 import type { Agent, Task } from "./use-office-data.ts";
 
 type TaskEvent = z.infer<typeof eventSchema>;
@@ -58,7 +57,9 @@ export function ProfileActivity({
             key={task.id}
             href={`/desk?task=${encodeURIComponent(task.id)}`}
           >
-            {task.title}
+            <span className="profile-task-title" title={task.title}>
+              {task.title}
+            </span>
             <span className="task-status">{labels(lang).status[task.status]}</span>
           </a>
         ))
@@ -66,19 +67,16 @@ export function ProfileActivity({
         <p>{t("panel.emptyTasks")}</p>
       )}
       <h3>{t("panel.recentEvents")}</h3>
-      {events.map((event) => {
-        const minutes = Math.max(0, Math.floor((Date.now() - Date.parse(event.ts)) / 60_000));
-        return (
-          <p className="event-row" key={event.id}>
-            <span>
-              {eventText(event, t, agentName)}
-              {event.taskId &&
-                ` ${tasks.find((task) => task.id === event.taskId)?.title ?? event.taskId.slice(0, 8)}`}
-            </span>
-            <time dateTime={event.ts}>{relativeTime(minutes, lang, t)}</time>
-          </p>
-        );
-      })}
+      <ol className="profile-events" aria-label={t("panel.recentEvents")}>
+        {events.map((event) => (
+          <ProfileEvent
+            key={event.id}
+            event={event}
+            task={tasks.find((task) => task.id === event.taskId)}
+            agentName={agentName}
+          />
+        ))}
+      </ol>
       {!events.length && <p>{t("panel.emptyEvents")}</p>}
       {error && <p role="alert">{error}</p>}
     </>
