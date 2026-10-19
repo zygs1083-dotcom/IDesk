@@ -35,14 +35,14 @@ export function ProfileStats({ agentId }: { agentId: string }) {
     [t("profile.completedWeek"), stats?.last7dCompleted ?? "—"],
     [t("profile.handoffs"), stats?.handoffs ?? "—"],
     [t("profile.averageDuration"), formatDuration(stats?.avgDurationMs ?? null, lang)],
-  ];
+  ] as const;
   return (
     <section aria-label={t("profile.stats")}>
       <dl className="profile-stats">
         {values.map(([label, value]) => (
           <div key={label}>
+            <dt title={label}>{label}</dt>
             <dd>{value}</dd>
-            <dt>{label}</dt>
           </div>
         ))}
       </dl>
