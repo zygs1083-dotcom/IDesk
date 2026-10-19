@@ -141,6 +141,8 @@ html[data-skin="pixel"] {
   & [data-ui="kind-avatar"] {
     width: 32px;
     height: 32px;
+    border: 0;
+    background: transparent;
   }
   & [data-ui="kind-avatar"] img {
     display: block;
