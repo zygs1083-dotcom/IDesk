@@ -1,6 +1,7 @@
 import { Bot, ListTodo, Send } from "lucide-react";
 import { useState } from "react";
 import { Button } from "../../components/button.tsx";
+import { EmptyState } from "../../components/empty-state.tsx";
 import { PixelIcon } from "../../components/pixel-icon.tsx";
 import { Segmented } from "../../components/segmented.tsx";
 import { useLang } from "../../i18n/lang.tsx";
@@ -74,9 +75,7 @@ export function ActivityPage() {
         </Button>
       )}
       {!isPending && !error && groups.length === 0 && (
-        <p data-ui="empty-note" className="py-16 text-center text-secondary text-text-2">
-          {t("activity.empty")}
-        </p>
+        <EmptyState title={t("activity.empty")} description={t("empty.activity")} scene="ledger" />
       )}
       <div data-ui="activity-ledger" data-empty={groups.length === 0}>
         {groups.map((group) => (

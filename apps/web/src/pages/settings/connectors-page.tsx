@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { Button } from "../../components/button.tsx";
 import { Dialog } from "../../components/dialog.tsx";
+import { EmptyState } from "../../components/empty-state.tsx";
 import { Toast } from "../../components/toast.tsx";
 import { useLang } from "../../i18n/lang.tsx";
 import { request } from "../../lib/api.ts";
@@ -80,16 +81,16 @@ export function ConnectorsPage() {
       )}
       {connectors.isPending && <p className="text-secondary text-text-2">{t("common.loading")}</p>}
       {!error && connectors.data?.length === 0 && (
-        <div data-ui="empty-note" className="py-16 text-center text-secondary text-text-2">
-          <p>{t("settings.noConnectors")}</p>
-          <Button
-            className="mt-3"
-            disabled={!isAdmin || !plugins.data}
-            onClick={() => setCreating(true)}
-          >
-            {t("settings.addConnector")}
-          </Button>
-        </div>
+        <EmptyState
+          title={t("settings.noConnectors")}
+          description={t("empty.connectors")}
+          scene="plug"
+          action={{
+            label: t("settings.addConnector"),
+            disabled: !isAdmin || !plugins.data,
+            onClick: () => setCreating(true),
+          }}
+        />
       )}
       {!!connectors.data?.length && (
         <div data-ui="panel" className="rounded-panel border border-line bg-surface">

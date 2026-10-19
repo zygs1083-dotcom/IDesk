@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { Button } from "../../components/button.tsx";
 import { Dialog } from "../../components/dialog.tsx";
+import { EmptyState } from "../../components/empty-state.tsx";
 import { Toast } from "../../components/toast.tsx";
 import { useLang } from "../../i18n/lang.tsx";
 import { PageHeader } from "../../layout/page-header.tsx";
@@ -90,14 +91,20 @@ export function SchedulesPage() {
       )}
       {schedules.isPending && <p className="text-secondary text-text-2">{t("common.loading")}</p>}
       {!error && schedules.data?.length === 0 && (
-        <div data-ui="empty-note" className="py-16 text-center text-secondary text-text-2">
-          <p>{t("schedules.empty")}</p>
-          {canEdit && (
-            <Button className="mt-3" disabled={!connectors.data} onClick={() => setCreating(true)}>
-              {t("common.createOne")}
-            </Button>
-          )}
-        </div>
+        <EmptyState
+          title={t("schedules.empty")}
+          description={t("empty.schedules")}
+          scene="calendar"
+          action={
+            canEdit
+              ? {
+                  label: t("common.createOne"),
+                  disabled: !connectors.data,
+                  onClick: () => setCreating(true),
+                }
+              : undefined
+          }
+        />
       )}
       {!!schedules.data?.length && (
         <div

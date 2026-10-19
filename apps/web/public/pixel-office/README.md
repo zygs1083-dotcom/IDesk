@@ -18,6 +18,8 @@ URL 前缀为 `/pixel-office/`。
 | `header-frame.webp` | 986 × 263，RGBA | 旧版空白招牌，W100 起不再用于品牌区 |
 | `agent-photo-room.webp` | 400 × 260，12,398 B | 侧栏小合影室内背景，按约 200 × 130 显示 |
 | `agent-walk.webp` | 192 × 648，55,400 B | 三名角色走路图集；每帧 48 × 72，四列九行 |
+| `reception.webp` | 1440 × 600，WebP ≤120 KB | 登录页前台横景，按约 720 × 300 显示；深色叠层压暗 |
+| `avatars/<kind>-<外观>.webp` | 每张 32 × 32，透明 WebP | 智能体列表头像；由办公室图集正面首帧裁切并最近邻缩放 |
 
 W100 起页头与品牌区都不再使用横景和旧招牌；页头直接排在纸面上，侧栏品牌由 CSS 铜牌承载。横景仅供旧版外观预览，以下构图说明保留作历史素材记录：横景中央约 x=34%–64%、y=28%–53% 为安静墙面；窄条展示应将真实标题放在中央留白，而不是左侧植物上。手机窄容器中心裁切会损失两侧道具，建议保留中央标题空间，勿强行将整幅图压成手机宽。桌面横景已压缩纵向构图以保护窄条里的台面，避免再拉伸。1100 × 120 中心裁切保留植物、书、灯的下部与连续台面，灯罩上端会轻裁；若需完整灯罩，可略增加显示高度。
 
@@ -26,6 +28,8 @@ W100 起页头与品牌区都不再使用横景和旧招牌；页头直接排在
 纹理未声明严格无缝，优先 `cover` 或自然尺寸；不做全屏强木纹、不放大为粗块像素。夜间维持正文对比，不对整页套滤镜。装饰使用空 `alt` / `aria-hidden` 和 `pointer-events: none`。
 
 ## 来源与制作
+
+W103 前台横景由内置 `image_gen.imagegen` 生成，输出缩到 1440 × 600 后以 WebP quality 76 编码。提示包含木柜台、绿罩台灯、绿植、挂钟和空门牌，禁止人物与文字。头像运行 `python3 apps/web/tools/make-agent-avatars.py` 重新生成：以 `apps/office/public/characters/index.json` 为清单，取每套 `walk/down/0` 的头部 48 × 48，最近邻缩为 32 × 32，同时更新主网页的外观清单副本。名单外观按 kind 分组、id 排序轮换，与办公室规则一致。
 
 W97 小合影背景用内置 `image_gen.imagegen` 生成，裁去原图底部 26 px 后以 Lanczos 缩至展示尺寸两倍，WebP 质量 90。角色帧从本仓库 `apps/office/public/characters/{claude-code,codex,gemini}-a.png/.json` 的 `walk/{left,right,down}/{0..3}` 导出；原帧 64 × 96，以 Lanczos 缩至 48 × 72，按角色及方向排列，WebP 质量 80。运行 `python3 apps/web/tools/make-agent-walk.py` 可重新生成图集，需要 Pillow。主网页只请求本目录中的副本。
 

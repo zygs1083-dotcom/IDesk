@@ -25,6 +25,9 @@
     400 12px / 1.4 "IDesk Pixel",
     var(--font-sans);
 }
+[data-ui="pixel-kit"] [data-ui="empty-state"] {
+  margin-top: 20px;
+}
 .kit-row {
   display: flex;
   flex-wrap: wrap;

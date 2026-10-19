@@ -3,6 +3,7 @@ import { Button } from "../../components/button.tsx";
 import { CapabilityPicker } from "../../components/capability-picker.tsx";
 import { Dialog } from "../../components/dialog.tsx";
 import { Drawer } from "../../components/drawer.tsx";
+import { EmptyState } from "../../components/empty-state.tsx";
 import { Field } from "../../components/field.tsx";
 import { Menu } from "../../components/menu.tsx";
 import { PixelIcon, pixelIconNames } from "../../components/pixel-icon.tsx";
@@ -195,6 +196,15 @@ export function PixelKit() {
           />
           <Button onClick={() => setToast("任务已更新")}>提示</Button>
         </div>
+      </section>
+      <section>
+        <h2>空状态 / Empty states</h2>
+        <EmptyState
+          title="还没有定时任务"
+          description="创建定时任务，让工作准时进行。"
+          scene="calendar"
+          action={{ label: "新建一个", onClick: () => setToast("新建定时任务") }}
+        />
       </section>
       <Dialog
         open={dialog}

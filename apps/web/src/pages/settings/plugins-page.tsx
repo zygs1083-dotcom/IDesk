@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { Button } from "../../components/button.tsx";
+import { EmptyState } from "../../components/empty-state.tsx";
 import { Switch } from "../../components/switch.tsx";
 import { Toast } from "../../components/toast.tsx";
 import { useLang } from "../../i18n/lang.tsx";
@@ -61,11 +62,17 @@ export function PluginsPage() {
       )}
       {plugins.isPending && <p className="text-secondary text-text-2">{t("common.loading")}</p>}
       {plugins.data?.length === 0 && (
-        <p data-ui="empty-note" className="py-16 text-center text-secondary text-text-2">
-          {t("settings.noPlugins")}
-        </p>
+        <EmptyState
+          title={t("settings.noPlugins")}
+          description={t("empty.plugins")}
+          scene="folder"
+        />
       )}
-      <div data-ui="panel" className="rounded-panel border border-line bg-surface">
+      <div
+        data-ui="panel"
+        data-empty={plugins.data?.length === 0}
+        className="rounded-panel border border-line bg-surface"
+      >
         {plugins.data?.map((plugin) => (
           <div key={plugin.id} className="border-b border-line last:border-b-0">
             <div className="flex flex-wrap items-center gap-4 px-4 py-3">

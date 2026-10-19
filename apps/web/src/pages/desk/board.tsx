@@ -10,8 +10,8 @@ import { labels } from "@idesk/shared/labels";
 import { BOARD_COLUMNS, type TaskStatus } from "@idesk/shared/task-status";
 import { AnimatePresence, useReducedMotion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
-import { Button } from "../../components/button.tsx";
 import { ColumnJump } from "../../components/column-jump.tsx";
+import { EmptyState } from "../../components/empty-state.tsx";
 import { Toast } from "../../components/toast.tsx";
 import { useLang } from "../../i18n/lang.tsx";
 import type { Task, TaskEvent } from "../../lib/types.ts";
@@ -156,13 +156,22 @@ export function Board({
             );
           })}
           {!search && boardTasks.length === 0 && !loading && (
-            <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-              <div data-ui="board-note" className="pointer-events-auto space-y-3 text-center">
-                <p className="text-secondary text-text-2">{t("desk.empty")}</p>
-                <Button variant="primary" disabled={!isAdmin} onClick={() => onPublish()}>
-                  {t("desk.publishOne")}
-                </Button>
-              </div>
+            <div
+              data-ui="empty-state-overlay"
+              className="pointer-events-none absolute inset-0 flex items-center justify-center"
+            >
+              <EmptyState
+                title={t("desk.empty")}
+                description={t("empty.desk")}
+                scene="folder"
+                action={{
+                  label: t("desk.publishOne"),
+                  disabled: !isAdmin,
+                  onClick: () => onPublish(),
+                }}
+                legacyPrimary
+                className="pointer-events-auto py-0"
+              />
             </div>
           )}
           {search && boardTasks.length === 0 && !loading && (
