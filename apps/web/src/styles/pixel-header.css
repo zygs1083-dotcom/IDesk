@@ -1,138 +1,146 @@
 html[data-skin="pixel"] {
-  & [data-ui="page-heading"] {
-    min-width: 0;
-    height: 72px;
-    flex-shrink: 0;
-    gap: 10px;
-    padding: 0 14px;
-    overflow: hidden;
+  & [data-ui="desk-toolbar"] > [data-ui="page-heading"] {
+    grid-column: 1;
+    grid-row: 1;
+    border: 0;
   }
-  & [data-ui="desk-toolbar"] {
+  & [data-ui="page-heading"] {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     min-width: 0;
-    height: 72px;
-    flex-shrink: 0;
-    gap: 10px;
-    padding: 0 14px;
+    min-height: 56px;
+    gap: 8px;
+    padding: 0 0 8px;
+    border-bottom: 1px dashed var(--line-strong);
+    background: none;
   }
   & [data-ui="page-heading"] h1 {
-    padding: 6px 16px;
-    border: 4px solid var(--wood);
-    border-top-color: var(--wood-edge);
-    outline: 2px solid var(--ink);
-    background: var(--surface);
-    box-shadow:
-      inset 0 0 0 1px var(--line-strong),
-      3px 4px 0 var(--wood-light);
+    min-width: 0;
+    padding: 0;
+    color: var(--text);
     font:
-      400 20px / 1.25 "IDesk Pixel",
+      400 24px / 1.25 "IDesk Pixel",
       var(--font-sans);
     overflow-wrap: anywhere;
   }
-  & [data-ui="page-heading"] > div {
-    min-width: 0;
-    flex-shrink: 0;
+  & [data-ui="page-heading"] [data-ui="page-subtitle"] {
+    font: 400 12px / 1.4 var(--font-sans);
+    color: var(--text-2);
   }
-  & [data-ui="header-note"],
-  & [data-ui="header-link"] {
-    padding: 5px 8px;
-    background: var(--surface);
-    border: 1px solid var(--line-strong);
+  & [data-ui="page-actions"] {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  & [data-ui="page-toolbar"] {
+    display: flex;
+    align-items: center;
+    min-height: 40px;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  & [data-ui="header-note"] {
+    color: var(--text-2);
+    font-size: 12px;
   }
   & [data-ui="header-link"] {
     display: inline-flex;
     align-items: center;
-    min-height: 36px;
-    white-space: nowrap;
+    min-height: 32px;
+    padding: 0 8px;
+    color: var(--text-2);
+    font:
+      400 12px / 1 "IDesk Pixel",
+      var(--font-sans);
+  }
+  & [data-ui="header-link"]:hover {
+    background: var(--surface-2);
+    color: var(--text);
   }
   & [data-ui="desk-toolbar"] {
-    flex-wrap: nowrap;
-  }
-  & :is([data-scene="desk"], [data-scene="automation"], [data-scene="relay"]) {
-    gap: 12px;
-  }
-  & [data-scene="relay"] [data-ui="relay-toolbar"] {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 6px 8px;
-    min-width: 0;
-  }
-  & [data-scene="relay"] [data-ui="relay-toolbar"] fieldset {
-    flex: 0 0 auto;
-    overflow: visible;
-  }
-  & [data-scene="relay"] [data-ui="relay-toolbar"] fieldset button {
-    padding-inline: 5px;
-  }
-  & [data-scene="relay"] [data-ui="relay-filters"] {
-    flex: 1 0 100%;
-    gap: 8px;
-  }
-  & [data-scene="relay"] [data-ui="relay-search"] {
     position: relative;
-    width: 200px;
-    flex: 0 0 200px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-rows: 56px 40px;
+    column-gap: 8px;
+    row-gap: 8px;
+    height: auto;
+    padding: 0;
+    background: none;
+    border: 0;
   }
-  & [data-scene="relay"] [data-ui="relay-search"] input {
-    padding-left: 34px;
-  }
-  & [data-scene="relay"] [data-ui="relay-search"] input::placeholder {
-    color: var(--text-3);
-  }
-  & [data-scene="relay"] [data-ui="relay-search-icon"] {
+  & [data-ui="desk-toolbar"]::after {
+    content: "";
     position: absolute;
-    z-index: 1;
-    top: 11px;
-    left: 12px;
-    display: block;
+    top: 55px;
+    left: 0;
+    right: 0;
+    border-bottom: 1px dashed var(--line-strong);
+  }
+  & [data-ui="desk-toolbar"] > [data-ui="desk-search"] {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  & [data-ui="desk-toolbar"] > [data-ui="desk-view"] {
+    grid-column: 2;
+    grid-row: 2;
+    justify-self: end;
+  }
+  & [data-ui="desk-toolbar"] > [data-ui="desk-actions"] {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: center;
+  }
+  & [data-ui="desk-search"] {
+    display: flex;
+    align-items: center;
+    width: 240px;
+    height: 36px;
+    gap: 8px;
+    padding: 0 12px;
     color: var(--text-2);
+    border: 1px solid var(--line-strong);
+    box-shadow:
+      inset 2px 2px 0 var(--line-strong),
+      inset -1px -1px 0 var(--surface);
+    background: var(--surface-2);
   }
-  & [data-scene="relay"] [data-ui="relay-toolbar"] label {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
+  & [data-ui="desk-search"] input {
+    width: 100%;
+    min-width: 0;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: var(--text);
+    font: 400 14px / 1.4 var(--font-sans);
   }
-}
-
-@media (min-width: 900px) and (max-width: 1100px) {
-  html[data-skin="pixel"] {
-    & [data-scene="relay"] [data-ui="relay-toolbar"] {
-      row-gap: 2px;
-    }
-    & [data-scene="relay"] [data-ui="relay-toolbar"] fieldset {
-      gap: 1px;
-    }
-    & [data-scene="relay"] [data-ui="relay-toolbar"] fieldset button {
-      padding-inline: 3px;
-      font-size: 11px;
-    }
+  & [data-ui="desk-search"]:focus-within {
+    border-color: var(--accent);
   }
 }
-
-@media (max-width: 899px) {
+@media (max-width: 599px) {
   html[data-skin="pixel"] {
+    & [data-ui="desk-toolbar"] > [data-ui="desk-search"] {
+      grid-column: 1 / -1;
+    }
     & [data-ui="page-heading"] h1 {
-      padding: 6px 16px;
-      font-size: 20px;
+      font-size: 24px;
     }
-    & [data-ui="page-heading"] {
-      height: 56px;
-      padding: 0 8px;
+    & [data-ui="page-toolbar"] {
+      flex-wrap: wrap;
+      height: auto;
+    }
+    & [data-ui="desk-search"] {
+      width: 100%;
     }
     & [data-ui="desk-toolbar"] {
-      height: auto;
-      min-height: 56px;
-      flex-wrap: wrap;
-      padding: 5px 8px;
+      grid-template-rows: 56px 40px 40px;
     }
-  }
-}
-
-@media (max-width: 599px) {
-  html[data-skin="pixel"] [data-scene="automation"] [data-ui="header-note"] {
-    display: none;
+    & [data-ui="desk-toolbar"] > [data-ui="desk-view"] {
+      grid-column: 1 / -1;
+      grid-row: 3;
+      justify-self: start;
+    }
   }
 }

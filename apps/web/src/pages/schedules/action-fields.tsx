@@ -75,6 +75,7 @@ export function ActionFields({
           />
           <p className="text-secondary text-text-2">{t("capability.tagsDescription")}</p>
           <Segmented
+            formField
             label={t("common.priority")}
             value={action.template.priority ?? "normal"}
             options={TASK_PRIORITIES.map((value) => ({
@@ -91,6 +92,7 @@ export function ActionFields({
       return (
         <>
           <Segmented
+            formField
             label={t("schedules.method")}
             value={action.method}
             options={["GET", "POST", "PUT", "PATCH", "DELETE"].map((value) => ({
@@ -128,7 +130,7 @@ export function ActionFields({
     case "connector_trigger":
       return (
         <>
-          <label className="block space-y-2 text-secondary text-text-2">
+          <label data-ui="form-select-label" className="block space-y-2 text-secondary text-text-2">
             <span>{t("common.connectors")}</span>
             <select
               className="w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body text-text focus:outline-accent"

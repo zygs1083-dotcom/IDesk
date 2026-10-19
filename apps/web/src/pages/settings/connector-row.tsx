@@ -1,5 +1,6 @@
 import { Plug } from "lucide-react";
 import { Menu } from "../../components/menu.tsx";
+import { PixelIcon } from "../../components/pixel-icon.tsx";
 import { useLang } from "../../i18n/lang.tsx";
 import { cn } from "../../lib/cn.ts";
 import { relativeTime } from "../../lib/format.ts";
@@ -36,7 +37,11 @@ export function ConnectorRow({
       data-ui="connector-row"
       className="flex items-center gap-4 border-b border-line px-4 py-3 last:border-b-0"
     >
-      <Plug aria-hidden="true" size={18} strokeWidth={1.5} className="shrink-0 text-text-2" />
+      <PixelIcon
+        name="plug"
+        fallback={<Plug aria-hidden="true" size={18} strokeWidth={1.5} />}
+        className="shrink-0 text-text-2"
+      />
       <div className="min-w-0 flex-1">
         <p className="truncate text-body">{connector.name}</p>
         {typeof connector.config.baseUrl === "string" && (

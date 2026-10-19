@@ -1,6 +1,7 @@
 import type { automationRunWithJobSchema } from "@idesk/shared/automation-schemas";
 import { Eye, EyeOff } from "lucide-react";
 import type { z } from "zod";
+import { PixelIcon } from "../../components/pixel-icon.tsx";
 import { useLang } from "../../i18n/lang.tsx";
 import { cn } from "../../lib/cn.ts";
 import { useSession } from "../../lib/use-session.ts";
@@ -67,9 +68,9 @@ export function RunCard({
               className="shrink-0 rounded-control text-text-3 hover:text-text-2 focus-visible:outline-2 focus-visible:outline-accent"
             >
               {run.hiddenAt === null ? (
-                <EyeOff size={16} strokeWidth={1.5} />
+                <PixelIcon name="eye-off" fallback={<EyeOff size={16} strokeWidth={1.5} />} />
               ) : (
-                <Eye size={16} strokeWidth={1.5} />
+                <PixelIcon name="eye" fallback={<Eye size={16} strokeWidth={1.5} />} />
               )}
             </button>
           )

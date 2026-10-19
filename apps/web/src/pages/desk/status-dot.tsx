@@ -13,6 +13,7 @@ const color: Record<TaskStatus, string> = {
 export function StatusDot({ status, muted = false }: { status: TaskStatus; muted?: boolean }) {
   return (
     <span
+      data-ui="status-dot"
       aria-hidden="true"
       className={cn("h-1.5 w-1.5 shrink-0 rounded-full", muted ? "bg-text-3" : color[status])}
     />

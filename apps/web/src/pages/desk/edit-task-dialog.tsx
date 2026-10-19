@@ -45,8 +45,26 @@ export function EditTaskDialog({ task, onClose }: { task: Task; onClose: () => v
     },
   });
   return (
-    <Dialog open onClose={onClose} title={t("common.edit")}>
+    <Dialog
+      open
+      onClose={onClose}
+      title={t("common.edit")}
+      footer={
+        <>
+          <Button onClick={onClose}>{t("common.cancel")}</Button>
+          <Button
+            type="submit"
+            form="edit-task-form"
+            variant="primary"
+            disabled={!isAdmin || !title.trim() || save.isPending}
+          >
+            {t("common.save")}
+          </Button>
+        </>
+      }
+    >
       <form
+        id="edit-task-form"
         className="space-y-4"
         onSubmit={(event) => {
           event.preventDefault();
@@ -80,8 +98,9 @@ export function EditTaskDialog({ task, onClose }: { task: Task; onClose: () => v
           onChange={(event) => setTags(event.target.value)}
         />
         <div className="space-y-2">
-          <p className="text-secondary text-text-2">{t("common.priority")}</p>
+          <p className="pixel-legacy text-secondary text-text-2">{t("common.priority")}</p>
           <Segmented
+            formField
             label={t("common.priority")}
             value={priority}
             onChange={setPriority}
@@ -103,7 +122,7 @@ export function EditTaskDialog({ task, onClose }: { task: Task; onClose: () => v
             {save.error.message}
           </p>
         )}
-        <div className="flex justify-end gap-2">
+        <div className="pixel-legacy flex justify-end gap-2">
           <Button onClick={onClose}>{t("common.cancel")}</Button>
           <Button
             type="submit"

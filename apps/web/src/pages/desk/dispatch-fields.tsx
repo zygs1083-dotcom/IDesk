@@ -31,6 +31,7 @@ export function DispatchFields({
   return (
     <div className="space-y-2">
       <Segmented
+        formField
         label={t("desk.dispatch")}
         value={mode}
         onChange={onModeChange}
@@ -42,7 +43,11 @@ export function DispatchFields({
       />
       {mode === "assign" && (
         <div className="space-y-2">
-          <label htmlFor={selectId} className="block text-secondary text-text-2">
+          <label
+            htmlFor={selectId}
+            data-ui="field-label"
+            className="block text-secondary text-text-2"
+          >
             {t("desk.recipient")}
           </label>
           <select

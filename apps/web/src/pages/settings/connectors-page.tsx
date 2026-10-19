@@ -123,9 +123,23 @@ export function ConnectorsPage() {
         open={isAdmin && !!deleting}
         title={t("settings.deleteConnector", { name: deleting?.name ?? "" })}
         onClose={() => setDeleting(null)}
+        footer={
+          <>
+            <Button onClick={() => setDeleting(null)}>{t("common.cancel")}</Button>
+            <Button
+              variant="danger"
+              disabled={remove.isPending}
+              onClick={() => {
+                if (deleting) remove.mutate(deleting);
+              }}
+            >
+              {t("common.delete")}
+            </Button>
+          </>
+        }
       >
         <p className="text-secondary text-text-2">{t("settings.deleteWarning")}</p>
-        <div className="mt-4 flex justify-end gap-2">
+        <div className="pixel-legacy mt-4 flex justify-end gap-2">
           <Button onClick={() => setDeleting(null)}>{t("common.cancel")}</Button>
           <Button
             disabled={remove.isPending}

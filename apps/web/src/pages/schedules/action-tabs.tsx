@@ -22,6 +22,7 @@ export function ActionTabs({
     options.push({ value: "connector_trigger", label: t("schedules.triggerConnector") });
   return (
     <Segmented
+      formField
       label={t("common.action")}
       options={options}
       value={action.type}

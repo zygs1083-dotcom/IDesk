@@ -110,7 +110,7 @@ test.each([undefined, "viewer", "admin"] as const)(
     const controls = buttons.filter((button) =>
       /aria-label="Remove dependency"|aria-haspopup="menu"|>Refresh<\//.test(button),
     );
-    expect(controls.length).toBe(3);
+    expect(controls.length).toBe(role === "admin" ? 4 : 3);
     for (const control of controls) expect(control.includes('disabled=""')).toBe(role !== "admin");
     expect(buttons.some((button) => />Complete<\//.test(button))).toBe(role === "admin");
     expect(buttons.some((button) => />Reply<\//.test(button))).toBe(role === "admin");

@@ -73,6 +73,19 @@ export function PublishDialog({ onClose }: { onClose: () => void }) {
       open
       onClose={onClose}
       title={t("common.publishTask")}
+      footer={
+        <>
+          <Button onClick={onClose}>{t("common.cancel")}</Button>
+          <Button
+            type="submit"
+            form="publish-task-form"
+            variant="primary"
+            disabled={!title.trim() || !enabled || mutation.isPending}
+          >
+            {t("common.publish")}
+          </Button>
+        </>
+      }
       actions={
         templates.length > 0 && (
           <Menu
@@ -93,6 +106,8 @@ export function PublishDialog({ onClose }: { onClose: () => void }) {
       }
     >
       <form
+        id="publish-task-form"
+        data-ui="publish-form"
         className="space-y-4"
         onSubmit={(event) => {
           event.preventDefault();
@@ -131,8 +146,9 @@ export function PublishDialog({ onClose }: { onClose: () => void }) {
         />
         <p className="text-secondary text-text-2">{t("capability.tagsDescription")}</p>
         <div className="space-y-2">
-          <span className="text-secondary text-text-2">{t("common.priority")}</span>
+          <span className="pixel-legacy text-secondary text-text-2">{t("common.priority")}</span>
           <Segmented
+            formField
             label={t("common.priority")}
             value={priority}
             onChange={setPriority}
@@ -162,7 +178,7 @@ export function PublishDialog({ onClose }: { onClose: () => void }) {
             {mutation.error.message}
           </p>
         )}
-        <div className="flex justify-end">
+        <div className="pixel-legacy flex justify-end">
           <Button
             type="submit"
             variant="primary"

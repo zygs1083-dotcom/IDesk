@@ -54,8 +54,26 @@ export function ComposeRelay({
     subject.trim() &&
     (reply || recipient === "broadcast" || (recipient === "agent" ? agentId : capability.trim()));
   return (
-    <Dialog open onClose={onClose} title={reply ? t("relay.replyMessage") : t("relay.sendMessage")}>
+    <Dialog
+      open
+      onClose={onClose}
+      title={reply ? t("relay.replyMessage") : t("relay.sendMessage")}
+      footer={
+        <>
+          <Button onClick={onClose}>{t("common.cancel")}</Button>
+          <Button
+            type="submit"
+            form="compose-relay-form"
+            variant="primary"
+            disabled={!valid || send.isPending}
+          >
+            {t("common.send")}
+          </Button>
+        </>
+      }
+    >
       <form
+        id="compose-relay-form"
         className="space-y-4"
         onSubmit={(event) => {
           event.preventDefault();
@@ -77,8 +95,9 @@ export function ComposeRelay({
       >
         {!reply && (
           <div className="space-y-2">
-            <p className="text-secondary text-text-2">{t("relay.recipient")}</p>
+            <p className="pixel-legacy text-secondary text-text-2">{t("relay.recipient")}</p>
             <Segmented
+              formField
               label={t("relay.recipient")}
               value={recipient}
               onChange={setRecipient}
@@ -91,7 +110,7 @@ export function ComposeRelay({
           </div>
         )}
         {!reply && recipient === "agent" && (
-          <label className="block space-y-2 text-secondary text-text-2">
+          <label data-ui="form-select-label" className="block space-y-2 text-secondary text-text-2">
             {t("nav.agents")}
             <select
               className="block w-full rounded-control border border-line bg-surface-2 px-3 py-2 text-body text-text focus:border-accent"
@@ -129,8 +148,9 @@ export function ComposeRelay({
           </div>
         )}
         <div className="space-y-2">
-          <p className="text-secondary text-text-2">{t("relay.kind")}</p>
+          <p className="pixel-legacy text-secondary text-text-2">{t("relay.kind")}</p>
           <Segmented
+            formField
             label={t("relay.kind")}
             value={kind}
             onChange={setKind}
@@ -156,7 +176,7 @@ export function ComposeRelay({
             {send.error.message}
           </p>
         )}
-        <div className="flex justify-end gap-2">
+        <div className="pixel-legacy flex justify-end gap-2">
           <Button onClick={onClose}>{t("common.cancel")}</Button>
           <Button type="submit" variant="primary" disabled={!valid || send.isPending}>
             {t("common.send")}

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 import { Button } from "../components/button.tsx";
 import { Field } from "../components/field.tsx";
+import { PixelIcon } from "../components/pixel-icon.tsx";
 import { useLang } from "../i18n/lang.tsx";
 import { request } from "../lib/api.ts";
 
@@ -38,7 +39,11 @@ export function Login() {
         className="w-90 max-w-full space-y-4 rounded-panel border border-line bg-surface p-4"
       >
         <h1 className="text-title">
-          <PencilRuler className="skin-mark" size={24} strokeWidth={1.5} aria-hidden="true" />
+          <PixelIcon
+            name="pencil"
+            fallback={<PencilRuler size={24} strokeWidth={1.5} />}
+            className="skin-mark"
+          />
           IDesk
         </h1>
         <Field

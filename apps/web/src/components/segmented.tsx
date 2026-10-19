@@ -5,14 +5,17 @@ export function Segmented<T extends string>({
   options,
   value,
   onChange,
+  formField = false,
 }: {
   label: string;
   options: readonly { value: T; label: string }[];
   value: T;
   onChange: (value: T) => void;
+  formField?: boolean;
 }) {
-  return (
+  const control = (
     <fieldset
+      data-ui="segmented"
       aria-label={label}
       className="flex max-w-full gap-1 overflow-x-auto rounded-control border border-line bg-surface-2 p-1"
     >
@@ -31,5 +34,15 @@ export function Segmented<T extends string>({
         </button>
       ))}
     </fieldset>
+  );
+  return formField ? (
+    <div data-ui="segmented-field">
+      <span data-ui="field-label" className="pixel-only">
+        {label}
+      </span>
+      {control}
+    </div>
+  ) : (
+    control
   );
 }

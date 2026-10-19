@@ -91,8 +91,26 @@ export function ScheduleDialog({
     },
   });
   return (
-    <Dialog open title={schedule ? t("schedules.edit") : t("schedules.create")} onClose={onClose}>
+    <Dialog
+      open
+      title={schedule ? t("schedules.edit") : t("schedules.create")}
+      onClose={onClose}
+      footer={
+        <>
+          <Button onClick={onClose}>{t("common.cancel")}</Button>
+          <Button
+            type="submit"
+            form="schedule-form"
+            variant="primary"
+            disabled={!ready || save.isPending}
+          >
+            {save.isPending ? t("common.saving") : schedule ? t("common.save") : t("common.create")}
+          </Button>
+        </>
+      }
+    >
       <form
+        id="schedule-form"
         noValidate
         className="space-y-4"
         onSubmit={(event) => {
@@ -126,7 +144,7 @@ export function ScheduleDialog({
               onChange={(event) => setTimezone(event.target.value)}
             />
           </div>
-          <div className="flex items-center gap-2 pb-2">
+          <div data-ui="form-switch" className="flex items-center gap-2 pb-2">
             <span className="text-secondary text-text-2">{t("common.enable")}</span>
             <Switch label={t("common.enable")} checked={enabled} onChange={setEnabled} />
           </div>
@@ -153,7 +171,7 @@ export function ScheduleDialog({
             {save.error.message}
           </p>
         )}
-        <div className="flex justify-end gap-2">
+        <div className="pixel-legacy flex justify-end gap-2">
           <Button onClick={onClose}>{t("common.cancel")}</Button>
           <Button type="submit" variant="primary" disabled={!ready || save.isPending}>
             {save.isPending ? t("common.saving") : schedule ? t("common.save") : t("common.create")}

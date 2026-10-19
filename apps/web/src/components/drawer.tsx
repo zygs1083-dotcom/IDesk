@@ -3,17 +3,20 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { type ReactNode, useCallback, useId } from "react";
 import { useLang } from "../i18n/lang.tsx";
 import { Button } from "./button.tsx";
+import { PixelIcon } from "./pixel-icon.tsx";
 
 export function Drawer({
   open,
   onClose,
   title,
   children,
+  footer,
 }: {
   open: boolean;
   onClose: () => void;
   title: string;
   children: ReactNode;
+  footer?: ReactNode;
 }) {
   const { t } = useLang();
   const id = useId();
@@ -56,14 +59,17 @@ export function Drawer({
                 {title}
               </h2>
               <Button
+                variant="icon"
                 aria-label={t("common.close")}
+                title={t("common.close")}
                 onClick={onClose}
                 className="shrink-0 border-0 p-2"
               >
-                <X size={18} strokeWidth={1.5} />
+                <PixelIcon name="close" fallback={<X size={18} strokeWidth={1.5} />} />
               </Button>
             </header>
-            {children}
+            <div data-ui="overlay-body">{children}</div>
+            {footer && <footer data-ui="overlay-footer">{footer}</footer>}
           </motion.div>
         </motion.dialog>
       )}

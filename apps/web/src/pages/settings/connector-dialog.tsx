@@ -60,8 +60,27 @@ export function ConnectorDialog({
       open
       title={connector ? t("settings.editConnector") : t("settings.addConnector")}
       onClose={onClose}
+      footer={
+        <>
+          <Button
+            disabled={!ready || test.isPending || create.isPending}
+            onClick={() => test.mutate()}
+          >
+            {test.isPending ? t("settings.testing") : t("settings.testConnection")}
+          </Button>
+          <Button
+            type="submit"
+            form="connector-form"
+            variant="primary"
+            disabled={!ready || create.isPending || test.isPending}
+          >
+            {create.isPending ? t("common.saving") : connector ? t("common.save") : t("common.add")}
+          </Button>
+        </>
+      }
     >
       <form
+        id="connector-form"
         noValidate
         className="space-y-4"
         onSubmit={(event) => {
@@ -75,6 +94,7 @@ export function ConnectorDialog({
           </p>
         ) : plugins.length > 0 ? (
           <Segmented
+            formField
             label={t("common.plugins")}
             value={pluginId}
             options={plugins.map((entry) => ({ value: entry.id, label: entry.name }))}
@@ -100,7 +120,7 @@ export function ConnectorDialog({
             {create.error.message}
           </p>
         )}
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="pixel-legacy flex flex-wrap items-center gap-2">
           <Button
             disabled={!ready || test.isPending || create.isPending}
             onClick={() => test.mutate()}
@@ -125,6 +145,14 @@ export function ConnectorDialog({
           >
             {create.isPending ? t("common.saving") : connector ? t("common.save") : t("common.add")}
           </Button>
+        </div>
+        <div role="status" className="pixel-only text-secondary">
+          {test.data?.success && (
+            <span className="text-status-done">{t("settings.connectionOk")}</span>
+          )}
+          {(test.error || test.data?.success === false) && (
+            <span className="text-status-failed">{test.error?.message ?? test.data?.error}</span>
+          )}
         </div>
       </form>
     </Dialog>

@@ -24,7 +24,7 @@ export function ColumnContent({
   onOpen: (id: string) => void;
   shake: string | null;
 }) {
-  const { t } = useLang();
+  const { lang, t } = useLang();
   function card(task: Task) {
     const handoff = handoffName(task);
     return (
@@ -40,6 +40,7 @@ export function ColumnContent({
       />
     );
   }
+  if (tasks.length === 0) return <p data-ui="column-empty">{lang === "zh" ? "空" : "Empty"}</p>;
   if (group === "flat") return tasks.map(card);
   return groupByHost(tasks, agents).map(({ host, tasks }) => (
     <div

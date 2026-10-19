@@ -6,6 +6,7 @@ import { useSearchParams } from "react-router";
 import type { z } from "zod";
 import { Button } from "../../components/button.tsx";
 import { Field } from "../../components/field.tsx";
+import { PixelIcon } from "../../components/pixel-icon.tsx";
 import { Segmented } from "../../components/segmented.tsx";
 import { useLang } from "../../i18n/lang.tsx";
 import { PageHeader } from "../../layout/page-header.tsx";
@@ -85,12 +86,10 @@ export function RelayPage() {
           ]}
         />
         <div data-ui="relay-search">
-          <Search
-            data-ui="relay-search-icon"
-            className="hidden"
-            aria-hidden="true"
-            size={16}
-            strokeWidth={1.5}
+          <PixelIcon
+            name="search"
+            fallback={<Search size={16} strokeWidth={1.5} />}
+            className="pixel-only relay-search-icon"
           />
           <Field
             label={t("relay.search")}

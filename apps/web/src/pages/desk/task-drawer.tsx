@@ -6,6 +6,7 @@ import { useState } from "react";
 import { Button } from "../../components/button.tsx";
 import { Drawer } from "../../components/drawer.tsx";
 import { Markdown } from "../../components/markdown.tsx";
+import { Menu } from "../../components/menu.tsx";
 import { Toast } from "../../components/toast.tsx";
 import { useLang } from "../../i18n/lang.tsx";
 import { request } from "../../lib/api.ts";
@@ -63,9 +64,59 @@ export function TaskDrawer({ taskId, onClose }: { taskId: string; onClose: () =>
             !(previewAction(task, actionSamples[action], new Date()) instanceof TransitionError),
         )
       : [];
+  const runAction = (action: HumanAction) => {
+    if (!task) return;
+    setError(null);
+    if (
+      action === "assign" ||
+      action === "handoff" ||
+      action === "recruit" ||
+      action === "complete"
+    )
+      setParameter(action);
+    else mutation.mutate({ task, action: actionSamples[action] });
+  };
+  const actionLabel = (action: HumanAction) =>
+    task?.status === "assigned" && action === "release"
+      ? t("desk.releaseToOpen")
+      : task?.status === "assigned" && action === "assign"
+        ? t("desk.reassign")
+        : labels(lang).action[action];
+  const firstAction = actions[0];
   return (
     <>
-      <Drawer open onClose={onClose} title={task?.title ?? ""}>
+      <Drawer
+        open
+        onClose={onClose}
+        title={task?.title ?? ""}
+        footer={
+          isAdmin &&
+          task && (
+            <>
+              <Button onClick={() => setEditing(true)}>{t("common.edit")}</Button>
+              {actions.length > 1 && (
+                <Menu
+                  label={lang === "zh" ? "更多操作" : "More actions"}
+                  trigger={lang === "zh" ? "更多" : "More"}
+                  items={actions.slice(1).map((action) => ({
+                    label: actionLabel(action),
+                    onSelect: () => runAction(action),
+                  }))}
+                />
+              )}
+              {firstAction && (
+                <Button
+                  variant={firstAction === "cancel" ? "secondary" : "primary"}
+                  disabled={mutation.isPending}
+                  onClick={() => runAction(firstAction)}
+                >
+                  {actionLabel(firstAction)}
+                </Button>
+              )}
+            </>
+          )
+        }
+      >
         {(taskError || eventsError) && (
           <p role="alert" className="text-secondary text-status-failed">
             {(taskError ?? eventsError)?.message}
@@ -77,30 +128,16 @@ export function TaskDrawer({ taskId, onClose }: { taskId: string; onClose: () =>
               <StatusDot status={task.status} />
               {labels(lang).status[task.status]}
             </div>
-            <div className="flex flex-wrap gap-2">
+            <div className="pixel-legacy flex flex-wrap gap-2">
               {isAdmin && <Button onClick={() => setEditing(true)}>{t("common.edit")}</Button>}
               {actions.map((action, index) => (
                 <Button
                   key={action}
                   variant={index === 0 && action !== "cancel" ? "primary" : "secondary"}
                   disabled={mutation.isPending}
-                  onClick={() => {
-                    setError(null);
-                    if (
-                      action === "assign" ||
-                      action === "handoff" ||
-                      action === "recruit" ||
-                      action === "complete"
-                    )
-                      setParameter(action);
-                    else mutation.mutate({ task, action: actionSamples[action] });
-                  }}
+                  onClick={() => runAction(action)}
                 >
-                  {task.status === "assigned" && action === "release"
-                    ? t("desk.releaseToOpen")
-                    : task.status === "assigned" && action === "assign"
-                      ? t("desk.reassign")
-                      : labels(lang).action[action]}
+                  {actionLabel(action)}
                 </Button>
               ))}
             </div>

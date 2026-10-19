@@ -1,4 +1,5 @@
 import { Search } from "lucide-react";
+import { PixelIcon } from "../../components/pixel-icon.tsx";
 import { Segmented } from "../../components/segmented.tsx";
 import { useLang } from "../../i18n/lang.tsx";
 import type { RunRange } from "./filter-runs.ts";
@@ -57,8 +58,11 @@ export function AutomationFilters({
             {t("automation.hidden", { count: hiddenCount })}
           </button>
         )}
-        <label className="flex min-w-0 flex-1 sidebar:max-w-60 items-center gap-2 rounded-control border border-line bg-surface px-3 py-2 text-text-2">
-          <Search size={16} strokeWidth={1.5} />
+        <label
+          data-ui="search-field"
+          className="flex min-w-0 flex-1 sidebar:max-w-60 items-center gap-2 rounded-control border border-line bg-surface px-3 py-2 text-text-2"
+        >
+          <PixelIcon name="search" fallback={<Search size={16} strokeWidth={1.5} />} />
           <input
             aria-label={t("automation.search")}
             placeholder={t("automation.search")}
