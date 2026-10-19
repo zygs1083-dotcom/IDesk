@@ -650,3 +650,33 @@ completedAt: <ISO>
 - 连接器配置加 `timezone`（IANA 名，默认 `Asia/Shanghai`，与定时的默认时区一致），标题「时区（海豚服务器）」/「Time zone (DolphinScheduler server)」；用 `Intl` 校验，无效返回 400。已有连接器没有这一项时按默认值。
 - `startTime`、`endTime` 按这个时区换算成时间点；`listRuns` 的 `startDate` 参数也按这个时区格式化。用 `Intl.DateTimeFormat` 换算，不加依赖。
 - 迁移 `0008` 一次性把已存 DolphinScheduler 连接器的 run 的 `started_at`、`finished_at` 减 8 小时（按默认时区的固定偏移，中国没有夏令时），只改 `plugin_id = 'dolphinscheduler'` 连接器下的 run；作业的 `last_run_at` 下一轮轮询会重算。迁移在服务启动时、轮询开始前执行，不会和新写入的正确时间叠加。
+
+### 12.31 服务器状态（M21，W104–W105）
+
+用户要在 IDesk 里看各台服务器的 CPU、内存、磁盘、网络，并在几台之间切换。
+
+**模型。** 共享定义在 `@idesk/shared/server-schemas`，常量以它为准（上报间隔 `SERVER_SAMPLE_SECONDS`=10，保留 `SERVER_RETENTION_DAYS`=7 天，时间范围 1h/6h/24h/7d）。
+- `servers`：`id`（ulid）、`name`（1–40 字）、`tokenHash`（sha256 hex，唯一索引）、`info`（JSON，`serverInfoSchema`，首次上报前为空）、`lastSeenAt`、`createdAt`。最近 3 个上报间隔（30 秒）内有上报为 `online`，否则 `offline`。
+- `server_samples`：`serverId`、`ts`（服务端收到时间）、`cpu`、`load1/5/15`、`memUsed/memTotal`、`swapUsed/swapTotal`、`diskUsed/diskTotal`（各分区之和）、`netRx/netTx`（字节/秒）、`uptime`，`cores` 与 `disks` 存 JSON。索引 `(serverId, ts)`。不加外键，删服务器时同一事务删它的样本。
+- 保留：调度器每小时删除 7 天前的样本。不做降采样表，查询时聚合。
+
+**上报令牌。** 服务器令牌和智能体密钥分开：`ids_` + 32 字节 base64url，只在创建或轮换时返回一次，库里存 sha256。上报走 `/api/probe/v1/*`，不经过 `/api/v1/*` 的人工/智能体鉴权；令牌不能访问任何其他接口。
+
+**接口。**
+- `GET /api/v1/servers`：全部服务器，按创建时间。
+- `POST /api/v1/servers`（admin）`{name}` → 201 `{server, token}`；`PATCH /api/v1/servers/{id}`（admin）改名；`POST /api/v1/servers/{id}/rotate-token`（admin）→ `{server, token}`，旧令牌立即失效；`DELETE /api/v1/servers/{id}`（admin）→ 204。
+- `GET /api/v1/servers/{id}/metrics?range=1h|6h|24h|7d` → `ServerMetrics`。桶宽 `step = max(10, ceil(范围秒数 / 360))`，按 `floor(ts / step)` 分组取平均，`ts` 为桶起点；没有样本的桶不出点。`latest` 是该服务器最新一条完整样本（含各核、各分区），没有样本时为 null。
+- `POST /api/probe/v1/samples`：`Authorization: Bearer ids_…`，体为 `serverSampleInputSchema`；写样本、更新 `info` 和 `lastSeenAt`，返回 204。令牌无效 401。
+- `GET /api/probe/v1/probe.mjs`：采集程序（无依赖的单文件 ESM），无需鉴权。
+- `GET /api/probe/v1/install.sh`：安装脚本，无需鉴权，不含任何令牌。脚本里的默认上报地址取这次请求的 origin，可用环境变量 `IDESK_URL` 覆盖。
+- 服务器的增删改不写事件表，前端轮询（列表与指标都 10 秒）。
+
+**采集程序（`packages/cli/src/probe.ts`，esbuild 单独打成 `dist/probe.mjs`）。** 只支持 Linux，其他平台启动即退出并说明。Node ≥ 20，无依赖。每 10 秒一次：
+- CPU：`/proc/stat` 两次读数之差，总的和每个核的使用率（%）。负载：`/proc/loadavg`。开机时长：`/proc/uptime`。
+- 内存：`/proc/meminfo`，`memUsed = MemTotal − MemAvailable`，`swapUsed = SwapTotal − SwapFree`（kB 换成字节）。
+- 磁盘：`/proc/mounts` 中 ext2/3/4、xfs、btrfs、vfat、f2fs 的分区，按设备去重，`fs.statfsSync` 算已用与总量。
+- 网络：`/proc/net/dev` 两次读数之差除以间隔，跳过 `lo`、`veth*`、`docker*`、`br-*`。
+- 信息：`os.hostname()`、`/etc/os-release` 的 `PRETTY_NAME`、`os.release()`、`os.cpus()[0].model`、`os.cpus().length`。
+- 启动时先取一次基线，10 秒后发第一条。上报失败在 stderr 打一行原因，下个周期继续。参数：`--url`、`--token-file`。
+
+**安装脚本。** `curl -fsSL <IDesk>/api/probe/v1/install.sh | sudo IDESK_PROBE_TOKEN=ids_… sh`：检查 `node` ≥ 20；下载 `probe.mjs` 到 `/opt/idesk-probe/probe.mjs`；令牌写入 `/etc/idesk-probe/token`（目录 700、文件 600、root）；写 `/etc/systemd/system/idesk-probe.service`（`DynamicUser=yes`、`LoadCredential=token:/etc/idesk-probe/token`、`--token-file ${CREDENTIALS_DIRECTORY}/token`、`Restart=always`、`RestartSec=10`）；`systemctl daemon-reload && systemctl enable --now idesk-probe`。重复执行会覆盖成新令牌和新版本。IDesk 自己所在的宿主机用 `IDESK_URL=http://127.0.0.1:3300`。
