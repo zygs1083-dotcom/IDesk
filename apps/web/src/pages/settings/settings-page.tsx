@@ -8,7 +8,7 @@ export function SettingsPage() {
   return (
     <div data-scene="settings" className="space-y-6">
       <PageHeader title={t("nav.settings")} />
-      <div className="flex flex-col gap-6 sidebar:flex-row">
+      <div data-ui="settings-book" className="flex flex-col gap-6 sidebar:flex-row">
         <nav
           data-ui="settings-tabs"
           aria-label={t("settings.navigation")}

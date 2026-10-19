@@ -9,9 +9,21 @@
 @import "./pixel-board.css";
 @import "./pixel-overlay.css";
 @import "./pixel-pages.css";
+@import "./pixel-lists.css";
+@import "./pixel-settings.css";
 @import "./pixel-decor.css";
 @import "./pixel-photo.css";
 @import "./pixel-preview.css";
+
+html:not([data-skin="pixel"]) [data-ui="agent-status-col"],
+html:not([data-skin="pixel"]) [data-ui="kind-avatar"],
+html:not([data-skin="pixel"]) [data-ui="pixel-kind-caption"],
+html:not([data-skin="pixel"]) [data-scene="history"] [data-ui="page-toolbar"] {
+  display: none;
+}
+html:not([data-skin="pixel"]) [data-scene="schedules"] td:last-child > div {
+  justify-content: flex-start;
+}
 
 [data-ui="overlay-footer"],
 .pixel-required,

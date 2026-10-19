@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { Button } from "../../components/button.tsx";
+import { Button, IconButton } from "../../components/button.tsx";
+import { PixelIcon } from "../../components/pixel-icon.tsx";
 import { useLang } from "../../i18n/lang.tsx";
 
 export function AccessRow({
@@ -39,9 +40,19 @@ export function AccessRow({
           </p>
         )}
       </div>
-      <Button aria-label={t("settings.copyNamed", { title })} onClick={copy}>
-        {copied ? t("common.copied") : t("common.copy")}
-      </Button>
+      <span className="pixel-legacy">
+        <Button aria-label={t("settings.copyNamed", { title })} onClick={copy}>
+          {copied ? t("common.copied") : t("common.copy")}
+        </Button>
+      </span>
+      <span className="pixel-only">
+        <IconButton
+          title={copied ? t("common.copied") : t("settings.copyNamed", { title })}
+          onClick={copy}
+        >
+          <PixelIcon name={copied ? "check" : "copy"} />
+        </IconButton>
+      </span>
     </div>
   );
 }

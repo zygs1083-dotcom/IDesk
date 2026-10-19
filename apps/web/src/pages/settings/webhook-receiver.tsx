@@ -40,7 +40,7 @@ export function WebhookReceiver() {
     ],
   ] as const;
   return (
-    <div className="space-y-4">
+    <div data-ui="webhook-receiver" className="space-y-4">
       <h3 className="text-section">{t("settings.webhookReceiver")}</h3>
       <dl className="rounded-panel border border-line bg-surface">
         {items.map(([title, description]) => (

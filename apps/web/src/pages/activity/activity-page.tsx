@@ -25,35 +25,39 @@ export function ActivityPage() {
   const groups = groupEvents(events, lang);
   return (
     <div data-scene="activity" className="space-y-6">
-      <PageHeader title={t("nav.activity")} />
-      <div className="flex flex-wrap items-center gap-3 whitespace-nowrap text-secondary">
-        <Segmented
-          label={t("common.type")}
-          value={type}
-          onChange={setType}
-          options={[
-            { value: "all", label: t("common.all") },
-            { value: "task", label: t("common.tasks") },
-            { value: "relay", label: t("nav.relay") },
-            { value: "agent", label: t("nav.agents") },
-          ]}
-        />
-        <label className="flex items-center gap-2 text-text-2">
-          {t("nav.agents")}
-          <select
-            className="rounded-control border border-line bg-surface px-3 py-2 text-text"
-            value={agentId}
-            onChange={(event) => setAgentId(event.target.value)}
-          >
-            <option value="">{t("common.all")}</option>
-            {agents.map((agent) => (
-              <option key={agent.id} value={agent.id}>
-                {agentName(agent.id)}
-              </option>
-            ))}
-          </select>
-        </label>
-      </div>
+      <PageHeader
+        title={t("nav.activity")}
+        toolbar={
+          <div className="flex flex-wrap items-center gap-3 whitespace-nowrap text-secondary">
+            <Segmented
+              label={t("common.type")}
+              value={type}
+              onChange={setType}
+              options={[
+                { value: "all", label: t("common.all") },
+                { value: "task", label: t("common.tasks") },
+                { value: "relay", label: t("nav.relay") },
+                { value: "agent", label: t("nav.agents") },
+              ]}
+            />
+            <label className="flex items-center gap-2 text-text-2">
+              {t("nav.agents")}
+              <select
+                className="rounded-control border border-line bg-surface px-3 py-2 text-text"
+                value={agentId}
+                onChange={(event) => setAgentId(event.target.value)}
+              >
+                <option value="">{t("common.all")}</option>
+                {agents.map((agent) => (
+                  <option key={agent.id} value={agent.id}>
+                    {agentName(agent.id)}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+        }
+      />
       {error && (
         <p role="alert" className="text-secondary text-status-failed">
           {error.message}
@@ -70,9 +74,11 @@ export function ActivityPage() {
         </Button>
       )}
       {!isPending && !error && groups.length === 0 && (
-        <p className="py-16 text-center text-secondary text-text-2">{t("activity.empty")}</p>
+        <p data-ui="empty-note" className="py-16 text-center text-secondary text-text-2">
+          {t("activity.empty")}
+        </p>
       )}
-      <div className="space-y-6">
+      <div data-ui="activity-ledger" data-empty={groups.length === 0}>
         {groups.map((group) => (
           <section data-ui="log-page" key={group.day} className="space-y-2">
             <h2 className="text-label text-text-2">{group.label}</h2>
@@ -105,7 +111,7 @@ export function ActivityPage() {
                       fallback={<Icon size={16} strokeWidth={1.5} />}
                       className="shrink-0 text-text-2"
                     />
-                    <p className="truncate text-body">
+                    <p className="min-w-0 break-words text-body">
                       {eventText(event, agentName, lang)}
                       {event.taskId &&
                         ` ${taskTitles.get(event.taskId) ?? event.taskId.slice(0, 8)}`}
@@ -118,7 +124,12 @@ export function ActivityPage() {
         ))}
       </div>
       {hasNextPage && (
-        <Button onClick={() => void fetchNextPage()} disabled={isFetching}>
+        <Button
+          variant="ghost"
+          className="mx-auto flex"
+          onClick={() => void fetchNextPage()}
+          disabled={isFetching}
+        >
           {t(isFetching ? "activity.loading" : "activity.loadEarlier")}
         </Button>
       )}

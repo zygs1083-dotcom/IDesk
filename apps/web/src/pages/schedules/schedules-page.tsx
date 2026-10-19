@@ -90,7 +90,7 @@ export function SchedulesPage() {
       )}
       {schedules.isPending && <p className="text-secondary text-text-2">{t("common.loading")}</p>}
       {!error && schedules.data?.length === 0 && (
-        <div className="py-16 text-center text-secondary text-text-2">
+        <div data-ui="empty-note" className="py-16 text-center text-secondary text-text-2">
           <p>{t("schedules.empty")}</p>
           {canEdit && (
             <Button className="mt-3" disabled={!connectors.data} onClick={() => setCreating(true)}>

@@ -63,11 +63,13 @@ export function ConnectorDialog({
       footer={
         <>
           <Button
+            variant="ghost"
             disabled={!ready || test.isPending || create.isPending}
             onClick={() => test.mutate()}
           >
             {test.isPending ? t("settings.testing") : t("settings.testConnection")}
           </Button>
+          <Button onClick={onClose}>{t("common.cancel")}</Button>
           <Button
             type="submit"
             form="connector-form"

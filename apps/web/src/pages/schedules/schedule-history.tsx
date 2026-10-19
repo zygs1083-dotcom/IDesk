@@ -1,6 +1,7 @@
 import type { eventSchema } from "@idesk/shared/task-schemas";
 import { useQuery } from "@tanstack/react-query";
 import type { z } from "zod";
+import { Button } from "../../components/button.tsx";
 import { Drawer } from "../../components/drawer.tsx";
 import { useLang } from "../../i18n/lang.tsx";
 import { request } from "../../lib/api.ts";
@@ -33,7 +34,12 @@ export function ScheduleHistory({
   const date = (value: unknown) =>
     new Date(String(value)).toLocaleString(lang === "zh" ? "zh-CN" : "en");
   return (
-    <Drawer open title={`${schedule.name} · ${t("schedules.history")}`} onClose={onClose}>
+    <Drawer
+      open
+      title={`${schedule.name} · ${t("schedules.history")}`}
+      onClose={onClose}
+      footer={<Button onClick={onClose}>{t("common.close")}</Button>}
+    >
       {history.isPending && <p className="text-secondary text-text-2">{t("common.loading")}</p>}
       {history.error && (
         <p role="alert" className="text-secondary text-status-failed">
