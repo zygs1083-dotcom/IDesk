@@ -216,6 +216,8 @@ export const en: Record<Key, string> = {
   "desk.noDependencies": "No dependencies",
   "desk.expandText": "Show full text",
   "desk.collapseText": "Collapse",
+  "desk.expandTitle": "Show full title",
+  "desk.collapseTitle": "Collapse title",
   "desk.reported": "{agent} reported progress",
   "desk.addDependency": "Add dependency",
   "desk.agentCount": "Agent count",

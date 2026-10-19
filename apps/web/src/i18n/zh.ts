@@ -208,6 +208,8 @@ export const zh = {
   "desk.noDependencies": "无依赖",
   "desk.expandText": "展开全文",
   "desk.collapseText": "收起",
+  "desk.expandTitle": "查看完整标题",
+  "desk.collapseTitle": "收起标题",
   "desk.reported": "{agent} 汇报了进展",
   "desk.addDependency": "添加依赖",
   "desk.agentCount": "人数",

@@ -4,7 +4,6 @@ import { useQuery } from "@tanstack/react-query";
 import { AnimatePresence } from "motion/react";
 import { useState } from "react";
 import { Button } from "../../components/button.tsx";
-import { Drawer } from "../../components/drawer.tsx";
 import { Menu } from "../../components/menu.tsx";
 import { Toast } from "../../components/toast.tsx";
 import { useLang } from "../../i18n/lang.tsx";
@@ -16,6 +15,7 @@ import { ActionDialog } from "./action-dialog.tsx";
 import { actionSamples, type HumanAction, previewAction } from "./drop-action.ts";
 import { EditTaskDialog } from "./edit-task-dialog.tsx";
 import { TaskDetails } from "./task-details.tsx";
+import { TaskReadingDrawer } from "./task-reading-drawer.tsx";
 import { useTaskAction } from "./use-task-action.ts";
 import "./task-drawer.css";
 
@@ -78,9 +78,8 @@ export function TaskDrawer({ taskId, onClose }: { taskId: string; onClose: () =>
   return (
     <>
       <div className="task-drawer">
-        <Drawer
+        <TaskReadingDrawer
           key={taskId}
-          open
           onClose={onClose}
           title={task?.title ?? ""}
           footer={
@@ -120,7 +119,7 @@ export function TaskDrawer({ taskId, onClose }: { taskId: string; onClose: () =>
             <TaskDetails task={task} events={events} agentName={agentName} onError={setError} />
           )}
           {!parameter && <Toast message={error} onClose={() => setError(null)} />}
-        </Drawer>
+        </TaskReadingDrawer>
       </div>
       <AnimatePresence>
         {isAdmin && editing && task && (

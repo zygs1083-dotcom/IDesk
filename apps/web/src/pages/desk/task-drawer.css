@@ -7,15 +7,28 @@ html .task-drawer dialog [data-ui="drawer"] {
 }
 
 html .task-drawer dialog [data-ui="drawer"] > header {
+  align-items: flex-start;
   flex: none;
   margin: 0;
-  padding: 16px;
+  padding: 12px 16px;
   border-bottom: 1px solid var(--line);
 }
 
 html .task-drawer dialog [data-ui="drawer"] > header h2 {
+  flex: 1;
   min-width: 0;
   overflow-wrap: anywhere;
+}
+
+.task-title-preview {
+  display: block;
+  max-height: 2lh;
+  overflow: hidden;
+}
+
+.task-full-title {
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
 }
 
 html .task-drawer dialog [data-ui="overlay-body"] {

@@ -43,6 +43,23 @@ async function renderTask(task: Task, role: "admin" | "viewer" = "admin") {
   return html;
 }
 
+test.each([
+  ["short", "短任务"],
+  ["long URL", `${detailTask.title} ${detailUrl}`],
+  ["extreme", `${"任务 LongEnglishTaskName".repeat(500)} ${detailUrl}`],
+] as const)(
+  "%s title stays complete in the heading without a duplicate full-title area on opening",
+  async (_, title) => {
+    language.value = "en";
+    const html = await renderTask({ ...detailTask, title });
+    const heading = html.match(/<h2\b[^>]*>[\s\S]*?<\/h2>/)?.[0] as string;
+    expect(heading).toContain(title);
+    expect(heading).not.toContain("<div");
+    expect(html.replace(/<[^>]*>/g, "").split(title)).toHaveLength(2);
+    expect(html).not.toContain("task-full-title");
+  },
+);
+
 test.each(["zh", "en"] as const)(
   "%s keeps requirements and multi-paragraph results separate, ordered and complete",
   async (lang) => {
