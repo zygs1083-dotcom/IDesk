@@ -31,7 +31,7 @@ export function ServerDialog({
   const client = useQueryClient();
   const [name, setName] = useState(action === "rename" ? (server?.name ?? "") : "");
   const [token, setToken] = useState("");
-  const [copied, setCopied] = useState(false);
+  const [copied, setCopied] = useState<"normal" | "local" | null>(null);
   const [copyError, setCopyError] = useState("");
   const mutate = useMutation({
     mutationFn: async () => {
@@ -60,10 +60,10 @@ export function ServerDialog({
       } else onClose();
     },
   });
-  async function copy(command: string) {
+  async function copy(command: string, which: "normal" | "local") {
     try {
       await navigator.clipboard.writeText(command);
-      setCopied(true);
+      setCopied(which);
       setCopyError("");
     } catch {
       setCopyError(t("servers.copyFailed"));
@@ -111,14 +111,16 @@ export function ServerDialog({
           <code className="block break-all rounded-control bg-surface-2 p-3 text-secondary">
             {installCommand(token)}
           </code>
-          <Button onClick={() => copy(installCommand(token))}>
-            {copied ? t("common.copied") : t("common.copy")}
+          <Button onClick={() => copy(installCommand(token), "normal")}>
+            {copied === "normal" ? t("common.copied") : t("common.copy")}
           </Button>
           <p className="text-label text-text-2">{t("servers.localInstall")}</p>
           <code className="block break-all rounded-control bg-surface-2 p-3 text-secondary">
             {installCommand(token, true)}
           </code>
-          <Button onClick={() => copy(installCommand(token, true))}>{t("common.copy")}</Button>
+          <Button onClick={() => copy(installCommand(token, true), "local")}>
+            {copied === "local" ? t("common.copied") : t("common.copy")}
+          </Button>
         </div>
       ) : action === "create" || action === "rename" ? (
         <form

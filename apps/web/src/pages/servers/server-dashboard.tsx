@@ -1,20 +1,18 @@
+import { SERVER_RANGE_SECONDS } from "@idesk/shared/server-schemas";
 import { useLang } from "../../i18n/lang.tsx";
 import type { Server, ServerMetrics, ServerRange } from "../../lib/use-servers.ts";
 import { ChartPanel } from "./chart-panel.tsx";
-import { bytes, niceMax, percent, rate, uptime } from "./format.ts";
+import { bytes, percent, rate, uptime } from "./format.ts";
 import { MetricCard } from "./metric-card.tsx";
 
-export function ServerDashboard({
-  info,
-  latest,
-  metrics,
-  range,
-}: {
+type Props = {
   info: NonNullable<Server["info"]>;
   latest: NonNullable<ServerMetrics["latest"]>;
   metrics: ServerMetrics;
   range: ServerRange;
-}) {
+};
+
+export function ServerDashboard({ info, latest, metrics, range }: Props) {
   const { lang, t } = useLang();
   const diskUsed = latest.disks.reduce((sum, disk) => sum + disk.used, 0);
   const diskTotal = latest.disks.reduce((sum, disk) => sum + disk.total, 0);
@@ -29,8 +27,16 @@ export function ServerDashboard({
     { key: "netTx", label: t("servers.sent"), color: 2 },
   ] as const;
   const diskSeries = [{ key: "diskUsed", label: t("servers.disk"), color: 3 }] as const;
-  const networkMax = niceMax(
-    Math.max(1, ...metrics.points.map((point) => Math.max(point.netRx, point.netTx))),
+  const now = Date.now();
+  const networkMax = Math.max(
+    0,
+    ...metrics.points
+      .filter(
+        (point) =>
+          Date.parse(point.ts) >= now - SERVER_RANGE_SECONDS[range] * 1000 &&
+          Date.parse(point.ts) <= now,
+      )
+      .map((point) => Math.max(point.netRx, point.netTx)),
   );
   return (
     <>
