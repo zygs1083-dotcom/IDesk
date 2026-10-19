@@ -1,13 +1,15 @@
 #!/usr/bin/env node
 import { Command } from "commander";
+import { receiverCommands } from "./commands/receiver.js";
 import { relayCommands } from "./commands/relay.js";
 import { taskCommands } from "./commands/tasks.js";
 import { type Config, saveConfig } from "./config.js";
 import { mcpBridge } from "./mcp-bridge.js";
+import { version } from "./version.js";
 
 const program = new Command("idesk")
   .description("IDesk 命令行")
-  .version("0.1.0")
+  .version(version)
   .option("--json", "输出原始 JSON");
 
 program
@@ -20,6 +22,7 @@ program
   });
 taskCommands(program);
 relayCommands(program);
+receiverCommands(program);
 program.command("mcp").description("stdio ↔ HTTP MCP 桥").action(mcpBridge);
 
 program.parseAsync().catch((e: Error) => {

@@ -1,10 +1,9 @@
 import { readFile } from "node:fs/promises";
 import { labels } from "@idesk/shared/labels";
 import type { TaskPriority, TaskStatus } from "@idesk/shared/task-status";
-
 import type { Command } from "commander";
 import { api } from "../client.js";
-import { formatAgentName } from "../labels.js";
+import { formatAgentName, formatTime } from "../labels.js";
 import { output } from "../output.js";
 
 type Task = {
@@ -14,8 +13,45 @@ type Task = {
   priority: TaskPriority;
   capabilities: string[];
   assigneeId: string | null;
+  body: string;
 };
+type Agent = { id: string; name: string; host: string; capabilities: string[] };
+type Event = { id: string; ts: string; type: string; agentId: string | null };
 export function taskCommands(program: Command): void {
+  program.command("me").action(async () => {
+    const me = await api<Agent>("GET", "/agents/me");
+    output(program.opts().json, me, [
+      ["名字", me.name],
+      ["id", me.id],
+      ["能力", me.capabilities.join("、") || "—"],
+    ]);
+  });
+
+  program.command("task <id>").action(async (id: string) => {
+    const path = `/tasks/${encodeURIComponent(id)}`;
+    const task = await api<Task>("GET", path);
+    const events = (await api<Event[]>("GET", `${path}/events`)).slice(-10);
+    if (program.opts().json) {
+      output(true, { task, events }, "");
+      return;
+    }
+    const agents = await api<Agent[]>("GET", "/agents");
+    output(false, task, [
+      ["标题", task.title],
+      ["状态", labels("zh").status[task.status]],
+      ["指派对象", formatAgentName(task.assigneeId, agents)],
+    ]);
+    process.stdout.write(`正文\n${task.body}\n最近事件\n`);
+    output(false, events, [
+      ["时间", "type", "做动作的人"],
+      ...events.map((event) => [
+        formatTime(event.ts),
+        event.type,
+        formatAgentName(event.agentId, agents),
+      ]),
+    ]);
+  });
+
   program
     .command("tasks")
     .option("--status <status>")
