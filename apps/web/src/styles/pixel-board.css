@@ -97,6 +97,7 @@ html[data-skin="pixel"] {
   }
   & [data-ui="card-title"] {
     font: 600 14px / 1.4 var(--font-sans);
+    overflow-wrap: anywhere;
   }
   & [data-ui="card"] .text-label {
     font-size: 12px;
