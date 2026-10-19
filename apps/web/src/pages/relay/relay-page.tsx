@@ -74,38 +74,19 @@ export function RelayPage() {
       </PageHeader>
       <div data-ui="relay-toolbar" className="contents">
         <div data-ui="relay-box-control">
-          <div className="pixel-legacy">
-            <Segmented
-              label={t("nav.relay")}
-              value={box}
-              onChange={selectBox}
-              options={[
-                {
-                  value: "inbox",
-                  label: `${t("relay.inbox")}${summary?.unread ? ` · ${summary.unread}` : ""}`,
-                },
-                { value: "sent", label: t("relay.sent") },
-                { value: "all", label: t("relay.all") },
-              ]}
-            />
-          </div>
-          <div className="pixel-only">
-            <Segmented
-              label={t("nav.relay")}
-              value={box}
-              onChange={selectBox}
-              options={[
-                { value: "inbox", label: t("relay.inbox") },
-                { value: "sent", label: t("relay.sent") },
-                { value: "all", label: t("relay.all") },
-              ]}
-            />
-            {summary?.unread ? (
-              <span data-ui="relay-box-count" aria-hidden="true">
-                {summary.unread > 99 ? "99+" : summary.unread}
-              </span>
-            ) : null}
-          </div>
+          <Segmented
+            label={t("nav.relay")}
+            value={box}
+            onChange={selectBox}
+            options={[
+              {
+                value: "inbox",
+                label: `${t("relay.inbox")}${summary?.unread ? ` · ${summary.unread}` : ""}`,
+              },
+              { value: "sent", label: t("relay.sent") },
+              { value: "all", label: t("relay.all") },
+            ]}
+          />
         </div>
         <div data-ui="relay-search">
           <PixelIcon
