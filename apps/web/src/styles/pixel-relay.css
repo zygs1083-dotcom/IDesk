@@ -28,22 +28,8 @@ html[data-skin="pixel"] {
     color: var(--text-3);
   }
   & [data-ui="relay-box-control"] {
-    position: relative;
     order: 1;
     min-width: 0;
-  }
-  & [data-ui="relay-box-count"] {
-    position: absolute;
-    top: -7px;
-    left: 70px;
-    min-width: 18px;
-    padding: 1px 3px;
-    color: var(--ink);
-    border: 1px solid var(--copper);
-    background: var(--copper-light);
-    font: 600 11px / 1.2 var(--font-sans);
-    text-align: center;
-    pointer-events: none;
   }
   & [data-ui="relay-toolbar"] > [data-ui="segmented"] {
     order: 2;
