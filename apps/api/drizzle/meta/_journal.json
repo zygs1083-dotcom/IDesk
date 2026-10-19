@@ -64,6 +64,13 @@
       "when": 1792317062867,
       "tag": "0008_ds_timezone",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "6",
+      "when": 1792397091387,
+      "tag": "0009_curved_prodigy",
+      "breakpoints": true
     }
   ]
 }

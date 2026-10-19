@@ -21,6 +21,7 @@ COPY plugins/webhook-notifier/package.json plugins/webhook-notifier/package.json
 RUN pnpm install --frozen-lockfile
 COPY . .
 RUN pnpm --filter web build
+RUN pnpm --filter @idesk/cli build
 RUN if [ "$WITH_OFFICE" = "true" ]; then pnpm --filter office build; fi
 
 FROM node:24-bookworm-slim AS runtime
@@ -41,6 +42,7 @@ COPY --from=build /app/plugins/webhook-notifier/package.json plugins/webhook-not
 RUN pnpm install --frozen-lockfile --prod
 COPY apps/api apps/api
 COPY packages/shared packages/shared
+COPY --from=build /app/packages/cli/dist/probe.mjs /app/packages/cli/dist/probe.mjs
 COPY plugins plugins
 COPY --from=build /app/apps/web/dist apps/web/dist
 RUN mkdir /data && chown node:node /data

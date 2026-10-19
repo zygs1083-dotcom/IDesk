@@ -21,6 +21,7 @@ import { mcpRoutes } from "./routes/mcp.ts";
 import { pluginRoutes } from "./routes/plugins.ts";
 import { relayRoutes } from "./routes/relay.ts";
 import { scheduleRoutes } from "./routes/schedules.ts";
+import { probeRoutes, serverRoutes } from "./routes/servers.ts";
 import { taskRoutes } from "./routes/tasks.ts";
 
 z.config(z.locales.zhCN());
@@ -65,6 +66,7 @@ const officeBuild =
 app.get("/api/meta", (c) => c.json({ office: officeBuild !== null, build: officeBuild }));
 
 app.get("/api/health", (c) => c.json({ ok: true }));
+probeRoutes(app);
 
 app.use("/api/v1/*", auth);
 authRoutes(app);
@@ -76,6 +78,7 @@ pluginRoutes(app);
 connectorRoutes(app);
 automationRoutes(app);
 scheduleRoutes(app);
+serverRoutes(app);
 mcpRoutes(app);
 
 app.doc("/api/openapi.json", {
