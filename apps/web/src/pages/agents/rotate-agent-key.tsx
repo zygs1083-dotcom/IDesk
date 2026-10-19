@@ -4,8 +4,10 @@ import { useState } from "react";
 import type { z } from "zod";
 import { Button } from "../../components/button.tsx";
 import { Dialog } from "../../components/dialog.tsx";
+import { Field } from "../../components/field.tsx";
 import { useLang } from "../../i18n/lang.tsx";
 import { request } from "../../lib/api.ts";
+import { copyText } from "../../lib/clipboard.ts";
 import type { Agent } from "../../lib/types.ts";
 import { agentOnboardingMessage } from "./create-agent.tsx";
 
@@ -14,7 +16,7 @@ export function RotateAgentKey({ agent, onClose }: { agent: Agent; onClose: () =
   const client = useQueryClient();
   const [key, setKey] = useState("");
   const [copied, setCopied] = useState<"key" | "message" | null>(null);
-  const [copyError, setCopyError] = useState("");
+  const [copyError, setCopyError] = useState<"key" | "message" | null>(null);
   const rotate = useMutation({
     mutationFn: async () => {
       const result = await request<z.infer<typeof registeredAgentSchema>>(
@@ -29,16 +31,16 @@ export function RotateAgentKey({ agent, onClose }: { agent: Agent; onClose: () =
   });
   async function copy(value: "key" | "message") {
     try {
-      await navigator.clipboard.writeText(
+      await copyText(
         value === "key"
           ? key
           : agentOnboardingMessage(lang, location.origin, agent.name, key, true),
       );
       setCopied(value);
-      setCopyError("");
+      setCopyError(null);
     } catch {
       setCopied(null);
-      setCopyError(t(value === "key" ? "agents.copyKeyFailed" : "agents.copyMessageFailed"));
+      setCopyError(value);
     }
   }
   return (
@@ -86,8 +88,18 @@ export function RotateAgentKey({ agent, onClose }: { agent: Agent; onClose: () =
         )}
         {(rotate.error || copyError) && (
           <p role="alert" className="text-secondary text-status-failed">
-            {rotate.error?.message || copyError}
+            {rotate.error?.message ||
+              t(copyError === "key" ? "agents.copyKeyFailed" : "agents.copyMessageFailed")}
           </p>
+        )}
+        {copyError === "message" && (
+          <Field
+            multiline
+            readOnly
+            label={t("agents.copyMessage")}
+            rows={7}
+            value={agentOnboardingMessage(lang, location.origin, agent.name, key, true)}
+          />
         )}
         <div className="pixel-legacy flex justify-end gap-2">
           {key ? (

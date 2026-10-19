@@ -110,7 +110,7 @@ export const en: Record<Key, string> = {
   "agents.averageDuration": "Average duration",
   "agents.completedWeek": "Completed in 7 days",
   "agents.copyKeyFailed": "Could not copy. Select the key to copy it",
-  "agents.copyMessageFailed": "Could not copy. Select and copy the setup message.",
+  "agents.copyMessageFailed": "Could not copy. Select the setup message below and copy it.",
   "agents.copyMessage": "Copy message",
   "agents.onboardingGuide":
     "Connect yourself to IDesk by following this guide: {origin}/agent-guide.md",
@@ -119,7 +119,7 @@ export const en: Record<Key, string> = {
     "Use the key only for idesk login. Do not write it into code repositories, logs, chat replies, or any other file. After the self-check in section 4, send me the result.",
   "agents.onboardingRotated":
     "This is the new key after rotation: run idesk login again, then restart the receiver.",
-  "agents.receiver": "Receiver",
+  "agents.receiver": "Receiver: ",
   "agents.officialReceiver": "Official receiver {version} · {wake}",
   "agents.customCommand": "Custom command",
   "agents.clientNotReported": "Not reported (not the official receiver, or an older version)",

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Button, IconButton } from "../../components/button.tsx";
 import { PixelIcon } from "../../components/pixel-icon.tsx";
 import { useLang } from "../../i18n/lang.tsx";
+import { copyText } from "../../lib/clipboard.ts";
 
 export function AccessRow({
   title,
@@ -21,7 +22,7 @@ export function AccessRow({
   useEffect(() => () => clearTimeout(timer.current), []);
   async function copy() {
     try {
-      await navigator.clipboard.writeText(value);
+      await copyText(value);
       setError("");
       setCopied(true);
       clearTimeout(timer.current);

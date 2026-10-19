@@ -15,6 +15,7 @@ import { Field } from "../../components/field.tsx";
 import { useLang } from "../../i18n/lang.tsx";
 import { translator } from "../../i18n/translate.ts";
 import { request } from "../../lib/api.ts";
+import { copyText } from "../../lib/clipboard.ts";
 import type { Agent } from "../../lib/types.ts";
 import { useAgents } from "../../lib/use-agents.ts";
 
@@ -47,7 +48,7 @@ export function CreateAgent({ agent, onClose }: { agent?: Agent; onClose: () => 
   const [capabilities, setCapabilities] = useState<string[]>(agent?.capabilities ?? []);
   const [webhookUrl, setWebhookUrl] = useState(agent?.webhookUrl ?? "");
   const [copied, setCopied] = useState<"key" | "message" | null>(null);
-  const [copyError, setCopyError] = useState("");
+  const [copyError, setCopyError] = useState<"key" | "message" | null>(null);
   const create = useMutation({
     mutationFn: (input: z.infer<typeof registerAgentSchema>) =>
       request<z.infer<typeof registeredAgentSchema>>("/agents", {
@@ -76,7 +77,7 @@ export function CreateAgent({ agent, onClose }: { agent?: Agent; onClose: () => 
   async function copy(value: "key" | "message") {
     if (!create.data) return;
     try {
-      await navigator.clipboard.writeText(
+      await copyText(
         value === "key"
           ? create.data.apiKey
           : agentOnboardingMessage(
@@ -87,11 +88,11 @@ export function CreateAgent({ agent, onClose }: { agent?: Agent; onClose: () => 
               false,
             ),
       );
-      setCopyError("");
+      setCopyError(null);
       setCopied(value);
     } catch {
       setCopied(null);
-      setCopyError(t(value === "key" ? "agents.copyKeyFailed" : "agents.copyMessageFailed"));
+      setCopyError(value);
     }
   }
   return (
@@ -139,8 +140,23 @@ export function CreateAgent({ agent, onClose }: { agent?: Agent; onClose: () => 
           <p className="text-secondary text-text-2">{t("agents.keyOnce")}</p>
           {copyError && (
             <p role="alert" className="text-secondary text-status-failed">
-              {copyError}
+              {t(copyError === "key" ? "agents.copyKeyFailed" : "agents.copyMessageFailed")}
             </p>
+          )}
+          {copyError === "message" && (
+            <Field
+              multiline
+              readOnly
+              label={t("agents.copyMessage")}
+              rows={7}
+              value={agentOnboardingMessage(
+                lang,
+                location.origin,
+                create.data.agent.name,
+                create.data.apiKey,
+                false,
+              )}
+            />
           )}
           <div className="pixel-legacy flex justify-end gap-2">
             <Button className="whitespace-nowrap px-2 sm:px-3" onClick={() => copy("key")}>

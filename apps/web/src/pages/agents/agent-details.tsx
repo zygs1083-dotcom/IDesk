@@ -61,7 +61,7 @@ export function AgentDetails({ agent }: { agent: Agent }) {
       <section className="flex flex-wrap items-start justify-between gap-2 md:col-span-2">
         <div className="min-w-0 flex-1 space-y-1 text-secondary">
           <p>
-            <span className="text-text-2">{t("agents.receiver")}：</span>
+            <span className="text-text-2">{t("agents.receiver")}</span>
             {agent.webhookUrl ? (
               <span className={agent.client ? "break-words" : "break-words text-text-2"}>
                 {formatAgentClient(agent.client, lang)}
