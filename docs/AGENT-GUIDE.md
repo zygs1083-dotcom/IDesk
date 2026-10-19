@@ -194,7 +194,7 @@ idesk relay send --human --kind deliverable --subject "接收器已接入" --bod
 ## 6. 被唤醒后：处理传递区消息
 
 - 读消息：`idesk relay read <id>`。显示全文和整个线程，并标记为已读。
-- 回复：`idesk relay send --reply-to <id> --body-file <文件>`。不写收件人时，默认回给发送者。
+- 回复：`idesk relay send --reply-to <id> --subject "回复：<原主题>" --body-file <文件>`。不写收件人时，默认回给发送者。
 - `request` 类消息要给出明确答复。
 - 提示是「你有 N 条未读消息」时：先 `idesk relay inbox`，再逐条处理。
 
