@@ -89,6 +89,7 @@ html[data-skin="pixel"] {
     border-radius: 0;
     background: var(--surface);
     box-shadow: var(--elevation-card);
+    padding: 7px 8px 6px;
   }
   & [data-scene="automation"] [data-ui="card"][data-status="waiting"] {
     --card-status: var(--status-open);
@@ -105,16 +106,8 @@ html[data-skin="pixel"] {
   & [data-scene="automation"] [data-ui="card"][data-status="canceled"] {
     --card-status: var(--status-open);
   }
-  & [data-scene="automation"] [data-ui="card"] {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    column-gap: 8px;
-    padding: 7px 8px 6px;
-  }
   & [data-scene="automation"] [data-ui="card"] > div:first-child {
-    flex: 1 0 100%;
-    align-items: center;
+    align-items: flex-start;
     gap: 4px;
     min-width: 0;
     margin-bottom: 2px;
@@ -124,25 +117,13 @@ html[data-skin="pixel"] {
     display: none;
   }
   & [data-scene="automation"] [data-ui="card-title"] {
-    display: block;
-    overflow: hidden;
     font-size: 13px;
     line-height: 20px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
   }
   & [data-scene="automation"] [data-ui="card"] > p {
     margin: 0;
     min-width: 0;
     line-height: 16px;
-  }
-  & [data-scene="automation"] [data-ui="card"] > p:not([data-ui]) {
-    flex: 0 1 auto;
-    max-width: 45%;
-  }
-  & [data-scene="automation"] [data-ui="card"] > p:last-child:not([data-ui]) {
-    flex-basis: 100%;
-    max-width: none;
   }
   & [data-scene="automation"] [data-ui="card"] [data-ui="button"][data-variant="icon"],
   & [data-ui="automation-external"] {
@@ -158,13 +139,8 @@ html[data-skin="pixel"] {
   }
   & [data-ui="run-time"] {
     display: flex;
-    flex: 1 1 0;
-    overflow: hidden;
+    flex-wrap: wrap;
     column-gap: 8px;
-    white-space: nowrap;
-  }
-  & [data-ui="run-time"] span {
-    white-space: nowrap;
   }
   & [data-scene="automation"] [data-ui="column-heading"] + div {
     gap: 4px;

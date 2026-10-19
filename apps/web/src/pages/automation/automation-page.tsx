@@ -9,36 +9,25 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import type { z } from "zod";
 import { Button } from "../../components/button.tsx";
-import { ColumnJump } from "../../components/column-jump.tsx";
 import { Toast } from "../../components/toast.tsx";
 import { useLang } from "../../i18n/lang.tsx";
 import { PageHeader } from "../../layout/page-header.tsx";
 import { request } from "../../lib/api.ts";
 import { relativeTime } from "../../lib/format.ts";
 import { useSession } from "../../lib/use-session.ts";
+import { AutomationBoard } from "./automation-board.tsx";
 import { AutomationFilters } from "./automation-filters.tsx";
 import { matches, type RunRange, selectRuns } from "./filter-runs.ts";
-import { JobCard } from "./job-card.tsx";
 import { nextRuns } from "./next-runs.ts";
-import { RunCard } from "./run-card.tsx";
-import { RunColumn, runColumns } from "./run-column.tsx";
 import { useRunVisibility } from "./use-run-visibility.ts";
 
 type Run = z.infer<typeof automationRunWithJobSchema>;
 export function AutomationPage() {
   const { isAdmin } = useSession();
   const { lang, t } = useLang();
-  const columns = [
-    { id: "waiting", label: t("automation.waiting"), color: "bg-status-open" },
-    { id: "running", label: t("automation.running"), color: "bg-status-in-progress" },
-    { id: "completed", label: t("automation.done"), color: "bg-status-done" },
-    { id: "failed", label: t("common.failed"), color: "bg-status-failed" },
-  ] as const;
   const client = useQueryClient();
   const [selected, setSelected] = useState<string | null>(null);
-  const [range, setRange] = useState<RunRange>(() =>
-    localStorage.getItem("automation.range") === "all" ? "all" : "today",
-  );
+  const [range, setRange] = useState<RunRange>("today");
   const [showHidden, setShowHidden] = useState(false);
   const [search, setSearch] = useState("");
   const [q, setQ] = useState("");
@@ -152,10 +141,7 @@ export function AutomationPage() {
             search={search}
             onSearch={setSearch}
             range={range}
-            onRange={(value) => {
-              setRange(value);
-              localStorage.setItem("automation.range", value);
-            }}
+            onRange={setRange}
             hiddenCount={hiddenCount}
             showHidden={showHidden}
             onShowHidden={() => setShowHidden(!showHidden)}
@@ -166,44 +152,14 @@ export function AutomationPage() {
               <p className="pt-2 text-secondary text-status-failed">{connector.lastError}</p>
             </div>
           )}
-          <ColumnJump
-            options={columns.map((column) => ({
-              id: `automation-column-${column.id}`,
-              label: column.label,
-            }))}
+          <AutomationBoard
+            runs={filteredRuns}
+            upcoming={upcoming}
+            now={now}
+            error={connector.lastError}
+            onToggleHidden={visibility.mutate}
+            pending={visibility.isPending}
           />
-          <section
-            data-ui="task-wall"
-            data-console=""
-            aria-label={t("automation.board")}
-            className="flex min-h-0 flex-1 gap-3 overflow-x-auto overflow-y-hidden pb-3"
-          >
-            {columns.map((column) => {
-              const items = filteredRuns.filter((run) => runColumns[run.status] === column.id);
-              return (
-                <RunColumn
-                  key={column.id}
-                  id={`automation-column-${column.id}`}
-                  label={column.label}
-                  count={items.length + (column.id === "waiting" ? upcoming.length : 0)}
-                  color={column.color}
-                  error={column.id === "waiting" ? connector.lastError : null}
-                >
-                  {items.map((run) => (
-                    <RunCard
-                      key={run.id}
-                      run={run}
-                      now={now}
-                      onToggleHidden={visibility.mutate}
-                      pending={visibility.isPending}
-                    />
-                  ))}
-                  {column.id === "waiting" &&
-                    upcoming.map((item) => <JobCard key={item.job.id} {...item} now={now} />)}
-                </RunColumn>
-              );
-            })}
-          </section>
         </>
       )}
       <Toast message={message} onClose={() => setMessage(null)} />
