@@ -23,8 +23,14 @@ export function CardHeading({
   return (
     <>
       <div className="mb-2 flex items-start gap-2">
-        <span title={status} className={cn("mt-1.5 size-2 shrink-0 rounded-full", color)} />
-        <h3 className="min-w-0 flex-1 line-clamp-2 text-body">{name}</h3>
+        <span
+          data-ui="status-dot"
+          title={status}
+          className={cn("mt-1.5 size-2 shrink-0 rounded-full", color)}
+        />
+        <h3 data-ui="card-title" className="min-w-0 flex-1 line-clamp-2 text-body">
+          {name}
+        </h3>
         {actions}
         {url !== null && (
           <a
@@ -32,6 +38,8 @@ export function CardHeading({
             target="_blank"
             rel="noreferrer"
             aria-label={t("automation.openRun", { name })}
+            title={t("automation.openRun", { name })}
+            data-ui="automation-external"
             className="shrink-0 rounded-control text-text-2 hover:text-text focus-visible:outline-2 focus-visible:outline-accent"
           >
             <PixelIcon name="external" fallback={<ExternalLink size={16} strokeWidth={1.5} />} />

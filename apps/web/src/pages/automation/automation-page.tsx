@@ -100,12 +100,19 @@ export function AutomationPage() {
     (jobs.data ?? []).filter((job) => matches(q, [job.name, job.group])),
     now,
   );
+  const subtitle = connector
+    ? connector.lastPolledAt === null
+      ? t("automation.notPolled")
+      : t("automation.lastPolled", {
+          time: relativeTime(new Date(connector.lastPolledAt), lang),
+        })
+    : null;
   return (
     <div data-scene="automation" className="flex h-full min-h-0 flex-col gap-6">
-      <PageHeader title={t("nav.automation")}>
+      <PageHeader title={t("nav.automation")} {...(subtitle ? { subtitle } : {})}>
         {connector && (
           <>
-            <span data-ui="header-note" className="text-secondary text-text-2">
+            <span data-ui="header-note" className="pixel-legacy text-secondary text-text-2">
               {connector.lastPolledAt === null
                 ? t("automation.notPolled")
                 : t("automation.lastPolled", {
@@ -124,7 +131,7 @@ export function AutomationPage() {
         </p>
       )}
       {connectorsQuery.isSuccess && connectors.length === 0 && (
-        <div className="py-16 text-center text-secondary text-text-2">
+        <div data-ui="board-note" className="py-16 text-center text-secondary text-text-2">
           <p>{t("settings.noConnectors")}</p>
           {isAdmin && (
             <Link
@@ -154,7 +161,7 @@ export function AutomationPage() {
             onShowHidden={() => setShowHidden(!showHidden)}
           />
           {connector.lastError !== null && (
-            <div role="alert">
+            <div role="alert" className="pixel-legacy">
               <div className="h-px bg-status-failed" />
               <p className="pt-2 text-secondary text-status-failed">{connector.lastError}</p>
             </div>
@@ -166,7 +173,8 @@ export function AutomationPage() {
             }))}
           />
           <section
-            data-ui="console"
+            data-ui="task-wall"
+            data-console=""
             aria-label={t("automation.board")}
             className="flex min-h-0 flex-1 gap-3 overflow-x-auto overflow-y-hidden pb-3"
           >
@@ -179,6 +187,7 @@ export function AutomationPage() {
                   label={column.label}
                   count={items.length + (column.id === "waiting" ? upcoming.length : 0)}
                   color={column.color}
+                  error={column.id === "waiting" ? connector.lastError : null}
                 >
                   {items.map((run) => (
                     <RunCard

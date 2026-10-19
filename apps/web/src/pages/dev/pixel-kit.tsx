@@ -9,6 +9,7 @@ import { PixelIcon, pixelIconNames } from "../../components/pixel-icon.tsx";
 import { Segmented } from "../../components/segmented.tsx";
 import { Switch } from "../../components/switch.tsx";
 import { Toast } from "../../components/toast.tsx";
+import { RelayFilters } from "../relay/relay-filters.tsx";
 import "../../styles/pixel-kit.css";
 
 export function PixelKit() {
@@ -20,6 +21,9 @@ export function PixelKit() {
   const [formCapabilities, setFormCapabilities] = useState<string[]>(["coding"]);
   const [formPriority, setFormPriority] = useState("normal");
   const [formEnabled, setFormEnabled] = useState(true);
+  const [filterRecipient, setFilterRecipient] = useState("all");
+  const [filterKind, setFilterKind] = useState("all");
+  const [filterTask, setFilterTask] = useState("all");
   return (
     <main data-ui="pixel-kit">
       <header>
@@ -89,6 +93,17 @@ export function PixelKit() {
             运行中
           </span>
         </div>
+      </section>
+      <section>
+        <h2>弹出筛选面板 / Filter popover</h2>
+        <RelayFilters
+          recipient={filterRecipient}
+          onRecipient={setFilterRecipient}
+          kind={filterKind}
+          onKind={setFilterKind}
+          task={filterTask}
+          onTask={setFilterTask}
+        />
       </section>
       <section>
         <h2>图标 / Icons</h2>

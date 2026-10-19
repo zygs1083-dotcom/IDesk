@@ -1,6 +1,7 @@
 import type { automationRunWithJobSchema } from "@idesk/shared/automation-schemas";
 import { Eye, EyeOff } from "lucide-react";
 import type { z } from "zod";
+import { Button } from "../../components/button.tsx";
 import { PixelIcon } from "../../components/pixel-icon.tsx";
 import { useLang } from "../../i18n/lang.tsx";
 import { cn } from "../../lib/cn.ts";
@@ -40,15 +41,20 @@ export function RunCard({
   };
   const times = runTimes(run.startedAt, run.finishedAt, now);
   const metadata = [
-    run.trigger,
-    times.text,
-    run.finishedAt === null && run.status !== "running"
-      ? "—"
-      : duration(run.startedAt, run.finishedAt, now, lang),
-  ].filter((value) => value !== null);
+    { key: "trigger", text: run.trigger },
+    { key: "times", text: times.text },
+    {
+      key: "duration",
+      text:
+        run.finishedAt === null && run.status !== "running"
+          ? "—"
+          : duration(run.startedAt, run.finishedAt, now, lang),
+    },
+  ].filter((part) => part.text !== null);
   return (
     <article
       data-ui="card"
+      data-status={run.status}
       className={cn(
         "rounded-card border border-line bg-surface p-3 transition-colors duration-hover ease-hover hover:bg-surface-2",
         run.hiddenAt !== null && "opacity-60",
@@ -59,20 +65,20 @@ export function RunCard({
           isAdmin &&
           run.status !== "waiting" &&
           run.status !== "running" && (
-            <button
-              type="button"
+            <Button
+              variant="icon"
               disabled={pending}
               aria-label={t(run.hiddenAt === null ? "automation.hide" : "automation.unhide")}
               title={t(run.hiddenAt === null ? "automation.hide" : "automation.unhide")}
               onClick={() => onToggleHidden(run)}
-              className="shrink-0 rounded-control text-text-3 hover:text-text-2 focus-visible:outline-2 focus-visible:outline-accent"
+              className="automation-hide-button shrink-0 text-text-3 hover:text-text-2"
             >
               {run.hiddenAt === null ? (
                 <PixelIcon name="eye-off" fallback={<EyeOff size={16} strokeWidth={1.5} />} />
               ) : (
                 <PixelIcon name="eye" fallback={<Eye size={16} strokeWidth={1.5} />} />
               )}
-            </button>
+            </Button>
           )
         }
         name={run.jobName}
@@ -81,8 +87,23 @@ export function RunCard({
         status={statusLabels[run.status]}
         color={statusColors[run.status]}
       />
-      <p title={times.title || undefined} className="text-label text-text-2 tabular-nums">
-        {metadata.join(" · ")}
+      <p
+        title={times.title || undefined}
+        className="pixel-legacy text-label text-text-2 tabular-nums"
+      >
+        {metadata.map((part) => part.text).join(" · ")}
+      </p>
+      <p
+        data-ui="run-time"
+        title={times.title || undefined}
+        className="pixel-only text-label text-text-2 tabular-nums"
+      >
+        {metadata.map((part) => (
+          <span key={part.key}>{part.text}</span>
+        ))}
+      </p>
+      <p data-ui="run-state" className="pixel-only text-label text-text-2">
+        {statusLabels[run.status]}
       </p>
       {run.status === "failed" && run.error !== null && (
         <p title={run.error} className="mt-2 truncate text-label text-status-failed">

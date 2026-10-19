@@ -8,6 +8,7 @@ export function JobCard({ job, schedule, next, now }: Upcoming & { now: number }
   return (
     <article
       data-ui="card"
+      data-status="waiting"
       className="rounded-card border border-line bg-surface p-3 transition-colors duration-hover ease-hover hover:bg-surface-2"
     >
       <CardHeading
@@ -18,10 +19,14 @@ export function JobCard({ job, schedule, next, now }: Upcoming & { now: number }
         color="bg-status-open"
       />
       <p
+        data-ui="run-time"
         title={`${schedule.cron} (${schedule.timezone})`}
         className="text-label text-text-2 tabular-nums"
       >
         {t("automation.nextRun", { time: nextRunTime(next, now) })}
+      </p>
+      <p data-ui="run-state" className="pixel-only text-label text-text-2">
+        {t("automation.waiting")}
       </p>
     </article>
   );
