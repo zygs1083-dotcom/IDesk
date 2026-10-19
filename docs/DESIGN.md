@@ -280,7 +280,7 @@ WS     /ws                                      cookie 鉴权；每条事件广�
 
 ### 6.3 Webhook 推送
 
-Agent 有 `webhookUrl` 时，匹配其能力的 `task.created`、点名给它的 `task.assigned`、发给它（指定、能力匹配或广播）的 `relay.sent` 会 POST 过去，header `X-IDesk-Signature: sha256=HMAC(key, body)`。失败重试 3 次（1s、5s、30s），结果写事件。不建投递表。
+Agent 有 `webhookUrl` 时，匹配其能力的 `task.created`、指派给它的 `task.assign`、交接给它的 `task.handoff`、发给它（指定、能力匹配或广播）的 `relay.sent` 会 POST 过去，header `X-IDesk-Signature: sha256=HMAC(key, body)`。失败重试 3 次（1s、5s、30s），结果写事件。不建投递表。接收端规范与官方接收器见 §12.32 和 `docs/AGENT-GUIDE.md`。
 
 ### 6.4 CLI `idesk`
 
@@ -680,3 +680,56 @@ completedAt: <ISO>
 - 启动时先取一次基线，10 秒后发第一条。上报失败在 stderr 打一行原因，下个周期继续。参数：`--url`、`--token-file`。
 
 **安装脚本。** `curl -fsSL <IDesk>/api/probe/v1/install.sh | sudo IDESK_PROBE_TOKEN=ids_… sh`：检查 `node` ≥ 20；下载 `probe.mjs` 到 `/opt/idesk-probe/probe.mjs`；令牌写入 `/etc/idesk-probe/token`（目录 700、文件 600、root）；写 `/etc/systemd/system/idesk-probe.service`（`DynamicUser=yes`、`LoadCredential=token:/etc/idesk-probe/token`、`--token-file ${CREDENTIALS_DIRECTORY}/token`、`Restart=always`、`RestartSec=10`）；`systemctl daemon-reload && systemctl enable --now idesk-probe`。重复执行会覆盖成新令牌和新版本。IDesk 自己所在的宿主机用 `IDESK_URL=http://127.0.0.1:3300`。
+
+### 12.32 智能体接入规范链接与官方接收器（M22，W106–W108）
+
+不同机器上的智能体各自写的 webhook 接收器参差不齐：有的缺 key 时放行、不唤醒会话、不核对归属、不续租、不常驻。M22 给出一个能直接发给智能体的规范链接，配一个官方接收器，让每台机器的接收端行为一致，并且用户在 IDesk 里能看出谁合规。
+
+**规范链接。** `GET /agent-guide.md`：无需鉴权，`text/markdown; charset=utf-8`，`Cache-Control: no-cache`。内容是仓库里的 `docs/AGENT-GUIDE.md`，把其中所有 `{{origin}}` 换成这次请求的 origin（同 `/api/probe/v1/install.sh`）。文件路径由配置 `IDESK_AGENT_GUIDE` 指定（默认 `docs/AGENT-GUIDE.md`，同 `IDESK_PROBE_DIST` 的写法），启动时读一次；Dockerfile 把它拷进镜像。路由挂在鉴权和前端静态回退之前。规范正文以 `docs/AGENT-GUIDE.md` 为准，实现与它冲突时改实现，要改规范先改这份文件。
+
+**命令行下载。** `GET /api/agent-kit/v1/idesk.mjs`：无需鉴权，返回 `packages/cli` 打出的单文件（`dist/main.js`，路径由配置 `IDESK_CLI_DIST` 指定，默认 `packages/cli/dist/main.js`），`text/javascript`。Node ≥ 20 可直接运行。
+
+**接口变化。**
+- `agents` 加 `client` 列（text，可空），迁移 `0010`。`PublicAgent` 多 `client: string | null`。
+- `POST /api/v1/agents/me/heartbeat` 接受可选请求体 `{ client?: string }`（1–120 字）。带了就更新 `client`，不带不清空。行为其余不变。
+- `PATCH /api/v1/agents/me { webhookUrl: url | null }`：智能体登记或清除自己的 webhook 地址（只认智能体 key，人用已有的 `PATCH /agents/{id}`）。返回 `PublicAgent`，地址按 §12.26 掩码。
+- `POST /api/v1/agents/me/webhook-test`（智能体）与 `POST /api/v1/agents/{id}/webhook-test`（admin）：立即向该智能体的 webhookUrl 发一条测试推送，同步返回 `WebhookTestResult { ok, status: number | null, durationMs, error: string | null, notifierEnabled }`。
+  - 请求体是事件形状 `{ id: 新 ULID, ts, type: "webhook.test", taskId: null, agentId: null, payload: {} }`，签名和请求头与 webhook-notifier 完全相同。
+  - 只发一次，10 秒超时，不重试，不写事件表。
+  - 2xx 为 `ok: true`。非 2xx 写 `error: "HTTP <状态码>"`；超时写 `"Request timed out"`；其他网络错误写 `"HTTP request failed"`（同 §12.26 的固定文字）。
+  - `notifierEnabled` 表示 webhook-notifier 插件当前是否启用，停用时真实事件不会推送。
+  - 没有 webhookUrl 返回 400 `agent.noWebhook`；智能体不存在 404。
+- §6.3 的事件名更正为 `task.assign`，并补上 `task.handoff`（见下）。
+
+**官方接收器（`packages/cli`，`idesk receiver …`）。** 和现有 CLI 同一个文件，共用 `~/.config/idesk/config.json` 的地址和 key。新增命令：
+- `idesk me`：打印当前智能体的名字、id、能力（`--json` 输出原始 JSON）。
+- `idesk task <id>`：打印任务标题、状态、指派对象、正文和最近 10 条事件（`GET /tasks/{id}` 与 `/tasks/{id}/events`）。
+- `idesk receiver init --listen <host:port> [--public-url <url>] (--codex-thread <id> | --wake <JSON 数组>) [--wake-on-open]`：写 `~/.config/idesk/receiver.json`（`{ listen, publicUrl, wake: string[], wakeOnOpen }`，权限 600）。`--codex-thread` 展开为 `["codex","queue","--thread",<id>,"--message","{prompt}"]`；`publicUrl` 默认 `http://<listen>/`；然后 `PATCH /agents/me` 登记 `publicUrl`。
+- `idesk receiver run`：常驻进程，行为见 `docs/AGENT-GUIDE.md` 第 7 节的 12 条，官方实现全部满足。实现要点：
+  - 读不到 key 或 receiver.json 时打印原因并以非 0 退出。
+  - 只接受 `publicUrl` 路径上的 `POST`，请求体上限 1 MiB。
+  - 状态存 `~/.config/idesk/receiver/state.json`，先写临时文件再改名：内容是最近 1000 个事件的 `{ id, type, taskId, state, at }`，`state` 取 `received | woken | skipped | failed`；再加任务首次被看到 `in_progress` 的时间。
+  - 唤醒队列串行执行。命令不经 shell，用 `{prompt}` 替换参数。60 秒内退出码 0 或 60 秒后仍在运行算成功，仍在运行的进程不杀，输出写进日志。
+  - 提示文字固定为：
+    - 指派或交接：`IDesk：任务 <taskId> 已指派给你（<type>，事件 <eventId>）。按 <origin>/agent-guide.md 第 5 节处理。`
+    - 收到消息：`IDesk：你收到传递区消息 <messageId>。按 <origin>/agent-guide.md 第 6 节处理。`
+    - 新任务：`IDesk：有一个你能领的新任务 <taskId>。空闲时按 <origin>/agent-guide.md 第 5 节领取。`
+    - 未读补漏：`IDesk：你有 <n> 条未读传递区消息。按 <origin>/agent-guide.md 第 6 节处理。`
+  - 在线心跳的 `client` 为 `idesk-receiver/<CLI 版本> (<process.platform>; wake=<codex|command>)`。
+  - 日志每行带 ISO 时间，写到 stdout；Windows 另外追加写 `~/.config/idesk/receiver/receiver.log`（Windows 计划任务不收集输出）。
+- `idesk receiver check`：逐项打印 ✓/✗，任一项失败则退出码为 1。顺序如下：
+  1. key 有效（`GET /agents/me`）；
+  2. 在线心跳成功；
+  3. IDesk 登记的 webhookUrl 不为空（有 receiver.json 时，提示里显示它的 publicUrl）；
+  4. 测试推送 `ok`，打印状态码和耗时；`notifierEnabled` 为 false 时也算失败，提示「Webhook 推送插件已停用」；
+  5. 有 receiver.json 时，检查唤醒命令能在 PATH 里找到。
+  
+  第一行打印 CLI 版本。
+- CLI 版本号随本次改为 `0.2.0`（`main.ts` 的 `.version()` 与 package.json 一致）。
+
+**网页。** 见 UI「智能体」「设置 · 接入信息」：
+- 新建智能体与轮换密钥成功后多一个「复制接入消息」；
+- 接入信息页加规范链接；
+- 智能体展开行显示接收端并可测试推送。
+
+**不做：** 接收端版本强制校验或自动升级、推送补发队列、按事件订阅配置、在 IDesk 里远程改接收器配置、Windows 服务（只用计划任务）。
