@@ -52,6 +52,9 @@ export function PixelKit() {
             <Button variant="icon" aria-label="刷新" title="刷新">
               <PixelIcon name="refresh" />
             </Button>
+            <Button variant="icon" aria-label="复制" title="复制">
+              <PixelIcon name="copy" />
+            </Button>
           </div>
         </div>
       </section>

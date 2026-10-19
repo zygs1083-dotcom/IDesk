@@ -80,7 +80,7 @@ export function ConnectorsPage() {
       )}
       {connectors.isPending && <p className="text-secondary text-text-2">{t("common.loading")}</p>}
       {!error && connectors.data?.length === 0 && (
-        <div className="py-16 text-center text-secondary text-text-2">
+        <div data-ui="empty-note" className="py-16 text-center text-secondary text-text-2">
           <p>{t("settings.noConnectors")}</p>
           <Button
             className="mt-3"

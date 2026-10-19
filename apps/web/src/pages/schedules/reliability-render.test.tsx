@@ -42,8 +42,8 @@ test("running execution disables its run button while keeping history accessible
     </table>,
   );
   expect(html).toContain("Running");
-  expect(html).toMatch(/<button[^>]* disabled=""[^>]*>Run now<\/button>/);
-  expect(html).toMatch(/<button(?![^>]* disabled=)[^>]*>Execution history<\/button>/);
+  expect(html).toMatch(/<button[^>]*aria-label="Run now"[^>]*disabled=""/);
+  expect(html).toMatch(/<button(?![^>]*disabled=)[^>]*aria-label="Execution history"/);
 });
 
 test("viewer schedules expose history without run or edit actions", () => {

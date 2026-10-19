@@ -1,5 +1,6 @@
-import { Button } from "../../components/button.tsx";
+import { Button, IconButton } from "../../components/button.tsx";
 import { Menu } from "../../components/menu.tsx";
+import { PixelIcon } from "../../components/pixel-icon.tsx";
 import { Switch } from "../../components/switch.tsx";
 import { useLang } from "../../i18n/lang.tsx";
 import { cn } from "../../lib/cn.ts";
@@ -122,13 +123,33 @@ export function ScheduleRow({
           </span>
         )}
       </td>
-      <td className="px-2 py-2">
-        <div className="flex items-center gap-1">
-          <Button onClick={onHistory}>{t("schedules.history")}</Button>
+      <td className="px-2 py-2 text-right">
+        <div className="flex items-center justify-end gap-1">
+          <span className="pixel-legacy">
+            <Button onClick={onHistory}>{t("schedules.history")}</Button>
+          </span>
+          <span className="pixel-only">
+            <IconButton title={t("schedules.history")} onClick={onHistory}>
+              <PixelIcon name="history" />
+            </IconButton>
+          </span>
           {canEdit && (
-            <Button disabled={busy || running} onClick={onRun}>
-              {t("schedules.runNow")}
-            </Button>
+            <>
+              <span className="pixel-legacy">
+                <Button disabled={busy || running} onClick={onRun}>
+                  {t("schedules.runNow")}
+                </Button>
+              </span>
+              <span className="pixel-only">
+                <IconButton
+                  title={t("schedules.runNow")}
+                  disabled={busy || running}
+                  onClick={onRun}
+                >
+                  <PixelIcon name="play" />
+                </IconButton>
+              </span>
+            </>
           )}
           {canEdit && (
             <Menu

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router";
 import { Button } from "../../components/button.tsx";
 import { Field } from "../../components/field.tsx";
+import { PixelIcon } from "../../components/pixel-icon.tsx";
 import { Segmented } from "../../components/segmented.tsx";
 import { useLang } from "../../i18n/lang.tsx";
 import { PageHeader } from "../../layout/page-header.tsx";
@@ -47,25 +48,55 @@ export function TaskHistory() {
   }
   return (
     <div data-scene="history" className="space-y-6">
-      <PageHeader title={t("desk.history")}>
+      <PageHeader
+        title={t("desk.history")}
+        toolbar={
+          <div className="flex flex-wrap items-center gap-2">
+            <div data-ui="history-search" className="relative w-60 max-w-full">
+              <PixelIcon
+                name="search"
+                className="pointer-events-none absolute left-3 top-4 text-text-2"
+              />
+              <Field
+                label={t("desk.search")}
+                type="search"
+                placeholder={t("desk.search")}
+                value={search}
+                onChange={(event) => setSearch(event.target.value)}
+              />
+            </div>
+            <Segmented
+              label={t("desk.history")}
+              value={status}
+              onChange={setStatus}
+              options={(["done", "cancelled"] as const).map((value) => ({
+                value,
+                label: labels(lang).status[value],
+              }))}
+            />
+          </div>
+        }
+      >
         <Link data-ui="header-link" className="text-secondary text-accent" to="/desk">
           {t("nav.desk")}
         </Link>
       </PageHeader>
-      <Segmented
-        label={t("desk.history")}
-        value={status}
-        onChange={setStatus}
-        options={(["done", "cancelled"] as const).map((value) => ({
-          value,
-          label: labels(lang).status[value],
-        }))}
-      />
-      <Field
-        label={t("desk.search")}
-        value={search}
-        onChange={(event) => setSearch(event.target.value)}
-      />
+      <div className="pixel-legacy space-y-6">
+        <Segmented
+          label={t("desk.history")}
+          value={status}
+          onChange={setStatus}
+          options={(["done", "cancelled"] as const).map((value) => ({
+            value,
+            label: labels(lang).status[value],
+          }))}
+        />
+        <Field
+          label={t("desk.search")}
+          value={search}
+          onChange={(event) => setSearch(event.target.value)}
+        />
+      </div>
       {query.error && (
         <p role="alert" className="text-secondary text-status-failed">
           {query.error.message}
@@ -73,9 +104,15 @@ export function TaskHistory() {
       )}
       {query.isPending && <p className="text-secondary text-text-2">{t("common.loading")}</p>}
       {!query.isPending && !query.error && !items.length && (
-        <p className="text-secondary text-text-2">{t("desk.noMatches")}</p>
+        <p data-ui="empty-note" className="text-secondary text-text-2">
+          {t("desk.noMatches")}
+        </p>
       )}
-      <ul className="divide-y divide-line rounded-panel border border-line bg-surface">
+      <ul
+        data-ui="history-list"
+        data-empty={items.length === 0}
+        className="divide-y divide-line rounded-panel border border-line bg-surface"
+      >
         {items.map((task) => (
           <li key={task.id}>
             <button
@@ -92,7 +129,12 @@ export function TaskHistory() {
         ))}
       </ul>
       {query.hasNextPage && (
-        <Button disabled={query.isFetchingNextPage} onClick={() => void query.fetchNextPage()}>
+        <Button
+          variant="ghost"
+          className="mx-auto flex"
+          disabled={query.isFetchingNextPage}
+          onClick={() => void query.fetchNextPage()}
+        >
           {t("desk.loadMore")}
         </Button>
       )}

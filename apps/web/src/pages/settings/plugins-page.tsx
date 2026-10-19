@@ -61,7 +61,9 @@ export function PluginsPage() {
       )}
       {plugins.isPending && <p className="text-secondary text-text-2">{t("common.loading")}</p>}
       {plugins.data?.length === 0 && (
-        <p className="py-16 text-center text-secondary text-text-2">{t("settings.noPlugins")}</p>
+        <p data-ui="empty-note" className="py-16 text-center text-secondary text-text-2">
+          {t("settings.noPlugins")}
+        </p>
       )}
       <div data-ui="panel" className="rounded-panel border border-line bg-surface">
         {plugins.data?.map((plugin) => (

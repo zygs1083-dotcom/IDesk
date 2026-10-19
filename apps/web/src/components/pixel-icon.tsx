@@ -33,7 +33,8 @@ type IconName =
   | "eye"
   | "eye-off"
   | "external"
-  | "pencil";
+  | "pencil"
+  | "copy";
 
 const cells: Record<IconName, readonly Cell[]> = {
   desk: [
@@ -303,6 +304,15 @@ const cells: Record<IconName, readonly Cell[]> = {
     [8, 5, 3, 3],
     [11, 2, 3, 3],
     [2, 14, 3, 1],
+  ],
+  copy: [
+    [3, 1, 8, 2],
+    [2, 3, 2, 8],
+    [4, 10, 1, 2],
+    [6, 4, 8, 2],
+    [5, 6, 2, 8],
+    [7, 12, 7, 2],
+    [12, 6, 2, 6],
   ],
 };
 
