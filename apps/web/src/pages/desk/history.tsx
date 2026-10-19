@@ -3,6 +3,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router";
 import { Button } from "../../components/button.tsx";
+import { EmptyState } from "../../components/empty-state.tsx";
 import { Field } from "../../components/field.tsx";
 import { PixelIcon } from "../../components/pixel-icon.tsx";
 import { Segmented } from "../../components/segmented.tsx";
@@ -104,9 +105,12 @@ export function TaskHistory() {
       )}
       {query.isPending && <p className="text-secondary text-text-2">{t("common.loading")}</p>}
       {!query.isPending && !query.error && !items.length && (
-        <p data-ui="empty-note" className="text-secondary text-text-2">
-          {t("desk.noMatches")}
-        </p>
+        <EmptyState
+          title={t("desk.noMatches")}
+          description={t("empty.history")}
+          scene="folder"
+          className="py-0"
+        />
       )}
       <ul
         data-ui="history-list"

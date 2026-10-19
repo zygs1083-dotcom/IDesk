@@ -2,6 +2,7 @@ import { AGENT_KIND_LABELS, AGENT_KINDS } from "@idesk/shared/agent-schemas";
 import { Fragment, useState } from "react";
 import { Button } from "../../components/button.tsx";
 import { Dialog } from "../../components/dialog.tsx";
+import { EmptyState } from "../../components/empty-state.tsx";
 import { Menu } from "../../components/menu.tsx";
 import { PixelIcon } from "../../components/pixel-icon.tsx";
 import { useLang } from "../../i18n/lang.tsx";
@@ -13,6 +14,7 @@ import { useAgents } from "../../lib/use-agents.ts";
 import { useSession } from "../../lib/use-session.ts";
 import { useShortcut } from "../../lib/use-shortcut.ts";
 import { AgentDetails } from "./agent-details.tsx";
+import { assignAvatarOutfits } from "./avatar-outfits.ts";
 import { CreateAgent } from "./create-agent.tsx";
 import { DeleteAgent } from "./delete-agent.tsx";
 import { RotateAgentKey } from "./rotate-agent-key.tsx";
@@ -28,6 +30,7 @@ export function AgentsPage() {
   const [editing, setEditing] = useState<Agent | null>(null);
   const [deleting, setDeleting] = useState<Agent | null>(null);
   const [creating, setCreating] = useState(false);
+  const outfits = assignAvatarOutfits(agents);
   const visibleAgents = agents.filter((agent) => !kind || agent.kind === kind);
   useShortcut("n", () => {
     if (isAdmin) setCreating(true);
@@ -68,12 +71,16 @@ export function AgentsPage() {
         </p>
       )}
       {!isPending && !error && visibleAgents.length === 0 ? (
-        <div data-ui="empty-note" className="py-16 text-center text-secondary text-text-2">
-          <p>{t("agents.empty")}</p>
-          <Button disabled={!isAdmin} className="mt-3" onClick={() => setCreating(true)}>
-            {t("common.createOne")}
-          </Button>
-        </div>
+        <EmptyState
+          title={t("agents.empty")}
+          description={t("empty.agents")}
+          scene="chair"
+          action={{
+            label: t("common.createOne"),
+            disabled: !isAdmin,
+            onClick: () => setCreating(true),
+          }}
+        />
       ) : (
         <div data-ui="agent-list-scroll" className="-mb-24 overflow-x-auto pb-24">
           <div data-ui="panel" className="rounded-panel border border-line bg-surface">
@@ -119,7 +126,7 @@ export function AgentsPage() {
                     >
                       <td data-ui="agent-status-col" className="px-4 py-2">
                         <span data-ui="list-status" data-status={agent.status}>
-                          <PixelIcon name={agent.status === "online" ? "check" : "pause"} />
+                          <span data-ui="status-pixel-dot" aria-hidden="true" />
                           {t(agent.status === "online" ? "common.online" : "common.offline")}
                         </span>
                       </td>
@@ -144,7 +151,16 @@ export function AgentsPage() {
                             )}
                           />
                           <span data-ui="kind-avatar" aria-hidden="true">
-                            {agent.kind.slice(0, 2).toUpperCase()}
+                            <img
+                              src={`/pixel-office/avatars/${outfits.get(agent.id)}.webp`}
+                              width="32"
+                              height="32"
+                              alt=""
+                              loading="lazy"
+                            />
+                            <span className="pixel-legacy">
+                              {agent.kind.slice(0, 2).toUpperCase()}
+                            </span>
                           </span>
                           <span className="min-w-0 truncate">{agent.name}</span>
                         </Button>

@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useSearchParams } from "react-router";
 import type { z } from "zod";
 import { Button } from "../../components/button.tsx";
+import { EmptyState } from "../../components/empty-state.tsx";
 import { Field } from "../../components/field.tsx";
 import { PixelIcon } from "../../components/pixel-icon.tsx";
 import { Segmented } from "../../components/segmented.tsx";
@@ -142,20 +143,18 @@ export function RelayPage() {
         </p>
       )}
       {!isPending && !error && messages.length === 0 ? (
-        <div data-ui="board-note" className="py-16 text-center text-secondary text-text-2">
-          <p>
-            {t(
-              q || status !== "all" || recipient !== "all" || kind !== "all" || task !== "all"
-                ? "relay.noMatches"
-                : "relay.empty",
-            )}
-          </p>
-          {isAdmin && (
-            <Button className="mt-3" onClick={() => setCompose({})}>
-              {t("relay.sendOne")}
-            </Button>
+        <EmptyState
+          title={t(
+            q || status !== "all" || recipient !== "all" || kind !== "all" || task !== "all"
+              ? "relay.noMatches"
+              : "relay.empty",
           )}
-        </div>
+          description={t("empty.relay")}
+          scene="envelope"
+          action={
+            isAdmin ? { label: t("relay.sendOne"), onClick: () => setCompose({}) } : undefined
+          }
+        />
       ) : (
         <div
           data-ui="panel"
@@ -181,9 +180,12 @@ export function RelayPage() {
           </div>
           <div data-ui="letter-desk" className="min-w-0 flex-1 overflow-y-auto">
             {!selected && (
-              <p data-ui="relay-select-note" className="p-6 text-secondary text-text-2">
-                {t("relay.selectMessage")}
-              </p>
+              <EmptyState
+                title={t("relay.selectMessage")}
+                description={t("empty.relaySelect")}
+                scene="envelope"
+                className="p-6"
+              />
             )}
             {selected && (
               <RelayDetail
