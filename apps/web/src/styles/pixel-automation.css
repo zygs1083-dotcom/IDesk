@@ -89,7 +89,7 @@ html[data-skin="pixel"] {
     border-radius: 0;
     background: var(--surface);
     box-shadow: var(--elevation-card);
-    padding: 7px 8px 6px;
+    padding: 4px 8px 3px;
   }
   & [data-scene="automation"] [data-ui="card"][data-status="waiting"] {
     --card-status: var(--status-open);
@@ -110,7 +110,7 @@ html[data-skin="pixel"] {
     align-items: flex-start;
     gap: 4px;
     min-width: 0;
-    margin-bottom: 2px;
+    margin-bottom: 0;
   }
   & [data-scene="automation"] [data-ui="status-dot"],
   & [data-ui="run-state"] {
@@ -118,7 +118,7 @@ html[data-skin="pixel"] {
   }
   & [data-scene="automation"] [data-ui="card-title"] {
     font-size: 13px;
-    line-height: 20px;
+    line-height: 17px;
   }
   & [data-scene="automation"] [data-ui="card"] > p {
     margin: 0;
