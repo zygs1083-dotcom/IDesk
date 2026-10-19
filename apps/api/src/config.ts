@@ -1,3 +1,4 @@
+import { fileURLToPath } from "node:url";
 import { z } from "zod";
 
 const schema = z.object({
@@ -10,6 +11,9 @@ const schema = z.object({
   IDESK_PUBLIC_URL: z.string().url().optional(),
   IDESK_OFFICE_DIST: z.string().optional(),
   IDESK_WEB_DIST: z.string().optional(),
+  IDESK_PROBE_DIST: z
+    .string()
+    .default(fileURLToPath(new URL("../../../packages/cli/dist/probe.mjs", import.meta.url))),
 });
 
 export type Config = z.infer<typeof schema>;

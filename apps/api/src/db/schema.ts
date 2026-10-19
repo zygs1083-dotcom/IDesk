@@ -1,10 +1,12 @@
 import { AGENT_KINDS } from "@idesk/shared/agent-schemas";
 import { RELAY_KINDS, type RelayRecipient } from "@idesk/shared/relay";
 import type { ScheduleAction } from "@idesk/shared/schedule-schemas";
+import type { serverDiskSchema, serverInfoSchema } from "@idesk/shared/server-schemas";
 import type { TaskRecruit } from "@idesk/shared/task-machine";
 import { TASK_PRIORITIES, TASK_STATUSES } from "@idesk/shared/task-status";
-import { index, integer, sqliteTable, text, uniqueIndex } from "drizzle-orm/sqlite-core";
+import { index, integer, real, sqliteTable, text, uniqueIndex } from "drizzle-orm/sqlite-core";
 import { ulid } from "ulid";
+import type { z } from "zod";
 
 export const RUN_STATUSES = ["waiting", "running", "success", "failed", "canceled"] as const;
 
@@ -57,6 +59,48 @@ export const agents = sqliteTable(
       .$defaultFn(() => new Date()),
   },
   (table) => [uniqueIndex("agents_api_key_hash_unique").on(table.apiKeyHash)],
+);
+
+export const servers = sqliteTable(
+  "servers",
+  {
+    id: text()
+      .primaryKey()
+      .$defaultFn(() => ulid()),
+    name: text().notNull(),
+    tokenHash: text("token_hash").notNull(),
+    info: text({ mode: "json" }).$type<z.infer<typeof serverInfoSchema>>(),
+    lastSeenAt: integer("last_seen_at", { mode: "timestamp_ms" }),
+    createdAt: integer("created_at", { mode: "timestamp_ms" })
+      .notNull()
+      .$defaultFn(() => new Date()),
+  },
+  (table) => [uniqueIndex("servers_token_hash_unique").on(table.tokenHash)],
+);
+
+export const serverSamples = sqliteTable(
+  "server_samples",
+  {
+    id: integer().primaryKey({ autoIncrement: true }),
+    serverId: text("server_id").notNull(),
+    ts: integer({ mode: "timestamp_ms" }).notNull(),
+    cpu: real().notNull(),
+    cores: text({ mode: "json" }).$type<number[]>().notNull(),
+    load1: real().notNull(),
+    load5: real().notNull(),
+    load15: real().notNull(),
+    memUsed: integer("mem_used").notNull(),
+    memTotal: integer("mem_total").notNull(),
+    swapUsed: integer("swap_used").notNull(),
+    swapTotal: integer("swap_total").notNull(),
+    diskUsed: integer("disk_used").notNull(),
+    diskTotal: integer("disk_total").notNull(),
+    disks: text({ mode: "json" }).$type<z.infer<typeof serverDiskSchema>[]>().notNull(),
+    netRx: real("net_rx").notNull(),
+    netTx: real("net_tx").notNull(),
+    uptime: real().notNull(),
+  },
+  (table) => [index("server_samples_server_ts_idx").on(table.serverId, table.ts)],
 );
 
 export const events = sqliteTable(

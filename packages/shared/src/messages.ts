@@ -29,6 +29,8 @@ export const zh = {
 
   "agent.notFound": () => "智能体不存在",
   "agent.noWebhook": () => "这个智能体没有配置 Webhook",
+  "server.notFound": () => "服务器不存在",
+  "server.invalidToken": () => "服务器令牌无效",
 
   "schedule.notFound": () => "定时任务不存在",
   "schedule.running": () => "定时任务正在执行",
@@ -89,6 +91,8 @@ export const en: { [K in MessageKey]: (typeof zh)[K] } = {
 
   "agent.notFound": () => "Agent not found",
   "agent.noWebhook": () => "This agent has no webhook",
+  "server.notFound": () => "Server not found",
+  "server.invalidToken": () => "Invalid server token",
 
   "schedule.notFound": () => "Schedule not found",
   "schedule.running": () => "Schedule is already running",
