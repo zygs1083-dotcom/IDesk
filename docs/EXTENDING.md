@@ -65,7 +65,11 @@ export default {
 
 ## 2. 接一个新的 AI 客户端
 
-先在「智能体」页新建智能体，拿到只显示一次的 key。然后三选一：
+先在「智能体」页新建智能体，拿到只显示一次的 key。
+
+**最省事的做法**：点「复制接入消息」，整段发给智能体。消息里的规范链接 `<origin>/agent-guide.md`（源文件 `docs/AGENT-GUIDE.md`）写明了怎么装官方接收器、怎么常驻、怎么自检，以及被唤醒后怎么接任务和交付。自己写接收器的，必须满足其中第 7 节的每一条。
+
+不用官方接收器时，三选一：
 
 **MCP**（最省事）：`<origin>/mcp`，Streamable HTTP，请求头 `Authorization: Bearer <key>`。工具有 `idesk_me`、`idesk_list_tasks`、`idesk_get_task`、`idesk_publish_task`、`idesk_report`、`idesk_relay_send`、`idesk_relay_inbox`，以及状态机每个动作一个的 `idesk_<action>_task`（claim、complete、handoff 等）。资源 `idesk://tasks/open`、`idesk://relay/inbox`。只支持 stdio 的客户端用 CLI 的 `idesk mcp` 做桥。
 

@@ -192,3 +192,10 @@
 - **W105 服务器状态页面**：UI §5「服务器」、§8.3。侧栏入口、`/servers` 页、手写 SVG 图表、添加/管理弹窗、三皮肤样式。依赖 W104 的接口定义（已在 `@idesk/shared/server-schemas`），可并行开发。
 - 负责人整合：腾讯云宿主机装 Node，腾讯云与 qyunt-orca 装采集程序；发布前后跑 `ui-audit`（加入 `/servers`）。正式部署仅腾讯云。
 
+
+## M22 智能体接入规范链接
+
+- **W106 接入规范后端**：DESIGN §12.32。`/agent-guide.md`（读 `docs/AGENT-GUIDE.md` 替换 origin）、`/api/agent-kit/v1/idesk.mjs`、`agents.client` 列与迁移 `0010`、心跳带 `client`、`PATCH /agents/me`、两个 `webhook-test` 接口、Dockerfile 拷贝规范文件和 CLI 单文件。验收：接口单元测试，测试推送对本地假接收端验签通过。
+- **W107 官方接收器**：DESIGN §12.32、`docs/AGENT-GUIDE.md` 第 7 节。`packages/cli` 加 `me`、`task <id>`、`receiver init/run/check`，版本 0.2.0。验收：签名（含规范里的测试向量）、防重放、持久去重与重启、归属核对、串行唤醒与退出码判断、提示不含外部内容、续租与 4 小时暂停、补漏的单元测试；本机对本地 IDesk 跑通 init → run → check。
+- **W108 接入规范网页**：UI「智能体」「设置」。新建与轮换后的「复制接入消息」、接入信息页规范链接、展开行的接收端与测试推送。依赖 W106 的接口定义（已在 `@idesk/shared`），可并行开发。
+- 负责人整合：用官方接收器在本机接一个测试智能体，指派任务走通唤醒 → accept → done；Mac 与公司 Windows 的现有接收器由各自机器上的智能体按规范链接换成官方接收器（换之前问用户）。正式部署仅腾讯云。
