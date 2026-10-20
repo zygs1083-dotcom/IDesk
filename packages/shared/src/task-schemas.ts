@@ -20,6 +20,9 @@ const recruitActionSchema = z.object({
 export const publishTaskSchema = createTaskSchema.extend({
   dispatch: z.discriminatedUnion("type", [assignActionSchema, recruitActionSchema]).exactOptional(),
 });
+export const webPublishTaskSchema = publishTaskSchema.extend({
+  publisherPersonId: z.string().exactOptional(),
+});
 export const taskActionSchema = z.discriminatedUnion("type", [
   z.object({ type: z.literal("claim") }),
   assignActionSchema,

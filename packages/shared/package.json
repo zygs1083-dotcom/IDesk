@@ -19,7 +19,9 @@
     "./server-schemas": "./src/server-schemas.ts",
     "./office-clearance": "./src/office-clearance.ts",
     "./office-geometry": "./src/office-geometry.ts",
-    "./office-layout": "./src/office-layout.ts"
+    "./office-layout": "./src/office-layout.ts",
+    "./people-schemas": "./src/people-schemas.ts",
+    "./assistant-schemas": "./src/assistant-schemas.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
