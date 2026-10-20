@@ -69,6 +69,7 @@ test("archives 2500 events in UTC month files and a second run leaves files unch
   });
   const emit = vi.fn();
   const ctx: PluginContext = {
+    assistant: { receive: vi.fn(), status: vi.fn() },
     db,
     dataDir: archiveDir,
     config: { keepDays: 90 },

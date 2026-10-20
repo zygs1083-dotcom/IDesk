@@ -1,4 +1,8 @@
-import type { AssistantConnectionStatus, AssistantReceiveInput, AssistantReply } from "@idesk/shared/assistant-schemas";
+import type {
+  AssistantConnectionStatus,
+  AssistantReceiveInput,
+  AssistantReply,
+} from "@idesk/shared/assistant-schemas";
 import type { ImChannel } from "@idesk/shared/people-schemas";
 import type { TaskAction, TransitionError } from "@idesk/shared/task-machine";
 import type { Hono } from "hono";

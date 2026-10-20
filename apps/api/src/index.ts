@@ -1,12 +1,13 @@
 import { serve } from "@hono/node-server";
 import { config } from "./config.ts";
+import { startAssistantNotifications } from "./core/assistant/notifications.ts";
 import { app, injectWebSocket } from "./http/app.ts";
 import { startPlugins } from "./plugins/host.ts";
 import { startScheduler } from "./scheduler/runner.ts";
-
 import { startSchedules } from "./scheduler/schedules.ts";
 
 await startPlugins();
+startAssistantNotifications();
 startScheduler();
 startSchedules();
 

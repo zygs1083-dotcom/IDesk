@@ -15,6 +15,7 @@ import { requestLang } from "./request-lang.ts";
 import { agentKitRoutes } from "./routes/agent-kit.ts";
 import { agentWebhookRoutes } from "./routes/agent-webhook.ts";
 import { agentRoutes } from "./routes/agents.ts";
+import { assistantRoutes } from "./routes/assistant.ts";
 import { authRoutes } from "./routes/auth.ts";
 import { automationRoutes } from "./routes/automation.ts";
 import { connectorRoutes } from "./routes/connectors.ts";
@@ -74,6 +75,7 @@ agentKitRoutes(app);
 
 app.use("/api/v1/*", auth);
 authRoutes(app);
+assistantRoutes(app);
 taskRoutes(app);
 peopleRoutes(app);
 agentWebhookRoutes(app);
