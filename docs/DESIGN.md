@@ -747,7 +747,7 @@ completedAt: <ISO>
 
 #### 人员
 
-- 新表 `people`：`id`（ulid）、`name`（1–20 字，去首尾空格，唯一）、`role`（`member` 可发布和查询 | `viewer` 只查询）、`createdAt`。
+- 新表 `people`：`id`（`p_` + ulid，前缀让前端只凭 publisherId 区分人员和智能体，删除后也能显示「已删除人员」而不是已删除智能体的文案）、`name`（1–20 字，去首尾空格，唯一）、`role`（`member` 可发布和查询 | `viewer` 只查询）、`createdAt`。
 - 新表 `person_bindings`：`id`、`personId`、`channel`（`feishu` `dingtalk` `wecom`）、`externalId`（平台用户 id：飞书 open_id、钉钉 senderStaffId、企业微信 userid）、`displayName`（平台上的昵称，绑定时记一次）、`createdAt`；`(channel, externalId)` 唯一。一个人可以绑多个平台。删人员同一事务删他的绑定、会话和来源记录（见下），历史任务的 publisherId 保留，显示「已删除人员」。
 - `tasks.publisherId` 的取值增加人员 id：`agent id` | `person id` | `human`。旧数据的 `human` 不迁移，显示为「管理员」。迁移 `0011` 只加表，不改 tasks。
 - `Actor` 增加 `{ kind: "person"; id: string }`，只来自助理（网页上永远是 `human`）。状态机里 person 只被下面两条规则放行：`cancel` 且 `id === publisherId`；其他动作一律 `auth.humanOrPublisherOnly` / `auth.humanOnly` 原样拒绝。发布、查询不走状态机。
