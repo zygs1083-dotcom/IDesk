@@ -55,6 +55,37 @@ test.each(cases)("$type renders $text", ({ type, payload, text }) => {
   ).toBe(text);
 });
 
+test.each(["feishu", "dingtalk", "wecom", "web"])(
+  "person publications use payload identity and channel %s",
+  (via) => {
+    const event: Event = {
+      id: "event",
+      ts: "2026-10-20T00:00:00Z",
+      type: "task.created",
+      payload: { personId: "p_pat", via },
+      taskId: "task",
+      agentId: null,
+    };
+    const names = (id: string | null) => (id === "p_pat" ? "Pat" : "Admin");
+    const text = eventText(event, names, "en");
+    expect(text).toContain("Pat published");
+    expect(text.includes("via")).toBe(via !== "web");
+    expect(text).not.toContain("Admin");
+  },
+);
+
+test("a person cancellation uses the person identity when the agent actor is null", () => {
+  const event: Event = {
+    id: "event",
+    ts: "2026-10-20T00:00:00Z",
+    type: "task.cancel",
+    payload: { personId: "p_pat" },
+    taskId: "task",
+    agentId: null,
+  };
+  expect(eventText(event, (id) => (id === "p_pat" ? "Pat" : "Admin"), "en")).toBe("Pat cancelled");
+});
+
 test("expired leases do not attribute the action to a human", () => {
   expect(
     eventText(

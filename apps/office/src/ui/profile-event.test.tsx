@@ -146,7 +146,7 @@ describe.each(["zh", "en"] as const)("%s colleague activity", (lang) => {
   it("keeps current tasks readable for viewers and preserves the three admin forms", () => {
     language.current = lang;
     const open = { ...task, id: "available-task", status: "open" as const };
-    const props = { agent, agents: [agent], tasks: [task, open], onClose: () => {} };
+    const props = { agent, agentName, tasks: [task, open], onClose: () => {} };
     const readonly = renderToStaticMarkup(<ProfileModal {...props} admin={false} />);
     expect(readonly).toContain('href="/desk?task=task%2Fone"');
     expect(readonly).not.toContain("<form");

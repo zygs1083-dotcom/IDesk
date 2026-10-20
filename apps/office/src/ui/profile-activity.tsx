@@ -12,18 +12,14 @@ import type { Agent, Task } from "./use-office-data.ts";
 type TaskEvent = z.infer<typeof eventSchema>;
 export function ProfileActivity({
   agent,
-  agents,
+  agentName,
   tasks,
 }: {
   agent: Agent;
-  agents: Agent[];
+  agentName: (id: string | null) => string;
   tasks: Task[];
 }) {
   const { lang, t } = useLang();
-  const agentName = (id: string | null) =>
-    id === null || id === "human"
-      ? t("common.human")
-      : (agents.find((item) => item.id === id)?.name ?? t("common.deletedAgent"));
   const [events, setEvents] = useState<TaskEvent[]>([]);
   const [error, setError] = useState("");
   useEffect(() => {

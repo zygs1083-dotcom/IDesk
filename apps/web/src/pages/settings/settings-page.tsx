@@ -17,6 +17,8 @@ export function SettingsPage() {
           {[
             ["connectors", t("common.connectors")],
             ["plugins", t("common.plugins")],
+            ["people", t("settings.people")],
+            ["assistant", t("settings.assistant")],
             ["access", t("settings.access")],
             ["appearance", t("settings.appearance")],
           ].map(([path, label]) => (

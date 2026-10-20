@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
+import { useSearchParams } from "react-router";
 import { Button } from "../../components/button.tsx";
 import { EmptyState } from "../../components/empty-state.tsx";
 import { Switch } from "../../components/switch.tsx";
@@ -18,10 +19,22 @@ export function PluginsPage() {
     connector: t("common.connectors"),
     notifier: t("settings.notifications"),
     action: t("common.action"),
+    channel: t("assistant.channels"),
   };
   const client = useQueryClient();
   const plugins = useQuery({ queryKey: ["plugins"], queryFn: () => request<Plugin[]>("/plugins") });
-  const [expanded, setExpanded] = useState<string | null>(null);
+  const [params, setParams] = useSearchParams();
+  const expanded = params.get("plugin");
+  function setExpanded(id: string | null) {
+    setParams(
+      (current) => {
+        if (id) current.set("plugin", id);
+        else current.delete("plugin");
+        return current;
+      },
+      { replace: true },
+    );
+  }
   const [message, setMessage] = useState<string | null>(null);
   const toggle = useMutation({
     mutationFn: ({ id, enabled }: { id: string; enabled: boolean }) =>

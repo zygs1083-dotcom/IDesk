@@ -12,13 +12,13 @@ import "./profile.css";
 
 export function ProfileModal({
   agent,
-  agents,
+  agentName,
   tasks,
   admin,
   onClose,
 }: {
   agent: Agent;
-  agents: Agent[];
+  agentName: (id: string | null) => string;
   tasks: Task[];
   admin: boolean;
   onClose: () => void;
@@ -82,7 +82,7 @@ export function ProfileModal({
           </div>
         </div>
         <ProfileStats agentId={agent.id} />
-        <ProfileActivity agent={agent} agents={agents} tasks={tasks} />
+        <ProfileActivity agent={agent} agentName={agentName} tasks={tasks} />
         {admin && <ProfileActions agentId={agent.id} tasks={tasks} onSuccess={announce} />}
       </div>
       <footer className="profile-footer">

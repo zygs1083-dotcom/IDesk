@@ -12,7 +12,9 @@ import { SchedulesPage } from "./pages/schedules/schedules-page.tsx";
 import { ServersPage } from "./pages/servers/servers-page.tsx";
 import { AccessPage } from "./pages/settings/access-page.tsx";
 import { AppearancePage } from "./pages/settings/appearance-page.tsx";
+import { AssistantPage } from "./pages/settings/assistant-page.tsx";
 import { ConnectorsPage } from "./pages/settings/connectors-page.tsx";
+import { PeoplePage } from "./pages/settings/people-page.tsx";
 import { PluginsPage } from "./pages/settings/plugins-page.tsx";
 import { SettingsPage } from "./pages/settings/settings-page.tsx";
 
@@ -48,6 +50,8 @@ export function App() {
           <Route index element={<Navigate to="/settings/connectors" replace />} />
           <Route path="connectors" element={<ConnectorsPage />} />
           <Route path="plugins" element={<PluginsPage />} />
+          <Route path="people" element={<PeoplePage />} />
+          <Route path="assistant" element={<AssistantPage />} />
           <Route path="access" element={<AccessPage />} />
           <Route path="appearance" element={<AppearancePage />} />
         </Route>
