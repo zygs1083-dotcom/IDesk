@@ -18,6 +18,9 @@ COPY plugins/n8n/package.json plugins/n8n/package.json
 COPY plugins/dolphinscheduler/package.json plugins/dolphinscheduler/package.json
 COPY plugins/github-actions/package.json plugins/github-actions/package.json
 COPY plugins/webhook-notifier/package.json plugins/webhook-notifier/package.json
+COPY plugins/feishu/package.json plugins/feishu/package.json
+COPY plugins/dingtalk/package.json plugins/dingtalk/package.json
+COPY plugins/wecom/package.json plugins/wecom/package.json
 RUN pnpm install --frozen-lockfile
 COPY . .
 RUN pnpm --filter web build
@@ -39,6 +42,9 @@ COPY --from=build /app/plugins/n8n/package.json plugins/n8n/package.json
 COPY --from=build /app/plugins/dolphinscheduler/package.json plugins/dolphinscheduler/package.json
 COPY --from=build /app/plugins/github-actions/package.json plugins/github-actions/package.json
 COPY --from=build /app/plugins/webhook-notifier/package.json plugins/webhook-notifier/package.json
+COPY --from=build /app/plugins/feishu/package.json plugins/feishu/package.json
+COPY --from=build /app/plugins/dingtalk/package.json plugins/dingtalk/package.json
+COPY --from=build /app/plugins/wecom/package.json plugins/wecom/package.json
 RUN pnpm install --frozen-lockfile --prod
 COPY apps/api apps/api
 COPY packages/shared packages/shared
