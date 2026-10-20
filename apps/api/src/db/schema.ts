@@ -242,7 +242,7 @@ export const relayMessages = sqliteTable(
 export const people = sqliteTable("people", {
   id: text()
     .primaryKey()
-    .$defaultFn(() => ulid()),
+    .$defaultFn(() => `p_${ulid()}`),
   name: text().notNull().unique(),
   role: text({ enum: PERSON_ROLES }).notNull(),
   createdAt: integer("created_at", { mode: "timestamp_ms" })
