@@ -40,7 +40,6 @@ html[data-skin="pixel"] {
       400 12px / 1.4 "IDesk Pixel",
       var(--font-sans);
     font-synthesis: none;
-    -webkit-font-smoothing: none;
   }
   & [data-ui="column-heading"] [data-ui="column-count"] {
     min-width: 20px;
@@ -49,7 +48,10 @@ html[data-skin="pixel"] {
     color: var(--ink);
     background: var(--copper-light);
     border: 1px solid var(--copper);
-    font: 400 12px / 1.2 var(--font-sans);
+    font:
+      400 12px / 16px "IDesk Pixel",
+      var(--font-sans);
+    font-synthesis: none;
   }
   & [data-ui="status-dot"] {
     width: 8px;

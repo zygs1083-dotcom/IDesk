@@ -54,8 +54,6 @@ html[data-skin="pixel"] {
     font:
       400 12px / 1.3 "IDesk Pixel",
       var(--font-sans);
-    font-synthesis: none;
-    -webkit-font-smoothing: none;
     white-space: nowrap;
   }
   & [data-ui="list-status"][data-status="online"] {
@@ -73,8 +71,6 @@ html[data-skin="pixel"] {
     font:
       400 12px / 1 "IDesk Pixel",
       var(--font-sans);
-    font-synthesis: none;
-    -webkit-font-smoothing: none;
   }
   & [data-ui="agent-kind-col"],
   & [data-ui="classic-agent-status-dot"] {
@@ -116,8 +112,6 @@ html[data-skin="pixel"] {
     font:
       400 12px / 1.4 "IDesk Pixel",
       var(--font-sans);
-    font-synthesis: none;
-    -webkit-font-smoothing: none;
   }
   & [data-ui="log-page"] li {
     min-height: 48px;

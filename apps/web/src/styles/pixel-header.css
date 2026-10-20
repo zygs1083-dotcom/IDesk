@@ -22,8 +22,6 @@ html[data-skin="pixel"] {
     font:
       400 24px / 1.25 "IDesk Pixel",
       var(--font-sans);
-    font-synthesis: none;
-    -webkit-font-smoothing: none;
     overflow-wrap: anywhere;
   }
   & [data-ui="page-heading"] [data-ui="page-subtitle"] {
@@ -55,8 +53,6 @@ html[data-skin="pixel"] {
     font:
       400 12px / 1 "IDesk Pixel",
       var(--font-sans);
-    font-synthesis: none;
-    -webkit-font-smoothing: none;
   }
   & [data-ui="header-link"]:hover {
     background: var(--surface-2);

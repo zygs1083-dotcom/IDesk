@@ -46,8 +46,6 @@ html[data-skin="pixel"] {
     font:
       400 24px / 1.25 "IDesk Pixel",
       var(--font-sans);
-    font-synthesis: none;
-    -webkit-font-smoothing: none;
     overflow-wrap: anywhere;
   }
   & [data-ui="overlay-body"] {

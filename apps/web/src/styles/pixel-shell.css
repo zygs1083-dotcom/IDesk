@@ -30,8 +30,6 @@ html[data-skin="pixel"] {
     font:
       400 24px / 1 "IDesk Pixel",
       var(--font-sans);
-    font-synthesis: none;
-    -webkit-font-smoothing: none;
     letter-spacing: 1px;
     background: var(--copper-light);
     border: 2px solid var(--ink);
@@ -52,7 +50,6 @@ html[data-skin="pixel"] {
       400 12px / 1.4 "IDesk Pixel",
       var(--font-sans);
     font-synthesis: none;
-    -webkit-font-smoothing: none;
     border: 0;
     border-radius: 0;
   }
@@ -118,8 +115,6 @@ html[data-skin="pixel"] {
     font:
       400 12px / 1 "IDesk Pixel",
       var(--font-sans);
-    font-synthesis: none;
-    -webkit-font-smoothing: none;
     border: 0;
   }
   & [data-ui="pixel-footer"] button:hover {
