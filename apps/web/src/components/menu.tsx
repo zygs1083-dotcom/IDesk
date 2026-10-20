@@ -1,6 +1,6 @@
 import { Ellipsis } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
-import { useEffect, useId, useRef, useState } from "react";
+import { useId, useLayoutEffect, useRef, useState } from "react";
 import { cn } from "../lib/cn.ts";
 import { Button } from "./button.tsx";
 import { PixelIcon } from "./pixel-icon.tsx";
@@ -22,18 +22,47 @@ export function Menu({
   const menu = useRef<HTMLDivElement>(null);
   const id = useId();
   const reduced = useReducedMotion();
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!open) return;
-    menu.current?.querySelector("button")?.focus();
+    if (disabled) {
+      setOpen(false);
+      return;
+    }
+    const panel = menu.current;
+    const button = triggerRef.current;
+    if (!panel || !button) return;
+    const anchor = button.getBoundingClientRect();
+    // Keep the DOM ancestry (including modal dialogs) while escaping scroll clipping.
+    panel.showPopover();
+    const bounds = panel.getBoundingClientRect();
+    const above = Math.max(0, anchor.top - 8);
+    const below = Math.max(0, window.innerHeight - anchor.bottom - 8);
+    const upwards = bounds.height > below && above > below;
+    panel.style.maxHeight = `${upwards ? above : below}px`;
+    panel.style.left = `${Math.max(8, Math.min(anchor.right - bounds.width, window.innerWidth - bounds.width - 8))}px`;
+    panel.style.top = `${upwards ? anchor.top - Math.min(bounds.height, above) : anchor.bottom}px`;
+    panel.querySelector("button")?.focus({ preventScroll: true });
     const outside = (event: PointerEvent) => {
       if (!root.current?.contains(event.target as Node)) setOpen(false);
     };
+    const moved = (event: Event) => {
+      if (event.type === "scroll" && panel.contains(event.target as Node)) return;
+      setOpen(false);
+      triggerRef.current?.focus({ preventScroll: true });
+    };
     document.addEventListener("pointerdown", outside);
-    return () => document.removeEventListener("pointerdown", outside);
-  }, [open]);
+    document.addEventListener("scroll", moved, true);
+    window.addEventListener("resize", moved);
+    return () => {
+      document.removeEventListener("pointerdown", outside);
+      document.removeEventListener("scroll", moved, true);
+      window.removeEventListener("resize", moved);
+      panel.hidePopover();
+    };
+  }, [open, disabled]);
   function close() {
     setOpen(false);
-    triggerRef.current?.focus();
+    triggerRef.current?.focus({ preventScroll: true });
   }
   return (
     <div ref={root} className="relative">
@@ -62,12 +91,14 @@ export function Menu({
           id={id}
           ref={menu}
           role="menu"
+          popover="manual"
           onKeyDown={(event) => {
             if (event.key === "Escape") {
               event.preventDefault();
+              event.stopPropagation();
               close();
             }
-            if (event.key === "Tab") setOpen(false);
+            if (event.key === "Tab") close();
             if (["ArrowDown", "ArrowUp", "Home", "End"].includes(event.key)) {
               event.preventDefault();
               const buttons = Array.from(menu.current?.querySelectorAll("button") ?? []);
@@ -86,7 +117,7 @@ export function Menu({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: reduced ? 0 : 0.2 }}
-          className="absolute right-0 top-full z-20 min-w-36 rounded-pop border border-line bg-surface p-1 shadow-pop"
+          className="fixed inset-auto m-0 w-min min-w-36 max-w-[calc(100vw-16px)] overflow-y-auto rounded-pop border border-line bg-surface p-1 shadow-pop"
         >
           {items.map((item) => (
             <button
