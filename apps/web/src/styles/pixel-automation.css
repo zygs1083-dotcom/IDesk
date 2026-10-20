@@ -195,6 +195,12 @@ html[data-skin="pixel"] {
 }
 
 html:not([data-skin="pixel"]) {
+  & [data-scene="automation"] [data-ui="page-heading"] {
+    flex-wrap: wrap;
+  }
+  & [data-scene="automation"] [data-ui="page-heading"] > div:first-child {
+    flex-shrink: 0;
+  }
   & [data-scene="automation"] [data-ui="run-cards"] {
     gap: 4px;
   }
