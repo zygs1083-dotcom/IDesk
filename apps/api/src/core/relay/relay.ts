@@ -11,7 +11,7 @@ import { inbox } from "./visibility.ts";
 export { listRelay } from "./query.ts";
 
 export type RelayMessage = typeof relayMessages.$inferSelect;
-export type Viewer = Exclude<Actor, { kind: "system" }>;
+export type Viewer = Exclude<Actor, { kind: "system" | "person" }>;
 export type RelayInput = {
   to?: RelayRecipient;
   kind: RelayKind;

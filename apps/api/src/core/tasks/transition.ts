@@ -51,6 +51,7 @@ function applyAction(
         ...(actor.kind === "agent" ? { agentId: actor.id } : {}),
         type: eventOverride?.type ?? `task.${action.type}`,
         payload: eventOverride?.payload ?? {
+          ...(actor.kind === "person" ? { personId: actor.id } : {}),
           from: task.status,
           to: next.status,
           ...(action.type === "handoff"

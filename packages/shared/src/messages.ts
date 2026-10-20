@@ -27,6 +27,10 @@ export const zh = {
   "transition.recruitMinimum": () => "招募至少需要 2 个智能体",
   "transition.systemLeaseOnly": () => "只有系统可以处理租约到期",
 
+  "person.notFound": () => "人员不存在",
+  "person.nameTaken": () => "人员名字已被使用",
+  "person.bindingNotFound": () => "绑定不存在",
+
   "agent.notFound": () => "智能体不存在",
   "agent.noWebhook": () => "这个智能体没有配置 Webhook",
   "server.notFound": () => "服务器不存在",
@@ -88,6 +92,10 @@ export const en: { [K in MessageKey]: (typeof zh)[K] } = {
     `Cannot ${labels("en").action[p.action].toLowerCase()} a task that is ${labels("en").status[p.status].toLowerCase()}`,
   "transition.recruitMinimum": () => "Recruitment requires at least 2 agents",
   "transition.systemLeaseOnly": () => "Only the system can handle lease expiry",
+
+  "person.notFound": () => "Person not found",
+  "person.nameTaken": () => "Person name is already taken",
+  "person.bindingNotFound": () => "Binding not found",
 
   "agent.notFound": () => "Agent not found",
   "agent.noWebhook": () => "This agent has no webhook",

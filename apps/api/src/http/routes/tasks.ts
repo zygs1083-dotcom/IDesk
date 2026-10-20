@@ -3,14 +3,15 @@ import { TransitionError } from "@idesk/shared/task-machine";
 import {
   errorSchema,
   idSchema,
-  publishTaskSchema,
   reportSchema,
   taskActionSchema,
   taskSchema,
   updateTaskSchema,
+  webPublishTaskSchema,
 } from "@idesk/shared/task-schemas";
 import { validator } from "hono/validator";
 import { z } from "zod";
+import { getPerson } from "../../core/people/people.ts";
 import { updateTask } from "../../core/tasks/edit.ts";
 import { publishTask } from "../../core/tasks/publish.ts";
 import { actOnTask, reportProgress } from "../../core/tasks/transition.ts";
@@ -26,7 +27,7 @@ export function taskRoutes(app: OpenAPIHono<AuthEnv>) {
       method: "post",
       path: "/api/v1/tasks",
       request: {
-        body: { required: true, content: { "application/json": { schema: publishTaskSchema } } },
+        body: { required: true, content: { "application/json": { schema: webPublishTaskSchema } } },
       },
       responses: {
         201: { description: "Published", content: { "application/json": { schema: taskSchema } } },
@@ -37,12 +38,17 @@ export function taskRoutes(app: OpenAPIHono<AuthEnv>) {
       },
     },
     (c) => {
-      const { dueAt, dispatch, ...input } = c.req.valid("json");
+      const { dueAt, dispatch, publisherPersonId, ...input } = c.req.valid("json");
       const actor = c.get("actor");
+      if (publisherPersonId !== undefined) {
+        if (actor.kind !== "human") throw new HttpError(403, "auth.humanOnly");
+        if (!getPerson(publisherPersonId)) throw new HttpError(400, "person.notFound");
+      }
       const task = publishTask(
         { ...input, ...(dueAt === undefined ? {} : { dueAt: new Date(dueAt) }) },
         actor,
         dispatch,
+        publisherPersonId === undefined ? undefined : { personId: publisherPersonId, via: "web" },
       );
       if (task instanceof TransitionError)
         return c.json({ error: task.translate(requestLang(c.req.header("Accept-Language"))) }, 409);
