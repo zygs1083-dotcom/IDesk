@@ -74,7 +74,7 @@ export function PeoplePage() {
       {!!people.data?.length && (
         <div
           data-ui="panel"
-          className="max-w-full overflow-x-auto rounded-panel border border-line bg-surface"
+          className="relative max-w-full overflow-x-auto rounded-panel border border-line bg-surface"
         >
           <table className="w-full min-w-140 border-collapse text-left">
             <thead data-ui="fixed-label" className="text-secondary text-text-2">
