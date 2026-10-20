@@ -54,7 +54,7 @@ export function CardHeading({
         <p
           data-ui="card-group"
           title={group}
-          className="mb-2 line-clamp-2 wrap-anywhere text-label text-text-2"
+          className="mb-0 line-clamp-1 wrap-anywhere text-label text-text-2"
         >
           {group}
         </p>
