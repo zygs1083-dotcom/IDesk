@@ -71,6 +71,8 @@ html[data-skin="pixel"] {
     font:
       400 12px / 1.4 "IDesk Pixel",
       var(--font-sans);
+    font-synthesis: none;
+    -webkit-font-smoothing: none;
   }
   & tbody tr {
     height: 48px;
@@ -108,5 +110,7 @@ html[data-skin="pixel"] {
     font:
       400 24px / 1.25 "IDesk Pixel",
       var(--font-sans);
+    font-synthesis: none;
+    -webkit-font-smoothing: none;
   }
 }

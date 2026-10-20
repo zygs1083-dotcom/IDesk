@@ -59,6 +59,8 @@ html[data-skin="pixel"] {
     font:
       400 24px / 1 "IDesk Pixel",
       var(--font-sans);
+    font-synthesis: none;
+    -webkit-font-smoothing: none;
     letter-spacing: 1px;
   }
   & [data-ui="login-subtitle"] {

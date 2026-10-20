@@ -25,6 +25,8 @@ html[data-skin="pixel"] {
     font:
       400 12px / 1.3 "IDesk Pixel",
       var(--font-sans);
+    font-synthesis: none;
+    -webkit-font-smoothing: none;
   }
   & [data-ui="settings-tabs"] a[aria-current="page"] {
     position: relative;
@@ -47,6 +49,8 @@ html[data-skin="pixel"] {
     font:
       400 12px / 1.4 "IDesk Pixel",
       var(--font-sans);
+    font-synthesis: none;
+    -webkit-font-smoothing: none;
   }
   & [data-ui="settings-sheet"] [data-ui="empty-note"] {
     border: 0;

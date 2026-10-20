@@ -40,6 +40,7 @@ html[data-skin="pixel"] {
       400 12px / 1.4 "IDesk Pixel",
       var(--font-sans);
     font-synthesis: none;
+    -webkit-font-smoothing: none;
   }
   & [data-ui="column-heading"] [data-ui="column-count"] {
     min-width: 20px;
