@@ -59,8 +59,8 @@
   --bg: #f4eddf;
   --surface: #fffdf7;
   --surface-2: #eee8d9;
-  --line: #d8d2c3;
-  --line-strong: #999e8e;
+  --line: #b8ad95;
+  --line-strong: #535e49;
   --text: #2e342b;
   --text-2: #626657;
   --text-3: #707565;
@@ -85,8 +85,8 @@
     --bg: #19251f;
     --surface: #25332b;
     --surface-2: #2d3c32;
-    --line: #455447;
-    --line-strong: #7b8c78;
+    --line: #4a5850;
+    --line-strong: #9aaa8d;
     --text: #f4eddf;
     --text-2: #c0c7b3;
     --text-3: #a6b39c;
@@ -137,8 +137,8 @@
   --radius-tag: 6px;
   --text-title: 22px;
   --text-title--line-height: 28px;
-  --text-title--font-weight: 600;
-  --text-title--letter-spacing: -0.01em;
+  --text-title--font-weight: 800;
+  --text-title--letter-spacing: 0.02em;
   --text-section: 15px;
   --text-section--line-height: 20px;
   --text-section--font-weight: 600;
@@ -151,7 +151,7 @@
   --text-secondary--font-weight: 400;
   --text-label: 12px;
   --text-label--line-height: 16px;
-  --text-label--font-weight: 500;
+  --text-label--font-weight: 700;
   --duration-hover: 120ms;
   --ease-hover: ease-out;
   --duration-expand: 200ms;
