@@ -14,6 +14,12 @@ html .task-drawer dialog [data-ui="drawer"] > header {
   border-bottom: 1px solid var(--line);
 }
 
+html[data-skin="pixel"] .task-drawer dialog [data-ui="drawer"] > header > button {
+  align-self: flex-start;
+  /* Preserve the close button's centered offset in the 64px short-title header. */
+  margin-top: 3.5px;
+}
+
 html .task-drawer dialog [data-ui="drawer"] > header h2 {
   flex: 1;
   min-width: 0;
