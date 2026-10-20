@@ -214,6 +214,6 @@ html:not([data-skin="pixel"]) {
     line-height: 18px;
   }
   & [data-scene="automation"] [data-ui="card-group"] {
-    margin-bottom: 2px;
+    margin-bottom: 0;
   }
 }
