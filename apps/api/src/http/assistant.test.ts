@@ -8,6 +8,8 @@ import { config } from "../config.ts";
 import { registerAgent } from "../core/agents/agents.ts";
 import { fakeModel, nativeReply, person } from "../core/assistant/fixture.ts";
 import { modelSettings } from "../core/assistant/settings.ts";
+import { db } from "../db/client.ts";
+import { taskOrigins, tasks } from "../db/schema.ts";
 import { app } from "./app.ts";
 
 const previousViewer = config.IDESK_VIEWER_PASSWORD;
@@ -89,13 +91,20 @@ test("assistant HTTP enforces admin/viewer/agent boundaries and returns only mas
   expect(await missing.json()).toEqual({ error: "Person not found" });
 });
 
-test("web chat uses the shared reply shape and deterministic publication without channel origins", async () => {
+test("web text button ids deterministically change priorities, publish, discard and confirm cancellation", async () => {
   const publisher = person();
   const headers = { Cookie: await cookie("test"), "Content-Type": "application/json" };
+  let cancelTaskId: string | undefined;
   const requests = await fakeModel((_request, turn) =>
     nativeReply(
       "openai-chat",
-      turn === 1 ? [{ name: "draft_task", input: { title: "HTTP draft" } }] : [],
+      turn % 2 === 1
+        ? [
+            cancelTaskId
+              ? { name: "request_cancel", input: { taskId: cancelTaskId } }
+              : { name: "draft_task", input: { title: "HTTP draft" } },
+          ]
+        : [],
     ),
   );
   const chat = (text: string) =>
@@ -105,8 +114,32 @@ test("web chat uses the shared reply shape and deterministic publication without
       body: JSON.stringify({ personId: publisher.id, text }),
     });
   expect(assistantReplySchema.parse(await (await chat("准备草稿")).json()).options).toHaveLength(6);
-  expect(assistantReplySchema.parse(await (await chat("发布")).json()).text).toContain(
+  for (const text of ["1", "2", "3", "4"]) {
+    const response = assistantReplySchema.parse(await (await chat(text)).json());
+    expect(response.options?.find((option) => option.id === text)?.label).toContain("✓");
+  }
+  await chat("cancel");
+  expect(db.select().from(tasks).all()).toHaveLength(0);
+  expect(requests).toHaveLength(2);
+  await chat("重新准备草稿");
+  expect(assistantReplySchema.parse(await (await chat("publish")).json()).text).toContain(
     "已发布：HTTP draft",
   );
-  expect(requests).toHaveLength(2);
+  expect(requests).toHaveLength(4);
+  await chat("publish");
+  expect(requests).toHaveLength(4);
+  const task = db.select().from(tasks).get();
+  expect(task).toMatchObject({ publisherId: publisher.id, status: "open" });
+  expect(db.select().from(taskOrigins).all()).toHaveLength(0);
+  cancelTaskId = task?.id;
+  await chat("准备取消");
+  expect(requests).toHaveLength(6);
+  await chat("cancel");
+  expect(db.select().from(tasks).get()?.status).toBe("open");
+  expect(requests).toHaveLength(6);
+  await chat("再次准备取消");
+  expect(requests).toHaveLength(8);
+  expect(assistantReplySchema.parse(await (await chat("confirm")).json()).text).toContain("已取消");
+  expect(db.select().from(tasks).get()?.status).toBe("cancelled");
+  expect(requests).toHaveLength(8);
 });

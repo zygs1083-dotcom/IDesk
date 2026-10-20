@@ -17,16 +17,21 @@ export function deterministic(
   text: string,
   action?: string,
 ): AssistantReply | undefined {
-  const command = action
-    ? ({ publish: "发布", confirm: "确认", cancel: "取消" }[action] ?? action)
-    : text.trim();
+  const input = action ?? text.trim();
+  let command = input;
+  if (command === "publish") command = "发布";
+  if (command === "confirm") command = "确认";
+  if (command === "cancel") command = "取消";
   if (command === "重来") {
     session.history = [];
     session.draft = null;
     return { text: "已清空会话，请重新开始。" };
   }
   const draft = session.draft;
-  if (!draft) return action ? { text: "该选项已失效，请重新开始。" } : undefined;
+  if (!draft)
+    return action || ["publish", "confirm", "cancel"].includes(input)
+      ? { text: "该选项已失效，请重新开始。" }
+      : undefined;
   const person = getPerson(session.personId);
   if (person?.role !== "member") {
     session.draft = null;
