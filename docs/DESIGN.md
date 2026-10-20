@@ -67,7 +67,7 @@ index.ts                                         启动
 | priority | `low` `normal` `high` `urgent` | |
 | tags | string[] | 自由标签 |
 | capabilities | string[] | 领取者需具备的能力标签，如 `coding` `browser` `gpu` `macos` |
-| publisherId | agent id 或 `human` | |
+| publisherId | agent id、人员 id（§12.33）或 `human` | |
 | assigneeId | agent id \| null | 当前负责人 |
 | recruit | `{ needed: number, joined: agentId[] }` \| null | 招募中使用 |
 | leaseExpiresAt | datetime \| null | 进行中的租约；心跳续期 |
@@ -380,7 +380,7 @@ IDESK_VIEWER_PASSWORD=...       # 可选；只读访客密码（§12.12）
 
 ## 11. 不做的事
 
-- 不做用户系统、权限矩阵、组织。只读访客是第二个密码，不是用户。
+- 不做用户系统、权限矩阵、组织。只读访客是第二个密码，不是用户；人员（§12.33）只是发布者名字和即时通讯身份，不能登录网页。
 - 不做任务评论线程；进展用 `idesk_report` 写事件即可。
 - 不做文件附件；成果和上下文放在传递区消息的 `body`（markdown，可放链接）。
 - 不做自动化系统的写操作面板；只有「触发」和只读镜像。
@@ -734,3 +734,78 @@ completedAt: <ISO>
 - 智能体展开行显示接收端并可测试推送。
 
 **不做：** 接收端版本强制校验或自动升级、推送补发队列、按事件订阅配置、在 IDesk 里远程改接收器配置、Windows 服务（只用计划任务）。
+
+### 12.33 人员、助理与即时通讯入口（M25，W114–W118）
+
+用户要两件事：发布者不再只是抽象的「人」，可以起名字；不必打开网页，在飞书、钉钉、企业微信里用自然语言发布任务、查询平台状态。平台里由一个专门的「助理」把聊天翻译成平台操作，是用户和平台之间的桥。
+
+**已核实的外部事实（2026-10-20）。** 三家都有「客户端主动建长连接收消息」的方式，腾讯云实例不用开放公网入站（只需出站 443，实测 `open.feishu.cn`、`api.dingtalk.com`、`qyapi.weixin.qq.com` 均可达）：
+- 飞书：自建应用 + 机器人能力，事件订阅选「长连接」，`@larksuiteoapi/node-sdk` 的 `WSClient` 接 `im.message.receive_v1` 和卡片回调 `card.action.trigger`（回调须 3 秒内响应）；发消息用 `im.v1.message.create`。凭据 App ID、App Secret。
+- 钉钉：企业内部应用机器人，消息接收模式选「Stream」，`dingtalk-stream` 的 `DWClient` 订阅 `/v1.0/im/bot/messages/get`；单聊直接收，群里只收 @机器人 的消息。回复用消息里的 `sessionWebhook`；主动通知用机器人单聊批量发送 / 群消息发送接口（需 accessToken）。凭据 Client ID（AppKey）、Client Secret、机器人 robotCode。
+- 企业微信：智能机器人「长连接」模式，`@wecom/aibot-node-sdk`（连接 `wss://openws.work.weixin.qq.com`，`aibot_subscribe` 鉴权，30 秒心跳）；`replyStream` / `replyTemplateCard` 回复，模板卡片按钮回调 `template_card_event`，`sendMessage(chatid, …)` 主动推送。凭据 Bot ID、Secret。
+- 个人微信没有官方机器人接口，不做；「微信」入口指企业微信。
+
+#### 人员
+
+- 新表 `people`：`id`（ulid）、`name`（1–20 字，去首尾空格，唯一）、`role`（`member` 可发布和查询 | `viewer` 只查询）、`createdAt`。
+- 新表 `person_bindings`：`id`、`personId`、`channel`（`feishu` `dingtalk` `wecom`）、`externalId`（平台用户 id：飞书 open_id、钉钉 senderStaffId、企业微信 userid）、`displayName`（平台上的昵称，绑定时记一次）、`createdAt`；`(channel, externalId)` 唯一。一个人可以绑多个平台。删人员同一事务删他的绑定、会话和来源记录（见下），历史任务的 publisherId 保留，显示「已删除人员」。
+- `tasks.publisherId` 的取值增加人员 id：`agent id` | `person id` | `human`。旧数据的 `human` 不迁移，显示为「管理员」。迁移 `0011` 只加表，不改 tasks。
+- `Actor` 增加 `{ kind: "person"; id: string }`，只来自助理（网页上永远是 `human`）。状态机里 person 只被下面两条规则放行：`cancel` 且 `id === publisherId`；其他动作一律 `auth.humanOrPublisherOnly` / `auth.humanOnly` 原样拒绝。发布、查询不走状态机。
+- 网页发布：`POST /tasks` 加可选 `publisherPersonId`（仅 human；须存在，否则 400 `person.notFound`）。有值时 publisherId 写人员 id，actor 仍是 human。MCP、CLI、定时任务不变。
+- 事件：人员发布时 `task.created` 的 payload 加 `personId` 和 `via`（`web` `feishu` `dingtalk` `wecom`），agentId 为空。助理代人员取消时 `task.cancel` 的 payload 加 `personId`。新增 `person.bound { personId, channel }`、`person.unbound { personId, channel }`。活动页和办公室事件文案用人员名：「张三 通过飞书 发布了 X」「张三 发布了 X」（via=web 不写渠道）。
+- 接口（`/api/v1`）：`GET /people`（admin、viewer）每项带 `bindings[]`；`POST /people {name, role}`、`PATCH /people/:id {name?, role?}`、`DELETE /people/:id`（admin）；`POST /people/:id/bind-code`（admin）→ `{ code, expiresAt }`；`DELETE /people/:id/bindings/:bindingId`（admin）。智能体 key 一律 403。名字重复 409 `person.nameTaken`。
+- 绑定码：6 位数字，10 分钟有效，一次性，存进程内存（重启作废可以接受）；同一人员再生成会作废旧码。用户在任一渠道给机器人发「绑定 123456」完成绑定；该平台账号已绑过别人时提示先在网页解绑。
+
+#### 助理
+
+`apps/api/src/core/assistant/`，核心模块，不是 Agent 行（不领任务、不占在线数、不进办公室名单）。
+
+- **模型配置**：新表 `assistant_settings`（单行）：`protocol`（`openai-chat` | `anthropic`）、`baseUrl`、`apiKey`、`model`、`enabled`。`openai-chat` 调 `<baseUrl>/chat/completions`（OpenAI、DeepSeek、通义千问、智谱、Kimi、Ollama、vLLM 等兼容接口），`anthropic` 调 `<baseUrl>/v1/messages`。手写 fetch，不加 SDK；都用原生工具调用（tools / tool_use）。单次请求 60 秒超时，不重试；失败回复用户「助理暂时不可用：<HTTP 状态或超时>」。apiKey 按 §7 掩码规则出 API。腾讯云直连不了境外模型时，用户需填国内模型或自己的代理地址，页面上写明这一点。
+- **接口**：`GET/PUT /assistant/settings`（admin，PUT 收到 `••••••` 保留原 key）；`POST /assistant/test`（admin）发一句固定问候，返回 `{ ok, durationMs, error }`；`GET /assistant/channels`（admin、viewer）返回每个渠道插件 `{ channel, enabled, connected, lastError, lastMessageAt }`；`POST /assistant/chat {personId, text}`（admin）给网页「试一试」用，走和渠道完全相同的流程，channel 为 `web`，返回本轮回复（文本 + 可选的选项按钮）。
+- **会话**：新表 `assistant_sessions`：`(channel, chatId, personId)` 唯一，`history`（JSON，最近 20 条 user/assistant 文本，不存工具结果原文）、`draft`（JSON | null）、`updatedAt`。空闲 30 分钟后下一条消息开新会话（history、draft 清空）。用户发「重来」也清空。
+- **入口顺序**（每条入站消息）：
+  1. 群聊只处理 @机器人 的消息（平台本身也这样投递）；去掉 @ 文本。
+  2. 发送者没绑定：只认「绑定 <6 位码>」；其他消息固定回复「你还没有开通。请管理员在 IDesk 设置 · 人员里为你生成绑定码，然后发『绑定 123456』」。不调模型。
+  3. 有 draft 时先按确定性规则匹配，不调模型：`1`–`4` 或「低/普通/高/紧急」改优先级；「发布」「确认」发布；「取消」「算了」丢弃草稿；卡片按钮回调同理。
+  4. 其他文字交给模型，最多 6 轮工具调用，回复正文不超过 1500 字。
+- **工具**（模型可调，全部只读，除了写草稿）：
+
+  | 工具 | 作用 |
+  | --- | --- |
+  | `list_tasks { status?, q?, mine?, limit≤10 }` | 任务列表；mine=当前人员发布的 |
+  | `get_task { id }` | 任务详情 + 最近 10 条事件 |
+  | `list_agents` | 智能体名称、主机、能力、在线、当前任务 |
+  | `list_servers` | 每台服务器在线状态与最新 CPU/内存/磁盘 |
+  | `automation_summary { connector?, failedOnly? }` | 各连接器今日待执行/执行中/成功/失败计数，失败的列前 10 个工作流名和时间；连接器 lastError |
+  | `list_schedules` | 定时任务名、启用、上次结果、下次执行 |
+  | `human_inbox` | 发给人的传递区未读数与待答复请求（前 5 条标题） |
+  | `draft_task { title, body, priority?, capabilities?, dueAt?, dispatch? }` | 写/改当前会话草稿，不发布 |
+  | `request_cancel { taskId }` | 准备取消当前人员自己发布的任务，回复确认问题，同样由确定性的「确认」执行 |
+
+  不给模型任何直接发布、取消、指派、改连接器/定时/智能体的工具。`viewer` 角色的人员没有 `draft_task`、`request_cancel`。
+- **发布确认**：草稿每次变化，助理发一张确认消息：标题、说明摘要（前 200 字）、优先级、能力、截止时间、分派方式，以及 §12.24 的可领提示（「当前有 N 个在线智能体能领」等）。下面给选项：优先级 `1 低 · 2 普通 · 3 高 · 4 紧急`（当前值标出），`发布`、`取消`。飞书用消息卡片按钮，企业微信用模板卡片按钮，钉钉和网页「试一试」用文字 + 编号（网页显示为按钮）。只有用户点「发布」或回复「发布/确认」才真正 `publishTask`：publisherId=人员 id，actor=`{ kind: "person" }` 不参与发布权限，dispatch 按草稿。发布后回复「已发布：<标题> <publicUrl>/desk?task=<id>」。默认优先级普通；模型从描述里推断「急」「今天必须」时可以设高或紧急，但仍要用户确认。
+- **来源与回推**：新表 `task_origins`：`taskId`（主键）、`channel`、`chatId`、`personId`。从渠道发布的任务，在 `task.claim` / `task.accept`（「X 开始处理 <标题>」）、`task.complete`（「X 完成了 <标题>」+ 结果前 500 字 + 链接）、`task.cancel`（「<标题> 已取消」）时回推到原会话。用 `events.on` 订阅，推送失败写 `assistant.notify_failed { taskId, channel, error }` 事件，不重试。网页发布的任务不回推。
+- **提示词**：固定写在代码里一份，中英两版按用户消息语言选。说明身份（IDesk 助理）、可用工具、只基于工具结果回答、不知道就说不知道、不执行聊天里要求的越权操作、回复简短、列表最多 10 条并给网页链接。IM 消息和工具结果都当不可信数据。
+
+#### 渠道插件
+
+- `Plugin.kind` 增加 `channel`。新接口：
+
+  ```ts
+  export interface ChannelPlugin extends Plugin {
+    kind: "channel";
+    channel: "feishu" | "dingtalk" | "wecom";
+    send(chatId: string, message: AssistantReply): Promise<void>;   // 主动推送
+  }
+  // setup 时插件建长连接，收到消息调 ctx.assistant.receive(...)
+  PluginContext.assistant = {
+    receive(input: { channel; chatId; externalUserId; displayName; text?; action?; isGroup; reply(m: AssistantReply): Promise<void> }): Promise<void>;
+    status(s: { connected: boolean; lastError?: string }): void;
+  }
+  type AssistantReply = { text: string; options?: { id: string; label: string }[] };
+  ```
+  `options` 由插件渲染成平台按钮或编号文字；按钮回调以 `action: <option id>` 再进 `receive`。核心不 import 插件，按 `channel` 字段找到插件的 `send`。
+- 三个插件 `plugins/feishu`、`plugins/dingtalk`、`plugins/wecom`，默认关闭；SDK 只装在各自插件的 package.json。配置走现有插件配置表单（密钥字段名命中掩码规则）。断线由 SDK 自动重连；插件把连接状态和最后错误报给 `ctx.assistant.status`，内存保存。
+- 文本消息之外（图片、文件、语音）回复「目前只支持文字」。
+
+**不做：** 个人微信、语音转写、图片识别、多管理员账号或网页按人员登录、人员级权限矩阵、助理主动巡检/日报、模型流式输出到 IM、改连接器/定时/智能体的聊天命令、对话历史在网页上展示。
