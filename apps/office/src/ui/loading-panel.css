@@ -19,6 +19,7 @@
 .loading-track {
   position: relative;
   margin-top: 80px;
+  margin-inline: 24px;
 }
 .loading-bar {
   height: 20px;
