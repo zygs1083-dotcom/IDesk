@@ -127,6 +127,33 @@ Director 订阅 WebSocket，把事件翻译成角色意图；刷新页面时按�
 
 1440×900首屏可见身份、统计、当前任务及至少4条最近活动（数据足够时）；390×844首屏可见统计/当前任务及至少1条活动起始。弹层只设一个主内容滚动区，固定标题底栏不盖内容；重新打开或换人置顶并重置展开。浅深、中英文、390/1000/1440、键盘及200%缩放验证，含用户提供的长汇报案例。
 
+### M26 加载条
+
+线上首屏要十几秒到几十秒（背景、遮挡件、前台角色图集和字体都要下完），期间画布区域一片空白。加载时在画布区域中央放一块加载面板，场景出来后淡出。
+
+- 面板：沿用像素面板风格（米白底、2px 深色描边、直角、Fusion Pixel），盖住 `.stage-host` 所在区域、不盖顶栏和名单；宽 360（窄屏 = 区域宽 − 32），居中。背后用面板同色系的浅底，不用纯黑遮罩。
+- 小人：前台 `receptionist` 的 `walk/right` 四帧（这张图集本来就要加载，不额外下载别的外观），按 8 帧/秒循环，最近邻缩放到 48×72。小人站在进度条上方，脚底跟着进度条的前沿走。图集没到之前只显示进度条和文字，不放占位图。小人用 DOM（`<div>` 背景图分帧），不用 canvas，不能被当成舞台画布。
+- 进度条：20px 高的像素条，按真实阶段推进：读布局 5% → 场景资源（背景、遮挡件、前台图集、外观索引）到 75% → 首屏字体到 90% → 建舞台并画出第一帧到 100%。长阶段内按时间缓慢逼近下一阶段的上限（最多到上限 − 2%），不倒退，不提前到 100%。
+- 俏皮话：进度条下面一行，每 2.5 秒换一句，随机顺序、不连续重复；跟随 `idesk.lang` 中英文。首句固定为「老板来了，快去通知摸鱼的同事」。句库见下表，可在此基础上微调用词，但不得出现脏话、真实人名/公司名、贬低某类人群。
+- 时机：开始加载 200ms 后还没好才显示（避免一闪而过）；第一帧画出后进度到 100%，停 150ms，再 300ms 淡出，然后**从 DOM 移除**。切换回放/回到现场等重新加载时同样适用。加载失败时移除面板，照旧显示「场景加载失败」。
+- 无障碍：面板 `role="progressbar"`，`aria-label`「正在布置办公室」，`aria-valuenow` 取整数百分比；俏皮话 `aria-hidden`，不放 live region。`prefers-reduced-motion` 下小人停在第 1 帧、不跑动画，进度条无过渡，俏皮话照常换但不做淡入淡出。
+- 不改加载顺序和资源本身，不为加载条增加额外网络请求（字体用已加载的分片，不够的字走回退字体）。
+
+| 中文 | English |
+| --- | --- |
+| 老板来了，快去通知摸鱼的同事 | The boss is coming — go warn the slackers |
+| 正在给咖啡机续命… | Reviving the coffee machine… |
+| 打印机又卡纸了，前台正在处理 | Printer jammed again, reception is on it |
+| 正在叫醒午睡的同事 | Waking up the nap squad |
+| 工位擦干净了，键盘正在搬进来 | Desks wiped, keyboards on the way |
+| 正在把需求从 v7 改回 v1 | Rolling the spec back from v7 to v1 |
+| 会议室被占了，换个角落开会 | Meeting room taken, finding a corner |
+| 有人拿错了外卖，正在物归原主 | Returning someone's misdelivered lunch |
+| 绿植浇水中，请勿踩踏 | Watering the plants, mind your step |
+| 正在假装很忙… | Pretending to look busy… |
+| 周报还差最后一句 | One more line on the weekly report |
+| 电梯太挤，小人改走楼梯 | Elevator's packed, taking the stairs |
+
 ## 8. 技术
 
 - PixiJS 8 负责场景，React 只管外框和面板。不用 Phaser、GSAP、状态库、瓦片地图库。
