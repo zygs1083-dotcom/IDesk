@@ -12,6 +12,7 @@ const queryKeys: Record<string, string[]> = {
   task: ["tasks"],
   relay: ["relay"],
   agent: ["agents"],
+  person: ["people"],
   connector: ["automation", "connectors"],
   schedule: ["schedules"],
 };
@@ -42,6 +43,7 @@ export function useRealtime() {
           "tasks",
           "relay",
           "agents",
+          "people",
           "automation",
           "connectors",
           "schedules",

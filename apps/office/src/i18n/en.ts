@@ -1,6 +1,14 @@
 import type { Key } from "./zh.ts";
 
 export const en: Record<Key, string> = {
+  "people.deleted": "Deleted person",
+  "panel.publisher": "Publisher",
+  "channel.feishu": "Feishu",
+  "channel.dingtalk": "DingTalk",
+  "channel.wecom": "WeCom",
+  "event.publishedVia": "{agent} published via {channel}",
+  "event.personBound": "{person} bound {channel}",
+  "event.personUnbound": "{person} unbound {channel}",
   "event.taskUpdated": "{agent} updated task details",
   "event.agentKeyRotated": "Rotated key for agent {name}",
   "event.scheduleStarted": "Schedule “{name}” started",
@@ -10,7 +18,7 @@ export const en: Record<Key, string> = {
   "common.closePanel": "Close panel",
   "common.deletedAgent": "Deleted agent",
   "common.everyone": "Everyone",
-  "common.human": "Human",
+  "common.human": "Admin",
   "common.none": "None",
   "common.pixelAvatar": "{kind} pixel avatar",
   "event.accept": "{agent} accepted",

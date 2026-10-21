@@ -1,4 +1,10 @@
 html[data-skin="pixel"] {
+  & [data-scene="settings"] [data-ui="fixed-label"],
+  & [data-scene="settings"] [data-ui="fixed-label"] th {
+    font:
+      400 12px / 1.4 "IDesk Pixel",
+      var(--font-sans);
+  }
   & [data-ui="settings-book"] {
     display: flex;
     flex-direction: column;

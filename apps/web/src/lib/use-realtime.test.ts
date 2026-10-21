@@ -40,6 +40,7 @@ test("each open invalidates all existing entities without needing an event; conn
     "tasks",
     "relay",
     "agents",
+    "people",
     "automation",
     "connectors",
     "schedules",
@@ -66,6 +67,15 @@ test("each open invalidates all existing entities without needing an event; conn
   vi.advanceTimersByTime(10_000);
   expect(Socket.instances).toHaveLength(2);
   expect(Socket.instances[1]?.close).toHaveBeenCalled();
+});
+
+test.each(["person.bound", "person.unbound"])("%s refreshes person names and bindings", (type) => {
+  vi.stubGlobal("window", { location: { href: "https://example.test" } });
+  vi.stubGlobal("WebSocket", Socket);
+  client.setQueryData(["people"], []);
+  useRealtime();
+  Socket.instances[0]?.onmessage?.({ data: JSON.stringify({ type }) });
+  expect(client.getQueryState(["people"])?.isInvalidated).toBe(true);
 });
 
 test.each(["relay.sent", "relay.read"])("%s invalidates inbox counts and lists", (type) => {

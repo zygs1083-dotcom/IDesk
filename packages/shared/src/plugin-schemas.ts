@@ -4,7 +4,7 @@ export const pluginSchema = z.object({
   id: z.string(),
   name: z.string(),
   version: z.string(),
-  kind: z.enum(["connector", "notifier", "action"]),
+  kind: z.enum(["connector", "notifier", "action", "channel"]),
   enabled: z.boolean(),
   config: z.record(z.string(), z.unknown()),
   error: z.string().optional(),

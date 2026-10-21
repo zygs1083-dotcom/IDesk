@@ -7,7 +7,7 @@ import { HttpError } from "../errors.ts";
 
 export type AuthEnv = {
   Variables: {
-    actor: Exclude<Actor, { kind: "system" }>;
+    actor: Exclude<Actor, { kind: "system" | "person" }>;
     agent: PublicAgent;
     readonly?: true;
   };

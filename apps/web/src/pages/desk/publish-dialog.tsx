@@ -14,9 +14,11 @@ import { request } from "../../lib/api.ts";
 import { useAgents } from "../../lib/use-agents.ts";
 import type { Schedule } from "../schedules/types.ts";
 import { DispatchFields } from "./dispatch-fields.tsx";
+import { PublisherSelect, usePublisher } from "./publisher-select.tsx";
 
 export function PublishDialog({ onClose }: { onClose: () => void }) {
   const { lang, t } = useLang();
+  const publisher = usePublisher();
   const [dueAt, setDueAt] = useState("");
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
@@ -55,6 +57,9 @@ export function PublishDialog({ onClose }: { onClose: () => void }) {
           capabilities,
           ...(dueAt ? { dueAt: new Date(dueAt).toISOString() } : {}),
           priority,
+          ...(publisher.publisherId === "human"
+            ? {}
+            : { publisherPersonId: publisher.publisherId }),
           ...(dispatch === undefined ? {} : { dispatch }),
           tags: tags.split(/[,，\s]+/).filter(Boolean),
         }),
@@ -145,6 +150,7 @@ export function PublishDialog({ onClose }: { onClose: () => void }) {
           onChange={(event) => setTags(event.target.value)}
         />
         <p className="text-secondary text-text-2">{t("capability.tagsDescription")}</p>
+        <PublisherSelect publisher={publisher} />
         <div className="space-y-2">
           <span className="pixel-legacy text-secondary text-text-2">{t("common.priority")}</span>
           <Segmented

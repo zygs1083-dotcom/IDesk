@@ -106,7 +106,7 @@ export function App() {
   });
   controls.current.playing = playing;
   controls.current.speed = speed;
-  const { agents, tasks, admin, error: dataError } = useOfficeData(mode.mode === "live");
+  const { agents, tasks, admin, agentName, error: dataError } = useOfficeData(mode.mode === "live");
   const adminRef = useRef(admin);
   adminRef.current = admin;
   const enterReplay = () => {
@@ -267,7 +267,7 @@ export function App() {
           )}
           <div className="stage-host" ref={host} />
           {task ? (
-            <TaskPanel task={task} agents={agents} onClose={closePanel} />
+            <TaskPanel task={task} agents={agents} agentName={agentName} onClose={closePanel} />
           ) : layout ? (
             <div className={`side-shell side-shell-right${panels.right ? "" : " is-collapsed"}`}>
               <Roster
@@ -303,7 +303,7 @@ export function App() {
           <ProfileModal
             key={agent.id}
             agent={agent}
-            agents={agents}
+            agentName={agentName}
             tasks={tasks}
             admin={admin}
             onClose={closePanel}

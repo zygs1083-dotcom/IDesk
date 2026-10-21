@@ -1,6 +1,5 @@
 import { labels } from "@idesk/shared/labels";
 import { useLang } from "../i18n/lang.tsx";
-
 import { PixelButton } from "./pixel-button.tsx";
 import { PixelPanel } from "./pixel-panel.tsx";
 import type { Agent, Task } from "./use-office-data.ts";
@@ -8,10 +7,12 @@ import type { Agent, Task } from "./use-office-data.ts";
 export function TaskPanel({
   task,
   agents,
+  agentName,
   onClose,
 }: {
   task: Task;
   agents: Agent[];
+  agentName: (id: string | null) => string;
   onClose: () => void;
 }) {
   const { lang, t } = useLang();
@@ -28,6 +29,8 @@ export function TaskPanel({
         <dd>{labels(lang).status[task.status]}</dd>
         <dt>{t("panel.assignee")}</dt>
         <dd>{assignee?.name || t("panel.unassigned")}</dd>
+        <dt>{t("panel.publisher")}</dt>
+        <dd>{agentName(task.publisherId)}</dd>
       </dl>
       <PixelButton href={`/desk?task=${encodeURIComponent(task.id)}`}>
         {t("panel.openBoard")}

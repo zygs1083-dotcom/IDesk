@@ -25,6 +25,7 @@ export interface TaskState {
 export type Actor =
   | { kind: "human" }
   | { kind: "agent"; id: string; capabilities: string[] }
+  | { kind: "person"; id: string }
   | { kind: "system" };
 export type TaskAction =
   | { type: "claim" }
@@ -176,7 +177,10 @@ const permitted: {
     byHumanOrPublisher(task, actor) ||
     (action.needed < 2 ? { key: "transition.recruitMinimum", params: undefined } : null),
   cancel_recruit: byHumanOrPublisher,
-  cancel: byHumanOrPublisher,
+  cancel: (task, actor) =>
+    actor.kind === "person" && actor.id === task.publisherId
+      ? null
+      : byHumanOrPublisher(task, actor),
   reopen: (_, actor) =>
     actor.kind === "human" ? null : { key: "transition.humanReopenOnly", params: undefined },
   lease_expired: (_, actor) =>

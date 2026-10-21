@@ -1,3 +1,9 @@
+import type {
+  AssistantConnectionStatus,
+  AssistantReceiveInput,
+  AssistantReply,
+} from "@idesk/shared/assistant-schemas";
+import type { ImChannel } from "@idesk/shared/people-schemas";
 import type { TaskAction, TransitionError } from "@idesk/shared/task-machine";
 import type { Hono } from "hono";
 import type { ZodType } from "zod";
@@ -17,16 +23,25 @@ export interface PluginContext {
   schedule(cron: string, fn: () => Promise<void>): Unsubscribe;
   registerRoutes(app: Hono): void;
   events: { emit(event: NewEvent): void; on(type: string, fn: Listener): Unsubscribe };
+  assistant: {
+    receive(input: AssistantReceiveInput): Promise<void>;
+    status(status: AssistantConnectionStatus): void;
+  };
 }
 export interface Plugin {
   id: string;
   name: string;
   version: string;
-  kind: "connector" | "notifier" | "action";
+  kind: "connector" | "notifier" | "action" | "channel";
   configSchema: ZodType;
   enabledByDefault?: boolean;
   setup?(ctx: PluginContext): void | Promise<void>;
   teardown?(): void | Promise<void>;
+}
+export interface ChannelPlugin extends Plugin {
+  kind: "channel";
+  channel: ImChannel;
+  send(chatId: string, message: AssistantReply): Promise<void>;
 }
 export type ConnectionResult = { success: boolean; error?: string };
 // 轮询进度，插件在逐项目之类的长循环里汇报，连接器页据此画进度条

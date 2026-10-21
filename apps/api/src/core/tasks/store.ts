@@ -1,3 +1,4 @@
+import type { AssistantChannel } from "@idesk/shared/assistant-schemas";
 import type { TaskPriority, TaskStatus } from "@idesk/shared/task-status";
 import { and, desc, eq, gt, lt, notInArray, or, sql } from "drizzle-orm";
 import { db } from "../../db/client.ts";
@@ -20,6 +21,7 @@ export function createTask(
     blockedBy?: string[];
   },
   publisherId: string,
+  personSource?: { personId: string; via: AssistantChannel },
 ): Task {
   const now = new Date();
   const { task, event } = db.transaction((tx) => {
@@ -32,8 +34,8 @@ export function createTask(
     const event = recordEvent(tx, {
       type: "task.created",
       taskId: task.id,
-      payload: { title: task.title, status: task.status },
-      ...(publisherId === "human" ? {} : { agentId: publisherId }),
+      payload: { title: task.title, status: task.status, ...personSource },
+      ...(publisherId === "human" || personSource ? {} : { agentId: publisherId }),
     });
     return { task, event };
   });

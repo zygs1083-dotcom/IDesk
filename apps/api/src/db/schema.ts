@@ -1,10 +1,25 @@
 import { AGENT_KINDS } from "@idesk/shared/agent-schemas";
+import {
+  ASSISTANT_CHANNELS,
+  type AssistantDraft,
+  type AssistantHistory,
+} from "@idesk/shared/assistant-schemas";
+import { IM_CHANNELS, PERSON_ROLES } from "@idesk/shared/people-schemas";
 import { RELAY_KINDS, type RelayRecipient } from "@idesk/shared/relay";
 import type { ScheduleAction } from "@idesk/shared/schedule-schemas";
 import type { serverDiskSchema, serverInfoSchema } from "@idesk/shared/server-schemas";
 import type { TaskRecruit } from "@idesk/shared/task-machine";
 import { TASK_PRIORITIES, TASK_STATUSES } from "@idesk/shared/task-status";
-import { index, integer, real, sqliteTable, text, uniqueIndex } from "drizzle-orm/sqlite-core";
+import { sql } from "drizzle-orm";
+import {
+  check,
+  index,
+  integer,
+  real,
+  sqliteTable,
+  text,
+  uniqueIndex,
+} from "drizzle-orm/sqlite-core";
 import { ulid } from "ulid";
 import type { z } from "zod";
 
@@ -223,3 +238,82 @@ export const relayMessages = sqliteTable(
     index("relay_messages_created_at_idx").on(table.createdAt),
   ],
 );
+
+export const people = sqliteTable("people", {
+  id: text()
+    .primaryKey()
+    .$defaultFn(() => `p_${ulid()}`),
+  name: text().notNull().unique(),
+  role: text({ enum: PERSON_ROLES }).notNull(),
+  createdAt: integer("created_at", { mode: "timestamp_ms" })
+    .notNull()
+    .$defaultFn(() => new Date()),
+});
+
+export const personBindings = sqliteTable(
+  "person_bindings",
+  {
+    id: text()
+      .primaryKey()
+      .$defaultFn(() => ulid()),
+    personId: text("person_id")
+      .notNull()
+      .references(() => people.id, { onDelete: "cascade" }),
+    channel: text({ enum: IM_CHANNELS }).notNull(),
+    externalId: text("external_id").notNull(),
+    displayName: text("display_name").notNull(),
+    createdAt: integer("created_at", { mode: "timestamp_ms" })
+      .notNull()
+      .$defaultFn(() => new Date()),
+  },
+  (table) => [
+    uniqueIndex("person_bindings_channel_external_unique").on(table.channel, table.externalId),
+  ],
+);
+
+export const assistantSettings = sqliteTable(
+  "assistant_settings",
+  {
+    id: integer().primaryKey().default(1),
+    protocol: text({ enum: ["openai-chat", "anthropic"] }).notNull(),
+    baseUrl: text("base_url").notNull(),
+    apiKey: text("api_key").notNull(),
+    model: text().notNull(),
+    enabled: integer({ mode: "boolean" }).notNull(),
+  },
+  (table) => [check("assistant_settings_singleton", sql`${table.id} = 1`)],
+);
+
+export const assistantSessions = sqliteTable(
+  "assistant_sessions",
+  {
+    channel: text({ enum: ASSISTANT_CHANNELS }).notNull(),
+    chatId: text("chat_id").notNull(),
+    personId: text("person_id")
+      .notNull()
+      .references(() => people.id, { onDelete: "cascade" }),
+    history: text({ mode: "json" }).$type<AssistantHistory>().notNull().default([]),
+    draft: text({ mode: "json" }).$type<AssistantDraft>(),
+    updatedAt: integer("updated_at", { mode: "timestamp_ms" })
+      .notNull()
+      .$defaultFn(() => new Date()),
+  },
+  (table) => [
+    uniqueIndex("assistant_sessions_channel_chat_person_unique").on(
+      table.channel,
+      table.chatId,
+      table.personId,
+    ),
+  ],
+);
+
+export const taskOrigins = sqliteTable("task_origins", {
+  taskId: text("task_id")
+    .primaryKey()
+    .references(() => tasks.id, { onDelete: "cascade" }),
+  channel: text({ enum: IM_CHANNELS }).notNull(),
+  chatId: text("chat_id").notNull(),
+  personId: text("person_id")
+    .notNull()
+    .references(() => people.id, { onDelete: "cascade" }),
+});

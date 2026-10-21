@@ -1,23 +1,33 @@
+import type { AssistantChannelStatus } from "@idesk/shared/assistant-schemas";
+import { IM_CHANNELS, type ImChannel } from "@idesk/shared/people-schemas";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { db } from "../db/client.ts";
 import { pluginState } from "../db/schema.ts";
 import { clearRegistrations, type LoadedPlugin, setup } from "./setup.ts";
-import type { ConnectorPlugin, Plugin } from "./types.ts";
+import type { ChannelPlugin, ConnectorPlugin, Plugin } from "./types.ts";
 
 export const plugins = new Map<string, LoadedPlugin>();
 
 async function teardown(loaded: LoadedPlugin): Promise<void> {
   if (!loaded.enabled) return;
-  await loaded.plugin.teardown?.();
   clearRegistrations(loaded);
+  await loaded.plugin.teardown?.();
 }
 
 export async function registerPlugin(plugin: Plugin, source: URL): Promise<void> {
-  const loaded: LoadedPlugin = { plugin, source, enabled: false, subscriptions: [], crons: [] };
+  const loaded: LoadedPlugin = {
+    plugin,
+    source,
+    enabled: false,
+    subscriptions: [],
+    crons: [],
+    connection: { connected: false, lastError: null, lastMessageAt: null },
+  };
   plugins.set(plugin.id, loaded);
   const state = db.select().from(pluginState).where(eq(pluginState.pluginId, plugin.id)).get();
-  if (state ? state.enabled : plugin.enabledByDefault !== false) await setup(loaded);
+  if (state ? state.enabled : plugin.kind !== "channel" && plugin.enabledByDefault !== false)
+    await setup(loaded);
 }
 
 export async function enablePlugin(id: string): Promise<void> {
@@ -39,6 +49,7 @@ export async function disablePlugin(id: string): Promise<void> {
     .run();
   await teardown(loaded);
   delete loaded.error;
+  loaded.connection.lastError = null;
 }
 
 export async function reloadPlugin(id: string): Promise<void> {
@@ -90,6 +101,28 @@ export function connectorPlugin(id: string): ConnectorPlugin | undefined {
   const loaded = plugins.get(id);
   if (loaded?.enabled && loaded.plugin.kind === "connector")
     return loaded.plugin as ConnectorPlugin;
+}
+
+export function channelPlugin(channel: ImChannel): ChannelPlugin | undefined {
+  const loaded = [...plugins.values()].find(
+    ({ plugin }) => plugin.kind === "channel" && (plugin as ChannelPlugin).channel === channel,
+  );
+  return loaded?.enabled ? (loaded.plugin as ChannelPlugin) : undefined;
+}
+
+export function channelStatuses(): AssistantChannelStatus[] {
+  return IM_CHANNELS.map((channel) => {
+    const loaded = [...plugins.values()].find(
+      ({ plugin }) => plugin.kind === "channel" && (plugin as ChannelPlugin).channel === channel,
+    );
+    return {
+      channel,
+      enabled: loaded?.enabled ?? false,
+      connected: loaded?.connection.connected ?? false,
+      lastError: loaded?.connection.lastError ?? null,
+      lastMessageAt: loaded?.connection.lastMessageAt ?? null,
+    };
+  });
 }
 
 export async function stopPlugins(): Promise<void> {

@@ -6,8 +6,8 @@ import { eventText } from "./event-text.ts";
 
 type Event = z.infer<typeof eventSchema>;
 const cases: [string, Event["payload"], string, string][] = [
-  ["task.updated", {}, "人 更新了任务信息", "Human updated task details"],
-  ["relay.read", {}, "人 已读消息", "Human read a message"],
+  ["task.updated", {}, "管理员 更新了任务信息", "Admin updated task details"],
+  ["relay.read", {}, "管理员 已读消息", "Admin read a message"],
   [
     "agent.key_rotated",
     { name: "Codex" },
@@ -69,24 +69,24 @@ const cases: [string, Event["payload"], string, string][] = [
   [
     "relay.sent",
     { to: { kind: "agent", id: "receiver" } },
-    "人 发消息给 Codex",
-    "Human sent a message to Codex",
+    "管理员 发消息给 Codex",
+    "Admin sent a message to Codex",
   ],
   [
     "relay.sent",
     { to: { kind: "capability", value: "review" } },
-    "人 发消息给 能力 review",
-    "Human sent a message to Capability review",
+    "管理员 发消息给 能力 review",
+    "Admin sent a message to Capability review",
   ],
   [
     "relay.sent",
     { to: { kind: "broadcast" } },
-    "人 发消息给 全体",
-    "Human sent a message to Everyone",
+    "管理员 发消息给 全体",
+    "Admin sent a message to Everyone",
   ],
-  ["task.created", {}, "人 发布了", "Human published"],
-  ["task.reported", { message: "Ready" }, "人 汇报：Ready", "Human reported: Ready"],
-  ["task.dependencies", {}, "人 修改了依赖", "Human updated dependencies"],
+  ["task.created", {}, "管理员 发布了", "Admin published"],
+  ["task.reported", { message: "Ready" }, "管理员 汇报：Ready", "Admin reported: Ready"],
+  ["task.dependencies", {}, "管理员 修改了依赖", "Admin updated dependencies"],
 ];
 
 for (const lang of ["zh", "en"] as const) {
@@ -130,3 +130,26 @@ for (const lang of ["zh", "en"] as const) {
 function makeEvent(type: string, payload: Event["payload"]): Event {
   return { id: "event", ts: "2026-10-15T00:00:00Z", type, payload, taskId: null, agentId: null };
 }
+
+test.each(["feishu", "dingtalk", "wecom", "web"])(
+  "person source is translated in office publications via %s",
+  (via) => {
+    const names = (id: string | null) => (id === "p_pat" ? "Pat" : "Admin");
+    const text = eventText(
+      makeEvent("task.created", { personId: "p_pat", via }),
+      translator("en"),
+      names,
+    );
+    expect(text).toContain("Pat published");
+    expect(text.includes("via")).toBe(via !== "web");
+    expect(text).not.toContain("Admin");
+  },
+);
+
+test("a person cancellation in office uses the person source", () => {
+  expect(
+    eventText(makeEvent("task.cancel", { personId: "p_pat" }), translator("en"), (id) =>
+      id === "p_pat" ? "Pat" : "Admin",
+    ),
+  ).toBe("Pat cancelled");
+});

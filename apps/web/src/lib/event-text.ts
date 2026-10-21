@@ -1,4 +1,5 @@
 import type { Lang } from "@idesk/shared/labels";
+import { IM_CHANNELS } from "@idesk/shared/people-schemas";
 import type { RelayRecipient } from "@idesk/shared/relay";
 import type { TaskAction } from "@idesk/shared/task-machine";
 import type { eventSchema } from "@idesk/shared/task-schemas";
@@ -50,13 +51,32 @@ export function eventText(
     return t("event.taskUpdated", { agent: agentName(event.agentId) });
   if (event.type === "task.dependencies")
     return t("event.dependenciesChanged", { agent: agentName(event.agentId) });
-  if (event.type === "task.created")
-    return t("event.published", { agent: agentName(event.agentId) });
+  if (event.type === "task.created") {
+    const agent = agentName(
+      typeof event.payload.personId === "string" ? event.payload.personId : event.agentId,
+    );
+    const channel = IM_CHANNELS.find((value) => value === event.payload.via);
+    return channel
+      ? t("event.publishedVia", { agent, channel: t(`channel.${channel}`) })
+      : t("event.published", { agent });
+  }
   if (event.type === "task.lease_expired") return t("event.leaseExpiredReleased");
+  if (event.type === "person.bound" || event.type === "person.unbound") {
+    const channel = IM_CHANNELS.find((value) => value === event.payload.channel);
+    if (channel)
+      return t(event.type === "person.bound" ? "event.personBound" : "event.personUnbound", {
+        person: agentName(String(event.payload.personId)),
+        channel: t(`channel.${channel}`),
+      });
+  }
   if (event.type.startsWith("task.")) {
     const action = event.type.slice(5);
     if (action in actionKeys)
-      return t(actionKeys[action as TaskAction["type"]], { agent: agentName(event.agentId) });
+      return t(actionKeys[action as TaskAction["type"]], {
+        agent: agentName(
+          typeof event.payload.personId === "string" ? event.payload.personId : event.agentId,
+        ),
+      });
   }
   if (event.type === "agent.registered")
     return t("event.agentCreated", { name: String(event.payload.name) });

@@ -1,5 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { renderToStaticMarkup } from "react-dom/server";
+import { MemoryRouter } from "react-router";
 import { expect, test, vi } from "vitest";
 import { AgentsPage } from "../pages/agents/agents-page.tsx";
 import { PluginsPage } from "../pages/settings/plugins-page.tsx";
@@ -52,9 +53,11 @@ test.each([undefined, "viewer", "admin"] as const)(
     }
     const html = renderToStaticMarkup(
       <QueryClientProvider client={client}>
-        <Probe />
-        <AgentsPage />
-        <PluginsPage />
+        <MemoryRouter>
+          <Probe />
+          <AgentsPage />
+          <PluginsPage />
+        </MemoryRouter>
       </QueryClientProvider>,
     );
     expect(allowed).toBe(role === "admin");
