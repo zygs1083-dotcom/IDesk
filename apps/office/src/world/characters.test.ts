@@ -2,8 +2,15 @@ import { Assets, Texture, TextureSource } from "pixi.js";
 import { expect, test, vi } from "vitest";
 import codex from "../../public/characters/codex-a.json";
 import custom from "../../public/characters/custom-a.json";
+import receptionist from "../../public/characters/receptionist.json";
 import { officeUrl } from "../office-url.ts";
-import { characterFrames, characterSheets, loadCharacters, loadOutfitIndex } from "./characters.ts";
+import {
+  characterFrames,
+  characterSheets,
+  loadCharacters,
+  loadOutfitIndex,
+  receptionistImage,
+} from "./characters.ts";
 
 test("shares in-flight requests and loads only requested stamped atlases", async () => {
   const fetcher = vi.fn(async (url: string) => ({
@@ -45,6 +52,30 @@ test("shares in-flight requests and loads only requested stamped atlases", async
     officeUrl("characters/codex-a.png"),
     officeUrl("characters/custom-a.png"),
   ]);
+  vi.restoreAllMocks();
+  vi.unstubAllGlobals();
+});
+
+test("shares one receptionist download between the native texture and DOM loading image", async () => {
+  const image = new Blob(["same PNG bytes"]);
+  const bitmap = { width: 1600, height: 96 };
+  const fetcher = vi.fn(async () => ({ json: async () => receptionist, blob: async () => image }));
+  const decode = vi.fn().mockResolvedValue(bitmap);
+  vi.stubGlobal("fetch", fetcher);
+  vi.stubGlobal("createImageBitmap", decode);
+  const source = new TextureSource({ width: 1600, height: 96 });
+  const texture = vi.spyOn(Texture, "from").mockReturnValue(new Texture({ source }));
+  const assets = vi.spyOn(Assets, "load");
+  await Promise.all([loadCharacters(["receptionist"]), loadCharacters(["receptionist"])]);
+  expect(fetcher.mock.calls).toEqual([
+    [officeUrl("characters/receptionist.json")],
+    [officeUrl("characters/receptionist.png")],
+  ]);
+  expect(decode).toHaveBeenCalledExactlyOnceWith(image);
+  expect(texture).toHaveBeenCalledExactlyOnceWith(bitmap);
+  expect(assets).not.toHaveBeenCalled();
+  expect(receptionistImage).toBe(image);
+  expect(characterSheets.get("receptionist")?.textureSource).toBe(source);
   vi.restoreAllMocks();
   vi.unstubAllGlobals();
 });

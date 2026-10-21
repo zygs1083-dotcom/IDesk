@@ -6,6 +6,8 @@ import { setTimeScale } from "./engine/tween.ts";
 import { useLang } from "./i18n/lang.tsx";
 import { initialGlyphs, loadGlyphs } from "./stage/glyphs.ts";
 import { BeijingClock } from "./ui/beijing-clock.tsx";
+import { LoadingPanel } from "./ui/loading-panel.tsx";
+import { type LoadingState, startLoading } from "./ui/loading-state.ts";
 import { Outfits } from "./ui/outfits.tsx";
 import { PanelHandle } from "./ui/panel-handle.tsx";
 import { isFullscreenKey, type Panels, readPanels, savePanels } from "./ui/panel-state.ts";
@@ -30,6 +32,7 @@ export function App() {
   stageText.current = t;
   const host = useRef<HTMLDivElement>(null);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState<LoadingState>();
   const [panels, setPanels] = useState(() => readPanels(window.localStorage));
   const panelsRef = useRef(panels);
   panelsRef.current = panels;
@@ -130,22 +133,29 @@ export function App() {
   }, []);
   useEffect(() => {
     let disposed = false;
+    const loading = startLoading(setLoading);
+    setError("");
     let observer: ResizeObserver;
     let stage: Awaited<ReturnType<typeof createStage>>;
     const start = async () => {
       const layout = await loadLayout();
+      loading.advance(5);
       const assets = await loadWorldAssets(mode.mode === "replay" ? mode.at : undefined);
       const element = host.current;
       if (!element || disposed) return;
+      loading.advance(75);
       setWorld({ layout });
       await loadGlyphs(initialGlyphs);
       if (disposed) return;
+      loading.advance(90);
       stage = await createStage(element, layout, assets);
       if (disposed) {
         stage.world.destroy({ children: true });
         stage.app.destroy(true, { children: true });
         return;
       }
+      // Pixi renders at priority -25; only finish after that native canvas frame.
+      stage.app.ticker.addOnce(() => loading.advance(100), undefined, -100);
       installDebug(stage, stageText.current, () => adminRef.current);
       observer = new ResizeObserver(() => stage.app.resize());
       observer.observe(element);
@@ -154,11 +164,15 @@ export function App() {
         ? direct(stage, stageText.current)
         : replay(stage, mode.at, controls.current, stageText.current));
     };
-    void start().catch((reason: Error) => {
-      if (!disposed) setError(reason.message);
+    void start().catch(() => {
+      if (!disposed) {
+        loading.fail();
+        setError(stageText.current("office.loadFailed"));
+      }
     });
     return () => {
       disposed = true;
+      loading.dispose();
       observer?.disconnect();
       stage?.world.destroy({ children: true });
       stage?.app.destroy(true, { children: true });
@@ -265,7 +279,9 @@ export function App() {
               />
             </div>
           )}
-          <div className="stage-host" ref={host} />
+          <div className="stage-host" ref={host}>
+            <LoadingPanel state={loading} />
+          </div>
           {task ? (
             <TaskPanel task={task} agents={agents} agentName={agentName} onClose={closePanel} />
           ) : layout ? (
