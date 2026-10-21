@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useLayoutEffect, useRef } from "react";
 import { useLang } from "../i18n/lang.tsx";
 import { characterSheets, receptionistImage } from "../world/characters.ts";
 import { LoadingCopy, loadingPhrases } from "./loading-copy.tsx";
@@ -10,7 +10,7 @@ export function LoadingPanel({ state }: { state: LoadingState | undefined }) {
   const { lang } = useLang();
   const panel = useRef<HTMLDivElement>(null);
   const sheet = characterSheets.get("receptionist");
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!state || !panel.current) return;
     panel.current.style.setProperty("--loading-progress", `${state.progress}%`);
   }, [state]);
