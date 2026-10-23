@@ -57,16 +57,16 @@ test.each([
   });
 });
 
-test("a report before resume is still the latest report", () => {
+test("a report before resume measures silence from the current entry", () => {
   expect(
     taskClock(
       [
         event("reported", 30, { message: "Before pause" }),
-        event("resume", 5, { from: "paused", to: "in_progress" }),
+        event("resume", 20, { from: "paused", to: "in_progress" }),
       ],
       now,
     ),
-  ).toEqual({ elapsedMs: 5 * 60_000, silentMinutes: 30 });
+  ).toEqual({ elapsedMs: 20 * 60_000, silentMinutes: 20 });
 });
 
 test("no entry event leaves the clock absent", () => {
