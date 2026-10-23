@@ -8,6 +8,7 @@ import { cn } from "../../lib/cn.ts";
 import { relativeTime } from "../../lib/format.ts";
 import type { Task } from "../../lib/types.ts";
 import { StatusDot } from "./status-dot.tsx";
+import { TaskCardClock } from "./task-card-clock.tsx";
 
 export function TaskCard({
   task,
@@ -92,6 +93,7 @@ export function TaskCard({
           ← {handoff} {t("common.handoff")}
         </span>
       )}
+      {task.status === "in_progress" && <TaskCardClock taskId={task.id} />}
       <span className="flex items-center gap-2 text-label">
         <StatusDot status={task.status} />
         <span className="min-w-0 flex-1 truncate text-text-2">{name}</span>

@@ -15,3 +15,5 @@ AGENTS.md
 .claude/
 .codex/
 local/
+deploy/release/targets/*.env
+!deploy/release/targets/example.env

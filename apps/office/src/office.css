@@ -362,6 +362,9 @@ a:focus-visible {
   .top-bar h1 {
     font-size: 12px;
   }
+  .top-bar-actions {
+    max-width: 100%;
+  }
   .top-bar .pixel-button {
     flex-shrink: 0;
   }
