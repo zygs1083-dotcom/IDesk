@@ -109,3 +109,22 @@ docker network rm "$drill_network"
 侧栏退出只清除当前浏览器 `idesk_session` cookie，断开当前页面实时订阅、清空查询缓存并跳转登录页；语言与外观偏好保留。admin 和 viewer 都可退出；agent bearer 不能调用人类注销。签名 cookie 没有数据库会话撤销表，退出不撤销已经复制到别处的 cookie。
 
 管理员在智能体菜单确认「轮换密钥」后，新 key 仅在当前弹层显示并可复制；关闭后无法再查询，遗失时再次轮换。旧 key 立即不能进行 REST/MCP 认证，现有客户端需要更新接入配置。身份、历史、webhook 不变，`lastSeenAt` 清空使状态离线，新 key 认证后恢复在线。事件 `agent.key_rotated` 只记身份信息，不记 key/hash；这不是远程终止智能体进程或取消进行中的任务。
+
+## 一键发布
+
+1. 复制 `deploy/release/targets/example.env` 为 `targets/<名字>.env`，填写目标、compose、发布目录及 marker 的绝对路径；目标配置已被 Git 忽略，权限设为 600。
+2. 将管理员密码单独写入本机权限为 600 的文件，在 `ADMIN_PASSWORD_FILE` 引用；配置中只存文件路径，不存密码。
+3. 本机执行时留空 `TARGET_SSH`，不经中转时留空 `RELAY_SSH`；远程执行使用 SSH 密钥与已验证的目标主机记录，中转机还需能以密钥连接目标。
+4. 填写 `DOCKER`、本机构建前缀 `BUILD_WRAPPER`、仅包住浏览器冒烟的 `BROWSER_WRAPPER`，以及本机 Playwright 模块和浏览器目录；空前缀表示直接执行。
+5. 先手工处理目标 `compose.yml` / `.env` 的改动，脚本不会同步这两个文件；目标需已有运行中的 `idesk` 服务，compose 默认镜像名为 `<COMPOSE_PROJECT>-idesk:latest`。
+6. 在仓库中执行 `TARGET=<名字> deploy/release/release.sh <git-rev>`，发布输入来自该提交的 `git archive` 快照。
+7. 流程依次为构建带 revision 标签的镜像、打包、传输并校验 SHA256、载入、在线备份并记录任务数、激活并等待 health、检查登录/任务数/办公室首帧；每步记录开始时间与耗时。
+8. health 最多等 60 秒，办公室首帧最多等 120 秒，仅超时重测一次；全部通过后才写目标 `MARKER_FILE`。
+
+退出码：`0` 为成功，`1` 为激活前失败（运行服务未切换），`2` 为激活或冒烟失败后已回滚且 `/login` 正常，`3` 为回滚后仍不正常、需要人工处理。失败不写 marker。
+
+完整日志保存在本机仓库 `local/releases/release-<rev12>.log`（600，目录 700），末行包含结果、退出码和总耗时。目标备份保存在 `RELEASE_DIR/<时间戳>-<rev12>/backup/`（700），含 `image.txt`、`idesk.db`、`files.tar.gz`、`env`、`compose.yml`（全部 600），不拉回本机。传输包在成功载入后删除，本机临时构建目录在结束时删除。
+
+自动回滚只把 `idesk:before-<rev12>` 换回 compose 镜像并重新启动，不恢复数据库或配置。参见「升级与回滚」：“镜像回滚和数据库结构回退是两件事。” 有不兼容迁移的版本不能依赖这个镜像回滚流程，需另行安排迁移与恢复方案。
+
+旧镜像与旧备份由运维核对后手工清理，脚本不自动删除。
