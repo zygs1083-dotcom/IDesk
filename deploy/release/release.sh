@@ -74,7 +74,7 @@ release_dir="$RELEASE_DIR/$(date -u +%Y%m%dT%H%M%S)-$rev"
 archive="idesk-$rev.tar.gz"
 step build
 mkdir "$tmp/context"
-git archive "$sha" | tar -x -C "$tmp/context"
+git archive "$sha" | (umask 022; tar -x -C "$tmp/context")
 read -r -a build_wrapper <<< "$BUILD_WRAPPER"
 "${build_wrapper[@]}" docker build -f "$tmp/context/deploy/Dockerfile" --build-arg WITH_OFFICE=true \
   --label "org.opencontainers.image.revision=$sha" -t "idesk:$rev" "$tmp/context"
