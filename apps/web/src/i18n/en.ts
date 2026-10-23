@@ -296,6 +296,8 @@ export const en: Record<Key, string> = {
   "desk.grouping": "Grouping",
   "desk.handoffNote": "Handoff note",
   "desk.joined": "joined",
+  "desk.running": "Running {duration}",
+  "desk.silent": "Silent {minutes} min",
   "desk.noAssignee": "Unassigned",
   "desk.noMatches": "No matching tasks",
   "desk.publishOne": "Publish one",

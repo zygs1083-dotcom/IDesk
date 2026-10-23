@@ -283,6 +283,8 @@ export const zh = {
   "desk.grouping": "分组",
   "desk.handoffNote": "交接说明",
   "desk.joined": "已加入",
+  "desk.running": "已进行 {duration}",
+  "desk.silent": "沉默 {minutes} 分钟",
   "desk.noAssignee": "未指定",
   "desk.noMatches": "没有匹配的任务",
   "desk.publishOne": "发布一个",
