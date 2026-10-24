@@ -55,6 +55,19 @@ export function Desk() {
     const timer = setTimeout(() => setQ(search), 200);
     return () => clearTimeout(timer);
   }, [search]);
+  const clearFilters = () => {
+    setQ("");
+    setParams(
+      (current) => {
+        const { normalized } = deskFilterParams(current, group);
+        normalized.delete("q");
+        normalized.delete("health");
+        return normalized;
+      },
+      { replace: false },
+    );
+    if (!document.querySelector("dialog[open], [role=menu]")) searchInput.current?.focus();
+  };
   const searchQuery = useQuery({
     queryKey: ["tasks", q],
     queryFn: () => request<Task[]>(`/tasks?q=${encodeURIComponent(q)}`),
@@ -139,6 +152,7 @@ export function Desk() {
           status={healthStatus}
           value={healthFilter}
           onChange={(value) => setFilter("health", value)}
+          onClear={search !== "" || healthFilter !== null ? clearFilters : undefined}
         />
       </div>
       {error && (

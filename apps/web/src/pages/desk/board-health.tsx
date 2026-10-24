@@ -15,15 +15,17 @@ export function BoardHealth({
   status,
   value,
   onChange,
+  onClear,
 }: {
   health: HealthTasks;
   status: HealthQueryStatus;
   value: HealthFilter | null;
   onChange: (value: HealthFilter | null) => void;
+  onClear?: (() => void) | undefined;
 }) {
   const { t } = useLang();
   const buttonClass =
-    "inline-flex items-center gap-1.5 whitespace-nowrap rounded-control border px-2 py-1 text-label text-text-2 transition-colors duration-hover ease-hover hover:text-text focus-visible:outline-2 focus-visible:outline-accent";
+    "inline-flex items-center gap-1.5 whitespace-nowrap rounded-control border px-2 py-1 text-label text-text-2 transition-colors duration-hover ease-hover hover:text-text focus-visible:outline-2 focus-visible:outline-accent sidebar:max-lg:px-1.5";
   const items = options.map((option) => {
     const queryStatus =
       option.value === "silent" || option.value === "waiting" ? status[option.value] : "success";
@@ -32,13 +34,13 @@ export function BoardHealth({
     return { ...option, queryStatus, count };
   });
   return (
-    <fieldset data-ui="board-health" className="min-w-0">
+    <fieldset data-ui="board-health" className="flex min-w-0 items-center gap-2">
       <legend className="sr-only">{t("desk.health")}</legend>
       <select
         aria-label={t("desk.health")}
         value={value ?? ""}
         onChange={(event) => onChange((event.target.value as HealthFilter) || null)}
-        className="w-full rounded-control border border-line bg-surface-2 px-2 py-1 text-label text-text-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent sidebar:hidden"
+        className="min-w-0 flex-1 rounded-control border border-line bg-surface-2 px-2 py-1 text-label text-text-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent sidebar:hidden"
       >
         <option value="">{t("common.all")}</option>
         {items.map((option) => (
@@ -77,6 +79,15 @@ export function BoardHealth({
           </button>
         ))}
       </div>
+      {onClear && (
+        <button
+          type="button"
+          onClick={onClear}
+          className={cn(buttonClass, "ml-auto shrink-0 border-transparent")}
+        >
+          {t("desk.clearFilters")}
+        </button>
+      )}
     </fieldset>
   );
 }

@@ -289,6 +289,7 @@ export const en: Record<Key, string> = {
   "desk.blockers": "{count} unfinished dependencies",
   "desk.board": "Task board",
   "desk.byHost": "By host",
+  "desk.clearFilters": "Clear filters",
   "desk.copyAsMarkdown": "Copy as Markdown",
   "desk.copyFailed": "Copy failed. Please try again.",
   "desk.dependencies": "Dependencies",

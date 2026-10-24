@@ -40,6 +40,29 @@ beforeEach(() => {
   state.lang = "en";
 });
 
+test("clear is a separate action from the health All control and is absent without a callback", () => {
+  const onChange = vi.fn();
+  const onClear = vi.fn();
+  const props = {
+    health,
+    status: { silent: "success", waiting: "success" } as const,
+    value: "blocked" as const,
+    onChange,
+  };
+  const withoutClear = BoardHealth(props);
+  expect(withoutClear.props.children[3]).toBeFalsy();
+  const withClear = BoardHealth({ ...props, onClear });
+  const clear = withClear.props.children[3] as Button;
+  expect(clear.type).toBe("button");
+  expect(clear.props.type).toBe("button");
+  clear.props.onClick();
+  expect(onClear).toHaveBeenCalledOnce();
+  expect(onChange).not.toHaveBeenCalled();
+  buttons(health, "blocked", onChange)[0]?.props.onClick();
+  expect(onChange).toHaveBeenCalledWith(null);
+  expect(onClear).toHaveBeenCalledOnce();
+});
+
 test("health controls replace the active filter and clear on a second click or All", () => {
   let selected: HealthFilter | null = null;
   const controls = () =>
