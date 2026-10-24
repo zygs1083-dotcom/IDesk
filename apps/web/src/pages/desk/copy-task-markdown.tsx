@@ -28,7 +28,7 @@ export function CopyTaskMarkdown({
   return (
     <Button
       variant="ghost"
-      className="ml-auto max-w-full px-2 py-1 text-secondary"
+      className="min-w-0 max-w-full px-2 py-1 text-secondary"
       aria-label={t("desk.copyAsMarkdown")}
       aria-live="polite"
       onClick={copy}
