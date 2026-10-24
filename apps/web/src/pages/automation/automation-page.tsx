@@ -6,7 +6,7 @@ import type {
 } from "@idesk/shared/automation-schemas";
 import { skipToken, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { Link } from "react-router";
+import { Link, useSearchParams } from "react-router";
 import type { z } from "zod";
 import { Button } from "../../components/button.tsx";
 import { Toast } from "../../components/toast.tsx";
@@ -16,8 +16,9 @@ import { request } from "../../lib/api.ts";
 import { relativeTime } from "../../lib/format.ts";
 import { useSession } from "../../lib/use-session.ts";
 import { AutomationBoard } from "./automation-board.tsx";
+import { automationFilterParams } from "./automation-filter-params.ts";
 import { AutomationFilters } from "./automation-filters.tsx";
-import { matches, type RunRange, selectRuns } from "./filter-runs.ts";
+import { matches, selectRuns } from "./filter-runs.ts";
 import { nextRuns } from "./next-runs.ts";
 import { useRunVisibility } from "./use-run-visibility.ts";
 
@@ -26,11 +27,10 @@ export function AutomationPage() {
   const { isAdmin } = useSession();
   const { lang, t } = useLang();
   const client = useQueryClient();
-  const [selected, setSelected] = useState<string | null>(null);
-  const [range, setRange] = useState<RunRange>("today");
+  const [params, setParams] = useSearchParams();
   const [showHidden, setShowHidden] = useState(false);
-  const [search, setSearch] = useState("");
-  const [q, setQ] = useState("");
+  const search = params.get("q") ?? "";
+  const [q, setQ] = useState(search);
   const [now, setNow] = useState(Date.now);
   useEffect(() => {
     const timer = setInterval(() => setNow(Date.now()), 30_000);
@@ -46,7 +46,29 @@ export function AutomationPage() {
     queryFn: () => request<z.infer<typeof connectorSchema>[]>("/connectors"),
   });
   const connectors = connectorsQuery.data ?? [];
-  const connector = connectors.find((item) => item.id === selected) ?? connectors[0];
+  const { connector, range } = automationFilterParams(params, connectors, connectorsQuery.status);
+  useEffect(() => {
+    if (
+      connectorsQuery.isSuccess &&
+      ((connector && params.get("connector") !== connector.id) || params.get("q") === "")
+    ) {
+      setParams(
+        (current) => automationFilterParams(current, connectors, connectorsQuery.status).normalized,
+        { replace: true },
+      );
+    }
+  }, [connectorsQuery.isSuccess, connectorsQuery.status, connector, connectors, params, setParams]);
+  const setFilter = (key: "q" | "connector" | "range", value: string) => {
+    setParams(
+      (current) => {
+        const { normalized } = automationFilterParams(current, connectors, connectorsQuery.status);
+        if (value === "") normalized.delete(key);
+        else normalized.set(key, value);
+        return normalized;
+      },
+      { replace: key === "q" },
+    );
+  };
   const runs = useQuery({
     queryKey: ["automation", "runs", connector?.id],
     queryFn:
@@ -137,11 +159,11 @@ export function AutomationPage() {
           <AutomationFilters
             connectors={connectors}
             selected={connector.id}
-            onSelect={setSelected}
+            onSelect={(value) => setFilter("connector", value)}
             search={search}
-            onSearch={setSearch}
+            onSearch={(value) => setFilter("q", value)}
             range={range}
-            onRange={setRange}
+            onRange={(value) => setFilter("range", value)}
             hiddenCount={hiddenCount}
             showHidden={showHidden}
             onShowHidden={() => setShowHidden(!showHidden)}
