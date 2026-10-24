@@ -13,11 +13,13 @@ import { Toast } from "../../components/toast.tsx";
 import { useLang } from "../../i18n/lang.tsx";
 import { PageHeader } from "../../layout/page-header.tsx";
 import { request } from "../../lib/api.ts";
+import { copyText } from "../../lib/clipboard.ts";
 import { relativeTime } from "../../lib/format.ts";
 import { useSession } from "../../lib/use-session.ts";
 import { AutomationBoard } from "./automation-board.tsx";
 import { automationFilterParams } from "./automation-filter-params.ts";
 import { AutomationFilters } from "./automation-filters.tsx";
+import { failureText } from "./failure-text.ts";
 import { matches, selectRuns } from "./filter-runs.ts";
 import { nextRuns } from "./next-runs.ts";
 import { useRunVisibility } from "./use-run-visibility.ts";
@@ -124,11 +126,7 @@ export function AutomationPage() {
         {connector && (
           <>
             <span data-ui="header-note" className="pixel-legacy text-secondary text-text-2">
-              {connector.lastPolledAt === null
-                ? t("automation.notPolled")
-                : t("automation.lastPolled", {
-                    time: relativeTime(new Date(connector.lastPolledAt), lang),
-                  })}
+              {subtitle}
             </span>
             <Button disabled={!isAdmin || poll.isPending} onClick={() => poll.mutate(connector.id)}>
               {t("common.refresh")}
@@ -180,6 +178,15 @@ export function AutomationPage() {
             now={now}
             error={connector.lastError}
             onToggleHidden={visibility.mutate}
+            onCopyFailure={async (run) => {
+              setMessage(null);
+              try {
+                await copyText(failureText(run, connector.name, t));
+                setMessage(t("common.copied"));
+              } catch {
+                setMessage(t("desk.copyFailed"));
+              }
+            }}
             pending={visibility.isPending}
           />
         </>

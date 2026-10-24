@@ -42,6 +42,7 @@ test.each([null, run.jobName, run.jobGroup])(
           run={{ ...run, jobGroup }}
           now={Date.UTC(2026, 9, 19, 8, 5)}
           onToggleHidden={() => {}}
+          onCopyFailure={() => {}}
           pending={false}
         />
       </QueryClientProvider>,

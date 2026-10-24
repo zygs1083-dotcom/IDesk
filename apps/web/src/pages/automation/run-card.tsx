@@ -1,5 +1,5 @@
 import type { automationRunWithJobSchema } from "@idesk/shared/automation-schemas";
-import { Eye, EyeOff } from "lucide-react";
+import { Copy, Eye, EyeOff } from "lucide-react";
 import type { z } from "zod";
 import { Button } from "../../components/button.tsx";
 import { PixelIcon } from "../../components/pixel-icon.tsx";
@@ -23,11 +23,13 @@ export function RunCard({
   run,
   now,
   onToggleHidden,
+  onCopyFailure,
   pending,
 }: {
   run: Run;
   now: number;
   onToggleHidden: (run: Run) => void;
+  onCopyFailure: (run: Run) => void;
   pending: boolean;
 }) {
   const { isAdmin } = useSession();
@@ -55,24 +57,35 @@ export function RunCard({
     >
       <CardHeading
         actions={
-          isAdmin &&
-          run.status !== "waiting" &&
-          run.status !== "running" && (
-            <Button
-              variant="icon"
-              disabled={pending}
-              aria-label={t(run.hiddenAt === null ? "automation.hide" : "automation.unhide")}
-              title={t(run.hiddenAt === null ? "automation.hide" : "automation.unhide")}
-              onClick={() => onToggleHidden(run)}
-              className="automation-hide-button shrink-0 text-text-3 hover:text-text-2"
-            >
-              {run.hiddenAt === null ? (
-                <PixelIcon name="eye-off" fallback={<EyeOff size={16} strokeWidth={1.5} />} />
-              ) : (
-                <PixelIcon name="eye" fallback={<Eye size={16} strokeWidth={1.5} />} />
-              )}
-            </Button>
-          )
+          <>
+            {run.status === "failed" && (
+              <Button
+                variant="icon"
+                aria-label={t("automation.copyFailure")}
+                title={t("automation.copyFailure")}
+                onClick={() => onCopyFailure(run)}
+                className="size-6 shrink-0 p-0 text-text-3 hover:text-text-2"
+              >
+                <PixelIcon name="copy" fallback={<Copy size={16} strokeWidth={1.5} />} />
+              </Button>
+            )}
+            {isAdmin && run.status !== "waiting" && run.status !== "running" && (
+              <Button
+                variant="icon"
+                disabled={pending}
+                aria-label={t(run.hiddenAt === null ? "automation.hide" : "automation.unhide")}
+                title={t(run.hiddenAt === null ? "automation.hide" : "automation.unhide")}
+                onClick={() => onToggleHidden(run)}
+                className="automation-hide-button shrink-0 text-text-3 hover:text-text-2"
+              >
+                {run.hiddenAt === null ? (
+                  <PixelIcon name="eye-off" fallback={<EyeOff size={16} strokeWidth={1.5} />} />
+                ) : (
+                  <PixelIcon name="eye" fallback={<Eye size={16} strokeWidth={1.5} />} />
+                )}
+              </Button>
+            )}
+          </>
         }
         name={run.jobName}
         group={run.jobGroup}
