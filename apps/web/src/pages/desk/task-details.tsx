@@ -64,7 +64,7 @@ export function TaskDetails({
         <TaskInformation task={task} agentName={agentName} />
       </div>
       <TaskDependencies task={task} onError={onError} />
-      <TaskTimeline events={events} agentName={agentName} />
+      <TaskTimeline key={task.id} events={events} agentName={agentName} />
     </div>
   );
 }

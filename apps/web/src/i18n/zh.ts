@@ -310,6 +310,8 @@ export const zh = {
   "desk.selectAgent": "选择 AI",
   "desk.templates": "模板",
   "desk.timeline": "进展记录",
+  "desk.showEarlierEvents": "显示较早的 {count} 条",
+  "desk.showLatestEvents": "仅显示最近10条",
   "desk.totalDuration": "总耗时 {duration}",
   "desk.unassignedHost": "未指派",
   "event.accept": "{agent} 接受了",
