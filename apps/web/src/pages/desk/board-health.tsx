@@ -25,7 +25,7 @@ export function BoardHealth({
 }) {
   const { t } = useLang();
   const buttonClass =
-    "inline-flex items-center gap-1.5 whitespace-nowrap rounded-control border px-2 py-1 text-label text-text-2 transition-colors duration-hover ease-hover hover:text-text focus-visible:outline-2 focus-visible:outline-accent";
+    "inline-flex items-center gap-1.5 whitespace-nowrap rounded-control border px-2 py-1 text-label text-text-2 transition-colors duration-hover ease-hover hover:text-text focus-visible:outline-2 focus-visible:outline-accent sidebar:max-lg:px-1.5";
   const items = options.map((option) => {
     const queryStatus =
       option.value === "silent" || option.value === "waiting" ? status[option.value] : "success";
