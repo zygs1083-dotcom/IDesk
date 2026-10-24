@@ -16,7 +16,7 @@ import { useShortcut } from "../../lib/use-shortcut.ts";
 import { useTasks } from "../../lib/use-tasks.ts";
 import { Board } from "./board.tsx";
 import { BoardHealth } from "./board-health.tsx";
-import type { HealthFilter } from "./board-health-state.ts";
+import { deskFilterParams } from "./desk-filter-params.ts";
 import { PublishDialog } from "./publish-dialog.tsx";
 import { TaskDrawer } from "./task-drawer.tsx";
 import { useBoardHealth } from "./use-board-health.ts";
@@ -29,11 +29,28 @@ export function Desk() {
     queryFn: () => request<TaskEvent[]>("/events?type=task.handoff"),
   });
   const searchInput = useRef<HTMLInputElement>(null);
-  const [group, setGroup] = useState<"flat" | "host">(() =>
-    localStorage.getItem("desk.group") === "host" ? "host" : "flat",
+  const [params, setParams] = useSearchParams();
+  const { search, group, healthFilter } = deskFilterParams(
+    params,
+    params.has("group") ? null : localStorage.getItem("desk.group"),
   );
-  const [search, setSearch] = useState("");
-  const [q, setQ] = useState("");
+  useEffect(() => {
+    if (params.get("group") !== group || params.get("q") === "") {
+      setParams((current) => deskFilterParams(current, group).normalized, { replace: true });
+    }
+  }, [params, group, setParams]);
+  const setFilter = (key: "q" | "group" | "health", value: string | null) => {
+    setParams(
+      (current) => {
+        const { normalized } = deskFilterParams(current, group);
+        if (value === null || value === "") normalized.delete(key);
+        else normalized.set(key, value);
+        return normalized;
+      },
+      { replace: key === "q" },
+    );
+  };
+  const [q, setQ] = useState(search);
   useEffect(() => {
     const timer = setTimeout(() => setQ(search), 200);
     return () => clearTimeout(timer);
@@ -47,7 +64,6 @@ export function Desk() {
   const scope = (q ? (searchQuery.data ?? []) : tasks).filter((task) =>
     BOARD_COLUMNS.includes(task.status),
   );
-  const [healthFilter, setHealthFilter] = useState<HealthFilter | null>(null);
   const { health, status: healthStatus, error: healthError } = useBoardHealth(scope, tasks);
   const healthPending =
     (healthFilter === "silent" || healthFilter === "waiting") &&
@@ -55,7 +71,6 @@ export function Desk() {
   const visible = healthFilter ? scope.filter((task) => health[healthFilter].has(task.id)) : scope;
   const error = queryError ?? (q ? searchQuery.error : null) ?? healthError;
   const [publish, setPublish] = useState(false);
-  const [params, setParams] = useSearchParams();
   const selected = params.get("task");
   const setSelected = (taskId: string | null) => {
     setParams(
@@ -89,7 +104,7 @@ export function Desk() {
               aria-label={t("desk.search")}
               placeholder={t("desk.search")}
               value={search}
-              onChange={(event) => setSearch(event.target.value)}
+              onChange={(event) => setFilter("q", event.target.value)}
               className="min-w-0 w-full bg-transparent text-secondary text-text outline-none placeholder:text-text-3 focus-visible:outline-1 focus-visible:outline-accent"
             />
           </label>
@@ -102,7 +117,7 @@ export function Desk() {
               ]}
               value={group}
               onChange={(value) => {
-                setGroup(value);
+                setFilter("group", value);
                 localStorage.setItem("desk.group", value);
               }}
             />
@@ -123,7 +138,7 @@ export function Desk() {
           health={health}
           status={healthStatus}
           value={healthFilter}
-          onChange={setHealthFilter}
+          onChange={(value) => setFilter("health", value)}
         />
       </div>
       {error && (
