@@ -281,6 +281,7 @@ export const zh = {
   "desk.dependencies": "依赖",
   "desk.dispatch": "分派",
   "desk.empty": "还没有任务",
+  "desk.clearFilters": "清除筛选",
   "desk.flat": "平铺",
   "desk.grouping": "分组",
   "desk.handoffNote": "交接说明",
