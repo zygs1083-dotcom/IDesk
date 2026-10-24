@@ -124,7 +124,7 @@ test.each(["zh", "en"] as const)(
 );
 
 test.each(["zh", "en"] as const)(
-  "%s details combine result/report PRs and show completed wall time",
+  "%s details combine result/report PRs and show completed wall time from hidden earlier events",
   async (lang) => {
     language.value = lang;
     const client = new QueryClient();
@@ -132,14 +132,18 @@ test.each(["zh", "en"] as const)(
     const events = [
       {
         ...(detailEvents[0] as TaskEvent),
-        type: "task.accept",
+        id: "earlier-claim",
+        ts: "2026-10-19T11:59:00Z",
+        type: "task.claim",
         payload: { from: "assigned", to: "in_progress" },
       },
       {
         ...(detailEvents[3] as TaskEvent),
+        id: "earlier-report",
         type: "task.reported",
         payload: { message: `${result}/files https://github.com/team/report/pull/12` },
       },
+      ...detailEvents,
     ];
     const html = await render(
       <QueryClientProvider client={client}>
@@ -157,7 +161,11 @@ test.each(["zh", "en"] as const)(
     expect(badges.match(/<a /g)).toHaveLength(2);
     expect(badges).toContain(`href="${result}"`);
     expect(badges).toContain('href="https://github.com/team/report/pull/12"');
-    expect(html).toContain(lang === "zh" ? "总耗时 9 分" : "Total 9 min");
+    expect(html).toContain(lang === "zh" ? "总耗时 10 分" : "Total 10 min");
+    const timeline = html.match(/<ol\b[\s\S]*?<\/ol>/)?.[0] as string;
+    expect(timeline.match(/<li\b/g)).toHaveLength(10);
+    expect(timeline).not.toContain("https://github.com/team/report/pull/12");
+    expect(timeline).not.toContain('dateTime="2026-10-19T11:59:00Z"');
     client.clear();
   },
 );

@@ -323,6 +323,8 @@ export const en: Record<Key, string> = {
   "desk.selectAgent": "Select AI",
   "desk.templates": "Templates",
   "desk.timeline": "Progress log",
+  "desk.showEarlierEvents": "Show {count} earlier events",
+  "desk.showLatestEvents": "Show latest 10",
   "desk.totalDuration": "Total {duration}",
   "desk.unassignedHost": "Unassigned",
   "event.accept": "{agent} accepted",
