@@ -38,13 +38,15 @@ test.each(["viewer", "admin"])(
               run={{ ...run, status, hiddenAt }}
               now={Date.now()}
               onToggleHidden={() => {}}
+              onCopyFailure={() => {}}
               pending={false}
             />
           </QueryClientProvider>,
         );
-        expect(html.includes("<button")).toBe(
+        expect(/aria-label="(?:Hide|Unhide)"/.test(html)).toBe(
           role === "admin" && status !== "waiting" && status !== "running",
         );
+        expect(html.includes('aria-label="Copy failure details"')).toBe(status === "failed");
         expect(html.includes("opacity-60")).toBe(hiddenAt !== null);
       }
     }

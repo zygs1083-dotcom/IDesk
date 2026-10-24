@@ -15,6 +15,7 @@ export function AutomationBoard({
   now,
   error,
   onToggleHidden,
+  onCopyFailure,
   pending,
 }: {
   runs: Run[];
@@ -22,6 +23,7 @@ export function AutomationBoard({
   now: number;
   error: string | null;
   onToggleHidden: (run: Run) => void;
+  onCopyFailure: (run: Run) => void;
   pending: boolean;
 }) {
   const { t } = useLang();
@@ -62,6 +64,7 @@ export function AutomationBoard({
                   run={run}
                   now={now}
                   onToggleHidden={onToggleHidden}
+                  onCopyFailure={onCopyFailure}
                   pending={pending}
                 />
               ))}
