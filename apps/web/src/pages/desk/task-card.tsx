@@ -86,7 +86,7 @@ export function TaskCard({
           drag && "touch-none",
         )}
       >
-        <span data-ui="card-title" className="mb-3 block line-clamp-2 text-body">
+        <span data-ui="card-title" className="mb-2 line-clamp-2 text-body">
           {blockers > 0 && (
             <span className="mr-2 inline-flex items-center gap-1 text-text-3 tabular-nums">
               <PixelIcon name="lock" fallback={<Lock size={16} strokeWidth={1.5} />} />
@@ -95,14 +95,6 @@ export function TaskCard({
             </span>
           )}
           {task.title}
-        </span>
-        <span className="mb-2 flex items-baseline justify-between gap-2 text-label text-text-2">
-          <span className="truncate">{task.capabilities.join(" · ")}</span>
-          {(task.priority === "high" || task.priority === "urgent") && (
-            <span className={cn("shrink-0", task.priority === "urgent" && "text-status-failed")}>
-              ↑{labels(lang).priority[task.priority]}
-            </span>
-          )}
         </span>
         {task.status === "recruiting" && task.recruit && (
           <span className="mb-2 block text-label text-text-2 tabular-nums">
@@ -127,7 +119,15 @@ export function TaskCard({
           </span>
         </span>
       </button>
-      <span className="mt-2 block empty:hidden">
+      <span className="mt-2 flex flex-wrap items-start gap-2">
+        <span className="flex min-w-0 max-w-full items-baseline gap-2 text-label text-text-2">
+          <span className="truncate">{task.capabilities.join(" · ")}</span>
+          {(task.priority === "high" || task.priority === "urgent") && (
+            <span className={cn("shrink-0", task.priority === "urgent" && "text-status-failed")}>
+              ↑{labels(lang).priority[task.priority]}
+            </span>
+          )}
+        </span>
         <TaskPrBadges result={task.result} events={events} />
       </span>
     </motion.div>

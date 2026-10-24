@@ -75,6 +75,31 @@ test("PR anchors are siblings of the task button with safe external destinations
   expect(keyboard).not.toHaveBeenCalled();
 });
 
+test.each([0, 1, 12])("cards retain capabilities and priority with %i PR links", (count) => {
+  const urls = Array.from(
+    { length: count },
+    (_, index) => `https://github.com/team/repo/pull/${index + 1}`,
+  );
+  const html = renderToStaticMarkup(
+    <TaskCard
+      task={{
+        ...task,
+        capabilities: ["coding", "review"],
+        priority: "urgent",
+        result: urls.join(" "),
+      }}
+      blockers={0}
+      name="Agent"
+      onOpen={() => {}}
+    />,
+  );
+  expect(html).toContain("coding · review");
+  expect(html).toContain("↑Urgent");
+  expect(html).toContain("Agent");
+  expect(html.match(/<a /g) ?? []).toHaveLength(count);
+  for (const url of urls) expect(html).toContain(`href="${url}"`);
+});
+
 test("Enter during keyboard dragging is reserved for dropping without opening details", () => {
   const { button, onOpen, keyboard } = card(true);
   const enter = { key: "Enter", code: "Enter" } as KeyboardEvent<HTMLButtonElement>;

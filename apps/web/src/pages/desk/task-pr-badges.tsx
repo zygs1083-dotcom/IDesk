@@ -14,7 +14,7 @@ export function TaskPrBadges({ result, events }: { result: string | null; events
           rel="noopener noreferrer"
           title={`${repository} · PR #${number}`}
           aria-label={`${repository} · PR #${number}`}
-          className="relative z-10 inline-flex max-w-full break-all rounded-sm border border-line px-1.5 py-0.5 text-text-2 transition-colors duration-hover hover:bg-surface-2 hover:text-text focus-visible:outline-2 focus-visible:outline-accent"
+          className="relative z-10 inline-flex max-w-full break-all rounded-sm border border-line px-1.5 text-text-2 transition-colors duration-hover hover:bg-surface-2 hover:text-text focus-visible:outline-2 focus-visible:outline-accent"
         >
           PR #{number}
         </a>
