@@ -30,7 +30,7 @@ export function Board({
   tasks,
   visible,
   handoffs,
-  search,
+  filtered,
   group,
   loading,
   onOpen,
@@ -39,7 +39,7 @@ export function Board({
   tasks: Task[];
   visible: Task[];
   handoffs: TaskEvent[];
-  search: string;
+  filtered: boolean;
   group: "flat" | "host";
   loading: boolean;
   onOpen: (id: string) => void;
@@ -155,7 +155,7 @@ export function Board({
               </Column>
             );
           })}
-          {!search && boardTasks.length === 0 && !loading && (
+          {!filtered && boardTasks.length === 0 && !loading && (
             <div
               data-ui="empty-state-overlay"
               className="pointer-events-none absolute inset-0 flex items-center justify-center"
@@ -174,7 +174,7 @@ export function Board({
               />
             </div>
           )}
-          {search && boardTasks.length === 0 && !loading && (
+          {filtered && boardTasks.length === 0 && !loading && (
             <p className="absolute inset-x-0 top-20 text-center text-secondary text-text-2">
               {t("desk.noMatches")}
             </p>
