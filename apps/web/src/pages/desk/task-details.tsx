@@ -1,11 +1,14 @@
 import { labels } from "@idesk/shared/labels";
 import { Markdown } from "../../components/markdown.tsx";
 import { useLang } from "../../i18n/lang.tsx";
+import { formatDuration } from "../../lib/format.ts";
 import type { Task, TaskEvent } from "../../lib/types.ts";
 import { StatusDot } from "./status-dot.tsx";
+import { completedDuration } from "./task-clock.ts";
 import { TaskDependencies } from "./task-dependencies.tsx";
 import { TaskExcerpt } from "./task-excerpt.tsx";
 import { TaskInformation } from "./task-information.tsx";
+import { TaskPrBadges } from "./task-pr-badges.tsx";
 import { TaskTimeline } from "./task-timeline.tsx";
 
 export function TaskDetails({
@@ -20,11 +23,17 @@ export function TaskDetails({
   onError: (message: string) => void;
 }) {
   const { lang, t } = useLang();
+  const total = completedDuration(task, events);
   return (
     <div className="task-details min-w-0 space-y-4">
-      <div className="flex items-center gap-2 text-secondary text-text-2">
+      <div className="flex flex-wrap items-center gap-2 text-secondary text-text-2">
         <StatusDot status={task.status} />
         {labels(lang).status[task.status]}
+        {total !== null && (
+          <span className="text-label tabular-nums">
+            {t("desk.totalDuration", { duration: formatDuration(total, lang) })}
+          </span>
+        )}
       </div>
       <section className="space-y-2">
         <h3 className="text-section">{t("desk.requirements")}</h3>
@@ -34,6 +43,7 @@ export function TaskDetails({
       </section>
       <section className="space-y-2 border-t border-line pt-4">
         <h3 className="text-section">{t("desk.executionResult")}</h3>
+        <TaskPrBadges result={task.result} events={events} />
         {task.result?.trim() ? (
           <TaskExcerpt lines={6}>
             <Markdown>{task.result}</Markdown>
