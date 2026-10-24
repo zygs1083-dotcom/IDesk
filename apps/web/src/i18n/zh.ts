@@ -287,6 +287,7 @@ export const zh = {
   "desk.health": "看板健康",
   "desk.healthBlocked": "阻塞",
   "desk.healthInProgress": "进行中",
+  "desk.healthOverdue": "逾期",
   "desk.healthSilent": "沉默",
   "desk.healthWaiting": "等回复",
   "desk.joined": "已加入",

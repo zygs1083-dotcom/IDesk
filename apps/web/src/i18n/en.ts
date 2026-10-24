@@ -300,6 +300,7 @@ export const en: Record<Key, string> = {
   "desk.health": "Board health",
   "desk.healthBlocked": "Blocked",
   "desk.healthInProgress": "In progress",
+  "desk.healthOverdue": "Overdue",
   "desk.healthSilent": "Silent",
   "desk.healthWaiting": "Awaiting reply",
   "desk.joined": "joined",

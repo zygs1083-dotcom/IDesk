@@ -1,5 +1,5 @@
 import type { Lang } from "@idesk/shared/labels";
-import type { ReactElement, ReactNode } from "react";
+import type { ChangeEvent, ReactElement, ReactNode } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { beforeEach, expect, test, vi } from "vitest";
 import { BoardHealth } from "./board-health.tsx";
@@ -33,8 +33,8 @@ function buttons(
     value,
     onChange,
   });
-  const children = tree.props.children;
-  return [children[1], ...children[2]] as Button[];
+  const children = tree.props.children[2].props.children;
+  return [children[0], ...children[1]] as Button[];
 }
 beforeEach(() => {
   state.lang = "en";
@@ -52,12 +52,14 @@ test("health controls replace the active filter and clear on a second click or A
     false,
     false,
     false,
+    false,
   ]);
   controls()[1]?.props.onClick();
   expect(selected).toBe("in_progress");
   expect(controls().map((button) => button.props["aria-pressed"])).toEqual([
     false,
     true,
+    false,
     false,
     false,
     false,
@@ -68,6 +70,11 @@ test("health controls replace the active filter and clear on a second click or A
   expect(selected).toBe(null);
   controls()[4]?.props.onClick();
   expect(selected).toBe("waiting");
+  controls()[5]?.props.onClick();
+  expect(selected).toBe("overdue");
+  controls()[5]?.props.onClick();
+  expect(selected).toBe(null);
+  controls()[5]?.props.onClick();
   controls()[0]?.props.onClick();
   expect(selected).toBe(null);
   expect(
@@ -94,8 +101,27 @@ test("counts are calculated before a health filter and stay scoped to the search
   expect(scoped.in_progress.size).toBe(0);
 });
 
+test("the narrow-screen native select switches health filters and All clears them", () => {
+  const onChange = vi.fn();
+  const tree = BoardHealth({
+    health,
+    status: { silent: "success", waiting: "success" },
+    value: "overdue",
+    onChange,
+  });
+  const select = tree.props.children[1];
+  expect(select.type).toBe("select");
+  expect(select.props.value).toBe("overdue");
+  expect(select.props["aria-label"]).toBeTruthy();
+  const change = select.props.onChange as (event: ChangeEvent<HTMLSelectElement>) => void;
+  change({ target: { value: "waiting" } } as ChangeEvent<HTMLSelectElement>);
+  expect(onChange).toHaveBeenLastCalledWith("waiting");
+  change({ target: { value: "" } } as ChangeEvent<HTMLSelectElement>);
+  expect(onChange).toHaveBeenLastCalledWith(null);
+});
+
 test.each(["zh", "en"] as const)(
-  "%s exposes labeled native buttons with real zero counts",
+  "%s exposes labeled native controls with real zero counts",
   (lang) => {
     state.lang = lang;
     const empty = boardHealth([], [], new Map(), [], Date.now());
@@ -107,9 +133,12 @@ test.each(["zh", "en"] as const)(
         onChange={() => {}}
       />,
     );
-    expect(html.match(/<button\b/g)).toHaveLength(5);
+    expect(html.match(/<button\b/g)).toHaveLength(6);
+    expect(html.match(/<select\b/g)).toHaveLength(1);
+    expect(html.match(/<option\b/g)).toHaveLength(6);
+    expect(html.match(/selected=""/g)).toHaveLength(1);
     expect(html.match(/aria-pressed="true"/g)).toHaveLength(1);
-    expect(html.match(/class="tabular-nums">0<\/span>/g)).toHaveLength(4);
+    expect(html.match(/class="tabular-nums">0<\/span>/g)).toHaveLength(5);
     expect(html).toContain('<legend class="sr-only">');
   },
 );
@@ -126,4 +155,6 @@ test("pending or failed health queries display an indeterminate count instead of
   expect(html.match(/aria-busy="true"/g)).toHaveLength(1);
   expect(html).toContain('class="tabular-nums">…</span>');
   expect(html).toContain('class="tabular-nums">—</span>');
+  expect(html).toMatch(/<option value="silent"[^>]*>[^<]*…<\/option>/);
+  expect(html).toMatch(/<option value="waiting"[^>]*>[^<]*—<\/option>/);
 });

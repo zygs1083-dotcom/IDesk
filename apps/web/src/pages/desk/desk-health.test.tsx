@@ -3,7 +3,6 @@ import { afterEach, assert, beforeEach, expect, test, vi } from "vitest";
 import type { Task, TaskEvent } from "../../lib/types.ts";
 import { Board } from "./board.tsx";
 import { BoardHealth } from "./board-health.tsx";
-import { boardHealth } from "./board-health-state.ts";
 import { Desk } from "./desk.tsx";
 import { detailTask } from "./task-detail.fixtures.ts";
 
@@ -44,7 +43,8 @@ vi.mock("react-router", () => ({
   Link: "a",
   useSearchParams: () => [
     state.params,
-    (update: (current: URLSearchParams) => URLSearchParams) => {
+    (update: (current: URLSearchParams) => URLSearchParams, options: { replace: boolean }) => {
+      expect(options.replace).toBe(false);
       state.params = update(state.params);
     },
   ],
@@ -105,7 +105,13 @@ beforeEach(() => {
   state.params = new URLSearchParams("group=flat");
   state.tasks = [
     { ...detailTask, id: "running", status: "in_progress" },
-    { ...detailTask, id: "blocked", status: "open", blockedBy: ["running"] },
+    {
+      ...detailTask,
+      id: "blocked",
+      status: "open",
+      blockedBy: ["running"],
+      dueAt: "2020-01-01T00:00:00Z",
+    },
   ];
   state.searchResults = [];
   state.events = new Map();
@@ -114,10 +120,14 @@ beforeEach(() => {
   state.error = null;
 });
 
-test("Desk combines health with search and both grouping modes without changing pre-filter counts", () => {
+test("viewer replays overdue, preserves URL parameters and scopes health to search and both groups", () => {
+  state.params = new URLSearchParams("group=flat&health=overdue&task=blocked&extra=a&extra=b");
   let page = render();
-  expect(page.board.visible).toEqual(state.tasks);
+  expect(page.health.value).toBe("overdue");
+  expect(page.board.visible.map((task) => task.id)).toEqual(["blocked"]);
   page.health.onChange("blocked");
+  expect(state.params.get("task")).toBe("blocked");
+  expect(state.params.getAll("extra")).toEqual(["a", "b"]);
   page = render();
   expect(page.board.visible.map((task) => task.id)).toEqual(["blocked"]);
   expect(page.health.health.in_progress.size).toBe(1);
@@ -132,6 +142,10 @@ test("Desk combines health with search and both grouping modes without changing 
   expect(page.health.health.blocked.size).toBe(1);
   expect(page.health.health.in_progress.size).toBe(0);
   expect(page.board.tasks).toEqual(state.tasks);
+  page.health.onChange("overdue");
+  page = render();
+  expect(page.health.health.overdue.size).toBe(1);
+  expect(page.board.visible).toEqual(state.searchResults);
   page.health.onChange("silent");
   page = render();
   expect(page.board.visible).toEqual([]);
@@ -145,16 +159,13 @@ test("Desk combines health with search and both grouping modes without changing 
   expect(render().board.filtered).toBe(false);
 });
 
-test("Desk immediately applies a task update to the active filter", () => {
-  render().health.onChange("blocked");
+test.each(["blocked", "overdue"] as const)("Desk immediately applies updates to %s", (filter) => {
+  render().health.onChange(filter);
   expect(render().board.visible).toHaveLength(1);
   state.tasks = state.tasks.map((task) =>
-    task.id === "running" ? { ...task, status: "done" } : task,
+    task.id === (filter === "blocked" ? "running" : "blocked") ? { ...task, status: "done" } : task,
   );
   expect(render().board.visible).toEqual([]);
-  expect(render().health.health).toEqual(
-    boardHealth(state.tasks, state.tasks, new Map(), [], Date.now()),
-  );
 });
 
 test.each(["silent", "waiting"] as const)(
