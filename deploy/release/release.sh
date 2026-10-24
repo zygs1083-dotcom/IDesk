@@ -37,7 +37,7 @@ trap finish EXIT
 run_at() {
   local host=$1 command
   shift
-  printf -v command '%q ' bash -euo pipefail -c "$@"
+  printf -v command '%q ' bash -c $'set -euo pipefail\n'"$1" "${@:2}"
   if [[ -n $host ]]; then
     ssh -o BatchMode=yes "$host" "$command"
   else
@@ -71,6 +71,7 @@ set -a
 source "$root/deploy/release/targets/$TARGET.env"
 set +a
 release_dir="$RELEASE_DIR/$(date -u +%Y%m%dT%H%M%S)-$rev"
+printf 'TARGET release_dir=%s backup_dir=%s/backup\n' "$release_dir" "$release_dir"
 archive="idesk-$rev.tar.gz"
 step build
 mkdir "$tmp/context"
