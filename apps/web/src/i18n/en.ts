@@ -291,6 +291,7 @@ export const en: Record<Key, string> = {
   "desk.byHost": "By host",
   "desk.clearFilters": "Clear filters",
   "desk.copyAsMarkdown": "Copy as Markdown",
+  "desk.copyTaskLink": "Copy task link",
   "desk.copyFailed": "Copy failed. Please try again.",
   "desk.dependencies": "Dependencies",
   "desk.dispatch": "Dispatch",

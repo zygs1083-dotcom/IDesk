@@ -277,6 +277,7 @@ export const zh = {
   "desk.board": "任务看板",
   "desk.byHost": "按主机",
   "desk.copyAsMarkdown": "复制为 Markdown",
+  "desk.copyTaskLink": "复制任务链接",
   "desk.copyFailed": "复制失败，请重试。",
   "desk.dependencies": "依赖",
   "desk.dispatch": "分派",

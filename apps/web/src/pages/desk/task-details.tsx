@@ -3,6 +3,7 @@ import { Markdown } from "../../components/markdown.tsx";
 import { useLang } from "../../i18n/lang.tsx";
 import { formatDuration } from "../../lib/format.ts";
 import type { Task, TaskEvent } from "../../lib/types.ts";
+import { CopyTaskLink } from "./copy-task-link.tsx";
 import { CopyTaskMarkdown } from "./copy-task-markdown.tsx";
 import { StatusDot } from "./status-dot.tsx";
 import { completedDuration } from "./task-clock.ts";
@@ -35,7 +36,10 @@ export function TaskDetails({
             {t("desk.totalDuration", { duration: formatDuration(total, lang) })}
           </span>
         )}
-        <CopyTaskMarkdown key={`${task.id}:${lang}`} task={task} onError={onError} />
+        <div key={`${task.id}:${lang}`} className="ml-auto flex max-w-full items-center gap-2">
+          <CopyTaskLink task={task} onError={onError} />
+          <CopyTaskMarkdown task={task} onError={onError} />
+        </div>
       </div>
       <section className="space-y-2">
         <h3 className="text-section">{t("desk.requirements")}</h3>
