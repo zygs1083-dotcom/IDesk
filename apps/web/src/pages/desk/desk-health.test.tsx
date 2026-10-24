@@ -10,6 +10,7 @@ import { detailTask } from "./task-detail.fixtures.ts";
 const state = vi.hoisted(() => ({
   values: [] as unknown[],
   cursor: 0,
+  params: new URLSearchParams(),
   tasks: [] as Task[],
   searchResults: [] as Task[],
   events: new Map<string, TaskEvent[]>(),
@@ -41,7 +42,12 @@ vi.mock("react", async (original) => ({
 }));
 vi.mock("react-router", () => ({
   Link: "a",
-  useSearchParams: () => [new URLSearchParams(), vi.fn()],
+  useSearchParams: () => [
+    state.params,
+    (update: (current: URLSearchParams) => URLSearchParams) => {
+      state.params = update(state.params);
+    },
+  ],
 }));
 vi.mock("@tanstack/react-query", () => ({
   keepPreviousData: vi.fn(),
@@ -96,6 +102,7 @@ afterEach(() => vi.unstubAllGlobals());
 beforeEach(() => {
   vi.stubGlobal("localStorage", { getItem: () => null });
   state.values = [];
+  state.params = new URLSearchParams("group=flat");
   state.tasks = [
     { ...detailTask, id: "running", status: "in_progress" },
     { ...detailTask, id: "blocked", status: "open", blockedBy: ["running"] },
@@ -114,11 +121,12 @@ test("Desk combines health with search and both grouping modes without changing 
   page = render();
   expect(page.board.visible.map((task) => task.id)).toEqual(["blocked"]);
   expect(page.health.health.in_progress.size).toBe(1);
-  state.values[0] = "host";
+  state.params.set("group", "host");
   page = render();
   expect(page.board.group).toBe("host");
   expect(page.board.visible.map((task) => task.id)).toEqual(["blocked"]);
-  state.values[2] = "blocked search";
+  state.params.set("q", "blocked search");
+  state.values[0] = "blocked search";
   state.searchResults = [state.tasks[1] as Task];
   page = render();
   expect(page.health.health.blocked.size).toBe(1);
@@ -132,7 +140,8 @@ test("Desk combines health with search and both grouping modes without changing 
   page = render();
   expect(page.board.visible).toEqual(state.searchResults);
   expect(page.board.filtered).toBe(true);
-  state.values[2] = "";
+  state.params.delete("q");
+  state.values[0] = "";
   expect(render().board.filtered).toBe(false);
 });
 

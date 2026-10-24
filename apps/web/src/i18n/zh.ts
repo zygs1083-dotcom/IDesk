@@ -276,6 +276,8 @@ export const zh = {
   "desk.blockers": "{count} 个未完成依赖",
   "desk.board": "任务看板",
   "desk.byHost": "按主机",
+  "desk.copyAsMarkdown": "复制为 Markdown",
+  "desk.copyFailed": "复制失败，请重试。",
   "desk.dependencies": "依赖",
   "desk.dispatch": "分派",
   "desk.empty": "还没有任务",

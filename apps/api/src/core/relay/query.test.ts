@@ -87,6 +87,12 @@ test("threads ignore list pages and searches but never cross hidden parents", ()
     { to: { kind: "agent", id: b.id }, kind: "reply", subject: "grandchild", replyTo: reply.id },
     c.id,
   );
+  for (const [index, message] of [root, reply, child].entries()) {
+    db.update(relayMessages)
+      .set({ createdAt: new Date(200000 + index) })
+      .where(eq(relayMessages.id, message.id))
+      .run();
+  }
   expect(relayThread(child.id, b).map((message) => message.id)).toEqual([
     root.id,
     reply.id,
@@ -96,6 +102,30 @@ test("threads ignore list pages and searches but never cross hidden parents", ()
   expect(() => getRelay(root.id, c)).toThrow("消息不存在");
   expect(() => relayThread(root.id, c)).toThrow("消息不存在");
   expect(relayThread(root.id, { kind: "human" })).toHaveLength(3);
+});
+
+test("threads order equal timestamps by ID regardless of insertion order", () => {
+  const reader = agent();
+  const root = "00000000000000000000000003";
+  const reply = "00000000000000000000000001";
+  const child = "00000000000000000000000002";
+  db.insert(relayMessages)
+    .values(
+      [
+        { id: root, replyTo: null },
+        { id: reply, replyTo: root },
+        { id: child, replyTo: reply },
+      ].map((message) => ({
+        ...message,
+        createdAt: new Date(300000),
+        fromAgentId: "human",
+        to: { kind: "agent" as const, id: reader.id },
+        kind: "reply" as const,
+        subject: "timestamp tie",
+      })),
+    )
+    .run();
+  expect(relayThread(child, reader).map((message) => message.id)).toEqual([reply, child, root]);
 });
 
 test("request status counts visible replies by others, including deeper descendants", () => {
