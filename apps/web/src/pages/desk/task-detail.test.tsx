@@ -21,7 +21,9 @@ vi.mock("../../i18n/lang.tsx", async () => {
 const agentName = (id: string | null) => (id === "human" ? "Publisher" : "Codex");
 
 async function render(children: ReactNode) {
-  const stream = await renderToReadableStream(children);
+  const stream = await renderToReadableStream(children, {
+    progressiveChunkSize: Number.POSITIVE_INFINITY,
+  });
   await stream.allReady;
   return new Response(stream).text();
 }
@@ -166,6 +168,9 @@ test("only admins retain the edit, reopen and dependency entry points in the dra
   for (const role of ["admin", "viewer"] as const) {
     const html = await renderTask(detailTask, role);
     const buttons = html.match(/<button\b[^>]*>[\s\S]*?<\/button>/g) ?? [];
+    expect(
+      buttons.some((button) => button.includes(`aria-label="${t("desk.copyAsMarkdown")}"`)),
+    ).toBe(true);
     for (const label of [t("common.edit"), labels("en").action.reopen, t("desk.addDependency")])
       expect(buttons.some((button) => button.includes(`>${label}</button>`))).toBe(
         role === "admin",
