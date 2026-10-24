@@ -47,6 +47,32 @@ test("counts overlapping health groups across statuses and resolves dependencies
   expect([...health.blocked]).toEqual(["open", "paused"]);
 });
 
+test.each([
+  ["open", true],
+  ["recruiting", true],
+  ["assigned", true],
+  ["in_progress", true],
+  ["paused", true],
+  ["done", false],
+  ["cancelled", false],
+] as const)("past-due %s tasks have overdue membership %s", (status, expected) => {
+  const due = { ...task("due", status), dueAt: new Date(now - 1).toISOString() };
+  expect(boardHealth([due], [due], new Map(), [], now).overdue.has("due")).toBe(expected);
+});
+
+test("overdue excludes exact, future and absent deadlines and stays within the search scope", () => {
+  const scope = [
+    { ...task("past", "open"), dueAt: new Date(now - 1).toISOString() },
+    { ...task("exact", "open"), dueAt: new Date(now).toISOString() },
+    { ...task("later-today", "open"), dueAt: new Date(now + 60_000).toISOString() },
+    task("no-deadline", "open"),
+  ];
+  const outside = { ...task("outside", "open"), dueAt: new Date(now - 1).toISOString() };
+  expect([...boardHealth(scope, [...scope, outside], new Map(), [], now).overdue]).toEqual([
+    "past",
+  ]);
+});
+
 test("silence begins strictly after fifteen minutes, never from absent or report-only events", () => {
   const scope = [task("running", "in_progress")];
   const events = new Map([["running", [claim(15)]]]);

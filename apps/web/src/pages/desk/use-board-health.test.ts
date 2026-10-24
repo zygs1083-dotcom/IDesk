@@ -117,6 +117,33 @@ test("the minute refresh observes the strict threshold and a cache update clears
   expect(useBoardHealth([running], [running]).health.silent.size).toBe(0);
 });
 
+test("the existing minute clock advances overdue and task updates remove or restore membership", () => {
+  const due = {
+    ...detailTask,
+    id: "due",
+    status: "open" as const,
+    dueAt: new Date(now).toISOString(),
+  };
+  expect(useBoardHealth([due], [due]).health.overdue.size).toBe(0);
+  expect(vi.getTimerCount()).toBe(1);
+  expect(state.events).toEqual([]);
+  vi.advanceTimersByTime(59_999);
+  expect(useBoardHealth([due], [due]).health.overdue.size).toBe(0);
+  vi.advanceTimersByTime(1);
+  expect(useBoardHealth([due], [due]).health.overdue.has(due.id)).toBe(true);
+  const done = { ...due, status: "done" as const };
+  expect(useBoardHealth([done], [done]).health.overdue.size).toBe(0);
+  const cancelled = { ...due, status: "cancelled" as const };
+  expect(useBoardHealth([cancelled], [cancelled]).health.overdue.size).toBe(0);
+  const postponed = { ...due, dueAt: new Date(now + 120_000).toISOString() };
+  expect(useBoardHealth([postponed], [postponed]).health.overdue.size).toBe(0);
+  expect(useBoardHealth([due], [due]).health.overdue.has(due.id)).toBe(true);
+  const cleared = { ...due, dueAt: null };
+  expect(useBoardHealth([cleared], [cleared]).health.overdue.size).toBe(0);
+  expect(vi.getTimerCount()).toBe(1);
+  expect(fetch).not.toHaveBeenCalled();
+});
+
 test("waiting uses the server pending-request contract, keeps read requests and drops answered requests after invalidation", async () => {
   useBoardHealth([running], [running]);
   const options = state.relay;

@@ -9,7 +9,8 @@ export function deskFilterParams(params: URLSearchParams, preferredGroup: string
     rawHealth === "in_progress" ||
     rawHealth === "silent" ||
     rawHealth === "blocked" ||
-    rawHealth === "waiting"
+    rawHealth === "waiting" ||
+    rawHealth === "overdue"
       ? rawHealth
       : null;
   const search = params.get("q") ?? "";

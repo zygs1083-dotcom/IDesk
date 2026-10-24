@@ -4,7 +4,7 @@ import type { Task, TaskEvent } from "../../lib/types.ts";
 import { countBlockers } from "./count-blockers.ts";
 import { taskClock } from "./task-clock.ts";
 
-export type HealthFilter = "in_progress" | "silent" | "blocked" | "waiting";
+export type HealthFilter = "in_progress" | "silent" | "blocked" | "waiting" | "overdue";
 export type HealthTasks = Record<HealthFilter, Set<string>>;
 export type HealthQueryStatus = Record<"silent" | "waiting", "pending" | "error" | "success">;
 export type PendingRequest = Pick<
@@ -24,6 +24,7 @@ export function boardHealth(
     silent: new Set(),
     blocked: new Set(),
     waiting: new Set(),
+    overdue: new Set(),
   };
   const waiting = new Set(
     pendingRequests
@@ -48,6 +49,13 @@ export function boardHealth(
       countBlockers(task.blockedBy, tasks) > 0
     )
       health.blocked.add(task.id);
+    if (
+      task.status !== "done" &&
+      task.status !== "cancelled" &&
+      task.dueAt !== null &&
+      Date.parse(task.dueAt) < now
+    )
+      health.overdue.add(task.id);
     if (waiting.has(task.id)) health.waiting.add(task.id);
   }
   return health;

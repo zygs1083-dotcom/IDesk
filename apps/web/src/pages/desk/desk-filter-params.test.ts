@@ -15,7 +15,7 @@ test.each([
   expect(deskFilterParams(filters.normalized, "flat").group).toBe(expected);
 });
 
-test.each(["in_progress", "silent", "blocked", "waiting"])(
+test.each(["in_progress", "silent", "blocked", "waiting", "overdue"])(
   "a shared search and %s health filter replay with the task and unknown values intact",
   (health) => {
     const params = new URLSearchParams("q=search+words&task=task-1&extra=a&extra=b");
