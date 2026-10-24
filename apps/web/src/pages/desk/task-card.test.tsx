@@ -18,7 +18,7 @@ vi.mock("react", async (original) => ({
     state.now ??= initial();
     return [state.now, (value: number) => (state.now = value)];
   },
-  useEffect: (effect: () => () => void) => {
+  useEffect: (effect: () => (() => void) | undefined) => {
     state.cleanup ??= effect();
   },
 }));
@@ -28,7 +28,7 @@ vi.mock("@tanstack/react-query", () => ({
     return { data: state.events };
   },
 }));
-vi.mock("motion/react", () => ({ motion: { button: "button" }, useReducedMotion: () => true }));
+vi.mock("motion/react", () => ({ motion: { div: "div" }, useReducedMotion: () => true }));
 vi.mock("../../i18n/lang.tsx", async () => {
   const { translator } = await import("../../i18n/translate.ts");
   return {
@@ -50,7 +50,12 @@ function entry(minutesAgo: number): TaskEvent {
 }
 function render(status = "in_progress" as typeof detailTask.status) {
   return renderToStaticMarkup(
-    <TaskCard task={{ ...detailTask, status }} name="Agent" blockers={0} onOpen={() => {}} />,
+    <TaskCard
+      task={{ ...detailTask, status, completedAt: new Date(now).toISOString() }}
+      name="Agent"
+      blockers={0}
+      onOpen={() => {}}
+    />,
   );
 }
 
@@ -82,11 +87,14 @@ test("silent cards color the whole elapsed and silence line with the lease warni
   );
 });
 
-test.each(["open", "assigned", "recruiting", "paused", "done", "cancelled"] as const)(
-  "%s cards have no clock and do not query events",
+test.each(["open", "assigned", "recruiting", "paused", "cancelled"] as const)(
+  "%s cards load report links without showing a clock",
   (status) => {
     expect(render(status)).not.toContain("已进行");
-    expect(state.query).not.toHaveBeenCalled();
+    expect(render(status)).not.toContain("总耗时");
+    expect(state.query).toHaveBeenCalledWith(
+      expect.objectContaining({ queryKey: ["task", detailTask.id, "events"] }),
+    );
   },
 );
 
@@ -103,6 +111,34 @@ test("missing events or a missing start event leave the line absent", () => {
   expect(render()).not.toContain("已进行");
   state.events = [];
   expect(render()).not.toContain("已进行");
+});
+
+test.each(["zh", "en"] as const)("%s done cards show a fixed total without a timer", (lang) => {
+  state.lang = lang;
+  expect(render("done")).toContain(lang === "zh" ? "总耗时 8 分" : "Total 8 min");
+  expect(vi.getTimerCount()).toBe(0);
+  vi.advanceTimersByTime(120_000);
+  expect(render("done")).toContain(lang === "zh" ? "总耗时 8 分" : "Total 8 min");
+});
+
+test("done cards omit total duration when the first start is missing", () => {
+  state.events = [];
+  expect(render("done")).not.toContain("总耗时");
+});
+
+test("cards use report links even when their result is empty", () => {
+  state.events = [
+    {
+      ...entry(1),
+      type: "task.reported",
+      payload: { message: "https://github.com/team/repo/pull/12" },
+    },
+  ];
+  const html = renderToStaticMarkup(
+    <TaskCard task={{ ...detailTask, result: null }} name="Agent" blockers={0} onOpen={() => {}} />,
+  );
+  expect(html).toContain('href="https://github.com/team/repo/pull/12"');
+  expect(html).toContain("PR #12");
 });
 
 test("English cards show elapsed time and silence", () => {

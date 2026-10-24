@@ -103,8 +103,9 @@ test.each([undefined, "viewer", "admin"] as const)(
     expect(html).toContain("Readable task");
     expect(html).toContain("Readable message");
     const buttons = html.match(/<button\b[^>]*>[\s\S]*?<\/button>/g) ?? [];
-    const card = buttons.find((button) => button.includes('data-ui="card"'));
+    const card = html.match(/<div\b[^>]*data-ui="card"[^>]*>([\s\S]*?)<\/button>/)?.[1];
     expect(card).toBeDefined();
+    expect(card).toContain('<button type="button"');
     expect(card?.includes("touch-none")).toBe(role === "admin");
     expect(card?.includes('aria-disabled="true"')).toBe(false);
     const controls = buttons.filter((button) =>

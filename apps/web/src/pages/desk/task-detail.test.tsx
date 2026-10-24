@@ -6,8 +6,9 @@ import { MemoryRouter } from "react-router";
 import { expect, test, vi } from "vitest";
 import { translator } from "../../i18n/translate.ts";
 import { eventText } from "../../lib/event-text.ts";
-import type { Task } from "../../lib/types.ts";
+import type { Task, TaskEvent } from "../../lib/types.ts";
 import { detailEvents, detailTask, detailUrl } from "./task-detail.fixtures.ts";
+import { TaskDetails } from "./task-details.tsx";
 import { TaskDrawer } from "./task-drawer.tsx";
 import { TaskTimeline } from "./task-timeline.tsx";
 
@@ -117,6 +118,45 @@ test.each(["zh", "en"] as const)(
         expect(item).not.toContain("task-excerpt");
       }
     }
+  },
+);
+
+test.each(["zh", "en"] as const)(
+  "%s details combine result/report PRs and show completed wall time",
+  async (lang) => {
+    language.value = lang;
+    const client = new QueryClient();
+    const result = "https://github.com/team/result/pull/12";
+    const events = [
+      {
+        ...(detailEvents[0] as TaskEvent),
+        type: "task.accept",
+        payload: { from: "assigned", to: "in_progress" },
+      },
+      {
+        ...(detailEvents[3] as TaskEvent),
+        type: "task.reported",
+        payload: { message: `${result}/files https://github.com/team/report/pull/12` },
+      },
+    ];
+    const html = await render(
+      <QueryClientProvider client={client}>
+        <MemoryRouter>
+          <TaskDetails
+            task={{ ...detailTask, result }}
+            events={events}
+            agentName={agentName}
+            onError={() => {}}
+          />
+        </MemoryRouter>
+      </QueryClientProvider>,
+    );
+    const badges = html.match(/<span data-ui="pr-badges"[\s\S]*?<\/span>/)?.[0] as string;
+    expect(badges.match(/<a /g)).toHaveLength(2);
+    expect(badges).toContain(`href="${result}"`);
+    expect(badges).toContain('href="https://github.com/team/report/pull/12"');
+    expect(html).toContain(lang === "zh" ? "总耗时 9 分" : "Total 9 min");
+    client.clear();
   },
 );
 

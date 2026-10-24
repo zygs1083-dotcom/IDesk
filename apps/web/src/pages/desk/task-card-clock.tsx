@@ -1,24 +1,27 @@
-import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useLang } from "../../i18n/lang.tsx";
-import { request } from "../../lib/api.ts";
 import { cn } from "../../lib/cn.ts";
 import { formatDuration } from "../../lib/format.ts";
-import type { TaskEvent } from "../../lib/types.ts";
-import { taskClock } from "./task-clock.ts";
+import type { Task, TaskEvent } from "../../lib/types.ts";
+import { completedDuration, taskClock } from "./task-clock.ts";
 
-export function TaskCardClock({ taskId }: { taskId: string }) {
+export function TaskCardClock({ task, events }: { task: Task; events: TaskEvent[] }) {
   const { lang, t } = useLang();
   const [now, setNow] = useState(Date.now);
-  const { data: events } = useQuery({
-    queryKey: ["task", taskId, "events"],
-    queryFn: () => request<TaskEvent[]>(`/tasks/${taskId}/events`),
-  });
   useEffect(() => {
+    if (task.status !== "in_progress") return;
     const timer = setInterval(() => setNow(Date.now()), 60_000);
     return () => clearInterval(timer);
-  }, []);
-  const clock = events ? taskClock(events, now) : null;
+  }, [task.status]);
+  const total = completedDuration(task, events);
+  if (total !== null) {
+    return (
+      <span className="mb-2 block text-label text-text-2 tabular-nums">
+        {t("desk.totalDuration", { duration: formatDuration(total, lang) })}
+      </span>
+    );
+  }
+  const clock = task.status === "in_progress" ? taskClock(events, now) : null;
   if (!clock) return null;
   return (
     <span
