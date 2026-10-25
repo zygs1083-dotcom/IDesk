@@ -292,6 +292,7 @@ export const zh = {
   "desk.copyAsMarkdown": "复制为 Markdown",
   "desk.copyTaskLink": "复制任务链接",
   "desk.copyFailed": "复制失败，请重试。",
+  "desk.createFromTask": "从此任务新建",
   "desk.dependencies": "依赖",
   "desk.dispatch": "分派",
   "desk.empty": "还没有任务",

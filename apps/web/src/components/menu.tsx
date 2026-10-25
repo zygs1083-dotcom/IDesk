@@ -1,6 +1,6 @@
 import { Ellipsis } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
-import { useId, useLayoutEffect, useRef, useState } from "react";
+import { type RefObject, useId, useLayoutEffect, useRef, useState } from "react";
 import { cn } from "../lib/cn.ts";
 import { Button } from "./button.tsx";
 import { PixelIcon } from "./pixel-icon.tsx";
@@ -10,15 +10,18 @@ export function Menu({
   items,
   disabled = false,
   trigger,
+  triggerRef: providedTriggerRef,
 }: {
   label: string;
   items: { label: string; onSelect: () => void; danger?: boolean }[];
   disabled?: boolean;
   trigger?: string;
+  triggerRef?: RefObject<HTMLButtonElement | null>;
 }) {
   const [open, setOpen] = useState(false);
   const root = useRef<HTMLDivElement>(null);
-  const triggerRef = useRef<HTMLButtonElement>(null);
+  const localTriggerRef = useRef<HTMLButtonElement>(null);
+  const triggerRef = providedTriggerRef ?? localTriggerRef;
   const menu = useRef<HTMLDivElement>(null);
   const id = useId();
   const reduced = useReducedMotion();
@@ -59,7 +62,7 @@ export function Menu({
       window.removeEventListener("resize", moved);
       panel.hidePopover();
     };
-  }, [open, disabled]);
+  }, [open, disabled, triggerRef]);
   function close() {
     setOpen(false);
     triggerRef.current?.focus({ preventScroll: true });

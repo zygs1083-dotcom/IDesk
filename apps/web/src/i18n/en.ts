@@ -306,6 +306,7 @@ export const en: Record<Key, string> = {
   "desk.copyAsMarkdown": "Copy as Markdown",
   "desk.copyTaskLink": "Copy task link",
   "desk.copyFailed": "Copy failed. Please try again.",
+  "desk.createFromTask": "Create from this task",
   "desk.dependencies": "Dependencies",
   "desk.dispatch": "Dispatch",
   "desk.empty": "No tasks yet",
