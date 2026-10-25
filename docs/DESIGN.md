@@ -220,7 +220,7 @@ done        --reopen-->                  open          仅人；清空 result、
 主要端点：
 
 ```
-GET    /tasks?status=&capability=&assignee=&q=&limit=&cursor=  q 匹配 title/body/result。无 limit 时保持数组；带 limit（1–100）要求 status，返回 {items,nextCursor}，按 updatedAt/id 倒序复合游标分页。无 status 时终态仍只返回最近 7 天更新过的；显式 status 包括全部历史，分页期间编辑会移动该任务的排序位置
+GET    /tasks?status=&capability=&assignee=&q=&limit=&cursor=  q 匹配 id/title/body/result。无 limit 时保持数组；带 limit（1–100）要求 status，返回 {items,nextCursor}，按 updatedAt/id 倒序复合游标分页。无 status 时终态仍只返回最近 7 天更新过的；显式 status 包括全部历史，分页期间编辑会移动该任务的排序位置
 POST   /tasks                                   发布
 GET    /tasks/:id
 PATCH  /tasks/:id { title?, body?, priority?, tags?, capabilities?, dueAt?, blockedBy? }  编辑详情；管理员或原发布者，至少一项；dueAt:null 清除（§4.1、§12.8）
@@ -511,7 +511,9 @@ completedAt: <ISO>
 
 ### 12.13 搜索正文（W36）
 
-`GET /tasks?q=`：`title LIKE %q% OR body LIKE %q% OR result LIKE %q%`，与其他筛选 AND。不用 FTS5：trigram 分词要求至少 3 个字符，中文两字词搜不到；LIKE 在万级任务上够快。MCP `idesk_list_tasks` 加 `q`。看板搜索改走它，见 UI.md。
+`GET /tasks?q=`：`id LIKE %q% OR title LIKE %q% OR body LIKE %q% OR result LIKE %q%`，与其他筛选 AND。不用 FTS5：trigram 分词要求至少 3 个字符，中文两字词搜不到；LIKE 在万级任务上够快。MCP `idesk_list_tasks` 加 `q`。看板搜索改走它，见 UI.md。
+
+M37（W138）增加任务ID匹配：复用已有转义模式，将完整ID或连续片段视为普通搜索词，ASCII字母大小写不敏感；`%`、`_`、反斜线仍按字面量匹配。ID与标题/正文/结果是同等的OR条件，不新增ID解析、短编号、相关度排序或自动跳转，不去除空白或拆分词。状态、能力、负责人交集、终态7天窗口、显式状态历史、分页顺序及响应形状均保持；不因ID命中绕过这些条件。REST、MCP、协作台及历史页共用此行为，无新参数、schema或迁移。
 
 ### 12.14 办公室回放、昼夜、声音（W37–W39）
 
