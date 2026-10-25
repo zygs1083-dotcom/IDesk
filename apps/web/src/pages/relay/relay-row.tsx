@@ -24,6 +24,7 @@ export function RelayRow({
     <button
       type="button"
       data-ui="message"
+      data-message-id={message.id}
       data-unread={unread ? "true" : undefined}
       aria-pressed={selected}
       onClick={onSelect}
