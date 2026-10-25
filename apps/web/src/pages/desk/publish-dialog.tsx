@@ -1,7 +1,7 @@
 import { labels } from "@idesk/shared/labels";
 import { TASK_PRIORITIES, type TaskPriority } from "@idesk/shared/task-status";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "../../components/button.tsx";
 import { CapabilityPicker } from "../../components/capability-picker.tsx";
 import { ClaimableHint } from "../../components/claimable-hint.tsx";
@@ -19,6 +19,12 @@ import { PublisherSelect, usePublisher } from "./publisher-select.tsx";
 export type PublishSeed = Pick<Task, "title" | "body" | "priority" | "tags" | "capabilities">;
 
 export function PublishDialog({ onClose, seed }: { onClose: () => void; seed?: PublishSeed }) {
+  const form = useRef<HTMLFormElement>(null);
+  const seeded = useRef(seed !== undefined);
+  useEffect(() => {
+    // React's autoFocus runs before the parent dialog's showModal ref.
+    if (seeded.current) form.current?.querySelector("input")?.focus({ preventScroll: true });
+  }, []);
   const { lang, t } = useLang();
   const publisher = usePublisher();
   const [dueAt, setDueAt] = useState("");
@@ -98,6 +104,7 @@ export function PublishDialog({ onClose, seed }: { onClose: () => void; seed?: P
       }
     >
       <form
+        ref={form}
         id="publish-task-form"
         data-ui="publish-form"
         className="space-y-4"
