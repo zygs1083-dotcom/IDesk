@@ -23,6 +23,7 @@ export function EditTaskDialog({ task, onClose }: { task: Task; onClose: () => v
   const [body, setBody] = useState(task.body);
   const [priority, setPriority] = useState(task.priority);
   const [tags, setTags] = useState(task.tags.join(" "));
+  const [tagsEdited, setTagsEdited] = useState(false);
   const [capabilities, setCapabilities] = useState(task.capabilities);
   const [dueAt, setDueAt] = useState(() => localDateTime(task.dueAt));
   const save = useMutation({
@@ -34,7 +35,7 @@ export function EditTaskDialog({ task, onClose }: { task: Task; onClose: () => v
           body,
           priority,
           capabilities,
-          tags: tags.split(/[,，\s]+/).filter(Boolean),
+          ...(tagsEdited ? { tags: tags.split(/[,，\s]+/).filter(Boolean) } : {}),
           dueAt: dueAt ? new Date(dueAt).toISOString() : null,
         }),
       }),
@@ -95,7 +96,10 @@ export function EditTaskDialog({ task, onClose }: { task: Task; onClose: () => v
         <Field
           label={t("common.tags")}
           value={tags}
-          onChange={(event) => setTags(event.target.value)}
+          onChange={(event) => {
+            setTags(event.target.value);
+            setTagsEdited(true);
+          }}
         />
         <div className="space-y-2">
           <p className="pixel-legacy text-secondary text-text-2">{t("common.priority")}</p>
