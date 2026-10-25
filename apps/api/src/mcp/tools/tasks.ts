@@ -30,7 +30,7 @@ export function registerTaskTools(server: McpServer, agent: PublicAgent) {
     "idesk_list_tasks",
     {
       description:
-        "筛选任务，默认查看自己能领取的任务，mine 查看自己负责的任务，q 搜索标题、正文和结果。",
+        "筛选任务，默认查看自己能领取的任务，mine 查看自己负责的任务，q 搜索任务ID、标题、正文和结果。",
       inputSchema: {
         q: taskQuerySchema.shape.q,
         status: taskQuerySchema.shape.status,

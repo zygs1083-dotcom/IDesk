@@ -70,7 +70,8 @@ export function listTasks(filter: {
             ),
         pattern === undefined
           ? undefined
-          : sql`(${tasks.title} LIKE ${pattern} ESCAPE '\\'
+          : sql`(${tasks.id} LIKE ${pattern} ESCAPE '\\'
+              OR ${tasks.title} LIKE ${pattern} ESCAPE '\\'
               OR ${tasks.body} LIKE ${pattern} ESCAPE '\\'
               OR ${tasks.result} LIKE ${pattern} ESCAPE '\\')`,
         filter.status === undefined
