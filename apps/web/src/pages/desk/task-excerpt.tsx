@@ -1,4 +1,5 @@
 import { type ReactNode, useCallback, useId, useState } from "react";
+import { CodeBlockCopyVisible } from "../../components/code-block.tsx";
 import { useLang } from "../../i18n/lang.tsx";
 
 export function TaskExcerpt({ children, lines }: { children: ReactNode; lines: 2 | 6 }) {
@@ -31,7 +32,9 @@ export function TaskExcerpt({ children, lines }: { children: ReactNode; lines: 2
         data-lines={lines}
         data-expanded={expanded}
       >
-        <div className="flow-root">{children}</div>
+        <CodeBlockCopyVisible value={expanded || !overflowing}>
+          <div className="flow-root">{children}</div>
+        </CodeBlockCopyVisible>
       </div>
       {overflowing && (
         <button

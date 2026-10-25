@@ -44,7 +44,7 @@ export function TaskDetails({
       <section className="space-y-2">
         <h3 className="text-section">{t("desk.requirements")}</h3>
         <TaskExcerpt lines={6}>
-          <Markdown>{task.body}</Markdown>
+          <Markdown key={task.id}>{task.body}</Markdown>
         </TaskExcerpt>
       </section>
       <section className="space-y-2 border-t border-line pt-4">
@@ -52,7 +52,7 @@ export function TaskDetails({
         <TaskPrBadges result={task.result} events={events} />
         {task.result?.trim() ? (
           <TaskExcerpt lines={6}>
-            <Markdown>{task.result}</Markdown>
+            <Markdown key={task.id}>{task.result}</Markdown>
           </TaskExcerpt>
         ) : (
           <p className="text-secondary text-text-2">

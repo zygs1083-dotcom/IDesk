@@ -60,7 +60,7 @@ export function RelayMessage({
           </Button>
         </div>
       )}
-      <Markdown>{message.body}</Markdown>
+      <Markdown key={message.id}>{message.body}</Markdown>
       <p className="text-label text-text-2">
         {message.readBy.length > 0
           ? t("relay.readBy", {
