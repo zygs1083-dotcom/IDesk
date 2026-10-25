@@ -90,13 +90,17 @@ test("SDK tools and resources share task transitions and relay read state", asyn
     expect(open).toContainEqual(expect.objectContaining({ id: matching.id }));
     expect(open).not.toContainEqual(expect.objectContaining({ id: missingCapability.id }));
     expect(open).not.toContainEqual(expect.objectContaining({ id: blocked.id }));
-    const searched = await clientA.callTool({
-      name: "idesk_list_tasks",
-      arguments: { q: missingCapability.title },
-    });
-    expect(JSON.parse(payload(searched))).toEqual([
-      expect.objectContaining({ id: missingCapability.id }),
-    ]);
+    for (const q of [missingCapability.title, missingCapability.id.toLowerCase()]) {
+      const searched = await clientA.callTool({ name: "idesk_list_tasks", arguments: { q } });
+      expect(JSON.parse(payload(searched))).toEqual([
+        expect.objectContaining({ id: missingCapability.id }),
+      ]);
+      const response = await app.request(`/api/v1/tasks?${new URLSearchParams({ q })}`, {
+        headers: { Authorization: `Bearer ${a.apiKey}` },
+      });
+      expect(response.status).toBe(200);
+      expect(JSON.parse(payload(searched))).toEqual(await response.json());
+    }
     const callA = (name: string, extra: object = {}) =>
       clientA.callTool({ name, arguments: { taskId: matching.id, ...extra } });
     expect(JSON.parse(payload(await callA("idesk_claim_task")))).toMatchObject({

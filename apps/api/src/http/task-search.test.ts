@@ -77,6 +77,89 @@ test.each([
   ).toEqual([task.id]);
 });
 
+test("ID search matches full IDs and fragments case-insensitively alongside body matches", async () => {
+  const { apiKey } = registerAgent({
+    name: "ID search",
+    kind: "codex",
+    host: "test",
+    capabilities: [],
+  });
+  const id = "01ARZ3NDEKTSV4RRB7H28J6FAV";
+  const bodyId = "01BX5ZZKBKACTAV9WEVGEMMVRZ";
+  db.insert(tasks)
+    .values([
+      { id, title: "ID match", publisherId: "human" },
+      { id: bodyId, title: "Body match", body: `Reference ${id}`, publisherId: "human" },
+    ])
+    .run();
+  const search = async (q: string) => {
+    const response = await app.request(`/api/v1/tasks?${new URLSearchParams({ q })}`, {
+      headers: { Authorization: `Bearer ${apiKey}` },
+    });
+    expect(response.status).toBe(200);
+    return z
+      .array(taskSchema)
+      .parse(await response.json())
+      .map((task) => task.id)
+      .sort();
+  };
+  for (const q of [id, id.toLowerCase(), "B7H28J6", "b7h28j6"]) {
+    expect(await search(q)).toEqual([id, bodyId]);
+  }
+  for (const q of ["B7H28%FAV", "B7H28J_FAV", "B7H28J6\\FAV", " B7H28J6 "]) {
+    expect(await search(q)).toEqual([]);
+  }
+});
+
+test("ID matches still intersect status, capability, assignee and the default history window", async () => {
+  const { agent, apiKey } = registerAgent({
+    name: "ID filters",
+    kind: "codex",
+    host: "test",
+    capabilities: ["coding"],
+  });
+  const matching = {
+    title: "Filtered task",
+    publisherId: "human",
+    status: "done" as const,
+    capabilities: ["coding"],
+    assigneeId: agent.id,
+    updatedAt: new Date(),
+  };
+  const ids = [
+    "01ARZ3NDEKTSV4RRFFQ69G5FAV",
+    "01ARZ3NDEKTSV4RRFFQ69G5FAW",
+    "01ARZ3NDEKTSV4RRFFQ69G5FAX",
+    "01ARZ3NDEKTSV4RRFFQ69G5FAY",
+    "01ARZ3NDEKTSV4RRFFQ69G5FAZ",
+  ] as const;
+  db.insert(tasks)
+    .values([
+      { ...matching, id: ids[0] },
+      { ...matching, id: ids[1], status: "in_progress" },
+      { ...matching, id: ids[2], capabilities: ["browser"] },
+      { ...matching, id: ids[3], assigneeId: null },
+      { ...matching, id: ids[4], updatedAt: new Date("2020-01-01T00:00:00Z") },
+    ])
+    .run();
+  const search = async (query: string) => {
+    const response = await app.request(`/api/v1/tasks?q=ffq69g5${query}`, {
+      headers: { Authorization: `Bearer ${apiKey}` },
+    });
+    expect(response.status).toBe(200);
+    return z
+      .array(taskSchema)
+      .parse(await response.json())
+      .map((task) => task.id)
+      .sort();
+  };
+  expect(await search("")).toEqual(ids.slice(0, 4));
+  expect(await search(`&status=done&capability=coding&assignee=${agent.id}`)).toEqual([
+    ids[0],
+    ids[4],
+  ]);
+});
+
 test("LIKE escaping preserves plain text and escapes every special character", () => {
   expect(escapeLike("部署")).toBe("部署");
   expect(escapeLike("\\50%_\\")).toBe("\\\\50\\%\\_\\\\");
