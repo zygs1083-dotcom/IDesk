@@ -1,4 +1,4 @@
-declare const __OFFICE_BUILD__: string;
+declare const __OFFICE_ASSET_VERSION__: string;
 
-// Sprites and scene media keep fixed names; the build stamp busts the 24h cache on deploy.
-export const officeUrl = (file: string) => `/office/${file}?v=${__OFFICE_BUILD__}`;
+// Fixed-name media share a content version so unchanged assets keep their cached URLs.
+export const officeUrl = (file: string) => `/office/${file}?v=${__OFFICE_ASSET_VERSION__}`;

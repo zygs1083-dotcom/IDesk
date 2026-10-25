@@ -1,10 +1,27 @@
+import { fileURLToPath } from "node:url";
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
+import { officeAssetVersion } from "./asset-version.ts";
+
+const build = Date.now().toString(36);
 
 export default defineConfig({
   base: "/office/",
-  define: { __OFFICE_BUILD__: JSON.stringify(Date.now().toString(36)) },
-  plugins: [react()],
+  define: {
+    __OFFICE_BUILD__: JSON.stringify(build),
+    __OFFICE_ASSET_VERSION__: JSON.stringify(
+      officeAssetVersion(fileURLToPath(new URL("./public", import.meta.url))),
+    ),
+  },
+  plugins: [
+    react(),
+    {
+      name: "office-build",
+      transformIndexHtml: () => [
+        { tag: "meta", attrs: { name: "office-build", content: build }, injectTo: "head" },
+      ],
+    },
+  ],
   build: {
     rollupOptions: {
       output: {
