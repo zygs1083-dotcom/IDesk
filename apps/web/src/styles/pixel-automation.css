@@ -16,6 +16,13 @@ html:not([data-skin="pixel"]) [data-scene="automation"] .automation-hide-button 
   font-weight: var(--text-secondary--font-weight);
 }
 
+html [data-scene="automation"] [data-ui="search-field"] .automation-clear-search {
+  width: 24px;
+  height: 24px;
+  min-height: 0;
+  padding: 0;
+}
+
 html[data-skin="pixel"] [data-scene="automation"] {
   gap: 12px;
   container: automation-page / inline-size;
@@ -41,6 +48,7 @@ html[data-skin="pixel"] {
     max-width: 240px;
   }
   & [data-ui="automation-toolbar"] [data-ui="search-field"] input {
+    padding-right: 24px;
     outline: 0;
   }
   & [data-ui="automation-connectors"] {

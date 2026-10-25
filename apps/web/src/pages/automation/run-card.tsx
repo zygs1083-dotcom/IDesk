@@ -5,7 +5,6 @@ import { Button } from "../../components/button.tsx";
 import { PixelIcon } from "../../components/pixel-icon.tsx";
 import { useLang } from "../../i18n/lang.tsx";
 import { cn } from "../../lib/cn.ts";
-import { useSession } from "../../lib/use-session.ts";
 import { CardHeading } from "./card-heading.tsx";
 import { duration } from "./duration.ts";
 import { runTimes } from "./run-times.ts";
@@ -22,17 +21,18 @@ const statusColors: Record<Run["status"], string> = {
 export function RunCard({
   run,
   now,
+  isAdmin,
   onToggleHidden,
   onCopyFailure,
   pending,
 }: {
   run: Run;
   now: number;
+  isAdmin: boolean;
   onToggleHidden: (run: Run) => void;
   onCopyFailure: (run: Run) => void;
   pending: boolean;
 }) {
-  const { isAdmin } = useSession();
   const { lang, t } = useLang();
   const statusLabels: Record<Run["status"], string> = {
     waiting: t("automation.waiting"),

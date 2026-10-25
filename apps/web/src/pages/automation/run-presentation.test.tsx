@@ -41,6 +41,7 @@ test.each([null, run.jobName, run.jobGroup])(
         <RunCard
           run={{ ...run, jobGroup }}
           now={Date.UTC(2026, 9, 19, 8, 5)}
+          isAdmin={true}
           onToggleHidden={() => {}}
           onCopyFailure={() => {}}
           pending={false}

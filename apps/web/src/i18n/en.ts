@@ -234,6 +234,7 @@ export const en: Record<Key, string> = {
   "automation.pollTooSoon": "Polled just now. Try again shortly",
   "automation.running": "Running",
   "automation.search": "Search workflows",
+  "automation.clearSearch": "Clear search",
   "automation.waiting": "Waiting",
   "common.action": "Action",
   "common.actionsFor": "Actions for {name}",
