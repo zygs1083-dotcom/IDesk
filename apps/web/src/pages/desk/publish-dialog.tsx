@@ -1,41 +1,40 @@
 import { labels } from "@idesk/shared/labels";
 import { TASK_PRIORITIES, type TaskPriority } from "@idesk/shared/task-status";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "../../components/button.tsx";
 import { CapabilityPicker } from "../../components/capability-picker.tsx";
 import { ClaimableHint } from "../../components/claimable-hint.tsx";
 import { Dialog } from "../../components/dialog.tsx";
 import { Field } from "../../components/field.tsx";
-import { Menu } from "../../components/menu.tsx";
 import { Segmented } from "../../components/segmented.tsx";
 import { useLang } from "../../i18n/lang.tsx";
 import { request } from "../../lib/api.ts";
+import type { Task } from "../../lib/types.ts";
 import { useAgents } from "../../lib/use-agents.ts";
-import type { Schedule } from "../schedules/types.ts";
 import { DispatchFields } from "./dispatch-fields.tsx";
+import { PublishTemplates } from "./publish-templates.tsx";
 import { PublisherSelect, usePublisher } from "./publisher-select.tsx";
 
-export function PublishDialog({ onClose }: { onClose: () => void }) {
+export type PublishSeed = Pick<Task, "title" | "body" | "priority" | "tags" | "capabilities">;
+
+export function PublishDialog({ onClose, seed }: { onClose: () => void; seed?: PublishSeed }) {
+  const form = useRef<HTMLFormElement>(null);
+  const seeded = useRef(seed !== undefined);
+  useEffect(() => {
+    // React's autoFocus runs before the parent dialog's showModal ref.
+    if (seeded.current) form.current?.querySelector("input")?.focus({ preventScroll: true });
+  }, []);
   const { lang, t } = useLang();
   const publisher = usePublisher();
   const [dueAt, setDueAt] = useState("");
-  const [title, setTitle] = useState("");
-  const [body, setBody] = useState("");
-  const [capabilities, setCapabilities] = useState<string[]>([]);
+  const [title, setTitle] = useState(seed?.title ?? "");
+  const [body, setBody] = useState(seed?.body ?? "");
+  const [capabilities, setCapabilities] = useState<string[]>(seed?.capabilities ?? []);
   const { agents } = useAgents();
-  const [tags, setTags] = useState("");
-  const { data: schedules } = useQuery({
-    queryKey: ["schedules"],
-    queryFn: () => request<Schedule[]>("/schedules"),
-  });
-  const templates =
-    schedules?.flatMap((schedule) =>
-      schedule.action.type === "publish_task"
-        ? [{ name: schedule.name, template: schedule.action.template }]
-        : [],
-    ) ?? [];
-  const [priority, setPriority] = useState<TaskPriority>("normal");
+  const [tags, setTags] = useState(seed?.tags.join(" ") ?? "");
+  const [originalTags, setOriginalTags] = useState(seed?.tags);
+  const [priority, setPriority] = useState<TaskPriority>(seed?.priority ?? "normal");
   const [mode, setMode] = useState<"open" | "assign" | "recruit">("open");
   const [agentId, setAgentId] = useState("");
   const [needed, setNeeded] = useState(2);
@@ -61,7 +60,7 @@ export function PublishDialog({ onClose }: { onClose: () => void }) {
             ? {}
             : { publisherPersonId: publisher.publisherId }),
           ...(dispatch === undefined ? {} : { dispatch }),
-          tags: tags.split(/[,，\s]+/).filter(Boolean),
+          tags: originalTags ?? tags.split(/[,，\s]+/).filter(Boolean),
         }),
       }),
     onError: (error) => {
@@ -92,25 +91,20 @@ export function PublishDialog({ onClose }: { onClose: () => void }) {
         </>
       }
       actions={
-        templates.length > 0 && (
-          <Menu
-            label={t("desk.templates")}
-            trigger={t("desk.templates")}
-            items={templates.map(({ name, template }) => ({
-              label: name,
-              onSelect: () => {
-                setTitle(template.title);
-                setBody(template.body ?? "");
-                setPriority(template.priority ?? "normal");
-                setTags((template.tags ?? []).join(" "));
-                setCapabilities(template.capabilities ?? []);
-              },
-            }))}
-          />
-        )
+        <PublishTemplates
+          onSelect={(template) => {
+            setTitle(template.title);
+            setBody(template.body ?? "");
+            setPriority(template.priority ?? "normal");
+            setTags((template.tags ?? []).join(" "));
+            setOriginalTags(undefined);
+            setCapabilities(template.capabilities ?? []);
+          }}
+        />
       }
     >
       <form
+        ref={form}
         id="publish-task-form"
         data-ui="publish-form"
         className="space-y-4"
@@ -147,7 +141,10 @@ export function PublishDialog({ onClose }: { onClose: () => void }) {
           label={t("common.tags")}
           placeholder={t("common.listSeparator")}
           value={tags}
-          onChange={(event) => setTags(event.target.value)}
+          onChange={(event) => {
+            setTags(event.target.value);
+            setOriginalTags(undefined);
+          }}
         />
         <p className="text-secondary text-text-2">{t("capability.tagsDescription")}</p>
         <PublisherSelect publisher={publisher} />

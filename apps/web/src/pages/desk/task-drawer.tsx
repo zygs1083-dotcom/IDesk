@@ -2,7 +2,7 @@ import { labels } from "@idesk/shared/labels";
 import { TransitionError } from "@idesk/shared/task-machine";
 import { useQuery } from "@tanstack/react-query";
 import { AnimatePresence } from "motion/react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Button } from "../../components/button.tsx";
 import { Menu } from "../../components/menu.tsx";
 import { Toast } from "../../components/toast.tsx";
@@ -14,6 +14,7 @@ import { useSession } from "../../lib/use-session.ts";
 import { ActionDialog } from "./action-dialog.tsx";
 import { actionSamples, type HumanAction, previewAction } from "./drop-action.ts";
 import { EditTaskDialog } from "./edit-task-dialog.tsx";
+import { PublishDialog, type PublishSeed } from "./publish-dialog.tsx";
 import { TaskDetails } from "./task-details.tsx";
 import { TaskReadingDrawer } from "./task-reading-drawer.tsx";
 import { useTaskAction } from "./use-task-action.ts";
@@ -32,6 +33,9 @@ export function TaskDrawer({ taskId, onClose }: { taskId: string; onClose: () =>
   });
   const { agents, agentName } = useAgents();
   const [editing, setEditing] = useState(false);
+  const moreRef = useRef<HTMLButtonElement>(null);
+  const [draft, setDraft] = useState<{ taskId: string; seed: PublishSeed } | null>(null);
+  if (draft && draft.taskId !== taskId) setDraft(null);
   const [parameter, setParameter] = useState<"assign" | "handoff" | "recruit" | "complete" | null>(
     null,
   );
@@ -87,16 +91,31 @@ export function TaskDrawer({ taskId, onClose }: { taskId: string; onClose: () =>
             task && (
               <>
                 <Button onClick={() => setEditing(true)}>{t("common.edit")}</Button>
-                {actions.length > 1 && (
-                  <Menu
-                    label={lang === "zh" ? "更多操作" : "More actions"}
-                    trigger={lang === "zh" ? "更多" : "More"}
-                    items={actions.slice(1).map((action) => ({
+                <Menu
+                  triggerRef={moreRef}
+                  label={lang === "zh" ? "更多操作" : "More actions"}
+                  trigger={lang === "zh" ? "更多" : "More"}
+                  items={[
+                    ...actions.slice(1).map((action) => ({
                       label: actionLabel(action),
                       onSelect: () => runAction(action),
-                    }))}
-                  />
-                )}
+                    })),
+                    {
+                      label: t("desk.createFromTask"),
+                      onSelect: () =>
+                        setDraft({
+                          taskId,
+                          seed: {
+                            title: task.title,
+                            body: task.body,
+                            priority: task.priority,
+                            tags: [...task.tags],
+                            capabilities: [...task.capabilities],
+                          },
+                        }),
+                    },
+                  ]}
+                />
                 {firstAction && (
                   <Button
                     variant={firstAction === "cancel" ? "secondary" : "primary"}
@@ -122,6 +141,16 @@ export function TaskDrawer({ taskId, onClose }: { taskId: string; onClose: () =>
         </TaskReadingDrawer>
       </div>
       <AnimatePresence>
+        {isAdmin && draft && draft.taskId === taskId && (
+          <PublishDialog
+            key={`publish-${taskId}`}
+            seed={draft.seed}
+            onClose={() => {
+              setDraft(null);
+              moreRef.current?.focus({ preventScroll: true });
+            }}
+          />
+        )}
         {isAdmin && editing && task && (
           <EditTaskDialog key="edit" task={task} onClose={() => setEditing(false)} />
         )}
