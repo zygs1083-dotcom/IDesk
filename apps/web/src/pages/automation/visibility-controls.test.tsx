@@ -37,6 +37,7 @@ test.each(["viewer", "admin"])(
             <RunCard
               run={{ ...run, status, hiddenAt }}
               now={Date.now()}
+              isAdmin={role === "admin"}
               onToggleHidden={() => {}}
               onCopyFailure={() => {}}
               pending={false}
@@ -58,6 +59,7 @@ test.each(["viewer", "admin"])(
           onSelect={() => {}}
           search=""
           onSearch={() => {}}
+          onClearSearch={() => {}}
           range="today"
           onRange={() => {}}
           hiddenCount={1}

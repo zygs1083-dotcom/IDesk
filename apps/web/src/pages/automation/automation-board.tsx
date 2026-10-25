@@ -13,6 +13,7 @@ export function AutomationBoard({
   runs,
   upcoming,
   now,
+  isAdmin,
   error,
   onToggleHidden,
   onCopyFailure,
@@ -21,6 +22,7 @@ export function AutomationBoard({
   runs: Run[];
   upcoming: Upcoming[];
   now: number;
+  isAdmin: boolean;
   error: string | null;
   onToggleHidden: (run: Run) => void;
   onCopyFailure: (run: Run) => void;
@@ -63,6 +65,7 @@ export function AutomationBoard({
                   key={run.id}
                   run={run}
                   now={now}
+                  isAdmin={isAdmin}
                   onToggleHidden={onToggleHidden}
                   onCopyFailure={onCopyFailure}
                   pending={pending}

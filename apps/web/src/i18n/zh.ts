@@ -221,6 +221,7 @@ export const zh = {
   "automation.pollTooSoon": "刚刚轮询过，稍后再试",
   "automation.running": "执行中",
   "automation.search": "搜索工作流",
+  "automation.clearSearch": "清空搜索",
   "automation.waiting": "待执行",
   "common.action": "动作",
   "common.actionsFor": "{name} 操作",

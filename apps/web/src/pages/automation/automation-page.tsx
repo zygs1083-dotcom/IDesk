@@ -6,7 +6,7 @@ import type {
 } from "@idesk/shared/automation-schemas";
 import { skipToken, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { Link, useSearchParams } from "react-router";
+import { Link } from "react-router";
 import type { z } from "zod";
 import { Button } from "../../components/button.tsx";
 import { Toast } from "../../components/toast.tsx";
@@ -17,11 +17,11 @@ import { copyText } from "../../lib/clipboard.ts";
 import { relativeTime } from "../../lib/format.ts";
 import { useSession } from "../../lib/use-session.ts";
 import { AutomationBoard } from "./automation-board.tsx";
-import { automationFilterParams } from "./automation-filter-params.ts";
 import { AutomationFilters } from "./automation-filters.tsx";
 import { failureText } from "./failure-text.ts";
 import { matches, selectRuns } from "./filter-runs.ts";
 import { nextRuns } from "./next-runs.ts";
+import { useAutomationFilters } from "./use-automation-filters.ts";
 import { useRunVisibility } from "./use-run-visibility.ts";
 
 type Run = z.infer<typeof automationRunWithJobSchema>;
@@ -29,48 +29,22 @@ export function AutomationPage() {
   const { isAdmin } = useSession();
   const { lang, t } = useLang();
   const client = useQueryClient();
-  const [params, setParams] = useSearchParams();
   const [showHidden, setShowHidden] = useState(false);
-  const search = params.get("q") ?? "";
-  const [q, setQ] = useState(search);
   const [now, setNow] = useState(Date.now);
   useEffect(() => {
     const timer = setInterval(() => setNow(Date.now()), 30_000);
     return () => clearInterval(timer);
   }, []);
-  useEffect(() => {
-    const timer = setTimeout(() => setQ(search), 200);
-    return () => clearTimeout(timer);
-  }, [search]);
   const [message, setMessage] = useState<string | null>(null);
   const connectorsQuery = useQuery({
     queryKey: ["automation", "connectors"],
     queryFn: () => request<z.infer<typeof connectorSchema>[]>("/connectors"),
   });
   const connectors = connectorsQuery.data ?? [];
-  const { connector, range } = automationFilterParams(params, connectors, connectorsQuery.status);
-  useEffect(() => {
-    if (
-      connectorsQuery.isSuccess &&
-      ((connector && params.get("connector") !== connector.id) || params.get("q") === "")
-    ) {
-      setParams(
-        (current) => automationFilterParams(current, connectors, connectorsQuery.status).normalized,
-        { replace: true },
-      );
-    }
-  }, [connectorsQuery.isSuccess, connectorsQuery.status, connector, connectors, params, setParams]);
-  const setFilter = (key: "q" | "connector" | "range", value: string) => {
-    setParams(
-      (current) => {
-        const { normalized } = automationFilterParams(current, connectors, connectorsQuery.status);
-        if (value === "") normalized.delete(key);
-        else normalized.set(key, value);
-        return normalized;
-      },
-      { replace: key === "q" },
-    );
-  };
+  const { search, q, connector, range, setFilter, clearSearch } = useAutomationFilters(
+    connectors,
+    connectorsQuery.status,
+  );
   const runs = useQuery({
     queryKey: ["automation", "runs", connector?.id],
     queryFn:
@@ -160,6 +134,7 @@ export function AutomationPage() {
             onSelect={(value) => setFilter("connector", value)}
             search={search}
             onSearch={(value) => setFilter("q", value)}
+            onClearSearch={clearSearch}
             range={range}
             onRange={(value) => setFilter("range", value)}
             hiddenCount={hiddenCount}
@@ -176,6 +151,7 @@ export function AutomationPage() {
             runs={filteredRuns}
             upcoming={upcoming}
             now={now}
+            isAdmin={isAdmin}
             error={connector.lastError}
             onToggleHidden={visibility.mutate}
             onCopyFailure={async (run) => {
