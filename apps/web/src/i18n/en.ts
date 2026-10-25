@@ -249,6 +249,8 @@ export const en: Record<Key, string> = {
   "common.connectors": "Connectors",
   "common.copied": "Copied",
   "common.copy": "Copy",
+  "markdown.copyCode": "Copy code",
+  "markdown.copyFailed": "Copy failed. Try again.",
   "common.create": "Create",
   "common.createOne": "Create one",
   "common.delete": "Delete",

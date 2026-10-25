@@ -236,6 +236,8 @@ export const zh = {
   "common.connectors": "连接器",
   "common.copied": "已复制",
   "common.copy": "复制",
+  "markdown.copyCode": "复制代码",
+  "markdown.copyFailed": "复制失败，请重试。",
   "common.create": "新建",
   "common.createOne": "新建一个",
   "common.delete": "删除",
