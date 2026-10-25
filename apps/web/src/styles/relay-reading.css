@@ -41,6 +41,8 @@
   }
 
   html [data-scene="relay"][data-reading] [data-ui="letter-desk"] {
+    /* Keep absolute status nodes inside the thread's scroll boundary. */
+    position: relative;
     min-height: 0;
   }
 }
