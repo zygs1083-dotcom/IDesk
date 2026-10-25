@@ -1,0 +1,24 @@
+@media (max-height: 500px) {
+  html[data-skin] [data-scene="automation"] {
+    gap: 8px;
+  }
+
+  html[data-skin] [data-scene="automation"] [data-ui="task-wall"] {
+    padding-bottom: 4px;
+  }
+
+  html[data-skin] [data-scene="automation"] [data-ui="task-folder"] {
+    row-gap: 4px;
+    padding-block: 8px;
+  }
+
+  html[data-skin="cartoon"] [data-scene="automation"] [data-ui="page-heading"],
+  html[data-skin="cartoon"] [data-scene="automation"] [data-ui="column-heading"] {
+    padding-bottom: 4px;
+  }
+
+  html[data-skin="pixel"] [data-scene="automation"] [data-ui="page-heading"] {
+    min-height: auto;
+    padding-bottom: 4px;
+  }
+}
