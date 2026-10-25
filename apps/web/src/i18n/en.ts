@@ -392,6 +392,8 @@ export const en: Record<Key, string> = {
   "nav.settings": "Settings",
   "nav.switchLanguage": "Switch language",
   "relay.selectMessage": "Select a message to view the conversation",
+  "relay.backToMessages": "Back to messages",
+  "relay.conversation": "Message thread",
   "relay.search": "Search subject or body",
   "relay.requestStatus": "Request status",
   "relay.pending": "Awaiting reply",

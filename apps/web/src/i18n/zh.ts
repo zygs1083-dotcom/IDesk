@@ -379,6 +379,8 @@ export const zh = {
   "nav.settings": "设置",
   "nav.switchLanguage": "切换语言",
   "relay.selectMessage": "选择消息查看完整对话",
+  "relay.backToMessages": "返回列表",
+  "relay.conversation": "消息线程",
   "relay.search": "搜索标题或正文",
   "relay.requestStatus": "请求状态",
   "relay.pending": "待答复",

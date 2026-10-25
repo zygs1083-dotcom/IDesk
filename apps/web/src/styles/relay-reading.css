@@ -1,0 +1,46 @@
+[data-scene="relay"] [data-ui="relay-back"] {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  html [data-scene="relay"][data-reading] {
+    gap: 8px;
+  }
+
+  html [data-scene="relay"] > [data-ui="page-heading"] {
+    flex-shrink: 0;
+  }
+
+  html [data-scene="relay"] > [data-ui="panel"] {
+    flex-direction: column;
+  }
+
+  html [data-scene="relay"]:not([data-reading]) > [data-ui="panel"] {
+    flex: 1 0 240px;
+  }
+
+  html [data-scene="relay"] [data-ui="mail-slots"] {
+    width: 100%;
+    max-height: none;
+    min-height: 0;
+    flex: 1;
+    border: 0;
+  }
+
+  html [data-scene="relay"]:not([data-reading]) [data-ui="letter-desk"],
+  html [data-scene="relay"][data-reading] > [data-ui="relay-toolbar"],
+  html [data-scene="relay"][data-reading] [data-ui="mail-slots"] {
+    display: none;
+  }
+
+  html [data-scene="relay"][data-reading] [data-ui="relay-back"] {
+    display: block;
+    flex: none;
+    padding: 8px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  html [data-scene="relay"][data-reading] [data-ui="letter-desk"] {
+    min-height: 0;
+  }
+}
