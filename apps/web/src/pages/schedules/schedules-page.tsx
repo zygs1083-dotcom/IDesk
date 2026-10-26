@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
+import { useSearchParams } from "react-router";
 import { Button } from "../../components/button.tsx";
 import { Dialog } from "../../components/dialog.tsx";
 import { EmptyState } from "../../components/empty-state.tsx";
@@ -11,12 +12,16 @@ import { useSession } from "../../lib/use-session.ts";
 import { useShortcut } from "../../lib/use-shortcut.ts";
 import { ScheduleDialog } from "./schedule-dialog.tsx";
 import { ScheduleHistory } from "./schedule-history.tsx";
-import { ScheduleRow } from "./schedule-row.tsx";
+import { SchedulesSearch } from "./schedules-search.tsx";
+import { SchedulesTable } from "./schedules-table.tsx";
 import type { Connector, Schedule } from "./types.ts";
 
 export function SchedulesPage() {
   const { t } = useLang();
   const { isAdmin: canEdit } = useSession();
+  const [params] = useSearchParams();
+  const search = params.get("q") ?? "";
+  const query = search.trim().toLowerCase();
   const [history, setHistory] = useState<Schedule | null>(null);
   const client = useQueryClient();
   const schedules = useQuery({
@@ -75,9 +80,17 @@ export function SchedulesPage() {
     if (canEdit && connectors.data) setCreating(true);
   });
   const error = schedules.error ?? connectors.error;
+  const visibleSchedules = (schedules.data ?? []).filter(
+    (schedule) =>
+      !query ||
+      schedule.id.toLowerCase().includes(query) ||
+      schedule.name.toLowerCase().includes(query) ||
+      (schedule.action.type === "publish_task" &&
+        schedule.action.template.title.toLowerCase().includes(query)),
+  );
   return (
     <div data-scene="schedules" className="space-y-6">
-      <PageHeader title={t("nav.schedules")}>
+      <PageHeader title={t("nav.schedules")} toolbar={<SchedulesSearch params={params} />}>
         {canEdit && (
           <Button variant="primary" disabled={!connectors.data} onClick={() => setCreating(true)}>
             {t("common.create")}
@@ -106,48 +119,32 @@ export function SchedulesPage() {
           }
         />
       )}
-      {!!schedules.data?.length && (
-        <div
-          data-ui="panel"
-          className="overflow-x-auto rounded-panel border border-line bg-surface"
-        >
-          <table className="w-full text-left text-secondary">
-            <thead className="border-b border-line text-label text-text-2">
-              <tr>
-                {[
-                  t("common.name"),
-                  t("schedules.frequency"),
-                  t("common.action"),
-                  t("schedules.lastRun"),
-                  t("schedules.nextRun"),
-                  t("common.enable"),
-                  "",
-                ].map((label) => (
-                  <th key={label} scope="col" className="whitespace-nowrap px-4 py-3 font-medium">
-                    {label}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {schedules.data.map((schedule) => (
-                <ScheduleRow
-                  key={schedule.id}
-                  schedule={schedule}
-                  connectors={connectors.data ?? []}
-                  busy={toggle.isPending || remove.isPending}
-                  running={schedule.running || pendingRuns.includes(schedule.id)}
-                  canEdit={canEdit}
-                  onHistory={() => setHistory(schedule)}
-                  onToggle={(enabled) => toggle.mutate({ id: schedule.id, enabled })}
-                  onRun={() => run.mutate(schedule.id)}
-                  onEdit={() => setEditing(schedule)}
-                  onDelete={() => setDeleting(schedule)}
-                />
-              ))}
-            </tbody>
-          </table>
+      {!error && !!schedules.data?.length && visibleSchedules.length === 0 && (
+        <div>
+          <EmptyState
+            title={t("schedules.noMatches")}
+            description={t("schedules.tryAnotherSearch")}
+            scene="calendar"
+            className="schedules-no-matches"
+          />
+          <p className="pixel-legacy mt-2 pb-16 text-center text-secondary text-text-2">
+            {t("schedules.tryAnotherSearch")}
+          </p>
         </div>
+      )}
+      {visibleSchedules.length > 0 && (
+        <SchedulesTable
+          schedules={visibleSchedules}
+          connectors={connectors.data ?? []}
+          busy={toggle.isPending || remove.isPending}
+          pendingRuns={pendingRuns}
+          canEdit={canEdit}
+          onHistory={setHistory}
+          onToggle={(schedule, enabled) => toggle.mutate({ id: schedule.id, enabled })}
+          onRun={(schedule) => run.mutate(schedule.id)}
+          onEdit={setEditing}
+          onDelete={setDeleting}
+        />
       )}
       {creating && connectors.data && (
         <ScheduleDialog connectors={connectors.data} onClose={() => setCreating(false)} />
