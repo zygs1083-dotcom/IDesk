@@ -1,5 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { renderToStaticMarkup } from "react-dom/server";
+import { MemoryRouter } from "react-router";
 import { expect, test, vi } from "vitest";
 import { AgentsPage } from "../agents/agents-page.tsx";
 import { ScheduleRow } from "./schedule-row.tsx";
@@ -30,7 +31,9 @@ test("masked HTTP schedules and agent webhook values render without URL parsing"
   );
   const agents = renderToStaticMarkup(
     <QueryClientProvider client={client}>
-      <AgentsPage />
+      <MemoryRouter>
+        <AgentsPage />
+      </MemoryRouter>
     </QueryClientProvider>,
   );
   expect(agents).toContain("Configured (hidden)");

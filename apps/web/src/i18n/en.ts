@@ -119,6 +119,11 @@ export const en: Record<Key, string> = {
   "desk.result": "Result / notes (optional)",
   "event.taskUpdated": "{agent} updated task details",
   "nav.logout": "Log out",
+  "agents.search": "Search agents",
+  "agents.searchLabel": "Search name, host, capability or ID",
+  "agents.clearSearch": "Clear search",
+  "agents.noMatches": "No matching agents",
+  "agents.tryAnotherSearch": "Try another search or type.",
   "agents.rotateKey": "Rotate key",
   "agents.rotateWarning":
     "The old key will stop working immediately. Update every client for this agent; identity and history are preserved.",
