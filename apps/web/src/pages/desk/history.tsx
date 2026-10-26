@@ -1,7 +1,7 @@
 import { labels } from "@idesk/shared/labels";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { Link, useSearchParams } from "react-router";
+import { Link, useLocation, useNavigate, useSearchParams } from "react-router";
 import { Button } from "../../components/button.tsx";
 import { EmptyState } from "../../components/empty-state.tsx";
 import { Field } from "../../components/field.tsx";
@@ -16,15 +16,28 @@ import { TaskDrawer } from "./task-drawer.tsx";
 type Page = { items: Task[]; nextCursor: string | null };
 export function TaskHistory() {
   const { lang, t } = useLang();
-  const [status, setStatus] = useState<"done" | "cancelled">("done");
-  const [search, setSearch] = useState("");
-  const [q, setQ] = useState("");
-  const [params, setParams] = useSearchParams();
+  const [params] = useSearchParams();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const status = params.get("status") === "cancelled" ? "cancelled" : "done";
+  const search = params.get("q") ?? "";
+  const [q, setQ] = useState(search);
   const taskId = params.get("task");
   useEffect(() => {
-    const timer = setTimeout(() => setQ(search), 200);
+    const timer = setTimeout(() => setQ(new URLSearchParams(location.search).get("q") ?? ""), 200);
     return () => clearTimeout(timer);
-  }, [search]);
+  }, [location]);
+  function setFilter(key: "q" | "status", value: string) {
+    if (key === "status" && value === status) return;
+    const next = new URLSearchParams(params);
+    const nextSearch = key === "q" ? value : search;
+    const nextStatus = key === "status" ? value : status;
+    next.delete("q");
+    next.delete("status");
+    if (nextSearch) next.set("q", nextSearch);
+    if (nextStatus === "cancelled") next.set("status", nextStatus);
+    navigate({ search: next.toString(), hash: location.hash }, { replace: key === "q" });
+  }
   const query = useInfiniteQuery({
     queryKey: ["tasks", "history", status, q],
     initialPageParam: null as string | null,
@@ -38,14 +51,10 @@ export function TaskHistory() {
   });
   const items = query.data?.pages.flatMap((page) => page.items) ?? [];
   function select(id: string | null) {
-    setParams(
-      (params) => {
-        if (id) params.set("task", id);
-        else params.delete("task");
-        return params;
-      },
-      { replace: true },
-    );
+    const next = new URLSearchParams(params);
+    if (id) next.set("task", id);
+    else next.delete("task");
+    navigate({ search: next.toString(), hash: location.hash }, { replace: true });
   }
   return (
     <div data-scene="history" className="space-y-6">
@@ -63,13 +72,13 @@ export function TaskHistory() {
                 type="search"
                 placeholder={t("desk.search")}
                 value={search}
-                onChange={(event) => setSearch(event.target.value)}
+                onChange={(event) => setFilter("q", event.target.value)}
               />
             </div>
             <Segmented
               label={t("desk.history")}
               value={status}
-              onChange={setStatus}
+              onChange={(value) => setFilter("status", value)}
               options={(["done", "cancelled"] as const).map((value) => ({
                 value,
                 label: labels(lang).status[value],
@@ -86,7 +95,7 @@ export function TaskHistory() {
         <Segmented
           label={t("desk.history")}
           value={status}
-          onChange={setStatus}
+          onChange={(value) => setFilter("status", value)}
           options={(["done", "cancelled"] as const).map((value) => ({
             value,
             label: labels(lang).status[value],
@@ -95,7 +104,7 @@ export function TaskHistory() {
         <Field
           label={t("desk.search")}
           value={search}
-          onChange={(event) => setSearch(event.target.value)}
+          onChange={(event) => setFilter("q", event.target.value)}
         />
       </div>
       {query.error && (
