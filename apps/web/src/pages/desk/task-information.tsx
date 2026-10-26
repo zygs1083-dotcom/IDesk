@@ -9,6 +9,7 @@ export function TaskInformation({
   agentName: (id: string | null) => string;
 }) {
   const { lang, t } = useLang();
+  const tags = task.tags.filter((tag) => tag.trim());
   const overdue =
     task.dueAt &&
     new Date(task.dueAt).getTime() < Date.now() &&
@@ -28,6 +29,22 @@ export function TaskInformation({
         <dd className="min-w-0 text-text-2 [overflow-wrap:anywhere]">
           {task.capabilities.join(" · ") || "—"}
         </dd>
+        {tags.length > 0 && (
+          <>
+            <dt className="text-text-2">{t("common.tags")}</dt>
+            <dd className="flex min-w-0 flex-wrap items-start gap-1 text-text-2">
+              {tags.map((tag, index) => (
+                <span
+                  // biome-ignore lint/suspicious/noArrayIndexKey: Read-only tags can repeat and have no item state.
+                  key={`${index}:${tag}`}
+                  className="max-w-full whitespace-break-spaces rounded-control border border-line bg-surface-2 px-1.5 py-0.5 [overflow-wrap:anywhere]"
+                >
+                  {tag}
+                </span>
+              ))}
+            </dd>
+          </>
+        )}
         {task.dueAt && (
           <>
             <dt className="text-text-2">{t("desk.dueAt")}</dt>

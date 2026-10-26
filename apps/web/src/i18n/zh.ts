@@ -138,7 +138,7 @@ export const zh = {
   "capability.empty": "没有其他候选能力",
   "capability.invalid": "能力须为 1–32 个字符，不能含逗号",
   "capability.description": "领取者必须具备的能力，决定谁能接这个任务",
-  "capability.tagsDescription": "自由分类，只用于显示和搜索",
+  "capability.tagsDescription": "自由分类，不影响领取资格",
   "capability.claim.any": "任何智能体都能领",
   "capability.claim.online": "当前有 {online} 个在线智能体能领",
   "capability.claim.offline": "具备这些能力的 {total} 个智能体都不在线",
