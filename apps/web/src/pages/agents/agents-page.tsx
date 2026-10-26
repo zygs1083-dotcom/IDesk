@@ -1,5 +1,6 @@
 import { AGENT_KIND_LABELS, AGENT_KINDS } from "@idesk/shared/agent-schemas";
 import { Fragment, useState } from "react";
+import { useLocation, useNavigate, useSearchParams } from "react-router";
 import { Button } from "../../components/button.tsx";
 import { Dialog } from "../../components/dialog.tsx";
 import { EmptyState } from "../../components/empty-state.tsx";
@@ -14,6 +15,7 @@ import { useAgents } from "../../lib/use-agents.ts";
 import { useSession } from "../../lib/use-session.ts";
 import { useShortcut } from "../../lib/use-shortcut.ts";
 import { AgentDetails } from "./agent-details.tsx";
+import { AgentsFilters } from "./agents-filters.tsx";
 import { assignAvatarOutfits } from "./avatar-outfits.ts";
 import { CreateAgent } from "./create-agent.tsx";
 import { DeleteAgent } from "./delete-agent.tsx";
@@ -23,7 +25,12 @@ export function AgentsPage() {
   const { isAdmin } = useSession();
   const { lang, t } = useLang();
   const { agents, error, isPending } = useAgents();
-  const [kind, setKind] = useState("");
+  const [params] = useSearchParams();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const search = params.get("q") ?? "";
+  const kind = AGENT_KINDS.find((value) => value === params.get("kind")) ?? "";
+  const query = search.trim().toLowerCase();
   const [rotating, setRotating] = useState<Agent | null>(null);
   const [selected, setSelected] = useState<Agent | null>(null);
   const [expanded, setExpanded] = useState<string | null>(null);
@@ -31,7 +38,21 @@ export function AgentsPage() {
   const [deleting, setDeleting] = useState<Agent | null>(null);
   const [creating, setCreating] = useState(false);
   const outfits = assignAvatarOutfits(agents);
-  const visibleAgents = agents.filter((agent) => !kind || agent.kind === kind);
+  const visibleAgents = agents.filter(
+    (agent) =>
+      (!kind || agent.kind === kind) &&
+      (!query ||
+        [agent.id, agent.name, agent.host, ...agent.capabilities].some((value) =>
+          value.toLowerCase().includes(query),
+        )),
+  );
+  function setFilter(key: "q" | "kind", value: string, replace = false) {
+    if (value === (key === "q" ? search : kind)) return;
+    const next = new URLSearchParams(params);
+    if (value) next.set(key, value);
+    else next.delete(key);
+    navigate({ search: next.toString(), hash: location.hash }, { replace });
+  }
   useShortcut("n", () => {
     if (isAdmin) setCreating(true);
   });
@@ -51,21 +72,13 @@ export function AgentsPage() {
       <PageHeader
         title={t("nav.agents")}
         toolbar={
-          <label className="flex items-center gap-2 text-secondary text-text-2">
-            {t("common.type")}
-            <select
-              className="rounded-control border border-line bg-surface-2 px-3 py-2 text-body text-text"
-              value={kind}
-              onChange={(event) => setKind(event.target.value)}
-            >
-              <option value="">{t("common.all")}</option>
-              {AGENT_KINDS.map((value) => (
-                <option key={value} value={value}>
-                  {AGENT_KIND_LABELS[value]}
-                </option>
-              ))}
-            </select>
-          </label>
+          <AgentsFilters
+            kind={kind}
+            onKind={(value) => setFilter("kind", value)}
+            search={search}
+            onSearch={(value) => setFilter("q", value, true)}
+            onClearSearch={() => setFilter("q", "")}
+          />
         }
       >
         <Button disabled={!isAdmin} variant="primary" onClick={() => setCreating(true)}>
@@ -82,16 +95,30 @@ export function AgentsPage() {
         </p>
       )}
       {!isPending && !error && visibleAgents.length === 0 ? (
-        <EmptyState
-          title={t("agents.empty")}
-          description={t("empty.agents")}
-          scene="chair"
-          action={{
-            label: t("common.createOne"),
-            disabled: !isAdmin,
-            onClick: () => setCreating(true),
-          }}
-        />
+        query || kind ? (
+          <div>
+            <EmptyState
+              title={t("agents.noMatches")}
+              description={t("agents.tryAnotherSearch")}
+              scene="chair"
+              className="agents-no-matches"
+            />
+            <p className="pixel-legacy mt-2 pb-16 text-center text-secondary text-text-2">
+              {t("agents.tryAnotherSearch")}
+            </p>
+          </div>
+        ) : (
+          <EmptyState
+            title={t("agents.empty")}
+            description={t("empty.agents")}
+            scene="chair"
+            action={{
+              label: t("common.createOne"),
+              disabled: !isAdmin,
+              onClick: () => setCreating(true),
+            }}
+          />
+        )
       ) : (
         <div data-ui="agent-list-scroll" className="-mb-24 overflow-x-auto pb-24">
           <div data-ui="panel" className="rounded-panel border border-line bg-surface">

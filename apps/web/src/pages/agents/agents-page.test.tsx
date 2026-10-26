@@ -16,6 +16,11 @@ vi.mock("react", async (importOriginal) => ({
     return [state.values[index], (value: unknown) => (state.values[index] = value)];
   },
 }));
+vi.mock("react-router", () => ({
+  useSearchParams: () => [new URLSearchParams()],
+  useLocation: () => ({ hash: "" }),
+  useNavigate: () => vi.fn(),
+}));
 vi.mock("../../i18n/lang.tsx", async () => {
   const { translator } = await import("../../i18n/translate.ts");
   return { useLang: () => ({ lang: "zh", t: translator("zh") }) };
