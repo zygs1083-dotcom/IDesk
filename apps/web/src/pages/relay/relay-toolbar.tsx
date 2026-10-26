@@ -1,9 +1,12 @@
-import { Search } from "lucide-react";
+import { Search, X } from "lucide-react";
+import { useRef } from "react";
+import { Button } from "../../components/button.tsx";
 import { Field } from "../../components/field.tsx";
 import { PixelIcon } from "../../components/pixel-icon.tsx";
 import { Segmented } from "../../components/segmented.tsx";
 import { useLang } from "../../i18n/lang.tsx";
 import { RelayFilters } from "./relay-filters.tsx";
+import "./relay-toolbar.css";
 
 export function RelayToolbar({
   box,
@@ -35,6 +38,7 @@ export function RelayToolbar({
   onTask: (value: string) => void;
 }) {
   const { t } = useLang();
+  const search = useRef<HTMLDivElement>(null);
   return (
     <div data-ui="relay-toolbar" className="contents">
       <div data-ui="relay-box-control">
@@ -49,7 +53,7 @@ export function RelayToolbar({
           ]}
         />
       </div>
-      <div data-ui="relay-search">
+      <div ref={search} data-ui="relay-search">
         <PixelIcon
           name="search"
           fallback={<Search size={16} strokeWidth={1.5} />}
@@ -62,6 +66,20 @@ export function RelayToolbar({
           value={q}
           onChange={(event) => onSearch(event.target.value)}
         />
+        {q !== "" && (
+          <Button
+            variant="icon"
+            className="relay-clear-search"
+            aria-label={t("relay.clearSearch")}
+            title={t("relay.clearSearch")}
+            onClick={() => {
+              onSearch("");
+              search.current?.querySelector("input")?.focus();
+            }}
+          >
+            <PixelIcon name="close" fallback={<X size={16} strokeWidth={1.5} />} />
+          </Button>
+        )}
       </div>
       <Segmented
         label={t("relay.requestStatus")}

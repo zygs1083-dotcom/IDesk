@@ -1,0 +1,21 @@
+html [data-scene="relay"] [data-ui="relay-search"] {
+  position: relative;
+}
+
+html [data-scene="relay"] [data-ui="relay-search"] input[data-ui="field"] {
+  padding-right: 40px;
+}
+
+html [data-scene="relay"] [data-ui="relay-search"] [data-ui="button"].relay-clear-search {
+  position: absolute;
+  right: 8px;
+  bottom: 7px;
+  width: 24px;
+  height: 24px;
+  min-height: 0;
+  padding: 0;
+}
+
+html[data-skin="pixel"] [data-scene="relay"] [data-ui="relay-search"] .relay-clear-search {
+  bottom: 6px;
+}

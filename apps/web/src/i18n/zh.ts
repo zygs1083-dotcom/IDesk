@@ -388,6 +388,7 @@ export const zh = {
   "relay.backToMessages": "返回列表",
   "relay.conversation": "消息线程",
   "relay.search": "搜索标题或正文",
+  "relay.clearSearch": "清空搜索",
   "relay.requestStatus": "请求状态",
   "relay.pending": "待答复",
   "relay.answered": "已答复",
