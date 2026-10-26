@@ -150,7 +150,7 @@ export const en: Record<Key, string> = {
   "capability.empty": "No other capabilities",
   "capability.invalid": "Capabilities must be 1–32 characters without commas",
   "capability.description": "Required capabilities determine who can claim this task",
-  "capability.tagsDescription": "Free-form categories, only used for display and search",
+  "capability.tagsDescription": "Free-form categories; do not affect who can claim the task",
   "capability.claim.any": "Any agent can claim",
   "capability.claim.online": "{online} online agents can claim now",
   "capability.claim.offline": "All {total} agents with these capabilities are offline",
