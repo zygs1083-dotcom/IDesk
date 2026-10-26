@@ -1,5 +1,6 @@
 import { Bot, ListTodo, Send } from "lucide-react";
 import { useState } from "react";
+import { useLocation, useNavigate, useSearchParams } from "react-router";
 import { Button } from "../../components/button.tsx";
 import { EmptyState } from "../../components/empty-state.tsx";
 import { PixelIcon } from "../../components/pixel-icon.tsx";
@@ -9,11 +10,16 @@ import { PageHeader } from "../../layout/page-header.tsx";
 import { eventText } from "../../lib/event-text.ts";
 import { useAgents } from "../../lib/use-agents.ts";
 import { useTasks } from "../../lib/use-tasks.ts";
+import { TaskDrawer } from "../desk/task-drawer.tsx";
 import { groupEvents } from "./group-events.ts";
 import { useActivity } from "./use-activity.ts";
 
 export function ActivityPage() {
   const { lang, t } = useLang();
+  const [params] = useSearchParams();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const taskId = params.get("task");
   const [type, setType] = useState("all");
   const [agentId, setAgentId] = useState("");
   const { events, error, isPending, hasNextPage, fetchNextPage, isFetching, refetch } = useActivity(
@@ -24,6 +30,12 @@ export function ActivityPage() {
   const { tasks } = useTasks();
   const taskTitles = new Map(tasks.map((task) => [task.id, task.title]));
   const groups = groupEvents(events, lang);
+  function select(id: string | null) {
+    const next = new URLSearchParams(params);
+    if (id) next.set("task", id);
+    else next.delete("task");
+    navigate({ search: next.toString(), hash: location.hash }, { replace: true });
+  }
   return (
     <div data-scene="activity" className="space-y-6">
       <PageHeader
@@ -112,8 +124,19 @@ export function ActivityPage() {
                     />
                     <p className="min-w-0 break-words text-body">
                       {eventText(event, agentName, lang)}
-                      {event.taskId &&
-                        ` ${taskTitles.get(event.taskId) ?? event.taskId.slice(0, 8)}`}
+                      {event.taskId && (
+                        <>
+                          {" "}
+                          <button
+                            type="button"
+                            aria-haspopup="dialog"
+                            className="max-w-full wrap-anywhere p-0 text-left text-accent underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                            onClick={() => select(event.taskId)}
+                          >
+                            {taskTitles.get(event.taskId) ?? event.taskId.slice(0, 8)}
+                          </button>
+                        </>
+                      )}
                     </p>
                   </li>
                 );
@@ -135,6 +158,7 @@ export function ActivityPage() {
       {!isPending && !error && events.length > 0 && !hasNextPage && (
         <p className="text-center text-secondary text-text-2">{t("activity.end")}</p>
       )}
+      {taskId && <TaskDrawer taskId={taskId} onClose={() => select(null)} />}
     </div>
   );
 }
