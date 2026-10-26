@@ -1,5 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { renderToStaticMarkup } from "react-dom/server";
+import { MemoryRouter } from "react-router";
 import { expect, test, vi } from "vitest";
 import { ScheduleRow } from "./schedule-row.tsx";
 import { SchedulesPage } from "./schedules-page.tsx";
@@ -53,7 +54,9 @@ test("viewer schedules expose history without run or edit actions", () => {
   client.setQueryData(["automation", "connectors"], []);
   const html = renderToStaticMarkup(
     <QueryClientProvider client={client}>
-      <SchedulesPage />
+      <MemoryRouter>
+        <SchedulesPage />
+      </MemoryRouter>
     </QueryClientProvider>,
   );
   expect(html).toContain("Execution history");
