@@ -401,6 +401,7 @@ export const en: Record<Key, string> = {
   "relay.backToMessages": "Back to messages",
   "relay.conversation": "Message thread",
   "relay.search": "Search subject or body",
+  "relay.clearSearch": "Clear search",
   "relay.requestStatus": "Request status",
   "relay.pending": "Awaiting reply",
   "relay.answered": "Answered",
