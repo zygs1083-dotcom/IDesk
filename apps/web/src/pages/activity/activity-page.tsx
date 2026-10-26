@@ -1,5 +1,4 @@
 import { Bot, ListTodo, Send } from "lucide-react";
-import { useState } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router";
 import { Button } from "../../components/button.tsx";
 import { EmptyState } from "../../components/empty-state.tsx";
@@ -20,8 +19,10 @@ export function ActivityPage() {
   const location = useLocation();
   const navigate = useNavigate();
   const taskId = params.get("task");
-  const [type, setType] = useState("all");
-  const [agentId, setAgentId] = useState("");
+  const typeParam = params.get("type");
+  const type =
+    typeParam === "task" || typeParam === "relay" || typeParam === "agent" ? typeParam : "all";
+  const agentId = params.get("agentId") ?? "";
   const { events, error, isPending, hasNextPage, fetchNextPage, isFetching, refetch } = useActivity(
     type,
     agentId,
@@ -30,6 +31,13 @@ export function ActivityPage() {
   const { tasks } = useTasks();
   const taskTitles = new Map(tasks.map((task) => [task.id, task.title]));
   const groups = groupEvents(events, lang);
+  function setFilter(key: "type" | "agentId", value: string) {
+    if (value === (key === "type" ? type : agentId)) return;
+    const next = new URLSearchParams(params);
+    if (key === "type" ? value !== "all" : value !== "") next.set(key, value);
+    else next.delete(key);
+    navigate({ search: next.toString(), hash: location.hash });
+  }
   function select(id: string | null) {
     const next = new URLSearchParams(params);
     if (id) next.set("task", id);
@@ -41,11 +49,11 @@ export function ActivityPage() {
       <PageHeader
         title={t("nav.activity")}
         toolbar={
-          <div className="flex flex-wrap items-center gap-3 whitespace-nowrap text-secondary">
+          <div className="flex min-w-0 max-w-full flex-wrap items-center gap-3 whitespace-nowrap text-secondary">
             <Segmented
               label={t("common.type")}
               value={type}
-              onChange={setType}
+              onChange={(value) => setFilter("type", value)}
               options={[
                 { value: "all", label: t("common.all") },
                 { value: "task", label: t("common.tasks") },
@@ -53,14 +61,17 @@ export function ActivityPage() {
                 { value: "agent", label: t("nav.agents") },
               ]}
             />
-            <label className="flex items-center gap-2 text-text-2">
+            <label className="flex min-w-0 max-w-full items-center gap-2 text-text-2">
               {t("nav.agents")}
               <select
-                className="rounded-control border border-line bg-surface px-3 py-2 text-text"
+                className="min-w-0 max-w-full rounded-control border border-line bg-surface px-3 py-2 text-text"
                 value={agentId}
-                onChange={(event) => setAgentId(event.target.value)}
+                onChange={(event) => setFilter("agentId", event.target.value)}
               >
                 <option value="">{t("common.all")}</option>
+                {agentId && !agents.some((agent) => agent.id === agentId) && (
+                  <option value={agentId}>{agentId}</option>
+                )}
                 {agents.map((agent) => (
                   <option key={agent.id} value={agent.id}>
                     {agentName(agent.id)}
