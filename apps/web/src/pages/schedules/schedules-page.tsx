@@ -10,6 +10,7 @@ import { PageHeader } from "../../layout/page-header.tsx";
 import { request } from "../../lib/api.ts";
 import { useSession } from "../../lib/use-session.ts";
 import { useShortcut } from "../../lib/use-shortcut.ts";
+import { parseEnabledFilter } from "./enabled-filter.ts";
 import { ScheduleDialog } from "./schedule-dialog.tsx";
 import { ScheduleHistory } from "./schedule-history.tsx";
 import { SchedulesSearch } from "./schedules-search.tsx";
@@ -22,6 +23,7 @@ export function SchedulesPage() {
   const [params] = useSearchParams();
   const search = params.get("q") ?? "";
   const query = search.trim().toLowerCase();
+  const enabled = parseEnabledFilter(params);
   const [history, setHistory] = useState<Schedule | null>(null);
   const client = useQueryClient();
   const schedules = useQuery({
@@ -82,11 +84,12 @@ export function SchedulesPage() {
   const error = schedules.error ?? connectors.error;
   const visibleSchedules = (schedules.data ?? []).filter(
     (schedule) =>
-      !query ||
-      schedule.id.toLowerCase().includes(query) ||
-      schedule.name.toLowerCase().includes(query) ||
-      (schedule.action.type === "publish_task" &&
-        schedule.action.template.title.toLowerCase().includes(query)),
+      (enabled === "" || schedule.enabled === (enabled === "true")) &&
+      (!query ||
+        schedule.id.toLowerCase().includes(query) ||
+        schedule.name.toLowerCase().includes(query) ||
+        (schedule.action.type === "publish_task" &&
+          schedule.action.template.title.toLowerCase().includes(query))),
   );
   return (
     <div data-scene="schedules" className="space-y-6">
