@@ -6,6 +6,8 @@ import { Drawer } from "../../components/drawer.tsx";
 import { useLang } from "../../i18n/lang.tsx";
 import { request } from "../../lib/api.ts";
 import { StatusDot } from "../desk/status-dot.tsx";
+import { CopyFailureDetails } from "./copy-failure-details.tsx";
+import { failureText } from "./failure-text.ts";
 import type { Schedule } from "./types.ts";
 
 export function ScheduleHistory({
@@ -62,19 +64,19 @@ export function ScheduleHistory({
               : "paused";
           return (
             <li key={event.id} className="space-y-2 py-4 text-secondary">
-              <p className="flex items-center gap-2">
-                {finished && event.payload.status === "failed" ? (
-                  <span
-                    aria-hidden="true"
-                    className="h-1.5 w-1.5 shrink-0 rounded-full bg-status-failed"
-                  />
-                ) : (
+              {finished && event.payload.status === "failed" ? (
+                <CopyFailureDetails
+                  key={`${schedule.id}:${event.id}:${lang}`}
+                  text={failureText(schedule, event, t)}
+                />
+              ) : (
+                <p className="flex items-center gap-2">
                   <StatusDot status={status} />
-                )}
-                {finished
-                  ? t(event.payload.status === "success" ? "common.success" : "common.failed")
-                  : t(running ? "schedules.running" : "schedules.interrupted")}
-              </p>
+                  {finished
+                    ? t(event.payload.status === "success" ? "common.success" : "common.failed")
+                    : t(running ? "schedules.running" : "schedules.interrupted")}
+                </p>
+              )}
               <p className="text-text-2">
                 {t("schedules.startedAt")} ·{" "}
                 {event.payload.startedAt ? date(event.payload.startedAt) : "—"}
