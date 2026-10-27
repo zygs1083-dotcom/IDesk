@@ -176,7 +176,7 @@ test("only admins retain the edit, reopen and dependency entry points in the dra
   for (const role of ["admin", "viewer"] as const) {
     const html = await renderTask(detailTask, role);
     const buttons = html.match(/<button\b[^>]*>[\s\S]*?<\/button>/g) ?? [];
-    for (const action of ["desk.copyTaskLink", "desk.copyAsMarkdown"] as const)
+    for (const action of ["desk.copyTaskId", "desk.copyTaskLink", "desk.copyAsMarkdown"] as const)
       expect(buttons.some((button) => button.includes(`aria-label="${t(action)}"`))).toBe(true);
     for (const label of [t("common.edit"), labels("en").action.reopen, t("desk.addDependency")])
       expect(buttons.some((button) => button.includes(`>${label}</button>`))).toBe(

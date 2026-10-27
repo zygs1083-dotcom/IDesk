@@ -280,6 +280,8 @@ export const zh = {
   "desk.requirements": "任务要求",
   "desk.executionResult": "执行结果",
   "desk.basicInfo": "基本信息",
+  "desk.taskId": "任务 ID",
+  "desk.copyTaskId": "复制任务 ID",
   "desk.noResultYet": "尚无执行结果",
   "desk.noResultProvided": "未填写执行结果",
   "desk.noDependencies": "无依赖",
