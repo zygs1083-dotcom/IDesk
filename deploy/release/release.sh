@@ -81,6 +81,8 @@ read -r -a build_wrapper <<< "$BUILD_WRAPPER"
   --label "org.opencontainers.image.revision=$sha" -t "idesk:$rev" "$tmp/context"
 step package
 docker save "idesk:$rev" | gzip > "$tmp/$archive"
+archive_bytes=$(wc -c < "$tmp/$archive")
+printf 'ARCHIVE bytes=%d\n' "$archive_bytes"
 checksum=$(sha256sum "$tmp/$archive")
 checksum=${checksum%% *}
 printf 'ARCHIVE sha256=%s\n' "$checksum"
@@ -89,16 +91,24 @@ run_at "$TARGET_SSH" 'umask 077; mkdir -p -m 700 "$1"' _ "$release_dir"
 if [[ -n $RELAY_SSH ]]; then
   run_at "$RELAY_SSH" 'umask 077; mkdir -p -m 700 "$1"' _ "$RELAY_DIR"
   ssh-keygen -F "${TARGET_SSH##*@}" > "$tmp/known_hosts"
+  transfer_started=$SECONDS
   scp -C "$tmp/$archive" "$tmp/known_hosts" "$RELAY_SSH:$RELAY_DIR/"
+  printf 'TRANSFER leg=local-to-relay duration=%ss\n' "$((SECONDS - transfer_started))"
   run_at "$RELAY_SSH" '
     cd "$1"
     printf "%s  %s\n" "$2" "$3" | sha256sum -c -
+    transfer_started=$SECONDS
     scp -C -o BatchMode=yes -o StrictHostKeyChecking=yes -o "UserKnownHostsFile=$1/known_hosts" "$3" "$4:$5/"
+    printf "TRANSFER leg=relay-to-target duration=%ss\n" "$((SECONDS - transfer_started))"
   ' _ "$RELAY_DIR" "$checksum" "$archive" "$TARGET_SSH" "$release_dir"
 elif [[ -n $TARGET_SSH ]]; then
+  transfer_started=$SECONDS
   scp -C "$tmp/$archive" "$TARGET_SSH:$release_dir/"
+  printf 'TRANSFER leg=local-to-target duration=%ss\n' "$((SECONDS - transfer_started))"
 else
+  transfer_started=$SECONDS
   cp "$tmp/$archive" "$release_dir/$archive"
+  printf 'TRANSFER leg=local-copy duration=%ss\n' "$((SECONDS - transfer_started))"
 fi
 run_at "$TARGET_SSH" 'cd "$1"; printf "%s  %s\n" "$2" "$3" | sha256sum -c -' _ "$release_dir" "$checksum" "$archive"
 if [[ -n $RELAY_SSH ]]; then

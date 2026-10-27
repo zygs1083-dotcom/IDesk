@@ -123,7 +123,7 @@ docker network rm "$drill_network"
 
 退出码：`0` 为成功，`1` 为激活前失败（运行服务未切换），`2` 为激活或冒烟失败后已回滚且 `/login` 正常，`3` 为回滚后仍不正常、需要人工处理。失败不写 marker。
 
-完整日志保存在本机仓库 `local/releases/release-<rev12>.log`（600，目录 700），末行包含结果、退出码和总耗时。目标备份保存在 `RELEASE_DIR/<时间戳>-<rev12>/backup/`（700），含 `image.txt`、`idesk.db`、`files.tar.gz`、`env`、`compose.yml`（全部 600），不拉回本机。传输包在成功载入后删除，本机临时构建目录在结束时删除。
+完整日志保存在本机仓库 `local/releases/release-<rev12>.log`（600，目录 700），末行包含结果、退出码和总耗时。日志还记录压缩归档实际字节数（`ARCHIVE bytes=<整数>`）与 SHA256；成功复制后记录该命令含连接开销的墙钟耗时（`TRANSFER leg=<段名> duration=<整数>s`，允许 0，不含校验、建目录或清理），段名为 `local-to-relay`（同次复制归档与 known_hosts）、`relay-to-target`、`local-to-target` 或 `local-copy`。目标备份保存在 `RELEASE_DIR/<时间戳>-<rev12>/backup/`（700），含 `image.txt`、`idesk.db`、`files.tar.gz`、`env`、`compose.yml`（全部 600），不拉回本机。传输包在成功载入后删除，本机临时构建目录在结束时删除。
 
 自动回滚只把 `idesk:before-<rev12>` 换回 compose 镜像并重新启动，不恢复数据库或配置。参见「升级与回滚」：“镜像回滚和数据库结构回退是两件事。” 有不兼容迁移的版本不能依赖这个镜像回滚流程，需另行安排迁移与恢复方案。
 
