@@ -1,0 +1,25 @@
+html [data-scene="history"] .history-search {
+  position: relative;
+}
+
+html [data-scene="history"] .history-search input[data-ui="field"] {
+  padding-right: 40px;
+}
+
+html [data-scene="history"] .history-search input[type="search"]::-webkit-search-cancel-button {
+  appearance: none;
+}
+
+html [data-scene="history"] .history-search [data-ui="button"].history-clear-search {
+  position: absolute;
+  right: 8px;
+  bottom: 7px;
+  width: 24px;
+  height: 24px;
+  min-height: 0;
+  padding: 0;
+}
+
+html[data-skin="pixel"] [data-scene="history"] .history-search .history-clear-search {
+  bottom: 6px;
+}
