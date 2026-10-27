@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from "react-router";
 import { Button } from "../../components/button.tsx";
 import { PixelIcon } from "../../components/pixel-icon.tsx";
 import { useLang } from "../../i18n/lang.tsx";
+import { parseEnabledFilter } from "./enabled-filter.ts";
 import "./schedules-search.css";
 
 export function SchedulesSearch({ params }: { params: URLSearchParams }) {
@@ -12,6 +13,17 @@ export function SchedulesSearch({ params }: { params: URLSearchParams }) {
   const location = useLocation();
   const navigate = useNavigate();
   const search = params.get("q") ?? "";
+  const enabled = parseEnabledFilter(params);
+  function setEnabled(value: string) {
+    if (value === enabled) return;
+    const next = new URLSearchParams(params);
+    if (value) next.set("enabled", value);
+    else next.delete("enabled");
+    navigate(
+      { pathname: location.pathname, search: next.toString(), hash: location.hash },
+      { preventScrollReset: true },
+    );
+  }
   function setSearch(value: string, replace = false) {
     if (value === search) return;
     const next = new URLSearchParams(params);
@@ -58,6 +70,17 @@ export function SchedulesSearch({ params }: { params: URLSearchParams }) {
           </Button>
         )}
       </div>
+      <select
+        aria-label={t("schedules.enabledState")}
+        title={t("schedules.enabledState")}
+        value={enabled}
+        onChange={(event) => setEnabled(event.target.value)}
+        className="h-9 shrink-0 rounded-control border border-line bg-surface px-3 text-secondary text-text"
+      >
+        <option value="">{t("common.all")}</option>
+        <option value="true">{t("schedules.enabled")}</option>
+        <option value="false">{t("schedules.disabled")}</option>
+      </select>
     </div>
   );
 }
