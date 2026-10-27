@@ -37,7 +37,7 @@ export function CopyTaskId({
   return (
     <Button
       variant="icon"
-      className="size-8 shrink-0 p-0 text-secondary"
+      className="relative size-8 shrink-0 p-0 text-secondary"
       aria-label={t("desk.copyTaskId")}
       title={t("desk.copyTaskId")}
       disabled={status === "pending"}
