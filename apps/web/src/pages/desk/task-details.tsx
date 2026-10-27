@@ -61,7 +61,7 @@ export function TaskDetails({
         )}
       </section>
       <div className="border-t border-line pt-4">
-        <TaskInformation task={task} agentName={agentName} />
+        <TaskInformation task={task} agentName={agentName} onError={onError} />
       </div>
       <TaskDependencies task={task} onError={onError} />
       <TaskTimeline key={task.id} events={events} agentName={agentName} />

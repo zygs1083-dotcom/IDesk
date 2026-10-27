@@ -293,6 +293,8 @@ export const en: Record<Key, string> = {
   "desk.requirements": "Requirements",
   "desk.executionResult": "Execution result",
   "desk.basicInfo": "Basic information",
+  "desk.taskId": "Task ID",
+  "desk.copyTaskId": "Copy task ID",
   "desk.noResultYet": "No execution result yet",
   "desk.noResultProvided": "No execution result provided",
   "desk.noDependencies": "No dependencies",

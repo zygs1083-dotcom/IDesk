@@ -1,12 +1,15 @@
 import { useLang } from "../../i18n/lang.tsx";
 import type { Task } from "../../lib/types.ts";
+import { CopyTaskId } from "./copy-task-id.tsx";
 
 export function TaskInformation({
   task,
   agentName,
+  onError,
 }: {
   task: Task;
   agentName: (id: string | null) => string;
+  onError?: (message: string) => void;
 }) {
   const { lang, t } = useLang();
   const tags = task.tags.filter((tag) => tag.trim());
@@ -19,6 +22,13 @@ export function TaskInformation({
     <section className="space-y-2">
       <h3 className="text-section">{t("desk.basicInfo")}</h3>
       <dl className="grid grid-cols-[max-content_minmax(0,1fr)] gap-x-3 gap-y-1 text-secondary">
+        <dt className="self-center text-text-2">{t("desk.taskId")}</dt>
+        <dd className="flex min-w-0 items-center gap-2">
+          <span className="min-w-0 flex-1 whitespace-break-spaces [overflow-wrap:anywhere]">
+            {task.id}
+          </span>
+          <CopyTaskId key={`${task.id}:${lang}`} taskId={task.id} onError={onError} />
+        </dd>
         <dt className="text-text-2">{t("desk.assignee")}</dt>
         <dd className="min-w-0 [overflow-wrap:anywhere]">
           {task.assigneeId === null ? t("desk.noAssignee") : agentName(task.assigneeId)}
