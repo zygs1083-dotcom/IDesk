@@ -308,6 +308,7 @@ export const en: Record<Key, string> = {
   "desk.board": "Task board",
   "desk.byHost": "By host",
   "desk.clearFilters": "Clear filters",
+  "desk.clearSearch": "Clear search",
   "desk.copyAsMarkdown": "Copy as Markdown",
   "desk.copyTaskLink": "Copy task link",
   "desk.copyFailed": "Copy failed. Please try again.",
