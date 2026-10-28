@@ -1,18 +1,18 @@
-import { labels } from "@idesk/shared/labels";
-import { TASK_PRIORITIES, type TaskPriority } from "@idesk/shared/task-status";
+import type { TaskPriority } from "@idesk/shared/task-status";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Button } from "../../components/button.tsx";
 import { CapabilityPicker } from "../../components/capability-picker.tsx";
 import { ClaimableHint } from "../../components/claimable-hint.tsx";
 import { Dialog } from "../../components/dialog.tsx";
 import { Field } from "../../components/field.tsx";
-import { Segmented } from "../../components/segmented.tsx";
 import { useLang } from "../../i18n/lang.tsx";
 import { request } from "../../lib/api.ts";
 import type { Task } from "../../lib/types.ts";
 import { useAgents } from "../../lib/use-agents.ts";
 import { DispatchFields } from "./dispatch-fields.tsx";
+import { usePublishCloseGuard } from "./publish-close-guard.tsx";
+import { PublishPriority } from "./publish-priority.tsx";
 import { PublishTemplates } from "./publish-templates.tsx";
 import { PublisherSelect, usePublisher } from "./publisher-select.tsx";
 
@@ -20,12 +20,7 @@ export type PublishSeed = Pick<Task, "title" | "body" | "priority" | "tags" | "c
 
 export function PublishDialog({ onClose, seed }: { onClose: () => void; seed?: PublishSeed }) {
   const form = useRef<HTMLFormElement>(null);
-  const seeded = useRef(seed !== undefined);
-  useEffect(() => {
-    // React's autoFocus runs before the parent dialog's showModal ref.
-    if (seeded.current) form.current?.querySelector("input")?.focus({ preventScroll: true });
-  }, []);
-  const { lang, t } = useLang();
+  const { t } = useLang();
   const publisher = usePublisher();
   const [dueAt, setDueAt] = useState("");
   const [title, setTitle] = useState(seed?.title ?? "");
@@ -72,14 +67,28 @@ export function PublishDialog({ onClose, seed }: { onClose: () => void; seed?: P
       onClose();
     },
   });
+  const dirty = !!(
+    title ||
+    body ||
+    tags ||
+    capabilities.length ||
+    dueAt ||
+    priority !== "normal" ||
+    mode !== "open" ||
+    agentId ||
+    needed !== 2
+  );
+  const guard = usePublishCloseGuard(form, dirty, mutation.isPending, onClose);
   return (
     <Dialog
       open
-      onClose={onClose}
+      onClose={guard.requestClose}
       title={t("common.publishTask")}
       footer={
         <>
-          <Button onClick={onClose}>{t("common.cancel")}</Button>
+          <Button onClick={guard.requestClose} disabled={mutation.isPending}>
+            {t("common.cancel")}
+          </Button>
           <Button
             type="submit"
             form="publish-task-form"
@@ -105,6 +114,7 @@ export function PublishDialog({ onClose, seed }: { onClose: () => void; seed?: P
     >
       <form
         ref={form}
+        onFocusCapture={guard.rememberFocus}
         id="publish-task-form"
         data-ui="publish-form"
         className="space-y-4"
@@ -148,19 +158,7 @@ export function PublishDialog({ onClose, seed }: { onClose: () => void; seed?: P
         />
         <p className="text-secondary text-text-2">{t("capability.tagsDescription")}</p>
         <PublisherSelect publisher={publisher} />
-        <div className="space-y-2">
-          <span className="pixel-legacy text-secondary text-text-2">{t("common.priority")}</span>
-          <Segmented
-            formField
-            label={t("common.priority")}
-            value={priority}
-            onChange={setPriority}
-            options={TASK_PRIORITIES.map((value) => ({
-              value,
-              label: labels(lang).priority[value],
-            }))}
-          />
-        </div>
+        <PublishPriority value={priority} onChange={setPriority} />
         <Field
           type="datetime-local"
           label={t("desk.dueAtOptional")}
@@ -181,7 +179,10 @@ export function PublishDialog({ onClose, seed }: { onClose: () => void; seed?: P
             {mutation.error.message}
           </p>
         )}
-        <div className="pixel-legacy flex justify-end">
+        <div className="pixel-legacy flex justify-end gap-2">
+          <Button data-publish-close onClick={guard.requestClose} disabled={mutation.isPending}>
+            {t("common.cancel")}
+          </Button>
           <Button
             type="submit"
             variant="primary"
@@ -191,6 +192,7 @@ export function PublishDialog({ onClose, seed }: { onClose: () => void; seed?: P
           </Button>
         </div>
       </form>
+      {guard.confirmation}
     </Dialog>
   );
 }
