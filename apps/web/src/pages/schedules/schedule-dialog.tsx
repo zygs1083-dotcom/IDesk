@@ -11,6 +11,7 @@ import { ActionFields } from "./action-fields.tsx";
 import { ActionTabs } from "./action-tabs.tsx";
 import { cronText } from "./cron-text.ts";
 import { entriesText, parseEntries } from "./entry-text.ts";
+import { SchedulePreview } from "./schedule-preview.tsx";
 import type { Connector, Schedule, ScheduleInput } from "./types.ts";
 
 export function ScheduleDialog({
@@ -135,6 +136,7 @@ export function ScheduleDialog({
           <p aria-live="polite" className="text-secondary text-text-2">
             {cron ? cronText(cron, lang) : t("schedules.cronPlaceholder")}
           </p>
+          <SchedulePreview cron={cron} timezone={timezone} enabled={enabled} lang={lang} t={t} />
         </div>
         <div className="flex items-end gap-4">
           <div className="min-w-0 flex-1">
