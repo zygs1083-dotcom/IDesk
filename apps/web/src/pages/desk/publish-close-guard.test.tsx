@@ -1,5 +1,6 @@
-import type { ComponentProps } from "react";
+import type { ComponentProps, RefObject } from "react";
 import { expect, test, vi } from "vitest";
+import { Button } from "../../components/button.tsx";
 import { CapabilityPicker } from "../../components/capability-picker.tsx";
 import { DispatchFields } from "./dispatch-fields.tsx";
 import {
@@ -8,6 +9,7 @@ import {
   confirmation,
   confirmButtons,
   edit,
+  elements,
   payload,
   renderDraft,
   seed,
@@ -83,15 +85,42 @@ test.each(dirtyFields)(
   },
 );
 
-test("seed is protected immediately and explicit discard closes without posting", () => {
-  const view = renderDraft(seed, [
-    (tree) => tree.props.onClose(),
-    (tree) => confirmButtons(tree)[1]?.props.onClick(),
-  ]);
-  expect(view.close).toHaveBeenCalledOnce();
-  expect(state.request).not.toHaveBeenCalled();
-  view.client.clear();
-});
+test.each(["footer", "legacy"])(
+  "%s discard closes owned dialogs before restoring source focus without posting",
+  (layout) => {
+    const confirmDialog = { close: vi.fn() };
+    const publishDialog = { close: vi.fn() };
+    const view = renderDraft(seed, [
+      (tree) => tree.props.onClose(),
+      (tree) => {
+        const form = component(tree, "form").props.ref as RefObject<HTMLFormElement | null>;
+        form.current = { closest: () => publishDialog } as unknown as HTMLFormElement;
+        const keep = elements(confirmation(tree)?.props.footer).find(
+          (element) => element.type === Button,
+        ) as React.ReactElement<ComponentProps<typeof Button>>;
+        (keep.props.ref as RefObject<HTMLButtonElement | null>).current = {
+          closest: () => confirmDialog,
+        } as unknown as HTMLButtonElement;
+        const discard =
+          layout === "footer"
+            ? confirmButtons(tree)[1]
+            : (elements(confirmation(tree)?.props.children).find(
+                (element) =>
+                  element.type === Button &&
+                  (element.props as ComponentProps<typeof Button>).variant === "danger",
+              ) as React.ReactElement<{ onClick: () => void }>);
+        discard?.props.onClick();
+      },
+    ]);
+    expect(confirmDialog.close).toHaveBeenCalledOnce();
+    expect(publishDialog.close).toHaveBeenCalledOnce();
+    expect(confirmDialog.close).toHaveBeenCalledBefore(publishDialog.close);
+    expect(publishDialog.close).toHaveBeenCalledBefore(view.close);
+    expect(view.close).toHaveBeenCalledOnce();
+    expect(state.request).not.toHaveBeenCalled();
+    view.client.clear();
+  },
+);
 
 test("template is protected and continue editing preserves special seeded tags for POST", async () => {
   state.request.mockResolvedValue({ id: "new-task" });

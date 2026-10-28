@@ -48,6 +48,11 @@ export function usePublishCloseGuard(
       .map((node) => ({ node, top: node.scrollTop, left: node.scrollLeft }));
     setConfirming(true);
   }
+  function discard() {
+    footerKeep.current?.closest("dialog")?.close();
+    form.current?.closest("dialog")?.close();
+    onClose();
+  }
   return {
     requestClose,
     rememberFocus: (event: FocusEvent<HTMLFormElement>) => {
@@ -63,7 +68,7 @@ export function usePublishCloseGuard(
             <Button ref={footerKeep} onClick={() => setConfirming(false)}>
               {t("desk.keepEditing")}
             </Button>
-            <Button variant="danger" onClick={onClose}>
+            <Button variant="danger" onClick={discard}>
               {t("desk.discard")}
             </Button>
           </>
@@ -74,7 +79,7 @@ export function usePublishCloseGuard(
           <Button ref={legacyKeep} onClick={() => setConfirming(false)}>
             {t("desk.keepEditing")}
           </Button>
-          <Button variant="danger" onClick={onClose}>
+          <Button variant="danger" onClick={discard}>
             {t("desk.discard")}
           </Button>
         </div>
