@@ -7,6 +7,7 @@ import { cn } from "../../lib/cn.ts";
 import { relativeTime } from "../../lib/format.ts";
 import { StatusDot } from "../desk/status-dot.tsx";
 import { cronText } from "./cron-text.ts";
+import { formatScheduleTime } from "./schedule-preview.tsx";
 import type { Connector, Schedule } from "./types.ts";
 
 export function ScheduleRow({
@@ -52,18 +53,7 @@ export function ScheduleRow({
       break;
   }
   const next = schedule.enabled && schedule.nextRunAt ? new Date(schedule.nextRunAt) : null;
-  const nextText = next
-    ? new Intl.DateTimeFormat(lang === "zh" ? "zh-CN" : "en", {
-        timeZone: schedule.timezone,
-        month: "2-digit",
-        day: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit",
-        hourCycle: "h23",
-      })
-        .format(next)
-        .replaceAll("/", "-")
-    : "—";
+  const nextText = next ? formatScheduleTime(next, schedule.timezone, lang) : "—";
   return (
     <tr className="border-b border-line last:border-b-0 hover:bg-surface-2">
       <td className="px-4 py-3 text-body">
