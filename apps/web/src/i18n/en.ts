@@ -92,6 +92,9 @@ export const en: Record<Key, string> = {
   "servers.range6h": "6 hours",
   "servers.range24h": "24 hours",
   "servers.range7d": "7 days",
+  "servers.overview": "Overview",
+  "servers.overviewSubtitle":
+    "{total} servers · {online} online · {offline} offline · updates every 10 seconds",
   "servers.refresh": "Updates every 10 seconds",
   "servers.subtitle": "Updates every 10 seconds · last report {time}",
   "servers.offlineSubtitle": "Offline · last report {time}",
