@@ -673,15 +673,17 @@ M37（W138）增加任务ID匹配：复用已有转义模式，将完整ID或连
 - `GET /api/probe/v1/install.sh`：安装脚本，无需鉴权，不含任何令牌。脚本里的默认上报地址取这次请求的 origin，可用环境变量 `IDESK_URL` 覆盖。
 - 服务器的增删改不写事件表，前端轮询（列表与指标都 10 秒）。
 
-**采集程序（`packages/cli/src/probe.ts`，esbuild 单独打成 `dist/probe.mjs`）。** 只支持 Linux，其他平台启动即退出并说明。Node ≥ 20，无依赖。每 10 秒一次：
+**采集程序（`packages/cli/src/probe.ts`，esbuild 单独打成 `dist/probe.mjs`）。** 支持 Linux 和 macOS（`probe-darwin.ts`），其他平台启动即退出并说明。Node ≥ 20，无依赖。每 10 秒一次：
 - CPU：`/proc/stat` 两次读数之差，总的和每个核的使用率（%）。负载：`/proc/loadavg`。开机时长：`/proc/uptime`。
 - 内存：`/proc/meminfo`，`memUsed = MemTotal − MemAvailable`，`swapUsed = SwapTotal − SwapFree`（kB 换成字节）。
 - 磁盘：`/proc/mounts` 中 ext2/3/4、xfs、btrfs、vfat、f2fs 的分区，按设备去重，`fs.statfsSync` 算已用与总量。
 - 网络：`/proc/net/dev` 两次读数之差除以间隔，跳过 `lo`、`veth*`、`docker*`、`br-*`。
 - 信息：`os.hostname()`、`/etc/os-release` 的 `PRETTY_NAME`、`os.release()`、`os.cpus()[0].model`、`os.cpus().length`。
+- macOS：CPU 用 `os.cpus()` 的累计时间（第一项为各核之和）；内存 `vm_stat`，已用 = (匿名页 − 可清除页 + 联动页 + 压缩占用页) × 页大小，与「活动监视器」一致，交换 `sysctl vm.swapusage`；磁盘取 `mount` 中可浏览（无 `nobrowse`）的本地 apfs/hfs/exfat/msdos/ntfs 卷，按 `diskN` 去重（根卷 statfs 即整个 APFS 容器）；网络 `netstat -ibn` 的 `en*` 链路行；系统 `sw_vers`，内核 `Darwin <release>`。
 - 启动时先取一次基线，10 秒后发第一条。上报失败在 stderr 打一行原因，下个周期继续。参数：`--url`、`--token-file`。
 
-**安装脚本。** `curl -fsSL <IDesk>/api/probe/v1/install.sh | sudo IDESK_PROBE_TOKEN=ids_… sh`：检查 `node` ≥ 20；下载 `probe.mjs` 到 `/opt/idesk-probe/probe.mjs`；令牌写入 `/etc/idesk-probe/token`（目录 700、文件 600、root）；写 `/etc/systemd/system/idesk-probe.service`（`DynamicUser=yes`、`LoadCredential=token:/etc/idesk-probe/token`、`--token-file ${CREDENTIALS_DIRECTORY}/token`、`Restart=always`、`RestartSec=10`）；`systemctl daemon-reload && systemctl enable --now idesk-probe`。重复执行会覆盖成新令牌和新版本。IDesk 自己所在的宿主机用 `IDESK_URL=http://127.0.0.1:3300`。
+**安装脚本。** `curl -fsSL <IDesk>/api/probe/v1/install.sh | sudo IDESK_NODE="$(command -v node)" IDESK_PROBE_TOKEN=ids_… sh`：检查 `node` ≥ 20；下载 `probe.mjs` 到 `/opt/idesk-probe/probe.mjs`；令牌写入 `/etc/idesk-probe/token`（目录 700、文件 600、root）；写 `/etc/systemd/system/idesk-probe.service`（`DynamicUser=yes`、`LoadCredential=token:/etc/idesk-probe/token`、`--token-file ${CREDENTIALS_DIRECTORY}/token`、`Restart=always`、`RestartSec=10`）；`systemctl daemon-reload && systemctl enable --now idesk-probe`。重复执行会覆盖成新令牌和新版本。IDesk 自己所在的宿主机用 `IDESK_URL=http://127.0.0.1:3300`。
+- macOS（`uname -s` 为 Darwin）：同样的程序与令牌路径，令牌目录归 `nobody`；写 `/Library/LaunchDaemons/com.idesk.probe.plist`（`UserName=nobody`、`RunAtLoad`、`KeepAlive`、`ThrottleInterval=10`，stderr 到 `/var/log/idesk-probe.log`），`launchctl bootout` 后 `bootstrap system`。launchd 只有系统 PATH，所以安装命令带 `IDESK_NODE="$(command -v node)"`，在用户自己的 shell 里解析出 node 绝对路径写进 plist；Linux 忽略这个变量，仍用 `/usr/bin/env node`。
 
 ### 12.32 智能体接入规范链接与官方接收器（M22，W106–W108）
 

@@ -14,7 +14,7 @@ type Action = "create" | "rename" | "rotate" | "delete";
 
 export function installCommand(token: string, local = false): string {
   const url = window.location.origin;
-  return `curl -fsSL ${url}/api/probe/v1/install.sh | sudo ${local ? "IDESK_URL=http://127.0.0.1:3300 " : ""}IDESK_PROBE_TOKEN=${token} sh`;
+  return `curl -fsSL ${url}/api/probe/v1/install.sh | sudo ${local ? "IDESK_URL=http://127.0.0.1:3300 " : ""}IDESK_NODE="$(command -v node)" IDESK_PROBE_TOKEN=${token} sh`;
 }
 
 export function ServerDialog({

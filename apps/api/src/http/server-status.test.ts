@@ -176,6 +176,8 @@ test("probe download and installer require no session", async () => {
     const script = await installer.text();
     expect(script).toContain("http://fixture.example:3300");
     expect(script).not.toMatch(/ids_[A-Za-z0-9_-]{43}/);
+    expect(script).toContain("/etc/systemd/system/idesk-probe.service");
+    expect(script).toContain("/Library/LaunchDaemons/com.idesk.probe.plist");
   } finally {
     config.IDESK_PROBE_DIST = original;
     rmSync(directory, { recursive: true });

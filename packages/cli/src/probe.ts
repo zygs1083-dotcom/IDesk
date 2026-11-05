@@ -1,8 +1,20 @@
 import { readFileSync, statfsSync } from "node:fs";
 import { cpus, hostname, release } from "node:os";
+import { darwin } from "./probe-darwin.ts";
 
-type CpuCounters = { idle: number; total: number };
-type NetCounters = { rx: number; tx: number };
+export type CpuCounters = { idle: number; total: number };
+export type NetCounters = { rx: number; tx: number };
+/** 每个平台各自的读数来源；CPU 与网络是累计计数，主循环取两次之差 */
+export type Platform = {
+  os: () => string;
+  kernel: () => string;
+  cpu: () => CpuCounters[];
+  net: () => NetCounters;
+  load: () => [number, number, number];
+  memory: () => ReturnType<typeof parseMem>;
+  mounts: () => string[];
+  uptime: () => number;
+};
 
 export function parseCpu(text: string): CpuCounters[] {
   return text
@@ -95,9 +107,22 @@ export function parseOsName(text: string): string {
   return line ? line.slice("PRETTY_NAME=".length).replace(/^"|"$/g, "") : "Linux";
 }
 
+const linux: Platform = {
+  os: () => parseOsName(readFileSync("/etc/os-release", "utf8")),
+  kernel: () => release(),
+  cpu: () => parseCpu(readFileSync("/proc/stat", "utf8")),
+  net: () => parseNet(readFileSync("/proc/net/dev", "utf8")),
+  load: () => parseLoad(readFileSync("/proc/loadavg", "utf8")),
+  memory: () => parseMem(readFileSync("/proc/meminfo", "utf8")),
+  mounts: () => parseMounts(readFileSync("/proc/mounts", "utf8")),
+  uptime: () => Number(readFileSync("/proc/uptime", "utf8").split(" ")[0]),
+};
+
 async function main() {
-  if (process.platform !== "linux") {
-    process.stderr.write("idesk probe 目前只支持 Linux\n");
+  const platform =
+    process.platform === "linux" ? linux : process.platform === "darwin" ? darwin : undefined;
+  if (!platform) {
+    process.stderr.write("idesk probe 目前只支持 Linux 和 macOS\n");
     process.exitCode = 1;
     return;
   }
@@ -114,24 +139,24 @@ async function main() {
   const cpuInfo = cpus();
   const info = {
     hostname: hostname(),
-    os: parseOsName(readFileSync("/etc/os-release", "utf8")),
-    kernel: release(),
+    os: platform.os(),
+    kernel: platform.kernel(),
     cpuModel: (cpuInfo[0] as (typeof cpuInfo)[number]).model,
     cpuCount: cpuInfo.length,
   };
-  let previousCpu = parseCpu(readFileSync("/proc/stat", "utf8"));
-  let previousNet = parseNet(readFileSync("/proc/net/dev", "utf8"));
+  let previousCpu = platform.cpu();
+  let previousNet = platform.net();
   let previousTime = Date.now();
   setInterval(async () => {
     const now = Date.now();
-    const currentCpu = parseCpu(readFileSync("/proc/stat", "utf8"));
-    const currentNet = parseNet(readFileSync("/proc/net/dev", "utf8"));
+    const currentCpu = platform.cpu();
+    const currentNet = platform.net();
     const cpuValues = cpuPercent(previousCpu, currentCpu);
     const network = netRate(previousNet, currentNet, (now - previousTime) / 1000);
     previousCpu = currentCpu;
     previousNet = currentNet;
     previousTime = now;
-    const disks = parseMounts(readFileSync("/proc/mounts", "utf8")).map((mount) => {
+    const disks = platform.mounts().map((mount) => {
       const stat = statfsSync(mount);
       return {
         mount,
@@ -143,11 +168,11 @@ async function main() {
       info,
       cpu: Number(cpuValues[0]),
       cores: cpuValues.slice(1),
-      load: parseLoad(readFileSync("/proc/loadavg", "utf8")),
-      ...parseMem(readFileSync("/proc/meminfo", "utf8")),
+      load: platform.load(),
+      ...platform.memory(),
       disks,
       ...network,
-      uptime: Number(readFileSync("/proc/uptime", "utf8").split(" ")[0]),
+      uptime: platform.uptime(),
     };
     try {
       const response = await fetch(`${url}/api/probe/v1/samples`, {
