@@ -11,20 +11,22 @@ import { type ServerRange, useServerMetrics, useServers } from "../../lib/use-se
 import { useSession } from "../../lib/use-session.ts";
 import { ServerDashboard } from "./server-dashboard.tsx";
 import { installCommand, ServerDialog } from "./server-dialog.tsx";
-import { ServerToolbar } from "./server-toolbar.tsx";
+import { ServerOverview } from "./server-overview.tsx";
+import { OVERVIEW, ServerToolbar } from "./server-toolbar.tsx";
 
 type DialogAction = "create" | "rename" | "rotate" | "delete";
 
 export function ServersPage() {
   const { lang, t } = useLang();
   const { isAdmin } = useSession();
-  const { data: servers = [], error, isPending } = useServers();
+  const { data: servers = [], error, isPending, isFetching } = useServers();
   const [params, setParams] = useSearchParams();
   const [dialog, setDialog] = useState<DialogAction | null>(null);
   const [newToken, setNewToken] = useState<{ id: string; token: string } | null>(null);
   const [now, setNow] = useState(Date.now());
   const requested = params.get("server") || localStorage.getItem("servers.selected");
-  const server = servers.find((entry) => entry.id === requested) ?? servers[0];
+  const server = servers.find((entry) => entry.id === requested);
+  const selected = server?.id ?? OVERVIEW;
   const requestedRange = params.get("range") || localStorage.getItem("servers.range");
   const range: ServerRange = SERVER_RANGES.find((item) => item === requestedRange) ?? "1h";
   const metrics = useServerMetrics(server?.id ?? "", range);
@@ -34,12 +36,13 @@ export function ServersPage() {
     return () => window.clearInterval(timer);
   }, []);
   useEffect(() => {
-    if (!server) return;
-    localStorage.setItem("servers.selected", server.id);
+    // 新建后列表刷新前找不到新服务器，等刷新完再同步，免得被改回总览
+    if (!servers.length || isFetching) return;
+    localStorage.setItem("servers.selected", selected);
     localStorage.setItem("servers.range", range);
-    if (params.get("server") !== server.id || params.get("range") !== range)
-      setParams({ server: server.id, range }, { replace: true });
-  }, [server, range, params, setParams]);
+    if (params.get("server") !== selected || params.get("range") !== range)
+      setParams({ server: selected, range }, { replace: true });
+  }, [servers.length, isFetching, selected, range, params, setParams]);
 
   function select(serverId: string, selectedRange: ServerRange) {
     localStorage.setItem("servers.selected", serverId);
@@ -55,21 +58,28 @@ export function ServersPage() {
     : elapsed < 60
       ? t("servers.secondsAgo", { seconds: elapsed })
       : relativeTime(new Date(server.lastSeenAt), lang);
-  const subtitle = server
-    ? !server.lastSeenAt
+  const online = servers.filter((entry) => entry.status === "online").length;
+  const subtitle = !server
+    ? servers.length
+      ? t("servers.overviewSubtitle", {
+          total: servers.length,
+          online,
+          offline: servers.length - online,
+        })
+      : t("servers.refresh")
+    : !server.lastSeenAt
       ? t("servers.waiting")
       : server.status === "offline"
         ? t("servers.offlineSubtitle", { time: lastSeen })
-        : t("servers.subtitle", { time: lastSeen })
-    : t("servers.refresh");
+        : t("servers.subtitle", { time: lastSeen });
   return (
     <div data-scene="servers" data-status={server?.status} className="space-y-4">
       <PageHeader
         title={t("nav.servers")}
         subtitle={subtitle}
         toolbar={
-          server && (
-            <ServerToolbar servers={servers} server={server} range={range} onSelect={select} />
+          servers.length > 0 && (
+            <ServerToolbar servers={servers} selected={selected} range={range} onSelect={select} />
           )
         }
       >
@@ -97,7 +107,7 @@ export function ServersPage() {
           {error.message}
         </p>
       )}
-      {!isPending && !error && !server && (
+      {!isPending && !error && !servers.length && (
         <EmptyState
           title={t("servers.empty")}
           description={t("servers.emptyDescription")}
@@ -106,6 +116,14 @@ export function ServersPage() {
             isAdmin ? { label: t("servers.add"), onClick: () => setDialog("create") } : undefined
           }
           legacyPrimary
+        />
+      )}
+      {!server && servers.length > 0 && (
+        <ServerOverview
+          servers={servers}
+          range={range}
+          now={now}
+          onOpen={(serverId) => select(serverId, range)}
         />
       )}
       {server && metrics.error && (

@@ -82,6 +82,8 @@ export const zh = {
   "servers.range6h": "6 小时",
   "servers.range24h": "24 小时",
   "servers.range7d": "7 天",
+  "servers.overview": "总览",
+  "servers.overviewSubtitle": "共 {total} 台 · 在线 {online} · 离线 {offline} · 每 10 秒更新",
   "servers.refresh": "每 10 秒更新",
   "servers.subtitle": "每 10 秒更新 · 上次上报 {time}",
   "servers.offlineSubtitle": "离线 · 最后上报 {time}",
